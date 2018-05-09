@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,15 +35,16 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {goto_details} from '../../entity/component.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
-import HostsCharts from './charts.js';
 import HostsFilterDialog from './filterdialog.js';
 import HostsTable from './table.js';
 import HostComponent from './component.js';
+
+import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
 import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -50,7 +52,11 @@ const ToolBarIcons = ({
   onHostCreateClick,
 }, {capabilities}) => (
   <IconDivider>
-    <HelpIcon page="hosts"/>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="hosts-view"
+      title={_('Help: Hosts')}
+    />
     {capabilities.mayCreate('host') &&
       <NewIcon
         title={_('New Host')}
@@ -66,14 +72,6 @@ ToolBarIcons.contextTypes = {
 ToolBarIcons.propTypes = {
   onHostCreateClick: PropTypes.func.isRequired,
 };
-
-const Dashboard = withDashboard(HostsCharts, {
-  hideFilterSelect: true,
-  configPrefId: 'd3f5f2de-a85b-43f2-a817-b127457cc8ba',
-  defaultControllersString: 'host-by-severity-class|host-by-topology|' +
-    'host-by-modification-time',
-  defaultControllerString: 'hosts-by-cvss',
-});
 
 const Page = ({
   onChanged,
@@ -100,7 +98,6 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
         filterEditDialog={HostsFilterDialog}
         sectionIcon="host.svg"
         table={HostsTable}
@@ -125,6 +122,10 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('host', {
+  dashboard2: HostsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
+  ),
   filtersFilter: ASSETS_FILTER_FILTER,
 })(Page);
 

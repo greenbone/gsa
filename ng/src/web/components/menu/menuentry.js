@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,111 +25,43 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, is_array} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose.js';
-import withCapabilties from '../../utils/withCapabilities.js';
 
 import withClickHandler from '../form/withClickHandler.js';
 
-import Link from '../link/link.js';
-import LegacyLink from '../link/legacylink.js';
+import Layout from '../layout/layout.js';
 
-const Entry = glamorous.li({
-  display: 'flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  textIndent: '12px',
-  textAlign: 'left',
-  color: '#3A3A3A',
-  height: '22px',
-  lineHeight: '22px',
-  fontSize: '10px',
-  fontWeight: 'bold',
-  width: '100%',
-  backgroundColor: 'white',
-  '& > a': {
-    display: 'flex',
-    flexGrow: 1,
-    background: 'none',
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
-  '&:last-child': {
-    borderBottomRightRadius: '8px',
-    borderBottomLeftRadius: '8px',
-  },
-  '&:hover': {
-    background: '#99CE48',
-  },
-  '& > a:hover, & > a:focus, & > a:link': {
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
-},
-  ({onClick}) => is_defined(onClick) ? {cursor: 'pointer'} : {},
-);
+import Link from '../link/link.js';
+
+const StyledLink = glamorous(Link)({
+  height: '100%',
+});
 
 const MenuEntry = ({
-    capabilities,
-    caps,
-    legacy,
-    section,
-    title,
-    to,
-    onClick,
-    ...other
-  }) => {
-  let entry;
-  const css = section ? 'menu-entry menu-section' : 'menu-entry';
-
-  if (is_defined(caps) && is_defined(capabilities)) {
-
-    if (!is_array(caps)) {
-      caps = [caps];
+  children,
+  title = children,
+  to,
+  ...props
+}) => (
+  <Layout
+    {...props}
+    grow="1"
+    align={['start', 'center']}
+  >
+    {is_defined(to) ?
+      <StyledLink to={to}>{title}</StyledLink> :
+      title
     }
-
-    const may_op = caps.reduce((a, b) => {
-      return capabilities.mayOp(b) && a;
-    }, true);
-
-    if (!may_op) {
-      return null;
-    }
-  }
-
-  if (is_defined(to)) {
-    entry = <Link to={to}>{title}</Link>;
-  }
-  else if (legacy) {
-    entry = <LegacyLink {...other}>{title}</LegacyLink>;
-  }
-  else {
-    entry = title;
-  }
-
-  return (
-    <Entry className={css} onClick={onClick}>{entry}</Entry>
-  );
-};
+  </Layout>
+);
 
 MenuEntry.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  caps: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
-  legacy: PropTypes.bool,
-  section: PropTypes.bool,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   to: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
-export default compose(
-  withCapabilties,
-  withClickHandler(),
-)(MenuEntry);
+export default withClickHandler()(MenuEntry);
 
 // vim: set ts=2 sw=2 tw=80:

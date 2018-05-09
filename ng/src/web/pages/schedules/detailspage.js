@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
@@ -39,11 +42,19 @@ import CreateIcon from '../../entity/icon/createicon.js';
 import EditIcon from '../../entity/icon/editicon.js';
 import DeleteIcon from '../../entity/icon/deleteicon.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import ScheduleComponent from './component.js';
 import ScheduleDetails from './details.js';
@@ -58,9 +69,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="schedule_details"
-        title={_('Help: Schedule Details')}
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anhcor="scheduled-scan"
+        title={_('Help: Schedules')}
       />
       <ListIcon
         title={_('Schedules List')}
@@ -141,7 +153,67 @@ const Page = ({
         onPermissionChanged={onChanged}
         onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
-      />
+      >
+        {({
+          activeTab = 0,
+          permissionsComponent,
+          permissionsTitle,
+          tagsComponent,
+          tagsTitle,
+          onActivateTab,
+          entity,
+          ...other
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  {is_defined(tagsComponent) &&
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
+                  }
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <ScheduleDetails
+                      entity={entity}
+                    />
+                  </TabPanel>
+                  {is_defined(tagsComponent) &&
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
+                  }
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
   </ScheduleComponent>
 );

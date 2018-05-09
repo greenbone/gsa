@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +43,8 @@ import Row from './row.js';
 const Header = ({
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   actionsColumn,
   onSortChange,
 }) => {
@@ -49,38 +52,58 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'text' : false}
+          width="19%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'text' : false}
           onSortChange={onSortChange}>
           {_('Text')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'nvt' : false}
+          width="30%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvt' : false}
           onSortChange={onSortChange}>
           {_('NVT')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'hosts' : false}
+          width="12%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'port' : false}
+          width="12%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'port' : false}
           onSortChange={onSortChange}>
           {_('Location')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'severity' : false}
+          width="9%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('From')}
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'new_severity' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          width="8%"
+          sortBy={sort ? 'new_severity' : false}
           onSortChange={onSortChange}>
           {_('To')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'active' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'active' : false}
           onSortChange={onSortChange}>
           {_('Active')}
         </TableHead>
@@ -92,6 +115,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

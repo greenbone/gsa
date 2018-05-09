@@ -25,18 +25,19 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../../components/layout/wrapper.js';
+
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-const CveCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts
-        type="cve"
-        titleType="CVEs"
-        filter={filter}/>
-    </div>
-  );
-};
+const CveCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="cve"
+      titleType="CVEs"
+      filter={filter}
+    />
+  </Wrapper>
+);
 
 CveCharts.propTypes = {
   filter: PropTypes.filter,

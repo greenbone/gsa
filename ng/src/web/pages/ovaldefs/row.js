@@ -25,7 +25,7 @@ import React from 'react';
 
 import {datetime} from 'gmp/locale.js';
 
-import {shorten} from 'gmp/utils.js';
+import {shorten} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {na, render_component} from '../../utils/render.js';

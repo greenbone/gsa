@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils';
+
+import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
+
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -37,26 +42,32 @@ import EntityContainer from '../../entity/container.js';
 import SeverityBar from '../../components/bar/severitybar.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
-import Wrapper from '../../components/layout/wrapper.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import InnerLink from '../../components/link/innerlink.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import NoteDialog from '../notes/dialog.js';
+import NoteComponent from '../notes/component.js';
 
-import OverrideDialog from '../overrides/dialog.js';
+import OverrideComponent from '../overrides/component.js';
 
 import ResultDetails from './details.js';
 
@@ -69,9 +80,10 @@ let ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="result_details"
-        title={_('Help: Result Details')}
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="results"
+        title={_('Help: Results')}
       />
       <ListIcon
         title={_('Results List')}
@@ -287,26 +299,9 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.handleSaveNote = this.handleSaveNote.bind(this);
-    this.handleSaveOverride = this.handleSaveOverride.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
 
-    this.openNoteDialog = this.openNoteDialog.bind(this);
-    this.openOverrideDialog = this.openOverrideDialog.bind(this);
-  }
-
-  handleSaveNote(data) {
-    const {gmp} = this.context;
-    const {onChanged} = this.props;
-
-    return gmp.note.create(data).then(onChanged);
-  }
-
-  handleSaveOverride(data) {
-    const {gmp} = this.context;
-    const {onChanged} = this.props;
-
-    return gmp.override.create(data).then(onChanged);
+    this.openDialog = this.openDialog.bind(this);
   }
 
   handleDownload(result) {
@@ -319,69 +314,114 @@ class Page extends React.Component {
     }).then(onDownloaded, onError);
   }
 
-  openNoteDialog(result) {
-    this.note_dialog.show({
+  openDialog(result = {}, createfunc) {
+    const {nvt = {}, task = {}, host = {}} = result;
+    createfunc({
       fixed: true,
-      oid: result.nvt.oid,
-      nvt: result.nvt,
-      task_id: '0',
-      task_name: result.task.name,
-      result_id: '',
-      task_uuid: result.task.id,
+      oid: nvt.oid,
+      nvt_name: nvt.name,
+      task_id: TASK_SELECTED,
+      task_name: task.name,
+      result_id: RESULT_UUID,
+      task_uuid: task.id,
       result_uuid: result.id,
       result_name: result.name,
       severity: result.original_severity > 0 ? 0.1 : result.original_severity,
-      note_severity: result.original_severity,
-      hosts: '--',
-      hosts_manual: result.host.name,
-      port: '--',
-      port_manual: result.port,
-    });
-  }
-
-  openOverrideDialog(result) {
-    this.override_dialog.show({
-      fixed: true,
-      oid: result.nvt.oid,
-      nvt: result.nvt,
-      task_id: '0',
-      task_name: result.task.name,
-      result_id: '',
-      task_uuid: result.task.id,
-      result_uuid: result.id,
-      result_name: result.name,
-      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
-      note_severity: result.original_severity,
-      hosts: '--',
-      hosts_manual: result.host.name,
-      port: '--',
+      hosts: MANUAL,
+      hosts_manual: host.name,
+      port: MANUAL,
       port_manual: result.port,
     });
   }
 
   render() {
+    const {onChanged} = this.props;
     return (
-      <Wrapper>
-        <EntityPage
-          {...this.props}
-          sectionIcon="result.svg"
-          title={_('Result')}
-          toolBarIcons={ToolBarIcons}
-          detailsComponent={Details}
-          permissionsComponent={false}
-          onNoteCreateClick={this.openNoteDialog}
-          onOverrideCreateClick={this.openOverrideDialog}
-          onResultDownloadClick={this.handleDownload}
-        />
-        <NoteDialog
-          ref={ref => this.note_dialog = ref}
-          onSave={this.handleSaveNote}
-        />
-        <OverrideDialog
-          ref={ref => this.override_dialog = ref}
-          onSave={this.handleSaveOverride}
-        />
-      </Wrapper>
+      <NoteComponent
+        onCreated={onChanged}
+      >
+        {({create: createnote}) => (
+          <OverrideComponent
+            onCreated={onChanged}
+          >
+            {({create: createoverride}) => (
+              <EntityPage
+                {...this.props}
+                sectionIcon="result.svg"
+                title={_('Result')}
+                toolBarIcons={ToolBarIcons}
+                detailsComponent={Details}
+                permissionsComponent={false}
+                onNoteCreateClick={
+                  result => this.openDialog(result, createnote)}
+                onOverrideCreateClick={
+                  result => this.openDialog(result, createoverride)}
+                onResultDownloadClick={this.handleDownload}
+              >
+                {({
+                  activeTab = 0,
+                  permissionsComponent,
+                  permissionsTitle,
+                  tagsComponent,
+                  tagsTitle,
+                  onActivateTab,
+                  entity,
+                  ...other
+                }) => {
+                  return (
+                    <Layout grow="1" flex="column">
+                      <TabLayout
+                        grow="1"
+                        align={['start', 'end']}
+                      >
+                        <TabList
+                          active={activeTab}
+                          align={['start', 'stretch']}
+                          onActivateTab={onActivateTab}
+                        >
+                          <Tab>
+                            {_('Information')}
+                          </Tab>
+                          {is_defined(tagsComponent) &&
+                            <Tab>
+                              {tagsTitle}
+                            </Tab>
+                          }
+                          {is_defined(permissionsComponent) &&
+                            <Tab>
+                              {permissionsTitle}
+                            </Tab>
+                          }
+                        </TabList>
+                      </TabLayout>
+
+                      <Tabs active={activeTab}>
+                        <TabPanels>
+                          <TabPanel>
+                            <Details
+                              entity={entity}
+                            />
+                          </TabPanel>
+                          {is_defined(tagsComponent) &&
+                            <TabPanel>
+                              {tagsComponent}
+                            </TabPanel>
+                          }
+                          {is_defined(permissionsComponent) &&
+                            <TabPanel>
+                              {permissionsComponent}
+                            </TabPanel>
+                          }
+                        </TabPanels>
+                      </Tabs>
+                    </Layout>
+                  );
+                }}
+              </EntityPage>
+            )}
+          </OverrideComponent>
+        )}
+      </NoteComponent>
     );
   }
 }

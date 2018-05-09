@@ -20,11 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/includes';
 
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
@@ -36,7 +37,7 @@ import SelectionType from '../../utils/selectiontype.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -57,8 +58,9 @@ const ToolBarIcons = withCapabilities(({
 }) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="users"
+      <ManualIcon
+        page="gui_administration"
+        anchor="user-management"
         title={_('Help: Users')}
       />
       {capabilities.mayCreate('user') &&
@@ -84,8 +86,11 @@ class UsersPage extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {confirmDeleteDialogVisible: false};
+
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
+    this.closeConfirmDeleteDialog = this.closeConfirmDeleteDialog.bind(this);
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 
@@ -113,11 +118,11 @@ class UsersPage extends React.Component {
       if (is_defined(user)) {
         users = users.filter(luser => luser.id !== user.id);
 
-        this.confirm_delete_dialog.show({
+        this.setState({
+          confirmDeleteDialogVisible: true,
           id: user.id,
           username: user.name,
           users,
-        }, {
           title: _('Confirm deletion of user {{name}}', user),
         });
 
@@ -145,15 +150,19 @@ class UsersPage extends React.Component {
 
           users = users.filter(luser => !ids.includes(luser.id));
 
-          this.confirm_delete_dialog.show({
+          this.setState({
+            confirmDeleteDialogVisible: true,
             users,
             deleteUsers,
-          }, {
             title: _('Confirm deletion of users'),
           });
         });
       }
     });
+  }
+
+  closeConfirmDeleteDialog() {
+    this.setState({confirmDeleteDialogVisible: false});
   }
 
   render() {
@@ -163,6 +172,16 @@ class UsersPage extends React.Component {
       onError,
       ...props
     } = this.props;
+
+    const {
+      id,
+      confirmDeleteDialogVisible,
+      deleteUsers = {},
+      title,
+      username,
+      users,
+    } = this.state;
+
     return (
       <Wrapper>
         <UserComponent
@@ -201,17 +220,24 @@ class UsersPage extends React.Component {
           />
         )}
         </UserComponent>
-        <ConfirmDeleteDialog
-          ref={ref => this.confirm_delete_dialog = ref}
-          onSave={this.handleDeleteUser}
-        />
+        {confirmDeleteDialogVisible &&
+          <ConfirmDeleteDialog
+            deleteUsers={deleteUsers}
+            id={id}
+            title={title}
+            username={username}
+            users={users}
+            onClose={this.closeConfirmDeleteDialog}
+            onSave={this.handleDeleteUser}
+          />
+        }
       </Wrapper>
     );
   }
 }
 
 UsersPage.propTypes = {
-  entities: PropTypes.collection,
+  entities: PropTypes.array,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,

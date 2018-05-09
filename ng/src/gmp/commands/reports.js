@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +24,15 @@
 
 import logger from '../log.js';
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Report from '../models/report.js';
 
 import {ALL_FILTER} from '../models/filter.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.reports');
 
@@ -41,6 +44,26 @@ class ReportsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_reports.get_reports_response;
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'report',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getHighResultsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'report',
+      group_column: 'date',
+      dataColumns: [
+        'high',
+        'high_per_host',
+      ],
+      filter,
+    });
   }
 }
 
@@ -55,7 +78,6 @@ class ReportCommand extends EntityCommand {
     log.debug('Importing report', args);
     return this.httpPost({
       cmd: 'import_report',
-      next: 'get_report',
       task_id,
       in_assets,
       xml_file,
@@ -69,9 +91,7 @@ class ReportCommand extends EntityCommand {
       report_id: id,
       report_format_id,
       filter: is_defined(filter) ? filter.all() : ALL_FILTER,
-    }, {
-      plain: true,
-    }).then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 
   addAssets({id}, {filter = ''}) {
@@ -107,7 +127,7 @@ class ReportCommand extends EntityCommand {
       id,
       delta_report_id,
       filter,
-    }, options).then(this.transformResponse);
+    }, options);
   }
 
   getElementFromRoot(root) {

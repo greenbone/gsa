@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,18 +27,15 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils.js';
+import {is_defined, select_save_id} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 
-import HelpIcon from '../components/icon/helpicon.js';
+import ManualIcon from '../components/icon/manualicon.js';
 import NewIcon from '../components/icon/newicon.js';
-import Icon from '../components/icon/icon.js';
 
+import Layout from '../components/layout/layout.js';
 import IconDivider from '../components/layout/icondivider.js';
-import Wrapper from '../components/layout/wrapper.js';
-
-import Section from '../components/section/section.js';
 
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
@@ -55,16 +53,19 @@ const SectionElements = ({
   onPermissionCreateClick,
 }) => {
   return (
-    <SectionElementDivider>
-      <NewIcon
-        title={_('New Permission')}
-        onClick={onPermissionCreateClick}
-      />
-      <HelpIcon
-        page="resource_permissions"
-        title={_('Help: Resource Permissions')}
-      />
-    </SectionElementDivider>
+    <Layout grow align="end">
+      <SectionElementDivider>
+        <NewIcon
+          title={_('New Permission')}
+          onClick={onPermissionCreateClick}
+        />
+        <ManualIcon
+          page="gui_administration"
+          anchor="permissions"
+          title={_('Help: Permissions')}
+        />
+      </SectionElementDivider>
+    </Layout>
   );
 };
 
@@ -73,25 +74,19 @@ SectionElements.propTypes = {
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
-const PermissionIcon = props => {
-  return (
-    <Icon
-      {...props}
-      img="permission.svg"
-      size="small"
-    />
-  );
-};
-
 class EntityPermissions extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {
+      multiplePermissionDialogVisible: false,
+    };
 
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
     this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
+      .bind(this);
+    this.closeMultiplePermissionDialog = this.closeMultiplePermissionDialog
       .bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
@@ -108,12 +103,14 @@ class EntityPermissions extends React.Component {
     const {relatedResourcesLoaders = [], entity} = this.props;
     const {gmp} = this.context;
 
-    this.dialog.show({
+    this.setState({
+      multiplePermissionDialogVisible: true,
       entity_type: entity.entity_type,
       entity_name: entity.name,
       id: entity.id,
       include_related: relatedResourcesLoaders.length === 0 ?
         CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
+      title: _('Create Multiple Permissions'),
     });
 
     Promise
@@ -121,32 +118,36 @@ class EntityPermissions extends React.Component {
       .then(loaded => {
         const related = loaded.reduce((sum, cur) => sum.concat(cur), []);
 
-        this.dialog.setValues({
+        this.setState({
           related,
         });
       });
 
     gmp.groups.getAll().then(response => {
       const {data: groups} = response;
-      this.dialog.setValues({
+      this.setState({
         groups,
         group_id: select_save_id(groups),
       });
     });
     gmp.roles.getAll().then(response => {
       const {data: roles} = response;
-      this.dialog.setValues({
+      this.setState({
         roles,
         role_id: select_save_id(roles),
       });
     });
     gmp.users.getAll().then(response => {
       const {data: users} = response;
-      this.dialog.setValues({
+      this.setState({
         users,
         user_id: select_save_id(users),
       });
     });
+  }
+
+  closeMultiplePermissionDialog() {
+    this.setState({multiplePermissionDialogVisible: false});
   }
 
   handleMultipleSave(data) {
@@ -158,10 +159,24 @@ class EntityPermissions extends React.Component {
   render() {
     const {
       entity,
-      foldable = true,
       permissions,
       ...props
     } = this.props;
+
+    const {
+      multiplePermissionDialogVisible,
+      entity_type,
+      entity_name,
+      group_id,
+      groups,
+      id,
+      include_related,
+      role_id,
+      roles,
+      title,
+      user_id,
+      users,
+    } = this.state;
 
     const extra = (
       <SectionElements
@@ -169,40 +184,52 @@ class EntityPermissions extends React.Component {
         onPermissionCreateClick={this.openMultiplePermissionDialog}
       />
     );
+
     const has_permissions = is_defined(permissions);
     const count = has_permissions ? permissions.length : 0;
 
     return (
-      <Wrapper>
-        <Section
-          foldable={foldable}
-          extra={extra}
-          img={<PermissionIcon/>}
-          title={_('Permissions ({{count}})', {count})}
-        >
-          {count > 0 &&
-            <PermissionsTable
-              {...props}
-              entities={permissions}
-              pagination={false}
-              footer={false}
-              footnote={false}
-              onPermissionEditClick={this.openPermissionDialog}
-            />
-          }
-          <MultiplePermissionDialog
-            ref={ref => this.dialog = ref}
-            onSave={this.handleMultipleSave}
+      <Layout
+        flex="column"
+        title={_('Permissions ({{count}})', {count})}
+      >
+        {extra}
+        {count === 0 &&
+          _('No permissions available')
+        }
+        {count > 0 &&
+          <PermissionsTable
+            {...props}
+            entities={permissions}
+            pagination={false}
+            footer={false}
+            footnote={false}
+            onPermissionEditClick={this.openPermissionDialog}
           />
-        </Section>
-      </Wrapper>
+        }
+        <MultiplePermissionDialog
+          visible={multiplePermissionDialogVisible}
+          entity_type={entity_type}
+          entity_name={entity_name}
+          group_id={group_id}
+          groups={groups}
+          id={id}
+          include_related={include_related}
+          role_id={role_id}
+          roles={roles}
+          title={title}
+          user_id={user_id}
+          users={users}
+          onClose={this.closeMultiplePermissionDialog}
+          onSave={this.handleMultipleSave}
+        />
+      </Layout>
     );
   }
 }
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
-  foldable: PropTypes.bool,
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,

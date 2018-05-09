@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,11 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/set';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import logger from '../log.js';
-import {is_array, is_defined, map} from '../utils.js';
+import {is_array, is_defined} from '../utils/identity';
+import {map} from '../utils/array';
 
 import Model from '../model.js';
 
@@ -46,13 +48,12 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_role',
-      next: 'get_role',
       name,
       comment,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -63,14 +64,13 @@ class RoleCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_role',
-      next: 'get_role',
       id,
       name,
       comment,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   editRoleSettings({id}) {

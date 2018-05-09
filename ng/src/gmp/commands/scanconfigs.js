@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +22,14 @@
  */
 
 import logger from '../log.js';
-import {extend, for_each, map, is_defined} from '../utils.js';
+import {for_each, map} from '../utils/array';
+import {is_defined} from '../utils/identity';
 
 import Model from '../model.js';
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 import {YES_VALUE, NO_VALUE} from '../parser.js';
 
-import {parse_counts}  from '../collection/parser.js';
+import {parse_counts} from '../collection/parser.js';
 
 import Nvt from '../models/nvt.js';
 import ScanConfig, {parse_count} from '../models/scanconfig.js';
@@ -36,16 +37,16 @@ import ScanConfig, {parse_count} from '../models/scanconfig.js';
 const log = logger.getLogger('gmp.commands.scanconfigs');
 
 const convert = (values, prefix) => {
-  let ret = {};
-  for (let [key, value] of Object.entries(values)) {
+  const ret = {};
+  for (const [key, value] of Object.entries(values)) {
     ret[prefix + key] = value;
   }
   return ret;
 };
 
 const convert_select = (values, prefix) => {
-  let ret = {};
-  for (let [key, value] of Object.entries(values)) {
+  const ret = {};
+  for (const [key, value] of Object.entries(values)) {
     if (value === YES_VALUE) {
       ret[prefix + key] = value;
     }
@@ -54,12 +55,12 @@ const convert_select = (values, prefix) => {
 };
 
 const convert_preferences = (values, nvt_name) => {
-  let ret = {};
+  const ret = {};
   for (const prop in values) {
-    const data  = values[prop];
+    const data = values[prop];
     const {type, value} = data;
     if (is_defined(value)) {
-      let typestring = nvt_name + '[' + type + ']:' + prop;
+      const typestring = nvt_name + '[' + type + ']:' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
       }
@@ -72,7 +73,7 @@ const convert_preferences = (values, nvt_name) => {
   return ret;
 };
 
-export class ScanConfigCommand extends EntityCommand {
+class ScanConfigCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'config', ScanConfig);
@@ -81,7 +82,6 @@ export class ScanConfigCommand extends EntityCommand {
   import({xml_file}) {
     const data = {
       cmd: 'import_config',
-      next: 'get_config',
       xml_file,
     };
     log.debug('Importing scan config', data);
@@ -96,14 +96,13 @@ export class ScanConfigCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_config',
-      next: 'get_config',
       base,
       comment,
       name,
       scanner_id,
     };
     log.debug('Creating scanconfig', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -114,29 +113,28 @@ export class ScanConfigCommand extends EntityCommand {
     select,
     scanner_preference_values,
   }) {
-    const data = extend({
+    const data = {
+      ...convert(trend, 'trend:'),
+      ...convert(scanner_preference_values, 'preference:scanner[scanner]:'),
+      ...convert_select(select, 'select:'),
+
       cmd: 'save_config',
-      next: 'get_config',
       id,
       comment,
       name,
-    },
-      convert(trend, 'trend:'),
-      convert(scanner_preference_values, 'preference:scanner[scanner]:'),
-      convert_select(select, 'select:'),
-    );
+    };
     log.debug('Saving scanconfig', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
-  editScanConfigSettings({id}) { // should be removed in future an splitted into several api calls
+  editScanConfigSettings({id}) { // should be removed in future and split into several api calls
     return this.httpGet({
       cmd: 'edit_config',
       id,
     }).then(response => {
-      let {data} = response;
-      let config_resp = data.get_config_response;
-      let settings = {};
+      const {data} = response;
+      const config_resp = data.get_config_response;
+      const settings = {};
 
       settings.scanconfig = new ScanConfig(
         config_resp.get_configs_response.config);
@@ -160,15 +158,14 @@ export class ScanConfigCommand extends EntityCommand {
     id,
     selected,
   }) {
-    const data = extend({
+    const data = {
+      ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
       no_redirect: '1',
       id,
       family: family_name,
       name: config_name,
-    },
-      convert_select(selected, 'nvt:'),
-    );
+    };
     log.debug('Saving scanconfigfamily', data);
     return this.httpPost(data);
   }
@@ -192,7 +189,7 @@ export class ScanConfigCommand extends EntityCommand {
 
       const nvts = {};
       for_each(config_resp.get_nvts_response.nvt, nvt => {
-        let oid = nvt._oid;
+        const oid = nvt._oid;
         nvts[oid] = true;
       });
 
@@ -221,7 +218,8 @@ export class ScanConfigCommand extends EntityCommand {
     preference_values,
     timeout,
   }) {
-    let data = extend({
+    const data = {
+      ...convert_preferences(preference_values, nvt_name),
       cmd: 'save_config_nvt',
       no_redirect: '1',
       id,
@@ -229,7 +227,7 @@ export class ScanConfigCommand extends EntityCommand {
       name: config_name,
       family: family_name,
       timeout,
-    }, convert_preferences(preference_values, nvt_name));
+    };
 
     data['preference:scanner[scanner]:timeout.' + oid] = manual_timeout;
 
@@ -250,9 +248,9 @@ export class ScanConfigCommand extends EntityCommand {
       name: config_name,
       family: family_name,
     }).then(response => {
-      let {data} = response;
-      let settings = {};
-      let config_resp = data.get_config_nvt_response;
+      const {data} = response;
+      const settings = {};
+      const config_resp = data.get_config_nvt_response;
 
       settings.config = new Model(config_resp.config, 'config');
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
@@ -271,7 +269,7 @@ export class ScanConfigCommand extends EntityCommand {
 
 }
 
-export class ScanConfigsCommand extends EntitiesCommand {
+class ScanConfigsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'config', ScanConfig);

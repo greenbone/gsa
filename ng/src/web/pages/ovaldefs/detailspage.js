@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,14 +27,16 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -42,6 +45,13 @@ import Layout from '../../components/layout/layout.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import ExternalLink from '../../components/link/externallink.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
@@ -52,18 +62,34 @@ import TableRow from '../../components/table/row.js';
 
 import OvaldefDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <HelpIcon
-      page="ovaldef_details"
-      title={_('Help: OVAL Definition Details')}
+const ToolBarIcons = ({
+  entity,
+  onOvaldefDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="oval"
+        title={_('Help: OVAL Definitions')}
+      />
+      <ListIcon
+        title={_('OVAL Definitions List')}
+        page="ovaldefs"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export OVAL Definition')}
+      onClick={onOvaldefDownloadClick}
     />
-    <ListIcon
-      title={_('OVAL Definitions List')}
-      page="ovaldefs"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onOvaldefDownloadClick: PropTypes.func.isRequired,
+};
 
 const Criteria = ({criteria}) => {
   const {
@@ -233,9 +259,11 @@ const Details = ({
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  <ExternalLink to={ref.url}>
-                    {ref.url}
-                  </ExternalLink>
+                  {is_defined(ref.url) &&
+                    <ExternalLink to={ref.url}>
+                      {ref.url}
+                    </ExternalLink>
+                  }
                 </TableData>
               </TableRow>
             ))}
@@ -309,7 +337,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CvePage = props => (
+const OvaldefPage = props => (
   <EntityContainer
     {...props}
     name="ovaldef"
@@ -320,20 +348,91 @@ const CvePage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="ovaldef.svg"
-        title={_('OVAL Definition')}
-        detailsComponent={Details}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
-      />
+      <EntityComponent
+        name="ovaldef"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="ovaldef.svg"
+            title={_('OVAL Definition')}
+            detailsComponent={Details}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onOvaldefDownloadClick={download}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          >
+            {({
+              activeTab = 0,
+              permissionsComponent,
+              permissionsTitle,
+              tagsComponent,
+              tagsTitle,
+              onActivateTab,
+              entity,
+              ...other
+            }) => {
+              return (
+                <Layout grow="1" flex="column">
+                  <TabLayout
+                    grow="1"
+                    align={['start', 'end']}
+                  >
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>
+                        {_('Information')}
+                      </Tab>
+                      {is_defined(tagsComponent) &&
+                        <Tab>
+                          {tagsTitle}
+                        </Tab>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <Tab>
+                          {permissionsTitle}
+                        </Tab>
+                      }
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details
+                          entity={entity}
+                        />
+                      </TabPanel>
+                      {is_defined(tagsComponent) &&
+                        <TabPanel>
+                          {tagsComponent}
+                        </TabPanel>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <TabPanel>
+                          {permissionsComponent}
+                        </TabPanel>
+                      }
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              );
+            }}
+          </EntityPage>
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );
 
-export default CvePage;
+export default OvaldefPage;
+
+// vim: set ts=2 sw=2 tw=80:

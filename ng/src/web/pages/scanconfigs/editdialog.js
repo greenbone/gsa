@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,20 +25,20 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils.js';
+import {is_defined, map} from 'gmp/utils';
 import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
-import withDialog from '../../components/dialog/withDialog.js';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
 import Checkbox from '../../components/form/checkbox.js';
 import {noop_convert} from '../../components/form/form.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Radio from '../../components/form/radio.js';
 import TextField from '../../components/form/textfield.js';
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import EditIcon from '../../components/icon/editicon.js';
@@ -67,7 +68,7 @@ class NvtPreferenceDisplay extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       preference,
       onEditNvtDetailsClick,
@@ -101,55 +102,51 @@ NvtPreferenceDisplay.propTypes = {
   onEditNvtDetailsClick: PropTypes.func.isRequired,
 };
 
-class NvtPreferences extends React.Component {
-
-  render() {
-    let {
-      config,
-      preferences,
-      onEditNvtDetailsClick,
-    } = this.props;
-    return (
-      <Section
-        foldable
-        title={_('Network Vulnerability Test Preferences')}
-      >
-        <Table fixed>
-          <TableHeader>
-            <TableRow>
-              <TableHead width="30%">
-                {_('NVT')}
-              </TableHead>
-              <TableHead width="30%">
-                {_('Name')}
-              </TableHead>
-              <TableHead width="30%">
-                {_('Value')}
-              </TableHead>
-              <TableHead width="10%">
-                {_('Actions')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              map(preferences, pref => {
-                return (
-                  <NvtPreferenceDisplay
-                    key={pref.nvt.name + pref.name}
-                    config={config}
-                    preference={pref}
-                    onEditNvtDetailsClick={onEditNvtDetailsClick}
-                  />
-                );
-              })
-            }
-          </TableBody>
-        </Table>
-      </Section>
-    );
-  }
-}
+const NvtPreferences = ({
+  config,
+  preferences,
+  onEditNvtDetailsClick,
+}) => {
+  return (
+    <Section
+      foldable
+      title={_('Network Vulnerability Test Preferences')}
+    >
+      <Table fixed>
+        <TableHeader>
+          <TableRow>
+            <TableHead width="30%">
+              {_('NVT')}
+            </TableHead>
+            <TableHead width="30%">
+              {_('Name')}
+            </TableHead>
+            <TableHead width="30%">
+              {_('Value')}
+            </TableHead>
+            <TableHead width="10%">
+              {_('Actions')}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {
+            map(preferences, pref => {
+              return (
+                <NvtPreferenceDisplay
+                  key={pref.nvt.name + pref.name}
+                  config={config}
+                  preference={pref}
+                  onEditNvtDetailsClick={onEditNvtDetailsClick}
+                />
+              );
+            })
+          }
+        </TableBody>
+      </Table>
+    </Section>
+  );
+};
 
 NvtPreferences.propTypes = {
   config: PropTypes.model.isRequired,
@@ -165,7 +162,7 @@ class ScannerPreference extends React.Component {
   }
 
   render() {
-    let {
+    const {
       preference,
       value,
       onPreferenceChange,
@@ -232,7 +229,7 @@ class ScannerPreferences extends React.Component {
   }
 
   onPreferenceChange(value, name) {
-    let {values, onValueChange} = this.props;
+    const {values, onValueChange} = this.props;
 
     values[name] = value;
 
@@ -240,7 +237,7 @@ class ScannerPreferences extends React.Component {
   }
 
   render() {
-    let  {preferences, values} = this.props;
+    const {preferences, values} = this.props;
     return (
       <Section
         foldable
@@ -300,7 +297,7 @@ class NvtFamily extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       family,
       select,
@@ -309,9 +306,9 @@ class NvtFamily extends React.Component {
       onSelectChange,
       onTrendChange,
     } = this.props;
-    let {name} = family;
-    let config_family = config.families[name];
-    let counts = {
+    const {name} = family;
+    const config_family = config.families[name];
+    const counts = {
       count: 0,
       max: family.max,
     };
@@ -393,7 +390,7 @@ class NvtFamilies extends React.Component {
   }
 
   onSelectChange(value, name) {
-    let {select, onValueChange} = this.props;
+    const {select, onValueChange} = this.props;
 
     select[name] = value;
 
@@ -401,7 +398,7 @@ class NvtFamilies extends React.Component {
   }
 
   onTrendChange(value, name) {
-    let {trend, onValueChange} = this.props;
+    const {trend, onValueChange} = this.props;
 
     trend[name] = value;
 
@@ -409,7 +406,7 @@ class NvtFamilies extends React.Component {
   }
 
   render() {
-    let {
+    const {
       config,
       families,
       trend,
@@ -445,7 +442,7 @@ class NvtFamilies extends React.Component {
           <TableBody>
             {
               map(families, family => {
-                let {name} = family;
+                const {name} = family;
                 return (
                   <NvtFamily
                     key={name}
@@ -484,114 +481,142 @@ NvtFamilies.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-class EditDialog extends React.Component {
+const EditDialog = ({
+  comment = '',
+  config,
+  families,
+  name,
+  scanner_id,
+  scanner_preference_values,
+  scanners,
+  select,
+  title,
+  trend,
+  visible = true,
+  onClose,
+  onEditConfigFamilyClick,
+  onEditNvtDetailsClick,
+  onSave,
+}) => {
 
-  render() {
-    let {
-      comment,
-      config,
-      families,
-      name,
-      scanner_id,
-      scanner_preference_values,
-      scanners,
-      select,
-      trend,
-      onEditConfigFamilyClick,
-      onEditNvtDetailsClick,
-      onValueChange,
-    } = this.props;
-    return (
-      <Layout flex="column">
+  const uncontrolledData = {
+    base: config.scan_config_type,
+    comment,
+    name,
+    scanner_id,
+  };
 
-        <FormGroup title={_('Name')}>
-          <TextField
-            name="name"
-            grow="1"
-            value={name}
-            size="30"
-            onChange={onValueChange}
-            maxLength="80"/>
-        </FormGroup>
+  const controlledData = {
+    id: config.id,
+    scanner_preference_values,
+    select,
+    trend,
+  };
 
-        <FormGroup title={_('Comment')}>
-          <TextField
-            name="comment"
-            value={comment}
-            grow="1"
-            size="30"
-            maxLength="400"
-            onChange={onValueChange}/>
-        </FormGroup>
+  return (
+    <SaveDialog
+      visible={visible}
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      defaultValues={uncontrolledData}
+      values={controlledData}
+    >
+      {({
+        values: state,
+        onValueChange,
+      }) => {
+        return (
+          <Layout flex="column">
 
-        {!config.isInUse() &&
-          config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
-          <FormGroup title={_('Scanner')}>
-            <Select2
-              name="scanner_id"
-              value={scanner_id}
-              onChange={onValueChange}
-            >
-              {render_options(scanners)}
-            </Select2>
-          </FormGroup>
-        }
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                size="30"
+                onChange={onValueChange}
+                maxLength="80"
+              />
+            </FormGroup>
 
-        {!config.isInUse() &&
-          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-          <NvtFamilies
-            config={config}
-            families={families}
-            trend={trend}
-            select={select}
-            onEditConfigFamilyClick={onEditConfigFamilyClick}
-            onValueChange={onValueChange}
-          />
-        }
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                size="30"
+                maxLength="400"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-        {!config.isInUse() &&
-          <ScannerPreferences
-            values={scanner_preference_values}
-            preferences={config.preferences.scanner}
-            onValueChange={onValueChange}
-          />
-        }
+            {!config.isInUse() &&
+              config.scan_config_type === OSP_SCAN_CONFIG_TYPE &&
+              <FormGroup title={_('Scanner')}>
+                <Select
+                  name="scanner_id"
+                  items={render_select_items(scanners)}
+                  value={state.scanner_id}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            }
 
-        {!config.isInUse() &&
-          config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-          <NvtPreferences
-            config={config}
-            preferences={config.preferences.nvt}
-            onValueChange={onValueChange}
-            onEditNvtDetailsClick={onEditNvtDetailsClick}
-          />
-        }
+            {!config.isInUse() &&
+              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+              <NvtFamilies
+                config={config}
+                families={families}
+                trend={trend}
+                select={select}
+                onEditConfigFamilyClick={onEditConfigFamilyClick}
+                onValueChange={onValueChange}
+              />
+            }
 
-      </Layout>
-    );
-  }
-}
+            {!config.isInUse() &&
+              <ScannerPreferences
+                values={scanner_preference_values}
+                preferences={config.preferences.scanner}
+                onValueChange={onValueChange}
+              />
+            }
+
+            {!config.isInUse() &&
+              config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
+              <NvtPreferences
+                config={config}
+                preferences={config.preferences.nvt}
+                onValueChange={onValueChange}
+                onEditNvtDetailsClick={onEditNvtDetailsClick}
+              />
+            }
+          </Layout>
+        );
+      }}
+    </SaveDialog>
+  );
+};
 
 EditDialog.propTypes = {
   comment: PropTypes.string,
   config: PropTypes.model.isRequired,
   families: PropTypes.array,
   name: PropTypes.string,
-  scanners: PropTypes.array,
   scanner_id: PropTypes.id,
   scanner_preference_values: PropTypes.object,
+  scanners: PropTypes.array,
   select: PropTypes.object,
+  title: PropTypes.string.isRequired,
   trend: PropTypes.object,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
-export default withDialog({
-  footer: _('Save'),
-  defaultState: {
-    comment: '',
-  },
-})(EditDialog);
+export default EditDialog;
 
 // vim: set ts=2 sw=2 tw=80:

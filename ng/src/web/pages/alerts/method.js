@@ -26,7 +26,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {
   EMAIL_NOTICE_ATTACH,

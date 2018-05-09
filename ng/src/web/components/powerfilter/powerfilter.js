@@ -26,15 +26,13 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {KeyCode, is_defined, is_string} from 'gmp/utils.js';
+import {KeyCode, is_defined, is_string} from 'gmp/utils';
 import logger from 'gmp/log.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 
-import FootNote from '../footnote/footnote.js';
-
-import Select2 from '../form/select2.js';
+import Select from '../form/select.js';
 import TextField from '../form/textfield.js';
 
 import DeleteIcon from '../icon/deleteicon.js';
@@ -52,18 +50,6 @@ import Filter from 'gmp/models/filter.js';
 const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
-
-const StyledFootNote = glamorous(FootNote)({
-  marginTop: '5px',
-  lineHeight: '1.2em',
-  minHeight: '1.2em',
-});
-
-const FilterSelect = glamorous(Select2)({
-  '& .select2-container': {
-    minWidth: '100px',
-  },
-});
 
 const Label = glamorous.label({
   marginRight: '5px',
@@ -175,6 +161,10 @@ class PowerFilter extends React.Component {
       type: createFilterType,
       name: filtername,
     }).then(response => {
+      const {data: result} = response;
+      // load new filter
+      return gmp.filter.get(result);
+    }).then(response => {
       const {data: f} = response;
       this.updateFilter(f);
       this.setState({filtername: ''});
@@ -182,7 +172,7 @@ class PowerFilter extends React.Component {
       if (onFilterCreated) {
         onFilterCreated(f);
       }
-    }, err => {
+    }).catch(err => {
       if (is_defined(onError)) {
         onError(err);
       }
@@ -194,15 +184,26 @@ class PowerFilter extends React.Component {
 
   componentWillReceiveProps(props) {
     const {filter, filters} = props;
+    const {filter: state_filter} = this.state;
 
     this.setState({
       filters,
     });
 
-    if (is_defined(filter) && !filter.equals(this.state.filter)) {
+    if (!is_defined(filter)) {
       this.setState({
         filter,
-        userfilter: filter ? filter.toFilterCriteriaString() : '',
+        userfilter: '',
+      });
+    }
+    else if (
+      !is_defined(state_filter) ||
+      filter.id !== state_filter.id ||
+      !filter.equals(this.state.filter)
+    ) {
+      this.setState({
+        filter,
+        userfilter: filter.toFilterCriteriaString(),
       });
     }
   }
@@ -214,9 +215,7 @@ class PowerFilter extends React.Component {
     const namedfilterid = is_defined(filter) && is_defined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
-    const filterstring = is_defined(filter) ? filter.toFilterExtraString() : '';
-
-    const filter_opts = render_options(filters, DEFAULT_FILTER_ID);
+    const filter_items = render_select_items(filters, DEFAULT_FILTER_ID);
 
     const can_create = capabilities.mayCreate('filter') &&
       filtername.trim().length > 0;
@@ -288,17 +287,16 @@ class PowerFilter extends React.Component {
                 title={_('Please insert a filter name')}/>
             }
             {capabilities.mayAccess('filters') &&
-              <FilterSelect
+              <Select
+                width="150px"
+                items={filter_items}
                 value={namedfilterid}
-                onChange={this.handleNamedFilterChange}>
-                {filter_opts}
-              </FilterSelect>
+                menuPosition="right"
+                onChange={this.handleNamedFilterChange}
+              />
             }
           </Divider>
         </Layout>
-        <StyledFootNote>
-          {filterstring}
-        </StyledFootNote>
       </Layout>
     );
   }

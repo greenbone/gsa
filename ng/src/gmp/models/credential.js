@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,8 @@ import moment from 'moment';
 
 import Model from '../model.js';
 
-import {is_defined, map} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {map} from '../utils/array';
 
 import {parse_yesno, NO_VALUE} from '../parser.js';
 

@@ -28,7 +28,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<manpage name="gsad" section="8" desc="Greenbone Security Assistant for the Open Vulnerability Assessment System (OpenVAS)">
+<manpage name="gsad" section="8" desc="Greenbone Security Assistant Daemon">
 
   <synopsis>
     <cmd>gsad OPTIONS</cmd>
@@ -36,18 +36,10 @@
 
   <description>
     <p>
-      Together, OpenVAS Scanner (openvassd(8)) and Greenbone Vulnerability Manager
-      (gvmd(8)) provide the core functionality of the Open
-      Vulnerability Assessment System (OpenVAS), with OpenVAS Scanner
-      handling the actual scan process and Greenbone Vulnerability Manager adding
-      various management functionalities to handle and organise scan
-      results.
-    </p>
-
-    <p>
-      The Greenbone Security Assistant Daemon (gsad) is a web
-      application that connects to the Greenbone Vulnerability Manager to provide for a
-      full-featured user interface for vulnerability management.
+      The Greenbone Security Assistant Daemon (gsad) is a stand-alone web server
+      that acts as the layer between the front-end application Greenbone
+      Security Assistant (GSA) and the central Greenbone Vulnerability Manager Daemon
+      (gvmd).
     </p>
 
   </description>
@@ -140,23 +132,18 @@
 
   <section name="SEE ALSO">
     <p>
-      <manref name="openvassd" section="8"/>
-      <manref name="openvasad" section="8"/>
-      <manref name="omp" section="8"/>
       <manref name="gvmd" section="8"/>
-      <manref name="gsd" section="8"/>
     </p>
   </section>
 
-  <section name="MORE INFORMATION ABOUT THE OpenVAS PROJECT">
+  <section name="MORE INFORMATION">
     <p>
-      The canonical places where you will find more information
-      about the OpenVAS project are:
+      The places where you will find more information are:
 
       <url href="http://www.openvas.org/"/>
       (Official site)
 
-      <url href="http://wald.intevation.org/projects/openvas/"/>
+      <url href="https://github.com/greenbone/"/>
       (Development Platform)
     </p>
   </section>

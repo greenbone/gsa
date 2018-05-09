@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,15 +21,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {is_defined, is_string, map} from '../utils.js';
-
 import logger from '../log.js';
+
+import {is_defined, is_string} from '../utils/identity';
+import {map, for_each} from '../utils/array';
 
 import {parse_collection_list} from '../collection/parser.js';
 
 import Filter, {ALL_FILTER} from '../models/filter.js';
 import {filter_string} from '../models/filter/utils.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
 
@@ -48,6 +51,9 @@ class EntitiesCommand extends HttpCommand {
     const rparams = super.getParams(other, extra_params);
 
     if (is_defined(filter)) {
+      if (is_defined(filter.id)) {
+        rparams.filt_id = filter.id;
+      }
       rparams.filter = filter_string(filter);
     }
     return rparams;
@@ -99,8 +105,7 @@ class EntitiesCommand extends HttpCommand {
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
     }
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   exportByFilter(filter) {
@@ -111,8 +116,7 @@ class EntitiesCommand extends HttpCommand {
       'bulk_export.x': 1,
       filter,
     };
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   delete(entities, extra_params) {
@@ -140,6 +144,94 @@ class EntitiesCommand extends HttpCommand {
       deleted = entities.getEntries();
       return this.delete(entities, extra_params);
     }).then(response => response.setData(deleted));
+  }
+
+  transformAggregates(response) {
+    const {aggregate} = response.data.get_aggregate.get_aggregates_response;
+
+    const ret = {
+      ...aggregate,
+    };
+
+    // ensure groups is always an array
+    const {group: groups = []} = aggregate;
+
+    ret.groups = map(groups, group => {
+      const {stats, text} = group;
+
+      const newGroup = {
+        ...group,
+      };
+
+      if (is_defined(text)) {
+        newGroup.text = {};
+
+        for_each(text, t => {
+          const name = t._column;
+          const value = t.__text;
+          newGroup.text[name] = value;
+        });
+      }
+      if (is_defined(stats)) {
+        newGroup.stats = {};
+
+        for_each(stats, s => {
+          const name = s._column;
+          const nStat = {...s};
+          delete nStat._column;
+          newGroup.stats[name] = nStat;
+        });
+      }
+
+      return newGroup;
+    });
+
+    delete ret.group;
+
+    return response.setData(ret);
+  }
+
+  getAggregates({
+    dataColumns = [],
+    textColumns = [],
+    sort = [],
+    aggregateMode,
+    maxGroups,
+    subgroupColumn,
+    ...params
+  } = {}) {
+
+    const requestParams = {};
+
+    dataColumns.forEach((column, i) =>
+      requestParams[`data_columns:${i}`] = column);
+
+    textColumns.forEach((column, i) =>
+      requestParams[`text_columns:${i}`] = column);
+
+    sort.forEach(({field, direction = 'ascending', stat = 'value'}, i) => {
+      requestParams[`sort_fields:${i}`] = field;
+      requestParams[`sort_orders:${i}`] = direction;
+      requestParams[`sort_stats:${i}`] = stat;
+    });
+
+    if (is_defined(aggregateMode)) {
+      requestParams.aggregate_mode = aggregateMode;
+    }
+
+    if (is_defined(maxGroups)) {
+      requestParams.max_groups = maxGroups;
+    }
+
+    if (is_defined(subgroupColumn)) {
+      requestParams.subgroup_column = subgroupColumn;
+    }
+
+    return this.httpGet({
+      ...requestParams,
+      ...params,
+      cmd: 'get_aggregate',
+    }).then(this.transformAggregates);
   }
 }
 

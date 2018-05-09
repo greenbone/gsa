@@ -1,7 +1,0 @@
-
-/* Dummy animation for folding */
-
-@keyframes fold-delay {
-  0%: { min-width: 0px };
-  100%: { min-width: 1px };
-}

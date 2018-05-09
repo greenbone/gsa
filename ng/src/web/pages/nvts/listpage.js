@@ -28,32 +28,29 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
-import NvtsCharts from './charts.js';
 import NvtsFilterDialog from './filterdialog.js';
 import NvtsTable from './table.js';
 
-const Dashboard = withDashboard(NvtsCharts, {
-  hideFilterSelect: true,
-  configPrefId: 'f68d9369-1945-477b-968f-121c6029971b',
-  defaultControllersString: 'nvt-by-severity-class|nvt-by-created|' +
-    'nvt-by-family',
-  defaultControllerString: 'nvt-by-cvss',
-});
+import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="nvts"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="network-vulnerability-tests"
       title={_('Help: NVTs')}/>
   );
 };
 
 export default withEntitiesContainer('nvt', {
-  dashboard: Dashboard,
+  dashboard2: NvtsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={NVTS_DASHBOARD_ID}/>
+  ),
   filterEditDialog: NvtsFilterDialog,
   sectionIcon: 'nvt.svg',
   table: NvtsTable,

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,13 +24,13 @@
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import logger from '../log.js';
-import {is_array} from '../utils.js';
+import {is_array} from '../utils/identity';
 
 import Group from '../models/group.js';
 
 const log = logger.getLogger('gmp.commands.groups');
 
-export class GroupCommand extends EntityCommand {
+class GroupCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'group', Group);
@@ -44,14 +44,13 @@ export class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'create_group',
-      next: 'get_group',
       name,
       comment,
       grant_full,
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -63,7 +62,6 @@ export class GroupCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_group',
-      next: 'get_group',
       id,
       name,
       comment,
@@ -71,7 +69,7 @@ export class GroupCommand extends EntityCommand {
       users: is_array(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {
@@ -79,7 +77,7 @@ export class GroupCommand extends EntityCommand {
   }
 }
 
-export class GroupsCommand extends EntitiesCommand {
+class GroupsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'group', Group);

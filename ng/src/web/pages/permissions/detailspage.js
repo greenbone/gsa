@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
@@ -38,9 +41,17 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
+import Layout from '../../components/layout/layout.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import PermissionDetails from './details.js';
@@ -56,9 +67,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="permission_details"
-        title={_('Help: Permission Details')}
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
       />
       <ListIcon
         title={_('Permission List')}
@@ -138,7 +150,67 @@ const Page = ({
           onPermissionDownloadClick={download}
           onPermissionEditClick={edit}
           onPermissionSaveClick={save}
-        />
+        >
+          {({
+            activeTab = 0,
+            permissionsComponent,
+            permissionsTitle,
+            tagsComponent,
+            tagsTitle,
+            onActivateTab,
+            entity,
+            ...other
+          }) => {
+            return (
+              <Layout grow="1" flex="column">
+                <TabLayout
+                  grow="1"
+                  align={['start', 'end']}
+                >
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>
+                      {_('Information')}
+                    </Tab>
+                    {is_defined(tagsComponent) &&
+                      <Tab>
+                        {tagsTitle}
+                      </Tab>
+                    }
+                    {is_defined(permissionsComponent) &&
+                      <Tab>
+                        {permissionsTitle}
+                      </Tab>
+                    }
+                  </TabList>
+                </TabLayout>
+
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <PermissionDetails
+                        entity={entity}
+                      />
+                    </TabPanel>
+                    {is_defined(tagsComponent) &&
+                      <TabPanel>
+                        {tagsComponent}
+                      </TabPanel>
+                    }
+                    {is_defined(permissionsComponent) &&
+                      <TabPanel>
+                        {permissionsComponent}
+                      </TabPanel>
+                    }
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            );
+          }}
+        </EntityPage>
       )}
     </PermissionComponent>
   );

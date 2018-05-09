@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,9 +52,8 @@ class ScheduleCommand extends EntityCommand {
     const month = date.month() + 1;
     const year = date.year();
     log.debug('Creating new schedule', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_schedule',
-      next: 'get_schedule',
       name,
       comment,
       day_of_month,
@@ -67,7 +66,7 @@ class ScheduleCommand extends EntityCommand {
       period_unit,
       duration,
       duration_unit,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -91,7 +90,6 @@ class ScheduleCommand extends EntityCommand {
 
     const data = {
       cmd: 'save_schedule',
-      next: 'get_schedule',
       comment,
       day_of_month,
       duration,
@@ -107,7 +105,7 @@ class ScheduleCommand extends EntityCommand {
       year,
     };
     log.debug('Saving schedule', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {

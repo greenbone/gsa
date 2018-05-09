@@ -46,10 +46,10 @@ const CertLink = ({
 
   if (type === 'CERT-Bund') {
     info_type = 'certbundadv';
-    title = _('View details fo CERT-Bund Advisory {{name}}', {name: id});
+    title = _('View details of CERT-Bund Advisory {{name}}', {name: id});
   }
   else if (type === 'DFN-CERT') {
-    title = _('View details fo DFN-CERT Advisory {{name}}', {name: id});
+    title = _('View details of DFN-CERT Advisory {{name}}', {name: id});
     info_type = 'dfncertadv';
   }
   return (

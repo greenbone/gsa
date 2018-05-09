@@ -41,9 +41,9 @@
 #include <gvm/base/networking.h> /* for sockaddr_as_str */
 #include <gvm/util/xmlutils.h>   /* for xml_string_append */
 
-#include "xslt_i18n.h" /* for accept_language_to_env_fmt */
+#include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
-#include "gsad_base.h" /* for xsl_transform, ctime_r_strip_newline */
+#include "gsad_base.h" /* for ctime_r_strip_newline */
 
 #undef G_LOG_DOMAIN
 /**
@@ -283,9 +283,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
       return MHD_NO;
     }
 
-  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
-
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
@@ -331,6 +329,7 @@ send_response (http_connection_t *connection, const char *content,
       return MHD_NO;
     }
 
+  add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
@@ -390,6 +389,8 @@ handler_send_response (http_connection_t *connection,
                                content_disposition);
     }
 
+  if (cmd_response_data_is_allow_caching (response_data) == FALSE)
+    add_forbid_caching_headers (response);
   add_security_headers (response);
   add_cors_headers (response);
 
@@ -466,9 +467,61 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
 
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
-  gchar *msg = gsad_message_new (NULL, NOT_FOUND_TITLE, NULL, 0,
-                                 NOT_FOUND_MESSAGE,
-                                 "/login", 0, response_data);
+  gchar *msg = g_strdup_printf (
+    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+    "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"\">"
+    "<head>"
+      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>"
+      "<link rel=\"icon\" href=\"/img/favicon.gif\" type=\"image/gif\"></link>"
+      "<title>Greenbone Security Assistant</title>"
+      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/gsa-base.css\"></link>"
+      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/gsa-style.css\"></link>"
+    "</head>"
+    "<body>"
+    "<div class=\"gsa-main\"><div>"
+    "<div class=\"panel panel-error\">"
+      "<div class=\"panel-heading\">"
+        "<h3 class=\"panel-title\">Error Message</h3>"
+      "</div>"
+      "<div class=\"panel-body\">"
+        "<div class=\"row\">"
+	  "<div class=\"pull-right\">"
+	    "<a href=\"/help/error_messages.html?token=\" class=\"icon icon-sm\" title=\"Help: Error Message\">"
+	      "<img src=\"/img/help.svg\" class=\"icon icon-sm\"></img>"
+	    "</a>"
+	  "</div>"
+	  "<img src=\"/img/alert_sign.svg\" alt=\"\" title=\"%s (GSA %s)\" class=\"pull-left icon icon-lg\"></img>"
+	  "<h4>%s (GSA %s)</h4>"
+        "</div>"
+	"<p style=\"margin-top: 10px; font-size: 16px;\">%s</p>"
+      "</div>"
+      "<div class=\"panel-footer\">"
+      "    Your options (not all may work):"
+      "    'Back' button of browser"
+      "    "
+      "        | <a href=\"/logout\">Logout</a></div>"
+      "</div>"
+      "<div class=\"gsa-footer\">"
+        "<div class=\"pull-left\">"
+	  "<span id=\"gsa-token\" style=\"display: none;\"></span>"
+        "</div>"
+	"Greenbone Security Assistant (GSA) Copyright 2009-2017 by Greenbone Networks"
+    " GmbH, <a href=\"http://www.greenbone.net\" target=\"_blank\">www.greenbone.net</a>"
+      "</div>"
+    "</div>"
+  "</div>"
+  "</body></html>",
+                          NOT_FOUND_TITLE,
+                          GSAD_VERSION,
+                          NOT_FOUND_TITLE,
+                          GSAD_VERSION,
+                          NOT_FOUND_MESSAGE);
+
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_TEXT_HTML);
+
+  cmd_response_data_set_content_length (response_data, strlen (msg));
+
   len = cmd_response_data_get_content_length (response_data);
   response = MHD_create_response_from_buffer (len, msg,
                                               MHD_RESPMEM_MUST_COPY);
@@ -511,12 +564,8 @@ handler_send_login_page (http_connection_t *connection,
                          int http_status_code, const gchar * message,
                          const gchar *url)
 {
-  const char * xml_flag = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "xml");
   time_t now;
   char ctime_now[200];
-  char *res;
   gsize len;
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -548,28 +597,17 @@ handler_send_login_page (http_connection_t *connection,
   response_data = cmd_response_data_new ();
   cmd_response_data_set_status_code (response_data, http_status_code);
 
-  if (xml_flag && strcmp (xml_flag, "0"))
-    {
-      res = xml;
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_XML);
-    }
-  else
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_TEXT_HTML);
-      res = xsl_transform (xml, response_data);
-      g_free (xml);
-    }
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_APP_XML);
 
   len = cmd_response_data_get_content_length (response_data);
 
   if (len == 0)
     {
-      len = strlen (res);
+      len = strlen (xml);
     }
 
-  response = MHD_create_response_from_buffer (len, res,
+  response = MHD_create_response_from_buffer (len, xml,
                                               MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection,
                                 response,
@@ -583,71 +621,48 @@ handler_send_login_page (http_connection_t *connection,
  * @param[in]  connection        Connection handle, e.g. used to send response.
  * @param[in]  http_status_code  HTTP status code for the response.
  * @param[in]  reason            Reason for re-authentication
- * @param[in]  xml               XML is requested
  *
  * @return MHD_YES on success. MHD_NO on errors.
  */
 int
 handler_send_reauthentication (http_connection_t *connection,
                                int http_status_code,
-                               authentication_reason_t reason,
-                               gboolean xml)
+                               authentication_reason_t reason)
 {
 
   const char *msg;
-  const char *type;
 
   switch (reason)
     {
       case LOGIN_FAILED:
         msg = "Login failed.";
-        type = "failed";
         break;
       case LOGIN_ERROR:
         msg = "Login failed. Error during authentication.";
-        type = "error";
         break;
       case GMP_SERVICE_DOWN:
         msg = "Login failed. GMP Service is down.";
-        type = "gmpdown";
         break;
       case SESSION_EXPIRED:
         msg = "Session expired. Please login again.";
-        type = "session";
         break;
       case LOGOUT_ALREADY:
         msg = "Already logged out.";
-        type = "already";
         break;
       case BAD_MISSING_TOKEN:
         msg = "Token missing or bad. Please login again.";
-        type = "token";
         break;
       case BAD_MISSING_COOKIE:
         msg = "Cookie missing or bad. Please login again.";
-        type = "cookie";
         break;
       case LOGOUT:
         msg = "Successfully logged out.";
-        type = "logout";
         break;
       default:
         msg = "";
-        type = "unknown";
     }
 
-  if (xml)
-    return handler_send_login_page (connection, http_status_code, msg,
-                                    NULL);
-  int ret;
-  char *param;
-
-  param = g_strdup_printf ("%s?type=%s", LOGIN_URL, type);
-  ret = send_redirect_to_urn (connection, param, NULL);
-
-  g_free (param);
-
-  return ret;
+  return handler_send_login_page (connection, http_status_code, msg, NULL);
 }
 
 /**
@@ -1021,6 +1036,22 @@ add_cors_headers (http_response_t *response)
   }
 }
 
+/**
+ * @brief Add header to forbid caching to a HTTP response.
+ *
+ * @param[in]  response       The HTTP response to add the headers to.
+ * @param[in]  allow_caching  1 to allow caching, 0 to forbid.
+ */
+void
+add_forbid_caching_headers (http_response_t *response)
+{
+  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
+                           "no-cache, no-store");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
+                           "no-cache");
+}
+
 gboolean
 is_export (http_connection_t *connection)
 {
@@ -1134,28 +1165,22 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  * @param[in]  function  The function in which the error occurred.
  * @param[in]  line      The line number at which the error occurred.
  * @param[in]  msg       The response message.
- * @param[in]  backurl   The URL offered to get back to a sane situation.
- *                       If NULL, the tasks page is used.
- * @param[in]  xml_flag  Flag to indicate if the returned content should contain
- *                       xml or html.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return An HTML document as a newly allocated string.
+ * @return An XML document as a newly allocated string.
  */
 char *
-gsad_message_new (credentials_t *credentials, const char *title,
-                  const char *function, int line, const char *msg,
-                  const char *backurl, gboolean xml_flag,
-                  cmd_response_data_t *response_data)
+gsad_message (credentials_t *credentials, const char *title,
+              const char *function, int line, const char *msg,
+              cmd_response_data_t *response_data)
 {
-  gchar *xml, *message, *resp;
+  gchar *xml, *message;
 
   if (function)
     {
       message = g_strdup_printf ("<gsad_response>"
                                  "<title>%s: %s:%i (GSA %s)</title>"
                                  "<message>%s</message>"
-                                 "<backurl>%s</backurl>"
                                  "<token>%s</token>"
                                  "</gsad_response>",
                                  title,
@@ -1163,7 +1188,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
                                  line,
                                  GSAD_VERSION,
                                  msg,
-                                 backurl ? backurl : "/omp?cmd=get_tasks",
                                  credentials ? credentials->token : "");
     }
   else
@@ -1171,13 +1195,11 @@ gsad_message_new (credentials_t *credentials, const char *title,
       message = g_strdup_printf ("<gsad_response>"
                                  "<title>%s (GSA %s)</title>"
                                  "<message>%s</message>"
-                                 "<backurl>%s</backurl>"
                                  "<token>%s</token>"
                                  "</gsad_response>",
                                  title,
                                  GSAD_VERSION,
                                  msg,
-                                 backurl ? backurl : "/omp?cmd=get_tasks",
                                  credentials ? credentials->token : "");
     }
 
@@ -1224,65 +1246,11 @@ gsad_message_new (credentials_t *credentials, const char *title,
     }
   g_free (message);
 
-  if (xml_flag)
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_XML);
-      cmd_response_data_set_content_length (response_data, strlen (xml));
-      return xml;
-    }
-
   cmd_response_data_set_content_type (response_data,
-                                      GSAD_CONTENT_TYPE_TEXT_HTML);
+                                      GSAD_CONTENT_TYPE_APP_XML);
+  cmd_response_data_set_content_length (response_data, strlen (xml));
 
-  resp = xsl_transform (xml, response_data);
-  if (resp == NULL)
-    {
-      resp = g_strdup ("<html>"
-                       "<body>"
-                       "An internal server error has occurred during XSL"
-                       " transformation."
-                       "</body>"
-                       "</html>");
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-    }
-
-  cmd_response_data_set_content_length (response_data, strlen (resp));
-
-  g_free (xml);
-  return resp;
-}
-
-/**
- * @brief Handles fatal errors.
- *
- * @todo Make it accept formatted strings.
- *
- * @param[in]  credentials  User authentication information.
- * @param[in]  title     The title for the message.
- * @param[in]  function  The function in which the error occurred.
- * @param[in]  line      The line number at which the error occurred.
- * @param[in]  msg       The response message.
- * @param[in]  backurl   The URL offered to get back to a sane situation.
- *                       If NULL, the tasks page is used.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return An HTML document as a newly allocated string.
- */
-char *
-gsad_message (credentials_t *credentials, const char *title,
-              const char *function, int line, const char *msg,
-              const char *backurl, cmd_response_data_t *response_data)
-{
-  gboolean xml_flag = 0;
-
-  if (credentials && credentials->params)
-    xml_flag = params_value_bool (credentials->params, "xml");
-
-  return gsad_message_new (credentials, title, function, line, msg, backurl,
-                           xml_flag, response_data);
-
+  return xml;
 }
 
 /**
@@ -1344,23 +1312,19 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
 }
 
 /**
- * @brief Removes user token and returns logout page or logout xml in case of
- * xml_flag is set to true
+ * @brief Removes user token and returns logout xml.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  xml_flag     Flag to indicate if the response should be xml
  * @param[in]  message      Login screen message.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Login XML.
  */
 char *
-logout_xml (credentials_t *credentials, gboolean xml_flag,
+logout_xml (credentials_t *credentials,
             const gchar *message, cmd_response_data_t *response_data)
 {
   time_t now;
-  gchar *xml;
-  char *res;
   char ctime_now[200];
 
   logout(credentials);
@@ -1368,12 +1332,5 @@ logout_xml (credentials_t *credentials, gboolean xml_flag,
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
-  xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
-
-  if (xml_flag)
-    return xml;
-
-  res = xsl_transform (xml, response_data);
-  g_free (xml);
-  return res;
+  return (login_xml (message, NULL, ctime_now, NULL, NULL, NULL));
 }

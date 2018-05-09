@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,16 +25,16 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils.js';
+import {is_defined, select_save_id} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -41,26 +42,22 @@ import Wrapper from '../../components/layout/wrapper.js';
 
 import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
 
-import ReportCharts from './charts.js';
 import ReportFilterDialog from './filterdialog.js';
 import ImportReportDialog from './importdialog.js';
 import ReportsTable from './table.js';
 
-import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
+import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 
-const Dashboard = withDashboard(ReportCharts, {
-  hideFilterSelect: true,
-  configPrefId: 'Äe599bb6b-b95a-4bb2-a6bb-fe8ac69bc071',
-  defaultControllersString: 'report-by-severity-class|' +
-    'report-by-high-results|report-by-cvss',
-  defaultControllerString: 'report-by-cvss',
-});
+import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
-    <HelpIcon page="reports"/>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="reading-of-the-reports"
+      title={_('Help: Reports')}
+    />
     <Icon
-      size="small"
       title={_('Upload report')}
       img="upload.svg"
       onClick={onUploadReportClick}/>
@@ -76,14 +73,22 @@ class Page extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {
+      importDialogVisible: false,
+      containerTaskDialogVisible: false,
+    };
 
     this.handleDialogSave = this.handleDialogSave.bind(this);
     this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
+    this.handleCloseContainerTask = this.handleCloseContainerTask.bind(this);
     this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
     this.handleReportDeleteClick = this.handleReportDeleteClick.bind(this);
+    this.handleTaskChange = this.handleTaskChange.bind(this);
+
     this.openImportDialog = this.openImportDialog.bind(this);
+    this.closeImportDialog = this.closeImportDialog.bind(this);
     this.openCreateTaskDialog = this.openCreateTaskDialog.bind(this);
+    this.loadTasks = this.loadTasks.bind(this);
   }
 
   componentWillReceiveProps(next) {
@@ -98,23 +103,30 @@ class Page extends React.Component {
     }
   }
 
-  showImportDialog(tasks, task_id) {
-    this.import_dialog.show({
-      tasks,
-      in_assets: 1,
-      task_id: select_save_id(tasks, task_id),
-    });
+  loadTasks() {
+    const {gmp} = this.context;
+    return gmp.tasks.get()
+      .then(response => {
+        const {data: tasks} = response;
+        return tasks.filter(task => task.isContainer());
+      });
   }
 
   openImportDialog(task_id) {
-    const {gmp} = this.context;
-    gmp.tasks.get()
-      .then(tasks => tasks.filter(task => task.isContainer()))
-      .then(tasks => this.showImportDialog(tasks, task_id));
+    this.loadTasks().then(
+      tasks => this.setState({
+        tasks,
+        task_id: select_save_id(tasks),
+        importDialogVisible: true,
+      }));
   }
 
   openCreateTaskDialog() {
-    this.container_task_dialog.show();
+    this.setState({containerTaskDialogVisible: true});
+  }
+
+  closeImportDialog() {
+    this.setState({importDialogVisible: false});
   }
 
   handleDialogSave(data) {
@@ -125,10 +137,18 @@ class Page extends React.Component {
 
   handleCreateContainerTask(data) {
     const {gmp} = this.context;
-    return gmp.task.createContainer(data).then(response => {
-      const task = response.data;
-      this.openImportDialog(task.id);
-    });
+    let task_id;
+    return gmp.task.createContainer(data)
+      .then(response => {
+        const {data: task} = response;
+        task_id = task.id;
+      })
+      .then(this.loadTasks)
+      .then(tasks => this.setState({tasks, task_id}));
+  }
+
+  handleCloseContainerTask() {
+    this.setState({containerTaskDialogVisible: false});
   }
 
   handleReportDeltaSelect(report) {
@@ -152,7 +172,18 @@ class Page extends React.Component {
     return gmp.report.delete(report).then(onChanged, onError);
   }
 
+  handleTaskChange(task_id) {
+    this.setState({task_id});
+  }
+
   render() {
+    const {
+      containerTaskDialogVisible,
+      importDialogVisible,
+      task_id,
+      tasks,
+    } = this.state;
+
     return (
       <Wrapper>
         <EntitiesPage
@@ -162,13 +193,23 @@ class Page extends React.Component {
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
         />
-        <ImportReportDialog
-          ref={ref => this.import_dialog = ref}
-          onNewContainerTaskClick={this.openCreateTaskDialog}
-          onSave={this.handleDialogSave}/>
-        <ContainerTaskDialog
-          ref={ref => this.container_task_dialog = ref}
-          onSave={this.handleCreateContainerTask}/>
+        {importDialogVisible &&
+          <ImportReportDialog
+            task_id={task_id}
+            tasks={tasks}
+            visible={importDialogVisible}
+            onNewContainerTaskClick={this.openCreateTaskDialog}
+            onClose={this.closeImportDialog}
+            onSave={this.handleDialogSave}
+            onTaskChange={this.handleTaskChange}
+          />
+        }
+        {containerTaskDialogVisible &&
+          <ContainerTaskDialog
+            onClose={this.handleCloseContainerTask}
+            onSave={this.handleCreateContainerTask}
+          />
+        }
       </Wrapper>
     );
   }
@@ -188,7 +229,10 @@ Page.contextTypes = {
 
 export default withEntitiesContainer('report', {
   filtersFilter: REPORTS_FILTER_FILTER,
-  dashboard: Dashboard,
+  dashboard2: ReportsDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+  ),
   title: _('Reports'),
   sectionIcon: 'report.svg',
   filterEditDialog: ReportFilterDialog,

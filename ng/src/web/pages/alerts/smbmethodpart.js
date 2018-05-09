@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,15 +26,20 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {
+  SMB_CREDENTIAL_TYPES,
+  smb_credential_filter,
+} from 'gmp/models/credential.js';
+
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
-import Select2 from '../../components/form/select2.js';
+import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import Text from '../../components/form/text.js';
@@ -42,19 +47,18 @@ import Text from '../../components/form/text.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 const SmbMethodPart = ({
-    prefix,
-    credentials,
-    reportFormats,
-    smbCredential,
-    smbFilePath,
-    smbReportFormat,
-    smbSharePath,
-    onChange,
-    onNewCredentialClick,
-  }) => {
-  const smb_credential_opts = render_options(credentials);
-  const smb_report_format_opts = render_options(reportFormats);
-
+  prefix,
+  credentials = [],
+  reportFormats,
+  smbCredential,
+  smbFilePath,
+  smbReportFormat,
+  smbSharePath,
+  onChange,
+  onNewCredentialClick,
+  onCredentialChange,
+}) => {
+  credentials.filter(smb_credential_filter);
   return (
     <Layout
       flex="column"
@@ -70,17 +74,19 @@ const SmbMethodPart = ({
 
       <FormGroup title={_('Credential')}>
         <Divider>
-          <Select2
+          <Select
             name={prefix + 'smb_credential'}
+            items={render_select_items(credentials)}
             value={smbCredential}
-            onChange={onChange}>
-            {smb_credential_opts}
-          </Select2>
+            onChange={onCredentialChange}
+          />
           <Layout>
             <NewIcon
-              value={['up']}
+              size="small"
+              value={SMB_CREDENTIAL_TYPES}
               title={_('Create a credential')}
-              onClick={onNewCredentialClick}/>
+              onClick={onNewCredentialClick}
+            />
           </Layout>
         </Divider>
       </FormGroup>
@@ -89,27 +95,29 @@ const SmbMethodPart = ({
         <TextField
           grow="1"
           name={prefix + 'smb_share_path'}
+          maxLength="256"
           value={smbSharePath}
           onChange={onChange}
-          maxLength="256"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('File path')}>
         <TextField
           grow="1"
           name={prefix + 'smb_file_path'}
+          maxLength="256"
           value={smbFilePath}
           onChange={onChange}
-          maxLength="256"/>
+        />
       </FormGroup>
 
       <FormGroup title={_('Report Format')}>
-        <Select2
+        <Select
           name={prefix + 'smb_report_format'}
+          items={render_select_items(reportFormats)}
           value={smbReportFormat}
-          onChange={onChange}>
-          {smb_report_format_opts}
-        </Select2>
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );
@@ -123,8 +131,9 @@ SmbMethodPart.propTypes = {
   smbFilePath: PropTypes.string.isRequired,
   smbReportFormat: PropTypes.id,
   smbSharePath: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-  onNewCredentialClick: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(SmbMethodPart);

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,33 +39,50 @@ const Header = ({
   filter,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          width="20%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'roles' : false}
+          width="26%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'roles' : false}
           onSortChange={onSortChange}>
           {_('Roles')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'groups' : false}
+          width="26%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'groups' : false}
           onSortChange={onSortChange}>
           {_('Groups')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'host_access' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'host_access' : false}
           onSortChange={onSortChange}>
           {_('Host Access')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'ldap' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'ldap' : false}
           onClick={onSortChange}>
           {_('Authentication Type')}
         </TableHead>
@@ -76,6 +94,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   filter: PropTypes.filter,
   links: PropTypes.bool,
   sort: PropTypes.bool,

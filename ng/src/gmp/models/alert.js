@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
 
-import {is_defined, is_empty, is_object, for_each, map} from '../utils.js';
+import {is_defined, is_object} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {for_each, map} from '../utils/array';
 
 import {parse_yesno, YES_VALUE} from '../parser.js';
 
@@ -50,6 +53,7 @@ export const METHOD_TYPE_START_TASK = 'Start Task';
 export const METHOD_TYPE_HTTP_GET = 'HTTP Get';
 export const METHOD_TYPE_SOURCEFIRE = 'Sourcefire Connector';
 export const METHOD_TYPE_VERINICE = 'verinice Connector';
+export const METHOD_TYPE_TIPPING_POINT = 'TippingPoint SMS';
 
 export const EMAIL_NOTICE_INCLUDE = '0';
 export const EMAIL_NOTICE_ATTACH = '2';

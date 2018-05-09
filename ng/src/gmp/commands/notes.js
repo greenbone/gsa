@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +27,16 @@ import logger from '../log.js';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Note from '../models/note.js';
+import {
+  DEFAULT_DAYS,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ANY,
+  MANUAL,
+} from '../models/override.js';
 
 const log = logger.getLogger('gmp.commands.notes');
 
-export class NoteCommand extends EntityCommand {
+class NoteCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'note', Note);
@@ -48,33 +55,45 @@ export class NoteCommand extends EntityCommand {
   }
 
   _save(args) {
-    let {cmd, oid, note_id, active = '-1', days = 30, hosts = '',
-      hosts_manual = '', result_id = '', result_uuid = '', port = '',
-      port_manual = '', severity = '', task_id = '', task_uuid = '',
-      text} = args;
-    log.debug('Saving note', args);
-    return this.httpPost({
+    const {
       cmd,
-      next: 'get_note',
       oid,
-      note_id,
+      id,
+      active = ACTIVE_YES_ALWAYS_VALUE,
+      days = DEFAULT_DAYS,
+      hosts = ANY,
+      hosts_manual = '',
+      result_id = '',
+      result_uuid = '',
+      port = ANY,
+      port_manual = '',
+      severity = '',
+      task_id = '',
+      task_uuid = '',
+      text,
+    } = args;
+    log.debug('Saving note', args);
+    return this.action({
+      cmd,
+      oid,
+      id,
       active,
       days,
-      hosts,
+      hosts: hosts === MANUAL ? '--' : '',
       hosts_manual,
       result_id,
       result_uuid,
       task_id,
       task_uuid,
-      port,
+      port: port === MANUAL ? '--' : '',
       port_manual,
       severity,
       text,
-    }).then(this.transformResponse);
+    });
   }
 }
 
-export class NotesCommand extends EntitiesCommand {
+class NotesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'note', Note);
@@ -82,6 +101,33 @@ export class NotesCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_notes.get_notes_response;
+  }
+
+  getActiveDaysAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'active_days',
+      filter,
+      maxGroups: 250,
+    });
+  }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'created',
+      aggregate_mode: 'count',
+      filter,
+    });
+  }
+
+  getWordCountsAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'note',
+      group_column: 'text',
+      aggregate_mode: 'word_counts',
+      filter,
+    });
   }
 };
 

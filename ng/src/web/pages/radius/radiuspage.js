@@ -4,7 +4,7 @@
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ import FormGroup from '../../components/form/formgroup.js';
 import PasswordField from '../../components/form/passwordfield.js';
 import TextField from '../../components/form/textfield.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import Layout from '../../components/layout/layout.js';
 import Section from '../../components/section/section.js';
@@ -117,9 +117,10 @@ class RadiusAuthentication extends React.Component {
 
     return (
       <Layout flex="column">
-        <HelpIcon
-          page="users"
-          anchor="radiusauthentication"
+        <ManualIcon
+          page="gui_administration"
+          anchor="radius"
+          size="medium"
           title={_('Help: RADIUS Authentication')}
         />
         <Section

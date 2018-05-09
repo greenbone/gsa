@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
-import {is_defined, for_each, map} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {for_each, map} from '../utils/array';
 
 import {parse_severity} from '../parser.js';
 
@@ -56,6 +58,10 @@ class CertBundAdv extends Info {
       ret.reference_url = advisory.Reference_URL;
       ret.categories = advisory.CategoryTree;
 
+      if (!is_defined(ret.version) && is_defined(advisory.Ref_Num)) {
+        ret.version = advisory.Ref_Num._update;
+      }
+
       if (is_defined(advisory.Description) &&
         is_defined(advisory.Description.Element)) {
         for_each(advisory.Description.Element, element => {
@@ -71,6 +77,14 @@ class CertBundAdv extends Info {
             );
           }
         });
+      }
+
+      if (is_defined(advisory.RevisionHistory)) {
+        ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
+          revision: rev.Number,
+          description: rev.Description,
+          date: moment(rev.Date),
+        }));
       }
 
       if (is_defined(advisory.CVEList && is_defined(advisory.CVEList.CVE))) {

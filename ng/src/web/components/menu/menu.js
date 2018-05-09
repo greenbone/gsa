@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,51 +23,153 @@
 
 import React from 'react';
 
-import {is_defined} from 'gmp/utils.js';
+import glamorous from 'glamorous';
+
+import {is_defined, has_value} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+import Theme from '../../utils/theme.js';
 
 import Link from '../link/link.js';
-import LegacyLink from '../link/legacylink.js';
 
-import './css/menu.css';
+const DefaultEntry = glamorous.div('menu-default-entry', {
+  display: 'flex',
+  justifyContent: 'center',
+  flexGrow: '1',
 
-function create_link(title, options = {}) {
-  const {to, legacy, children, caps, ...other} = options; // eslint-disable-line no-unused-vars
-  if (legacy) {
-    return <LegacyLink {...other}>{title}</LegacyLink>;
+  '& a, & a:hover, & a:focus, & a:link': {
+    color: '#FFFFFF',
+    display: 'block',
+    height: '35px',
+    lineHeight: '35px',
+    fontSize: '10px',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  '.menu:hover & a': {
+    color: '#393637',
+  },
+});
+
+const MenuPoint = glamorous.li('menu-point', {
+  background: "url('/img/style/menu_pointy.png') no-repeat",
+  display: 'block',
+  height: '15px',
+  marginTop: '-14px',
+  marginLeft: '25px',
+});
+
+const StyledMenuEntry = glamorous.li('menu-entry', {
+  '& a': {
+    color: '#3A3A3A',
+  },
+  '&:last-child, &:last-child .menu-entry:last-child': {
+    borderBottomRightRadius: '8px',
+    borderBottomLeftRadius: '8px',
+  },
+  '& a, & a:hover, & a:focus, & a:link': {
+    textDecoration: 'none',
+    color: '#3A3A3A',
+  },
+
+  '& > .menu-section': {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    borderTop: '1px solid #b0b0b0',
+  },
+});
+
+const MenuList = glamorous.ul('menu-list', {
+  width: '255px',
+  zIndex: Theme.Layers.onTop,
+  position: 'absolute',
+  display: 'none',
+  background: '#FAFAFA',
+  border: '1px solid #3A3A3A',
+  borderRadius: '0px 0px 8px 8px',
+
+  '& .menu-entry': {
+    display: 'flex',
+    alignItems: 'stretch',
+    textIndent: '12px',
+    textAlign: 'left',
+    color: '#3A3A3A',
+    minHeight: '22px',
+    fontSize: '10px',
+    fontWeight: 'bold',
+    width: '100%',
+    backgroundColor: 'white',
+  },
+  '& .menu-entry:hover': {
+    background: '#99CE48',
+  },
+});
+
+const StyledMenu = glamorous.li('menu', {
+  flexGrow: '1',
+  flexShrink: '1',
+  height: '35px',
+
+  '&:hover': {
+    backgroundColor: '#99ce48',
+  },
+
+  '&:hover > .menu-list': {
+    display: 'block',
+  },
+
+  '& a': {
+    display: 'flex',
+    flexGrow: 1,
+    alignItems: 'center', // center text vertically
+  },
+
+  '& a, & a:hover, & a:focus, & a:link': {
+    background: 'none',
+    textDecoration: 'none',
+    color: '#3A3A3A',
+  },
+});
+
+const Menu = ({
+  children,
+  title,
+  to,
+  ...props
+}) => {
+  let link;
+  if (is_defined(to)) {
+    link = <Link to={to}>{title}</Link>;
   }
-  else if (to) {
-    return <Link to={to}>{title}</Link>;
-  }
-  return undefined;
-}
-
-const Menu = ({children, title, ...props}) => {
-  let link = create_link(title, props);
-
-  if (!is_defined(link) && is_defined(children) && children.length > 0) {
-    // create link from first menu entry
-    // this allows to have different links depending on the capabilities of a
-    // user
+  else if (is_defined(children) && children.length > 0) {
     const [child] = children;
-    link = create_link(title, child.props);
+    link = React.cloneElement(child, {title});
   }
+
+  const menuentries = React.Children.map(children, child => has_value(child) ? (
+    <StyledMenuEntry key={child.key}>
+      {child}
+    </StyledMenuEntry>
+  ) : child);
+
   return (
-    <li className="menu">
-      {link}
+    <StyledMenu>
+      <DefaultEntry>
+        {link}
+      </DefaultEntry>
       {is_defined(children) && children.length > 0 &&
-        <ul>
-          <li className="menu-point"></li>
-          {children}
-        </ul>
+        <MenuList>
+          <MenuPoint/>
+          {menuentries}
+        </MenuList>
       }
-    </li>
+    </StyledMenu>
   );
 };
 
 Menu.propTypes = {
-  legacy: PropTypes.bool,
   title: PropTypes.string.isRequired,
   to: PropTypes.string,
 };

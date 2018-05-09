@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,8 @@
 
 import logger from '../log.js';
 
-import {
-  is_array,
-  is_defined,
-  map,
-} from '../utils.js';
+import {is_array, is_defined} from '../utils/identity';
+import {map} from '../utils/array';
 
 import Model from '../model.js';
 
@@ -53,7 +50,7 @@ export function parse_info_counts(response) {
   //  or by using the same pattern (with 's') for info
 
   const infos = response.info;
-  // its getting even uglier... if no entites are returned we get a single info
+  // its getting even uglier... if no entities are returned we get a single info
   // element for start and max counts.
   let es = is_array(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;

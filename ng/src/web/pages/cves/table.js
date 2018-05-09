@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,56 +44,82 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          width="15em"
-          sortby={sort ? 'name' : false}
+          width="15%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'vector' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'vector' : false}
           onSortChange={onSortChange}>
           {_('Vector')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'complexity' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'complexity' : false}
           onSortChange={onSortChange}>
           {_('Complexity')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'authentication' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'authentication' : false}
           onSortChange={onSortChange}>
           {_('Authentication')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'confidentiality_impact' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'confidentiality_impact' : false}
           onSortChange={onSortChange}>
           {_('Confidentiality Impact')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'integrity_impact' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'integrity_impact' : false}
           onSortChange={onSortChange}>
           {_('Integrity Impact')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'availability_impact' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'availability_impact' : false}
           onSortChange={onSortChange}>
           {_('Availability Impact')}
         </TableHead>
         <TableHead
-          width="15em"
-          sortby={sort ? 'published' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'published' : false}
           onSortChange={onSortChange}>
           {_('Published')}
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'severity' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -104,6 +131,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
@@ -118,6 +147,7 @@ const CvesFooter = createEntitiesFooter({
 
 export const CvesTable = createEntitiesTable({
   body: false,
+  doubleRow: true,
   emptyTitle: _('No CVEs available'),
   row: CveRow,
   rowDetails: withRowDetails('cve')(CveDetails),

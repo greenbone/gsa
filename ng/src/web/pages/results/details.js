@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,13 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_empty, is_defined} from 'gmp/utils.js';
+import {is_empty, is_defined} from 'gmp/utils';
 import {TAG_NA} from 'gmp/models/nvt.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -45,13 +46,16 @@ import TableRow from '../../components/table/row.js';
 
 import References from '../nvts/references.js';
 import Solution from '../nvts/solution.js';
+import P from '../nvts/preformatted';
 
+/*
+ security and log messages from nvts are converted to results
+ results should preserve newlines AND whitespaces for formatting
+*/
 const Pre = glamorous.pre({
   whiteSpace: 'pre-wrap',
   wordWrap: 'normal',
 });
-
-const P = Pre.withComponent('div');
 
 const ResultDetails = ({
     className,
@@ -161,7 +165,7 @@ const ResultDetails = ({
                           id={oid}
                           textOnly={!links}
                         >
-                          {render_nvt_name(nvt)}
+                          {render_nvt_name(oid, nvt.name)}
                           {' OID: ' + oid}
                         </DetailsLink>
                       )}

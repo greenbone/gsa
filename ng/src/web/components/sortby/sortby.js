@@ -36,6 +36,9 @@ const Anchor = glamorous.a(
 
 class SortBy extends React.Component {
 
+  static ASC = 'asc';
+  static DESC = 'desc';
+
   constructor(...args) {
     super(...args);
 
@@ -43,7 +46,7 @@ class SortBy extends React.Component {
   }
 
   handleClick() {
-    let {by, onClick} = this.props;
+    const {by, onClick} = this.props;
 
     if (onClick) {
       onClick(by);
@@ -51,7 +54,7 @@ class SortBy extends React.Component {
   }
 
   render() {
-    let {children, className} = this.props;
+    const {children, className} = this.props;
     return (
       <Anchor onClick={this.handleClick} className={className}>
         {children}

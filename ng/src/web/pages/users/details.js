@@ -23,7 +23,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_empty} from 'gmp/utils.js';
+import {is_empty} from 'gmp/utils';
 
 import {
   AUTH_METHOD_LDAP,

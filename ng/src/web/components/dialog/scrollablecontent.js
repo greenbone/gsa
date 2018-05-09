@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,15 +33,16 @@ import Layout from '../layout/layout.js';
 const ScrollableContent = glamorous.div(
   {
     overflow: 'auto',
-    background: '#eee',
     padding: '0 15px',
     width: '100%',
+    height: '100%',
   },
   ({maxHeight}) => ({maxHeight}),
 );
 
 const StyledLayout = glamorous(Layout)({
   overflow: 'hidden', // fix for adjusting the content while resizing in firefox
+  height: '100%', // needs to be set for Chrome
 });
 
 const ScrollableContentLayout = ({

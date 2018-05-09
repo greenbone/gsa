@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,37 +31,37 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-import VulnsCharts from './charts.js';
 import VulnsFilterDialog from './filterdialog.js';
 import VulnsTable from './table.js';
 
-const Dashboard = withDashboard(VulnsCharts, {
-  configPrefId: '43690dcb-3174-4d84-aa88-58c1936c7f5c',
-  defaultControllersString: 'vuln-by-cvss|vuln-by-severity-class',
-  defaultControllerString: 'vuln-by-cvss',
-  hideFilterSelect: true,
-});
+import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => {
   return (
     <Layout flex box>
-      <HelpIcon page="vulns" title={_('Vulnerabilities')}/>
+      <ManualIcon
+        page="search"
+        anchor="vulnerabilities"
+        title={_('Vulnerabilities')}/>
     </Layout>
   );
 };
 
 export default withEntitiesContainer('vuln', {
-  dashboard: Dashboard,
+  dashboard2: VulnerabilitiesDashboard,
   filterEditDialog: VulnsFilterDialog,
   filtersFilter: VULNS_FILTER_FILTER,
   table: VulnsTable,
   title: _('Vulnerabilities'),
   sectionIcon: 'vulnerability.svg',
   toolBarIcons: ToolBarIcons,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
+  ),
 })(EntitiesPage);

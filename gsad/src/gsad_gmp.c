@@ -30,8 +30,7 @@
  * @brief GMP communication module of Greenbone Security Assistant daemon.
  *
  * This file implements an API for GMP.  The functions call the Greenbone
- * Vulnerability Manager via GMP properly, and apply XSL-Transforms to
- * deliver HTML results.
+ * Vulnerability Manager via GMP properly.
  */
 
 #include <stdio.h>
@@ -57,25 +56,13 @@
 #include "gsad_gmp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "gsad_http.h" /* for gsad_message, logout_xml */
-#include "gsad_base.h" /* for xsl_transform */
-#include "xslt_i18n.h"
+#include "gsad_base.h" /* for set_language_code */
+#include "gsad_i18n.h"
 
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
 #include <gvm/gmp/gmp.h>
-
-/*
- * XSLT includes
- */
-#include <libxml2/libxml/xmlmemory.h>
-#include <libxml2/libxml/HTMLtree.h>
-#include <libxml2/libxml/xmlIO.h>
-#include <libxml2/libxml/xinclude.h>
-#include <libxslt/xslt.h>
-#include <libxslt/xsltInternals.h>
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
 
 #undef G_LOG_DOMAIN
 /**
@@ -105,6 +92,12 @@
   " the entered values.  If in doubt, the online help of the respective section"  \
   " will lead you to the appropriate help page."                                  \
   "</gsad_msg>"
+
+/**
+ * @brief HTTP status code for expected failure of gmp requests e.g. if some
+ *        parameter was missing or invalid.
+ */
+#define GSAD_STATUS_INVALID_REQUEST MHD_HTTP_UNPROCESSABLE_ENTITY
 
 /**
  * @brief Initial filtered results per page on the report summary.
@@ -172,18 +165,11 @@ static char *get_asset (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_assets (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_assets_chart (gvm_connection_t *, credentials_t *,
-                               params_t *, const char *, cmd_response_data_t*);
-
-
 static char *get_task (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
 static char *get_tasks (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
-
-static char *get_tasks_chart (gvm_connection_t *, credentials_t *,
-                              params_t *, const char *, cmd_response_data_t*);
 
 static char *get_trash (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
@@ -328,12 +314,11 @@ static gchar *next_page_url (credentials_t *, params_t *, const char *,
 static gchar *action_result_page (gvm_connection_t *, credentials_t *,
                                   params_t *, cmd_response_data_t *,
                                   const char*, const char*, const char*,
-                                  const char*);
+                                  const char*, const char*);
 
 static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
-                                    params_t *, entity_t, int, const char*,
-                                    const char *, const char*, const char*,
-                                    const char *, cmd_response_data_t *);
+                                    params_t *, entity_t,  const char *,
+                                    cmd_response_data_t *);
 
 /* Helpers. */
 
@@ -381,26 +366,6 @@ gmp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
   manager_port = port_manager;
 }
 
-/**
- * @brief Traverse a chart preference tree and output xml elements.
- *
- * @param id     ID of the preference.
- * @param value  Preference value.
- * @param buffer GString buffer to output elements to.
- *
- * @return always 0
- */
-static gboolean
-print_chart_pref (gchar *id, gchar *value, GString* buffer)
-{
-  g_string_append_printf (buffer,
-                          "<chart_preference id=\"%s\">"
-                          "<value>%s</value>"
-                          "</chart_preference>",
-                          id,
-                          value);
-  return 0;
-}
 
 /**
  *  @brief Structure to search a key by value
@@ -481,7 +446,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
 }
 
 /**
- * @brief Wrap some XML in an envelope and XSL transform the envelope.
+ * @brief Wrap some XML in an envelope.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -489,21 +454,19 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  * @param[in]  xml            XML string.  Freed before exit.
  * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped GMP XML object.
  */
 static char *
-xsl_transform_gmp (gvm_connection_t *connection,
-                   credentials_t * credentials, params_t *params, gchar * xml,
-                   cmd_response_data_t *response_data)
+envelope_gmp (gvm_connection_t *connection,
+              credentials_t * credentials, params_t *params, gchar * xml,
+              cmd_response_data_t *response_data)
 {
   time_t now;
   gchar *res, *name;
   GString *string;
-  char *html;
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
-  const char *refresh_interval;
   struct timeval tv;
 
   assert (credentials);
@@ -526,7 +489,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
-                                 "<charts>%d</charts>"
                                  "<guest>%d</guest>"
                                  "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
@@ -546,7 +508,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
                                  credentials->role,
                                  credentials->severity,
                                  credentials->language,
-                                 credentials->charts,
                                  credentials->guest,
                                  credentials->client_address,
                                  (double) ((tv.tv_sec
@@ -558,12 +519,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
   g_string_append (string, res);
   g_free (res);
 
-  g_string_append (string, "<chart_preferences>");
-  g_tree_foreach (credentials->chart_prefs,
-                  (GTraverseFunc)print_chart_pref,
-                  string);
-  g_string_append (string, "</chart_preferences>");
-
   if (credentials->pw_warning)
     {
       gchar *warning_elem;
@@ -573,71 +528,6 @@ xsl_transform_gmp (gvm_connection_t *connection,
                                               credentials->pw_warning);
       g_string_append (string, warning_elem);
       g_free (warning_elem);
-    }
-
-  refresh_interval = params_value (params, "refresh_interval");
-  if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
-    g_string_append_printf (string,
-                            "<autorefresh interval=\"%s\"/>",
-                            credentials->autorefresh);
-  else
-    {
-      int ret;
-      gchar *interval_64, *response;
-      entity_t entity;
-
-      interval_64 = (refresh_interval
-                     ? g_base64_encode ((guchar*) refresh_interval,
-                                        strlen (refresh_interval))
-                     : g_strdup (""));
-      ret = gmpf (connection, credentials, &response, &entity, response_data,
-                  "<modify_setting"
-                  " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
-                  "<value>%s</value>"
-                  "</modify_setting>",
-                  interval_64);
-      g_free (interval_64);
-      switch (ret)
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Failure to send command to"
-                                " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
-          case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Failure to receive response from"
-                                " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
-          default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while modifying the"
-                                " autorefresh setting for the settings. "
-                                "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
-        }
-
-      free_entity (entity);
-      g_free (credentials->autorefresh);
-      credentials->autorefresh = g_strdup (refresh_interval);
-      user_set_autorefresh (credentials->token, refresh_interval);
-
-      g_string_append_printf (string,
-                              "<autorefresh interval=\"%s\"/>",
-                              credentials->autorefresh);
     }
 
   g_string_append (string, "<params>");
@@ -682,39 +572,9 @@ xsl_transform_gmp (gvm_connection_t *connection,
                           xml);
   g_free (xml);
 
-  if (params_value_bool (params, "xml"))
-    {
-      cmd_response_data_set_content_type(response_data,
-                                         GSAD_CONTENT_TYPE_APP_XML);
-      return g_string_free (string, FALSE);
-    }
-
-  html = xsl_transform (string->str, response_data);
   cmd_response_data_set_content_type(response_data,
-                                     GSAD_CONTENT_TYPE_TEXT_HTML);
-  g_string_free (string, TRUE);
-  if (html == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      res = g_strdup_printf ("<gsad_response>"
-                             "<title>Internal Error</title>"
-                             "<message>"
-                             "An internal server error has occurred during XSL"
-                             " transformation."
-                             "</message>"
-                             "<backurl>/omp?cmd=get_tasks</backurl>"
-                             "</gsad_response>");
-      html = xsl_transform (res, response_data);
-      if (html == NULL)
-        html = g_strdup ("<html>"
-                         "<body>"
-                         "An internal server error has occurred during XSL"
-                         " transformation."
-                         "</body>"
-                         "</html>");
-      g_free (res);
-    }
-  return html;
+                                     GSAD_CONTENT_TYPE_APP_XML);
+  return g_string_free (string, FALSE);
 }
 
 /**
@@ -773,7 +633,7 @@ member1 (params_t *params, const char *string)
  * @param[out] success      Whether the command returned a success response.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed error message on failure, NULL on success.
+ * @return Error message on failure, NULL on success.
  */
 static char *
 check_modify_config (gvm_connection_t *connection,
@@ -783,9 +643,7 @@ check_modify_config (gvm_connection_t *connection,
 {
   entity_t entity;
   gchar *response;
-  const char *no_redirect, *status_text;
-
-  no_redirect = params_value (params, "no_redirect");
+  const char  *status_text;
 
   if (success)
     *success = 0;
@@ -796,13 +654,14 @@ check_modify_config (gvm_connection_t *connection,
 
   if (read_entity_c (connection, &entity))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to read command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Check the response. */
@@ -811,13 +670,14 @@ check_modify_config (gvm_connection_t *connection,
   if (status_text == NULL)
     {
       free_entity (entity);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to parse status_text from response.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (strcmp (status_text, "Config is in use") == 0)
@@ -830,12 +690,13 @@ check_modify_config (gvm_connection_t *connection,
                                        entity_attribute (entity, "status"),
                                        message);
 
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       response
         = action_result_page (connection, credentials, params, response_data,
                               "Save Config",
                               entity_attribute (entity, "status"),
-                              message, next_url);
+                              message, NULL, next_url);
 
       g_free (next_url);
       free_entity (entity);
@@ -850,11 +711,12 @@ check_modify_config (gvm_connection_t *connection,
                                        entity_attribute (entity, "status"),
                                        message);
 
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       response
         = action_result_page (connection, credentials, params, response_data, "Save Config",
                               entity_attribute (entity, "status"),
-                              message, next_url);
+                              message, NULL, next_url);
 
       g_free (next_url);
       free_entity (entity);
@@ -867,9 +729,6 @@ check_modify_config (gvm_connection_t *connection,
 
   response
     = response_from_entity (connection, credentials, params, entity,
-                            (no_redirect && strcmp (no_redirect, "0")),
-                            NULL, next,
-                            NULL, fail_next,
                             "Save Config", response_data);
   free_entity (entity);
 
@@ -910,15 +769,19 @@ set_http_status_from_entity (entity_t entity,
                              cmd_response_data_t *response_data)
 {
   if (entity == NULL)
-    response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
   else if (strcmp (entity_attribute (entity, "status_text"),
               "Permission denied")
            == 0)
-    response_data->http_status_code = MHD_HTTP_FORBIDDEN;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_FORBIDDEN);
   else if (strcmp (entity_attribute (entity, "status"), "404") == 0)
-    response_data->http_status_code = MHD_HTTP_NOT_FOUND;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_NOT_FOUND);
   else
-    response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+    cmd_response_data_set_status_code (response_data,
+                                       MHD_HTTP_BAD_REQUEST);
 }
 
 /**
@@ -1004,7 +867,8 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
         return 4;
       case 1:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -1018,14 +882,14 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return 1;
       case 2:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -1039,14 +903,14 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return 2;
       default:
         if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
         if (response)
           {
             gchar *message;
@@ -1059,8 +923,7 @@ simple_gmpf (gvm_connection_t *connection, const gchar *message_operation,
                          : "performing an operation");
             *response = gsad_message (credentials, "Internal error",
                                       __FUNCTION__, __LINE__,
-                                      message, "/omp?cmd=get_tasks",
-                                      response_data);
+                                      message, response_data);
             g_free (message);
           }
         return -1;
@@ -1206,7 +1069,8 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
       ret_html = ret_func (connection, credentials, params, msg,               \
                           response_data);                                      \
       g_free (msg);                                                            \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
+      cmd_response_data_set_status_code (response_data,                        \
+                                         MHD_HTTP_BAD_REQUEST);                \
       return ret_html;                                                         \
     }
 
@@ -1354,7 +1218,7 @@ next_page_url (credentials_t *credentials, params_t *params,
                const char* action_message)
 {
   GString *url;
-  const char *next_cmd, *xml_param, *next_xml_param;
+  const char *next_cmd;
   params_iterator_t iter;
   gchar *param_name;
   param_t *current_param;
@@ -1377,9 +1241,6 @@ next_page_url (credentials_t *credentials, params_t *params,
   else
     next_cmd = "get_tasks";
 
-  xml_param = params_value (params, "xml");
-  next_xml_param = params_value (params, "next_xml");
-
   g_string_append (url, next_cmd);
 
   params_iterator_init (&iter, params);
@@ -1401,15 +1262,6 @@ next_page_url (credentials_t *credentials, params_t *params,
                                     ? current_param->value
                                     : "");
         }
-    }
-
-  if (next_xml_param)
-    {
-      g_string_append_printf (url, "&xml=%s", next_xml_param);
-    }
-  else if (xml_param)
-    {
-      g_string_append_printf (url, "&xml=%s", xml_param);
     }
 
   if (action_status)
@@ -1440,7 +1292,7 @@ next_page_url (credentials_t *credentials, params_t *params,
 }
 
 /**
- * @brief Generate a page containing a result.
+ * @brief Generate a enveloped GMP XML containing a result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -1449,30 +1301,86 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @param[in]  action         Name of the action.
  * @param[in]  status         Status code.
  * @param[in]  message        Status message.
+ * @param[in]  details        Status details.
  * @param[in]  next_url       URL of next page.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static gchar *
 action_result_page (gvm_connection_t *connection,
                     credentials_t *credentials, params_t *params,
                     cmd_response_data_t *response_data,
                     const char* action, const char* status,
-                    const char* message, const char* next_url)
+                    const char* message, const char* details,
+                    const char* next_url)
 {
   gchar *xml;
   xml = g_markup_printf_escaped ("<action_result>"
                                  "<action>%s</action>"
                                  "<status>%s</status>"
                                  "<message>%s</message>"
-                                 "<next>%s</next>"
+                                 "<details>%s</details>"
                                  "</action_result>",
                                  action ? action : "",
                                  status ? status : "",
                                  message ? message : "",
-                                 next_url ? next_url : "");
-  return xsl_transform_gmp (connection, credentials, params, xml,
-                            response_data);
+                                 details ? details : "");
+  return envelope_gmp (connection, credentials, params, xml,
+                       response_data);
+}
+
+/**
+ * @brief Generate a enveloped GMP XML containing an action result.
+ *
+ * Should replace action_result_page function completely in future
+ *
+ * @param[in]  connection     Connection to manager
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         HTTP request params
+ * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]  action         Name of the action.
+ * @param[in]  status         Status code.
+ * @param[in]  message        Status message.
+ * @param[in]  details        Status details (optional).
+ * @param[in]  id             ID of the handled entity (optional).
+ *
+ * @return Enveloped XML object.
+ */
+static gchar *
+action_result (gvm_connection_t *connection,
+               credentials_t *credentials,
+               params_t *params,
+               cmd_response_data_t *response_data,
+               const char *action,
+               const char *status,
+               const char *message,
+               const char *details,
+               const char *id)
+{
+
+  GString *xml;
+
+  xml = g_string_new ("");
+  xml_string_append(xml,
+                    "<action_result>"
+                    "<action>%s</action>"
+                    "<status>%s</status>"
+                    "<message>%s</message>",
+                    action ? action : "",
+                    status ? status : "",
+                    message ? message : "");
+
+  if (details)
+    xml_string_append(xml, "<details>%s</details>", details);
+
+  if (id)
+    xml_string_append(xml, "<id>%s</id>", id);
+
+  g_string_append (xml, "</action_result>");
+
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -1487,7 +1395,7 @@ action_result_page (gvm_connection_t *connection,
  * @param[in]  op_name        Operation name.
  * @param[in]  next_cmd       Next command.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 gchar *
 message_invalid (gvm_connection_t *connection,
@@ -1502,10 +1410,11 @@ message_invalid (gvm_connection_t *connection,
                             status, message);
   ret = action_result_page (connection, credentials, params, response_data,
                             op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            message,
+                            message, NULL,
                             next_url);
   g_free (next_url);
-  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+  cmd_response_data_set_status_code (response_data,
+                                     MHD_HTTP_BAD_REQUEST);
   return ret;
 }
 
@@ -1514,50 +1423,29 @@ message_invalid (gvm_connection_t *connection,
  *
  * @param[in]  connection     Connection to manager
  */
-static gchar*
+static gchar *
 response_from_entity (gvm_connection_t *connection,
-                      credentials_t* credentials, params_t *params,
-                      entity_t entity, int no_redirect,
-                      const char* override_next, const char *default_next,
-                      const char* override_fail_next,
-                      const char* default_fail_next,
-                      const char* action, cmd_response_data_t *response_data)
+                      credentials_t *credentials, params_t *params,
+                      entity_t entity, const char *action,
+                      cmd_response_data_t *response_data)
 {
-  gchar *res, *next_url;
+  gchar *res;
+  entity_t status_details_entity;
   int success;
   success = gmp_success (entity);
 
-  if (success)
-    {
-      next_url = next_page_url (credentials, params,
-                                override_next, default_next,
-                                action,
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
-    }
-  else
+  if (!success)
     {
       set_http_status_from_entity (entity, response_data);
-      next_url = next_page_url (credentials, params,
-                                override_fail_next, default_fail_next,
-                                action,
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
     }
 
-  if (no_redirect || success == 0)
-    {
-      res = action_result_page (connection, credentials, params, response_data,
-                                action, entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      res = NULL;
-      response_data->redirect = next_url;
-    }
+  status_details_entity = entity_child (entity, "status_details");
+
+  res = action_result (connection, credentials, params, response_data,
+                       action, entity_attribute (entity, "status"),
+                       entity_attribute (entity, "status_text"),
+                       entity_text(status_details_entity),
+                       entity_attribute (entity, "id"));
   return res;
 }
 
@@ -1567,11 +1455,11 @@ response_from_entity (gvm_connection_t *connection,
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[in]  response     Extra XML to insert inside envelope.
  * @param[in]  next         Command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 generate_page (gvm_connection_t *connection, credentials_t *credentials,
@@ -1615,10 +1503,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
 
   if (strcmp (next, "get_assets") == 0)
     return get_assets (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_assets_chart") == 0)
-    return get_assets_chart (connection, credentials, params, response,
-                             response_data);
 
   if (strcmp (next, "get_config") == 0)
     return get_config (connection, credentials, params, response, 0,
@@ -1695,9 +1579,6 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (next, "get_tasks") == 0)
     return get_tasks (connection, credentials, params, response, response_data);
 
-  if (strcmp (next, "get_tasks_chart") == 0)
-    return get_tasks_chart (connection, credentials, params, response, response_data);
-
   if (strcmp (next, "get_report") == 0)
     {
       char *result;
@@ -1706,9 +1587,9 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
       result = get_report (connection, credentials, params, NULL,
                            response, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result,
-                                                 response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result,
+                                            response_data);
     }
 
   if (strcmp (next, "get_report_format") == 0)
@@ -1784,10 +1665,10 @@ generate_page (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  response       Extra XML to insert inside page element for XSLT.
+ * @param[in]  response       Extra XML to insert inside enveloped XML.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 next_page (gvm_connection_t *connection, credentials_t *credentials,
@@ -1805,7 +1686,7 @@ next_page (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one resource, XSL transform the result.
+ * @brief Get one resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Type of resource.
@@ -1815,7 +1696,7 @@ next_page (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_one (gvm_connection_t *connection, const char *type,
@@ -1836,12 +1717,12 @@ get_one (gvm_connection_t *connection, const char *type,
 
   if (id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
-                           "Diagnostics: missing ID.",
-                           "/omp?cmd=get_tasks", response_data);
+                           "Diagnostics: missing ID.", response_data);
     }
 
   xml = g_string_new ("");
@@ -1865,26 +1746,28 @@ get_one (gvm_connection_t *connection, const char *type,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissions. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting permissins. "
-                                 "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 "Diagnostics: Internal Error.", response_data);
         }
 
       g_string_append (xml, response);
@@ -1930,25 +1813,27 @@ get_one (gvm_connection_t *connection, const char *type,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get tag names */
@@ -1964,25 +1849,27 @@ get_one (gvm_connection_t *connection, const char *type,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get permissions */
@@ -2009,25 +1896,27 @@ get_one (gvm_connection_t *connection, const char *type,
   if (ret == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
@@ -2035,12 +1924,12 @@ get_one (gvm_connection_t *connection, const char *type,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
- * @brief Get all of a particular type of resource, XSL transform the result.
+ * @brief Get all of a particular type of resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  type           Resource type.
@@ -2050,7 +1939,7 @@ get_one (gvm_connection_t *connection, const char *type,
  * @param[in]  extra_attribs  Extra attributes for GMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_many (gvm_connection_t *connection, const char *type,
@@ -2060,9 +1949,8 @@ get_many (gvm_connection_t *connection, const char *type,
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
-  gchar *filter_type, *request, *built_filter;
-  int no_filter_history;
-  const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
+  gchar *request, *built_filter;
+  const char *build_filter, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
@@ -2070,11 +1958,8 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *level_false_positive;
   const char *details;
 
-  no_filter_history = params_value(params, "no_filter_history")
-                        ? atoi (params_value(params, "no_filter_history"))
-                        : 0;
   build_filter = params_value(params, "build_filter");
-  given_filt_id = params_value (params, "filt_id");
+  filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
   first = params_value (params, "first");
@@ -2097,33 +1982,6 @@ get_many (gvm_connection_t *connection, const char *type,
 
   if (details == NULL || strcmp (details, "") == 0)
     details = "0";
-
-  if (strcasecmp (type, "info") == 0)
-    filter_type = g_strdup (params_value (params, "info_type"));
-  else
-    filter_type = g_strdup (type);
-
-  if (given_filt_id)
-    {
-      if (no_filter_history == 0
-          && strcmp (given_filt_id, FILT_ID_NONE)
-          && strcmp (given_filt_id, FILT_ID_USER_SETTING))
-        g_tree_replace (credentials->last_filt_ids, filter_type,
-                        g_strdup (given_filt_id));
-      else
-        g_free (filter_type);
-
-      filt_id = given_filt_id;
-    }
-  else
-    {
-      if (no_filter_history == 0
-          && (filter == NULL || strcmp (filter, "") == 0))
-        filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
-      else
-        filt_id = NULL;
-      g_free (filter_type);
-    }
 
   /* check if filter still exists */
   switch (filter_exists (connection, filt_id))
@@ -2347,26 +2205,28 @@ get_many (gvm_connection_t *connection, const char *type,
       g_free(request);
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_free(request);
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting resources list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   // TODO: Test response
@@ -2386,26 +2246,28 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</filters>");
@@ -2424,26 +2286,28 @@ get_many (gvm_connection_t *connection, const char *type,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the filter list. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -2465,37 +2329,39 @@ get_many (gvm_connection_t *connection, const char *type,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
     }
 
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   g_string_free (type_many, TRUE);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
- * @brief Setup edit XML, XSL transform the result.
+ * @brief Setup edit XML, envelope the result.
  *
  * @param[in]  connection         Connection to manager
  * @param[in]  type               Type or resource to edit.
@@ -2505,7 +2371,7 @@ get_many (gvm_connection_t *connection, const char *type,
  * @param[in]  extra_xml          Extra XML to insert inside page element.
  * @param[out] response_data      Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_resource (gvm_connection_t *connection, const char *type,
@@ -2523,13 +2389,14 @@ edit_resource (gvm_connection_t *connection, const char *type,
 
   if (resource_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a resource. "
                            "The resource remains as it was. "
                            "Diagnostics: Required ID parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -2546,12 +2413,13 @@ edit_resource (gvm_connection_t *connection, const char *type,
                             resource_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -2564,19 +2432,20 @@ edit_resource (gvm_connection_t *connection, const char *type,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2675,7 +2544,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Resource XML on success.  HTML result of XSL transformation on error.
+ * @return Resource XML on success.  XML error object on error.
  */
 char *
 export_resource (gvm_connection_t *connection, const char *type,
@@ -2700,8 +2569,8 @@ export_resource (gvm_connection_t *connection, const char *type,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   subtype = params_value (params, "subtype");
@@ -2728,7 +2597,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
@@ -2742,7 +2611,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -2762,7 +2631,7 @@ export_resource (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a resource. "
                            "The resource could not be delivered. "
                            "Diagnostics: Failure to receive resource from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   ret = setting_get_value (connection,
@@ -2784,21 +2653,21 @@ export_resource (gvm_connection_t *connection, const char *type,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -2834,7 +2703,7 @@ export_resource (gvm_connection_t *connection, const char *type,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return XML on success.  HTML result of XSL transformation on error.
+ * @return XML on success.  XML error object on error.
  */
 static char *
 export_many (gvm_connection_t *connection, const char *type,
@@ -2873,7 +2742,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   else if (strcmp (type, "asset") == 0)
@@ -2896,7 +2765,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   else
@@ -2918,7 +2787,7 @@ export_many (gvm_connection_t *connection, const char *type,
                               "An internal error occurred while getting a list. "
                               "The list could not be delivered. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
   g_free (filter_escaped);
@@ -2933,7 +2802,7 @@ export_many (gvm_connection_t *connection, const char *type,
                            "An internal error occurred while getting a list. "
                            "The list could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -2957,21 +2826,21 @@ export_many (gvm_connection_t *connection, const char *type,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -3006,7 +2875,7 @@ export_many (gvm_connection_t *connection, const char *type,
 }
 
 /**
- * @brief Delete a resource, get all resources, XSL transform the result.
+ * @brief Delete a resource, get all resources, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  type           Type of resource.
@@ -3016,7 +2885,7 @@ export_many (gvm_connection_t *connection, const char *type,
  * @param[in]  get            Next page get command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_resource (gvm_connection_t *connection, const char *type,
@@ -3024,24 +2893,24 @@ delete_resource (gvm_connection_t *connection, const char *type,
                  const char *get, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
-  const char *no_redirect, *next_id;
+  const char  *next_id;
   entity_t entity;
   gchar *cap_type, *default_next, *prev_action;
 
-  no_redirect = params_value (params, "no_redirect");
   id_name = g_strdup_printf ("%s_id", type);
   if (params_value (params, id_name))
     resource_id = g_strdup (params_value (params, id_name));
   else
     {
       g_free (id_name);
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
                            "The resource was not deleted. "
                            "Diagnostics: Required parameter resource_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* This is a hack for assets, because asset_id is the param name used for
@@ -3084,13 +2953,14 @@ delete_resource (gvm_connection_t *connection, const char *type,
     {
       g_free (resource_id);
       g_free (extra_attribs);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
                            "The resource is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_free (resource_id);
@@ -3099,13 +2969,14 @@ delete_resource (gvm_connection_t *connection, const char *type,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a resource. "
                            "It is unclear whether the resource has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!gmp_success (entity))
@@ -3116,9 +2987,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
   prev_action = g_strdup_printf ("Delete %s", cap_type);
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, default_next,
-                               NULL, default_next,
                                prev_action, response_data);
 
   g_free (response);
@@ -3131,7 +2999,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
 }
 
 /**
- * @brief Perform action on resource, get next page, XSL transform result.
+ * @brief Perform action on resource, get next page, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -3140,7 +3008,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
  * @param[in]  action         Action to perform.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 resource_action (gvm_connection_t *connection, credentials_t *credentials,
@@ -3148,7 +3016,7 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                  cmd_response_data_t* response_data)
 {
   gchar *html, *response, *param_name;
-  const char *no_redirect, *resource_id;
+  const char  *resource_id;
   gchar *cap_action, *cap_type, *get_cmd, *prev_action;
 
   int ret;
@@ -3157,7 +3025,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
   assert (type);
 
   param_name = g_strdup_printf ("%s_id", type);
-  no_redirect = params_value (params, "no_redirect");
   resource_id = params_value (params, param_name);
 
   if (resource_id == NULL)
@@ -3169,11 +3036,11 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
                   "Diagnostics: Required parameter %s was NULL.",
                   param_name);
       g_free (param_name);
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           message,
-                           "/omp?cmd=get_tasks", response_data);
+                           message, response_data);
       g_free (message);
       return html;
     }
@@ -3193,29 +3060,32 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
                              "The resource remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
                              "It is unclear whether the resource has been affected. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while performing an action. "
                              "It is unclear whether the resource has been affected. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (!gmp_success (entity))
@@ -3226,9 +3096,6 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
   get_cmd = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("%s %s", cap_action, cap_type);
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, get_cmd,
-                               NULL, get_cmd,
                                prev_action, response_data);
 
   g_free (response);
@@ -3271,14 +3138,14 @@ resource_action (gvm_connection_t *connection, credentials_t *credentials,
  * multiple GMP commands.
  *
  * Some, like delete_credential_gmp, simply run the GMP commands inside
- * one GMP COMMANDS and leave it to the XSL to figure out the context.
+ * one GMP COMMANDS.
  *
  * Others, like create_target_gmp, run each command separately and wrap the
- * responses in a unique page tag which gives the XSL the context.
+ * responses in a unique page tag.
  *
  * One handler, delete_target_gmp, runs all the commands in a single COMMANDS
  * and also wraps the response in a unique page tag to convey the context to
- * the XSL.  This is probably the way to go.
+ * the enveloped XML.  This is probably the way to go.
  */
 
 /**
@@ -3304,29 +3171,32 @@ setting_get_value_error (gvm_connection_t *connection,
       case 0:
         return NULL;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a setting. "
                             "The setting could not be delivered. "
                             "Diagnostics: Internal error.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
     }
 }
 
@@ -3363,7 +3233,7 @@ setting_get_value_error (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_task (gvm_connection_t *connection, credentials_t * credentials,
@@ -3391,29 +3261,32 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       switch (ret)
         {
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
                                 "The setting could not be delivered. "
                                 "Diagnostics: Internal error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
     }
 
@@ -3492,25 +3365,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get configs to select in new task UI. */
@@ -3520,25 +3395,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_ALERTS"))
@@ -3550,25 +3427,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
                                "The current list of alerts is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting alert list. "
                                "The current list of alerts is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3582,25 +3461,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
                                "The current list of schedules is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the schedule list. "
                                "The current list of schedules is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3613,7 +3494,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the"
@@ -3621,13 +3503,14 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "The current list of scanners is not available. "
                                "Diagnostics: Failure to send command to manager"
                                " daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting"
@@ -3635,7 +3518,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                                "The current list of scanners is not available. "
                                "Diagnostics: Failure to receive response from"
                                " manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3648,25 +3531,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
                                "The current list of groups is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting group list. "
                                "The current list of groups is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3680,25 +3565,27 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
                                "The current list of tags is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting tag list. "
                                "The current list of tags is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -3715,8 +3602,8 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -3727,7 +3614,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -3746,7 +3633,7 @@ new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_container_task (gvm_connection_t *connection,
@@ -3766,9 +3653,9 @@ new_container_task (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</new_container_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -3779,7 +3666,7 @@ new_container_task (gvm_connection_t *connection,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_container_task_gmp (gvm_connection_t *connection,
@@ -3799,7 +3686,7 @@ new_container_task_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_report (gvm_connection_t *connection, credentials_t *credentials,
@@ -3831,9 +3718,9 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "</upload_report>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -3844,7 +3731,7 @@ upload_report (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -3854,14 +3741,14 @@ upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a report, get all tasks, XSL transform the result.
+ * @brief Create a report, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_report_gmp (gvm_connection_t *connection,
@@ -3871,10 +3758,9 @@ create_report_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *no_redirect, *cmd, *task_id, *name, *comment, *xml_file;
+  const char *task_id, *name, *comment, *xml_file;
   const char *in_assets;
 
-  no_redirect = params_value (params, "no_redirect");
   task_id = params_value (params, "task_id");
   xml_file = params_value (params, "xml_file");
   name = params_value (params, "name");
@@ -3969,38 +3855,35 @@ create_report_gmp (gvm_connection_t *connection,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
                              "No new report was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
                              "It is unclear whether the report has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new report. "
                              "It is unclear whether the report has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
-  cmd = params_value (params, "cmd");
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL,
-                               (cmd && strcmp (cmd, "import_report"))
-                                  ? "new_container_task" : "upload_report",
                                "Import Report", response_data);
   free_entity (entity);
   g_free (response);
@@ -4008,14 +3891,14 @@ create_report_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Import report, get all reports, XSL transform the result.
+ * @brief Import report, get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_report_gmp (gvm_connection_t *connection,
@@ -4036,7 +3919,7 @@ CHECK_PARAM_INVALID (name, "Create Task", "new_task")
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_container_task_gmp (gvm_connection_t *connection,
@@ -4046,9 +3929,8 @@ create_container_task_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *no_redirect, *name, *comment;
+  const char  *name, *comment;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   CHECK_PARAM_INVALID (name, "Create Container Task", "new_container_task");
@@ -4076,37 +3958,37 @@ create_container_task_gmp (gvm_connection_t *connection,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
                              "No task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a container task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "task_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "new_container_task",
                                "Create Container Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -4114,14 +3996,14 @@ create_container_task_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Create a task, get all tasks, XSL transform the result.
+ * @brief Create a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4131,7 +4013,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   int ret;
   gchar *schedule_element, *command;
   gchar *response, *html;
-  const char *no_redirect;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
@@ -4142,7 +4023,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   params_t *alerts;
   GString *alert_element;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   target_id = params_value (params, "target_id");
@@ -4338,29 +4218,32 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
                              "No new task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -4408,45 +4291,42 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
               case 1:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
                                     "No new tag was created. "
                                     "Diagnostics: Failure to send command to manager daemon.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
               case 2:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new tag. "
                                     "It is unclear whether the tag has been created or not. "
                                     "Diagnostics: Failure to receive response from manager daemon.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
               default:
                 free_entity (entity);
                 g_free (response);
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (
+                  response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while creating a new task. "
                                     "It is unclear whether the tag has been created or not. "
                                     "Diagnostics: Internal Error.",
-                                    "/omp?cmd=get_tasks", response_data);
+                                    response_data);
             }
 
           if (entity_attribute (entity, "id"))
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
             = response_from_entity (connection, credentials, params, tag_entity,
-                                    (no_redirect && strcmp (no_redirect, "0")),
-                                    NULL, "get_tasks",
-                                    NULL, "new_tasks",
                                     "Create Task and Tag", response_data);
           free_entity (tag_entity);
           g_free (tag_response);
@@ -4457,18 +4337,12 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
             = response_from_entity (connection, credentials, params, entity,
-                                    (no_redirect && strcmp (no_redirect, "0")),
-                                    NULL, "get_tasks",
-                                    NULL, "new_task",
                                     "Create Task", response_data);
         }
     }
   else
     {
       html = response_from_entity (connection, credentials, params, entity,
-                                   (no_redirect && strcmp (no_redirect, "0")),
-                                   NULL, "get_tasks",
-                                   NULL, "new_task",
                                    "Create Task", response_data);
     }
   free_entity (entity);
@@ -4478,14 +4352,14 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
 
 /**
- * @brief Delete a task, get all tasks, XSL transform the result.
+ * @brief Delete a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4496,7 +4370,7 @@ delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_task XML, XSL transform the result.
+ * @brief Setup edit_task XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -4504,7 +4378,7 @@ delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_task (gvm_connection_t *connection, credentials_t * credentials,
@@ -4512,13 +4386,12 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
+  const char *task_id, *next, *sort_field, *sort_order;
   const char *overrides, *alerts;
   int apply_overrides;
 
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-  refresh_interval = params_value (params, "refresh_interval");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   overrides = params_value (params, "overrides");
@@ -4528,13 +4401,14 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
 
   if (task_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a task. "
                            "The task remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -4570,12 +4444,13 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                              : "")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -4591,7 +4466,6 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                           /* Page that follows. */
                           "<next>%s</next>"
                           /* Passthroughs. */
-                          "<refresh_interval>%s</refresh_interval>"
                           "<sort_field>%s</sort_field>"
                           "<sort_order>%s</sort_order>"
                           "<apply_overrides>%i</apply_overrides>",
@@ -4599,7 +4473,6 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                           credentials->username,
                           alerts ? alerts : "1",
                           next,
-                          refresh_interval ? refresh_interval : "",
                           sort_field,
                           sort_order,
                           apply_overrides);
@@ -4607,31 +4480,32 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_task XML, XSL transform the result.
+ * @brief Setup edit_task XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -4641,21 +4515,20 @@ edit_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Save task, get next page, XSL transform the result.
+ * @brief Save task, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
-  const char *no_redirect;
   const char *comment, *name, *schedule_id, *in_assets;
   const char *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
@@ -4666,7 +4539,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *alert_element;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
@@ -4851,35 +4723,35 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "edit_task",
                                "Save Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -4889,26 +4761,25 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 #undef CHECK
 
 /**
- * @brief Save container task, get next page, XSL transform the result.
+ * @brief Save container task, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char * save_container_task_gmp (gvm_connection_t *connection,
                                 credentials_t *credentials, params_t *params,
                                 cmd_response_data_t *response_data)
 {
   gchar *format, *response, *html;
-  const char *no_redirect, *comment, *name, *task_id;
+  const char  *comment, *name, *task_id;
   const char *in_assets, *auto_delete, *auto_delete_data;
   int ret;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
@@ -4955,35 +4826,35 @@ char * save_container_task_gmp (gvm_connection_t *connection,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "No new task was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a task. "
                              "It is unclear whether the task has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "edit_task",
                                "Save Container Task", response_data);
   free_entity (entity);
   g_free (response);
@@ -4998,7 +4869,7 @@ char * save_container_task_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -5016,7 +4887,7 @@ export_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Tasks XML on success.  HTML result of XSL transformation
+ * @return Tasks XML on success.  Enveloped XML
  *         on error.
  */
 char * export_tasks_gmp (gvm_connection_t *connection,
@@ -5028,14 +4899,14 @@ char * export_tasks_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Stop a task, get all tasks, XSL transform the result.
+ * @brief Stop a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 stop_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5046,14 +4917,14 @@ stop_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Resume a task, get all tasks, XSL transform the result.
+ * @brief Resume a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 resume_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -5064,14 +4935,14 @@ resume_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Start a task, get all tasks, XSL transform the result.
+ * @brief Start a task, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 start_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5089,18 +4960,17 @@ start_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
-  const char *no_redirect, *task_id, *slave_id;
+  const char  *task_id, *slave_id;
   int ret;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   slave_id = params_value (params, "slave_id");
   task_id = params_value (params, "task_id");
 
@@ -5121,35 +4991,35 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
                              "The task was not moved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
                              "It is unclear whether the task has been moved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while moving a task. "
                              "It is unclear whether the task has been moved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tasks",
-                               NULL, "get_tasks",
                                "Move Task", response_data);
 
   free_entity (entity);
@@ -5167,7 +5037,7 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed NVT details response or error message.
+ * @return XML enveloped NVT details response or error message.
  */
 static char*
 get_nvts (gvm_connection_t *connection, credentials_t *credentials,
@@ -5180,12 +5050,13 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
   oid = params_value (params, "oid");
   if (oid == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an NVT. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -5208,24 +5079,26 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
                             oid)
         == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
     }
 
   xml = g_string_new ("<get_nvts>");
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Append extra_xml */
@@ -5244,31 +5117,33 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</get_nvts>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -5280,7 +5155,7 @@ get_nvts (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed SecInfo response or error message.
+ * @return XML enveloped SecInfo response or error message.
  */
 char *
 get_info (gvm_connection_t *connection, credentials_t *credentials,
@@ -5316,23 +5191,25 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
       && strcmp (info_type, "DFN_CERT_ADV")
       && strcmp (info_type, "ALLINFO"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
                            "Diagnostics: Invalid info_type parameter value",
-                           "/omp?cmd=get_info", response_data);
+                           response_data);
     }
 
   if (params_value (params, "info_name")
       && params_value (params, "info_id"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting SecInfo. "
                            "Diagnostics: Both ID and Name set.",
-                           "/omp?cmd=get_info", response_data);
+                           response_data);
     }
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
@@ -5401,14 +5278,14 @@ get_info (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get info, XSL transform the result.
+ * @brief Get info, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5425,7 +5302,7 @@ get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed NVT details response or error message.
+ * @return XML enveloped NVT details response or error message.
  */
 char*
 get_nvts_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -5487,7 +5364,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
 }
 
 /**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
@@ -5495,7 +5372,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -5530,14 +5407,14 @@ get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 }
 
 /**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -5546,45 +5423,9 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
   return get_tasks (connection, credentials, params, NULL, response_data);
 }
 
-/**
- * @brief Get a tasks chart, XSL transform the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data     Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-static char *
-get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                 const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return xsl_transform_gmp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
-                            response_data);
-}
 
 /**
- * @brief Get a tasks chart, XSL transform the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                     cmd_response_data_t* response_data)
-{
-  return get_tasks_chart (connection, credentials, params, NULL, response_data);
-}
-
-
-/**
- * @brief Get all tasks, XSL transform the result.
+ * @brief Get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -5592,7 +5433,7 @@ get_tasks_chart_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_task (gvm_connection_t *connection, credentials_t *credentials,
@@ -5644,13 +5485,14 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
         get_overrides ? "\"/>" : "")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
                            "No update on the requested task can be retrieved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   commands_xml = g_string_new ("");
@@ -5670,13 +5512,14 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_string_append (xml, commands_xml->str);
 
@@ -5684,13 +5527,14 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
     {
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to parse response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   get_target = command_enabled (credentials, "GET_TARGETS");
@@ -5730,14 +5574,13 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting an alert of a task. "
                                               "Diagnostics: Failure to send command to manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                       if (read_string_c (connection, &xml))
@@ -5745,14 +5588,13 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting an alert of a task. "
                                               "Diagnostics: Failure to receive response from manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                     }
@@ -5774,14 +5616,13 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting the target of a task. "
                                               "Diagnostics: Failure to send command to manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                       if (read_string_c (connection, &xml))
@@ -5789,14 +5630,13 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
-                          response_data->http_status_code
-                            = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                          cmd_response_data_set_status_code (
+                            response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                           return gsad_message (credentials,
                                               "Internal error",
                                               __FUNCTION__, __LINE__,
                                               "An internal error occurred while getting the target of a task. "
                                               "Diagnostics: Failure to receive response from manager daemon.",
-                                              "/omp?cmd=get_tasks",
                                                response_data);
                         }
                     }
@@ -5820,25 +5660,27 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code(response_data,
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting slaves list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
     }
 
@@ -5854,25 +5696,27 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Get permissions */
@@ -5888,45 +5732,47 @@ get_task (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
 
   g_string_append (xml, "</get_task>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a task, XSL transform the result.
+ * @brief Get a task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -5944,7 +5790,7 @@ get_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_credential (gvm_connection_t *connection, credentials_t *credentials,
@@ -5956,20 +5802,20 @@ new_credential (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_credential>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Create a credential, get all credentials, XSL transform result.
+ * @brief Create a credential, get all credentials, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_credential_gmp (gvm_connection_t *connection,
@@ -5978,14 +5824,12 @@ create_credential_gmp (gvm_connection_t *connection,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect;
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   int autogenerate;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
@@ -6216,13 +6060,14 @@ create_credential_gmp (gvm_connection_t *connection,
         }
       else
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new credential. "
                                "The credential could not be created. "
                                "Diagnostics: Unrecognized credential type.",
-                               "/omp?cmd=get_credentials", response_data);
+                               response_data);
         }
     }
 
@@ -6233,37 +6078,37 @@ create_credential_gmp (gvm_connection_t *connection,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new credential. "
                              "It is unclear whether the credential has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "credential_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_credentials",
-                               NULL, "new_credential",
                                "Create Credential",
                                response_data);
   free_entity (entity);
@@ -6272,7 +6117,7 @@ create_credential_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one credential, XSL transform the result.
+ * @brief Get one credential, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials        Username and password for authentication.
@@ -6280,7 +6125,7 @@ create_credential_gmp (gvm_connection_t *connection,
  * @param[in]   commands           Extra commands to run before the others.
  * @param[out]  response_data      Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6291,14 +6136,14 @@ get_credential (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one credential, XSL transform the result.
+ * @brief Get one credential, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_credential_gmp (gvm_connection_t *connection,
@@ -6314,7 +6159,7 @@ get_credential_gmp (gvm_connection_t *connection,
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result. Required.
  * @param[out]  login          Login name return.  NULL to skip.  Only set on
  *                             success with credential_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -6341,12 +6186,13 @@ download_credential_gmp (gvm_connection_t *connection,
 
   if ((credential_id == NULL) || (format == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Required parameter was NULL.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       return 1;
     }
 
@@ -6358,12 +6204,13 @@ download_credential_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       return 1;
     }
 
@@ -6381,13 +6228,14 @@ download_credential_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
 
@@ -6432,13 +6280,14 @@ download_credential_gmp (gvm_connection_t *connection,
       else
         {
           free_entity (entity);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
     }
@@ -6451,13 +6300,14 @@ download_credential_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to receive credential from manager daemon.",
-                                "/omp?cmd=get_credentials", response_data);
+                                response_data);
           return 1;
         }
 
@@ -6483,13 +6333,14 @@ download_credential_gmp (gvm_connection_t *connection,
           free_entity (entity);
           return 0;
         }
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a credential. "
                             "The credential could not be delivered. "
                             "Diagnostics: Failure to parse credential from manager daemon.",
-                            "/omp?cmd=get_credentials", response_data);
+                            response_data);
       free_entity (entity);
       return 1;
     }
@@ -6503,7 +6354,7 @@ download_credential_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Credential XML on success.  HTML result of XSL transformation
+ * @return Credential XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -6523,7 +6374,7 @@ export_credential_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Credentials XML on success.  HTML result of XSL transformation
+ * @return Credentials XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -6536,7 +6387,7 @@ export_credentials_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one or all credentials, XSL transform the result.
+ * @brief Get one or all credentials, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -6556,7 +6407,7 @@ get_credentials (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get one or all credentials, XSL transform the result.
+ * @brief Get one or all credentials, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -6573,14 +6424,14 @@ get_credentials_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete credential, get all credentials, XSL transform result.
+ * @brief Delete credential, get all credentials, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6598,7 +6449,7 @@ delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6608,7 +6459,7 @@ new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
 }
 
 /**
- * @brief Setup edit_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
@@ -6616,7 +6467,7 @@ new_credential_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6627,14 +6478,14 @@ edit_credential (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Setup edit_credential XML, XSL transform the result.
+ * @brief Setup edit_credential XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6644,14 +6495,14 @@ edit_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Save credential, get next page, XSL transform the result.
+ * @brief Save credential, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -6660,14 +6511,13 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   int ret, change_password, change_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
-  const char *no_redirect, *credential_id;
+  const char  *credential_id;
   const char *name, *comment, *login, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   credential_id = params_value (params, "credential_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -6815,35 +6665,35 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
                              "The Credential was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Credential. "
                              "It is unclear whether the Credential has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_credentials", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_credentials",
-                               NULL, "edit_credential",
                                "Save Credential", response_data);
   free_entity (entity);
   g_free (response);
@@ -6859,7 +6709,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6870,8 +6720,8 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -6882,7 +6732,7 @@ new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_agent_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -6892,14 +6742,14 @@ new_agent_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Create an agent, get all agents, XSL transform result.
+ * @brief Create an agent, get all agents, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials          Username and password for authentication.
  * @param[in]  params               Request parameters.
  * @param[out] response_data        Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -6907,7 +6757,6 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   entity_t entity;
   gchar *response, *html;
-  const char *no_redirect;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
@@ -6916,7 +6765,6 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
   gchar *command;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   installer = params_value (params, "installer");
@@ -6999,37 +6847,37 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
                             "No new agent was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
                             "It is unclear whether the agent has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new agent. "
                             "It is unclear whether the agent has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "agent_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_agents",
-                               NULL, "new_agent",
                                "Create Agent", response_data);
   free_entity (entity);
   g_free (response);
@@ -7037,14 +6885,14 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Delete agent, get all agents, XSL transform result.
+ * @brief Delete agent, get all agents, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7055,12 +6903,12 @@ delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get an agent, XSL transform the result.
+ * @brief Get an agent, envelope the result.
  *
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  html           Result.  Required.
  * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
  *                             on success with agent_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -7084,13 +6932,14 @@ download_agent_gmp (gvm_connection_t *connection,
 
   if ((agent_id == NULL) || (format == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while downloading "
                             "an agent. "
                             "Diagnostics: Required parameter was NULL.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       return 1;
     }
 
@@ -7103,13 +6952,14 @@ download_agent_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting agent list. "
                             "The current list of agents is not available. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_agents", response_data);
+                            response_data);
       return 1;
     }
 
@@ -7127,13 +6977,14 @@ download_agent_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
                                 "The agent is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_agents", response_data);
+                                response_data);
           return 1;
         }
 
@@ -7181,13 +7032,14 @@ download_agent_gmp (gvm_connection_t *connection,
       else
         {
           free_entity (entity);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
                                 "Diagnostics: Failure to receive agent from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           return 1;
         }
     }
@@ -7198,30 +7050,32 @@ download_agent_gmp (gvm_connection_t *connection,
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
                                 "Diagnostics: Failure to receive agent from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           return 1;
         }
 
       free_entity (entity);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting a agent. "
                             "The agent could not be delivered. "
                             "Diagnostics: Failure to parse agent from manager daemon.",
-                            "/omp?cmd=get_tasks", response_data);
+                            response_data);
       return 1;
     }
 }
 
 /**
- * @brief Setup edit_agent XML, XSL transform the result.
+ * @brief Setup edit_agent XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7229,7 +7083,7 @@ download_agent_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7240,14 +7094,14 @@ edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Setup edit_agent XML, XSL transform the result.
+ * @brief Setup edit_agent XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7257,14 +7111,14 @@ edit_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Modify a agent, get all agents, XSL transform the result.
+ * @brief Modify a agent, get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7272,10 +7126,9 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *agent_id, *name, *comment;
+  const char  *agent_id, *name, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   agent_id = params_value (params, "agent_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -7306,35 +7159,35 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
                              "The agent was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
                              "It is unclear whether the agent has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a agent. "
                              "It is unclear whether the agent has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_agents",
-                               NULL, "edit_agent",
                                "Save Agent", response_data);
   free_entity (entity);
   g_free (response);
@@ -7342,7 +7195,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one agent, XSL transform the result.
+ * @brief Get one agent, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7350,7 +7203,7 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7360,14 +7213,14 @@ get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get one agent, XSL transform the result.
+ * @brief Get one agent, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7377,7 +7230,7 @@ get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get all agents, XSL transform the result.
+ * @brief Get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -7385,7 +7238,7 @@ get_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7396,14 +7249,14 @@ get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get all agents, XSL transform the result.
+ * @brief Get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_agents_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7413,14 +7266,14 @@ get_agents_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Verify agent, get agents, XSL transform the result.
+ * @brief Verify agent, get agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -7434,12 +7287,13 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   agent_id = params_value (params, "agent_id");
   if (agent_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_agents", response_data);
+                           response_data);
     }
   response = NULL;
   entity = NULL;
@@ -7456,29 +7310,32 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
                              "The agent was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
                              "It is unclear whether the agent was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a agent. "
                              "It is unclear whether the agent was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_agents", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -7489,13 +7346,14 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a agent. "
                                "It is unclear whether the agent was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_agents", response_data);
+                               response_data);
         }
     }
   else
@@ -7516,7 +7374,7 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Agent XML on success.  HTML result of XSL transformation on error.
+ * @return Agent XML on success.  Enveloped XML on error.
  */
 char *
 export_agent_gmp (gvm_connection_t *connection,
@@ -7535,7 +7393,7 @@ export_agent_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Agents XML on success.  HTML result of XSL transformation
+ * @return Agents XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -7570,7 +7428,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
-  const char *filter, *filt_id, *xml_param;
+  const char *filter, *filt_id;
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -7602,13 +7460,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       else
         filter_escaped = NULL;
     }
-  xml_param = params_value (params, "xml");
 
-  if (xml_param == NULL || atoi (xml_param) == 0)
-    {
-      return xsl_transform_gmp (connection, credentials,params,
-                                g_strdup ("<get_aggregate/>"), response_data);
-    }
   xml = g_string_new ("<get_aggregate>");
 
   command = g_string_new ("<get_aggregates");
@@ -7707,34 +7559,37 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting aggregates. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   g_string_append (xml, response);
   g_free (response);
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7746,7 +7601,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -7773,30 +7628,33 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Formats for new alert. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Formats for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Formats for new alert. It is unclear whether"
                              " the alert has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -7813,30 +7671,33 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Filters for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Filters for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Report "
                              "Filters for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
@@ -7855,32 +7716,32 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
                              " for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
                              " for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting Tasks"
                              " for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts",
                              response_data);
     }
   g_string_append (xml, response);
@@ -7899,32 +7760,32 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
                              " Credentials for new alert. "
                              "The task was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
                              " Credentials for new alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting"
                              " Credentials for new alert. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts",
                              response_data);
     }
 
@@ -7933,8 +7794,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -7945,7 +7806,7 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_alert_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -8099,6 +7960,11 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                 && (strcmp (name, "snmp_community") == 0
                     || strcmp (name, "snmp_agent") == 0
                     || strcmp (name, "snmp_message") == 0))
+            || (strcmp (method, "TippingPoint SMS") == 0
+                && (strcmp (name, "tp_sms_credential") == 0
+                    || strcmp (name, "tp_sms_hostname") == 0
+                    || strcmp (name, "tp_sms_tls_certificate") == 0
+                    || strcmp (name, "tp_sms_tls_workaround") == 0))
             || (strcmp (method, "verinice Connector") == 0
                 && (strcmp (name, "verinice_server_credential") == 0
                     || strcmp (name, "verinice_server_url") == 0
@@ -8167,14 +8033,14 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
 }
 
 /**
- * @brief Create an alert, get all alerts, XSL transform the result.
+ * @brief Create an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8182,13 +8048,11 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect;
   const char *name, *comment, *active, *condition, *event, *method, *filter_id;
   params_t *method_data, *event_data, *condition_data;
   entity_t entity;
   GString *xml;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   active = params_value (params, "active");
@@ -8275,37 +8139,37 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "alert_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_alerts",
-                               NULL, "new_alert",
                                "Create Alert", response_data);
   free_entity (entity);
   g_free (response);
@@ -8313,14 +8177,14 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Delete an alert, get all alerts, XSL transform the result.
+ * @brief Delete an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8331,7 +8195,7 @@ delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get one alert, XSL transform the result.
+ * @brief Get one alert, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -8339,7 +8203,7 @@ delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8366,30 +8230,33 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
                                  "Formats for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
                                  "Formats for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Report "
                                  "Formats for the alert. "
                                  "It is unclear whether the task has been saved or not. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8414,29 +8281,32 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting Tasks "
                                  "for the alert. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8462,29 +8332,32 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alert. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_alerts", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8500,14 +8373,14 @@ get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get one alert, XSL transform the result.
+ * @brief Get one alert, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8517,7 +8390,7 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get all alerts, XSL transform the result.
+ * @brief Get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -8525,7 +8398,7 @@ get_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8551,28 +8424,28 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the tasks. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the reports. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_tasks",
                                  response_data);
         }
 
@@ -8600,29 +8473,32 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting filters "
                                  "for the alerts. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_tasks", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -8640,14 +8516,14 @@ get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get all alerts, XSL transform the result.
+ * @brief Get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -8657,7 +8533,7 @@ get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Setup edit_alert XML, XSL transform the result.
+ * @brief Setup edit_alert XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -8665,7 +8541,7 @@ get_alerts_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_alert (gvm_connection_t *connection, credentials_t * credentials,
@@ -8682,13 +8558,14 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
 
   if (alert_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an alert. "
                            "The alert remains as it was. "
                            "Diagnostics: Required parameter alert_id was NULL.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -8701,12 +8578,13 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
                             alert_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<edit_alert>");
@@ -8728,12 +8606,13 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting alert info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_REPORT_FORMATS"))
@@ -8746,25 +8625,27 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
                                "The current list of report formats is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting report formats. "
                                "The current list of report formats is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
     }
 
@@ -8777,27 +8658,29 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of filters. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of filters. "
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_filters", response_data);
+                               response_data);
         }
     }
 
@@ -8813,27 +8696,29 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of tasks. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of tasks. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -8848,47 +8733,49 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of credentials. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_alerts", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of credentials. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_alert XML, XSL transform the result.
+ * @brief Setup edit_alert XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -8898,14 +8785,14 @@ edit_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify an alert, get all alerts, XSL transform the result.
+ * @brief Modify an alert, get all alerts, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -8914,13 +8801,12 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *xml;
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *alert_id;
+  const char  *name, *comment, *alert_id;
   const char *event, *condition, *method;
   const char *filter_id, *active;
   params_t *event_data, *condition_data, *method_data;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   condition = params_value (params, "condition");
@@ -9010,35 +8896,35 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while saving a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_alerts",
-                              NULL, "edit_alert",
                               "Save Alert", response_data);
   free_entity (entity);
   g_free (response);
@@ -9046,34 +8932,35 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Test an alert, get all alerts XSL transform the result.
+ * @brief Test an alert, get all alerts envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *alert_id;
+  const char  *alert_id;
   entity_t entity;
+  entity_t status_details_entity;
 
-  no_redirect = params_value (params, "no_redirect");
   alert_id = params_value (params, "alert_id");
 
   if (alert_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         GSAD_STATUS_INVALID_REQUEST);
       return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while testing an alert. "
+                           "Invalid request", __FUNCTION__, __LINE__,
+                           "Missing parameter alert_id."
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   /* Test the alert. */
@@ -9083,32 +8970,35 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             alert_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts", response_data);
+                           response_data);
     }
 
-  /* Cleanup, and return transformed XML. */
 
-  html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_alerts",
-                              NULL, "get_alerts",
-                              "Test Alert", response_data);
+  status_details_entity = entity_child (entity, "status_details");
+
+  html = action_result (connection, credentials, params, response_data,
+                        "Test Alert", entity_attribute (entity, "status"),
+                        entity_attribute (entity, "status_text"),
+                        entity_text(status_details_entity),
+                        entity_attribute (entity, "id"));
 
   free_entity (entity);
   g_free (response);
@@ -9123,7 +9013,7 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Alert XML on success.  HTML result of XSL transformation on error.
+ * @return Alert XML on success.  Enveloped XML on error.
  */
 char *
 export_alert_gmp (gvm_connection_t *connection,
@@ -9142,7 +9032,7 @@ export_alert_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Alerts XML on success.  HTML result of XSL transformation
+ * @return Alerts XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -9163,7 +9053,7 @@ export_alerts_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_target (gvm_connection_t *connection, credentials_t *credentials,
@@ -9247,25 +9137,27 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
     }
 
@@ -9279,25 +9171,27 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -9310,9 +9204,9 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -9323,7 +9217,7 @@ new_target (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -9333,14 +9227,14 @@ new_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a target, get all targets, XSL transform the result.
+ * @brief Create a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_target_gmp (gvm_connection_t *connection, credentials_t *
@@ -9349,7 +9243,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 {
   int ret;
   gchar *html, *response, *command;
-  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
+  const char  *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *target_exclude_source;
@@ -9362,7 +9256,6 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   entity_t entity;
   GString *xml;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
@@ -9516,37 +9409,37 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
         /* 'gmp' set response. */
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
                             "No new target was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
                             "It is unclear whether the target has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new target. "
                             "It is unclear whether the target has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_targets", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "target_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_targets",
-                              NULL, "new_target",
                               "Create Target", response_data);
   free_entity (entity);
   g_free (response);
@@ -9561,39 +9454,39 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 #define CHECK(name)                                                                 \
   if (name == NULL)                                                                 \
     {                                                                               \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                       \
+      cmd_response_data_set_status_code (response_data,                             \
+                                         MHD_HTTP_BAD_REQUEST);                     \
       return gsad_message (credentials,                                             \
                            "Internal error", __FUNCTION__, __LINE__,                \
                            "An internal error occurred while cloning a resource. "  \
                            "The resource was not cloned. "                          \
                            "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
                            "' was NULL.",                                           \
-                           "/omp?cmd=get_tasks", response_data);                    \
+                           response_data);                    \
     }
 
 /**
- * @brief Clone a resource, XSL transform the result.
+ * @brief Clone a resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *id, *type, *alterable, *no_redirect, *next_id;
+  const char *id, *type, *alterable,  *next_id;
   gchar *next_id_name, *cap_type, *prev_action;
   entity_t entity;
 
   id = params_value (params, "id");
   type = params_value (params, "resource_type");
   alterable = params_value (params, "alterable");
-  no_redirect = params_value (params, "no_redirect");
 
   CHECK (id);
   CHECK (type);
@@ -9612,13 +9505,14 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 type)
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while cloning a resource. "
                                "The resource was not cloned. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else if (gvm_connection_sendf (connection,
@@ -9630,25 +9524,27 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                  type)
            == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
                            "The resource was not cloned. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while cloning a resource. "
                            "It is unclear whether the resource has been cloned or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return next page. */
@@ -9668,13 +9564,14 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while cloning a resource. "
                               "The resource remains the same. "
                               "Diagnostics: Error getting new resource.",
-                              "/omp?cmd=get_tasks", response_data);
+                              response_data);
         }
       next_id_name = g_strdup_printf ("%s_id", type);
       params_add (params, next_id_name, next_id);
@@ -9690,9 +9587,6 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
   cap_type = capitalize (type);
   prev_action = g_strdup_printf ("Clone %s", cap_type);
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, NULL,
-                              NULL, NULL,
                               prev_action, response_data);
 
   free_entity (entity);
@@ -9706,14 +9600,14 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
 #undef CHECK
 
 /**
- * @brief Delete a target, get all targets, XSL transform the result.
+ * @brief Delete a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_target_gmp (gvm_connection_t *connection, credentials_t *
@@ -9725,14 +9619,14 @@ delete_target_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Delete a trash agent, get all agents, XSL transform the result.
+ * @brief Delete a trash agent, get all agents, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9743,14 +9637,14 @@ delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a trash config, get all trash, XSL transform the result.
+ * @brief Delete a trash config, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9761,14 +9655,14 @@ delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a trash alert, get all trash, XSL transform the result.
+ * @brief Delete a trash alert, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9779,14 +9673,14 @@ delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a trash credential, get all trash, XSL transform the result.
+ * @brief Delete a trash credential, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9797,14 +9691,14 @@ delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * crede
 }
 
 /**
- * @brief Delete a trash report format, get all trash, XSL transform the result.
+ * @brief Delete a trash report format, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9815,14 +9709,14 @@ delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * cr
 }
 
 /**
- * @brief Delete a trash schedule, get all trash, XSL transform the result.
+ * @brief Delete a trash schedule, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9833,14 +9727,14 @@ delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credent
 }
 
 /**
- * @brief Delete a trash target, get all trash, XSL transform the result.
+ * @brief Delete a trash target, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9851,14 +9745,14 @@ delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a trash task, get all trash, XSL transform the result.
+ * @brief Delete a trash task, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -9869,7 +9763,7 @@ delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Restore a resource, get all trash, XSL transform the result.
+ * @brief Restore a resource, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  connection     Connection to manager.
@@ -9877,7 +9771,7 @@ delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -9886,20 +9780,20 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *xml;
   gchar *ret;
   entity_t entity;
-  const char *target_id, *no_redirect;
+  const char *target_id;
 
   target_id = params_value (params, "target_id");
-  no_redirect = params_value (params, "no_redirect");
 
   if (target_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
                            "The resource was not restored. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -9913,33 +9807,32 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
                            "The resource was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while restoring a resource. "
                            "It is unclear whether the resource has been restored or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return trash page. */
 
   ret = response_from_entity (connection, credentials, params, entity,
-                             (no_redirect && strcmp (no_redirect, "0")),
-                             NULL, "get_trash",
-                             NULL, "get_trash",
                              "Restore", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -9947,14 +9840,14 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Empty the trashcan, get all trash, XSL transform the result.
+ * @brief Empty the trashcan, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
@@ -9962,11 +9855,8 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
                     cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char* no_redirect;
   gchar *ret;
   entity_t entity;
-
-  no_redirect = params_value (params, "no_redirect");
 
   xml = g_string_new ("");
 
@@ -9977,31 +9867,30 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while emptying the trashcan. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return trash page. */
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_trash",
-                              NULL, "get_trash",
                               "Empty Trashcan", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -10017,7 +9906,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_tag (gvm_connection_t *connection, credentials_t *credentials,
@@ -10057,9 +9946,9 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -10070,7 +9959,7 @@ new_tag (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -10080,26 +9969,24 @@ new_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Create a tag, get report, XSL transform the result.
+ * @brief Create a tag, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
-  const char* no_redirect;
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
   value = params_value (params, "tag_value");
@@ -10140,37 +10027,37 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
                              "No new tag was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "tag_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_tags",
-                              NULL, "new_tag",
                               "Create Tag", response_data);
 
   free_entity (entity);
@@ -10179,14 +10066,14 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete note, get next page, XSL transform the result.
+ * @brief Delete note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -10196,14 +10083,14 @@ delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Delete a note, get all notes, XSL transform the result.
+ * @brief Delete a note, get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -10214,7 +10101,7 @@ delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_tag XML, XSL transform the result.
+ * @brief Setup edit_tag XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -10222,7 +10109,7 @@ delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_tag (gvm_connection_t *connection, credentials_t * credentials,
@@ -10236,13 +10123,14 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   tag_id = params_value (params, "tag_id");
   if (tag_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a tag. "
                            "The tag remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -10252,12 +10140,13 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
                             tag_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -10275,31 +10164,32 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tags", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_tag XML, XSL transform the result.
+ * @brief Setup edit_tag XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10309,14 +10199,14 @@ edit_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify a tag, get all tags, XSL transform the result.
+ * @brief Modify a tag, get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10324,11 +10214,10 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
-  const char *tag_id, *no_redirect;
+  const char *tag_id;
   entity_t entity;
   char* ret;
 
-  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
@@ -10372,16 +10261,18 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
                              "The tag remains the same. "
                              "Diagnostics: Failure to send command to "
                              "manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -10389,22 +10280,20 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "or not. "
                              "Diagnostics: Failure to receive response from "
                              "manager daemon.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
                              "It is unclear whether the tag has been saved "
                              "or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tags", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_tags",
-                              NULL, "edit_tag",
                               "Save Tag", response_data);
 
   free_entity (entity);
@@ -10421,7 +10310,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Target XML on success.  HTML result of XSL transformation
+ * @return Target XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -10440,7 +10329,7 @@ export_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Targets XML on success.  HTML result of XSL transformation
+ * @return Targets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -10452,7 +10341,7 @@ export_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one tag, XSL transform the result.
+ * @brief Get one tag, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10460,7 +10349,7 @@ export_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tag (gvm_connection_t *connection, credentials_t * credentials,
@@ -10472,14 +10361,14 @@ get_tag (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one tag, XSL transform the result.
+ * @brief Get one tag, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10489,7 +10378,7 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all tags, XSL transform the result.
+ * @brief Get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10497,7 +10386,7 @@ get_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_tags (gvm_connection_t *connection, credentials_t * credentials,
@@ -10509,14 +10398,14 @@ get_tags (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all tags, XSL transform the result.
+ * @brief Get all tags, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10533,39 +10422,40 @@ get_tags_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *tag_id, *enable;
+  const char  *tag_id, *enable;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   enable = params_value (params, "enable");
 
   if (tag_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
                            "The tag was not modified. "
                            "Diagnostics: Required parameter tag_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   if (enable == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
                            "The tag was not modified. "
                            "Diagnostics: Required parameter enable was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Delete the resource and get all resources. */
@@ -10578,20 +10468,22 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             enable)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
                            "The tag is not modified. "
                            "Diagnostics: Failure to send command to"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while modifying a tag. "
@@ -10599,15 +10491,12 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            " or not. "
                            "Diagnostics: Failure to read response from"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (! gmp_success (entity))
     set_http_status_from_entity (entity, response_data);
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_tags",
-                               NULL, "get_tags",
                                "Toggle Tag", response_data);
 
   free_entity (entity);
@@ -10617,7 +10506,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_target XML, XSL transform the result.
+ * @brief Setup edit_target XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10625,7 +10514,7 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_target (gvm_connection_t *connection, credentials_t * credentials,
@@ -10644,13 +10533,14 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
 
   if (target_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a target. "
                            "The target remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -10663,12 +10553,13 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
                             target_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -10695,12 +10586,13 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting target info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_CREDENTIALS"))
@@ -10713,25 +10605,27 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets", response_data);
+                               response_data);
         }
     }
 
@@ -10745,45 +10639,47 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting targets list. "
                                "The current list of targets is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_target XML, XSL transform the result.
+ * @brief Setup edit_target XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10793,7 +10689,7 @@ edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one target, XSL transform the result.
+ * @brief Get one target, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10801,7 +10697,7 @@ edit_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_target (gvm_connection_t *connection, credentials_t * credentials,
@@ -10813,14 +10709,14 @@ get_target (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one target, XSL transform the result.
+ * @brief Get one target, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10830,7 +10726,7 @@ get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all targets, XSL transform the result.
+ * @brief Get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -10838,7 +10734,7 @@ get_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_targets (gvm_connection_t *connection, credentials_t * credentials,
@@ -10850,14 +10746,14 @@ get_targets (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all targets, XSL transform the result.
+ * @brief Get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_targets_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -10867,21 +10763,21 @@ get_targets_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify a target, get all targets, XSL transform the result.
+ * @brief Modify a target, get all targets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
+  const char  *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential;
   const char *target_source, *target_exclude_source;
@@ -10889,7 +10785,6 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   const char *reverse_lookup_unify, *alive_tests, *in_use;
   GString *command;
 
-  no_redirect = params_value (params, "no_redirect");
   alive_tests = params_value (params, "alive_tests");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -10932,35 +10827,35 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
                                  "The target remains the same. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
                                  "It is unclear whether the target has been saved or not. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a target. "
                                  "It is unclear whether the target has been saved or not. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_targets", response_data);
+                                 response_data);
         }
 
       html = response_from_entity (connection, credentials, params, entity,
-                                   (no_redirect && strcmp (no_redirect, "0")),
-                                   NULL, "get_targets",
-                                   NULL, "edit_target",
                                    "Save Target", response_data);
 
       free_entity (entity);
@@ -11096,31 +10991,30 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
     if (ret == -1)
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying target. "
                              "No target was modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       }
 
     entity = NULL;
     if (read_entity_and_text_c (connection, &entity, &response))
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a target. "
                              "It is unclear whether the target has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       }
 
     html = response_from_entity (connection, credentials, params, entity,
-                                 (no_redirect && strcmp (no_redirect, "0")),
-                                 NULL, "get_targets",
-                                 NULL, "edit_target",
                                  "Save Target", response_data);
   }
 
@@ -11137,7 +11031,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Target XML on success.  HTML result of XSL transformation
+ * @return Target XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -11157,7 +11051,7 @@ export_target_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Targets XML on success.  HTML result of XSL transformation
+ * @return Targets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -11178,7 +11072,7 @@ export_targets_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_config (gvm_connection_t *connection, credentials_t *credentials,
@@ -11203,39 +11097,42 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
                              " for new config. Diagnostics: Failure to send"
                              " command to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
                              " for new config. " "Diagnostics: Failure to"
                              " receive response from manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting scanners"
                              "for new config. It is unclear whether the config"
                              " has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
     }
   g_string_append (xml, response);
   g_free (response);
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11246,7 +11143,7 @@ new_config (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -11264,7 +11161,7 @@ new_config_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_config (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11277,8 +11174,8 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_config>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -11289,7 +11186,7 @@ upload_config (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11299,24 +11196,23 @@ upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Create config, get all configs, XSL transform the result.
+ * @brief Create config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *base, *scanner = NULL;
+  const char  *name, *comment, *base, *scanner = NULL;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
@@ -11348,37 +11244,37 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
                             "No new config was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
                             "It is unclear whether the config has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new config. "
                             "It is unclear whether the config has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_configs", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "config_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_configs",
-                               NULL, "new_config",
                                "Create Config", response_data);
 
   free_entity (entity);
@@ -11387,25 +11283,22 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Import config, get all configs, XSL transform the result.
+ * @brief Import config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the config. */
 
@@ -11423,37 +11316,37 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a config. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_configs", response_data);
+                             response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_configs",
-                               NULL, "new_config",
                                "Import Config", response_data);
   free_entity (entity);
   g_free (response);
@@ -11461,7 +11354,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Get all scan configs, XSL transform the result.
+ * @brief Get all scan configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -11469,7 +11362,7 @@ import_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -11480,14 +11373,14 @@ get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t 
 }
 
 /**
- * @brief Get all scan configs, XSL transform the result.
+ * @brief Get all scan configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11497,7 +11390,7 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -11506,7 +11399,7 @@ get_configs_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config (gvm_connection_t *connection, credentials_t * credentials,
@@ -11538,25 +11431,27 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Get all the families. */
@@ -11564,25 +11459,27 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (gvm_connection_sendf (connection, "<get_nvt_families/>") == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (edit)
@@ -11592,25 +11489,27 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while getting the config. "
                    "The config is not available. "
                    "Diagnostics: Failure to send command to manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while getting the config. "
                    "The config is not available. "
                    "Diagnostics: Failure to receive response from manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
 
     }
@@ -11619,24 +11518,26 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   if (gvm_connection_sendf (connection, "<get_credentials/>") == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while getting the config. "
                "The config is not available. "
                "Diagnostics: Failure to send command to manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while getting the config. "
                "The config is not available. "
                "Diagnostics: Failure to receive response from manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   /* Get the permissions */
@@ -11652,25 +11553,27 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting permissions list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</permissions>");
@@ -11678,19 +11581,19 @@ get_config (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11700,14 +11603,14 @@ get_config_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11717,14 +11620,14 @@ edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get a config, XSL transform the result.
+ * @brief Get a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -11734,14 +11637,14 @@ edit_config_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Sync config, get configs, XSL transform the result.
+ * @brief Sync config, get configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -11758,13 +11661,14 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             config_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while synchronizing a config. "
                "The config is not synchronized. "
                "Diagnostics: Failure to send command to manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   xml = g_string_new ("");
@@ -11772,13 +11676,14 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
                "An internal error occurred while synchronizing a config. "
                "It is unclear whether the config has been synchronized or not. "
                "Diagnostics: Failure to receive response from manager daemon.",
-               "/omp?cmd=get_configs", response_data);
+               response_data);
     }
 
   next = params_value (params, "next");
@@ -11805,7 +11710,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[out]  success        Whether the last command was successful.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return HTML result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
@@ -11847,13 +11752,14 @@ save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
           == -1)
         {
           g_free (value);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
                    "An internal error occurred while saving a config. It is"
                    " unclear whether the entire config has been saved. "
                    "Diagnostics: Failure to send command to manager daemon.",
-                   "/omp?cmd=get_configs", response_data);
+                   response_data);
         }
       g_free (value);
 
@@ -11919,13 +11825,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (gmp_ret == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   ret = check_modify_config (connection, credentials, params,
@@ -11968,13 +11875,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
               == -1)
             {
               g_free (value);
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs", response_data);
+                                   response_data);
             }
           g_free (value);
           g_free (ret);
@@ -12003,13 +11911,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
     {
       if (osp_ret == NULL)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a config. "
                                "It is unclear whether the entire config has been saved. "
                                "Diagnostics: save_osp_prefs returned NULL unexpectedly.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
       return ret;
     }
@@ -12031,13 +11940,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                 && strcmp (params_value (params, "trend"), "0"))
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while saving a config. "
                               "It is unclear whether the entire config has been saved. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_configs", response_data);
+                              response_data);
         }
 
       if (selects)
@@ -12058,14 +11968,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                       trends && member1 (trends, family))
                 == -1)
               {
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                     "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while saving a config. "
                                     "It is unclear whether the entire config has been saved. "
                                     "Diagnostics: Failure to send command to manager daemon.",
-                                    "/omp?cmd=get_configs", response_data);
+                                    response_data);
               }
         }
 
@@ -12090,13 +12000,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                         family)
                   == -1)
                 {
-                  response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (
+                    response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while saving a config. "
                                        "It is unclear whether the entire config has been saved. "
                                        "Diagnostics: Failure to send command to manager daemon.",
-                                       "/omp?cmd=get_configs", response_data);
+                                       response_data);
                 }
             }
         }
@@ -12106,13 +12017,14 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                                 "</modify_config>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a config. "
                                "It is unclear whether the entire config has been saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       g_free (ret);
@@ -12124,7 +12036,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get details of a family for a config, XSL transform the result.
+ * @brief Get details of a family for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -12132,7 +12044,7 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config_family (gvm_connection_t *connection, credentials_t *
@@ -12148,12 +12060,13 @@ get_config_family (gvm_connection_t *connection, credentials_t *
 
   if ((config_id == NULL) || (name == NULL) || (family == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<get_config_family_response>");
@@ -12184,25 +12097,27 @@ get_config_family (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (edit)
@@ -12227,44 +12142,46 @@ get_config_family (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_configs", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</all>");
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get details of a family for a config, XSL transform the result.
+ * @brief Get details of a family for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12274,14 +12191,14 @@ get_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get details of a family for editing a config, XSL transform result.
+ * @brief Get details of a family for editing a config, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_family_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12291,14 +12208,14 @@ edit_config_family_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_config_family_gmp (gvm_connection_t *connection, credentials_t *
@@ -12314,13 +12231,14 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
 
   if ((config_id == NULL) || (family == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving getting config family. "
                            "The config has not been saved. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   /* Set the NVT selection. */
@@ -12333,13 +12251,14 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                             family)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   nvts = params_values (params, "nvt:");
@@ -12356,13 +12275,14 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                                   name)
             == -1)
           {
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a config. "
                                  "It is unclear whether the entire config has been saved. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_configs", response_data);
+                                 response_data);
           }
     }
 
@@ -12371,13 +12291,14 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
                             "</modify_config>")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   ret = check_modify_config (connection, credentials, params,
@@ -12388,7 +12309,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -12396,7 +12317,7 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  edit         0 for config view page, else config edit page.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
@@ -12412,12 +12333,13 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
 
   if ((config_id == NULL) || (name == NULL))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config family. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<get_config_nvt_response>");
@@ -12446,25 +12368,27 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</get_config_nvt_response>");
@@ -12477,25 +12401,27 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
                            "The current list of notes is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of notes. "
                            "The current list of notes is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -12506,40 +12432,42 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
                            "The current list of overrides is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of overrides. "
                            "The current list of overrides is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+                           response_data);
     }
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get details of an NVT for a config, XSL transform the result.
+ * @brief Get details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12549,14 +12477,14 @@ get_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Edit details of an NVT for a config, XSL transform the result.
+ * @brief Edit details of an NVT for a config, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12566,14 +12494,14 @@ edit_config_nvt_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Save NVT prefs for a config, get NVT details, XSL transform result.
+ * @brief Save NVT prefs for a config, get NVT details, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
@@ -12700,13 +12628,14 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
               if (timeout == NULL)
                 {
                   g_free (value);
-                  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_BAD_REQUEST);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while saving a config. "
                                        "It is unclear whether the entire config has been saved. "
                                        "Diagnostics: Required parameter was NULL.",
-                                       "/omp?cmd=get_configs", response_data);
+                                       response_data);
                 }
 
               preference_name_escaped = g_markup_escape_text (preference_name,
@@ -12762,13 +12691,14 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
           if (ret == -1)
             {
               g_free (value);
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs", response_data);
+                                   response_data);
             }
           g_free (value);
 
@@ -12789,14 +12719,14 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Delete config, get all configs, XSL transform the result.
+ * @brief Delete config, get all configs, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -12814,7 +12744,7 @@ delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Config XML on success.  HTML result of XSL transformation on error.
+ * @return Config XML on success.  Enveloped XML on error.
  */
 char *
 export_config_gmp (gvm_connection_t *connection,
@@ -12833,7 +12763,7 @@ export_config_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scan configs XML on success.  HTML result of XSL transformation
+ * @return Scan configs XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12852,7 +12782,7 @@ export_configs_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -12870,7 +12800,7 @@ export_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Notes XML on success.  HTML result of XSL transformation
+ * @return Notes XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12889,7 +12819,7 @@ export_notes_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Override XML on success.  HTML result of XSL transformation on error.
+ * @return Override XML on success.  Enveloped XML on error.
  */
 char *
 export_override_gmp (gvm_connection_t *connection,
@@ -12908,7 +12838,7 @@ export_override_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Overrides XML on success.  HTML result of XSL transformation
+ * @return Overrides XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12928,7 +12858,7 @@ export_overrides_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Port List XML on success.  HTML result of XSL transformation on
+ * @return Port List XML on success.  Enveloped XML on
  *         error.
  */
 char *
@@ -12948,7 +12878,7 @@ export_port_list_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Port Lists XML on success.  HTML result of XSL transformation
+ * @return Port Lists XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -12968,7 +12898,7 @@ export_port_lists_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Config XML on success.  HTML result of XSL transformation on error.
+ * @return Config XML on success.  Enveloped XML on error.
  */
 char *
 export_preference_file_gmp (gvm_connection_t *connection,
@@ -13000,26 +12930,28 @@ export_preference_file_gmp (gvm_connection_t *connection,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       entity = NULL;
       if (read_entity_c (connection, &entity))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       preference_entity = entity_child (entity, "preference");
@@ -13042,20 +12974,21 @@ export_preference_file_gmp (gvm_connection_t *connection,
         {
           free_entity (entity);
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive file from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -13066,7 +12999,7 @@ export_preference_file_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Report format XML on success.  HTML result of XSL transformation
+ * @return Report format XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -13086,7 +13019,7 @@ export_report_format_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Report Formats XML on success.  HTML result of XSL transformation
+ * @return Report Formats XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -13099,14 +13032,14 @@ export_report_formats_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Delete report, get task status, XSL transform the result.
+ * @brief Delete report, get task status, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_report_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -13285,26 +13218,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
         {
           g_string_free (commands_xml, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send extra commands to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &commands_xml))
         {
           g_string_free (commands_xml, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
@@ -13414,13 +13349,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_entity_and_text_c (connection, &entity, &esc_response))
@@ -13429,13 +13365,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
       status = entity_attribute (entity, "status");
       if ((status == NULL)
@@ -13445,13 +13382,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to parse response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
       free_entity (entity);
     }
@@ -13497,13 +13435,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   given_filt_id = params_value (params, "filt_id");
@@ -13635,7 +13574,8 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                   "Given host search_phrase was invalid",
                                   "Get Report");
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_BAD_REQUEST);
           return g_string_free (xml, FALSE);
         }
 
@@ -13653,13 +13593,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else
@@ -13737,13 +13678,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_string_free (delta_states, TRUE);
@@ -13760,26 +13702,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           if (read_entity_c (connection, &entity))
             {
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
           entity_t report = entity_child (entity, "report");
           if (report == NULL)
             {
               free_entity (entity);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Response from manager daemon did not contain a report.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
           extension = entity_attribute (report, "extension");
           requested_content_type = entity_attribute (report, "content_type");
@@ -13795,34 +13739,31 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                   switch (ret)
                     {
                       case 1:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Failure to send command to manager daemon.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                       case 2:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Failure to receive response from manager daemon.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                       default:
-                        response_data->http_status_code
-                          = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                        cmd_response_data_set_status_code (response_data,
+                                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
                         return gsad_message (credentials,
                                             "Internal error", __FUNCTION__, __LINE__,
                                             "An internal error occurred while getting a setting. "
                                             "The setting could not be delivered. "
                                             "Diagnostics: Internal error.",
-                                            "/omp?cmd=get_tasks",
                                              response_data);
                     }
                 }
@@ -13878,13 +13819,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           if (read_entity_c (connection, &entity))
             {
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           report_entity = entity_child (entity, "report");
@@ -13927,34 +13869,31 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                       switch (ret)
                         {
                           case 1:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Failure to send command to manager daemon.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                           case 2:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                           default:
-                            response_data->http_status_code
-                              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                            cmd_response_data_set_status_code (response_data,
+                                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
                             return gsad_message (credentials,
                                                 "Internal error", __FUNCTION__, __LINE__,
                                                 "An internal error occurred while getting a setting. "
                                                 "The setting could not be delivered. "
                                                 "Diagnostics: Internal error.",
-                                                "/omp?cmd=get_tasks",
                                                  response_data);
                         }
                     }
@@ -13993,13 +13932,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               free_entity (entity);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive report from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
     }
@@ -14009,7 +13949,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
       task_id = NULL;
 
-      /* Format is NULL, send XSL transformed XML. */
+      /* Format is NULL, send enveloped XML. */
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
@@ -14073,13 +14013,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if ((filt_id == NULL) && (params_value (params, "filter") == NULL))
@@ -14113,26 +14054,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14151,28 +14094,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                 {
                   g_string_free (xml, TRUE);
                   if (error) *error = 1;
-                  response_data->http_status_code
-                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
                                        "The current list of filters is not available. "
                                        "Diagnostics: Failure to send command to manager daemon.",
-                                       "/omp?cmd=get_tasks", response_data);
+                                       response_data);
                 }
 
               if (read_string_c (connection, &xml))
                 {
                   g_string_free (xml, TRUE);
                   if (error) *error = 1;
-                  response_data->http_status_code
-                    = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                  cmd_response_data_set_status_code (response_data,
+                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
                                        "The current list of filters is not available. "
                                        "Diagnostics: Failure to receive response from manager daemon.",
-                                       "/omp?cmd=get_tasks", response_data);
+                                       response_data);
                 }
 
               g_string_append (xml, "</filters>");
@@ -14229,13 +14172,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               g_free (task_id);
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
@@ -14243,13 +14187,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               g_free (task_id);
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           g_free (task_id);
@@ -14293,26 +14238,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14326,26 +14273,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
         }
 
@@ -14362,26 +14311,28 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
                                    "The current list of filters is not available. "
                                    "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
               if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+              cmd_response_data_set_status_code (response_data,
+                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
                                    "The current list of filters is not available. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_tasks", response_data);
+                                   response_data);
             }
 
           g_string_append (xml, "</filters>");
@@ -14399,25 +14350,27 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting tag names list. "
                               "The current list of resources is not available. "
                               "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_resources", response_data);
+                              response_data);
         }
 
       g_string_append (xml, "</get_report>");
@@ -14426,7 +14379,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get a report and XSL transform the result.
+ * @brief Get a report and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14445,8 +14398,8 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
   result = get_report (connection, credentials, params, NULL, NULL, &error,
                        response_data);
 
-  return error ? result : xsl_transform_gmp (connection, credentials, params,
-                                             result, response_data);
+  return error ? result : envelope_gmp (connection, credentials, params,
+                                        result, response_data);
 }
 
 /**
@@ -14457,7 +14410,7 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 report_alert_gmp (gvm_connection_t *connection,
@@ -14476,11 +14429,11 @@ report_alert_gmp (gvm_connection_t *connection,
   if ((alert_id == NULL) || (report_id == NULL))
     {
       cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message_new (credentials,
-                               "Bad Request", __FUNCTION__, __LINE__,
-                               "Missing parameter alert_id or report_id. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_reports", 1, response_data);
+      return gsad_message (credentials,
+                           "Bad Request", __FUNCTION__, __LINE__,
+                           "Missing parameter alert_id or report_id. "
+                           "Diagnostics: Required parameter was NULL.",
+                           response_data);
     }
 
   filter = params_value (params, "filter");
@@ -14503,25 +14456,27 @@ report_alert_gmp (gvm_connection_t *connection,
                                   alert_id);
   if (ret == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from "
                            "manager daemon.",
-                           "/omp?cmd=get_tasks", 1, response_data);
+                           response_data);
     }
 
   status = entity_attribute (entity, "status");
@@ -14529,30 +14484,29 @@ report_alert_gmp (gvm_connection_t *connection,
     {
       free_entity (entity);
       g_free (response);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to parse response from manager daemon.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to parse response from manager daemon.",
+                           response_data);
     }
   if (strcmp(status, "200"))
     {
       free_entity (entity);
       g_free (response);
       cmd_response_data_set_status_code(response_data, MHD_HTTP_BAD_REQUEST);
-      return gsad_message_new (credentials,
-                               "Failed", __FUNCTION__, __LINE__,
-                               "Running the report alert failed."
-                               "The report could not be delivered.",
-                               "/omp?cmd=get_tasks", 1, response_data);
+      return gsad_message (credentials,
+                           "Failed", __FUNCTION__, __LINE__,
+                           "Running the report alert failed."
+                           "The report could not be delivered.",
+                           response_data);
 
     }
 
-  html = response_from_entity (connection, credentials, params, entity, 1,
-                              NULL, "report_alert",
-                              NULL, "report_alert",
+  html = response_from_entity (connection, credentials, params, entity,
                               "Report Alert", response_data);
 
   free_entity (entity);
@@ -14561,7 +14515,7 @@ report_alert_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get all reports, XSL transform the result.
+ * @brief Get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14569,7 +14523,7 @@ report_alert_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_reports (gvm_connection_t *connection, credentials_t * credentials,
@@ -14588,14 +14542,14 @@ get_reports (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all reports, XSL transform the result.
+ * @brief Get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -14605,14 +14559,14 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get the hosts for a report, XSL transform the result.
+ * @brief Get the hosts for a report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_section (gvm_connection_t *connection,
@@ -14633,12 +14587,13 @@ get_report_section (gvm_connection_t *connection,
 
   if (report_id == NULL && (type == NULL || strcmp (type, "prognostic")))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: report_id was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (!strcmp (report_section, "results"))
@@ -14648,8 +14603,8 @@ get_report_section (gvm_connection_t *connection,
       result = get_report (connection, credentials, params, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_gmp (connection, credentials,
-                                                 params, result, response_data);
+      return error ? result : envelope_gmp (connection, credentials,
+                                            params, result, response_data);
     }
 
   result = get_report (connection, credentials, params, NULL, NULL,
@@ -14681,31 +14636,34 @@ get_report_section (gvm_connection_t *connection,
             break;
           case 1:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           case 2:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
           default:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting the "
                                 "result formats list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_tasks", response_data);
+                                response_data);
         }
 
       g_string_append (xml, response);
@@ -14714,19 +14672,19 @@ get_report_section (gvm_connection_t *connection,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get a report section, XSL transform the result.
+ * @brief Get a report section, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_section_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -14757,12 +14715,13 @@ download_ssl_cert (gvm_connection_t *connection,
   ssl_cert = params_value (params, "ssl_cert");
   if (ssl_cert == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ssl_cert was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ssl_cert, NULL);
@@ -14797,12 +14756,13 @@ download_ca_pub (gvm_connection_t *connection, credentials_t * credentials,
   ca_pub = params_value (params, "ca_pub");
   if (ca_pub == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: ca_pub was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ca_pub, NULL);
@@ -14830,12 +14790,13 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
   key_pub = params_value (params, "key_pub");
   if (key_pub == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred."
                            " Diagnostics: key_pub was NULL.",
-                           "/omp?cmd=get_reports", response_data);
+                           response_data);
     }
 
   /* The Base64 comes URI escaped as it may contain special characters. */
@@ -14852,7 +14813,7 @@ download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Result XML on success.  HTML result of XSL transformation
+ * @return Result XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -14872,7 +14833,7 @@ export_result_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Results XML on success.  HTML result of XSL transformation
+ * @return Results XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -14885,7 +14846,7 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get all results, XSL transform the result.
+ * @brief Get all results, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -14893,7 +14854,7 @@ export_results_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_results (gvm_connection_t *connection, credentials_t * credentials,
@@ -14912,14 +14873,14 @@ get_results (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all results, XSL transform the result.
+ * @brief Get all results, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -14933,7 +14894,7 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get one result, XSL transform the result.
+ * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
@@ -14947,7 +14908,7 @@ get_results_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml        Extra XML to insert inside page element.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_result (gvm_connection_t *connection, credentials_t *credentials,
@@ -14982,6 +14943,7 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
                             "<commands>"
                             "%s"
                             "<get_results"
+                            " get_counts=\"0\""
                             " result_id=\"%s\""
                             "%s%s%s"
                             " filter=\"autofp=%s"
@@ -15003,23 +14965,25 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get tag names */
@@ -15034,43 +14998,45 @@ get_result (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting tag names list. "
                            "The current list of resources is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_resources", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Get one result, XSL transform the result.
+ * @brief Get one result, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15097,7 +15063,7 @@ get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_result_page (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15117,7 +15083,7 @@ get_result_page (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Get all notes, XSL transform the result.
+ * @brief Get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15125,7 +15091,7 @@ get_result_page (gvm_connection_t *connection, credentials_t *credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -15135,14 +15101,14 @@ get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 }
 
 /**
- * @brief Get all notes, XSL transform the result.
+ * @brief Get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15152,7 +15118,7 @@ get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get a note, XSL transform the result.
+ * @brief Get a note, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15160,24 +15126,25 @@ get_notes_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
-  return get_one (connection, "note", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "note", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**
- * @brief Get a note, XSL transform the result.
+ * @brief Get a note, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15195,7 +15162,7 @@ get_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_note (gvm_connection_t *connection, credentials_t *credentials,
@@ -15252,30 +15219,32 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                                 " details=\"0\"/>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
                                "No new note was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_notes", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
                                "No new note was created. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_notes", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</new_note>");
-      return xsl_transform_gmp (connection, credentials, params,
-                                g_string_free (xml, FALSE), response_data);
+      return envelope_gmp (connection, credentials, params,
+                           g_string_free (xml, FALSE), response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -15290,13 +15259,14 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
                             task_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code(response_data,
+                                        MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
                            "No new note was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -15351,20 +15321,21 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code(response_data,
+                                        MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
                            "It is unclear whether the note has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -15375,7 +15346,7 @@ new_note (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15511,14 +15482,14 @@ get_result_id_from_params(params_t *params)
 }
 
 /**
- * @brief Create a note, get report, XSL transform the result.
+ * @brief Create a note, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15526,13 +15497,12 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *oid, *severity, *port, *hosts;
+  const char  *oid, *severity, *port, *hosts;
   const char *text, *task_id, *result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
   CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
 
@@ -15582,37 +15552,37 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
                              "No new note was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
                              "It is unclear whether the note has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new note. "
                              "It is unclear whether the note has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "note_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_notes",
-                              NULL, "new_note",
                               "Create Note", response_data);
   free_entity (entity);
   g_free (response);
@@ -15620,14 +15590,14 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Delete note, get next page, XSL transform the result.
+ * @brief Delete note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -15637,14 +15607,14 @@ delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Delete a note, get all notes, XSL transform the result.
+ * @brief Delete a note, get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -15655,7 +15625,7 @@ delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Edit note, get next page, XSL transform the result.
+ * @brief Edit note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15663,7 +15633,7 @@ delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_note (gvm_connection_t *connection, credentials_t *credentials,
@@ -15683,13 +15653,14 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
                             note_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -15702,31 +15673,32 @@ edit_note (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_notes", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Edit note, get next page, XSL transform the result.
+ * @brief Edit note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15736,14 +15708,14 @@ edit_note_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Save note, get next page, XSL transform the result.
+ * @brief Save note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -15751,12 +15723,10 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect;
   const char *note_id, *text, *hosts, *port, *severity, *task_id;
   const char *result_id, *active, *days, *oid;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   note_id = params_value (params, "note_id");
 
   oid = params_value (params, "oid");
@@ -15811,35 +15781,35 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
                              "The note remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
                              "It is unclear whether the note has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
                              "It is unclear whether the note has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_notes", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_notes",
-                              NULL, "edit_note",
                               "Save Note", response_data);
 
   free_entity (entity);
@@ -15848,7 +15818,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all overrides, XSL transform the result.
+ * @brief Get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15856,7 +15826,7 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15867,14 +15837,14 @@ get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get all overrides, XSL transform the result.
+ * @brief Get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15884,7 +15854,7 @@ get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Get a override, XSL transform the result.
+ * @brief Get a override, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -15892,25 +15862,25 @@ get_overrides_gmp (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_override (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one (connection, "override", credentials, params, extra_xml, NULL,
-                  response_data);
+  return get_one (connection, "override", credentials, params, extra_xml,
+                  "result=\"1\"", response_data);
 }
 
 /**
- * @brief Get an override, XSL transform the result.
+ * @brief Get an override, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -15928,7 +15898,7 @@ get_override_gmp (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_override (gvm_connection_t *connection, credentials_t *credentials,
@@ -15985,30 +15955,32 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                                 " details=\"0\"/>")
           == -1)
         {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
                                "No new override was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_overrides", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
                                "No new override was created. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_overrides", response_data);
+                               response_data);
         }
 
       g_string_append (xml, "</new_override>");
-      return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                                response_data);
+      return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                           response_data);
     }
 
   if (gvm_connection_sendf (connection,
@@ -16025,13 +15997,14 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
                             task_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
                            "No new override was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16086,20 +16059,21 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
                            "It is unclear whether the override has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16110,7 +16084,7 @@ new_override (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16120,14 +16094,14 @@ new_override_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Create an override, get report, XSL transform the result.
+ * @brief Create an override, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -16135,14 +16109,12 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   char *ret;
   gchar *response;
-  const char *no_redirect;
   const char *oid, *severity, *custom_severity, *new_severity, *port, *hosts;
   const char *text, *task_id, *result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
   CHECK_PARAM_INVALID (oid, "Create Override", "new_override");
 
@@ -16220,37 +16192,37 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
                              "No new override was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
                              "It is unclear whether the override has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new override. "
                              "It is unclear whether the override has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "override_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_overrides",
-                              NULL, "new_override",
                               "Create Override", response_data);
   free_entity (entity);
   g_free (response);
@@ -16258,14 +16230,14 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete override, get next page, XSL transform the result.
+ * @brief Delete override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16276,14 +16248,14 @@ delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a override, get all overrides, XSL transform the result.
+ * @brief Delete a override, get all overrides, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16294,7 +16266,7 @@ delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credent
 }
 
 /**
- * @brief Edit override, get next page, XSL transform the result.
+ * @brief Edit override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16302,7 +16274,7 @@ delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credent
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_override (gvm_connection_t *connection, credentials_t *credentials,
@@ -16322,13 +16294,14 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
                             override_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16341,31 +16314,32 @@ edit_override (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_overrides", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Edit override, get next page, XSL transform the result.
+ * @brief Edit override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_override_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16375,14 +16349,14 @@ edit_override_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Save override, get next page, XSL transform the result.
+ * @brief Save override, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -16390,12 +16364,11 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect, *override_id, *text, *hosts, *port;
+  const char  *override_id, *text, *hosts, *port;
   const char *severity, *custom_severity, *new_severity;
   const char *task_id, *result_id, *active, *days, *oid;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   override_id = params_value (params, "override_id");
 
   port = get_port_from_params (params);
@@ -16458,35 +16431,35 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
                              "The override remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
                              "It is unclear whether the override has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a override. "
                              "It is unclear whether the override has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_overrides", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_overrides",
-                              NULL, "edit_override",
                               "Save Override", response_data);
 
   free_entity (entity);
@@ -16498,7 +16471,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Scanners. */
 
 /**
- * @brief Get all scanners, XSL transform the result.
+ * @brief Get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16506,7 +16479,7 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16517,14 +16490,14 @@ get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Get all scanners, XSL transform the result.
+ * @brief Get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16534,7 +16507,7 @@ get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get one scanner, XSL transform the result.
+ * @brief Get one scanner, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16542,7 +16515,7 @@ get_scanners_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16553,14 +16526,14 @@ get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get one scanner, XSL transform the result.
+ * @brief Get one scanner, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16577,7 +16550,7 @@ get_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scanner XML on success.  HTML result of XSL transformation on error.
+ * @return Scanner XML on success.  Enveloped XML on error.
  */
 char *
 export_scanner_gmp (gvm_connection_t *connection,
@@ -16596,7 +16569,7 @@ export_scanner_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Scanners XML on success. HTML result of XSL transformation on error.
+ * @return Scanners XML on success. Enveloped XML on error.
  */
 char *
 export_scanners_gmp (gvm_connection_t *connection,
@@ -16616,7 +16589,7 @@ export_scanners_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_scanner (gvm_connection_t *connection, credentials_t *credentials,
@@ -16630,12 +16603,13 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
                             " filter=\"first=1 rows=-1\" />")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("<new_scanner>");
@@ -16645,18 +16619,19 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the credentials list. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -16667,7 +16642,7 @@ new_scanner (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -16677,14 +16652,14 @@ new_scanner_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Verify scanner, get scanners, XSL transform the result.
+ * @brief Verify scanner, get scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16712,29 +16687,32 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
                              "The scanner was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
                              "It is unclear whether the scanner was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a scanner. "
                              "It is unclear whether the scanner was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_scanners", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -16744,13 +16722,14 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a scanner. "
                                "It is unclear whether the scanner was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_scanners", response_data);
+                               response_data);
         }
     }
   else
@@ -16769,14 +16748,14 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Create a scanner, get all scanners, XSL transform the result.
+ * @brief Create a scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16785,11 +16764,9 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   int ret;
   char *html;
   gchar *response = NULL;
-  const char *no_redirect;
   const char *name, *comment, *host, *port, *type, *ca_pub, *credential_id;
   entity_t entity = NULL;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "scanner_host");
@@ -16829,37 +16806,37 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
                  "No new scanner was created. "
                  "Diagnostics: Failure to send command to manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
                  "It is unclear whether the scanner has been created or not. "
                  "Diagnostics: Failure to receive response from manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while creating a new scanner. "
                  "It is unclear whether the scanner has been created or not. "
                  "Diagnostics: Internal Error.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "scanner_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_scanners",
-                               NULL, "new_scanner",
                                "Create Scanner", response_data);
   free_entity (entity);
   g_free (response);
@@ -16867,14 +16844,14 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a scanner, get all scanners, XSL transform the result.
+ * @brief Delete a scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16885,14 +16862,14 @@ delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a trash scanner, get all scanners, XSL transform the result.
+ * @brief Delete a trash scanner, get all scanners, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -16903,7 +16880,7 @@ delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Setup edit_scanner XML, XSL transform the result.
+ * @brief Setup edit_scanner XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -16911,7 +16888,7 @@ delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credenti
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
@@ -16926,13 +16903,14 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
 
   if (scanner_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a scanner. "
                            "The scanner remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (next == NULL)
@@ -16946,12 +16924,13 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
                             scanner_id)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -16970,30 +16949,31 @@ edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting scanner info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_scanner XML, XSL transform the result.
+ * @brief Setup edit_scanner XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17003,14 +16983,14 @@ edit_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Save scanner, get next page, XSL transform the result.
+ * @brief Save scanner, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17018,13 +16998,11 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const char *no_redirect;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
   const char *credential_id, *which_cert;
   char *html;
   int ret, is_unix_socket, in_use;
 
-  no_redirect = params_value (params, "no_redirect");
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -17124,35 +17102,35 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
                  "The scanner remains the same. "
                  "Diagnostics: Failure to send command to manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
                  "It is unclear whether the scanner has been saved or not. "
                  "Diagnostics: Failure to receive response from manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message
                 (credentials, "Internal error", __FUNCTION__, __LINE__,
                  "An internal error occurred while saving a scanner. "
                  "It is unclear whether the scanner has been saved or not. "
                  "Diagnostics: Internal Error.",
-                 "/omp?cmd=get_scanners", response_data);
+                 response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_scanners",
-                               NULL, "edit_scanner",
                                "Save Scanner", response_data);
 
   free_entity (entity);
@@ -17164,7 +17142,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 /* Schedules. */
 
 /**
- * @brief Get one schedule, XSL transform the result.
+ * @brief Get one schedule, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17172,7 +17150,7 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17183,14 +17161,14 @@ get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_
 }
 
 /**
- * @brief Get one schedule, XSL transform the result.
+ * @brief Get one schedule, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17200,7 +17178,7 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Get all schedules, XSL transform the result.
+ * @brief Get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17208,7 +17186,7 @@ get_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17219,14 +17197,14 @@ get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Get all schedules, XSL transform the result.
+ * @brief Get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17244,7 +17222,7 @@ get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17277,8 +17255,8 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17289,7 +17267,7 @@ new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17299,14 +17277,14 @@ new_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Create a schedule, get all schedules, XSL transform the result.
+ * @brief Create a schedule, get all schedules, envelope the result.
  * @param[in]  connection     Connection to manager.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17314,12 +17292,10 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 {
   char *ret;
   gchar *response;
-  const char *no_redirect;
   const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
   const char *period, *period_unit, *duration, *duration_unit, *timezone;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   hour = params_value (params, "hour");
@@ -17393,37 +17369,37 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
                              "No new schedule was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
                              "It is unclear whether the schedule has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new schedule. "
                              "It is unclear whether the schedule has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "schedule_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_schedules",
-                              NULL, "new_schedule",
                               "Create Schedule", response_data);
   free_entity (entity);
   g_free (response);
@@ -17431,14 +17407,14 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a schedule, get all schedules, XSL transform the result.
+ * @brief Delete a schedule, get all schedules, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17449,14 +17425,14 @@ delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Get all system reports, XSL transform the result.
+ * @brief Get all system reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_system_reports_gmp (gvm_connection_t *connection,
@@ -17591,25 +17567,27 @@ get_system_reports_gmp (gvm_connection_t *connection,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (command_enabled (credentials, "GET_SCANNERS"))
@@ -17622,33 +17600,35 @@ get_system_reports_gmp (gvm_connection_t *connection,
           == -1)
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
                                "The current list of system reports is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
 
       if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the system reports. "
                                "The current list of system reports is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17829,7 +17809,7 @@ get_system_report_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Get one report format, XSL transform the result.
+ * @brief Get one report format, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17837,7 +17817,7 @@ get_system_report_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_format (gvm_connection_t *connection, credentials_t *
@@ -17849,14 +17829,14 @@ get_report_format (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get one report format, XSL transform the result.
+ * @brief Get one report format, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17866,7 +17846,7 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get all Report Formats, XSL transform the result.
+ * @brief Get all Report Formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17874,7 +17854,7 @@ get_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_report_formats (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17885,14 +17865,14 @@ get_report_formats (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Get all Report Formats, XSL transform the result.
+ * @brief Get all Report Formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_report_formats_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -17910,7 +17890,7 @@ get_report_formats_gmp (gvm_connection_t *connection, credentials_t * credential
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_report_format (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17921,8 +17901,8 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -17933,7 +17913,7 @@ new_report_format (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -17943,14 +17923,14 @@ new_report_format_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete report format, get report formats, XSL transform the result.
+ * @brief Delete report format, get report formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_report_format_gmp (gvm_connection_t *connection,
@@ -17962,7 +17942,7 @@ delete_report_format_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Setup edit_report_format XML, XSL transform the result.
+ * @brief Setup edit_report_format XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -17970,7 +17950,7 @@ delete_report_format_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_report_format (gvm_connection_t *connection,
@@ -18001,14 +17981,14 @@ edit_report_format (gvm_connection_t *connection,
 }
 
 /**
- * @brief Setup edit_report_format XML, XSL transform the result.
+ * @brief Setup edit_report_format XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_report_format_gmp (gvm_connection_t *connection,
@@ -18020,25 +18000,22 @@ edit_report_format_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Import report format, get all report formats, XSL transform result.
+ * @brief Import report format, get all report formats, envelope result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  const char* no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the report format. */
 
@@ -18056,29 +18033,32 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a report format. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -18086,9 +18066,6 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
   if (entity_attribute (entity, "id"))
     params_add (params, "report_format_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_report_formats",
-                               NULL, "new_report_format",
                                "Create Report Format", response_data);
 
   free_entity (entity);
@@ -18097,14 +18074,14 @@ import_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Save report_format, get next page, XSL transform the result.
+ * @brief Save report_format, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -18113,10 +18090,9 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
   int ret;
   gchar *html, *response;
   params_t *preferences, *id_list_params, *include_id_lists;
-  const char *no_redirect, *report_format_id, *name, *summary, *enable;
+  const char  *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   report_format_id = params_value (params, "report_format_id");
   name = params_value (params, "name");
   summary = params_value (params, "summary");
@@ -18207,35 +18183,32 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
               case 0:
                 break;
               case 1:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
                                       "The Report Format was not saved. "
                                       "Diagnostics: Failure to send command to manager daemon.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
               case 2:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
                                       "It is unclear whether the Report Format has been saved or not. "
                                       "Diagnostics: Failure to receive response from manager daemon.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
               case -1:
               default:
-                response_data->http_status_code
-                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_INTERNAL_SERVER_ERROR);
                 return gsad_message (credentials,
                                       "Internal error", __FUNCTION__, __LINE__,
                                       "An internal error occurred while saving a Report Format. "
                                       "It is unclear whether the Report Format has been saved or not. "
                                       "Diagnostics: Internal Error.",
-                                      "/omp?cmd=get_report_formats",
                                       response_data);
             }
 
@@ -18296,35 +18269,32 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
                   case 0:
                     break;
                   case 1:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
                                          "The Report Format was not saved. "
                                          "Diagnostics: Failure to send command to manager daemon.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                   case 2:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
                                          "It is unclear whether the Report Format has been saved or not. "
                                          "Diagnostics: Failure to receive response from manager daemon.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                   case -1:
                   default:
-                    response_data->http_status_code
-                      = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                    cmd_response_data_set_status_code (response_data,
+                                                       MHD_HTTP_INTERNAL_SERVER_ERROR);
                     return gsad_message (credentials,
                                          "Internal error", __FUNCTION__, __LINE__,
                                          "An internal error occurred while saving a Report Format. "
                                          "It is unclear whether the Report Format has been saved or not. "
                                          "Diagnostics: Internal Error.",
-                                         "/omp?cmd=get_report_formats",
                                          response_data);
                 }
 
@@ -18357,35 +18327,35 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
       case -1:
         return response;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
                              "The Report Format was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
                              "It is unclear whether the Report Format has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Report Format. "
                              "It is unclear whether the Report Format has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_report_formats",
-                               NULL, "edit_report_format",
                                "Save Report Format", response_data);
   free_entity (entity);
   g_free (response);
@@ -18393,14 +18363,14 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Verify report format, get report formats, XSL transform the result.
+ * @brief Verify report format, get report formats, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -18414,12 +18384,13 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
   report_format_id = params_value (params, "report_format_id");
   if (report_format_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying a report format. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_report_formats", response_data);
+                           response_data);
     }
 
   /* Verify the report format. */
@@ -18439,29 +18410,32 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
                              "The report format was not verified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
                              "It is unclear whether the report format was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
                              "It is unclear whether the report format was verified or not. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_report_formats", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity))
@@ -18471,13 +18445,14 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
         {
           free_entity (entity);
           g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while verifying a report format. "
                                "It is unclear whether the report format was verified or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_report_formats", response_data);
+                               response_data);
         }
     }
   else
@@ -18491,20 +18466,20 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
 }
 
 /**
- * @brief Run a wizard and XSL transform the result.
+ * @brief Run a wizard and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  const char *no_redirect, *name;
+  const char  *name;
   int ret;
   GString *run;
   param_t *param;
@@ -18517,16 +18492,17 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
    * parameters are called "param"s and so are the GMP wizard
    * parameters. */
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   if (name == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
                            "Diagnostics: Required parameter 'name' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   run = g_string_new ("<run_wizard>");
 
@@ -18561,35 +18537,35 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "The wizard did not start. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "wizard",
-                               NULL, "wizard",
                                "Run Wizard", response_data);
   free_entity (entity);
   g_free (response);
@@ -18607,7 +18583,8 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
             == -1)                                                            \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
+            cmd_response_data_set_status_code (response_data,                 \
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);\
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
@@ -18615,25 +18592,26 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
                      name " list for trash."                                  \
                      "Diagnostics: Failure to send command to"                \
                      " manager daemon.",                                      \
-                     "/omp?cmd=get_trash", response_data);                    \
+                     response_data);                    \
           }                                                                   \
                                                                               \
         if (read_string_c (connection, &xml))                                 \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
+            cmd_response_data_set_status_code (response_data,                 \
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);\
             return gsad_message                                               \
                     (credentials,                                             \
                      "Internal error", __FUNCTION__, __LINE__,                \
                      "An internal error occurred while getting " name " list."\
                      "Diagnostics: Failure to receive response from"          \
                      " manager daemon.",                                      \
-                     "/omp?cmd=get_tasks", response_data);                    \
+                     response_data);                    \
           }                                                                   \
       }
 
 /**
- * @brief Setup trash page XML, XSL transform the result.
+ * @brief Setup trash page XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -18641,7 +18619,7 @@ run_wizard_gmp (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_trash (gvm_connection_t *connection, credentials_t * credentials,
@@ -18693,21 +18671,21 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 #undef GET_TRASH_RESOURCE
 
 /**
- * @brief Get all trash, XSL transform the result.
+ * @brief Get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -18725,7 +18703,7 @@ get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
@@ -18748,33 +18726,33 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
-  buffer_languages_xml (xml);
-
   g_string_append (xml, "</get_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18785,7 +18763,7 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -18827,30 +18805,33 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "It is unclear whether the task has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_alerts", response_data);
+                             response_data);
     }
 
   settings = get_my_settings (connection, credentials, params, response,
@@ -18868,7 +18849,7 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
@@ -18913,29 +18894,32 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the alert. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting resources "
                              "for the settings. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             response_data);
     }
   free_entity (entity);
 
@@ -18956,33 +18940,33 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
-  buffer_languages_xml (xml);
-
   g_string_append (xml, "</edit_my_settings>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -18993,7 +18977,7 @@ edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -19089,7 +19073,7 @@ send_settings_filters (gvm_connection_t *connection, params_t *data,
  * @param[out] language     Language.  Caller must free.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
@@ -19155,36 +19139,34 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           case 0:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
                                  "The settings remains the same. "
                                  "Diagnostics: Manager closed connection during authenticate.",
-                                 "/omp?cmd=get_my_settings", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            g_string_append (xml,
-                             "<gsad_msg"
-                             " status_text=\"Password error\""
-                             " operation=\"Save My Settings\">"
-                             "You tried to change your password, but the old"
-                             " password was not provided or was incorrect. "
-                             " Please enter the correct old password or remove"
-                             " old and new passwords to apply any other changes"
-                             " of your settings."
-                             "</gsad_msg>");
-            return edit_my_settings (connection, credentials, params,
-                                     g_string_free (xml, FALSE),
-                                     response_data);
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
+            return gsad_message (credentials,
+                                 "Invalid Password", __FUNCTION__, __LINE__,
+                                 "You tried to change your password, but the old"
+                                 " password was not provided or was incorrect. "
+                                 " Please enter the correct old password or remove"
+                                 " old and new passwords to apply any other changes"
+                                 " of your settings.",
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving settings. "
                                  "The settings remains the same. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_my_settings", response_data);
+                                 response_data);
         }
 
       passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
@@ -19198,13 +19180,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (passwd_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (passwd_64);
 
@@ -19213,12 +19196,13 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19252,13 +19236,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19267,12 +19252,13 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19317,13 +19303,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (max_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (max_64);
 
@@ -19334,13 +19321,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19367,13 +19355,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19384,13 +19373,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19417,13 +19407,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19434,13 +19425,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19467,13 +19459,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (fname_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (fname_64);
 
@@ -19484,13 +19477,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity) != 1)
@@ -19517,13 +19511,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (lang_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (lang_64);
 
@@ -19534,13 +19529,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (gmp_success (entity))
@@ -19573,13 +19569,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   if (send_settings_filters (connection, defaults, changed, xml,
                              &modify_failed, response_data))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
                            "It is unclear whether all the settings were saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   /* Send resources filters */
@@ -19588,13 +19585,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   if (send_settings_filters (connection, filters, changed, xml, &modify_failed,
                              response_data))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
                            "It is unclear whether all the settings were saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
+                           response_data);
     }
 
   /* Send Severity Class. */
@@ -19618,13 +19616,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19635,13 +19634,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
 
@@ -19683,13 +19683,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19700,13 +19701,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19736,13 +19738,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
           == -1)
         {
           g_free (text_64);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while saving settings. "
                               "It is unclear whether all the settings were saved. "
                               "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_my_settings", response_data);
+                              response_data);
         }
       g_free (text_64);
 
@@ -19753,13 +19756,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19791,13 +19795,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         {
           g_free (text_64);
           gvm_connection_close (connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       g_free (text_64);
 
@@ -19809,13 +19814,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         {
           g_string_free (xml, TRUE);
           gvm_connection_close (connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving settings. "
                                "It is unclear whether all the settings were saved. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_my_settings", response_data);
+                               response_data);
         }
       xml_string_append (xml, "</save_setting>");
       if (! gmp_success (entity))
@@ -19843,7 +19849,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
@@ -19862,24 +19868,26 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   help_response = NULL;
   if (read_entity_and_string_c (connection, &help_response, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   free_entity (help_response);
 
@@ -19887,9 +19895,9 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -19900,7 +19908,7 @@ get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return XML on success.  HTML result of XSL transformation on error.
+ * @return XML on success.  Enveloped XML on error.
  */
 char *
 export_gmp_doc_gmp (gvm_connection_t *connection,
@@ -19922,24 +19930,26 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
                             format)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a list. "
                            "The list could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_protocol_doc", response_data);
+                           response_data);
     }
 
   response = NULL;
   if (read_entity_and_text_c (connection, &response, &content))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting GMP doc. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_protocol_doc", response_data);
+                           response_data);
     }
 
   if (strcmp (format, "xml") == 0)
@@ -19952,24 +19962,26 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
       if (entity == NULL)
         {
           free_entity (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema element missing.",
-                               "/omp?cmd=get_protocol_doc", response_data);
+                               response_data);
         }
 
       content_64 = entity_text (entity);
       if (strlen (content_64) == 0)
         {
           free_entity (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting GMP doc. "
                                "Diagnostics: Schema empty.",
-                               "/omp?cmd=get_protocol_doc", response_data);
+                               response_data);
         }
 
       content = (char *) g_base64_decode (content_64, &content_length);
@@ -19993,7 +20005,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
 /* Groups. */
 
 /**
- * @brief Get one group, XSL transform the result.
+ * @brief Get one group, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20001,7 +20013,7 @@ export_gmp_doc_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_group (gvm_connection_t *connection, credentials_t * credentials,
@@ -20013,14 +20025,14 @@ get_group (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one group, XSL transform the result.
+ * @brief Get one group, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -20030,7 +20042,7 @@ get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all groups, XSL transform the result.
+ * @brief Get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20038,7 +20050,7 @@ get_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_groups (gvm_connection_t *connection, credentials_t * credentials,
@@ -20050,14 +20062,14 @@ get_groups (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all groups, XSL transform the result.
+ * @brief Get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20075,7 +20087,7 @@ get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -20086,8 +20098,8 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -20098,7 +20110,7 @@ new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -20108,14 +20120,14 @@ new_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 }
 
 /**
- * @brief Delete a group from trash, get all groups, XSL transform the result.
+ * @brief Delete a group from trash, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20126,14 +20138,14 @@ delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credential
 }
 
 /**
- * @brief Delete a group, get all groups, XSL transform the result.
+ * @brief Delete a group, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20144,26 +20156,25 @@ delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 }
 
 /**
- * @brief Create a group, get all groups, XSL transform the result.
+ * @brief Create a group, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
-  const char *no_redirect, *name, *comment, *users, *grant_full;
+  const char  *name, *comment, *users, *grant_full;
   entity_t entity;
   GString *xml;
   int ret;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   grant_full = params_value (params, "grant_full");
@@ -20210,37 +20221,37 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
                             "No new group was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
                             "It is unclear whether the group has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new group. "
                             "It is unclear whether the group has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_groups", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "group_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_groups",
-                               NULL, "new_group",
                                "Create Group", response_data);
   free_entity (entity);
   g_free (response);
@@ -20248,7 +20259,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
 }
 
 /**
- * @brief Setup edit_group XML, XSL transform the result.
+ * @brief Setup edit_group XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20256,7 +20267,7 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20267,14 +20278,14 @@ edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Setup edit_group XML, XSL transform the result.
+ * @brief Setup edit_group XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20291,7 +20302,7 @@ edit_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Group XML on success.  HTML result of XSL transformation on error.
+ * @return Group XML on success.  Enveloped XML on error.
  */
 char *
 export_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -20309,7 +20320,7 @@ export_group_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Groups XML on success.  HTML result of XSL transformation
+ * @return Groups XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -20328,7 +20339,7 @@ export_groups_gmp (gvm_connection_t *connection,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20336,10 +20347,9 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *group_id, *name, *comment, *users;
+  const char  *group_id, *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   group_id = params_value (params, "group_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -20374,35 +20384,35 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
                              "The group was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
                              "It is unclear whether the group has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a group. "
                              "It is unclear whether the group has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_groups", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_groups",
-                               NULL, "edit_group",
                                "Save Group", response_data);
   free_entity (entity);
   g_free (response);
@@ -20413,7 +20423,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 /* Permissions. */
 
 /**
- * @brief Get one permission, XSL transform the result.
+ * @brief Get one permission, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20421,7 +20431,7 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20432,14 +20442,14 @@ get_permission (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get one permission, XSL transform the result.
+ * @brief Get one permission, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20449,7 +20459,7 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Get all permissions, XSL transform the result.
+ * @brief Get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20457,7 +20467,7 @@ get_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20468,14 +20478,14 @@ get_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Get all permissions, XSL transform the result.
+ * @brief Get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20485,14 +20495,14 @@ get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Delete a permission, get all permissions, XSL transform the result.
+ * @brief Delete a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20503,14 +20513,14 @@ delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * crede
 }
 
 /**
- * @brief Delete a permission, get all permissions, XSL transform the result.
+ * @brief Delete a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20521,7 +20531,7 @@ delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -20529,7 +20539,7 @@ delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20553,29 +20563,32 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20598,29 +20611,32 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20643,29 +20659,32 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -20679,19 +20698,19 @@ new_permission (gvm_connection_t *connection, credentials_t * credentials, param
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -20701,14 +20720,14 @@ new_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Create a permission, get all permissions, XSL transform the result.
+ * @brief Create a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -20716,7 +20735,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *resource_id, *resource_type;
+  const char  *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   entity_t entity;
 
@@ -20724,7 +20743,6 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
@@ -20761,7 +20779,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -20769,9 +20788,10 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command"
                                 " to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -20779,16 +20799,17 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                 "The permission was not created. "
                                 "Diagnostics: Failure to receive response"
                                 " from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
                                 " the subject for a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
       subject_entity = entity_child (get_subject_entity, subject_type);
@@ -20890,37 +20911,37 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
         html = response_from_entity (connection, credentials, params, entity,
-                                     (no_redirect && strcmp (no_redirect, "0")),
-                                     NULL, "get_permissions",
-                                     NULL, "new_permission",
                                      "Create Permission", response_data);
     }
   else
@@ -20955,37 +20976,37 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while creating a permission. "
                                 "It is unclear whether the permission has been created or not. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
         html = response_from_entity (connection, credentials, params, entity,
-                                     (no_redirect && strcmp (no_redirect, "0")),
-                                     NULL, "get_permissions",
-                                     NULL, "new_permission",
                                      "Create Permission", response_data);
     }
   free_entity (entity);
@@ -21000,29 +21021,32 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:                                                                \
         break;                                                                \
       case 1:                                                                 \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;     \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
                             "The permission was not created. "                               \
                             "Diagnostics: Failure to send command to manager daemon.",       \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
       case 2:                                                                                \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
                             "It is unclear whether the permission has been created or not. " \
                             "Diagnostics: Failure to receive response from manager daemon.", \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
       default:                                                                               \
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;                    \
+        cmd_response_data_set_status_code (response_data,                     \
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);  \
         return gsad_message (credentials,                                                    \
                             "Internal error", __FUNCTION__, __LINE__,                        \
                             "An internal error occurred while creating a permission. "       \
                             "It is unclear whether the permission has been created or not. " \
                             "Diagnostics: Internal Error.",                                  \
-                            "/omp?cmd=get_permissions", response_data);                      \
+                            response_data);                      \
     }                                                                         \
   if (gmp_success (entity))                                                   \
     {                                                                         \
@@ -21033,10 +21057,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   else                                                                        \
     {                                                                         \
       html                                                                    \
-        = response_from_entity (connection, credentials, params, entity,                  \
-                                (no_redirect && strcmp (no_redirect, "0")),   \
-                                NULL, "get_permissions",                      \
-                                NULL, "new_permissions",                      \
+        = response_from_entity (connection, credentials, params, entity,      \
                                 "Create Permissions", response_data);         \
       free_entity (entity);                                                   \
       g_free (response);                                                      \
@@ -21044,7 +21065,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }                                                                         \
 
 /**
- * @brief Setup new_permissions XML, XSL transform the result.
+ * @brief Setup new_permissions XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -21052,7 +21073,7 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21081,29 +21102,32 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21126,29 +21150,32 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21171,29 +21198,32 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -21222,34 +21252,34 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
             break;
           case 1:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
       g_string_append (xml, response);
 
@@ -21286,34 +21316,34 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
             break;
           case 1:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
             g_free (get_command);
-            response_data->http_status_code
-              = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting a resource. "
                                  "No new permission was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
       g_string_append (xml, response);
 
@@ -21326,19 +21356,19 @@ new_permissions (gvm_connection_t *connection, credentials_t * credentials, para
 
   g_string_append (xml, "</new_permissions>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup new_permission XML, XSL transform the result.
+ * @brief Setup new_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21348,14 +21378,14 @@ new_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 }
 
 /**
- * @brief Create multiple permission, get next page, XSL transform the result.
+ * @brief Create multiple permission, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -21364,7 +21394,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   int ret;
   gchar *html, *response, *summary_response, *next_url;
   int successes;
-  const char *no_redirect, *permission, *comment, *resource_id, *resource_type;
+  const char  *permission, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   int include_related;
 
@@ -21374,7 +21404,6 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
-  no_redirect = params_value (params, "no_redirect");
   permission = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
@@ -21412,7 +21441,8 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -21420,9 +21450,10 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 "The permission was not created. "
                                 "Diagnostics: Failure to send command"
                                 " to manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
@@ -21430,16 +21461,17 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                                 "The permission was not created. "
                                 "Diagnostics: Failure to receive response"
                                 " from manager daemon.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting"
                                 " the subject for a permission. "
                                 "The permission was not created. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_permissions", response_data);
+                                response_data);
         }
 
       subject_entity = entity_child (get_subject_entity, subject_type);
@@ -21843,27 +21875,20 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                             G_STRINGIFY (MHD_HTTP_CREATED),
                             summary_response);
 
-  if (no_redirect)
-    {
-      html = action_result_page (connection, credentials, params, response_data,
-                                 "Create Permissions",
-                                 G_STRINGIFY (MHD_HTTP_CREATED),
-                                 summary_response,
-                                 next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      html = NULL;
-      response_data->redirect = next_url;
-    }
+  html = action_result_page (connection, credentials, params, response_data,
+                              "Create Permissions",
+                              G_STRINGIFY (MHD_HTTP_CREATED),
+                              summary_response,
+                              NULL,
+                              next_url);
+  g_free (next_url);
   return html;
 }
 
 #undef CHECK_GMPF_RET
 
 /**
- * @brief Setup edit_permission XML, XSL transform the result.
+ * @brief Setup edit_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -21871,7 +21896,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -21896,29 +21921,32 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -21941,29 +21969,32 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -21986,29 +22017,32 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -22026,14 +22060,14 @@ edit_permission (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Setup edit_permission XML, XSL transform the result.
+ * @brief Setup edit_permission XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22050,7 +22084,7 @@ edit_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Permission XML on success.  HTML result of XSL transformation on error.
+ * @return Permission XML on success.  Enveloped XML on error.
  */
 char *
 export_permission_gmp (gvm_connection_t *connection,
@@ -22069,7 +22103,7 @@ export_permission_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Permissions XML on success.  HTML result of XSL transformation
+ * @return Permissions XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -22082,27 +22116,25 @@ export_permissions_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Modify a permission, get all permissions, XSL transform the result.
+ * @brief Modify a permission, get all permissions, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect;
   const char *permission_id, *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type;
   entity_t entity;
   int ret;
 
-  no_redirect = params_value (params, "no_redirect");
   permission_id = params_value (params, "permission_id");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
@@ -22159,35 +22191,35 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
                              "The permission was not modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
                              "It is unclear whether the permission has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a permission. "
                              "It is unclear whether the permission has been modified or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_permissions", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_permissions",
-                               NULL, "edit_permission",
                                "Save Permission", response_data);
   free_entity (entity);
   g_free (response);
@@ -22206,7 +22238,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22217,8 +22249,8 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22230,7 +22262,7 @@ new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 upload_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22243,8 +22275,8 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_port_list>");
 
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22255,7 +22287,7 @@ upload_port_list (gvm_connection_t *connection, credentials_t *credentials, para
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22265,24 +22297,23 @@ upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, 
 }
 
 /**
- * @brief Create a port list, get all port lists, XSL transform the result.
+ * @brief Create a port list, get all port lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *port_range, *from_file;
+  const char  *name, *comment, *port_range, *from_file;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   port_range = params_value (params, "port_range");
@@ -22314,37 +22345,37 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
                             "No new port list was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
                             "It is unclear whether the port list has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new port list. "
                             "It is unclear whether the port list has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_port_lists", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "port_list_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "new_port_list",
                                "Create Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -22360,7 +22391,7 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_port_range (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22371,8 +22402,8 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_range>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22383,7 +22414,7 @@ new_port_range (gvm_connection_t *connection, credentials_t *credentials, params
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22393,14 +22424,14 @@ new_port_range_gmp (gvm_connection_t *connection, credentials_t *credentials, pa
 }
 
 /**
- * @brief Add a range to a port list, XSL transform the result.
+ * @brief Add a range to a port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22408,10 +22439,9 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *port_list_id, *start, *end, *type;
+  const char  *port_list_id, *start, *end, *type;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   start = params_value (params, "port_range_start");
   end = params_value (params, "port_range_end");
@@ -22447,35 +22477,35 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
                              "The Port Range was not created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
                              "It is unclear whether the Port Range has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a Port Range. "
                              "It is unclear whether the Port Range has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "edit_port_list",
-                               NULL, "edit_port_list",
                                "Create Port Range", response_data);
   free_entity (entity);
   g_free (response);
@@ -22483,7 +22513,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Get one port_list, XSL transform the result.
+ * @brief Get one port_list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22491,7 +22521,7 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
  * @param[in]  commands     Extra commands to run before the others.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22502,14 +22532,14 @@ get_port_list (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get one port_list, XSL transform the result.
+ * @brief Get one port_list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22519,7 +22549,7 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Get all Port Lists, XSL transform the result.
+ * @brief Get all Port Lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22527,7 +22557,7 @@ get_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_port_lists (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22538,14 +22568,14 @@ get_port_lists (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get all port_lists, XSL transform the result.
+ * @brief Get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_port_lists_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22562,7 +22592,7 @@ get_port_lists_gmp (gvm_connection_t *connection, credentials_t * credentials, p
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22572,7 +22602,7 @@ new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Setup edit_port_list XML, XSL transform the result.
+ * @brief Setup edit_port_list XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22580,7 +22610,7 @@ new_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, par
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22591,14 +22621,14 @@ edit_port_list (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Setup edit_port_list XML, XSL transform the result.
+ * @brief Setup edit_port_list XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22608,14 +22638,14 @@ edit_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Modify a port list, get all port list, XSL transform the result.
+ * @brief Modify a port list, get all port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22623,10 +22653,9 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *port_list_id, *name, *comment;
+  const char  *port_list_id, *name, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -22657,35 +22686,35 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
                              "The Port List was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
                              "It is unclear whether the Port List has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a Port List. "
                              "It is unclear whether the Port List has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "edit_port_list",
                                "Save Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -22693,14 +22722,14 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 }
 
 /**
- * @brief Delete a port list, get all port lists, XSL transform the result.
+ * @brief Delete a port list, get all port lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22711,14 +22740,14 @@ delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Delete a trash port list, get all trash, XSL transform the result.
+ * @brief Delete a trash port list, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22729,14 +22758,14 @@ delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * creden
 }
 
 /**
- * @brief Delete a port range, get the port list, XSL transform the result.
+ * @brief Delete a port range, get the port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22747,25 +22776,22 @@ delete_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Import port list, get all port_lists, XSL transform the result.
+ * @brief Import port list, get all port_lists, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
-
-  no_redirect = params_value (params, "no_redirect");
 
   /* Create the port list. */
 
@@ -22783,40 +22809,37 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while importing a port_list. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_port_lists",
                              response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_port_lists",
-                               NULL, "new_port_list",
                                "Import Port List", response_data);
   free_entity (entity);
   g_free (response);
@@ -22835,7 +22858,7 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -22846,8 +22869,8 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -22858,7 +22881,7 @@ new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22868,14 +22891,14 @@ new_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Delete a role from trash, get all roles, XSL transform the result.
+ * @brief Delete a role from trash, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22886,14 +22909,14 @@ delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials
 }
 
 /**
- * @brief Delete a role, get all roles, XSL transform the result.
+ * @brief Delete a role, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -22904,14 +22927,14 @@ delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Create a role, get all roles, XSL transform the result.
+ * @brief Create a role, get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -22919,10 +22942,9 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *name, *comment, *users;
+  const char  *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
@@ -22950,37 +22972,37 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "No new role was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new role. "
                              "It is unclear whether the role has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "role_id", entity_attribute (entity, "id"));
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_roles",
-                              NULL, "new_role",
                               "Create Role", response_data);
   free_entity (entity);
   g_free (response);
@@ -22988,7 +23010,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
 }
 
 /**
- * @brief Setup edit_role XML, XSL transform the result.
+ * @brief Setup edit_role XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -22996,7 +23018,7 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23023,26 +23045,29 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the permission list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -23067,26 +23092,29 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_roles", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -23104,14 +23132,14 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Setup edit_role XML, XSL transform the result.
+ * @brief Setup edit_role XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23121,7 +23149,7 @@ edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Get one role, XSL transform the result.
+ * @brief Get one role, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23129,7 +23157,7 @@ edit_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23139,14 +23167,14 @@ get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *p
 }
 
 /**
- * @brief Get one role, XSL transform the result.
+ * @brief Get one role, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23156,7 +23184,7 @@ get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_
 }
 
 /**
- * @brief Get all roles, XSL transform the result.
+ * @brief Get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23164,7 +23192,7 @@ get_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23174,14 +23202,14 @@ get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get all roles, XSL transform the result.
+ * @brief Get all roles, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_roles_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23198,7 +23226,7 @@ get_roles_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Role XML on success.  HTML result of XSL transformation on error.
+ * @return Role XML on success.  Enveloped XML on error.
  */
 char *
 export_role_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23216,7 +23244,7 @@ export_role_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Roles XML on success.  HTML result of XSL transformation
+ * @return Roles XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -23234,7 +23262,7 @@ export_roles_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23242,10 +23270,9 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *role_id, *name, *comment, *users;
+  const char  *role_id, *name, *comment, *users;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   role_id = params_value (params, "role_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -23280,35 +23307,35 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
                              "The role was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
                              "It is unclear whether the role has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a role. "
                              "It is unclear whether the role has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_roles", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_roles",
-                               NULL, "edit_role",
                                "Save Role", response_data);
   free_entity (entity);
   g_free (response);
@@ -23326,7 +23353,7 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23345,24 +23372,26 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
                             "</commands>")
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed list. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_entity_and_text_c (connection, &entity, &text))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   time (&now);
@@ -23386,12 +23415,12 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   g_free (text);
 
-  return xsl_transform_gmp (connection, credentials, params,  response,
-                            response_data);
+  return envelope_gmp (connection, credentials, params,  response,
+                       response_data);
 }
 
 /**
- * @brief Synchronize with a feed and XSL transform the result.
+ * @brief Synchronize with a feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication
@@ -23401,7 +23430,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  feed_name      Name of the feed shown in error messages.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char*
 sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23409,19 +23438,17 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
            const char *feed_name,
            cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   entity_t entity;
   char *text = NULL;
   gchar *html, *msg;
-
-  no_redirect = params_value (params, "no_redirect");
 
   if (gvm_connection_sendf (connection,
                             "<%s/>",
                             sync_cmd)
       == -1)
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
 
       msg = g_strdup_printf
               ("An internal error occurred while synchronizing with %s. "
@@ -23430,14 +23457,15 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
                feed_name);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           msg, "/omp?cmd=get_tasks", response_data);
+                           msg, response_data);
       g_free (msg);
       return html;
     }
 
   if (read_entity_and_text_c (connection, &entity, &text))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
 
       msg = g_strdup_printf
               ("An internal error occurred while synchronizing with %s. "
@@ -23446,29 +23474,26 @@ sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *
                feed_name);
       html = gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           msg, "/omp?cmd=get_tasks", response_data);
+                           msg, response_data);
       g_free (msg);
       return html;
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_feeds",
-                               NULL, "get_feeds",
                                action, response_data);
 
   return html;
 }
 
 /**
- * @brief Synchronize with an NVT feed and XSL transform the result.
+ * @brief Synchronize with an NVT feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_feed_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23480,14 +23505,14 @@ sync_feed_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Synchronize with a SCAP feed and XSL transform the result.
+ * @brief Synchronize with a SCAP feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_scap_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23499,14 +23524,14 @@ sync_scap_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Synchronize with a CERT feed and XSL transform the result.
+ * @brief Synchronize with a CERT feed and envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23521,7 +23546,7 @@ sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Filters. */
 
 /**
- * @brief Get one filter, XSL transform the result.
+ * @brief Get one filter, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23529,7 +23554,7 @@ sync_cert_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23540,14 +23565,14 @@ get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t 
 }
 
 /**
- * @brief Get one filter, XSL transform the result.
+ * @brief Get one filter, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23557,7 +23582,7 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Get all filters, XSL transform the result.
+ * @brief Get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23565,7 +23590,7 @@ get_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, param
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23576,14 +23601,14 @@ get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Get all filters, XSL transform the result.
+ * @brief Get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_filters_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23601,7 +23626,7 @@ get_filters_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -23612,29 +23637,28 @@ new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Create a filter, get all filters, XSL transform the result.
+ * @brief Create a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *no_redirect, *name, *comment, *term, *type;
+  const char  *name, *comment, *term, *type;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
@@ -23664,29 +23688,32 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "No new alert was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new alert. "
                             "It is unclear whether the alert has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_alerts", response_data);
+                            response_data);
     }
 
   if (gmp_success (entity))
@@ -23706,9 +23733,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
   if (entity_attribute (entity, "id"))
     params_add (params, "filter_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_filters",
-                               NULL, "new_filter",
                                "Create Filter", response_data);
   free_entity (entity);
   g_free (response);
@@ -23716,14 +23740,14 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
 }
 
 /**
- * @brief Delete a filter, get all filters, XSL transform the result.
+ * @brief Delete a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23734,14 +23758,14 @@ delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentia
 }
 
 /**
- * @brief Delete a filter, get all filters, XSL transform the result.
+ * @brief Delete a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23787,7 +23811,7 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 }
 
 /**
- * @brief Setup edit_filter XML, XSL transform the result.
+ * @brief Setup edit_filter XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23795,7 +23819,7 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23806,14 +23830,14 @@ edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t
 }
 
 /**
- * @brief Setup edit_filter XML, XSL transform the result.
+ * @brief Setup edit_filter XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -23830,7 +23854,7 @@ edit_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, para
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Filter XML on success.  HTML result of XSL transformation on error.
+ * @return Filter XML on success.  Enveloped XML on error.
  */
 char *
 export_filter_gmp (gvm_connection_t *connection,
@@ -23849,7 +23873,7 @@ export_filter_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Filters XML on success.  HTML result of XSL transformation
+ * @return Filters XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -23869,7 +23893,7 @@ export_filters_gmp (gvm_connection_t *connection,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
@@ -23879,14 +23903,14 @@ new_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, params
 }
 
 /**
- * @brief Modify a filter, get all filters, XSL transform the result.
+ * @brief Modify a filter, get all filters, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -23894,9 +23918,8 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   entity_t entity;
   gchar *html, *response;
-  const char *no_redirect, *filter_id, *name, *comment, *term, *type;
+  const char  *filter_id, *name, *comment, *term, *type;
 
-  no_redirect = params_value (params, "no_redirect");
   filter_id = params_value (params, "filter_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -23929,25 +23952,27 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
     if (ret == -1)
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
                              "The filter was not modified. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
+                             response_data);
       }
 
     entity = NULL;
     if (read_entity_and_text_c (connection, &entity, &response))
       {
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while modifying a filter. "
                              "It is unclear whether the filter has been modified or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
+                             response_data);
       }
 
   }
@@ -23956,9 +23981,6 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
   /* Pass response to handler of following page. */
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_filters",
-                               NULL, "edit_filter",
                                "Save Filter", response_data);
 
   free_entity (entity);
@@ -23970,7 +23992,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
 /* Schedules. */
 
 /**
- * @brief Setup edit_schedule XML, XSL transform the result.
+ * @brief Setup edit_schedule XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -23978,7 +24000,7 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
@@ -23990,14 +24012,14 @@ edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_schedule XML, XSL transform the result.
+ * @brief Setup edit_schedule XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_schedule_gmp (gvm_connection_t *connection, credentials_t *
@@ -24015,7 +24037,7 @@ edit_schedule_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Schedule XML on success.  HTML result of XSL transformation on error.
+ * @return Schedule XML on success.  Enveloped XML on error.
  */
 char *
 export_schedule_gmp (gvm_connection_t *connection,
@@ -24034,7 +24056,7 @@ export_schedule_gmp (gvm_connection_t *connection,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Schedules XML on success. HTML result of XSL transformation on error.
+ * @return Schedules XML on success. Enveloped XML on error.
  */
 char *
 export_schedules_gmp (gvm_connection_t *connection,
@@ -24046,14 +24068,14 @@ export_schedules_gmp (gvm_connection_t *connection,
 }
 
 /**
- * @brief Save schedule, get next page, XSL transform the result.
+ * @brief Save schedule, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24061,12 +24083,11 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
 {
   gchar *response;
   entity_t entity;
-  const char *no_redirect, *schedule_id, *name, *comment;
+  const char  *schedule_id, *name, *comment;
   const char *hour, *minute, *day_of_month, *month, *year, *timezone;
   const char *period, *period_unit, *duration, *duration_unit;
   char *ret;
 
-  no_redirect = params_value (params, "no_redirect");
   schedule_id = params_value (params, "schedule_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -24143,35 +24164,35 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
                              "The schedule remains the same. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a schedule. "
                              "It is unclear whether the schedule has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_schedules", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_schedules",
-                              NULL, "edit_schedule",
                               "Save Schedule", response_data);
   free_entity (entity);
   g_free (response);
@@ -24190,7 +24211,7 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
@@ -24216,29 +24237,32 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24261,29 +24285,32 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24306,29 +24333,32 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (xml, response);
@@ -24338,8 +24368,8 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -24350,7 +24380,7 @@ new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *pa
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -24360,14 +24390,14 @@ new_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Delete a user, get all users, XSL transform the result.
+ * @brief Delete a user, get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24386,7 +24416,7 @@ delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 delete_user_confirm (gvm_connection_t *connection, credentials_t
@@ -24406,26 +24436,29 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the user list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
     }
 
@@ -24442,20 +24475,20 @@ delete_user_confirm (gvm_connection_t *connection, credentials_t
     g_string_append (xml, extra_xml);
 
   g_string_append (xml, "</delete_user>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Show confirmation deleting a user, XSL transform the result.
+ * @brief Show confirmation deleting a user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
@@ -24467,7 +24500,7 @@ delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Get one user, XSL transform the result.
+ * @brief Get one user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -24475,7 +24508,7 @@ delete_user_confirm_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_user (gvm_connection_t *connection, credentials_t * credentials,
@@ -24502,26 +24535,29 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24536,14 +24572,14 @@ get_user (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get one user, XSL transform the result.
+ * @brief Get one user, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24553,7 +24589,7 @@ get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get all users, XSL transform the result.
+ * @brief Get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -24561,7 +24597,7 @@ get_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24585,26 +24621,29 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24621,14 +24660,14 @@ get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *
 }
 
 /**
- * @brief Get all users, XSL transform the result.
+ * @brief Get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_users_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
@@ -24638,20 +24677,19 @@ get_users_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 }
 
 /**
- * @brief Create a user, get all users, XSL transform the result.
+ * @brief Create a user, get all users, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   const char *auth_method, *comment;
   int ret;
@@ -24660,7 +24698,6 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *buf, *response, *html;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "login");
   password = params_value (params, "password");
   hosts = params_value (params, "access_hosts");
@@ -24777,37 +24814,37 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
                              "No new user was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
                              "It is unclear whether the user has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating a new user. "
                              "It is unclear whether the user has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "user_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_users",
-                               NULL, "new_user",
                                "Create User", response_data);
   free_entity (entity);
   g_free (response);
@@ -24815,7 +24852,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_user XML, XSL transform the result.
+ * @brief Setup edit_user XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -24823,7 +24860,7 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_user (gvm_connection_t *connection, credentials_t * credentials,
@@ -24848,26 +24885,29 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24890,26 +24930,29 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the group list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24932,29 +24975,32 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the role list. "
                                  "No new user was created. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
       g_string_append (extra, response);
@@ -24973,14 +25019,14 @@ edit_user (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Setup edit_user XML, XSL transform the result.
+ * @brief Setup edit_user XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -24990,14 +25036,14 @@ edit_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get multiple vulns, XSL transform the result.
+ * @brief Get multiple vulns, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -25007,7 +25053,7 @@ get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Get multiple vulns, XSL transform the result.
+ * @brief Get multiple vulns, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
@@ -25015,7 +25061,7 @@ get_vulns_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 get_vulns (gvm_connection_t *connection, credentials_t * credentials,
@@ -25056,26 +25102,29 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred getting the auth list. "
                                  "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_users", response_data);
+                                 response_data);
         }
 
 
@@ -25086,13 +25135,13 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
 
   g_string_append (xml, "</auth_settings>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Modify a user, get all users, XSL transform the result.
+ * @brief Modify a user, get all users, envelope the result.
  *
  * @param[in]  connection       Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
@@ -25102,7 +25151,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[out] logout_user      Whether the user should be logged out.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -25111,7 +25160,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   int ret;
   gchar *html, *response, *buf;
-  const char *no_redirect;
   const char *user_id, *login, *old_login, *modify_password, *password;
   const char *hosts, *hosts_allow, *ifaces, *ifaces_allow, *comment;
   entity_t entity;
@@ -25123,7 +25171,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   *modified_user = NULL;
   *logout_user = 0;
 
-  no_redirect = params_value (params, "no_redirect");
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
@@ -25291,29 +25338,32 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
                              "The user was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
                              "It is unclear whether the user has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a user. "
                              "It is unclear whether the user has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   if (gmp_success (entity)
@@ -25323,15 +25373,12 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       free_entity (entity);
       g_free (response);
-      html = logout_xml (credentials, params_value_bool (params, "xml"),
+      html = logout_xml (credentials,
                          "Authentication method changed. Please login with "
                          "LDAP password.", response_data);
     }
   else
     html = response_from_entity (connection, credentials, params, entity,
-                                 (no_redirect && strcmp (no_redirect, "0")),
-                                 NULL, "get_users",
-                                 NULL, "edit_user",
                                  "Save User", response_data);
   free_entity (entity);
   g_free (response);
@@ -25346,7 +25393,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Note XML on success.  Enveloped XML on error.
  */
 char *
 export_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -25364,7 +25411,7 @@ export_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Users XML on success.  HTML result of XSL transformation
+ * @return Users XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -25456,9 +25503,9 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25469,7 +25516,7 @@ cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed dashboard.
+ * @return Enveloped XML object.
  */
 char *
 dashboard (gvm_connection_t *connection, credentials_t * credentials,
@@ -25515,33 +25562,36 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
             break;
           case 1:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Failure to send command to "
                                 "manager daemon.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
           case 2:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Failure to receive response from "
                                 "manager daemon.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
           default:
             g_string_free (xml, TRUE);
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while "
                                 "testing SecInfo database availability. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=dashboard", response_data);
+                                response_data);
         }
       g_string_append_printf (xml,
                               "<secinfo_test>%s</secinfo_test>",
@@ -25572,33 +25622,36 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
         break;
       case 1:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
                             "filters list. "
                             "Diagnostics: Failure to send command to "
                             "manager daemon.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
       case 2:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
                             "filters list. "
                             "Diagnostics: Failure to receive response from "
                             "manager daemon.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
       default:
         g_string_free (xml, TRUE);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the "
                             "filters list. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=dashboard", response_data);
+                            response_data);
     }
 
   g_string_append (xml, response);
@@ -25606,9 +25659,9 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25628,7 +25681,7 @@ dashboard (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformated list of users and configuration.
+ * @return XML enveloped list of users and configuration.
  */
 char*
 save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
@@ -25637,7 +25690,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   int ret;
   entity_t entity = NULL;
   char *html, *response = NULL, *truefalse;
-  const char *no_redirect, *method, *name;
+  const char  *method, *name;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -25645,7 +25698,6 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   else
     truefalse = "false";
 
-  no_redirect = params_value (params, "no_redirect");
   method = params_value (params, "group");
   CHECK_PARAM_INVALID (method, "Save Authentication", "get_users");
   if (!strcmp (method, "method:ldap_connect"))
@@ -25716,36 +25768,36 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
                              "The settings were not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
                              "It is unclear whether the settings have been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the auth settings. "
                              "It is unclear whether the settings have been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_users", response_data);
+                             response_data);
     }
 
   gchar* next_url = g_strdup_printf ("auth_settings&name=%s", name);
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, next_url,
-                              NULL, "modify_auth",
                               "Save Authentication Configuration",
                               response_data);
   free_entity (entity);
@@ -25753,63 +25805,97 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   g_free (response);
   return html;
 }
+/**
+ * @brief Get all dashboard settings
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_dashboard_settings_gmp (gvm_connection_t *connection,
+                            credentials_t * credentials, params_t *params,
+                            cmd_response_data_t* response_data)
+{
+  GString *xml;
+
+  xml = g_string_new ("<get_dashboard_settings>");
+
+  if (gvm_connection_sendf_xml (connection,
+                              "<get_settings"
+                              " filter='name~\"Dashboard\"'/>"))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "dashboard settings"
+                            "Diagnostics: Failure to send command to manager "
+                            "daemon.",
+                            response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the "
+                           "dashboard settings"
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                            response_data);
+    }
+
+  g_string_append (xml, "</get_dashboard_settings>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
 
 /**
- * @brief Save chart preferences.
+ * @brief Save user setting
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  pref_id        Preference ID.
- * @param[in]  pref_value     Preference value.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return SAVE_CHART_PREFERENCE GMP response.
+ * @return An action response.
  */
 char*
-save_chart_preference_gmp (gvm_connection_t *connection,
-                           credentials_t* credentials, params_t *params,
-                           gchar **pref_id, gchar **pref_value,
-                           cmd_response_data_t* response_data)
+save_setting_gmp (gvm_connection_t *connection,
+                  credentials_t* credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  *pref_id = g_strdup (params_value (params, "chart_preference_id"));
-  *pref_value = g_strdup (params_value (params, "chart_preference_value"));
+  const gchar *setting_id = params_value (params, "setting_id");
+  const gchar *setting_value = params_value (params, "setting_value");
 
-  gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
-                                     strlen (*pref_value));
-  gboolean xml_flag = params_value_bool (params, "xml");
+  CHECK_PARAM_INVALID (setting_id, "Save Chart Preferences", "get_users");
+  CHECK_PARAM_INVALID (setting_value, "Save Chart Preferences", "get_users");
+
+  gchar* value_64 = g_base64_encode ((guchar*)setting_value,
+                                     strlen (setting_value));
+  gchar *html;
   gchar* response = NULL;
-  entity_t entity;
+  entity_t entity = NULL;
   int ret;
 
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
 
-  if (*pref_id == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing name\"/>");
-    }
-  if (*pref_value == NULL)
-    {
-      response = g_strdup
-        ("<save_chart_preference_response"
-         " status=\"400\" status_text=\"Invalid or missing value\"/>");
-    }
-
-  if (response)
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return response;
-    }
-
-  response = NULL;
-  entity = NULL;
   ret = gmpf (connection, credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
-              *pref_id, value_64);
+              setting_id, value_64);
+
   g_free (value_64);
   switch (ret)
     {
@@ -25819,53 +25905,39 @@ save_chart_preference_gmp (gvm_connection_t *connection,
       case 1:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             response_data);
       case 2:
 
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             response_data);
       default:
 
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message_new (credentials,
+        return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", xml_flag, response_data);
+                             response_data);
     }
-
-  if (gmp_success (entity))
-    {
-      free_entity (entity);
-      g_free (response);
-      return g_strdup ("<save_chart_preference_response"
-                       " status=\"200\" status_text=\"OK\"/>");
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      gchar* ret_response
-        = g_strdup_printf ("<save_chart_preference_response"
-                           " status=\"%s\" status_text=\"%s\"/>",
-                           entity_attribute (entity, "status"),
-                           entity_attribute (entity, "status_text"));
-      free_entity (entity);
-      g_free (response);
-      return ret_response;
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                              "Save Setting",
+                              response_data);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 
@@ -25880,7 +25952,7 @@ save_chart_preference_gmp (gvm_connection_t *connection,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard (gvm_connection_t *connection, credentials_t *credentials,
@@ -25892,12 +25964,13 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
 
   if (name == NULL)
     {
-        response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_BAD_REQUEST);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the wizard. "
                              "Given name was invalid",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   xml = g_string_new ("");
@@ -25916,25 +25989,27 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the"
                            " wizard."
                            "Diagnostics: Failure to receive response from"
                            " manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Get the setting. */
@@ -25945,31 +26020,33 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the wizard. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while the wizard. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -25980,7 +26057,7 @@ wizard (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -25998,7 +26075,7 @@ wizard_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_get (gvm_connection_t *connection, credentials_t *credentials,
@@ -26022,12 +26099,13 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
   name = params_value (params, "get_name");
   if (name == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while trying to start a wizard. "
                            "Diagnostics: Required parameter 'get_name' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   run = g_string_new ("<run_wizard read_only=\"1\">");
@@ -26064,29 +26142,32 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "The wizard did not start. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while running a wizard. "
                              "It is unclear whether the wizard started or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   wizard_xml = g_strdup_printf ("<wizard><%s/>%s%s</wizard>",
@@ -26094,8 +26175,8 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_gmp (connection, credentials, params, wizard_xml,
-                            response_data);
+  return envelope_gmp (connection, credentials, params, wizard_xml,
+                       response_data);
 }
 
 /**
@@ -26106,7 +26187,7 @@ wizard_get (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 wizard_get_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26123,7 +26204,7 @@ wizard_get_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26139,24 +26220,26 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
                            "Diagnostics: Required parameter 'resource_type' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   if (strcmp (type, "info") == 0)
     {
       subtype = params_value (params, "info_type");
       if (subtype == NULL)
         {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_BAD_REQUEST);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while performing a bulk action. "
                                "Diagnostics: Required parameter 'info_type' was NULL.",
-                               "/omp?cmd=get_tasks", response_data);
+                               response_data);
         }
     }
   else
@@ -26172,12 +26255,13 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
     action = "trash";
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while performing a bulk action. "
                            "Diagnostics: Could not determine the action.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   if (strcmp (action, "create") == 0)
@@ -26285,31 +26369,34 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Failure to send command to"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Failure to receive response from"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
         }
 
       entities_t entities = entity->entities;
@@ -26367,31 +26454,34 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
           case -1:
             break;
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Failure to send command to"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Failure to receive response from"
                                 " manager daemon.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            cmd_response_data_set_status_code (response_data,
+                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a"
                                 " resources list. "
                                 "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_my_settings", response_data);
+                                response_data);
         }
 
       g_string_append (bulk_string, response);
@@ -26401,25 +26491,25 @@ process_bulk_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (bulk_string, FALSE), response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (bulk_string, FALSE), response_data);
 }
 
 /**
- * @brief Delete multiple resources, get next page, XSL transform the result.
+ * @brief Delete multiple resources, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  const char *no_redirect, *type;
+  const char  *type;
   GString *commands_xml;
   params_t *selected_ids;
   params_iterator_t iter;
@@ -26429,17 +26519,17 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity_t entity;
   gchar *extra_attribs;
 
-  no_redirect = params_value (params, "no_redirect");
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
                            "The resources were not deleted. "
                            "Diagnostics: Required parameter 'resource_type' was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Extra attributes */
@@ -26483,26 +26573,28 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (commands_xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
                            "The resources were not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
   g_string_free (commands_xml, TRUE);
 
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting resources. "
                            "It is unclear whether the resources have been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
 
@@ -26517,9 +26609,6 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, NULL,
-                              NULL, NULL,
                               "Bulk Delete", response_data);
   g_free (response);
   free_entity (entity);
@@ -26539,7 +26628,7 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 static char *
 new_host (gvm_connection_t *connection, credentials_t *credentials,
@@ -26551,9 +26640,9 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
@@ -26564,7 +26653,7 @@ new_host (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 new_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26581,7 +26670,7 @@ new_host_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26589,11 +26678,9 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *name, *comment;
+  const char  *name, *comment;
   entity_t entity;
   GString *xml;
-
-  no_redirect = params_value (params, "no_redirect");
 
   name = params_value (params, "name");
   CHECK_PARAM_INVALID (name, "Create Host", "new_host");
@@ -26628,37 +26715,37 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
                             "No new host was created. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Failure to receive response from manager daemon.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while creating a new host. "
                             "It is unclear whether the host has been created or not. "
                             "Diagnostics: Internal Error.",
-                            "/omp?cmd=get_assets", response_data);
+                            response_data);
     }
 
   if (entity_attribute (entity, "id"))
     params_add (params, "asset_id", entity_attribute (entity, "id"));
   html = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_assets",
-                              NULL, "new_host",
                               "Create Host", response_data);
   free_entity (entity);
   g_free (response);
@@ -26674,7 +26761,7 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed asset response or error message.
+ * @return XML enveloped asset response or error message.
  */
 char *
 get_asset (gvm_connection_t *connection, credentials_t *credentials,
@@ -26698,23 +26785,25 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
                            "Diagnostics: Invalid asset_type parameter value",
-                           "/omp?cmd=get_asset", response_data);
+                           response_data);
     }
 
   if (params_value (params, "asset_name")
       && params_value (params, "asset_id"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an asset. "
                            "Diagnostics: Both ID and Name set.",
-                           "/omp?cmd=get_asset", response_data);
+                           response_data);
     }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
@@ -26745,14 +26834,14 @@ get_asset (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get asset, XSL transform the result.
+ * @brief Get asset, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26770,7 +26859,7 @@ get_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return XSL transformed assets response or error message.
+ * @return XML enveloped assets response or error message.
  */
 char *
 get_assets (gvm_connection_t *connection, credentials_t *credentials,
@@ -26794,12 +26883,13 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
   if (strcmp (asset_type, "host")
       && strcmp (asset_type, "os"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting Assets. "
                            "Diagnostics: Invalid asset_type parameter value",
-                           "/omp?cmd=get_assets", response_data);
+                           response_data);
     }
 
   extra_response = g_string_new (extra_xml ? extra_xml : "");
@@ -26824,14 +26914,14 @@ get_assets (gvm_connection_t *connection, credentials_t *credentials,
 }
 
 /**
- * @brief Get assets, XSL transform the result.
+ * @brief Get assets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 get_assets_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -26841,14 +26931,14 @@ get_assets_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Create an asset, get report, XSL transform the result.
+ * @brief Create an asset, get report, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
@@ -26856,10 +26946,9 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *report_id, *filter;
+  const char  *report_id, *filter;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   report_id = params_value (params, "report_id");
   filter = params_value (params, "filter");
 
@@ -26884,35 +26973,35 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
                              "No new asset was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
                              "It is unclear whether the asset has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while creating an asset. "
                              "It is unclear whether the asset has been created or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_tasks", response_data);
+                             response_data);
     }
 
   ret = response_from_entity (connection, credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_report_section",
-                              NULL, "get_report_section",
                               "Create Asset", response_data);
   free_entity (entity);
   g_free (response);
@@ -26927,16 +27016,15 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *resource_id;
-  const char *next_id, *no_redirect;
+  const char *next_id;
   entity_t entity;
-  gchar *next_url;
 
   if (params_value (params, "asset_id"))
     resource_id = g_strdup (params_value (params, "asset_id"));
@@ -26944,13 +27032,14 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
     resource_id = g_strdup (params_value (params, "report_id"));
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
                            "The asset was not deleted. "
                            "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* This is a hack, needed because asset_id is the param name used for
@@ -26976,13 +27065,14 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_free (resource_id);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
                            "The asset is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   g_free (resource_id);
@@ -26990,13 +27080,14 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &response))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an asset. "
                            "It is unclear whether the asset has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -27004,32 +27095,18 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (params_given (params, "next") == 0)
     params_add (params, "next", "get_asset");
 
-  no_redirect = params_value (params, "no_redirect");
-  if (no_redirect && strcmp (no_redirect, "0"))
+  html = next_page (connection, credentials, params, response,
+                    response_data);
+  if (html == NULL)
     {
-      html = next_page (connection, credentials, params, response,
-                        response_data);
-      if (html == NULL)
-        {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-          html = gsad_message (credentials,
-              "Internal error", __FUNCTION__, __LINE__,
-              "An internal error occurred while deleting an "
-              "asset. Diagnostics: Error in parameter next.",
-              "/omp?cmd=get_tasks", response_data);
-        }
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_BAD_REQUEST);
+      html = gsad_message (credentials,
+          "Internal error", __FUNCTION__, __LINE__,
+          "An internal error occurred while deleting an "
+          "asset. Diagnostics: Error in parameter next.",
+          response_data);
     }
-  else
-    {
-      next_url = next_page_url (credentials, params, NULL, "get_asset",
-                                "delete_asset",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"));
-      response_data->redirect = next_url;
-
-      html = NULL;
-    }
-
   g_free (response);
   free_entity (entity);
   return html;
@@ -27043,7 +27120,7 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Asset XML on success.  HTML result of XSL transformation on error.
+ * @return Asset XML on success.  Enveloped XML on error.
  */
 char *
 export_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -27061,7 +27138,7 @@ export_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
  * @param[in]   params               Request parameters.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
- * @return Assets XML on success.  HTML result of XSL transformation
+ * @return Assets XML on success.  Enveloped XML
  *         on error.
  */
 char *
@@ -27074,7 +27151,7 @@ export_assets_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Setup edit XML, XSL transform the result.
+ * @brief Setup edit XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -27082,7 +27159,7 @@ export_assets_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_asset (gvm_connection_t *connection, credentials_t *credentials,
@@ -27097,13 +27174,14 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
   asset_id = params_value (params, "asset_id");
   if (asset_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a asset. "
                            "The asset remains as it was. "
                            "Diagnostics: Required ID parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
+                           response_data);
     }
 
   xml = g_string_new ("");
@@ -27129,49 +27207,52 @@ edit_asset (gvm_connection_t *connection, credentials_t *credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         g_string_free (xml, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the asset. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
     }
 
   g_string_append (xml, response);
   g_string_append_printf (xml, "</edit_asset>");
   free_entity (entity);
   g_free (response);
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
 }
 
 /**
- * @brief Setup edit_asset XML, XSL transform the result.
+ * @brief Setup edit_asset XML, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 edit_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -27181,14 +27262,14 @@ edit_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Modify an asset, get all assets, XSL transform the result.
+ * @brief Modify an asset, get all assets, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return Result of XSL transformation.
+ * @return Enveloped XML object.
  */
 char *
 save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
@@ -27196,10 +27277,9 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *no_redirect, *asset_id, *comment;
+  const char  *asset_id, *comment;
   entity_t entity;
 
-  no_redirect = params_value (params, "no_redirect");
   asset_id = params_value (params, "asset_id");
   comment = params_value (params, "comment");
 
@@ -27226,79 +27306,41 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
                              "The asset was not saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
                              "It is unclear whether the asset has been saved or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving an asset. "
                              "It is unclear whether the asset has been saved or not. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_assets", response_data);
+                             response_data);
     }
 
   html = response_from_entity (connection, credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_assets",
-                               NULL, "edit_asset",
                                "Save Asset", response_data);
   free_entity (entity);
   g_free (response);
   return html;
 }
 
-/**
- * @brief Get an assets chart, XSL transform the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-static char *
-get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
-                  params_t *params, const char *extra_xml,
-                  cmd_response_data_t* response_data)
-{
-  return xsl_transform_gmp (connection, credentials, params,
-                            g_strdup ("<get_assets_chart/>"), response_data);
-}
-
-/**
- * @brief Get an assets chart, XSL transform the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_assets_chart_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return get_assets_chart (connection, credentials, params, NULL,
-                           response_data);
-}
 
 
 /* Manager communication. */
@@ -27385,16 +27427,13 @@ openvas_connection_open (gvm_connection_t *connection,
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
- * @param[out] chart_prefs   Chart preferences.
- * @param[out] autorefresh   Autorefresh preference.
  *
  * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_gmp (const gchar * username, const gchar * password,
                   gchar **role, gchar **timezone, gchar **severity,
-                  gchar **capabilities, gchar **language, gchar **pw_warning,
-                  GTree **chart_prefs, gchar **autorefresh)
+                  gchar **capabilities, gchar **language, gchar **pw_warning)
 {
   gvm_connection_t connection;
   int auth;
@@ -27499,89 +27538,6 @@ authenticate_gmp (const gchar * username, const gchar * password,
           return -1;
         }
 
-      /* Get the chart preferences */
-
-      ret = gvm_connection_sendf (&connection,
-                                  "<get_settings"
-                                  " filter='name~\"Dashboard\"'/>");
-      if (ret)
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Read the response */
-      entity = NULL;
-      if (read_entity_and_text_c (&connection, &entity, &response))
-        {
-          gvm_connection_close (&connection);
-          return 2;
-        }
-
-      /* Check the response. */
-      status = entity_attribute (entity, "status");
-      if (status == NULL
-          || strlen (status) == 0)
-        {
-          g_free (response);
-          free_entity (entity);
-          return -1;
-        }
-      first = status[0];
-      if (first == '2')
-        {
-          entities_t entities = entity->entities;
-          entity_t child_entity;
-          *chart_prefs = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                          NULL, g_free, g_free);
-
-          while ((child_entity = first_entity (entities)))
-            {
-              if (strcmp (entity_name (child_entity), "setting") == 0)
-                {
-                  const char *setting_id
-                    = entity_attribute (child_entity, "id");
-                  const char *setting_value
-                    = entity_text (entity_child (child_entity, "value"));
-
-                  if (setting_id && setting_value)
-                    g_tree_insert (*chart_prefs,
-                                   g_strdup (setting_id),
-                                   g_strdup (setting_value));
-                }
-              entities = next_entities (entities);
-            }
-          free_entity (entity);
-          g_free (response);
-        }
-      else
-        {
-          free_entity (entity);
-          g_free (response);
-          gvm_connection_close (&connection);
-          return -1;
-        }
-
-      /* Get autorefresh setting. */
-
-      ret = setting_get_value (&connection,
-                               "578a1c14-e2dc-45ef-a591-89d31391d007",
-                               autorefresh,
-                               NULL);
-
-      switch (ret)
-        {
-          case 0:
-            break;
-          case 1:
-          case 2:
-            gvm_connection_close (&connection);
-            return 2;
-          default:
-            gvm_connection_close (&connection);
-            return -1;
-        }
-
       gvm_connection_close (&connection);
       return 0;
     }
@@ -27591,6 +27547,113 @@ authenticate_gmp (const gchar * username, const gchar * password,
       return 1;
     }
 }
+
+/**
+ * @brief Login and create a session
+ *
+ * @param[in]   con             HTTP Connection
+ * @param[in]   params          Request paramters
+ * @param[out]  response_data   Extra data return for the HTTP response
+ * @param[in]   client_address  Client address
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
+int
+login (http_connection_t *con,
+       params_t *params,
+       cmd_response_data_t *response_data,
+       const char *client_address)
+{
+  int ret;
+  authentication_reason_t auth_reason;
+  credentials_t *credentials;
+  gchar *timezone;
+  gchar *role;
+  gchar *capabilities;
+  gchar *severity;
+  gchar *language;
+  gchar *pw_warning;
+
+  const char *password = params_value (params, "password");
+  const char *login = params_value(params, "login");
+
+  if ((password == NULL)
+      && (params_original_value (params, "password") == NULL))
+    password = "";
+
+  if (login && password)
+    {
+      ret = authenticate_gmp (login,
+                              password,
+                              &role,
+                              &timezone,
+                              &severity,
+                              &capabilities,
+                              &language,
+                              &pw_warning);
+      if (ret)
+        {
+          int status;
+          if (ret == -1)
+            status = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          if (ret == 2)
+            status = MHD_HTTP_SERVICE_UNAVAILABLE;
+          else
+            status = MHD_HTTP_UNAUTHORIZED;
+
+          auth_reason =
+                  ret == 2
+                    ? GMP_SERVICE_DOWN
+                    : (ret == -1
+                        ? LOGIN_ERROR
+                        : LOGIN_FAILED);
+
+          g_warning ("Authentication failure for '%s' from %s",
+                     login ?: "",
+                     client_address);
+          return handler_send_reauthentication(con, status,
+                                               auth_reason);
+        }
+      else
+        {
+          user_t *user;
+          user = user_add (login, password, timezone, severity, role,
+                           capabilities, language, pw_warning, client_address);
+
+          g_message ("Authentication success for '%s' from %s",
+                     login ?: "",
+                     client_address);
+
+          credentials = credentials_new (user, language, client_address);
+
+          char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
+
+          ret = handler_create_response (con, data, response_data, user->cookie);
+
+          user_release (user);
+
+          credentials_free (credentials);
+
+          g_free (timezone);
+          g_free (severity);
+          g_free (capabilities);
+          g_free (language);
+          g_free (role);
+          g_free (pw_warning);
+
+          return ret;
+        }
+    }
+  else
+    {
+      g_warning ("Authentication failure for '%s' from %s",
+                 login ?: "",
+                 client_address);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            LOGIN_FAILED);
+    }
+}
+
 
 /**
  * @brief Connect to Greenbone Vulnerability Manager daemon.
@@ -27612,7 +27675,8 @@ manager_connect (credentials_t *credentials,
                                manager_address,
                                manager_port))
     {
-      response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
       return -1;
     }
 

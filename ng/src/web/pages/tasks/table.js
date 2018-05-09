@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,50 +44,72 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
+  const sortProps = {
+    currentSortBy,
+    currentSortDir,
+    sort,
+    onSortChange,
+  };
   return (
     <TableHeader>
       <TableRow>
         <TableHead
+          {...sortProps}
           rowSpan="2"
-          sortby={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          sortBy="name"
+          width="41%"
+        >
           {_('Name')}
         </TableHead>
         <TableHead
+          {...sortProps}
           rowSpan="2"
-          width="10em"
-          sortby={sort ? 'status' : false}
-          onSortChange={onSortChange}>
+          width="8%"
+          sortBy="status"
+        >
           {_('Status')}
         </TableHead>
-        <TableHead colSpan="2">{_('Reports')}</TableHead>
         <TableHead
+          width="30%"
+          colSpan="2"
+        >
+          {_('Reports')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
           rowSpan="2"
-          width="10em"
-          sortby={sort ? 'severity' : false}
-          onSortChange={onSortChange}>
+          width="8%"
+          sortBy="severity"
+        >
           {_('Severity')}
         </TableHead>
         <TableHead
+          {...sortProps}
           rowSpan="2"
-          width="6em"
-          sortby={sort ? 'trend' : false}
-          onSortChange={onSortChange}>
+          width="5%"
+          sortBy="trend"
+        >
           {_('Trend')}
         </TableHead>
         {actionsColumn}
       </TableRow>
       <TableRow>
         <TableHead
-          sortby={sort ? 'total' : false}
-          onSortChange={onSortChange}>
+          {...sortProps}
+          sortBy="total"
+          width="6%"
+        >
           {_('Total')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'last' : false}
-          onSortChange={onSortChange}>
+          {...sortProps}
+          sortBy="last"
+          width="24%"
+        >
           {_('Last')}
         </TableHead>
       </TableRow>
@@ -96,6 +119,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

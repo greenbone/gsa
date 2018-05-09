@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +51,8 @@ const Header = ({
   delta = false,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
@@ -57,18 +60,23 @@ const Header = ({
       <TableRow>
         {delta &&
           <TableHead
-            width="5em"
-            sortby={sort ? 'delta' : false}
+            width="4%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'delta' : false}
             onSortChange={onSortChange}>
             {_('Delta')}
           </TableHead>
         }
         <TableHead
-          sortby={sort ? 'vulnerability' : false}
+          width="57%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'vulnerability' : false}
           onSortChange={onSortChange}>
           {_('Vulnerability')}
         </TableHead>
-        <TableHead width="5em">
+        <TableHead width="2%">
           <Layout flex align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
@@ -79,32 +87,42 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'severity' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'qod' : false}
+          width="3%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'host' : false}
+          width="7%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'host' : false}
           onSortChange={onSortChange}>
           {_('Host')}
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'location' : false}
+          width="13%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'location' : false}
           onSortChange={onSortChange}>
           {_('Location')}
         </TableHead>
         <TableHead
-          width="20em"
-          sortby={sort ? 'created' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}>
           {_('Created')}
         </TableHead>
@@ -116,6 +134,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   delta: PropTypes.bool,
   links: PropTypes.bool,
   sort: PropTypes.bool,

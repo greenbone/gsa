@@ -25,11 +25,12 @@
 
 #include <string.h> /* for strcmp */
 #include <assert.h> /* for assert */
+#include <stdlib.h> /* for abort */
 
 #include "gsad_http_handler.h"
 #include "gsad_gmp.h" /* for get_system_report_gmp */
 #include "validator.h" /* for openvas_validate */
-#include "xslt_i18n.h" /* for accept_language_to_env_fmt */
+#include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
 
@@ -346,9 +347,10 @@ handle_static_file (http_connection_t *connection, const char * method,
   gchar* path;
   http_response_t *response;
   cmd_response_data_t *response_data;
-  char *default_file = "login/login.html";
+  char *default_file = "index.html";
 
   response_data = cmd_response_data_new ();
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -369,14 +371,6 @@ handle_static_file (http_connection_t *connection, const char * method,
   g_free (path);
 
   return handler_send_response (connection, response, response_data, NULL);
-}
-
-int
-handle_login_page (http_connection_t *connection, const char *method,
-                   const char *url, gsad_connection_info_t *con_info,
-                   http_handler_t *handler, void *data)
-{
-  return handler_send_login_page (connection, MHD_HTTP_OK, NULL, NULL);
 }
 
 int
@@ -417,7 +411,6 @@ handle_setup_user (http_connection_t *connection,
   const char *cookie;
   char client_address[INET6_ADDRSTRLEN];
   const char *token;
-  gboolean xml = params_value_bool (con_info->params, "xml");
   authentication_reason_t auth_reason;
 
   user_t *user;
@@ -464,13 +457,11 @@ handle_setup_user (http_connection_t *connection,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message_new (NULL,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Bad token.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
+      res = gsad_message (NULL,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Bad token.",
+                          response_data);
       return handler_create_response (connection,
                                       res,
                                       response_data,
@@ -488,7 +479,7 @@ handle_setup_user (http_connection_t *connection,
 
       return handler_send_reauthentication (connection,
                                             MHD_HTTP_SERVICE_UNAVAILABLE,
-                                            auth_reason, xml);
+                                            auth_reason);
     }
 
   if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
@@ -514,7 +505,7 @@ handle_setup_user (http_connection_t *connection,
                  : BAD_MISSING_TOKEN);
 
       return handler_send_reauthentication (connection, http_response_code,
-                                            auth_reason, xml);
+                                            auth_reason);
     }
 
   if (ret)
@@ -586,9 +577,7 @@ handle_logout (http_connection_t *connection,
 
   user_remove (user);
 
-  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT,
-                                        params_value_bool (con_info->params,
-                                                           "xml"));
+  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
 }
 
 int
@@ -658,174 +647,6 @@ handle_gmp_post (http_connection_t *connection,
 }
 
 int
-handle_help_pages (http_connection_t *connection,
-                   const char *method, const char *url,
-                   gsad_connection_info_t *con_info,
-                   http_handler_t *handler, void *data)
-{
-  cmd_response_data_t *response_data;
-  credentials_t *credentials = (credentials_t*)data;
-
-  gchar **preferred_languages;
-  gchar *xsl_filename = NULL;
-  gchar *page;
-  GHashTable *template_attributes;
-
-  int template_found = 0;
-  time_t now;
-  char ctime_now[200];
-  gchar *xml, *pre;
-  int index;
-  char *res;
-
-  page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
-
-  assert (credentials->token);
-
-  now = time (NULL);
-  ctime_r_strip_newline (&now, ctime_now);
-
-  pre = g_markup_printf_escaped
-          ("<envelope>"
-          "<version>%s</version>"
-          "<vendor_version>%s</vendor_version>"
-          "<token>%s</token>"
-          "<time>%s</time>"
-          "<login>%s</login>"
-          "<role>%s</role>"
-          "<i18n>%s</i18n>"
-          "<charts>%i</charts>"
-          "<guest>%d</guest>"
-          "<client_address>%s</client_address>"
-          "<help><%s/></help>",
-          GSAD_VERSION,
-          vendor_version_get (),
-          credentials->token,
-          ctime_now,
-          credentials->username,
-          credentials->role,
-          credentials->language,
-          credentials->charts,
-          credentials->guest,
-          credentials->client_address,
-          page);
-
-  xml = g_strdup_printf ("%s"
-                         "<capabilities>%s</capabilities>"
-                         "</envelope>",
-                         pre,
-                         credentials->capabilities);
-  g_free (pre);
-
-  preferred_languages = g_strsplit (credentials->language, ":", 0);
-
-  index = 0;
-
-  while (preferred_languages [index] && xsl_filename == NULL)
-    {
-      gchar *help_language;
-      help_language = g_strdup (preferred_languages [index]);
-      xsl_filename = g_strdup_printf ("help_%s.xsl",
-                                      help_language);
-      if (access (xsl_filename, R_OK) != 0)
-        {
-          g_free (xsl_filename);
-          xsl_filename = NULL;
-          if (strchr (help_language, '_'))
-            {
-              *strchr (help_language, '_') = '\0';
-              xsl_filename = g_strdup_printf ("help_%s.xsl",
-                                              help_language);
-              if (access (xsl_filename, R_OK) != 0)
-                {
-                  g_free (xsl_filename);
-                  xsl_filename = NULL;
-                }
-            }
-        }
-      g_free (help_language);
-      index ++;
-    }
-
-  template_attributes
-    = g_hash_table_new (g_str_hash, g_str_equal);
-
-  g_hash_table_insert (template_attributes, "match", page);
-  g_hash_table_insert (template_attributes, "mode", "help");
-
-  // Try to find the requested page template
-  if (xsl_filename)
-    {
-      template_found
-        = find_element_in_xml_file (xsl_filename, "xsl:template",
-                                    template_attributes);
-    }
-
-  if (template_found == 0)
-    {
-      // Try finding page template again in default help
-      template_found
-        = find_element_in_xml_file ("help.xsl", "xsl:template",
-                                    template_attributes);
-    }
-
-  response_data = cmd_response_data_new ();
-
-  if (template_found == 0)
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
-      res = gsad_message_new (credentials,
-                              NOT_FOUND_TITLE, NULL, 0,
-                              NOT_FOUND_MESSAGE,
-                              "/help/contents.html",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
-    }
-  else
-    {
-      if (params_value_bool (con_info->params, "xml"))
-        {
-          res = xml;
-          cmd_response_data_set_content_type (response_data,
-                                              GSAD_CONTENT_TYPE_APP_XML);
-        }
-      else
-        {
-          if (!xsl_filename)
-            {
-              xsl_filename = g_strdup ("help.xsl");
-            }
-
-          res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                               response_data);
-        }
-
-    }
-
-  g_strfreev (preferred_languages);
-  g_free (xsl_filename);
-  g_free (page);
-
-  if (res == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      res = gsad_message_new (credentials,
-                              "Invalid request", __FUNCTION__, __LINE__,
-                              "Error generating help page.",
-                              "/help/contents.html",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
-    }
-
-  credentials_free (credentials);
-  return handler_create_response (connection,
-                                  res,
-                                  response_data,
-                                  NULL);
-}
-
-int
 handle_system_report (http_connection_t *connection,
                       const char *method, const char *url,
                       gsad_connection_info_t *con_info,
@@ -872,28 +693,23 @@ handle_system_report (http_connection_t *connection,
         break;
       case -1:
         return handler_send_reauthentication
-          (connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN,
-           params_value_bool (con_info->params, "xml"));
+          (connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN);
 
         break;
       case -2:
-       res = gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred. "
-                               "Diagnostics: Could not authenticate to manager "
-                               "daemon.",
-                               "/omp?cmd=get_tasks",
-                               params_value_bool (con_info->params, "xml"),
-                               response_data);
+       res = gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred. "
+                           "Diagnostics: Could not authenticate to manager "
+                           "daemon.",
+                           response_data);
         break;
       default:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Failure to connect to manager daemon.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Failure to connect to manager daemon.",
+                            response_data);
         break;
     }
 
@@ -921,26 +737,10 @@ handle_index_ng (http_connection_t *connection,
   cmd_response_data_t *response_data;
 
   response_data = cmd_response_data_new ();
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url,
                                     "ng/index.html",
-                                    response_data);
-  return handler_send_response (connection, response, response_data, NULL);
-}
-
-int
-handle_config_ng (http_connection_t *connection,
-                 const char *method, const char *url,
-                 gsad_connection_info_t *con_info,
-                 http_handler_t *handler, void *data)
-{
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-
-  response_data = cmd_response_data_new ();
-
-  response = file_content_response (connection, url,
-                                    "ng/config.js",
                                     response_data);
   return handler_send_response (connection, response, response_data, NULL);
 }
@@ -952,7 +752,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
 {
   gchar* path;
   http_response_t *response;
-  char *default_file = "login/login.html";
+  char *default_file = "index.html";
   cmd_response_data_t *response_data;
 
   /** @todo validation, URL length restriction (allows you to view ANY
@@ -972,6 +772,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
   g_debug ("Requesting url %s for static ng path %s", url, path);
 
   response_data = cmd_response_data_new ();
+  cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url, path, response_data);
 
@@ -1008,8 +809,8 @@ init_http_handlers()
   anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
 
 #ifdef SERVE_STATIC_ASSETS
-  url_handler_add (anon_url_handlers, "^/(img|js|css)/.+$",
-                   handle_static_file);
+  url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
+                   handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);
 #endif
@@ -1019,15 +820,13 @@ init_http_handlers()
                    handle_redirect_to_login_page);
 
   url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
-  url_handler_add (anon_url_handlers, "^/config.js$", handle_config_ng);
+  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
                    handle_static_ng_file);
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);
   url_handler_add (user_url_handlers, "^/omp$", handle_gmp_get);
-  url_handler_add (user_url_handlers,
-      "^/help/[a-zA-Z][[:alpha:][:alnum:]_-]*\\.html$", handle_help_pages);
   url_handler_add (user_url_handlers, "^/system_report/.+$",
                    handle_system_report);
   http_handler_add (user_url_handlers, not_found_handler);

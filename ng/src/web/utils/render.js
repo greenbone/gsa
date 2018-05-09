@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,30 +20,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/starts-with';
 
-import d3 from 'd3';
+import {format} from 'd3-format';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, is_empty, map, shorten, split} from 'gmp/utils.js';
+import {is_defined, is_empty, map, shorten, split} from 'gmp/utils';
 
 import Wrapper from '../components/layout/wrapper.js';
+import {is_function, is_object} from 'gmp/utils/index.js';
 
 const log = logger.getLogger('web.render');
 
-export const LOG = _('Log');
-export const LOW = _('Low');
-export const MEDIUM = _('Medium');
-export const HIGH = _('High');
-export const NONE = _('None');
-export const FALSE_POSITIVE = _('False Positive');
-export const ERROR = _('Error');
-export const DEBUG = _('Debug');
-
 export const N_A = _('N/A');
 
-export function render_options(list, default_opt_value, default_opt = '--') {
+export const UNSET_VALUE = '0';
+export const UNSET_LABEL = '--';
+
+export function render_options(list, default_opt_value,
+  default_opt = UNSET_LABEL) {
   const options = map(list, entry => {
     return (
       <option key={entry.id} value={entry.id}>{entry.name}</option>
@@ -59,115 +56,49 @@ export function render_options(list, default_opt_value, default_opt = '--') {
   return options;
 }
 
-export const cvss_number_format = d3.format('0.1f');
+/**
+ * Render a entities list as items array
+ *
+ * @param {Array} list               The entities list
+ * @param {*}     default_item_value (optional) Value for the default item
+ * @param {*}     default_item_label (optional. Default is '--') Label to display for the default item
+ *
+ * @returns {Array} An array to be used as items for a Select component or undefined
+ */
+export const render_select_items = (
+  list,
+  default_item_value,
+  default_item_label = UNSET_LABEL,
+) => {
+  const items = is_defined(list) ?
+    list.map(item => ({label: item.name, value: item.id})) :
+    undefined;
 
-export function cvss_risk_factor(score, type) {
-  if (type === 'classic') {
-    if (score === 0) {
-      return LOG;
-    }
-    if (score > 0 && score <= 2) {
-      return LOW;
-    }
-    if (score > 2 && score <= 5) {
-      return MEDIUM;
-    }
-    if (score > 5 && score <= 10) {
-      return HIGH;
-    }
-    return NONE;
-  }
-  if (type === 'pci-dss') {
-    if (score === 0 && score < 4) {
-      return LOG;
-    }
-    else if (score >= 4) {
-      return HIGH;
-    }
-    return NONE;
+  if (!is_defined(default_item_value)) {
+    return items;
   }
 
-  if (score === 0) {
-    return LOG;
-  }
-  else if (score > 0 && score < 4) {
-    return LOW;
-  }
-  else if (score >= 4 && score < 7) {
-    return MEDIUM;
-  }
-  else if (score >= 7 && score <= 10) {
-    return HIGH;
-  }
-  return NONE;
-}
-
-export function result_cvss_risk_factor(score) {
-  if (score > 0) {
-    return cvss_risk_factor(score);
-  }
-  if (score === 0) {
-    return LOG;
-  }
-  if (score === -1) {
-    return FALSE_POSITIVE;
-  }
-  if (score === -2) {
-    return DEBUG;
-  }
-  if (score === -3) {
-    return ERROR;
-  }
-  return N_A;
-}
-
-export function get_severity_levels(type) {
-  if (type === 'classic') {
-    return {
-      max_high: 10.0,
-      min_high: 5.1,
-      max_medium: 5.0,
-      min_medium: 2.1,
-      max_low: 2.0,
-      min_low: 0.1,
-      max_log: 0.0,
-    };
-  }
-  if (type === 'pci-dss') {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
-  return {
-    max_high: 10.0,
-    min_high: 7.0,
-    max_medium: 6.9,
-    min_medium: 4.0,
-    max_low: 3.9,
-    min_low: 0.1,
-    max_log: 0.0,
+  const default_item = {
+    value: default_item_value,
+    label: default_item_label,
   };
-}
+  return is_defined(items) ? [default_item, ...items] : [default_item];
+};
 
-export function render_nvt_name(nvt, length = 70) {
-  if (!is_defined(nvt) || !is_defined(nvt.name)) {
+export const severityFormat = format('0.1f');
+
+export function render_nvt_name(oid, name, length = 70) {
+  if (!is_defined(name)) {
     return '';
   }
 
-  if (nvt.name.length < length) {
-    return nvt.name;
+  if (name.length < length) {
+    return name;
   }
 
   return (
-    <abbr title={nvt.name + ' (' + nvt.oid + ')'}>
-      {shorten(nvt.name, length)}
+    <abbr title={name + ' (' + oid + ')'}>
+      {shorten(name, length)}
     </abbr>
   );
 }
@@ -601,6 +532,17 @@ export const render_section_title = (counts, title) => {
     title,
     ...counts,
   });
+};
+
+export const setRef = (...refs) => ref => {
+  for (const rf of refs) {
+    if (is_function(rf)) {
+      rf(ref);
+    }
+    else if (is_object(rf) && is_defined(rf.current)) {
+      rf.current = ref;
+    }
+  }
 };
 
 // vim: set ts=2 sw=2 tw=80:

@@ -4,9 +4,10 @@
 #
 # Authors:
 # Björn Ricks <bjoern.ricks@greenbone.net>
+# Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2016 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -98,12 +99,20 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/users.js
      ${NG_SRC_DIR}/src/gmp/commands/vulns.js
      ${NG_SRC_DIR}/src/gmp/gmp.js
-     ${NG_SRC_DIR}/src/gmp/http.js
+     ${NG_SRC_DIR}/src/gmp/http/gmp.js
+     ${NG_SRC_DIR}/src/gmp/http/http.js
+     ${NG_SRC_DIR}/src/gmp/http/interceptor.js
+     ${NG_SRC_DIR}/src/gmp/http/rejection.js
+     ${NG_SRC_DIR}/src/gmp/http/response.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/default.js
+     ${NG_SRC_DIR}/src/gmp/http/transform/x2js.js
+     ${NG_SRC_DIR}/src/gmp/http/utils.js
      ${NG_SRC_DIR}/src/gmp/index.js
      ${NG_SRC_DIR}/src/gmp/list.js
      ${NG_SRC_DIR}/src/gmp/locale.js
      ${NG_SRC_DIR}/src/gmp/log.js
      ${NG_SRC_DIR}/src/gmp/model.js
+     ${NG_SRC_DIR}/src/gmp/models/actionresult.js
      ${NG_SRC_DIR}/src/gmp/models/agent.js
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/asset.js
@@ -155,10 +164,15 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/vulnerability.js
      ${NG_SRC_DIR}/src/gmp/parser.js
      ${NG_SRC_DIR}/src/gmp/promise.js
-     ${NG_SRC_DIR}/src/gmp/response.js
      ${NG_SRC_DIR}/src/gmp/timezones.js
-     ${NG_SRC_DIR}/src/gmp/utils.js
-     ${NG_SRC_DIR}/src/gmp/xml2json.js
+     ${NG_SRC_DIR}/src/gmp/utils/array.js
+     ${NG_SRC_DIR}/src/gmp/utils/calc.js
+     ${NG_SRC_DIR}/src/gmp/utils/event.js
+     ${NG_SRC_DIR}/src/gmp/utils/id.js
+     ${NG_SRC_DIR}/src/gmp/utils/identity.js
+     ${NG_SRC_DIR}/src/gmp/utils/index.js
+     ${NG_SRC_DIR}/src/gmp/utils/object.js
+     ${NG_SRC_DIR}/src/gmp/utils/string.js
      ${NG_SRC_DIR}/src/web/app.js
      ${NG_SRC_DIR}/src/web/components/badge/badge.js
      ${NG_SRC_DIR}/src/web/components/bar/menubar.js
@@ -172,9 +186,51 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/datasource.js
      ${NG_SRC_DIR}/src/web/components/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/components/dashboard/commoncharts.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/withDashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/controller.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/datasource.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/eventnode.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/helper.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/row.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/rowtarget.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/aggregate.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/bar.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/base.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/bubble.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/cloud.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/donut.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/gantt.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/horizontalbar.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/line.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/task.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/chart/topology.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/controls.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createddisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createdtransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datadisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatable.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/displaymenu.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/utils.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/data/selectors.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/registry.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js
+     ${NG_SRC_DIR}/src/web/components/dialog/closebutton.js
      ${NG_SRC_DIR}/src/web/components/dialog/dialog.js
      ${NG_SRC_DIR}/src/web/components/dialog/error.js
      ${NG_SRC_DIR}/src/web/components/dialog/footer.js
@@ -184,7 +240,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${NG_SRC_DIR}/src/web/components/dialog/title.js
      ${NG_SRC_DIR}/src/web/components/dialog/savedialog.js
-     ${NG_SRC_DIR}/src/web/components/dialog/withDialog.js
      ${NG_SRC_DIR}/src/web/components/folding/folding.js
      ${NG_SRC_DIR}/src/web/components/footnote/footnote.js
      ${NG_SRC_DIR}/src/web/components/form/button.js
@@ -195,9 +250,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/filefield.js
      ${NG_SRC_DIR}/src/web/components/form/formgroup.js
      ${NG_SRC_DIR}/src/web/components/form/form.js
+     ${NG_SRC_DIR}/src/web/components/form/multiselect.js
      ${NG_SRC_DIR}/src/web/components/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/components/form/radio.js
-     ${NG_SRC_DIR}/src/web/components/form/select2.js
+     ${NG_SRC_DIR}/src/web/components/form/select.js
+     ${NG_SRC_DIR}/src/web/components/form/selectelements.js
      ${NG_SRC_DIR}/src/web/components/form/spinner.js
      ${NG_SRC_DIR}/src/web/components/form/submitbutton.js
      ${NG_SRC_DIR}/src/web/components/form/textarea.js
@@ -207,6 +264,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${NG_SRC_DIR}/src/web/components/form/withDownload.js
      ${NG_SRC_DIR}/src/web/components/form/yesnoradio.js
+     ${NG_SRC_DIR}/src/web/components/icon/arrowicon.js
      ${NG_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${NG_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${NG_SRC_DIR}/src/web/components/icon/deleteicon.js
@@ -233,17 +291,21 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/layout/withLayout.js
      ${NG_SRC_DIR}/src/web/components/layout/wrapper.js
      ${NG_SRC_DIR}/src/web/components/loading/loading.js
+     ${NG_SRC_DIR}/src/web/components/link/blanklink.js
      ${NG_SRC_DIR}/src/web/components/link/certlink.js
      ${NG_SRC_DIR}/src/web/components/link/cvelink.js
      ${NG_SRC_DIR}/src/web/components/link/detailslink.js
      ${NG_SRC_DIR}/src/web/components/link/externallink.js
      ${NG_SRC_DIR}/src/web/components/link/innerlink.js
-     ${NG_SRC_DIR}/src/web/components/link/legacylink.js
      ${NG_SRC_DIR}/src/web/components/link/link.js
+     ${NG_SRC_DIR}/src/web/components/link/manuallink.js
+     ${NG_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${NG_SRC_DIR}/src/web/components/link/target.js
      ${NG_SRC_DIR}/src/web/components/menu/iconmenu.js
-     ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/components/menu/menu.js
+     ${NG_SRC_DIR}/src/web/components/menu/menuentry.js
+     ${NG_SRC_DIR}/src/web/components/menu/menuhelpentry.js
+     ${NG_SRC_DIR}/src/web/components/menu/menusection.js
      ${NG_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${NG_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${NG_SRC_DIR}/src/web/components/pagination/pagination.js
@@ -263,16 +325,24 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/provider/cachefactoryprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/cacheprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
+     ${NG_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${NG_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
+     ${NG_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
      ${NG_SRC_DIR}/src/web/components/section/header.js
      ${NG_SRC_DIR}/src/web/components/section/section.js
      ${NG_SRC_DIR}/src/web/components/sortby/sortby.js
+     ${NG_SRC_DIR}/src/web/components/sortable/emptyrow.js
+     ${NG_SRC_DIR}/src/web/components/sortable/grid.js
+     ${NG_SRC_DIR}/src/web/components/sortable/item.js
+     ${NG_SRC_DIR}/src/web/components/sortable/resizer.js
+     ${NG_SRC_DIR}/src/web/components/sortable/row.js
      ${NG_SRC_DIR}/src/web/components/sticky/container.js
      ${NG_SRC_DIR}/src/web/components/sticky/sticky.js
      ${NG_SRC_DIR}/src/web/components/structure/footer.js
      ${NG_SRC_DIR}/src/web/components/structure/header.js
      ${NG_SRC_DIR}/src/web/components/structure/main.js
      ${NG_SRC_DIR}/src/web/components/tab/tab.js
+     ${NG_SRC_DIR}/src/web/components/tab/tablayout.js
      ${NG_SRC_DIR}/src/web/components/tab/tablist.js
      ${NG_SRC_DIR}/src/web/components/tab/tabpanel.js
      ${NG_SRC_DIR}/src/web/components/tab/tabpanels.js
@@ -327,7 +397,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/condition.js
      ${NG_SRC_DIR}/src/web/pages/alerts/details.js
      ${NG_SRC_DIR}/src/web/pages/alerts/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/alerts/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/pages/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/event.js
@@ -346,13 +415,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/table.js
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${NG_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/charts.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/details.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/filterdialog.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/listpage.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/row.js
-     ${NG_SRC_DIR}/src/web/pages/allsecinfo/table.js
      ${NG_SRC_DIR}/src/web/pages/assetspage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/component.js
      ${NG_SRC_DIR}/src/web/pages/credentials/details.js
@@ -369,6 +433,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/certbund/row.js
      ${NG_SRC_DIR}/src/web/pages/certbund/table.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cpes/charts.js
      ${NG_SRC_DIR}/src/web/pages/cpes/details.js
      ${NG_SRC_DIR}/src/web/pages/cpes/detailspage.js
@@ -376,6 +445,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cpes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/row.js
      ${NG_SRC_DIR}/src/web/pages/cpes/table.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/cves/charts.js
      ${NG_SRC_DIR}/src/web/pages/cves/details.js
      ${NG_SRC_DIR}/src/web/pages/cves/detailspage.js
@@ -383,6 +457,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cves/listpage.js
      ${NG_SRC_DIR}/src/web/pages/cves/row.js
      ${NG_SRC_DIR}/src/web/pages/cves/table.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/cves/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/charts.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/details.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/detailspage.js
@@ -390,6 +469,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/dfncert/row.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/table.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/dfncert/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/extras/cvsscalculatorpage.js
      ${NG_SRC_DIR}/src/web/pages/extras/feedstatuspage.js
      ${NG_SRC_DIR}/src/web/pages/extras/trashactions.js
@@ -421,6 +505,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/hosts/row.js
      ${NG_SRC_DIR}/src/web/pages/hosts/table.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/modifieddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/modifiedhighdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
+     ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
      ${NG_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${NG_SRC_DIR}/src/web/pages/loginpage.js
      ${NG_SRC_DIR}/src/web/pages/notes/charts.js
@@ -432,17 +524,32 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/listpage.js
      ${NG_SRC_DIR}/src/web/pages/notes/row.js
      ${NG_SRC_DIR}/src/web/pages/notes/table.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/activedaysdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/notes/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/component.js
      ${NG_SRC_DIR}/src/web/pages/nvts/details.js
      ${NG_SRC_DIR}/src/web/pages/nvts/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/nvts/listpage.js
      ${NG_SRC_DIR}/src/web/pages/nvts/preferences.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/preformatted.js
      ${NG_SRC_DIR}/src/web/pages/nvts/references.js
      ${NG_SRC_DIR}/src/web/pages/nvts/row.js
      ${NG_SRC_DIR}/src/web/pages/nvts/solution.js
      ${NG_SRC_DIR}/src/web/pages/nvts/table.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/familydisplay.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/qoddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/qodtypedisplay.js
      ${NG_SRC_DIR}/src/web/pages/os/charts.js
      ${NG_SRC_DIR}/src/web/pages/os/component.js
      ${NG_SRC_DIR}/src/web/pages/os/detailspage.js
@@ -450,6 +557,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/os/listpage.js
      ${NG_SRC_DIR}/src/web/pages/os/row.js
      ${NG_SRC_DIR}/src/web/pages/os/table.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/os/dashboard/vulnscoredisplay.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/charts.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/details.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
@@ -457,6 +569,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/listpage.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/row.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/table.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/classdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/overrides/charts.js
      ${NG_SRC_DIR}/src/web/pages/overrides/component.js
      ${NG_SRC_DIR}/src/web/pages/overrides/details.js
@@ -466,6 +584,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/overrides/listpage.js
      ${NG_SRC_DIR}/src/web/pages/overrides/row.js
      ${NG_SRC_DIR}/src/web/pages/overrides/table.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/activedaysdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/overrides/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/page.js
      ${NG_SRC_DIR}/src/web/pages/performance/performancepage.js
      ${NG_SRC_DIR}/src/web/pages/performance/startendtimeselection.js
@@ -524,6 +647,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/table.js
      ${NG_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/highresultsdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/reports/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/results/charts.js
      ${NG_SRC_DIR}/src/web/pages/results/delta.js
      ${NG_SRC_DIR}/src/web/pages/results/details.js
@@ -532,6 +660,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/results/listpage.js
      ${NG_SRC_DIR}/src/web/pages/results/row.js
      ${NG_SRC_DIR}/src/web/pages/results/table.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/descriptionwordclouddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/results/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/roles/component.js
      ${NG_SRC_DIR}/src/web/pages/roles/details.js
      ${NG_SRC_DIR}/src/web/pages/roles/detailspage.js
@@ -568,6 +702,18 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/charts.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/details.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/row.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/table.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/createddisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${NG_SRC_DIR}/src/web/pages/secinfopage.js
      ${NG_SRC_DIR}/src/web/pages/tags/component.js
      ${NG_SRC_DIR}/src/web/pages/tags/details.js
@@ -579,7 +725,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/targets/component.js
      ${NG_SRC_DIR}/src/web/pages/targets/details.js
      ${NG_SRC_DIR}/src/web/pages/targets/detailspage.js
-     ${NG_SRC_DIR}/src/web/pages/targets/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/targets/dialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/targets/listpage.js
@@ -591,6 +736,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
      ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/schedulesdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/statusdisplay.js
      ${NG_SRC_DIR}/src/web/pages/tasks/details.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dialogcontainer.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dialog.js
@@ -619,17 +770,26 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/usersettings/dialog.js
      ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/index.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/loaders.js
+     ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
+     ${NG_SRC_DIR}/src/web/store/index.js
+     ${NG_SRC_DIR}/src/web/store/reducers.js
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js
+     ${NG_SRC_DIR}/src/web/utils/globalcss.js
      ${NG_SRC_DIR}/src/web/utils/os.js
      ${NG_SRC_DIR}/src/web/utils/proptypes.js
      ${NG_SRC_DIR}/src/web/utils/render.js
      ${NG_SRC_DIR}/src/web/utils/selectiontype.js
+     ${NG_SRC_DIR}/src/web/utils/severity.js
      ${NG_SRC_DIR}/src/web/utils/theme.js
      ${NG_SRC_DIR}/src/web/utils/state.js
      ${NG_SRC_DIR}/src/web/utils/urls.js
@@ -639,6 +799,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/utils/withContext.js
      ${NG_SRC_DIR}/src/web/utils/withGmp.js
      ${NG_SRC_DIR}/src/web/utils/withPrefix.js
+     ${NG_SRC_DIR}/src/web/utils/withSubscription.js
      ${NG_SRC_DIR}/src/web/utils/withUserName.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js
@@ -652,21 +813,7 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
-     ${NG_SRC_DIR}/src/web/components/folding/css/folding.css
-     ${NG_SRC_DIR}/src/web/components/form/css/checkboxradio.css
-     ${NG_SRC_DIR}/src/web/components/form/css/datepicker.css
-     ${NG_SRC_DIR}/src/web/components/form/css/form.css
-     ${NG_SRC_DIR}/src/web/components/form/css/formgroup.css
-     ${NG_SRC_DIR}/src/web/components/form/css/select2.css
-     ${NG_SRC_DIR}/src/web/components/form/css/spinner.css
-     ${NG_SRC_DIR}/src/web/components/menu/css/menu.css
-     ${NG_SRC_DIR}/src/web/css/app.css
-     ${NG_SRC_DIR}/src/web/css/gsa-base.css
-     ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
-     ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
-     ${NG_SRC_DIR}/src/web/entities/css/component.css
-     ${NG_SRC_DIR}/src/web/entities/css/footer.css
-     ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
+     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
      )
 
 set (NG_FILES
@@ -700,8 +847,16 @@ add_custom_target (gsa-ng ALL
 install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
 
+install (FILES public/robots.txt
+         DESTINATION ${NG_DEST_DIR}/..)
+
 # remove old generated files
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
 
-install (DIRECTORY build/static
+install (DIRECTORY
+         ${NG_BUILD_DIR}/static
+         ${NG_BUILD_DIR}/img
          DESTINATION ${NG_DEST_DIR})
+
+## Translations
+add_subdirectory (po)

@@ -4,7 +4,7 @@
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 
 import Divider from '../../components/layout/divider.js';
@@ -49,8 +49,10 @@ import TableData from '../../components/table/data.js';
 import withGmp from '../../utils/withGmp.js';
 
 const ToolBarIcons = () => (
-  <HelpIcon
-    page="feed_management"
+  <ManualIcon
+    page="search"
+    searchTerm="feed"
+    size="medium"
     title={_('Help: Feed Status')}
   />
 );
@@ -236,7 +238,7 @@ class FeedStatus extends React.Component {
               </TableData>
               <TableData>
                 <IconDivider>
-                  <Link to="certbundadvs">
+                  <Link to="certbunds">
                     <IconDivider align={['start', 'center']}>
                       <Icon
                         img="cert_bund_adv.svg"
@@ -245,7 +247,7 @@ class FeedStatus extends React.Component {
                       <span>CERT-Bund Advisories</span>
                     </IconDivider>
                   </Link>
-                  <Link to="dfncertadvs">
+                  <Link to="dfncerts">
                     <IconDivider align={['start', 'center']}>
                       <Icon
                         img="dfn_cert_adv.svg"

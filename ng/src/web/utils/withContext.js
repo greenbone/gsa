@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,12 @@
 import React from 'react';
 
 const withContext = contextTypes => Component => {
-  const ContextWrapper = (props, context) => {
-    return (
-      <Component
-        {...props}
-        {...context}
-      />
-    );
-  };
+  const ContextWrapper = (props, context) => (
+    <Component
+      {...props}
+      {...context}
+    />
+  );
 
   ContextWrapper.contextTypes = contextTypes;
 

@@ -7,7 +7,7 @@
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * Copyright (C) 2009, 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,31 +29,16 @@
  * @brief Base functionality of GSA.
  */
 
-/**
- * @brief Location of XSL file.
- */
-#define XSL_PATH "gsad.xsl"
-
 #include "gsad_base.h"
 #include "gsad_params.h"
 
 #include <glib.h>
-#ifdef USE_LIBXSLT
-#include "xslt_i18n.h"
-#include <libxml/parser.h>
-#include <libexslt/exslt.h>
+
+#include <libxml/parser.h> /* for xmlHasFeature() */
 #include <string.h> /* for strlen() */
-#include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
-#include <libxslt/transform.h> /* for xsltApplyStylesheet() */
-#include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
 #include <sys/param.h>
 #ifndef __FreeBSD__
 #include <malloc.h>
-#endif
-#else
-#include <string.h>
-#include <sys/wait.h>
-#include <errno.h>
 #endif
 
 #undef G_LOG_DOMAIN
@@ -80,12 +65,10 @@ static int http_only = 0;
 int
 gsad_base_init ()
 {
-#ifdef USE_LIBXSLT
   if (!xmlHasFeature (XML_WITH_THREAD))
     return 1;
   /* Required by libxml for thread safety. */
   xmlInitParser ();
-#endif
   return 0;
 }
 
@@ -97,10 +80,7 @@ gsad_base_init ()
 int
 gsad_base_cleanup ()
 {
-#ifdef USE_LIBXSLT
-  xsltCleanupGlobals ();
   xmlCleanupParser ();
-#endif
   return 0;
 }
 
@@ -196,199 +176,6 @@ ctime_r_strip_newline (time_t *time, char *string)
       return string;
     }
   return string;
-}
-
-/**
- * @brief HTML returned when XSL transform fails.
- */
-#define FAIL_HTML                                                       \
- "<html>"                                                               \
- "<body>"                                                               \
- "An internal server error has occurred during XSL transformation."     \
- "</body>"                                                              \
- "</html>"
-
-/**
- * @brief XSL Transformation.
- *
- * Transforms XML by applying a given XSL stylesheet, usually into HTML.
- *
- * @param[in]  xml_text        The XML text to transform.
- * @param[in]  xsl_stylesheet  The file name of the XSL stylesheet to use.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return HTML output from XSL transformation.
- */
-char *
-xsl_transform_with_stylesheet (const char *xml_text,
-                               const char *xsl_stylesheet,
-                               cmd_response_data_t *response_data)
-{
-#ifdef USE_LIBXSLT
-  xsltStylesheetPtr cur = NULL;
-  xmlDocPtr doc, res;
-  xmlChar *doc_txt_ptr = NULL;
-  int doc_txt_len;
-
-  g_debug ("xsl stylesheet: [%s]\n", xml_text);
-  g_debug ("text to transform: [%s]\n", xml_text);
-
-  exsltRegisterAll ();
-  register_i18n_ext_module ();
-
-  xmlSubstituteEntitiesDefault (1);
-  xmlLoadExtDtdDefaultValue = 1;
-  cur = xsltParseStylesheetFile ((const xmlChar *) xsl_stylesheet);
-  if (cur == NULL)
-    {
-      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  doc = xmlParseMemory (xml_text, strlen (xml_text));
-  if (doc == NULL)
-    {
-      g_warning ("Failed to parse stylesheet %s", xsl_stylesheet);
-      xsltFreeStylesheet (cur);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  res = xsltApplyStylesheet (cur, doc, NULL);
-  if (res == NULL)
-    {
-      g_warning ("Failed to apply stylesheet %s", xsl_stylesheet);
-      xsltFreeStylesheet (cur);
-      xmlFreeDoc (doc);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-  xmlFreeDoc (doc);
-
-  if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
-    {
-      g_warning ("Failed to store transformation result.");
-      xsltFreeStylesheet (cur);
-      xmlFreeDoc (res);
-      if (response_data)
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return g_strdup (FAIL_HTML);
-    }
-
-  xsltFreeStylesheet (cur);
-  xmlFreeDoc (res);
-#ifndef __FreeBSD__
-  malloc_trim (0);
-#endif
-
-  return (char *) doc_txt_ptr;
-#else
-  int content_fd;
-  gint exit_status;
-  gchar **cmd;
-  gboolean success = TRUE;
-  gchar *standard_out = NULL;
-  gchar *standard_err = NULL;
-  char content_file[] = "/tmp/gsa_xsl_transform_XXXXXX";
-  GError *error;
-
-  /* Create a temporary file. */
-
-  content_fd = mkstemp (content_file);
-  if (content_fd == -1)
-    {
-      g_warning ("%s: mkstemp: %s\n", __FUNCTION__, strerror (errno));
-      return g_strdup (FAIL_HTML);
-    }
-
-  /* Copy text to temporary file. */
-
-  g_debug ("text to transform: [%s]\n", xml_text);
-
-  error = NULL;
-  g_file_set_contents (content_file, xml_text, strlen (xml_text), &error);
-  if (error)
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-      unlink (content_file);
-      close (content_fd);
-      return g_strdup (FAIL_HTML);
-    }
-
-  /* Run xsltproc on the temporary file. */
-
-  cmd = (gchar **) g_malloc (4 * sizeof (gchar *));
-  cmd[0] = g_strdup ("xsltproc");
-  cmd[1] = g_strdup (xsl_stylesheet);
-  cmd[2] = g_strdup (content_file);
-  cmd[3] = NULL;
-  g_debug ("%s: Spawning in parent dir: %s %s %s\n",
-           __FUNCTION__, cmd[0], cmd[1], cmd[2]);
-  if ((g_spawn_sync (NULL,
-                     cmd,
-                     NULL,                  /* Environment. */
-                     G_SPAWN_SEARCH_PATH,
-                     NULL,                  /* Setup function. */
-                     NULL,
-                     &standard_out,
-                     &standard_err,
-                     &exit_status,
-                     NULL)
-       == FALSE)
-      || (WIFEXITED (exit_status) == 0)
-      || WEXITSTATUS (exit_status))
-    {
-      g_debug ("%s: failed to transform the xml: %d (WIF %i, WEX %i)",
-               __FUNCTION__,
-               exit_status,
-               WIFEXITED (exit_status),
-               WEXITSTATUS (exit_status));
-      g_debug ("%s: stderr: %s\n", __FUNCTION__, standard_err);
-      g_debug ("%s: stdout: %s\n", __FUNCTION__, standard_out);
-      success = FALSE;
-    }
-
-  /* Cleanup. */
-
-  g_free (cmd[0]);
-  g_free (cmd[1]);
-  g_free (cmd[2]);
-  g_free (cmd);
-  g_free (standard_err);
-
-  unlink (content_file);
-  close (content_fd);
-
-  if (success)
-    return standard_out;
-
-  g_free (standard_out);
-
-  if (response_data)
-    response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-  return g_strdup (FAIL_HTML);
-#endif
-}
-
-/**
- * @brief XSL Transformation.
- *
- * Does the transformation from XML to HTML applying omp.xsl.
- *
- * @param[in]  xml_text  The XML text to transform.
- * @param[out] response_data   Extra data return for the HTTP response.
- *
- * @return HTML output from XSL transformation.
- */
-char *
-xsl_transform (const char *xml_text, cmd_response_data_t *response_data)
-{
-  return xsl_transform_with_stylesheet (xml_text, XSL_PATH, response_data);
 }
 
 

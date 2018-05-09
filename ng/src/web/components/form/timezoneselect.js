@@ -24,14 +24,14 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {map} from 'gmp/utils.js';
+import {map} from 'gmp/utils';
 import timezones from 'gmp/timezones.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import withLayout from '../layout/withLayout.js';
 
-import Select2 from './select2.js';
+import Select from './select.js';
 
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
@@ -41,12 +41,12 @@ const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
   });
 
   return (
-    <Select2 {...props} value={value}>
+    <Select {...props} value={value}>
       <option value="UTC">
         {_('Coordinated Universal Time/UTC')}
       </option>
       {timezone_opts}
-    </Select2>
+    </Select>
   );
 };
 

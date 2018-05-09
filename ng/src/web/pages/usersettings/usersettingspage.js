@@ -2,9 +2,10 @@
 *
 * Authors:
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+* Björn Ricks <bjoern.ricks@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -20,15 +21,16 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+import 'core-js/fn/object/entries';
 
 import React from 'react';
 import glamorous, {Col} from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _, {set_language} from 'gmp/locale.js';
 import {parse_yesno, YES_VALUE} from 'gmp/parser.js';
-import {is_defined, is_empty} from 'gmp/utils.js';
+import {is_defined, is_empty} from 'gmp/utils';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import EditIcon from '../../components/icon/editicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -46,6 +48,13 @@ import TableRow from '../../components/table/row.js';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
+import Languages, {BROWSER_LANGUAGE} from '../../utils/languages';
+import {
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_PCI_DSS,
+} from '../../utils/severity';
 
 import withCapabilities from '../../utils/withCapabilities.js';
 import withGmp from '../../utils/withGmp.js';
@@ -55,10 +64,10 @@ import SettingsDialog from './dialog.js';
 const CA_CERT_ID = '9ac801ea-39f8-11e6-bbaa-28d24461215b';
 
 const SEVERITY_CLASSES = [
-  {id: 'nist', name: 'NVD Vulnerability Severity Ratings'},
-  {id: 'bsi', name: 'BSI Schwachstellenampel (Germany)'},
-  {id: 'classic', name: 'OpenVAS Classic'},
-  {id: 'pci-dss', name: 'PCI-DSS'},
+  {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
+  {id: SEVERITY_CLASS_BSI, name: 'BSI Schwachstellenampel (Germany)'},
+  {id: SEVERITY_CLASS_CLASSIC, name: 'OpenVAS Classic'},
+  {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
 ];
 
 const Heading = glamorous.h4({marginBottom: '5px'});
@@ -66,11 +75,14 @@ const Heading = glamorous.h4({marginBottom: '5px'});
 const ToolBarIcons = ({onEditSettingsClick}) => (
   <Layout flex>
     <IconDivider>
-      <HelpIcon
-        page="my_settings"
+      <ManualIcon
+        size="medium"
+        page="gui_introduction"
+        anchor="my-settings"
         title={_('Help: My Settings')}
       />
       <EditIcon
+        size="medium"
         title={_('Edit My Settings')}
         onClick={onEditSettingsClick}
       />
@@ -95,7 +107,11 @@ class UserSettings extends React.Component {
       filter_settings: [],
       misc_settings: [],
       initial_data: {},
-      option_lists: {severitiesList: SEVERITY_CLASSES},
+      option_lists: {
+        severitiesList: SEVERITY_CLASSES,
+        languagesList: Object.entries(Languages).map(
+          ([code, language]) => [code, language.name, language.native_name]),
+      },
     };
     this.set_filters = [];
     this.set_settings = [];
@@ -133,12 +149,6 @@ class UserSettings extends React.Component {
         option_lists.scanconfigsList = config_list;
         this.setState({option_lists});
         return config_list;
-      }),
-      gmp.user.currentLanguages()
-      .then(response => {
-        option_lists.languagesList = response.data;
-        this.setState({option_lists});
-        return option_lists.languagesList;
       }),
       gmp.alerts.getAll()
       .then(response => {
@@ -356,7 +366,6 @@ class UserSettings extends React.Component {
     this.set_settings = settings[0];// eslint-disable-line prefer-destructuring
     this.set_filters = settings[1]; // eslint-disable-line prefer-destructuring
     this.scanconfigs = settings[2]; // eslint-disable-line prefer-destructuring
-    this.languages = settings[3];
 
     for (const [key, item] of this.set_settings) {
         all_possible_settings[key] = item.value;
@@ -374,9 +383,9 @@ class UserSettings extends React.Component {
       }
       else if (item === 'User Interface Language') {
         const code = all_possible_settings[item];
-        const set_language = this.getLanguageNameByCode(code);
+        const current_language = this.getLanguageNameByCode(code);
         general_settings.push({
-          'User Interface Language': set_language,
+          'User Interface Language': current_language,
         });
         initial_data.userinterfacelanguage = code;
       }
@@ -758,7 +767,7 @@ class UserSettings extends React.Component {
         const id = all_possible_settings[item];
         const filter_name = this.getFilterNameById(id);
         filter_settings[item] = filter_name;
-        initial_data.allsecinfofilter = id;
+        initial_data.secinfofilter = id;
       }
       else if (item === 'Default CA Cert (immutable)') {
         const cacert = this.getValueBySettingId(CA_CERT_ID);
@@ -818,13 +827,8 @@ class UserSettings extends React.Component {
   }
 
   getLanguageNameByCode(code) {
-    const language = this.languages.find(
-      item => {
-        return item.code === code;
-      });
-    if (is_defined(language)) {
-      return language.name;
-    };
+    const language = Languages[code];
+    return is_defined(language) ? language.name : undefined;
   }
 
   getValueBySettingId(id) {
@@ -840,7 +844,17 @@ class UserSettings extends React.Component {
   handleSaveSettings(data) {
     const {gmp} = this.props;
     return gmp.user.saveSettings(data)
-      .then(() => this.load());
+      .then(() => {
+        this.load();
+        const {userinterfacelanguage: lang} = data;
+
+        if (lang === BROWSER_LANGUAGE) {
+          set_language();
+        }
+        else {
+          set_language(lang);
+        }
+      });
   }
 
   openSettingsDialog() {
@@ -924,7 +938,7 @@ class UserSettings extends React.Component {
       ['OVAL Filter', initial_data.ovalfilter],
       ['CERT-Bund Filter', initial_data.certbundfilter],
       ['DFN-CERT Filter', initial_data.dfncertfilter],
-      ['All SecInfo Filter', initial_data.allsecinfofilter],
+      ['SecInfo Filter', initial_data.secinfofilter],
     ];
 
     return (
@@ -1054,13 +1068,14 @@ class UserSettings extends React.Component {
           </TableBody>
         </Table>
 
-        <SettingsDialog
-          visible = {dialogvisible}
-          onClose={this.handleCloseDialog}
-          onSave={this.handleSaveSettings}
-          data={initial_data}
-          optionLists={option_lists}
-        />
+        {dialogvisible &&
+          <SettingsDialog
+            onClose={this.handleCloseDialog}
+            onSave={this.handleSaveSettings}
+            data={initial_data}
+            optionLists={option_lists}
+          />
+        }
       </Layout>
     );
   }

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,11 @@ import Credential from '../models/credential.js';
 import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
-import {extend, for_each, map} from '../utils.js';
+import {for_each, map} from '../utils/array';
 
 function convert_data(prefix, data, fields) {
-  let converted = {};
-  for (let name of fields) {
+  const converted = {};
+  for (const name of fields) {
     if (data.hasOwnProperty(name)) {
       converted[prefix + ':' + name] = data[name];
     }
@@ -47,7 +47,7 @@ const event_data_quick_first_scan_fields = [
 
 const event_data_quick_task_fields = [
   'config_id', 'alert_email', 'scanner_id', 'auto_start',
-  'start_year', 'start_month', 'start_day',  'start_hour', 'start_minute',
+  'start_year', 'start_month', 'start_day', 'start_hour', 'start_minute',
   'start_timezone', 'smb_credential', 'ssh_credential', 'ssh_port',
   'esxi_credential', 'task_name', 'target_hosts', 'port_list_id',
 ];
@@ -57,7 +57,7 @@ const event_data_modify_task_fields = [
   'start_day', 'start_hour', 'start_minute', 'start_timezone',
 ];
 
-export class WizardCommand extends HttpCommand {
+class WizardCommand extends HttpCommand {
 
   constructor(http) {
     super(http, {cmd: 'wizard'});
@@ -67,8 +67,8 @@ export class WizardCommand extends HttpCommand {
     return this.httpGet({
       name: 'quick_first_scan',
     }).then(response => {
-      let {data} = response;
-      let settings = new Settings();
+      const {data} = response;
+      const settings = new Settings();
 
       settings.client_address = data.client_address;
 
@@ -90,11 +90,11 @@ export class WizardCommand extends HttpCommand {
     return this.httpGet({
       name: 'quick_task',
     }).then(response => {
-      let {data} = response;
+      const {data} = response;
 
-      let resp = data.wizard.run_wizard_response.response.commands_response;
+      const resp = data.wizard.run_wizard_response.response.commands_response;
 
-      let settings = new Settings();
+      const settings = new Settings();
 
       for_each(resp.get_settings_response.setting, setting => {
           settings.set(setting.name, {
@@ -125,11 +125,11 @@ export class WizardCommand extends HttpCommand {
     return this.httpGet({
       name: 'modify_task',
     }).then(response => {
-      let {data} = response;
+      const {data} = response;
 
-      let resp = data.wizard.run_wizard_response.response.commands_response;
+      const resp = data.wizard.run_wizard_response.response.commands_response;
 
-      let settings = new Settings();
+      const settings = new Settings();
 
       for_each(resp.get_settings_response.setting, setting => {
           settings.set(setting.name, {
@@ -150,50 +150,44 @@ export class WizardCommand extends HttpCommand {
   }
 
   runQuickFirstScan(args) {
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'quick_first_scan',
-      },
-      convert_data('event_data', args, event_data_quick_first_scan_fields),
-    ));
+    return this.httpPost({
+      ...convert_data('event_data', args, event_data_quick_first_scan_fields),
+      cmd: 'run_wizard',
+      name: 'quick_first_scan',
+    });
   }
 
   runQuickTask(args) {
-    let {date, ...other} = args;
-    let event_data = convert_data('event_data', other,
+    const {date, ...other} = args;
+    const event_data = convert_data('event_data', other,
       event_data_quick_task_fields);
 
     event_data['event_data:start_day'] = date.day();
     event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'quick_task',
-      },
-      event_data,
-    ));
+    return this.httpPost({
+      ...event_data,
+      cmd: 'run_wizard',
+      name: 'quick_task',
+    });
   }
 
   runModifyTask(args) {
-    let {date, ...other} = args;
+    const {date, ...other} = args;
 
-    let event_data = convert_data('event_data', other,
+    const event_data = convert_data('event_data', other,
       event_data_modify_task_fields);
 
     event_data['event_data:start_day'] = date.day();
     event_data['event_data:start_month'] = date.month() + 1;
     event_data['event_data:start_year'] = date.year();
 
-    return this.httpPost(extend(
-      {
-        cmd: 'run_wizard',
-        name: 'modify_task',
-      },
-      event_data
-    ));
+    return this.httpPost({
+      ...event_data,
+      cmd: 'run_wizard',
+      name: 'modify_task',
+    });
   }
 }
 

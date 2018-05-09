@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
-import {extend, is_defined, is_empty, is_model_element, map} from '../utils.js';
+import {is_defined, is_model_element} from '../utils/identity';
+import {map} from '../utils/array';
+import {is_empty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -34,6 +37,25 @@ import {
 } from '../parser.js';
 
 import Nvt from './nvt.js';
+
+export const MANUAL = '1';
+export const ANY = '0';
+
+export const ACTIVE_NO_VALUE = '0';
+export const ACTIVE_YES_FOR_NEXT_VALUE = '1';
+export const ACTIVE_YES_ALWAYS_VALUE = '-1';
+export const ACTIVE_YES_UNTIL_VALUE = '-2';
+
+export const DEFAULT_DAYS = 30;
+export const DEFAULT_OID_VALUE = '1.3.6.1.4.1.25623.1.0.';
+
+export const TASK_ANY = '';
+export const TASK_SELECTED = '0';
+
+export const RESULT_ANY = '';
+export const RESULT_UUID = '0';
+
+export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
 
@@ -51,7 +73,7 @@ class Override extends Model {
 
     ret.new_severity = parse_severity(ret.new_severity);
 
-    ret = extend(ret, parse_text(ret.text));
+    ret = {...ret, ...parse_text(ret.text)};
 
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');
@@ -74,6 +96,13 @@ class Override extends Model {
 
     if (is_empty(elem.port)) {
       delete ret.port;
+    }
+
+    if (is_defined(elem.end_time) && elem.end_time.length > 0) {
+      ret.end_time = moment(elem.end_time);
+    }
+    else {
+      delete ret.end_time;
     }
 
     return ret;

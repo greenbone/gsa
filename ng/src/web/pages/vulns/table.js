@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +41,8 @@ import VulnsRow from './row.js';
 const Header = ({
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   actionsColumn,
   hideColumns = {},
   onSortChange,
@@ -48,45 +51,62 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          width="40%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         {hideColumns.oldest !== true &&
           <TableHead
-            sortby={sort ? 'oldest' : false}
+            width="15%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'oldest' : false}
             onSortChange={onSortChange}>
             {_('Oldest Result')}
           </TableHead>
         }
         {hideColumns.oldest !== true &&
           <TableHead
-            sortby={sort ? 'newest' : false}
+            width="15%"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'newest' : false}
             onSortChange={onSortChange}>
             {_('Newest Result')}
           </TableHead>
         }
         <TableHead
-          width="10em"
-          sortby={sort ? 'severity' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'qod' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'results' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'results' : false}
           onSortChange={onSortChange}>
           {_('Results')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'hosts' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
@@ -98,6 +118,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   hideColumns: PropTypes.object,
   links: PropTypes.bool,
   sort: PropTypes.bool,
@@ -116,6 +138,7 @@ export const VulnsTable = createEntitiesTable({
   header: VulnsHeader,
   footer: Footer,
   row: VulnsRow,
+  toggleDetailsIcon: false,
 });
 
 export default VulnsTable;

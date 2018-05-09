@@ -34,6 +34,19 @@
 #include <microhttpd.h> /* for MHD_HTTP_OK */
 
 /**
+ * @brief Response information for commands.
+ */
+struct cmd_response_data {
+  gboolean allow_caching;      ///> Whether the response may be cached.
+  int http_status_code;        ///> HTTP status code.
+  gchar *redirect;             ///> Redirect URL or NULL.
+  content_type_t content_type; ///> Content type. Default is text/html
+  gchar *content_type_string;  ///> Content type as string. Default is NULL.
+  gsize content_length;        ///> Content length of the response
+  gchar *content_disposition;  ///> Content disposition
+};
+
+/**
  * @brief Initializes a cmd_response_data_t struct.
  *
  * @param[in]  data  The cmd_response_data_t struct to initialize
@@ -41,6 +54,7 @@
 static void
 cmd_response_data_init (cmd_response_data_t* data)
 {
+  data->allow_caching = FALSE;
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   data->content_type_string = NULL;
@@ -48,7 +62,6 @@ cmd_response_data_init (cmd_response_data_t* data)
   data->content_disposition = NULL;
   data->content_length = 0;
 }
-
 
 /**
  * @brief Allocates memory for a cmd_response_data_t sturct and initializes it
@@ -95,6 +108,32 @@ cmd_response_data_free (cmd_response_data_t* data)
     }
 
   g_free (data);
+}
+
+/**
+ * @brief Set allow_caching flag of cmd_response_data_t struct
+ *
+ * @param[in]  data           Command response data struct
+ * @param[in]  allow_caching  allow_caching flag to set
+ */
+void
+cmd_response_data_set_allow_caching (cmd_response_data_t *data,
+                                     gboolean allow_caching)
+{
+  data->allow_caching = (allow_caching != FALSE);
+}
+
+/**
+ * @brief Get allow_caching flag of cmd_response_data_t struct
+ *
+ * @param[in]  data  Command response data struct
+ *
+ * @return The allow_caching flag
+ */
+gboolean
+cmd_response_data_is_allow_caching (cmd_response_data_t *data)
+{
+  return data->allow_caching;
 }
 
 /**

@@ -23,49 +23,19 @@
 
 import React from 'react';
 
-import EntityTags from '../../entity/tags.js';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../../components/layout/layout.js';
-
-import TagsHandler from '../../entity/tagshandler.js';
 
 import ScanInfo from './scaninfo.js';
 
 const Summary = ({
   report,
-  onError,
-  onTagChanged,
 }) => (
   <Layout flex="column">
     <ScanInfo
       report={report}
     />
-    <TagsHandler
-      onError={onError}
-      onChanged={onTagChanged}
-      resourceType="report"
-    >
-      {({
-        add,
-        create,
-        delete: delete_func,
-        disable,
-        enable,
-        edit,
-      }) => (
-        <EntityTags
-          entity={report}
-          onTagAddClick={add}
-          onTagCreateClick={create}
-          onTagDeleteClick={delete_func}
-          onTagDisableClick={disable}
-          onTagEditClick={edit}
-          onTagEndableClick={enable}
-        />
-      )}
-    </TagsHandler>
   </Layout>
 );
 

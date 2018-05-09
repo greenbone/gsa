@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map, extend} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {map} from '../utils/array';
 import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
@@ -43,7 +44,8 @@ const method_data_fields = [
   'start_task_task', 'send_host', 'send_port', 'send_report_format',
   'scp_credential', 'scp_host', 'scp_known_hosts', 'scp_path',
   'scp_report_format', 'smb_credential', 'smb_file_path', 'smb_report_format',
-  'smb_share_path',
+  'smb_share_path', 'tp_sms_hostname', 'tp_sms_credential',
+  'tp_sms_tls_certificate', 'tp_sms_tls_workaround',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
@@ -62,7 +64,7 @@ function convert_data(prefix, data, fields) {
   return converted;
 }
 
-export class AlertCommand extends EntityCommand {
+class AlertCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);
@@ -79,9 +81,11 @@ export class AlertCommand extends EntityCommand {
       method,
       ...other
     } = args;
-    const data = extend({
+    const data = {
+      ...convert_data('method_data', other, method_data_fields),
+      ...convert_data('condition_data', other, condition_data_fields),
+      ...convert_data('event_data', other, event_data_fields),
       cmd: 'create_alert',
-      next: 'get_alert',
       active,
       name,
       comment,
@@ -89,12 +93,9 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    },
-      convert_data('method_data', other, method_data_fields),
-      convert_data('condition_data', other, condition_data_fields),
-      convert_data('event_data', other, event_data_fields));
+    };
     log.debug('Creating new alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save(args) {
@@ -109,9 +110,11 @@ export class AlertCommand extends EntityCommand {
       method,
       ...other
     } = args;
-    const data = extend({
+    const data = {
+      ...convert_data('method_data', other, method_data_fields),
+      ...convert_data('condition_data', other, condition_data_fields),
+      ...convert_data('event_data', other, event_data_fields),
       cmd: 'save_alert',
-      next: 'get_alert',
       id,
       active,
       name,
@@ -120,12 +123,9 @@ export class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
-    },
-      convert_data('method_data', other, method_data_fields),
-      convert_data('condition_data', other, condition_data_fields),
-      convert_data('event_data', other, event_data_fields));
+    };
     log.debug('Saving alert', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   newAlertSettings() { // should be removed after all corresponding omp commands are implemented
@@ -185,6 +185,15 @@ export class AlertCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'test_alert',
       id,
+    }).then(response => {
+      const {action_result} = response.data;
+      const {status, details} = action_result;
+      return response.setData({
+        ...action_result,
+        details: is_defined(details) && details.length > 0 ?
+          details : undefined,
+        success: status[0] === '2',
+      });
     });
   }
 
@@ -194,7 +203,7 @@ export class AlertCommand extends EntityCommand {
 
 }
 
-export class AlertsCommand extends EntitiesCommand {
+class AlertsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'alert', Alert);

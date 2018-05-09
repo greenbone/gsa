@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Seffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,31 +32,28 @@ import FilterDialog from '../certbund/filterdialog.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
-import DfnCertCharts from './charts.js';
 import DfnCertTable from './table.js';
+
+import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="dfn_cert_advs"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="id15"
       title={_('Help: DFN-CERT Advisories')}/>
   );
 };
 
-const Dashboard = withDashboard(DfnCertCharts, {
-  hideFilterSelect: true,
-  configPrefId: '9812ea49-682d-4f99-b3cc-eca051d1ce59',
-  defaultControllersString: 'dfn_cert_adv-by-severity-class|' +
-    'dfn_cert_adv-by-created|dfn_cert_adv-by-cvss',
-  defaultControllerString: 'dfn_cert_adv-by-cvss',
-});
-
-export default withEntitiesContainer('dfncertadv', {
-  dashboard: Dashboard,
+export default withEntitiesContainer('dfncert', {
+  dashboard2: DfnCertDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
+  ),
   filterEditDialog: FilterDialog,
   sectionIcon: 'dfn_cert_adv.svg',
   table: DfnCertTable,

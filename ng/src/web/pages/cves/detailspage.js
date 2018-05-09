@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,21 +26,33 @@ import React from 'react';
 
 import _, {long_date} from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
-import {EntityInfoTable} from '../../entity/info.js';
+import {InfoLayout} from '../../entity/info.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import CertLink from '../../components/link/certlink.js';
 import DetailsLink from '../../components/link/detailslink.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import Table from '../../components/table/stripedtable.js';
 import TableHeader from '../../components/table/header.js';
@@ -50,18 +63,34 @@ import TableRow from '../../components/table/row.js';
 
 import CveDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <HelpIcon
-      page="cve_details"
-      title={_('Help: CVE Details')}
+const ToolBarIcons = ({
+  entity,
+  onCveDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="cve"
+        title={_('Help: CVEs')}
+      />
+      <ListIcon
+        title={_('CVE List')}
+        page="cves"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export CVE')}
+      onClick={onCveDownloadClick}
     />
-    <ListIcon
-      title={_('CVE List')}
-      page="cves"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onCveDownloadClick: PropTypes.func.isRequired,
+};
 
 const Details = ({
   entity,
@@ -159,42 +188,16 @@ const EntityInfo = ({
 }) => {
   const {id, published_time, last_modified_time, update_time} = entity;
   return (
-    <EntityInfoTable>
-      <TableBody>
-        <TableRow>
-          <TableData>
-            {_('ID')}
-          </TableData>
-          <TableData>
-            {id}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Published')}
-          </TableData>
-          <TableData>
-            {long_date(published_time)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Modified')}
-          </TableData>
-          <TableData>
-            {long_date(update_time)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Last updated')}
-          </TableData>
-          <TableData>
-            {long_date(last_modified_time)}
-          </TableData>
-        </TableRow>
-      </TableBody>
-    </EntityInfoTable>
+    <InfoLayout>
+      <div>{_('ID:')}</div>
+      <div>{id}</div>
+      <div>{_('Published:')}</div>
+      <div>{long_date(published_time)}</div>
+      <div>{_('Modified:')}</div>
+      <div>{long_date(update_time)}</div>
+      <div>{_('Last updated:')}</div>
+      <div>{long_date(last_modified_time)}</div>
+    </InfoLayout>
   );
 };
 
@@ -213,19 +216,88 @@ const CvePage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="cve.svg"
-        title={_('CVE')}
-        detailsComponent={Details}
-        infoComponent={EntityInfo}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
-      />
+      <EntityComponent
+        name="cve"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="cve.svg"
+            title={_('CVE')}
+            detailsComponent={Details}
+            infoComponent={EntityInfo}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onCveDownloadClick={download}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          >
+            {({
+              activeTab = 0,
+              permissionsComponent,
+              permissionsTitle,
+              tagsComponent,
+              tagsTitle,
+              onActivateTab,
+              entity,
+              ...other
+            }) => {
+              return (
+                <Layout grow="1" flex="column">
+                  <TabLayout
+                    grow="1"
+                    align={['start', 'end']}
+                  >
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>
+                        {_('Information')}
+                      </Tab>
+                      {is_defined(tagsComponent) &&
+                        <Tab>
+                          {tagsTitle}
+                        </Tab>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <Tab>
+                          {permissionsTitle}
+                        </Tab>
+                      }
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details
+                          entity={entity}
+                        />
+                      </TabPanel>
+                      {is_defined(tagsComponent) &&
+                        <TabPanel>
+                          {tagsComponent}
+                        </TabPanel>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <TabPanel>
+                          {permissionsComponent}
+                        </TabPanel>
+                      }
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              );
+            }}
+          </EntityPage>
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );

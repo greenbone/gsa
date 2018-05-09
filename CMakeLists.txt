@@ -8,7 +8,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,43 +24,46 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-message ("-- Configuring greenbone-security-assistant...")
+cmake_minimum_required (VERSION 3.0)
 
-project (greenbone-security-assistant C)
+message ("-- Configuring Greenbone Security Assistant...")
 
-cmake_minimum_required (VERSION 2.8)
+project (greenbone-security-assistant
+         VERSION 8.0.0
+         LANGUAGES C)
+
 
 if (POLICY CMP0005)
   cmake_policy (SET CMP0005 NEW)
 endif (POLICY CMP0005)
 
-# Needed for 'pkg_check_modules' function
-include (FindPkgConfig)
-
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-
-if (NOT PKG_CONFIG_FOUND)
-  message(FATAL_ERROR "pkg-config executable not found. Aborting.")
-endif (NOT PKG_CONFIG_FOUND)
 
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
 endif (NOT CMAKE_BUILD_TYPE)
 
-if (NOT SERVE_STATIC_ASSETS EQUAL 0)
-  set (SERVE_STATIC_ASSETS 1)
-endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
+## Retrieve git revision (at configure time)
+include (GetGit)
 
-## Project version
-# The following three variables should be set through the project command once
-# we require CMake >= 3.0
-set (PROJECT_VERSION_MAJOR 7)
-set (PROJECT_VERSION_MINOR 1)
-set (PROJECT_VERSION_PATCH 0)
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+  if (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
+    if (GIT_FOUND)
+      Git_GET_REVISION(${CMAKE_SOURCE_DIR} ProjectRevision)
+      set (GIT_REVISION "~git-${ProjectRevision}")
+    endif (GIT_FOUND)
+  endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 # Set beta version if this is a beta release series,
 # unset if this is a stable release series.
 set (PROJECT_BETA_RELEASE 1)
+
+if (GIT_REVISION)
+  set (PROJECT_VERSION_GIT "${GIT_REVISION}")
+else (GIT_REVISION)
+  set (PROJECT_VERSION_GIT "~git")
+endif (GIT_REVISION)
 
 # If PROJECT_BETA_RELEASE is set, the version string will be set to:
 #   "major.minor+beta${PROJECT_BETA_RELEASE}"
@@ -90,7 +93,7 @@ set (CPACK_SOURCE_TOPLEVEL_TAG "")
 set (CPACK_SYSTEM_NAME "")
 set (CPACK_TOPLEVEL_TAG "")
 
-set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_SVN}")
+set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_GIT}")
 
 set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
@@ -165,21 +168,19 @@ message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
-## Program
-
-set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
-set (LINKER_HARDENING_FLAGS     "-Wl,-z,relro -Wl,-z,now")
-
-set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-security")
-
-set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
-set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
-
-if (NOT SKIP_SRC)
+if (SKIP_SRC)
   # ng has no documentation to build so skip if src should not be build
+  set (SKIP_NG ON)
+  set (SKIP_GSAD ON)
+endif (SKIP_SRC)
+
+if (NOT SKIP_NG)
   add_subdirectory (ng)
+endif (NOT SKIP_NG)
+
+if (NOT SKIP_GSAD)
   add_subdirectory (gsad)
-endif (NOT SKIP_SRC)
+endif (NOT SKIP_GSAD)
 
 ## Documentation
 

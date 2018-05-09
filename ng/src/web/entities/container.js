@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,15 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/set';
 
 import React from 'react';
 
 import logger from 'gmp/log.js';
-import {
-  is_defined,
-  is_array,
-  exclude_object_props,
-} from 'gmp/utils.js';
+import {is_defined, is_array, exclude_object_props} from 'gmp/utils';
 
 import PromiseFactory from 'gmp/promise.js';
 import CancelToken from 'gmp/cancel.js';
@@ -49,6 +47,8 @@ import Wrapper from '../components/layout/wrapper.js';
 
 import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
+import SortBy from '../components/sortby/sortby.js';
+
 const log = logger.getLogger('web.entities.container');
 
 const exclude_props = [
@@ -67,10 +67,11 @@ class EntitiesContainer extends React.Component {
 
     this.state = {
       loading: false,
+      updating: false,
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
     };
 
-    const {gmpname, gmp} = this.props;
+    const {gmpname, gmp, notify} = this.props;
 
     let entities_command_name;
 
@@ -85,8 +86,10 @@ class EntitiesContainer extends React.Component {
 
     this.entities_command = gmp[entities_command_name];
 
-    this.load = this.load.bind(this);
-    this.reload = this.reload.bind(this);
+    this.notifyTimer = notify(`${entities_command_name}.timer`);
+    this.notifyChanged = notify(`${entities_command_name}.changed`);
+
+    this.handleChanged = this.handleChanged.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -125,20 +128,32 @@ class EntitiesContainer extends React.Component {
     const filter = is_defined(filterstring) ? Filter.fromString(filterstring) :
       undefined;
 
-    this.load(filter, {reload});
+    this.load({filter, reload});
   }
 
 
-  load(filter, options = {}) {
+  load(options = {}) {
     const {entities_command} = this;
-    const {force = false, reload = false} = options;
+    const {filter, force = false, reload = false} = options;
     const {cache, extraLoadParams = {}} = this.props;
+    const {loaded_filter} = this.state;
 
     this.cancelLoading();
 
-    this.setState({loading: true});
+    if (is_defined(loaded_filter) &&
+      is_defined(filter) && !loaded_filter.equals(filter)) {
+      this.setState({
+        loading: true,
+        updating: true,
+      });
+    }
+    else {
+      this.setState({loading: true});
+    }
 
     const token = new CancelToken(cancel => this.cancel = cancel);
+
+    log.debug('Loading', options);
 
     entities_command.get({filter, ...extraLoadParams}, {
       cache,
@@ -147,11 +162,17 @@ class EntitiesContainer extends React.Component {
     })
       .then(response => {
         const {data: entities, meta} = response;
-        const {filter: loaded_filter, counts: entities_counts} = meta;
+        const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
         this.cancel = undefined;
 
         let refresh = false;
+
+        const reverse_field = loaded_filter.get('sort-reverse');
+        const reverse = is_defined(reverse_field);
+        const field = reverse ? reverse_field : loaded_filter.get('sort');
+
+        log.debug('Loaded entities', response);
 
         this.setState({
           entities,
@@ -159,9 +180,10 @@ class EntitiesContainer extends React.Component {
           filter,
           loaded_filter,
           loading: false,
+          sortBy: field,
+          sortDir: reverse ? SortBy.DESC : SortBy.ASC,
+          updating: false,
         });
-
-        log.debug('Loaded entities', response);
 
         if (meta.fromcache && (meta.dirty || reload)) {
           log.debug('Forcing reload of entities', meta.dirty, reload);
@@ -173,7 +195,7 @@ class EntitiesContainer extends React.Component {
         if (is_defined(error.isCancel) && error.isCancel()) {
           return;
         }
-        this.setState({loading: false, entities: undefined});
+        this.setState({loading: false});
         this.handleError(error);
         return PromiseFactory.reject(error);
       });
@@ -205,7 +227,7 @@ class EntitiesContainer extends React.Component {
       cache.invalidate();
     }
     // reload data from backend
-    this.load(this.state.filter, {force: true});
+    this.load({filter: this.state.loaded_filter, force: true});
   }
 
   getRefreshInterval() {
@@ -234,6 +256,7 @@ class EntitiesContainer extends React.Component {
 
     this.timer = undefined;
     this.reload();
+    this.notifyTimer();
   }
 
   cancelLastRequest() {
@@ -245,6 +268,11 @@ class EntitiesContainer extends React.Component {
   cancelLoading() {
     this.cancelLastRequest();
     this.clearTimer(); // remove possible running timer
+  }
+
+  handleChanged() {
+    this.reload();
+    this.notifyChanged();
   }
 
   handleSelectionTypeChange(selection_type) {
@@ -333,7 +361,7 @@ class EntitiesContainer extends React.Component {
 
     filter.set(sort, field);
 
-    this.load(filter);
+    this.load({filter});
   }
 
   handleError(error) {
@@ -345,19 +373,19 @@ class EntitiesContainer extends React.Component {
   handleFirst() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.first());
+    this.load({filter: filter.first()});
   }
 
   handleNext() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.next());
+    this.load({filter: filter.next()});
   }
 
   handlePrevious() {
     const {loaded_filter: filter} = this.state;
 
-    this.load(filter.previous());
+    this.load({filter: filter.previous()});
   }
 
   handleLast() {
@@ -366,16 +394,16 @@ class EntitiesContainer extends React.Component {
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
 
-    this.load(filter.first(last));
+    this.load({filter: filter.first(last)});
   }
 
   handleFilterCreated(filter) {
     this.loadFilters();
-    this.load(filter);
+    this.load({filter});
   }
 
   handleFilterChanged(filter) {
-    this.load(filter);
+    this.load({filter});
   }
 
   handleFilterReset() {
@@ -399,6 +427,9 @@ class EntitiesContainer extends React.Component {
       loading,
       selected,
       selection_type,
+      sortBy,
+      sortDir,
+      updating,
     } = this.state;
     const {
       onDownload,
@@ -419,7 +450,9 @@ class EntitiesContainer extends React.Component {
           filter={loaded_filter}
           filters={filters}
           selectionType={selection_type}
-          onChanged={this.reload}
+          sortBy={sortBy}
+          sortDir={sortDir}
+          onChanged={this.handleChanged}
           onDownloaded={onDownload}
           onError={this.handleError}
           onFilterChanged={this.handleFilterChanged}
@@ -437,6 +470,7 @@ class EntitiesContainer extends React.Component {
           onPreviousClick={this.handlePrevious}
           showError={showErrorMessage}
           showSuccess={showSuccessMessage}
+          updating={updating}
         />
       </Wrapper>
     );
@@ -456,6 +490,7 @@ EntitiesContainer.propTypes = {
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
+  notify: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,

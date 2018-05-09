@@ -37,63 +37,99 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
+import glamorous from 'glamorous';
 
 const Header = ({
+  actions = true,
+  currentSortDir,
+  currentSortBy,
   sort = true,
   onSortChange,
-}) => (
-  <TableHeader>
-    <TableRow>
-      <TableHead
-        sortby={sort ? 'dn' : false}
-        onSortChange={onSortChange}>
-        {_('DN')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'serial' : false}
-        onSortChange={onSortChange}>
-        {_('Serial')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'notvalidbefore' : false}
-        onSortChange={onSortChange}>
-        {_('Not Valid Before')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'notvalidafter' : false}
-        onSortChange={onSortChange}>
-        {_('Not Valid After')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'ip' : false}
-        onSortChange={onSortChange}>
-        {_('IP')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'hostname' : false}
-        onSortChange={onSortChange}>
-        {_('Hostname')}
-      </TableHead>
-      <TableHead
-        sortby={sort ? 'port' : false}
-        onSortChange={onSortChange}>
-        {_('Port')}
-      </TableHead>
-      <TableHead
-        width="50px"
-        onSortChange={onSortChange}>
-        {_('Actions')}
-      </TableHead>
-    </TableRow>
-  </TableHeader>
-);
+}) => {
+  const sortProps = {
+    currentSortDir,
+    currentSortBy,
+    sort,
+    onSortChange,
+  };
+  return (
+    <TableHeader>
+      <TableRow>
+        <TableHead
+          {...sortProps}
+          sortBy="dn"
+          width={actions ? '35%' : '40%'}
+        >
+          {_('DN')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="serial"
+          width="10%"
+        >
+          {_('Serial')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="notvalidbefore"
+          width="10%"
+        >
+          {_('Not Valid Before')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="notvalidafter"
+          width="10%"
+        >
+          {_('Not Valid After')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="ip"
+          width="10%"
+        >
+          {_('IP')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="hostname"
+          width="15%"
+        >
+          {_('Hostname')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          sortBy="port"
+          width="5%"
+        >
+          {_('Port')}
+        </TableHead>
+        {actions &&
+          <TableHead
+            width="5%"
+          >
+            {_('Actions')}
+          </TableHead>
+        }
+      </TableRow>
+    </TableHeader>
+  );
+};
 
 Header.propTypes = {
+  actions: PropTypes.bool,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
 
+const StyledSpan = glamorous.span({
+  wordBreak: 'break-all',
+});
+
 const Row = ({
+  actions = true,
   entity,
   links = true,
   onTlsCertificateDownloadClick,
@@ -102,7 +138,9 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        {issuer}
+        <StyledSpan>
+          {issuer}
+        </StyledSpan>
       </TableData>
       <TableData>
         {serial}
@@ -129,22 +167,25 @@ const Row = ({
       <TableData>
         {port}
       </TableData>
-      <TableData flex align="center">
-        <Icon
-          img="download.svg"
-          title={_('Download TLS Certificate')}
-          value={entity}
-          onClick={onTlsCertificateDownloadClick}
-        />
-      </TableData>
+      {actions &&
+        <TableData flex align="center">
+          <Icon
+            img="download.svg"
+            title={_('Download TLS Certificate')}
+            value={entity}
+            onClick={onTlsCertificateDownloadClick}
+          />
+        </TableData>
+      }
     </TableRow>
   );
 };
 
 Row.propTypes = {
+  actions: PropTypes.bool,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
-  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
+  onTlsCertificateDownloadClick: PropTypes.func,
 };
 
 export default createEntitiesTable({

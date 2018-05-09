@@ -45,7 +45,11 @@ import Link from '../../components/link/link.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const IconActions = ({entity, onEntityDelete, onEntityDownload}) => (
+const IconActions = ({
+  entity,
+  onOsDeleteClick,
+  onOsDownloadClick,
+}) => (
   <IconDivider
     align={['center', 'center']}
     grow
@@ -53,23 +57,26 @@ const IconActions = ({entity, onEntityDelete, onEntityDownload}) => (
     {entity.isInUse() ?
       <DeleteIcon
         active={false}
-        title={_('Operating System is in use')}/> :
+        title={_('Operating System is in use')}
+      /> :
       <DeleteIcon
         value={entity}
         title={_('Delete')}
-        onClick={onEntityDelete}/>
+        onClick={onOsDeleteClick}
+      />
     }
     <ExportIcon
       value={entity}
-      onClick={onEntityDownload}
-      title={_('Export Operating System')}/>
+      onClick={onOsDownloadClick}
+      title={_('Export Operating System')}
+    />
   </IconDivider>
 );
 
 IconActions.propTypes = {
   entity: PropTypes.model.isRequired,
-  onEntityDelete: PropTypes.func,
-  onEntityDownload: PropTypes.func,
+  onOsDeleteClick: PropTypes.func.isRequired,
+  onOsDownloadClick: PropTypes.func.isRequired,
 };
 
 const Actions = withEntityActions(IconActions);

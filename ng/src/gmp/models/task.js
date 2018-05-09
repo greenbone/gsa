@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,9 @@
 
 import moment from 'moment';
 
-import {
-  is_array,
-  is_defined,
-  is_empty,
-  map,
-} from '../utils.js';
+import {is_defined, is_array} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {map} from '../utils/array';
 
 import {
   parse_int,
@@ -43,6 +40,10 @@ import Model from '../model.js';
 import Report from './report.js';
 import Schedule from './schedule.js';
 import Scanner from './scanner.js';
+
+export const AUTO_DELETE_KEEP = 'keep';
+export const AUTO_DELETE_NO = 'no';
+export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
 function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
@@ -167,11 +168,19 @@ class Task extends Model {
             elem.min_qod = parse_int(pref.value);
             break;
           case 'auto_delete':
-            elem.auto_delete = pref.value === 'keep' ? 'keep' : 'no';
+            elem.auto_delete = pref.value === AUTO_DELETE_KEEP ?
+              AUTO_DELETE_KEEP : AUTO_DELETE_NO;
             break;
           case 'auto_delete_data':
             elem.auto_delete_data = pref.value === '0' ?
-              5 : parse_int(pref.value);
+              AUTO_DELETE_DEFAULT_VALUE : parse_int(pref.value);
+            break;
+          case 'max_hosts':
+          case 'max_checks':
+            elem[pref.scanner_name] = parse_int(pref.value);
+            break;
+          case 'source_iface':
+            elem.source_iface = pref.value;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};

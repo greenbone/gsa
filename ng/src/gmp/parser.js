@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,28 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+import 'core-js/fn/string/starts-with';
 
 import moment from 'moment';
 
-import {
-  is_defined,
-  is_empty,
-  parse_float,
-  parse_int,
-  parse_yesno,
-  NO_VALUE,
-  YES_VALUE,
-} from './utils.js';
-
-// export imported parse stuff from utils
-// this code will be moved at this place in future
-export {
-  parse_int,
-  parse_float,
-  parse_yesno,
-  YES_VALUE,
-  NO_VALUE,
-};
+import {is_defined} from './utils/identity';
+import {is_empty} from './utils/string';
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);
@@ -71,12 +56,49 @@ export function parse_text(text) {
   };
 }
 
+export function parse_int(value) {
+  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+    return undefined;
+  }
+
+  const val = parseInt(value, 10);
+
+  if (isNaN(val)) {
+    return undefined;
+  }
+
+  return val;
+}
+
+export function parse_float(value) {
+  const val = parseFloat(value);
+
+  if (isNaN(val)) {
+    return undefined;
+  }
+
+  return val;
+}
+
+export const YES_VALUE = 1;
+export const NO_VALUE = 0;
+
+export function parse_yesno(value) {
+  return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
+}
+
+
 export function parse_csv(value) {
   if (is_empty(value)) {
     return [];
   }
   return value.split(',').map(val => val.trim());
 }
+
+export const parse_qod = qod => ({
+  type: qod.type,
+  value: parse_float(qod.value),
+});
 
 export function parse_envelope_meta(envelope) {
   const meta = {};

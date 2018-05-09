@@ -25,9 +25,11 @@ import React from 'react';
 
 import logger from 'gmp/log.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import SortBy from '../../components/sortby/sortby.js';
 
 const log = logger.getLogger('web.pages.reports.reportentitiescontainer');
 
@@ -36,7 +38,9 @@ class ReportEntitiesContainer extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {};
+    this.state = {
+      sort: {},
+    };
 
     this.handleFirst = this.handleFirst.bind(this);
     this.handleLast = this.handleLast.bind(this);
@@ -229,16 +233,21 @@ class ReportEntitiesContainer extends React.Component {
       paged_entities: entities,
       paged_counts: entitiesCounts,
       filter,
+      sort,
     } = this.state;
 
     if (!is_defined(children)) {
       return null;
     }
 
+    const {field, reverse} = sort;
+
     return children({
       entities,
       entitiesCounts,
       filter,
+      sortBy: field,
+      sortDir: reverse ? SortBy.DESC : SortBy.ASC,
       onFirstClick: this.handleFirst,
       onLastClick: this.handleLast,
       onNextClick: this.handleNext,

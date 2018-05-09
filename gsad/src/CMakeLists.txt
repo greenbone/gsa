@@ -8,7 +8,7 @@
 # Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2018 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,15 +24,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# Needed for 'pkg_check_modules' function
+include (FindPkgConfig)
+
+if (NOT PKG_CONFIG_FOUND)
+  message(FATAL_ERROR "pkg-config executable not found. Aborting.")
+endif (NOT PKG_CONFIG_FOUND)
+
 ## Check for existence of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
-pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
-pkg_check_modules (LIBEXSLT REQUIRED libexslt)
+pkg_check_modules (GLIB REQUIRED glib-2.0>=2.42)
 pkg_check_modules (LIBGVM_BASE REQUIRED libgvm_base>=1.0.0)
 pkg_check_modules (LIBGVM_UTIL REQUIRED libgvm_util>=1.0.0)
 pkg_check_modules (LIBGVM_GMP REQUIRED libgvm_gmp>=1.0.0)
-pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
 
 message (STATUS "Looking for libgcrypt...")
@@ -50,24 +55,37 @@ else (NOT LIBGCRYPT)
 endif (NOT LIBGCRYPT)
 
 if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
-    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-    LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
+    (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT
+    LIBGVM_GMP_FOUND OR NOT GNUTLS_FOUND OR NOT
     LIBGCRYPT)
   message (FATAL_ERROR "One or more required libraries was not found "
     "(see message above), please install the missing "
     "libraries and run cmake again.")
 endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
-  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-  LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+  (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT
+  LIBGVM_GMP_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Config
 
+if (NOT SERVE_STATIC_ASSETS EQUAL 0)
+  set (SERVE_STATIC_ASSETS 1)
+endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
+
+## Program
+
+set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
+set (LINKER_HARDENING_FLAGS     "-Wl,-z,relro -Wl,-z,now")
+
+set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-security")
+
+set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
+set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
+
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
-                     ${GLIB_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS}
+                     ${GLIB_INCLUDE_DIRS}
                      ${LIBGVM_BASE_INCLUDE_DIRS}
                      ${LIBGVM_UTIL_INCLUDE_DIRS}
                      ${LIBGVM_GMP_INCLUDE_DIRS}
-                     ${LIBXSLT_INCLUDE_DIRS}
                      ${GNUTLS_INCLUDE_DIRS})
 
 find_package (Threads)
@@ -76,21 +94,18 @@ find_package (Threads)
 
 add_library (gsad_base STATIC gsad_base.c)
 target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_UTIL_LDFLAGS} ${GNUTLS_LDFLAGS})
 
 add_library (gsad_gmp STATIC gsad_gmp.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
-add_library (gsad_xslt_ext STATIC xslt_i18n.c)
+add_library (gsad_i18n_ext STATIC gsad_i18n.c)
 target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
-                       ${LIBXSLT_LDFLAGS} ${LIBGVM_GMP_LDFLAGS}
-                       ${GNUTLS_LDFLAGS})
+                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
+                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
 
 ## Program
 
@@ -103,7 +118,7 @@ add_executable (gsad
                 gsad_http_handler.c
                 validator.c)
 
-target_link_libraries (gsad gsad_gmp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_gmp gsad_base gsad_i18n_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (SERVE_STATIC_ASSETS)
@@ -113,16 +128,30 @@ else (SERVE_STATIC_ASSETS)
   message (STATUS "Static asset serving not builtin, use an external server")
 endif (SERVE_STATIC_ASSETS)
 
-if (USE_LIBXSLT)
-  message (STATUS "Internal XSL transformations, with libxslt.")
-  add_definitions (-DUSE_LIBXSLT)
-else (USE_LIBXSLT)
-  message (STATUS "External XSL transformations, with xsltproc.")
-endif (USE_LIBXSLT)
-
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
 endif (GSAD_VERSION)
+
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
+  # If we got GIT_REVISION at configure time,
+  # assume we can get it at build time as well
+  if (GIT_REVISION)
+    # a custom target that is always built
+    add_custom_target (revisiontag ALL)
+
+    # creates gitrevision.h using cmake script
+    add_custom_command (TARGET revisiontag COMMAND ${CMAKE_COMMAND}
+                        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+                        -P ${CMAKE_SOURCE_DIR}/cmake/GetGit.cmake)
+
+    # explicitly say that the executable depends on custom target
+    add_dependencies (gsad revisiontag)
+
+    # include the output directory, where the gitrevision.h file is generated
+    include_directories (${CMAKE_CURRENT_BINARY_DIR})
+    add_definitions (-DGIT_REV_AVAILABLE)
+  endif (GIT_REVISION)
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 if (GVM_SERVER_CERTIFICATE)
   add_definitions (-DGVM_SERVER_CERTIFICATE="${GVM_SERVER_CERTIFICATE}")
@@ -178,45 +207,6 @@ add_custom_target (cppcheck COMMENT "Running cppcheck..."
 add_custom_target (check COMMENT "Checking code...")
 add_dependencies (check cppcheck)
 
-## Very superficial check if stylesheets are fine
-
-if (PATH_TO_XSLTPROC)
-  add_custom_target (omp-xsl-syntax ALL
-                                    COMMENT "Checking syntax of omp.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp.xsl)
-  add_custom_target (gsad-xsl-syntax ALL
-                                     COMMENT "Checking syntax of gsad.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/gsad.xsl)
-  add_custom_target (help-xsl-syntax ALL
-                                     COMMENT "Checking syntax of help.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help.xsl)
-  add_custom_target (help_de-xsl-syntax ALL
-                                     COMMENT "Checking syntax of help_de.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_de.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_de.xsl)
-  add_custom_target (help_ru-xsl-syntax ALL
-                                     COMMENT "Checking syntax of help_ru.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_ru.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_ru.xsl)
-  add_custom_target (help_zh_CN-xsl-syntax ALL
-                                     COMMENT "Checking syntax of help_zh_CN.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_zh_CN.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/help_zh_CN.xsl)
-  add_custom_target (rnc-xsl-syntax ALL
-                                    COMMENT "Checking syntax of rnc.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/rnc.xsl)
-  add_custom_target (omp-doc-xsl-syntax ALL
-                                        COMMENT "Checking syntax of omp-doc.xsl"
-                                        COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl
-                                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/classic/omp-doc.xsl)
-else (PATH_TO_XSLTPROC)
-  message ("Not performing simple stylesheet tests -- xsltproc not found.")
-endif (PATH_TO_XSLTPROC)
-
 ## Tag files
 
 set (C_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
@@ -226,8 +216,5 @@ add_custom_target (ctags COMMENT "Building tags..."
                    COMMAND ctags ${C_FILES})
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
-
-## gettext translations
-add_subdirectory (po)
 
 ## End

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
 
-import {is_defined, is_empty, is_model_element, extend, map} from '../utils.js';
+import {is_defined, is_model_element} from '../utils/identity';
+import {map} from '../utils/array';
+import {is_empty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -35,6 +39,9 @@ import {
 
 import Nvt from './nvt.js';
 
+export const NOTE_ACTIVE_UNLIMITED_VALUE = '-2';
+export const NOTE_INACTIVE_VALUE = '-1';
+
 class Note extends Model {
 
   static entity_type = 'note';
@@ -47,7 +54,7 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret = extend(ret, parse_text(ret.text));
+    ret = {...ret, ...parse_text(ret.text)};
 
     ret.severity = parse_severity(ret.severity);
 
@@ -74,6 +81,13 @@ class Note extends Model {
       delete ret.port;
     }
 
+    if (is_defined(elem.end_time) && elem.end_time.length > 0) {
+      ret.end_time = moment(elem.end_time);
+    }
+    else {
+      delete ret.end_time;
+    }
+
     return ret;
   }
 
@@ -96,7 +110,7 @@ export const parse_notes = notes => {
       return n;
     });
   }
-  let list = new List(entries);
+  const list = new List(entries);
   list.active = active;
   return list;
 };

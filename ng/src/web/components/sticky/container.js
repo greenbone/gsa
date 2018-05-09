@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/set';
 
 import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
+import SubscriptionProvider from '../provider/subscriptionprovider.js';
 
 const EVENTS = [
   'resize',
@@ -43,13 +45,14 @@ class StickyContainer extends React.Component {
     this.subscribers = new Set();
 
     this.notify = this.notify.bind(this);
-    this.subscribe = this.subscribe.bind(this);
-    this.unsubscribe = this.unsubscribe.bind(this);
+    this.notification = this.props.notify('sticky.changed');
   }
 
   componentDidMount() {
     for (const name of EVENTS) {
-      window.addEventListener(name, this.notify);
+      // use passive event handlers see
+      // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Improving_scrolling_performance_with_passive_listeners
+      window.addEventListener(name, this.notify, {passive: true});
     }
   }
 
@@ -68,31 +71,24 @@ class StickyContainer extends React.Component {
 
         const {top, bottom} = this.container.getBoundingClientRect();
 
-        this.subscribers.forEach(handler => handler({
+        this.notification({
           distanceFromTop: top,
           distanceFromBottom: bottom,
           eventSource: currentTarget === window ?
             document.body : this.container,
           container: this.container,
-        }));
+        });
       });
 
       this.frame_pending = true;
     }
   }
 
-  subscribe(handler) {
-    this.subscribers.add(handler);
-  }
-
-  unsubscribe(handler) {
-    this.subscribers.delete(handler);
-  }
-
   render() {
+    const {notify, ...props} = this.props;
     return (
       <div
-        {...this.props}
+        {...props}
         ref={ref => this.container = ref}
         onScroll={this.notify}
         onTouchStart={this.notify}
@@ -103,20 +99,21 @@ class StickyContainer extends React.Component {
     );
   }
 
-  getChildContext() {
-    return {
-      subscribe: this.subscribe,
-      unsubscribe: this.unsubscribe,
-    };
-  }
 }
 
-StickyContainer.childContextTypes = {
-  subscribe: PropTypes.func,
-  unsubscribe: PropTypes.func,
+StickyContainer.propTypes = {
+  notify: PropTypes.func.isRequired,
 };
 
-
-export default StickyContainer;
+export default props => (
+  <SubscriptionProvider>
+    {({notify}) => (
+      <StickyContainer
+        {...props}
+        notify={notify}
+      />
+    )}
+  </SubscriptionProvider>
+);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,7 +23,7 @@
 
 import glamorous from 'glamorous';
 
-import {is_defined, map} from 'gmp/utils.js';
+import {is_defined, map} from 'gmp/utils';
 
 const convert_align = align => {
   switch (align) {

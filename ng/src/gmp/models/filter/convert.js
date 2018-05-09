@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty} from '../../utils.js';
+import {is_defined} from '../../utils/identity';
+import {is_empty} from '../../utils/string';
 
 import {parse_int} from '../../parser.js';
 
@@ -46,9 +47,10 @@ function convert_no_relation(keyword, value, relation) {
   return {
     keyword,
     value,
-    relation: '',
   };
 }
+
+const convert_no_relation_and_keyword = (keyword, value, relation) => ({value});
 
 const KEYWORD_CONVERTERS = {
   apply_overrides: convert_boolean_int,
@@ -62,9 +64,9 @@ const KEYWORD_CONVERTERS = {
 };
 
 const VALUE_CONVERTERS = {
-  and: convert_no_relation,
-  or: convert_no_relation,
-  not: convert_no_relation,
+  and: convert_no_relation_and_keyword,
+  or: convert_no_relation_and_keyword,
+  not: convert_no_relation_and_keyword,
   re: convert_no_relation,
   regexp: convert_no_relation,
   '': convert_no_relation,

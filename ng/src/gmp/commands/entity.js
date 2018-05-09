@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import logger from '../log.js';
 
 import {filter_string} from '../models/filter/utils.js';
+
+import ActionResult from '../models/actionresult';
+
+import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
 
@@ -60,10 +64,6 @@ class EntityCommand extends HttpCommand {
     return new this.clazz(this.getElementFromRoot(response.data));
   }
 
-  get({id}, {filter, ...options} = {}) {
-    return this.httpGet({id, filter}, options).then(this.transformResponse);
-  }
-
   transformResponse(response) {
     let entity = this.getModelFromResponse(response);
     if (!is_defined(entity.id)) {
@@ -73,19 +73,38 @@ class EntityCommand extends HttpCommand {
     return response.setData(entity);
   }
 
+  transformActionResult(response) {
+    return response.setData(new ActionResult(response.data));
+  }
+
+  /**
+   * Creates a HTTP POST Request returning an ActionResult
+   *
+   * @param {*} args  Arguments to be passed to httpPost
+   *
+   * @returns {Promise} A Promise returning a Response with an
+   *                    ActionResult model as data
+   */
+  action(...args) {
+    return this.httpPost(...args).then(this.transformActionResult);
+  }
+
+  get({id}, {filter, ...options} = {}) {
+    return this.httpGet({id, filter}, options).then(this.transformResponse);
+  }
+
   clone({id}) {
     const extra_params = {
       id, // we need plain 'id' in the submitted form data not 'xyz_id'
     };
-    return this.httpPost({
+    return this.action({
       cmd: 'clone',
       resource_type: this.name,
-      next: 'get_' + this.name,
     }, {
       extra_params,
     }).then(response => {
       log.debug('Cloned', this.name, id);
-      return this.transformResponse(response);
+      return response;
     })
     .catch(err => {
       log.error('An error occurred while cloning', this.name, id, err);
@@ -112,8 +131,7 @@ class EntityCommand extends HttpCommand {
       'bulk_export.x': 1,
       ['bulk_selected:' + id]: 1,
     };
-    return this.httpPost(params, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    return this.httpPost(params, {transform: DefaultTransform});
   }
 
   getElementFromRoot(root) {

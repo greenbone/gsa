@@ -33,7 +33,7 @@ import withCapabilities from '../../utils/withCapabilities.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -45,24 +45,25 @@ import ReportFormatsTable, {SORT_FIELDS} from './table.js';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
-  onReportFormatCreateClick,
+  onReportFormatImportClick,
 }) => (
   <IconDivider>
-    <HelpIcon
-      page="report_formats"
+    <ManualIcon
+      page="reports"
+      anchor="report-plugins"
       title={_('Help: Report Formats')}
     />
     {capabilities.mayCreate('report_format') &&
       <NewIcon
-        title={_('New Report Format')}
-        onClick={onReportFormatCreateClick}
+        title={_('Import Report Format')}
+        onClick={onReportFormatImportClick}
       />
     }
   </IconDivider>
 ));
 
 ToolBarIcons.propTypes = {
-  onReportFormatCreateClick: PropTypes.func.isRequired,
+  onReportFormatImportClick: PropTypes.func.isRequired,
 };
 
 const ReportFormatsFilterDialog = createFilterDialog({
@@ -76,7 +77,6 @@ const ReportFormatsPage = ({
   ...props
 }) => (
   <ReportFormatComponent
-    onCreated={onChanged}
     onSaved={onChanged}
     onCloned={onChanged}
     onCloneError={onError}
@@ -84,14 +84,15 @@ const ReportFormatsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onImported={onChanged}
     onVerified={onChanged}
     onVerifyError={onError}
   >{({
     clone,
-    create,
     delete: delete_func,
     download,
     edit,
+    import: import_func,
     save,
     verify,
   }) => (
@@ -106,11 +107,10 @@ const ReportFormatsPage = ({
       onDownloaded={onDownloaded}
       onError={onError}
       onReportFormatCloneClick={clone}
-      onReportFormatCreateClick={create}
+      onReportFormatImportClick={import_func}
       onReportFormatDeleteClick={delete_func}
       onReportFormatDownloadClick={download}
       onReportFormatEditClick={edit}
-      onReportFormatSaveClick={save}
       onReportFormatVerifyClick={verify}
     />
   )}

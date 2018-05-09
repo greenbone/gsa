@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,34 +38,31 @@ class HostCommand extends EntityCommand {
   }
 
   create(args) {
-    let {name, comment = ''} = args;
+    const {name, comment = ''} = args;
     log.debug('Creating host', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_host',
-      next: 'get_asset',
       name,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
-    let {id, comment = ''} = args;
+    const {id, comment = ''} = args;
     log.debug('Saving host', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_asset',
-      next: 'get_asset',
       asset_id: id,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   deleteIdentifier({id}) {
     log.debug('Deleting Host Identifier with id', id);
     return this.httpPost({
       cmd: 'delete_asset',
-      next: 'get_asset',
       asset_id: id,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
@@ -81,6 +79,47 @@ class HostsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_assets.get_assets_response;
+  }
+
+  getModifiedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'host',
+      group_column: 'modified',
+      subgroup_column: 'severity_level',
+      filter,
+    });
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'host',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getVulnScoreAggregates({filter, max} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'host',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'modified',
+      ],
+      dataColumns: [
+        'severity',
+      ],
+      sort: [{
+        field: 'severity',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
+    });
   }
 }
 

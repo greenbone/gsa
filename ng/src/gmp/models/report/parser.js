@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,18 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import 'babel-polyfill'; // required for Object.entries, Object.values
+import 'core-js/fn/object/entries';
+import 'core-js/fn/object/values';
+import 'core-js/fn/string/includes';
+import 'core-js/fn/string/starts-with';
 
 import moment from 'moment';
 
+import {is_defined} from '../../utils/identity';
+import {is_empty} from '../../utils/string';
 import {
   filter as filter_func,
   for_each,
-  is_defined,
-  is_empty,
   map,
-} from '../../utils.js';
+} from '../../utils/array';
 
 import {parse_severity} from '../../parser.js';
 
@@ -122,7 +124,7 @@ export const parse_tls_certificates = (report, filter) => {
 
         // currently cert data starts with x509:
         // not sure if there are other types of certs
-        // therefore keep orginal data
+        // therefore keep original data
 
         cert._data = value;
 
@@ -232,11 +234,12 @@ export const parse_ports = (report, filter) => {
 export const parse_vulnerabilities = (report, filter) => {
   const temp_vulns = {};
   const {vulns, results = {}} = report;
-  const {count: full_count} = vulns;
 
   if (!is_defined(vulns)) {
     return empty_collection_list(filter);
   }
+
+  const {count: full_count} = vulns;
 
   for_each(results.result, result => {
     const {nvt = {}, host} = result;

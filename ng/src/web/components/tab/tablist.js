@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Divider from '../layout/divider.js';
+import Layout from '../layout/layout.js';
 
 import Tab from './tab.js';
 
@@ -46,9 +46,9 @@ const TabList = ({
     return child;
   });
   return (
-    <Divider {...props}>
+    <Layout {...props}>
       {children}
-    </Divider>
+    </Layout>
   );
 };
 

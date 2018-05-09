@@ -23,7 +23,9 @@
 
 import Model from '../model.js';
 
-import {is_defined, is_empty, map} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {map} from '../utils/array';
 
 import {parse_int, parse_yesno, parse_csv} from '../parser.js';
 
@@ -38,10 +40,10 @@ export const TARGET_CREDENTIAL_NAMES = [
 
 class Target extends Model {
 
-  static entity_type = "target";
+  static entity_type = 'target';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(elem.port_list) && !is_empty(elem.port_list._id)) {
       ret.port_list = new PortList(ret.port_list);

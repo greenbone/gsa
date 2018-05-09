@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/includes';
 
 import React from 'react';
 
@@ -28,7 +29,7 @@ import logger from 'gmp/log.js';
 
 import CancelToken from 'gmp/cancel.js';
 
-import {first, is_defined} from 'gmp/utils.js';
+import {first, is_defined} from 'gmp/utils';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
@@ -146,7 +147,7 @@ class ReportDetails extends React.Component {
   load({
     id = this.state.id,
     delta_id = this.state.delta_id,
-    filter = this.state.filter,
+    filter,
     force,
   } = {}) {
     return this.loadInternal({
@@ -264,7 +265,7 @@ class ReportDetails extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load({force: true});
+    this.load({force: true, filter: this.state.filter});
   }
 
   getRefreshInterval() {

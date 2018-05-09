@@ -24,7 +24,7 @@
 import moment from 'moment';
 import ReactPropTypes from 'prop-types';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils/identity';
 
 import {CacheFactory, Cache} from 'gmp/cache.js';
 
@@ -39,78 +39,22 @@ import CollectionCounts from 'gmp/collection/collectioncounts.js';
 import Filter from 'gmp/models/filter.js';
 import Settings from 'gmp/models/settings.js';
 
+import {
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
+} from './severity';
+import warning from './warning';
 
-export const component = ReactPropTypes.oneOfType([
-  ReactPropTypes.func,
-  ReactPropTypes.object,
-]);
-
-export const componentOrFalse = ReactPropTypes.oneOfType([
-  component,
-  ReactPropTypes.oneOf([false]),
-]);
-
-export const componentOrElement = ReactPropTypes.oneOfType([
-  component,
-  ReactPropTypes.element,
-]);
-
-export const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
-
-export const numberOrNumberString = ReactPropTypes.oneOfType([
-  ReactPropTypes.number,
-  numberString,
-]);
-
-export const icon = ReactPropTypes.oneOfType([
-  ReactPropTypes.string,
-  ReactPropTypes.element,
-]);
-
-export const yesno = ReactPropTypes.oneOf([
-  1, 0,
-]);
-
-export const id = ReactPropTypes.string; // TODO improve checking for uuid
-
-export const idOrZero = ReactPropTypes.oneOfType([
-  id,
-  ReactPropTypes.oneOf([0]),
-]);
-
-export const stringOrFalse = ReactPropTypes.oneOfType([
-  ReactPropTypes.string,
-  ReactPropTypes.oneOf([false]),
-]);
-
-export const counts = ReactPropTypes.instanceOf(CollectionCounts);
-
-export const set = ReactPropTypes.instanceOf(Set);
-
-export const filter = ReactPropTypes.instanceOf(Filter);
-
-export const model = ReactPropTypes.instanceOf(Model);
-
-export const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
-export const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
-
-export const capabilities = ReactPropTypes.instanceOf(Capabilities);
-
-export const gmp = ReactPropTypes.instanceOf(Gmp);
-
-export const settings = ReactPropTypes.instanceOf(Settings);
-
-export const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
-export const cache = ReactPropTypes.instanceOf(Cache);
-
-const mayRequire = validator => {
+export const mayRequire = validator => {
   const wrapper = (...props) => {
     return validator(...props);
   };
 
-  wrapper.isRequired = (props, prop_name, component_name) => {
+  wrapper.isRequired = (props, prop_name, component_name, ...rest) => {
     if (is_defined(props[prop_name])) {
-      return validator(props, prop_name, component_name);
+      return validator(props, prop_name, component_name, ...rest);
     }
     return new Error('Prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '` is required.');
@@ -119,26 +63,127 @@ const mayRequire = validator => {
   return wrapper;
 };
 
+export const deprecated = (validator, message = '') =>
+  (props, prop_name, component_name, ...rest) => {
+  warning(is_defined(props[prop_name]),
+    `'${prop_name}' is deprecated on ${component_name}. ${message}`);
+  return validator(props, prop_name, component_name, ...rest);
+};
+
+const component = ReactPropTypes.oneOfType([
+  ReactPropTypes.func,
+  ReactPropTypes.object,
+]);
+
+const componentOrFalse = ReactPropTypes.oneOfType([
+  component,
+  ReactPropTypes.oneOf([false]),
+]);
+
+const componentOrElement = ReactPropTypes.oneOfType([
+  component,
+  ReactPropTypes.element,
+]);
+
+const elementOrString = ReactPropTypes.oneOfType([
+  ReactPropTypes.element,
+  ReactPropTypes.string,
+]);
+
+const numberString = ReactPropTypes.string; // TODO restrict string to contain numbers
+
+const numberOrNumberString = ReactPropTypes.oneOfType([
+  ReactPropTypes.number,
+  numberString,
+]);
+
+const icon = ReactPropTypes.oneOfType([
+  ReactPropTypes.string,
+  ReactPropTypes.element,
+]);
+
+const yesno = ReactPropTypes.oneOf([
+  1, 0,
+]);
+
+const id = ReactPropTypes.string; // TODO improve checking for uuid
+
+const idOrZero = ReactPropTypes.oneOfType([
+  id,
+  ReactPropTypes.oneOf([0]),
+]);
+
+const stringOrFalse = ReactPropTypes.oneOfType([
+  ReactPropTypes.string,
+  ReactPropTypes.oneOf([false]),
+]);
+
+const counts = ReactPropTypes.instanceOf(CollectionCounts);
+
+const set = ReactPropTypes.instanceOf(Set);
+
+const filter = ReactPropTypes.instanceOf(Filter);
+
+const model = ReactPropTypes.instanceOf(Model);
+
+const entitycommand = ReactPropTypes.instanceOf(EntityCommand);
+const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
+
+const capabilities = ReactPropTypes.instanceOf(Capabilities);
+
+const gmp = ReactPropTypes.instanceOf(Gmp);
+
+const settings = ReactPropTypes.instanceOf(Settings);
+
+const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
+const cache = ReactPropTypes.instanceOf(Cache);
+
 const momentDateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (is_defined(value) && !moment.isMoment(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
-      ' `' + component_name + '`. Note a valid moment date. Value is ' + value);
+      ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
   }
   return undefined;
 };
 
-export const momentDate = mayRequire(momentDateValidator);
+const momentDate = mayRequire(momentDateValidator);
 
-export const timeunit = ReactPropTypes.oneOf([
+const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
-export const iconSize = ReactPropTypes.oneOfType([
+const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
   ReactPropTypes.oneOf([
     'small', 'medium', 'large', 'default',
   ]),
+]);
+
+const toStringValidator = (props, prop_name, component_name) => {
+  const value = props[prop_name];
+  if (is_defined(value) && !is_defined(value.toString)) {
+    return new Error('Invalid prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '`. Prop ' + prop_name + ' can not be ' +
+      'converted to String. Value is `' + value + '`.');
+  }
+};
+
+const toString = mayRequire(toStringValidator);
+
+const severityClass = ReactPropTypes.objectOf([
+  SEVERITY_CLASS_BSI,
+  SEVERITY_CLASS_CLASSIC,
+  SEVERITY_CLASS_NIST,
+  SEVERITY_CLASS_PCI_DSS,
+]);
+
+const ref = ReactPropTypes.oneOfType([
+  ReactPropTypes.func,
+  // React.createRef() returns an object with a current property
+  ReactPropTypes.shape({
+    current: ReactPropTypes.any,
+  }),
 ]);
 
 export default {
@@ -166,6 +211,7 @@ export default {
   component,
   componentOrFalse,
   componentOrElement,
+  elementOrString,
   entitycommand,
   entitiescommand,
   filter,
@@ -178,10 +224,13 @@ export default {
   icon,
   id,
   idOrZero,
+  ref,
   set,
   settings,
+  severityClass,
   stringOrFalse,
   timeunit,
+  toString,
   yesno,
 };
 

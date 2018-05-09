@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import logger from '../log.js';
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Credential from '../models/credential.js';
+
+import DefaultTransform from '../http/transform/default.js';
 
 const log = logger.getLogger('gmp.commands.credentials');
 
@@ -52,9 +54,8 @@ class CredentialCommand extends EntityCommand {
       private_key,
     } = args;
     log.debug('Creating new credential', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_credential',
-      next: 'get_credential',
       name,
       comment,
       base,
@@ -69,7 +70,7 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       private_key,
       certificate,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -94,9 +95,8 @@ class CredentialCommand extends EntityCommand {
       private_key,
     } = args;
     log.debug('Saving credential', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_credential',
-      next: 'get_credential',
       allow_insecure,
       auth_algorithm,
       base,
@@ -115,7 +115,7 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       privacy_password,
       private_key,
-    }).then(this.transformResponse);
+    });
   }
 
   download({id}, format = 'pem') {
@@ -123,8 +123,7 @@ class CredentialCommand extends EntityCommand {
       cmd: 'download_credential',
       package_format: format,
       credential_id: id,
-    }, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform});
   }
 
   getElementFromRoot(root) {

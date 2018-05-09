@@ -4,7 +4,7 @@
 * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
 *
 * Copyright:
-* Copyright (C) 2017 Greenbone Networks GmbH
+* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
-import {is_empty} from 'gmp/utils.js';
+import {is_empty} from 'gmp/utils';
 
 import Button from '../../components/form/button.js';
 import CheckBox from '../../components/form/checkbox.js';
@@ -34,7 +34,7 @@ import FileField from '../../components/form/filefield.js';
 import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import Layout from '../../components/layout/layout.js';
 import Section from '../../components/section/section.js';
@@ -173,9 +173,10 @@ class LdapAuthentication extends React.Component {
 
     return (
       <Layout flex="column">
-        <HelpIcon
-          page="users"
-          anchor="peruserldapauthentication"
+        <ManualIcon
+          page="gui_administration"
+          anchor="ldap"
+          size="medium"
           title={_('Help: LDAP per-User Authentication')}
         />
         <Section

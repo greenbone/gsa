@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,11 @@
 
 import glamorous from 'glamorous';
 
+import Theme from '../../utils/theme';
+
 const DialogOverlay = glamorous.div({
   position: 'fixed',
-  fontFamily: 'Trebuchet MS, Tahoma, Verdana, Arial, sans-serif',
+  fontFamily: Theme.Font.dialog,
   fontSize: '1.1em',
   top: 0,
   right: 0,
@@ -33,7 +35,7 @@ const DialogOverlay = glamorous.div({
   left: 0,
   margin: 0,
   background: 'rgba(102, 102, 102, 0.5)',
-  zIndex: 100,
+  zIndex: Theme.Layers.onTop,
   transition: 'opacity 1s ease-in',
   width: '100%',
   height: '100%',

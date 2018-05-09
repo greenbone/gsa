@@ -179,8 +179,7 @@ typedef enum authentication_reason authentication_reason_t;
 
 int handler_send_reauthentication (http_connection_t *connection,
                                    int http_status_code,
-                                   authentication_reason_t reason,
-                                   gboolean xml);
+                                   authentication_reason_t reason);
 
 int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
@@ -200,6 +199,8 @@ void add_security_headers (http_response_t *response);
 void add_guest_chart_content_security_headers (http_response_t *response);
 
 void add_cors_headers (http_response_t *response);
+
+void add_forbid_caching_headers (http_response_t *response);
 
 /* helper functions required in gsad_http */
 http_response_t *
@@ -239,15 +240,12 @@ int params_append_mhd (params_t *params, const char *name, const char *filename,
 
 
 char * gsad_message (credentials_t *, const char *, const char *, int,
-                     const char *, const char *, cmd_response_data_t *);
+                     const char *, cmd_response_data_t *);
 
-char * gsad_message_new (credentials_t *, const char *, const char *, int,
-                         const char *, const char *, gboolean,
-                         cmd_response_data_t *);
 gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
                   const gchar *, const gchar *);
 
-gchar * logout_xml (credentials_t *credentials, gboolean xml_flag,
+gchar * logout_xml (credentials_t *credentials,
                     const gchar *message, cmd_response_data_t *response_data);
 
 #endif /* _GSAD_HTTP_H */

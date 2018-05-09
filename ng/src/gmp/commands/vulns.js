@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,14 +26,14 @@ import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Vulnerability from '../models/vulnerability.js';
 
-export class VulnerabilityCommand extends EntityCommand {
+class VulnerabilityCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'vuln', Vulnerability);
   }
 }
 
-export class VulnerabilitiesCommand extends EntitiesCommand {
+class VulnerabilitiesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'vuln', Vulnerability);
@@ -40,6 +41,22 @@ export class VulnerabilitiesCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_vulns.get_vulns_response;
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'vuln',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getHostAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'vuln',
+      group_column: 'hosts',
+      filter,
+    });
   }
 }
 

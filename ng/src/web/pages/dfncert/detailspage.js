@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,37 +26,63 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
+import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
+import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
+
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 import ExternalLink from '../../components/link/externallink.js';
 
 import DfnCertAdvDetails from './details.js';
 
-const ToolBarIcons = () => (
-  <IconDivider>
-    <HelpIcon
-      page="dfn_cert_adv_details"
-      title={_('Help: DFN-CERT Advisory Details')}
+const ToolBarIcons = ({
+  entity,
+  onDfnCertAdvDownloadClick,
+}) => (
+  <Divider margin="10px">
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="id15"
+        title={_('Help: DFN-CERT Advisories')}
+      />
+      <ListIcon
+        title={_('DFN-CERT Advisories')}
+        page="dfncerts"
+      />
+    </IconDivider>
+    <ExportIcon
+      value={entity}
+      title={_('Export DFN-CERT Advisory')}
+      onClick={onDfnCertAdvDownloadClick}
     />
-    <ListIcon
-      title={_('DFN-CERT Advisories')}
-      page="dfncertadvs"
-    />
-  </IconDivider>
+  </Divider>
 );
+
+ToolBarIcons.propTypes = {
+  entity: PropTypes.model.isRequired,
+  onDfnCertAdvDownloadClick: PropTypes.func.isRequired,
+};
 
 const Details = ({
   entity,
@@ -130,7 +157,7 @@ Details.propTypes = {
 const DfnCertAdvPage = props => (
   <EntityContainer
     {...props}
-    name="dfncertadv"
+    name="dfncert"
     resourceType="dfn_cert_adv"
   >
     {({
@@ -139,15 +166,84 @@ const DfnCertAdvPage = props => (
       onError,
       ...cprops
     }) => (
-      <EntityPage
-        {...props}
-        {...cprops}
-        sectionIcon="dfn_cert_adv.svg"
-        title={_('DFN-CERT Advisory')}
-        detailsComponent={Details}
-        permissionsComponent={false}
-        toolBarIcons={ToolBarIcons}
-      />
+      <EntityComponent
+        name="dfncert"
+        onDownloaded={onDownloaded}
+        onDownloadError={onError}
+      >
+        {({download}) => (
+          <EntityPage
+            {...props}
+            {...cprops}
+            sectionIcon="dfn_cert_adv.svg"
+            title={_('DFN-CERT Advisory')}
+            detailsComponent={Details}
+            permissionsComponent={false}
+            toolBarIcons={ToolBarIcons}
+            onDfnCertAdvDownloadClick={download}
+          >
+            {({
+              activeTab = 0,
+              permissionsComponent,
+              permissionsTitle,
+              tagsComponent,
+              tagsTitle,
+              onActivateTab,
+              entity,
+              ...other
+            }) => {
+              return (
+                <Layout grow="1" flex="column">
+                  <TabLayout
+                    grow="1"
+                    align={['start', 'end']}
+                  >
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>
+                        {_('Information')}
+                      </Tab>
+                      {is_defined(tagsComponent) &&
+                        <Tab>
+                          {tagsTitle}
+                        </Tab>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <Tab>
+                          {permissionsTitle}
+                        </Tab>
+                      }
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details
+                          entity={entity}
+                        />
+                      </TabPanel>
+                      {is_defined(tagsComponent) &&
+                        <TabPanel>
+                          {tagsComponent}
+                        </TabPanel>
+                      }
+                      {is_defined(permissionsComponent) &&
+                        <TabPanel>
+                          {permissionsComponent}
+                        </TabPanel>
+                      }
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+              );
+            }}
+          </EntityPage>
+        )}
+      </EntityComponent>
     )}
   </EntityContainer>
 );

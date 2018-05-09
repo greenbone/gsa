@@ -80,6 +80,7 @@ const ResultsTab = ({
         <ResultsTable
           {...props}
           delta={delta}
+          footer={false}
         />
       )}
     </ReportEntitiesContainer>

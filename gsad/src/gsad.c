@@ -68,8 +68,6 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
-#include <langinfo.h>
-#include <locale.h>
 #include <netinet/in.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
@@ -104,7 +102,11 @@
 #include "gsad_settings.h"
 #include "gsad_user.h"
 #include "validator.h"
-#include "xslt_i18n.h"
+#include "gsad_i18n.h"
+
+#ifdef GIT_REV_AVAILABLE
+#include "gitrevision.h"
+#endif
 
 #undef G_LOG_DOMAIN
 /**
@@ -114,6 +116,13 @@
 
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
+
+/*
+* define MHD_USE_INTERNAL_POLLING_THREAD for libmicrohttp < 0.9.53
+*/
+#if MHD_VERSION < 0x00095300
+#define MHD_USE_INTERNAL_POLLING_THREAD 0
+#endif
 
 /**
  * @brief Fallback GSAD port for HTTPS.
@@ -403,7 +412,6 @@ init_validator ()
                          "|(get_aggregate)"
                          "|(get_asset)"
                          "|(get_assets)"
-                         "|(get_assets_chart)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -411,6 +419,7 @@ init_validator ()
                          "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
+                         "|(get_dashboard_settings)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -449,7 +458,6 @@ init_validator ()
                          "|(get_targets)"
                          "|(get_task)"
                          "|(get_tasks)"
-                         "|(get_tasks_chart)"
                          "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
@@ -492,7 +500,7 @@ init_validator ()
                          "|(save_alert)"
                          "|(save_asset)"
                          "|(save_auth)"
-                         "|(save_chart_preference)"
+                         "|(save_setting)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -558,8 +566,8 @@ init_validator ()
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
-  openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_id", "^(.*){0,400}$");
+  openvas_validator_add (validator, "setting_value", "^(.*){0,1000}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
@@ -839,7 +847,6 @@ init_validator ()
   openvas_validator_alias (validator, "include_related",   "number");
   openvas_validator_alias (validator, "inheritor_id",       "id");
   openvas_validator_alias (validator, "ignore_pagination",   "boolean");
-  openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
   openvas_validator_alias (validator, "access_ifaces", "hosts_opt");
@@ -1322,9 +1329,8 @@ exec_gmp_post (http_connection_t *con,
   int ret;
   user_t *user;
   credentials_t *credentials;
-  gchar *res = NULL, *new_sid, *url;
-  const gchar *cmd, *caller, *language, *password;
-  gboolean xml_flag;
+  gchar *res = NULL, *new_sid;
+  const gchar *cmd, *caller, *language;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
   cmd_response_data_t *response_data;
@@ -1332,94 +1338,15 @@ exec_gmp_post (http_connection_t *con,
   params_mhd_validate (con_info->params);
 
   cmd = params_value (con_info->params, "cmd");
-  xml_flag = params_value_bool (con_info->params, "xml");
+
+  response_data = cmd_response_data_new ();
 
   if (cmd && !strcmp (cmd, "login"))
     {
-      password = params_value (con_info->params, "password");
-      if ((password == NULL)
-          && (params_original_value (con_info->params, "password") == NULL))
-        password = "";
-
-      if (params_value (con_info->params, "login")
-          && password)
-        {
-          gchar *timezone, *role, *capabilities, *severity, *language;
-          gchar *pw_warning, *autorefresh;
-          GTree *chart_prefs;
-          ret = authenticate_gmp (params_value (con_info->params, "login"),
-                                  password,
-                                  &role,
-                                  &timezone,
-                                  &severity,
-                                  &capabilities,
-                                  &language,
-                                  &pw_warning,
-                                  &chart_prefs,
-                                  &autorefresh);
-          if (ret)
-            {
-              int status;
-              if (ret == -1 || ret == 2)
-                status = MHD_HTTP_SERVICE_UNAVAILABLE;
-              else
-                status = MHD_HTTP_UNAUTHORIZED;
-
-              auth_reason =
-                     ret == 2
-                       ? GMP_SERVICE_DOWN
-                       : (ret == -1
-                           ? LOGIN_ERROR
-                           : LOGIN_FAILED);
-
-              g_warning ("Authentication failure for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-              return handler_send_reauthentication(con, status,
-                                                   auth_reason, xml_flag);
-            }
-          else
-            {
-              user_t *user;
-              user = user_add (params_value (con_info->params, "login"),
-                               password, timezone, severity, role, capabilities,
-                               language, pw_warning, chart_prefs, autorefresh,
-                               client_address);
-              /* Redirect to get_tasks. */
-              url = g_strdup_printf ("%s&token=%s",
-                                     params_value (con_info->params, "text"),
-                                     user->token);
-              ret = send_redirect_to_urn (con, url, user);
-              user_release (user);
-
-              g_message ("Authentication success for '%s' from %s",
-                         params_value (con_info->params, "login") ?: "",
-                         client_address);
-
-              g_free (url);
-              g_free (timezone);
-              g_free (severity);
-              g_free (capabilities);
-              g_free (language);
-              g_free (role);
-              g_free (pw_warning);
-              g_free (autorefresh);
-              return ret;
-            }
-        }
-      else
-        {
-          g_warning ("Authentication failure for '%s' from %s",
-                     params_value (con_info->params, "login") ?: "",
-                     client_address);
-          return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                               LOGIN_FAILED, xml_flag);
-        }
+      return login (con, con_info->params, response_data, client_address);
     }
 
   /* Check the session. */
-
-  response_data = cmd_response_data_new ();
 
   if (params_value (con_info->params, "token") == NULL)
     {
@@ -1427,21 +1354,17 @@ exec_gmp_post (http_connection_t *con,
                                          MHD_HTTP_BAD_REQUEST);
 
       if (params_given (con_info->params, "token") == 0)
-        res = gsad_message_new (NULL,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred inside GSA daemon. "
-                                "Diagnostics: Token missing.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (NULL,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred inside GSA daemon. "
+                            "Diagnostics: Token missing.",
+                            response_data);
       else
-        res = gsad_message_new (NULL,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred inside GSA daemon. "
-                                "Diagnostics: Token bad.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (NULL,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred inside GSA daemon. "
+                            "Diagnostics: Token bad.",
+                            response_data);
 
       return handler_create_response (con, res, response_data, NULL);
     }
@@ -1452,13 +1375,11 @@ exec_gmp_post (http_connection_t *con,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      res = gsad_message_new (NULL,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Bad token.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
+      res = gsad_message (NULL,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Bad token.",
+                          response_data);
       return handler_create_response (con, res, response_data, NULL);
     }
 
@@ -1477,7 +1398,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           SESSION_EXPIRED, xml_flag);
+                                           SESSION_EXPIRED);
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
@@ -1485,7 +1406,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           BAD_MISSING_COOKIE, xml_flag);
+                                           BAD_MISSING_COOKIE);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN ||
@@ -1500,7 +1421,7 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_free (response_data);
 
       return handler_send_reauthentication(con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                           auth_reason, xml_flag);
+                                           auth_reason);
     }
 
   /* From here, the user is authenticated. */
@@ -1545,27 +1466,21 @@ exec_gmp_post (http_connection_t *con,
       case -1:
         cmd_response_data_free (response_data);
         return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                              GMP_SERVICE_DOWN,
-                                              params_value_bool
-                                                (con_info->params, "xml"));
+                                              GMP_SERVICE_DOWN);
       case -2:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Could not authenticate to manager "
-                                "daemon.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Could not authenticate to manager "
+                            "daemon.",
+                            response_data);
         break;
       default:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Failure to connect to manager daemon.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (con_info->params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Failure to connect to manager daemon.",
+                            response_data);
         break;
     }
 
@@ -1581,15 +1496,13 @@ exec_gmp_post (http_connection_t *con,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message_new (credentials,
-                              "Internal error",
-                              __FUNCTION__,
-                              __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Empty command.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
+      res = gsad_message (credentials,
+                          "Internal error",
+                          __FUNCTION__,
+                          __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Empty command.",
+                          response_data);
     }
 
   ELSE (bulk_delete)
@@ -1676,18 +1589,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_alert)
   ELSE (save_asset)
   ELSE (save_auth)
-  else if (!strcmp (cmd, "save_chart_preference"))
-    {
-      gchar *pref_id, *pref_value;
-
-      res = save_chart_preference_gmp (&connection,
-                                       credentials,
-                                       con_info->params,
-                                       &pref_id, &pref_value,
-                                       response_data);
-      if (pref_id && pref_value)
-        user_set_chart_pref (credentials->token, pref_id, pref_value);
-    }
+  ELSE (save_setting)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
@@ -1704,20 +1606,20 @@ exec_gmp_post (http_connection_t *con,
                                   &severity, &language,
                                   response_data);
       if (timezone)
-        /* credentials->timezone set in save_my_settings_gmp before XSLT. */
+        /* credentials->timezone set in save_my_settings_gmp. */
         user_set_timezone (credentials->token, timezone);
       if (password)
         {
-          /* credentials->password set in save_my_settings_gmp before XSLT. */
+          /* credentials->password set in save_my_settings_gmp. */
           user_set_password (credentials->token, password);
 
           user_logout_all_sessions (credentials->username, credentials);
         }
       if (severity)
-        /* credentials->severity set in save_my_settings_gmp before XSLT. */
+        /* credentials->severity set in save_my_settings_gmp. */
         user_set_severity (credentials->token, severity);
       if (language)
-        /* credentials->language is set in save_my_settings_omp before XSLT. */
+        /* credentials->language is set in save_my_settings_gmp. */
         user_set_language (credentials->token, language);
 
       g_free (timezone);
@@ -1749,7 +1651,7 @@ exec_gmp_post (http_connection_t *con,
         user_logout_all_sessions (modified_user, credentials);
 
       if (password)
-        /* credentials->password set in save_user_gmp before XSLT. */
+        /* credentials->password set in save_user_gmp. */
         user_set_password (credentials->token, password);
 
       g_free (password);
@@ -1768,15 +1670,13 @@ exec_gmp_post (http_connection_t *con,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      res = gsad_message_new (credentials,
-                              "Internal error",
-                              __FUNCTION__,
-                              __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Unknown command.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (con_info->params, "xml"),
-                              response_data);
+      res = gsad_message (credentials,
+                          "Internal error",
+                          __FUNCTION__,
+                          __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Unknown command.",
+                          response_data);
     }
 
   ret = handler_create_response (con, res, response_data, new_sid);
@@ -2062,13 +1962,11 @@ exec_gmp_get (http_connection_t *con,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message_new (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: No valid command for gmp.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (params, "xml"),
-                              response_data);
+      res = gsad_message (credentials,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: No valid command for gmp.",
+                          response_data);
       return handler_create_response (con, res, response_data, NULL);
     }
 
@@ -2093,32 +1991,29 @@ exec_gmp_get (http_connection_t *con,
       case 0:
         break;
       case -1:
-        cmd_response_data_free (response_data);
-        return handler_send_reauthentication (con,
-                                              MHD_HTTP_SERVICE_UNAVAILABLE,
-                                              GMP_SERVICE_DOWN,
-                                              params_value_bool
-                                                (con_info->params, "xml"));
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Could not connect to manager "
+                            "daemon.",
+                            response_data);
+        break;
 
       case -2:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Could not authenticate to manager "
-                                "daemon.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Could not authenticate to manager "
+                            "daemon.",
+                            response_data);
         break;
       default:
-        res = gsad_message_new (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred. "
-                                "Diagnostics: Failure to connect to manager "
-                                "daemon.",
-                                "/omp?cmd=get_tasks",
-                                params_value_bool (params, "xml"),
-                                response_data);
+        res = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred. "
+                            "Diagnostics: Failure to connect to manager "
+                            "daemon.",
+                            response_data);
     }
 
   if (res)
@@ -2157,8 +2052,6 @@ exec_gmp_get (http_connection_t *con,
       watcher_data = NULL;
     }
 
-  /** @todo Ensure that XSL passes on sort_order and sort_field. */
-
   /* Check cmd and precondition, start respective GMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
@@ -2176,10 +2069,9 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (new_role)
-  ELSE (get_assets_chart)
+  ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
-  ELSE (get_tasks_chart)
   ELSE (delete_user_confirm)
   ELSE (edit_agent)
   ELSE (edit_alert)
@@ -2420,13 +2312,11 @@ exec_gmp_get (http_connection_t *con,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message_new (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred inside GSA daemon. "
-                              "Diagnostics: Unknown command.",
-                              "/omp?cmd=get_tasks",
-                              params_value_bool (params, "xml"),
-                              response_data);
+      res = gsad_message (credentials,
+                          "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Unknown command.",
+                          response_data);
     }
 
   res_len = cmd_response_data_get_content_length (response_data);
@@ -2439,9 +2329,7 @@ exec_gmp_get (http_connection_t *con,
   if (get_guest_password()
       && strcmp (credentials->username, get_guest_username()) == 0
       && cmd
-      && (strcmp (cmd, "get_aggregate") == 0
-          || strcmp (cmd, "get_assets_chart") == 0
-          || strcmp (cmd, "get_tasks_chart") == 0))
+      && strcmp (cmd, "get_aggregate") == 0)
     {
       add_guest_chart_content_security_headers (response);
     }
@@ -2814,11 +2702,7 @@ register_signal_handlers ()
       || signal (SIGINT, handle_signal_exit) == SIG_ERR
       || signal (SIGHUP, SIG_IGN) == SIG_ERR
       || signal (SIGPIPE, SIG_IGN) == SIG_ERR
-#ifdef USE_LIBXSLT
       || signal (SIGCHLD, SIG_IGN) == SIG_ERR)
-#else
-      || signal (SIGCHLD, SIG_DFL) == SIG_ERR)
-#endif
     return -1;
   return 0;
 }
@@ -2878,8 +2762,9 @@ start_unix_http_daemon (const char *unix_socket_path,
     }
 
   return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, 0,
-           NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+           | MHD_USE_DEBUG, 0, NULL, NULL, handler, http_handlers,
+           MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
@@ -2905,7 +2790,8 @@ start_http_daemon (int port,
   else
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | ipv6_flag, port,
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+           | MHD_USE_DEBUG | ipv6_flag, port,
            NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
@@ -2930,8 +2816,9 @@ start_https_daemon (int port, const char *key, const char *cert,
   else
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL
-           | ipv6_flag, port, NULL, NULL, &handle_request, http_handlers,
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+           | MHD_USE_DEBUG | MHD_USE_SSL | ipv6_flag,
+           port, NULL, NULL, &handle_request, http_handlers,
            MHD_OPTION_HTTPS_MEM_KEY, key,
            MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
@@ -3017,8 +2904,6 @@ int
 main (int argc, char **argv)
 {
   gchar *rc_name;
-  gchar *old_locale;
-  char *locale;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_manager_port = DEFAULT_GVM_PORT;
@@ -3232,8 +3117,8 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-#ifdef GSAD_SVN_REVISION
-      printf ("SVN revision %i\n", GSAD_SVN_REVISION);
+#ifdef GSAD_GIT_REVISION
+      printf ("GIT revision %s\n", GSAD_GIT_REVISION);
 #endif
       if (debug_tls)
         {
@@ -3309,10 +3194,10 @@ main (int argc, char **argv)
       }
   }
 
-#ifdef GSAD_SVN_REVISION
-  g_message ("Starting GSAD version %s (SVN revision %i)\n",
+#ifdef GSAD_GIT_REVISION
+  g_message ("Starting GSAD version %s (GIT revision %s)\n",
              GSAD_VERSION,
-             GSAD_SVN_REVISION);
+             GSAD_GIT_REVISION);
 #else
   g_message ("Starting GSAD version %s\n",
              GSAD_VERSION);
@@ -3365,51 +3250,6 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
     }
-
-  /* Set and test the base locale for XSLt gettext */
-  old_locale = g_strdup (setlocale (LC_ALL, NULL));
-
-  locale = setlocale (LC_ALL, "");
-  if (locale == NULL)
-    {
-      g_warning ("%s: "
-                 "Failed to set locale according to environment variables,"
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else if (strcmp (locale, "C") == 0)
-    {
-      g_message ("%s: Locale for gettext extensions set to \"C\","
-                 " gettext translations are disabled.",
-                 __FUNCTION__);
-      set_ext_gettext_enabled (0);
-    }
-  else
-    {
-      if (strcasestr (locale, "en_") != locale)
-          {
-            g_warning ("%s: Locale defined by environment variables"
-                       " is not an \"en_...\" one.",
-                      __FUNCTION__);
-            set_ext_gettext_enabled (0);
-          }
-
-      if (strcasecmp (nl_langinfo (CODESET), "UTF-8"))
-        g_warning ("%s: Locale defined by environment variables"
-                   " does not use UTF-8 encoding.",
-                   __FUNCTION__);
-
-      g_debug ("%s: gettext translation extensions are enabled"
-               " (using locale \"%s\").",
-               __FUNCTION__, locale);
-      set_ext_gettext_enabled (1);
-    }
-
-  setlocale (LC_ALL, old_locale);
-  g_free (old_locale);
-
-  init_language_lists ();
 
   if (gsad_redirect_port_string)
     {

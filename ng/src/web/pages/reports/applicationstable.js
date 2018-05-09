@@ -29,6 +29,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
+import IconDivider from '../../components/layout/icondivider.js';
+
 import DetailsLink from '../../components/link/detailslink.js';
 
 import TableData from '../../components/table/data.js';
@@ -37,8 +39,11 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
+import CpeIcon from '../../components/icon/cpeicon';
 
 const Header = ({
+  currentSortBy,
+  currentSortDir,
   links = true,
   sort = true,
   onSortChange,
@@ -47,23 +52,32 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
+          onSortChange={onSortChange}
+        >
           {_('Application CPE')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'hosts' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
           onSortChange={onSortChange}>
           {_('Hosts')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'occurrences' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'occurrences' : false}
           onSortChange={onSortChange}>
           {_('Occurrences')}
         </TableHead>
         <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           width="10%"
-          sortby={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -73,6 +87,8 @@ const Header = ({
 };
 
 Header.propTypes = {
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
@@ -93,7 +109,10 @@ const Row = ({
           id={name}
           textOnly={!links}
         >
-          {name}
+          <IconDivider>
+            <CpeIcon name={name}/>
+            <span>{name}</span>
+          </IconDivider>
         </DetailsLink>
       </TableData>
       <TableData>

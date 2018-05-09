@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
@@ -60,7 +60,7 @@ const Actions = ({
   onScannerVerifyClick,
 }) => (
   <IconDivider
-    align={['center', 'center']}
+    align={['start', 'center']}
     grow
   >
     <TrashIcon
@@ -79,7 +79,7 @@ const Actions = ({
       name="permission"
       entity={entity}
       value={entity}
-      mayClone={entity.scanner_type !== CVE_SCANNER_TYPE}
+      mayClone={entity.isClonable()}
       onClick={onScannerCloneClick}/>
     <ExportIcon
       value={entity}

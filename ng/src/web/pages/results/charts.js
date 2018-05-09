@@ -23,65 +23,72 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 
-const ResultCharts = ({filter}) => {
-  return (
-    <div>
-      <DataSource
-        filter={filter}
-        name="results-severity-count-source"
-        group-column="severity"
-        aggregate-type="result">
-        <Chart
-          name="result-by-cvss"
-          type="bar"
-          title={_('Results by CVSS')}
-          title-count="count"
-          template="info_by_cvss"/>
-        <Chart
-          name="result-by-severity-class"
-          type="donut"
-          title={_('Results by Severity Class')}
-          title-count="count"
-          template="info_by_class"/>
-      </DataSource>
-      <DataSource
-        filter={filter}
-        name="result-vuln-words-source"
-        aggregate-type="result"
-        group-column="vulnerability"
-        aggregate-mode="word_counts"
-        sort-stat="count"
-        sort-order="descending"
-        max-groups="250">
-        <Chart
-          name="result-by-vuln-words"
-          type="cloud"
-          title={_('Results vulnerability word cloud')}/>
-      </DataSource>
-      <DataSource
-        filter={filter}
-        name="result-desc-words-source"
-        aggregate-type="result"
-        group-column="description"
-        aggregate-mode="word_counts"
-        sort-stat="count"
-        sort-order="descending"
-        max-groups="250">
-        <Chart
-          name="result-by-desc-words"
-          type="cloud"
-          title={_('Results description word cloud')}/>
-      </DataSource>
-    </div>
-  );
-};
+const ResultCharts = ({filter}) => (
+  <Wrapper>
+    <DataSource
+      filter={filter}
+      name="results-severity-count-source"
+      groupColumn="severity"
+      aggregateType="result"
+    >
+      <Chart
+        name="result-by-cvss"
+        type="bar"
+        title={_('Results by CVSS')}
+        title-count="count"
+        template="info_by_cvss"
+      />
+      <Chart
+        name="result-by-severity-class"
+        type="donut"
+        title={_('Results by Severity Class')}
+        title-count="count"
+        template="info_by_class"
+      />
+    </DataSource>
+    <DataSource
+      filter={filter}
+      name="result-vuln-words-source"
+      aggregateType="result"
+      groupColumn="vulnerability"
+      aggregateMode="word_counts"
+      sortStat="count"
+      sortOrder="descending"
+      maxGroups="250"
+    >
+      <Chart
+        name="result-by-vuln-words"
+        type="cloud"
+        title={_('Results vulnerability word cloud')}
+      />
+    </DataSource>
+    <DataSource
+      filter={filter}
+      name="result-desc-words-source"
+      aggregateType="result"
+      groupColumn="description"
+      aggregateMode="word_counts"
+      sortStat="count"
+      sortOrder="descending"
+      maxGroups="250"
+    >
+      <Chart
+        name="result-by-desc-words"
+        type="cloud"
+        title={_('Results description word cloud')}
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 ResultCharts.propTypes = {
   filter: PropTypes.filter,

@@ -23,58 +23,67 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Wrapper from '../../components/layout/wrapper.js';
 
 import DataSource from '../../components/dashboard/datasource.js';
 import Chart from '../../components/dashboard/chart.js';
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-export const NvtCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts type="nvt" titleType="NVTs"
-        filter={filter}/>
-      <DataSource
-        name="nvt-by-family-source"
-        aggregate-type="nvt"
-        group-column="family"
-        column="severity"
-        filter={filter}>
-        <Chart
-          name="nvt-by-family"
-          title={_('NVTs by Family')}
-          title-count="size_value"
-          type="bubbles"/>
-      </DataSource>
-      <DataSource
-        name="nvt-by-qod-type-source"
-        aggregate-type="nvt"
-        group-column="qod_type"
-        filter={filter}>
-        <Chart
-          name="nvt-by-qod_type"
-          template="qod_type_counts"
-          title={_('NVTs by QoD type')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-      <DataSource
-        name="nvt-by-qod-source"
-        aggregate-type="nvt"
-        group-column="qod"
-        filter={filter}>
-        <Chart
-          name="nvt-by-qod"
-          template="percentage_counts"
-          title={_('NVTs by QoD')}
-          title-count="count"
-          type="donut"/>
-      </DataSource>
-    </div>
-  );
-};
+const NvtCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="nvt"
+      titleType="NVTs"
+      filter={filter}
+    />
+    <DataSource
+      name="nvt-by-family-source"
+      aggregateType="nvt"
+      groupColumn="family"
+      column="severity"
+      filter={filter}
+    >
+      <Chart
+        name="nvt-by-family"
+        title={_('NVTs by Family')}
+        title-count="size_value"
+        type="bubbles"
+      />
+    </DataSource>
+    <DataSource
+      name="nvt-by-qod-type-source"
+      aggregateType="nvt"
+      groupColumn="qod_type"
+      filter={filter}
+    >
+      <Chart
+        name="nvt-by-qod_type"
+        template="qod_type_counts"
+        title={_('NVTs by QoD type')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+    <DataSource
+      name="nvt-by-qod-source"
+      aggregateType="nvt"
+      groupColumn="qod"
+      filter={filter}
+    >
+      <Chart
+        name="nvt-by-qod"
+        template="percentage_counts"
+        title={_('NVTs by QoD')}
+        title-count="count"
+        type="donut"
+      />
+    </DataSource>
+  </Wrapper>
+);
 
 NvtCharts.propTypes = {
   filter: PropTypes.filter,

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +32,9 @@ import FilterDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['term', _('Term')],
-  ['type', _('Type')],
+  ['name', _('Name'), '37%'],
+  ['term', _('Term'), '37%'],
+  ['type', _('Type'), '18%'],
 ];
 
 const FiltersTable = createEntitiesTable({

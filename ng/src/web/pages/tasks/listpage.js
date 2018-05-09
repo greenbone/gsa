@@ -31,14 +31,13 @@ import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import TaskFilterDialog from './filterdialog.js';
-import TaskCharts from './charts.js';
 import Table from './table.js';
 
 import NewIconMenu from './icons/newiconmenu.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
@@ -48,14 +47,8 @@ import MenuEntry from '../../components/menu/menuentry.js';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 import TaskComponent from './component.js';
-
-const Dashboard = withDashboard(TaskCharts, {
-  hideFilterSelect: true,
-  configPrefId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
-  defaultControllersString: 'task-by-severity-class|' +
-    'task-by-most-high-results|task-by-status',
-  defaultControllerString: 'task-by-cvss',
-});
+import TaskDashboard from './dashboard';
+import {TASK_DASHBOARD_ID} from './dashboard/index.js';
 
 const ToolBarIcons = ({
     onAdvancedTaskWizardClick,
@@ -66,13 +59,13 @@ const ToolBarIcons = ({
   }, {capabilities}) => {
   return (
     <IconDivider>
-      <HelpIcon
-        page="tasks"
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="creating-a-task"
         title={_('Help: Tasks')}/>
       {capabilities.mayOp('run_wizard') &&
         <IconMenu
           img="wizard.svg"
-          size="small"
           onClick={onTaskWizardClick}>
           {capabilities.mayCreate('task') &&
             <MenuEntry
@@ -157,7 +150,12 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard={Dashboard}
+        dashboard2={dashboardProps => (
+          <TaskDashboard {...dashboardProps} />
+        )}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
+        )}
         filterEditDialog={TaskFilterDialog}
         sectionIcon="task.svg"
         table={Table}

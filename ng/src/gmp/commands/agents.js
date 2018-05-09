@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,11 @@ import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Agent from '../models/agent.js';
 
+import DefaultTransform from '../http/transform/default.js';
+
 const log = logger.getLogger('gmp.commands.agents');
 
-export class AgentCommand extends EntityCommand {
+class AgentCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'agent', Agent);
@@ -43,7 +45,6 @@ export class AgentCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'verify_agent',
       id,
-      next: 'get_agent',
     });
   }
 
@@ -54,10 +55,9 @@ export class AgentCommand extends EntityCommand {
       comment,
       installer,
       installer_sig,
-      next: 'get_agent',
     };
     log.debug('Creating new agent', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({id, name, comment = ''}) {
@@ -66,10 +66,9 @@ export class AgentCommand extends EntityCommand {
       id,
       name,
       comment,
-      next: 'get_agent',
     };
     log.debug('Saving agent', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   downloadInstaller({id}) {
@@ -77,12 +76,11 @@ export class AgentCommand extends EntityCommand {
       cmd: 'download_agent',
       agent_format: 'installer',
       agent_id: id,
-    }, {plain: true})
-      .then(response => response.setData(response.data.responseText));
+    }, {transform: DefaultTransform});
   }
 }
 
-export class AgentsCommand extends EntitiesCommand {
+class AgentsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'agent', Agent);

@@ -23,7 +23,7 @@
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {secinfo_type} from 'gmp/models/secinfo.js';
 import {

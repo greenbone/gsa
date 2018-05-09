@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -43,18 +44,24 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          width="59%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           rowSpan="2"
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
+          width="33%"
           colSpan="3">
           {_('Port Counts')}
         </TableHead>
@@ -65,17 +72,26 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
-          sortby={sort ? 'total' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'tcp' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'tcp' : false}
           onSortChange={onSortChange}>
           {_('TCP')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'udp' : false}
+          width="11%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'udp' : false}
           onSortChange={onSortChange}>
           {_('UDP')}
         </TableHead>
@@ -86,6 +102,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

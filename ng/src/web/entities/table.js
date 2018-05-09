@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +23,16 @@
  */
 
 import React from 'react';
+import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined, for_each, exclude_object_props} from 'gmp/utils.js';
+import {is_defined, for_each, exclude_object_props} from 'gmp/utils';
 
 import FootNote from '../components/footnote/footnote.js';
+
+import {FoldState} from '../components/folding/folding.js';
+
+import FoldIcon from '../components/icon/foldicon.js';
 
 import Layout from '../components/layout/layout.js';
 
@@ -48,6 +54,19 @@ const exclude_props = [
   'children',
 ];
 
+const UpdatingStripedTable = glamorous(StripedTable)(
+  ({updating}) => {
+    return {
+      opacity: updating ? '0.2' : '1.0',
+    };
+  },
+);
+
+const DetailsIcon = glamorous(FoldIcon)({
+  marginTop: '2px',
+  marginLeft: '2px',
+});
+
 class EntitiesTable extends React.Component {
 
   constructor(...args) {
@@ -55,8 +74,14 @@ class EntitiesTable extends React.Component {
 
     this.state = {
       details: {},
+      allToggled: false,
     };
 
+    this.handleToggleAllDetails = this.handleToggleAllDetails.bind(this);
+    this.handleFirst = this.handleFirst.bind(this);
+    this.handleLast = this.handleLast.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrevious = this.handlePrevious.bind(this);
     this.handleToggleShowDetails = this.handleToggleShowDetails.bind(this);
   }
 
@@ -68,30 +93,72 @@ class EntitiesTable extends React.Component {
     this.setState({details});
   }
 
+  handleToggleAllDetails(untoggle = false) {
+    const {entities} = this.props;
+    let {details, allToggled} = this.state;
+
+    allToggled = !allToggled;
+
+    if (untoggle) {
+      allToggled = false;
+    }
+
+    if (allToggled) {
+      for_each(entities, entity => details[entity.id] = true);
+    }
+    else {
+      for_each(entities, entity => details[entity.id] = false);
+    }
+    this.setState({details, allToggled});
+  }
+
+  handleFirst(...args) {
+    this.props.onFirstClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handleLast(...args) {
+    this.props.onLastClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handleNext(...args) {
+    this.props.onNextClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
+  handlePrevious(...args) {
+    this.props.onPreviousClick(...args);
+    this.handleToggleAllDetails(true);
+  }
+
   render() {
-    const {props} = this;
-    const {details} = this.state;
+    const {details, allToggled} = this.state;
     const {
+      doubleRow = false,
       emptyTitle,
       entities,
       entitiesCounts,
       filter,
       footnote = true,
-    } = props;
+      toggleDetailsIcon = true,
+      updating,
+      sortBy: currentSortBy,
+      sortDir: currentSortDir,
+      links,
+      row: RowComponent,
+      rowDetails: RowDetailsComponent,
+      header: HeaderComponent,
+      footer: FooterComponent,
+      pagination: PaginationComponent = Pagination,
+      body: BodyComponent = TableBody,
+    } = this.props;
 
     if (!is_defined(entities)) {
       return null;
     }
 
-    const RowComponent = props.row;
-    const RowDetailsComponent = props.rowDetails;
-    const HeaderComponent = props.header;
-    const FooterComponent = props.footer;
-    const PaginationComponent = is_defined(props.pagination) ?
-      props.pagination : Pagination;
-    const BodyComponent = is_defined(props.body) ? props.body : TableBody;
-
-    const other = exclude_object_props(props, exclude_props);
+    const other = exclude_object_props(this.props, exclude_props);
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 
@@ -100,72 +167,102 @@ class EntitiesTable extends React.Component {
     }
 
     const rows = [];
-    if (RowComponent) {
+    if (is_defined(RowComponent)) {
       for_each(entities, entity => {
         rows.push(
           <RowComponent
             {...other}
             onToggleDetailsClick={this.handleToggleShowDetails}
             key={entity.id}
-            entity={entity}/>
+            entity={entity}
+          />
         );
-        if (RowDetailsComponent && details[entity.id]) {
-          rows.push(
-            <RowDetailsComponent
-              links={props.links}
-              key={'details-' + entity.id}
-              entity={entity}
-            />
-          );
+        if (is_defined(RowDetailsComponent) && details[entity.id]) {
+          if (doubleRow) {
+            rows.push(
+              <TableBody key={'details-' + entity.id}>
+                <RowDetailsComponent
+                  links={links}
+                  entity={entity}
+                />
+              </TableBody>
+            );
+          }
+          else {
+            rows.push(
+              <RowDetailsComponent
+                links={links}
+                key={'details-' + entity.id}
+                entity={entity}
+              />
+            );
+          }
         }
       });
     }
 
-    let pagination;
-    if (PaginationComponent) {
-      pagination = (
+    const pagination = PaginationComponent === false ?
+      undefined :
+      (
         <PaginationComponent
           {...other}
+          onFirstClick={this.handleFirst}
+          onLastClick={this.handleLast}
+          onNextClick={this.handleNext}
+          onPreviousClick={this.handlePrevious}
           counts={entitiesCounts}
         />
       );
-    }
 
-    let header;
-    if (HeaderComponent) {
-      header = (
-        <HeaderComponent {...other}/>
+    const header = !is_defined(HeaderComponent) || HeaderComponent === false ?
+      undefined :
+      (
+        <HeaderComponent
+          currentSortBy={currentSortBy}
+          currentSortDir={currentSortDir}
+          {...other}
+        />
       );
-    }
 
-    let footer;
-    if (FooterComponent) {
-      footer = (
-        <FooterComponent {...other}/>
-      );
-    }
+    const footer = !is_defined(FooterComponent) || FooterComponent === false ?
+      undefined :
+      <FooterComponent {...other} />;
 
-    let body;
-    if (BodyComponent) {
-      body = (
+    const body = BodyComponent === false ?
+      rows :
+      (
         <BodyComponent>
           {rows}
         </BodyComponent>
       );
-    }
-    else {
-      body = rows;
-    }
+
+    const detailsIcon = (
+      <DetailsIcon
+        foldState={allToggled ? FoldState.UNFOLDED : FoldState.FOLDED}
+        title={allToggled ? _('Fold all details') : _('Unfold all details')}
+        onClick={this.handleToggleAllDetails}
+      />
+    );
 
     return (
       <Layout
         flex="column"
         grow="1"
         className="entities-table">
-        {pagination}
-        <StripedTable header={header} footer={footer}>
+        {toggleDetailsIcon ?
+          <Layout align="space-between" grow="1">
+            {detailsIcon}
+            {pagination}
+          </Layout> :
+          pagination
+        }
+        <UpdatingStripedTable
+          header={header}
+          footer={footer}
+          updating={updating}
+        >
           {body}
-        </StripedTable>
+        </UpdatingStripedTable>
         {footnote ?
           <Layout flex align="space-between">
             <FootNote>
@@ -182,6 +279,7 @@ class EntitiesTable extends React.Component {
 
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
+  doubleRow: PropTypes.bool,
   emptyTitle: PropTypes.string,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
@@ -189,8 +287,14 @@ EntitiesTable.propTypes = {
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,
   header: PropTypes.componentOrFalse,
+  links: PropTypes.bool,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
+  rowDetails: PropTypes.component,
+  sortBy: PropTypes.string,
+  sortDir: PropTypes.string,
+  toggleDetailsIcon: PropTypes.bool,
+  updating: PropTypes.bool,
   onFirstClick: PropTypes.func,
   onLastClick: PropTypes.func,
   onNextClick: PropTypes.func,

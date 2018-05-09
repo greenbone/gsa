@@ -7,7 +7,7 @@
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * Copyright (C) 2009, 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,5 @@ int get_http_only ();
 void set_http_only (int);
 void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);
-char * xsl_transform_with_stylesheet (const char *, const char *,
-                                      cmd_response_data_t *);
-char * xsl_transform (const char *, cmd_response_data_t *);
 
 #endif /* not _GSAD_BASE_H */

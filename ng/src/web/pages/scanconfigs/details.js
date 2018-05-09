@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
 

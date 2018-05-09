@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -36,7 +37,8 @@ import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {loader} from '../../entity/container.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ExportIcon from '../../components/icon/exporticon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
@@ -46,14 +48,19 @@ import Layout from '../../components/layout/layout.js';
 
 import Link from '../../components/link/link.js';
 
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
+
 import InfoTable from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import OverrideComponent from '../overrides/component.js';
-import NoteComponent from '../notes/component.js';
-
+import NvtComponent from './component.js';
 import NvtDetails from './details.js';
 import Preferences from './preferences.js';
 
@@ -61,20 +68,28 @@ let ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
+  onNvtDownloadClick,
   onOverrideCreateClick,
 }) => {
   return (
     <Divider margin="10px">
       <IconDivider>
-        <HelpIcon
-          page="nvt_details"
-          title={_('Help: NVT Details')}
+        <ManualIcon
+          page="vulnerabilitymanagement"
+          anchor="network-vulnerability-tests"
+          title={_('Help: NVTs')}
         />
         <ListIcon
           title={_('NVT List')}
           page="nvts"
         />
       </IconDivider>
+
+      <ExportIcon
+        value={entity}
+        title={_('Export NVT')}
+        onClick={onNvtDownloadClick}
+      />
 
       <IconDivider>
         {capabilities.mayCreate('note') &&
@@ -127,6 +142,7 @@ ToolBarIcons.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   onNoteCreateClick: PropTypes.func.isRequired,
+  onNvtDownloadClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
@@ -248,38 +264,93 @@ const Page = ({
   onError,
   ...props
 }) => (
-  <NoteComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
+  <NvtComponent
+    onChanged={onChanged}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
     {({
-      create: notecreate,
+      notecreate,
+      overridecreate,
+      download,
     }) => (
-      <OverrideComponent
-        onCreated={onChanged}
-        onSaved={onChanged}
+      <EntityPage
+        {...props}
+        detailsComponent={Details}
+        permissionsComponent={false}
+        toolBarIcons={ToolBarIcons}
+        title={_('NVT')}
+        sectionIcon="nvt.svg"
+        onChanged={onChanged}
+        onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
+        onNvtDownloadClick={download}
+        onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
       >
         {({
-          create: overridecreate,
-        }) => (
-          <EntityPage
-            {...props}
-            detailsComponent={Details}
-            permissionsComponent={false}
-            toolBarIcons={ToolBarIcons}
-            title={_('NVT')}
-            sectionIcon="nvt.svg"
-            onChanged={onChanged}
-            onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
-            onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
-            onPermissionChanged={onChanged}
-            onPermissionDownloaded={onDownloaded}
-            onPermissionDownloadError={onError}
-          />
-        )}
-      </OverrideComponent>
+          activeTab = 0,
+          permissionsComponent,
+          permissionsTitle,
+          tagsComponent,
+          tagsTitle,
+          onActivateTab,
+          entity,
+          ...other
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  {is_defined(tagsComponent) &&
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
+                  }
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                    />
+                  </TabPanel>
+                  {is_defined(tagsComponent) &&
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
+                  }
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
-  </NoteComponent>
+  </NvtComponent>
 );
 
 Page.propTypes = {

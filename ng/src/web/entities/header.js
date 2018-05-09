@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../utils/proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
@@ -34,7 +37,7 @@ import TableHeader from '../components/table/header.js';
 import TableRow from '../components/table/row.js';
 
 const defaultactions = (
-  <TableHead width="10em">{_('Actions')}</TableHead>
+  <TableHead width="8%">{_('Actions')}</TableHead>
 );
 
 /**
@@ -114,18 +117,25 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
   const Header = ({
     actionsColumn,
     links = true,
+    currentSortBy,
+    currentSortDir,
     sort = true,
     onSortChange,
   }) => {
+
     return (
       <TableHeader>
         <TableRow>
           {
             columns.map(column => {
+              const width = is_defined(column[2]) ? column[2] : '';
               return (
                 <TableHead
                   key={column[0]}
-                  sortby={sort ? column[0] : false}
+                  width={width}
+                  currentSortBy={currentSortBy}
+                  currentSortDir={currentSortDir}
+                  sortBy={sort ? column[0] : false}
                   onSortChange={onSortChange}>
                   {column[1]}
                 </TableHead>
@@ -140,6 +150,8 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
 
   Header.propTypes = {
     actionsColumn: PropTypes.element,
+    currentSortBy: PropTypes.string,
+    currentSortDir: PropTypes.string,
     links: PropTypes.bool,
     sort: PropTypes.bool,
     onSortChange: PropTypes.func,

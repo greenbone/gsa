@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,52 +44,74 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
     <TableHeader>
       <TableRow>
         <TableHead
-          sortby={sort ? 'name' : false}
+          width="30%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sorty={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'version' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'version' : false}
           onSortChange={onSortChange}>
           {_('Version')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'status' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'status' : false}
           onSortChange={onSortChange}>
           {_('Status')}
         </TableHead>
         <TableHead
-          sortby={sort ? 'class' : false}
+          width="10%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'class' : false}
           onSortChange={onSortChange}>
           {_('Class')}
         </TableHead>
         <TableHead
-          width="15em"
-          sortby={sort ? 'created' : false}
+          width="15%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'created' : false}
           onSortChange={onSortChange}>
           {_('Created')}
         </TableHead>
         <TableHead
-          width="15em"
-          sortby={sort ? 'modified' : false}
+          width="15%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'modified' : false}
           onSortChange={onSortChange}>
           {_('Modified')}
         </TableHead>
         <TableHead
-          width="5em"
-          sortby={sort ? 'cves' : false}
+          width="2%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'cves' : false}
           onSortChange={onSortChange}>
           {_('CVEs')}
         </TableHead>
         <TableHead
-          width="10em"
-          sortby={sort ? 'severity' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
@@ -100,6 +123,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
@@ -114,6 +139,7 @@ const OvaldefsFooter = createEntitiesFooter({
 
 export const OvaldefsTable = createEntitiesTable({
   body: false,
+  doubleRow: true,
   emptyTitle: _('No OVAL Definitions available'),
   row: OvaldefRow,
   rowDetails: withRowDetails('ovaldef', 10)(OvaldefDetails),

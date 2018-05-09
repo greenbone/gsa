@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,24 +26,39 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
+import Theme from '../../utils/theme.js';
+
 import PropTypes from '../../utils/proptypes.js';
 
 const StyledDiv = glamorous.div(
   {
     fontSize: '16px',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'start',
     flexGrow: '1',
-    paddingLeft: '3px',
-    paddingRight: '3px',
-    paddingBottom: '1px',
-    borderTop: 'white 2px solid',
+    paddingLeft: '8px',
+    paddingRight: '8px',
+    paddingBottom: '2px',
+    paddingTop: '2px',
   },
-  ({active, disabled, theme}) => ({
+  ({active, disabled}) => ({
+    borderLeft: active ?
+      '1px solid ' + Theme.dialogGray : '1px solid ' + Theme.white,
+    borderRight: '1px solid ' + Theme.lightGray,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    borderTop: active ? '2px solid ' + theme.main.lightGreen : undefined,
+    backgroundColor: active ? Theme.dialogGray : undefined,
+    borderBottom: active ? '1px solid ' + Theme.dialogGray : undefined,
+    marginBottom: active ? '-1px' : undefined,
+    borderTop: active ?
+      '2px solid ' + Theme.lightGreen :
+      '2px solid ' + Theme.white,
     ':hover': {
-      borderTop: active ? undefined : '2px solid' + theme.extra.lightGray,
+      borderTop: active ?
+        undefined : '2px solid ' + Theme.lightGray,
+    },
+    ':first-child': {
+      borderLeft: active ?
+        '1px solid ' + Theme.lightGray : '1px solid ' + Theme.white,
     },
   }),
 );

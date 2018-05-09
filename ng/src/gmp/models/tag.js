@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import moment from 'moment';
-
-import {is_defined, is_empty} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {is_empty} from '../utils/string';
 
 import Model from '../model.js';
 
@@ -33,7 +32,6 @@ class Tag extends Model {
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
-    ret.modified = moment(elem.modified);
 
     if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {
       ret.resource = new Model(elem.resource, elem.resource.type);

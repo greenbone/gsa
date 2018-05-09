@@ -27,7 +27,7 @@ import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
@@ -44,7 +44,11 @@ import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
 const ToolBarIcons = ({onTargetCreateClick}) => {
   return (
     <IconDivider>
-      <HelpIcon page="targets"/>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="creating-a-target"
+        title={_('Help: Targets')}
+      />
       <NewIcon
         title={_('New Target')}
         onClick={onTargetCreateClick}/>

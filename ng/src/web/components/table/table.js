@@ -38,9 +38,7 @@ const Table = ({
       className={className}>
       {header}
       {children}
-      <tfoot>
-        {footer}
-      </tfoot>
+      {footer}
     </table>
   );
 };
@@ -48,17 +46,13 @@ const Table = ({
 Table.propTypes = {
   className: PropTypes.string,
   fixed: PropTypes.bool,
-  footer: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
-  header: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  footer: PropTypes.element,
+  header: PropTypes.element,
 };
 
-export default glamorous(Table)(
+export default glamorous(Table, {
+  displayName: 'Table',
+})(
   'table',
   {
     border: 0,

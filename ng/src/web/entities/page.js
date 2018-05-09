@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, exclude_object_props} from 'gmp/utils.js';
+import {is_defined, exclude_object_props} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 import {render_section_title} from '../utils/render.js';
@@ -44,6 +44,8 @@ import Section from '../components/section/section.js';
 const exclude_props = [
   'children',
   'dashboard',
+  'dashboard2',
+  'dashboardControls',
   'filterEditDialog',
   'filters',
   'powerfilter',
@@ -59,7 +61,13 @@ class EntitiesPage extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {
+      showFilterDialog: false,
+    };
+
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
+    this.handleFilterDialogCloseClick =
+      this.handleFilterDialogCloseClick.bind(this);
   }
 
   getSectionTitle() {
@@ -69,19 +77,23 @@ class EntitiesPage extends React.Component {
   }
 
   handleFilterEditClick() {
-    if (this.filter_dialog) {
-      this.filter_dialog.show();
-    }
+    this.setState({showFilterDialog: true});
+  }
+
+  handleFilterDialogCloseClick() {
+    this.setState({showFilterDialog: false});
   }
 
   renderSection() {
     const {
       entities,
       filter,
-      foldable,
       loading,
       sectionIcon,
       dashboard: DashboardComponent,
+      dashboard2,
+      dashboardControls,
+      onFilterChanged,
     } = this.props;
 
     let {
@@ -96,19 +108,29 @@ class EntitiesPage extends React.Component {
       SectionComponent = Section;
     }
 
+    let extra;
+    if (is_defined(dashboardControls)) {
+      extra = dashboardControls();
+    }
+    else {
+      extra = is_defined(DashboardComponent) ? <DashboardControls/> : null;
+    }
     return (
       <SectionComponent
         title={this.getSectionTitle()}
         className="entities-section"
         img={sectionIcon}
-        foldable={foldable}
-        extra={DashboardComponent ? <DashboardControls/> : null}>
+        extra={extra}
+      >
         <Layout
           flex="column"
           grow="1"
         >
           {DashboardComponent &&
             <DashboardComponent filter={filter}/>
+          }
+          {is_defined(dashboard2) &&
+            dashboard2({filter, onFilterChanged})
           }
           {loading && !is_defined(entities) ?
             this.renderLoading() :
@@ -221,16 +243,18 @@ class EntitiesPage extends React.Component {
       filterEditDialog: FilterDialogComponent,
       onFilterChanged,
     } = this.props;
+    const {showFilterDialog} = this.state;
 
-    if (!FilterDialogComponent) {
+    if (!FilterDialogComponent || !showFilterDialog) {
       return null;
     }
 
     return (
       <FilterDialogComponent
         filter={filter}
-        ref={ref => this.filter_dialog = ref}
-        onFilterChanged={onFilterChanged}/>
+        onFilterChanged={onFilterChanged}
+        onCloseClick={this.handleFilterDialogCloseClick}
+      />
     );
   }
 
@@ -248,12 +272,13 @@ class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   createFilterType: PropTypes.string,
   dashboard: PropTypes.componentOrFalse,
+  dashboard2: PropTypes.func,
+  dashboardControls: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,
   filterEditDialog: PropTypes.component,
   filters: PropTypes.array,
-  foldable: PropTypes.bool,
   loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
   section: PropTypes.componentOrFalse,

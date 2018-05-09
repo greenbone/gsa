@@ -59,8 +59,6 @@ static GMutex *mutex = NULL;
  * @param[in]  capabilities  Capabilities of manager.
  * @param[in]  language      User Interface Language (language name or code)
  * @param[in]  pw_warning    Password policy warning.
- * @param[in]  chart_prefs   The chart preferences.
- * @param[in]  autorefresh   The autorefresh preference.
  * @param[in]  address       Client's IP address.
  *
  * @return Added user.
@@ -68,8 +66,7 @@ static GMutex *mutex = NULL;
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning, GTree *chart_prefs,
-          const gchar *autorefresh, const char *address)
+          const gchar *language, const gchar *pw_warning, const char *address)
 {
   user_t *user = NULL;
   int index;
@@ -96,8 +93,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   user->severity = g_strdup (severity);
   user->capabilities = g_strdup (capabilities);
   user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-  user->chart_prefs = chart_prefs;
-  user->autorefresh = g_strdup (autorefresh);
   user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
                                          NULL, g_free, g_free);
   g_ptr_array_add (users, (gpointer) user);
@@ -145,8 +140,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
     {
       int ret;
       gchar *timezone, *role, *capabilities, *severity, *language;
-      gchar *pw_warning, *autorefresh;
-      GTree *chart_prefs;
+      gchar *pw_warning;
 
       if (cookie)
         {
@@ -182,9 +176,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
                               &severity,
                               &capabilities,
                               &language,
-                              &pw_warning,
-                              &chart_prefs,
-                              &autorefresh);
+                              &pw_warning);
       if (ret == 1)
         return USER_GUEST_LOGIN_FAILED;
       else if (ret == 2)
@@ -195,8 +187,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
         {
           user_t *user;
           user = user_add (guest_username, guest_password, timezone, severity,
-                           role, capabilities, language, pw_warning,
-                           chart_prefs, autorefresh, address);
+                           role, capabilities, language, pw_warning, address);
           *user_return = user;
           g_free (timezone);
           g_free (severity);
@@ -204,7 +195,6 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           g_free (language);
           g_free (role);
           g_free (pw_warning);
-          g_free (autorefresh);
           return USER_OK;
         }
     }
@@ -405,66 +395,6 @@ user_set_charts (const gchar *token, const int charts)
   return ret;
 }
 
-/**
- * @brief Set a chart preference of a user.
- *
- * @param[in]   token       User token.
- * @param[in]   pref_id     ID of the chart preference.
- * @param[in]   pref_value  Preference value to set.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_chart_pref (const gchar *token, gchar* pref_id, gchar *pref_value)
-{
-  int index, ret;
-  ret = 1;
-  g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_tree_replace (item->chart_prefs,
-                          pref_id, pref_value);
-          ret = 0;
-          break;
-        }
-    }
-  g_mutex_unlock (mutex);
-  return ret;
-}
-
-/**
- * @brief Set default autorefresh interval of user.
- *
- * @param[in]   token        User token.
- * @param[in]   autorefresh  Autorefresh interval.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_autorefresh (const gchar *token, const gchar *autorefresh)
-{
-  int index, ret;
-  ret = 1;
-  g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->autorefresh);
-          item->autorefresh = g_strdup (autorefresh);
-          ret = 0;
-          break;
-        }
-    }
-  g_mutex_unlock (mutex);
-  return ret;
-}
 
 /**
  * @brief Logs out all sessions of a given user, except the current one.
@@ -604,12 +534,9 @@ credentials_new (user_t *user, const char *language, const char *client_address)
   credentials->capabilities = g_strdup (user->capabilities);
   credentials->token = g_strdup (user->token);
   credentials->charts = user->charts;
-  credentials->chart_prefs = user->chart_prefs;
   credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
                                              : NULL;
   credentials->language = g_strdup (language);
-  credentials->autorefresh = user->autorefresh
-                              ? g_strdup (user->autorefresh) : NULL;
   credentials->last_filt_ids = user->last_filt_ids;
   credentials->client_address = g_strdup (client_address);
   credentials->guest = user->guest;
@@ -636,7 +563,6 @@ credentials_free (credentials_t *creds)
   g_free (creds->severity);
   g_free (creds->pw_warning);
   g_free (creds->client_address);
-  g_free (creds->autorefresh);
   g_free (creds->sid);
   /* params, chart_prefs and last_filt_ids are not duplicated. */
   g_free (creds);

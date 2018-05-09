@@ -24,7 +24,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {ThemeProvider} from 'glamorous';
+import {Provider as StoreProvider} from 'react-redux';
 
 import {
   browserHistory,
@@ -36,18 +36,19 @@ import {
 
 import CacheFactory from 'gmp/cache.js';
 import Gmp from 'gmp';
-import {HttpInterceptor} from 'gmp/http.js';
 import PromiseFactory from 'gmp/promise.js';
+import {subscribe} from 'gmp/locale/lang';
+import {is_defined} from 'gmp/utils/identity';
 
-import {is_defined} from 'gmp/utils.js';
-import _ from 'gmp/locale.js';
+import HttpInterceptor from 'gmp/http/interceptor.js';
 
 import CacheFactoryProvider from './components/provider/cachefactoryprovider.js'; // eslint-disable-line max-len
+import GmpProvider from './components/provider/gmpprovider.js';
 
 import PropTypes from './utils/proptypes.js';
+import globalcss from './utils/globalcss.js';
 
-import {get_severity_levels} from './utils/render.js';
-import theme from './utils/theme.js';
+import configureStore from './store';
 
 import AssetsPage from './pages/assetspage.js';
 import HomePage from './pages/homepage.js';
@@ -62,9 +63,9 @@ import AgentsPage from './pages/agents/listpage.js';
 import AgentDetailsPage from './pages/agents/detailspage.js';
 import AlertsPage from './pages/alerts/listpage.js';
 import AlertDetailsPage from './pages/alerts/detailspage.js';
-import AllSecInfosPage from './pages/allsecinfo/listpage.js';
-import CertBundAdvsPage from './pages/certbund/listpage.js';
-import CertBundAdvDetailsPage from './pages/certbund/detailspage.js';
+import SecInfosPage from './pages/secinfo/listpage.js';
+import CertBundsPage from './pages/certbund/listpage.js';
+import CertBundDetailsPage from './pages/certbund/detailspage.js';
 import CpesPage from './pages/cpes/listpage.js';
 import CpeDetailsPage from './pages/cpes/detailspage.js';
 import CredentialsPage from './pages/credentials/listpage.js';
@@ -72,8 +73,8 @@ import CredentialDetailsPage from './pages/credentials/detailspage.js';
 import CvesPage from './pages/cves/listpage.js';
 import CveDetailsPage from './pages/cves/detailspage.js';
 import CvssCalculatorPage from './pages/extras/cvsscalculatorpage.js';
-import DfnCertAdvsPage from './pages/dfncert/listpage.js';
-import DfnCertAdvDetailsPage from './pages/dfncert/detailspage.js';
+import DfnCertsPage from './pages/dfncert/listpage.js';
+import DfnCertDetailsPage from './pages/dfncert/detailspage.js';
 import FeedStatusPage from './pages/extras/feedstatuspage.js';
 import FiltersPage from './pages/filters/listpage.js';
 import FilterDetailsPage from './pages/filters/detailspage.js';
@@ -124,16 +125,21 @@ import UserSettingsPage from './pages/usersettings/usersettingspage.js';
 import UsersPage from './pages/users/listpage.js';
 import VulnerabilitiesPage from './pages/vulns/listpage.js';
 
-import './css/gsa-base.css';
-import './css/app.css';
-
 const {config = {}} = window;
 
 const caches = new CacheFactory();
 
 const gmp = new Gmp({caches, ...config});
 
+const store = configureStore();
+
 window.gmp = gmp;
+
+globalcss({
+  'html, body, #app, #app > div': {
+    height: '100%',
+  },
+});
 
 function is_logged_in(next_state, replace) {
   if (!gmp.token && !sessionStorage.token) {
@@ -145,16 +151,6 @@ function is_logged_in(next_state, replace) {
     });
   }
 }
-
-if (!is_defined(window.gsa._)) {
-  window.gsa._ = _;
-}
-
-if (!is_defined(window.gsa.severity_levels)) {
-  window.gsa.severity_levels = get_severity_levels(); // TODO pass type
-}
-
-window.gsa.history = browserHistory;
 
 class AppHttpInterceptor extends HttpInterceptor {
 
@@ -178,10 +174,23 @@ class App extends React.Component {
     super(props);
 
     gmp.addHttpInterceptor(new AppHttpInterceptor(this));
+
+    this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
+
   }
 
-  getChildContext() {
-    return {gmp};
+  componentDidMount() {
+    this.unsubscribe = subscribe(this.renderOnLanguageChange);
+  }
+
+  componentWillUnmount() {
+    if (is_defined(this.unsubscribe)) {
+      this.unsubscribe();
+    }
+  }
+
+  renderOnLanguageChange() {
+    this.forceUpdate();
   }
 
   toLoginPage() {
@@ -196,18 +205,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <CacheFactoryProvider caches={caches}>
-        <ThemeProvider theme={theme}>
-          {this.props.children}
-        </ThemeProvider>
-      </CacheFactoryProvider>
+      <GmpProvider gmp={gmp}>
+        <CacheFactoryProvider caches={caches}>
+          <StoreProvider store={store}>
+            {this.props.children}
+          </StoreProvider>
+        </CacheFactoryProvider>
+      </GmpProvider>
     );
   }
 }
-
-App.childContextTypes = {
-  gmp: PropTypes.gmp,
-};
 
 App.contextTypes = {
   router: PropTypes.object.isRequired,
@@ -288,14 +295,14 @@ ReactDOM.render(
           path="ovaldefs"
           component={OvaldefsPage}/>
         <Route
-          path="certbundadvs"
-          component={CertBundAdvsPage}/>
+          path="certbunds"
+          component={CertBundsPage}/>
         <Route
-          path="dfncertadvs"
-          component={DfnCertAdvsPage}/>
+          path="dfncerts"
+          component={DfnCertsPage}/>
         <Route
           path="secinfos"
-          component={AllSecInfosPage}/>
+          component={SecInfosPage}/>
         <Route
           path="portlists"
           component={PortListsPage}/>
@@ -404,12 +411,12 @@ ReactDOM.render(
           component={OvaldefDetailsPage}
         />
         <Route
-          path="certbundadv/:id"
-          component={CertBundAdvDetailsPage}
+          path="certbund/:id"
+          component={CertBundDetailsPage}
         />
         <Route
-          path="dfncertadv/:id"
-          component={DfnCertAdvDetailsPage}
+          path="dfncert/:id"
+          component={DfnCertDetailsPage}
         />
         <Route
           path="user/:id"

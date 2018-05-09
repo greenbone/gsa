@@ -5,7 +5,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 import logger from './log.js';
 
-import {is_defined, is_function} from './utils.js';
+import {is_defined, is_function} from './utils/identity';
 
 import {parse_int, parse_float} from './parser.js';
 
@@ -87,7 +87,7 @@ const ip_to_number = original => {
 
   // TODO support ipv6
 
-  return original; // use original value for comparision
+  return original; // use original value for comparison
 };
 
 const get_value = (convert_func, value, property, undefined_val) => {

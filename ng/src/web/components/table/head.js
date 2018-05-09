@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
@@ -22,10 +23,11 @@
  */
 
 import React from 'react';
+import _ from 'gmp/locale.js';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined, capitalize_first_letter} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -38,20 +40,48 @@ const TableHead = ({
     className,
     colSpan,
     rowSpan,
-    sortby,
+    currentSortBy,
+    currentSortDir,
+    sort = true,
+    sortBy,
     width,
     onSortChange,
     ...other
   }) => {
+
+
+  let sortSymbol;
+  if (currentSortBy === sortBy) {
+    if (currentSortDir === Sort.DESC) {
+      sortSymbol = ( // triangle pointing down
+        <span
+          title={_('Sorted In Descending Order By {{sortBy}}',
+            {sortBy: capitalize_first_letter(sortBy)})}>
+          &nbsp;&#9660;
+        </span>
+      );
+    }
+    else if (currentSortDir === Sort.ASC) {
+      sortSymbol = ( // triangle pointing up
+        <span
+          title={_('Sorted In Ascending Order By {{sortBy}}',
+            {sortBy: capitalize_first_letter(sortBy)})}>
+          &nbsp;&#9650;
+        </span>
+      );
+    }
+  }
+
   return (
     <th
       className={className}
       rowSpan={rowSpan}
       colSpan={colSpan}>
-      {sortby && is_defined(onSortChange) ?
-        <Sort by={sortby} onClick={onSortChange}>
+      {sort && sortBy && is_defined(onSortChange) ?
+        <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}
+            {sortSymbol}
           </Layout>
         </Sort> :
         <Layout {...other}>
@@ -63,15 +93,20 @@ const TableHead = ({
 };
 
 TableHead.propTypes = {
-  colSpan: PropTypes.numberString,
   className: PropTypes.string,
+  colSpan: PropTypes.numberString,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   rowSpan: PropTypes.numberString,
-  sortby: PropTypes.stringOrFalse,
+  sort: PropTypes.bool,
+  sortBy: PropTypes.stringOrFalse,
   width: PropTypes.string,
   onSortChange: PropTypes.func,
 };
 
-export default glamorous(TableHead)({
+export default glamorous(TableHead, {
+  displayName: 'TableHead',
+})({
   backgroundColor: '#3A3A3A',
   color: '#FFFFFF',
   fontWeight: 'bold',

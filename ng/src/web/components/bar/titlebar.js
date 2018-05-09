@@ -36,12 +36,13 @@ import Divider from '../layout/divider.js';
 import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
+import Theme from 'web/utils/theme';
 
 const LogoutLink = glamorous.a({
-  color: '#393637',
+  color: Theme.darkGray,
   cursor: 'pointer',
   '&:link, &:hover': {
-    color: '#393637',
+    color: Theme.darkGray,
   },
 });
 

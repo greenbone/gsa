@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/set';
+import 'core-js/fn/symbol';
 
-import {is_defined, map, pluralize_type} from '../utils.js';
+import {is_defined} from '../utils/identity';
+import {map} from '../utils/array';
+import {pluralize_type} from '../utils/string';
 
 const types = {
   host: 'asset',
@@ -31,12 +35,14 @@ const types = {
   cves: 'info',
   cpe: 'info',
   cpes: 'info',
-  dfncertadv: 'info',
-  dfncertadvs: 'info',
+  dfncert: 'info',
+  dfncerts: 'info',
   ovaldefs: 'info',
   ovaldef: 'info',
-  certbundadv: 'info',
-  certbundadvs: 'info',
+  certbund: 'info',
+  certbunds: 'info',
+  secinfo: 'info',
+  secinfos: 'info',
   portlist: 'port_list',
   portlists: 'port_list',
   reportformat: 'report_format',

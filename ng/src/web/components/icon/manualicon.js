@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,67 +23,41 @@
 
 import React from 'react';
 
-import {get_language} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
-
 import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
 
 import Icon from './icon.js';
 
-const LANGUAGE_MAPPING = {};
-const DEFAULT_LANGUAGE_PATH = 'en';
-
-const get_language_path = () => {
-  const lang = get_language();
-
-  if (!is_defined(lang)) {
-    return DEFAULT_LANGUAGE_PATH;
-  }
-
-  const code = lang.slice(0, 1);
-  const path = LANGUAGE_MAPPING[code];
-
-  return is_defined(path) ? path : DEFAULT_LANGUAGE_PATH;
-};
+import ManualLink from '../link/manuallink.js';
 
 const ManualIcon = ({
   anchor,
   page,
+  searchTerm,
   title,
-  gmp,
   ...props
 }) => {
-  const {manualurl} = gmp.globals;
-
-  let url = manualurl;
-  if (!url.endsWith('/')) {
-    url += '/';
-  }
-
-  url += get_language_path() + '/' + page + '.html';
-
-  if (is_defined(anchor)) {
-    url += '#' + anchor;
-  }
   return (
-    <Icon
-      {...props}
-      img="help.svg"
-      to={url}
-      title={title}
-      target="_blank"
-    />
+    <ManualLink
+      anchor={anchor}
+      page={page}
+      searchTerm={searchTerm}
+    >
+      <Icon
+        {...props}
+        img="help.svg"
+        title={title}
+      />
+    </ManualLink>
   );
 };
 
 ManualIcon.propTypes = {
   anchor: PropTypes.string,
-  gmp: PropTypes.gmp.isRequired,
   page: PropTypes.string.isRequired,
+  searchTerm: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
-export default withGmp(ManualIcon);
+export default ManualIcon;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,9 @@
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import {for_each, map, is_defined} from '../utils.js';
+import {for_each, map} from '../utils/array';
+import {is_defined} from '../utils/identity';
+
 import logger from '../log.js';
 
 import Capabilities from '../capabilities/capabilities.js';
@@ -54,18 +56,21 @@ class UserCommand extends EntityCommand {
       const settings = new Settings();
       const {data} = response;
 
-      for_each(data.auth_settings.describe_auth_response.group, group => {
-        const values = {};
+      if (is_defined(data.auth_settings) &&
+       is_defined(data.auth_settings.describe_auth_response)) {
+        for_each(data.auth_settings.describe_auth_response.group, group => {
+          const values = {};
 
-        for_each(group.auth_conf_setting, setting => {
-          values[setting.key] = setting.value;
-          if (is_defined(setting.certificate_info)) {
-            values.certificate_info = setting.certificate_info;
-          }
+          for_each(group.auth_conf_setting, setting => {
+            values[setting.key] = setting.value;
+            if (is_defined(setting.certificate_info)) {
+              values.certificate_info = setting.certificate_info;
+            }
+          });
+
+          settings.set(group._name, values);
         });
-
-        settings.set(group._name, values);
-      });
+      }
 
       return response.setData(settings);
     });
@@ -103,21 +108,51 @@ class UserCommand extends EntityCommand {
   }
 
   currentChartPreferences(options = {}) {
+    // FIXME remove after legacy dashboards are obsolete
     return this.httpGet({
-      cmd: 'get_my_settings',
+      cmd: 'get_dashboard_settings',
     }, options,
     ).then(response => {
-      const prefs = response.data.chart_preferences.chart_preference;
+      const {setting: prefs} = response.data.get_dashboard_settings
+        .get_settings_response;
       log.debug('ChartPreferences loaded', prefs);
       return response.setData(new ChartPreferences(prefs));
     });
   }
 
-  currentLanguages() {
+  currentDashboardSettings(options = {}) {
     return this.httpGet({
-      cmd: 'get_my_settings',
-    }).then(response => {
-      return response.setData(response.data.get_my_settings.gsa_languages.language);
+      cmd: 'get_dashboard_settings',
+    }, options,
+    ).then(response => {
+      const {setting: prefs} = response.data.get_dashboard_settings
+        .get_settings_response;
+
+      log.debug('DashboardSettings loaded', prefs);
+
+      const settings = {};
+
+      for_each(prefs, pref => {
+        const {_id: id, value} = pref;
+
+        try {
+          settings[id] = JSON.parse(value);
+        }
+        catch (e) {
+          log.warn('Could not parse dashboard setting', pref);
+        }
+      });
+
+      return response.setData(settings);
+    });
+  }
+
+  saveDashboardSetting(id, settings) {
+    log.debug('Saving dashboard settings', id, settings);
+    return this.action({
+      setting_id: id,
+      setting_value: JSON.stringify(settings),
+      cmd: 'save_setting',
     });
   }
 
@@ -144,7 +179,6 @@ class UserCommand extends EntityCommand {
     }
     const data = {
       cmd: 'create_user',
-      next: 'get_user',
       access_hosts,
       access_ifaces,
       auth_method,
@@ -157,7 +191,7 @@ class UserCommand extends EntityCommand {
       'role_ids:': role_ids,
     };
     log.debug('Creating new user', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -171,7 +205,7 @@ class UserCommand extends EntityCommand {
     ifaces_allow,
     name,
     old_name,
-    password,
+    password = '', // needs to be included in httpPost, should be optional in gsad
     role_ids,
   }) {
     if (auth_method === AUTH_METHOD_LDAP) {
@@ -188,7 +222,6 @@ class UserCommand extends EntityCommand {
     }
     const data = {
       cmd: 'save_user',
-      next: 'get_user',
       access_hosts,
       access_ifaces,
       comment,
@@ -203,7 +236,7 @@ class UserCommand extends EntityCommand {
       'role_ids:': role_ids,
     };
     log.debug('Saving user', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   delete({id, inheritor_id}) {
@@ -218,6 +251,7 @@ class UserCommand extends EntityCommand {
   }
 
   saveSettings(data) {
+    log.debug('Saving settings', data);
     return this.httpPost({
       cmd: 'save_my_settings',
       text: data.timezone,
@@ -231,6 +265,7 @@ class UserCommand extends EntityCommand {
       severity_class: data.severityclass,
       dynamic_severity: data.dynamicseverity,
       default_severity: data.defaultseverity,
+      /* eslint-disable max-len */
       'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899': data.defaultalert,
       'settings_default:fe7ea321-e3e3-4cc6-9952-da836aae83ce': data.defaultopenvasscanconfig,
       'settings_default:fb19ac4b-614c-424c-b046-0bc32bf1be73': data.defaultospscanconfig,
@@ -266,7 +301,8 @@ class UserCommand extends EntityCommand {
       'settings_filter:adb6ffc8-e50e-4aab-9c31-13c741eb8a16': data.ovalfilter,
       'settings_filter:e4cf514a-17e2-4ab9-9c90-336f15e24750': data.certbundfilter,
       'settings_filter:312350ed-bc06-44f3-8b3f-ab9eb828b80b': data.dfncertfilter,
-      'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.allsecinfofilter,
+      'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.secinfofilter,
+      /* eslint-enable max-len */
       auto_cache_rebuild: data.autocacherebuild,
     });
   }
@@ -276,7 +312,7 @@ class UserCommand extends EntityCommand {
   }
 }
 
-export class UsersCommand extends EntitiesCommand {
+class UsersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'user', User);

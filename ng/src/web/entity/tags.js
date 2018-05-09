@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,31 +21,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/from';
+import 'core-js/fn/set';
 
 import React from 'react';
 
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {first, is_defined} from 'gmp/utils.js';
+import {first, is_defined} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 
 import TextField from '../components/form/textfield.js';
-import Select2 from '../components/form/select2.js';
+import Select from '../components/form/select.js';
 
 import EditIcon from '../components/icon/editicon.js';
-import HelpIcon from '../components/icon/helpicon.js';
+import ManualIcon from '../components/icon/manualicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 import TrashIcon from '../components/icon/trashicon.js';
 
 import Divider from '../components/layout/divider.js';
+import Layout from '../components/layout/layout.js';
 import IconDivider from '../components/layout/icondivider.js';
 
 import DetailsLink from '../components/link/detailslink.js';
-
-import Section from '../components/section/section.js';
 
 import Table from '../components/table/stripedtable.js';
 import TableBody from '../components/table/body.js';
@@ -130,7 +132,7 @@ class AddTag extends React.Component {
     return (
       <Divider>
         <b>{_('Add Tag')}</b>
-        <Select2
+        <Select
           name="name"
           value={name}
           onChange={this.onValueChange}>
@@ -141,7 +143,7 @@ class AddTag extends React.Component {
               </option>
             );
           })}
-        </Select2>
+        </Select>
         <span>with Value</span>
         <TextField
           name="value"
@@ -172,23 +174,26 @@ const SectionElements = ({
   onTagCreateClick,
 }) => {
   return (
-    <SectionElementDivider margin="10px">
-      <AddTag
-        entity={entity}
-        onAddTag={onTagAddClick}
-      />
-      <IconDivider>
-        <NewIcon
-          title={_('New Tag')}
-          value={entity}
-          onClick={onTagCreateClick}
+    <Layout grow align="end">
+      <SectionElementDivider margin="10px">
+        <AddTag
+          entity={entity}
+          onAddTag={onTagAddClick}
         />
-        <HelpIcon
-          page="user-tags"
-          title={_('Help: User Tags list')}
-        />
-      </IconDivider>
-    </SectionElementDivider>
+        <IconDivider>
+          <NewIcon
+            title={_('New Tag')}
+            value={entity}
+            onClick={onTagCreateClick}
+          />
+          <ManualIcon
+            page="gui_introduction"
+            anchor="tags"
+            title={_('Help: User Tags')}
+          />
+        </IconDivider>
+      </SectionElementDivider>
+    </Layout>
   );
 };
 
@@ -200,7 +205,6 @@ SectionElements.propTypes = {
 
 const EntityTags = ({
   entity,
-  foldable = true,
   onTagAddClick,
   onTagDeleteClick,
   onTagDisableClick,
@@ -218,12 +222,14 @@ const EntityTags = ({
   const has_tags = is_defined(tags);
   const count = has_tags ? tags.length : 0;
   return (
-    <Section
-      foldable={foldable}
-      extra={extra}
-      img={<TagIcon/>}
+    <Layout
+      flex="column"
       title={_('User Tags ({{count}})', {count})}
     >
+      {extra}
+      {tags.length === 0 &&
+        _('No user tags available')
+      }
       {tags.length > 0 &&
         <Table>
           <TableHeader>
@@ -288,13 +294,12 @@ const EntityTags = ({
           </TableBody>
         </Table>
       }
-    </Section>
+    </Layout>
   );
 };
 
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
-  foldable: PropTypes.bool,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

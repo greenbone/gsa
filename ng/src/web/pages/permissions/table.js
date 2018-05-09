@@ -32,12 +32,12 @@ import PermissionDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['description', _('Description')],
-  ['type', _('Resource Type')],
-  ['_resource', _('Resource')],
-  ['subject_type', _('Subject Type')],
-  ['_subject', _('Subject')],
+  ['name', _('Name'), '16%'],
+  ['description', _('Description'), '28%'],
+  ['type', _('Resource Type'), '12%'],
+  ['_resource', _('Resource'), '12%'],
+  ['subject_type', _('Subject Type'), '12%'],
+  ['_subject', _('Subject'), '12%'],
 ];
 
 const Table = createEntitiesTable({

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import CollectionCounts from '../collection/collectioncounts.js';
 import {parse_collection_list} from '../collection/parser.js';
@@ -34,7 +34,7 @@ import Filter from '../models/filter.js';
 
 const log = logger.getLogger('gmp.commands.filters');
 
-export class FilterCommand extends EntityCommand {
+class FilterCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'filter', Filter);
@@ -44,21 +44,19 @@ export class FilterCommand extends EntityCommand {
     const {term, name, type, comment = ''} = args;
     const data = {
       cmd: 'create_filter',
-      next: 'get_filter',
       term,
       name,
       optional_resource_type: type,
       comment,
     };
     log.debug('Creating new filter', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save(args) {
     const {id, term, name, type, comment = ''} = args;
     const data = {
       cmd: 'save_filter',
-      next: 'get_filter',
       comment,
       id,
       name,
@@ -66,7 +64,7 @@ export class FilterCommand extends EntityCommand {
       term,
     };
     log.debug('Saving filter', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   getElementFromRoot(root) {
@@ -102,7 +100,7 @@ const parse_collection_counts = response => {
   return new CollectionCounts(parse_counts(response));
 };
 
-export class FiltersCommand extends EntitiesCommand {
+class FiltersCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'filter', Filter);

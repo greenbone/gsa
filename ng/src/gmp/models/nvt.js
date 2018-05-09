@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,14 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/starts-with';
 
-import {
-  is_defined,
-  is_empty,
-  is_string,
-  map,
-  shallow_copy,
-} from '../utils.js';
+import {is_defined, is_string} from '../utils/identity';
+import {is_empty} from '../utils/string';
+import {map} from '../utils/array';
 
 import {parse_float, parse_severity} from '../parser.js';
 
@@ -87,7 +84,7 @@ class Nvt extends Info {
 
     if (is_defined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
-        const pref = shallow_copy(preference);
+        const pref = {...preference};
         delete pref.nvt;
         return pref;
       });

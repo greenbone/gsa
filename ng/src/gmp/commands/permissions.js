@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ import Permission from '../models/permission.js';
 
 const log = logger.getLogger('gmp.commands.permissions');
 
-export class PermissionCommand extends EntityCommand {
+class PermissionCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'permission', Permission);
@@ -52,7 +52,6 @@ export class PermissionCommand extends EntityCommand {
     const data = {
       cmd: 'create_permission',
       comment,
-      next: 'get_permission',
       permission: name,
       permission_group_id: group_id,
       permission_role_id: role_id,
@@ -62,7 +61,7 @@ export class PermissionCommand extends EntityCommand {
       subject_type,
     };
     log.debug('Creating new permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   save({
@@ -78,7 +77,6 @@ export class PermissionCommand extends EntityCommand {
   }) {
     const data = {
       cmd: 'save_permission',
-      next: 'get_permission',
       id,
       comment,
       permission: name,
@@ -91,11 +89,11 @@ export class PermissionCommand extends EntityCommand {
       id_or_empty: resource_id,
     };
     log.debug('Saving permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 }
 
-export class PermissionsCommand extends EntitiesCommand {
+class PermissionsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'permission', Permission);
@@ -131,7 +129,7 @@ export class PermissionsCommand extends EntitiesCommand {
     }
 
     log.debug('Creating new permission', data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.httpPost(data);
   }
 
   getEntitiesResponse(root) {

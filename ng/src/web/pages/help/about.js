@@ -27,6 +27,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale.js';
 
 import ExternalLink from '../../components/link/externallink.js';
+import ProtocolDocLink from '../../components/link/protocoldoclink.js';
 import Img from '../../components/img/img.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -67,15 +68,21 @@ const About = () => (
         <TextBlock>
           <h1>Greenbone Security Assistant</h1>
           <h3>Version 7.1+beta1</h3>
-          <DivP>The Greenbone Security Assistant (GSA) is the web-based graphical
-            user interface of the Open Vulnerability Assessment System
-            (OpenVAS). GSA connects to OpenVAS Manager via the OpenVAS
-            Management Protocol (OMP). By implementing the full feature set
-            of OMP, GSA offers a straight-forward, yet powerful method to
-            manage network vulnerability scans.
+          <DivP>The Greenbone Security Assistant (GSA) is the web-based
+            user interface of the Greenbone Vulnerability Manager (GVM).
           </DivP>
           <DivP>
-            Copyright 2009-2017 by&nbsp;
+            GSA connects to GVM via the Greenbone Management Protocol (GMP)
+            making the rich feature set of the GVM backend available, covering
+            vulnerability scanning, vulnerability management, and related
+            activities.
+          </DivP>
+          <DivP>
+            GSA adds various smart features and forms a powerful tool to manage
+            and maintain a high resilience level of the IT infrastructures.
+          </DivP>
+          <DivP>
+            Copyright 2009-2018 by&nbsp;
             <ExternalLink
               to="https://www.greenbone.net"
             >
@@ -91,25 +98,15 @@ const About = () => (
               (full license text)
             </ExternalLink>
           </DivP>
-          <DivP>Contact: For updates, feature proposals and bug reports contact
-            the&nbsp;
-            <ExternalLink
-              to="http://www.greenbone.net/en/contact/"
-            >
-              Greenbone team
-            </ExternalLink> or visit the&nbsp;
-            <ExternalLink
-              to="http://www.openvas.org/"
-            >
-              OpenVAS homepage.
-            </ExternalLink>
-          </DivP>
           <DivP>
             Cookies: This web application uses cookies to store session
             information. The cookie is not stored on the server-side hard disk
-            and not submitted anywhere. It is lost when the session is closed
-            or expired. The cookie is also temporarily stored in your browser
-            where you can examine the content.
+            and not submitted anywhere. It is lost when the session is closed or
+            expired. The cookie is also temporarily stored in your browser where
+            you can examine the content.
+          </DivP>
+          <DivP>
+            The GMP documentation is available <ProtocolDocLink title="here"/>.
           </DivP>
         </TextBlock>
         <ImageBlock>

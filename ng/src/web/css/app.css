@@ -1,9 +1,0 @@
-html {
-  overflow-y: scroll;
-}
-
-html, body, #app, #app > div {
-  height: 100%;
-}
-
-/* vim: set ts=2 sw=2 tw=80:*/

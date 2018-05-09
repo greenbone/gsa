@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,32 +29,29 @@ import _ from 'gmp/locale.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import {withDashboard} from '../../components/dashboard/dashboard.js';
+import DashboardControls from '../../components/dashboard2/controls';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
-import CpeCharts from './charts.js';
 import CpeFilterDialog from './filterdialog.js';
 import CpesTable from './table.js';
 
+import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard/index.js';
+
 const ToolBarIcons = props => {
   return (
-    <HelpIcon
-      page="cpes"
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="cpe"
       title={_('Help: CPEs')}/>
   );
 };
 
-const Dashboard = withDashboard(CpeCharts, {
-  hideFilterSelect: true,
-  configPrefId: '9cff9b4d-b164-43ce-8687-f2360afc7500',
-  defaultControllersString: 'cpe-by-severity-class|cpe-by-created|' +
-    'cpe-by-cvss',
-  defaultControllerString: 'cpe-by-cvss',
-});
-
 export default withEntitiesContainer('cpe', {
-  dashboard: Dashboard,
+  dashboard2: CpesDashboard,
+  dashboardControls: () => (
+    <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
+  ),
   filterEditDialog: CpeFilterDialog,
   sectionIcon: 'cpe.svg',
   table: CpesTable,

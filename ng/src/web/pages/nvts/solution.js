@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 import {TAG_NA} from 'gmp/models/nvt.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -33,6 +33,8 @@ import DetailsBlock from '../../entity/block.js';
 import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
 
 import IconDivider from '../../components/layout/icondivider.js';
+
+import Pre from './preformatted';
 
 const Solution = ({
   solution,
@@ -53,9 +55,9 @@ const Solution = ({
           displayTitleText
           type={solutionType}/>
       </IconDivider>
-      <p>
+      <Pre>
         {solution}
-      </p>
+      </Pre>
     </DetailsBlock>
   );
 };

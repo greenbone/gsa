@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_empty} from './utils.js';
+import {is_defined} from './utils/identity';
+import {is_empty} from './utils/string';
 
 import logger from './log.js';
 
@@ -62,7 +63,9 @@ import './commands/users.js';
 import './commands/vulns.js';
 import './commands/wizard.js';
 
-import {GmpHttp, build_server_url, build_url_params} from './http.js';
+import GmpHttp from './http/gmp.js';
+import {build_server_url, build_url_params} from './http/utils.js';
+
 import {get_commands} from './command.js';
 import LoginCommand from './commands/login.js';
 
@@ -78,8 +81,11 @@ export class Gmp {
       storage = localStorage,
       caches,
       manualurl,
+      protocoldocurl,
       ...httpoptions
     } = options;
+
+    log.debug('Using gmp options', options);
 
     this._commands = {};
 
@@ -99,11 +105,7 @@ export class Gmp {
       this.token = this.storage.token;
     }
 
-    this.globals = {manualurl};
-
-    if (!is_defined(window.gsa)) {
-      window.gsa = {};
-    }
+    this.globals = {manualurl, protocoldocurl};
 
     const commands = get_commands();
     for (const name in commands) { // eslint-disable-line guard-for-in
@@ -179,7 +181,6 @@ export class Gmp {
       delete this.storage.token;
     }
     this.http.token = token;
-    window.gsa.token = token;
   }
 
   get username() {

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -43,6 +44,8 @@ const Header = ({
   actionsColumn,
   links = true,
   sort = true,
+  currentSortBy,
+  currentSortDir,
   onSortChange,
 }) => {
   return (
@@ -50,31 +53,46 @@ const Header = ({
       <TableRow>
         <TableHead
           rowSpan="2"
-          sortby={sort ? 'date' : false}
+          width="25%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'date' : false}
           onSortChange={onSortChange}>
           {_('Date')}
         </TableHead>
         <TableHead
           rowSpan="2"
-          width="10em"
-          sortby={sort ? 'status' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'status' : false}
           onSortChange={onSortChange}>
           {_('Status')}
         </TableHead>
         <TableHead
+          width="39%"
           rowSpan="2"
-          sortby={sort ? 'task' : false}
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'task' : false}
           onSortChange={onSortChange}>
           {_('Task')}
         </TableHead>
         <TableHead
           rowSpan="2"
-          width="10em"
-          sortby={sort ? 'severity' : false}
+          width="8%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}>
           {_('Severity')}
         </TableHead>
-        <TableHead colSpan="5">{_('Scan Results')}</TableHead>
+        <TableHead
+          width="25%"
+          colSpan="5"
+        >
+          {_('Scan Results')}
+        </TableHead>
         {is_defined(actionsColumn) ?
           actionsColumn :
           <TableHead rowSpan="2" width="5em">{_('Actions')}</TableHead>
@@ -82,32 +100,42 @@ const Header = ({
       </TableRow>
       <TableRow>
         <TableHead
-          width="5em"
-          sortby={sort ? 'high' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'high' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.High/>
         </TableHead>
         <TableHead
-          width="5em"
-          sortby={sort ? 'medium' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'medium' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Medium/>
         </TableHead>
         <TableHead
-          width="5em"
-          sortby={sort ? 'low' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'low' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Low/>
         </TableHead>
         <TableHead
-          width="5em"
-          sortby={sort ? 'log' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'log' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.Log/>
         </TableHead>
         <TableHead
-          width="5em"
-          sortby={sort ? 'false_positive' : false}
+          width="4%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'false_positive' : false}
           onSortChange={onSortChange}>
           <SeverityClassLabel.FalsePositive/>
         </TableHead>
@@ -118,6 +146,8 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
@@ -133,6 +163,7 @@ export default createEntitiesTable({
   header: Header,
   footer: Footer,
   row: ReportRow,
+  toggleDetailsIcon: false,
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,49 +29,46 @@ import PortList from '../models/portlist.js';
 
 const log = logger.getLogger('gmp.commands.portlists');
 
-export class PortListCommand extends EntityCommand {
+class PortListCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'port_list', PortList);
   }
 
   create(args) {
-    let {name, comment = '', from_file, port_range, file} = args;
+    const {name, comment = '', from_file, port_range, file} = args;
     log.debug('Creating new port list', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_port_list',
-      next: 'get_port_list',
       name,
       comment,
       from_file,
       port_range,
       file,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
-    let {id, name, comment = ''} = args;
+    const {id, name, comment = ''} = args;
 
     log.debug('Saving port list', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_port_list',
-      next: 'get_port_list',
       comment,
       id,
       name,
-    }).then(this.transformResponse);
+    });
   }
 
   createPortRange(args) {
-    let {id, port_range_start, port_range_end, port_type} = args;
-    return this.httpPost({
+    const {id, port_range_start, port_range_end, port_type} = args;
+    return this.action({
       cmd: 'create_port_range',
-      next: 'get_port_list',
       id,
       port_range_start,
       port_range_end,
       port_type,
-    }).then(this.transformResponse);
+    });
   }
 
   deletePortRange({id, port_list_id}) {
@@ -83,13 +80,12 @@ export class PortListCommand extends EntityCommand {
   }
 
   import(args) {
-    let {xml_file} = args;
+    const {xml_file} = args;
     log.debug('Importing port list', args);
     return this.httpPost({
       cmd: 'import_port_list',
-      next: 'get_port_list',
       xml_file,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
@@ -97,7 +93,7 @@ export class PortListCommand extends EntityCommand {
   }
 }
 
-export class PortListsCommand extends EntitiesCommand {
+class PortListsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'port_list', PortList);

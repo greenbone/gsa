@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map, is_empty} from '../utils.js';
+import {map} from '../utils/array';
+import {is_empty} from '../utils/string';
 import logger from '../log.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
@@ -46,7 +47,6 @@ class TaskCommand extends EntityCommand {
 
     return this.httpPost({
       cmd: 'start_task',
-      next: 'get_task',
       id,
     })
     .then(() => {
@@ -64,7 +64,6 @@ class TaskCommand extends EntityCommand {
 
     return this.httpPost({
       cmd: 'stop_task',
-      next: 'get_task',
       id,
     })
     .then(() => {
@@ -177,7 +176,6 @@ class TaskCommand extends EntityCommand {
 
     const data = {
       cmd: 'create_task',
-      next: 'get_task',
       'alert_ids:': alert_ids,
       alterable,
       apply_overrides,
@@ -202,18 +200,17 @@ class TaskCommand extends EntityCommand {
       target_id,
     };
     log.debug('Creating task', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   createContainer(args) {
     const {name, comment = ''} = args;
     log.debug('Creating container task', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_container_task',
-      next: 'get_task',
       name,
       comment,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
@@ -241,7 +238,6 @@ class TaskCommand extends EntityCommand {
     } = args;
     const data = {
       cmd: 'save_task',
-      next: 'get_task',
       alterable,
       'alert_ids:': alert_ids,
       apply_overrides,
@@ -264,7 +260,7 @@ class TaskCommand extends EntityCommand {
       task_id: id,
     };
     log.debug('Saving task', args, data);
-    return this.httpPost(data).then(this.transformResponse);
+    return this.action(data);
   }
 
   saveContainer(args) {
@@ -277,16 +273,15 @@ class TaskCommand extends EntityCommand {
       id,
     } = args;
     log.debug('Saving container task', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_container_task',
-      next: 'get_task',
       name,
       comment,
       in_assets,
       auto_delete,
       auto_delete_data,
       task_id: id,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
@@ -302,6 +297,45 @@ class TasksCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_tasks.get_tasks_response;
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'severity',
+      filter,
+    });
+  }
+
+  getStatusAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'task',
+      group_column: 'status',
+      filter,
+    });
+  }
+
+  getHighResultsAggregates({filter, max} = {}) {
+    return this.getAggregates({
+      filter,
+      aggregate_type: 'task',
+      group_column: 'uuid',
+      textColumns: [
+        'name',
+        'high_per_host',
+        'severity',
+        'modified',
+      ],
+      sort: [{
+        field: 'high_per_host',
+        direction: 'descending',
+        stat: 'max',
+      }, {
+        field: 'modified',
+        direction: 'descending',
+      }],
+      maxGroups: max,
+    });
   }
 }
 

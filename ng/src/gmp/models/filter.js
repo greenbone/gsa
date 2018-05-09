@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,20 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/find-index';
+import 'core-js/fn/array/includes';
 
-import {
-  for_each,
-  is_defined,
-  is_string,
-  includes,
-  map,
-} from '../utils.js';
+import {is_defined, is_string} from '../utils/identity';
+import {for_each, map} from '../utils/array';
 
 import Model from '../model.js';
 
 import convert from './filter/convert.js';
-import FilterTerm from './filter/filterterm.js';
+import FilterTerm, {AND} from './filter/filterterm.js';
 import {EXTRA_KEYWORDS} from './filter/keywords.js';
+
+export const UNKNOWN_FILTER_ID = '0';
 
 /**
  * Represents a filter
@@ -129,7 +128,7 @@ class Filter extends Model {
   }
 
   /**
-   * Add a FilterTerm to this Filter
+   * Add FilterTerm to this Filter
    *
    * Adds the passed FilterTerm to the list of filtertems in this Filter.
    *
@@ -139,8 +138,8 @@ class Filter extends Model {
    *
    * @return {Filter} This filter
    */
-  _addTerm(term) {
-    this.terms.push(term);
+  _addTerm(...terms) {
+    this.terms.push(...terms);
     return this;
   }
 
@@ -180,15 +179,32 @@ class Filter extends Model {
    *
    * @return {Filter} This filter with merged terms.
    */
-  _merge(filter) {
+  _mergeExtraKeywords(filter) {
     if (is_defined(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
-        if (is_defined(key) && includes(EXTRA_KEYWORDS, key) &&
+        if (is_defined(key) && EXTRA_KEYWORDS.includes(key) &&
           !this.has(key)) {
           this._addTerm(term);
         }
       });
+    }
+    return this;
+  }
+
+  /**
+   * Merges all terms from filter into this Filter
+   *
+   *
+   * @private
+   *
+   * @param {Filter} filter  Terms from filter to be merged.
+   *
+   * @return {Filter} This filter with merged terms.
+   */
+  _merge(filter) {
+    if (is_defined(filter)) {
+      this._addTerm(...filter.getAllTerms());
     }
     return this;
   }
@@ -226,7 +242,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (!is_defined(key) || !includes(EXTRA_KEYWORDS, key)) {
+      if (!is_defined(key) || !EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });
@@ -244,7 +260,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (is_defined(key) && includes(EXTRA_KEYWORDS, key)) {
+      if (is_defined(key) && EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });
@@ -268,11 +284,45 @@ class Filter extends Model {
   }
 
   /**
+   * Check if a filter term is included in this filter
+   *
+   * @param {FilterTerm} term  FilterTerm to find in the filter
+   *
+   * @return {Boolean}
+   */
+  hasTerm(term) {
+    const terms = this.getTerms(term.keyword);
+    return terms.findIndex(cterm => cterm.equals(term)) !== -1;
+  }
+
+  /**
+   * Get all FilterTerms for a keyword
+   *
+   * @param {String} key FilterTerm keyword to search for
+   *
+   * @returns {Array} Returns all FilterTerms in an Array found for
+   *                  the passed keyword or an empty Array if not FilterTerm
+   *                  has been found.
+   */
+  getTerms(key) {
+    if (!is_defined(key)) {
+      return [];
+    }
+
+    return this.terms.reduce((terms, term) => {
+      if (term.keyword === key) {
+        terms.push(term);
+      }
+      return terms;
+    }, []);
+  }
+
+  /**
    * Get all FilterTerms
    *
-   * @returns {FilterTerm} Returns the array of all FilterTerms in this filter
+   * @returns {Array} Returns the array of all FilterTerms in this filter
    */
-  getTerms() {
+  getAllTerms() {
     return this.terms;
   }
 
@@ -316,7 +366,7 @@ class Filter extends Model {
    }
 
   /**
-   * Check wether this Filter contains a FilterTerm with the passed keyword
+   * Check whether this Filter contains a FilterTerm with the passed keyword
    *
    * @param {String} key  Keyword to search for
    *
@@ -362,14 +412,27 @@ class Filter extends Model {
       return false;
     }
 
-    const ours = this.getTerms();
-    const others = filter.getTerms();
+    const ours = this.getAllTerms();
+    const others = filter.getAllTerms();
 
     for (let i = 0; i < ours.length; i++) {
       const our = ours[i];
-      const other = our.hasKeyword() ? filter.getTerm(our.keyword) : others[i];
+      if (our.hasKeyword()) {
+        const otherterms = filter.getTerms(our.keyword);
+        const ourterms = this.getTerms(our.keyword);
 
-      if (!our.equals(other)) {
+        if (otherterms.length !== ourterms.length) {
+          return false;
+        }
+
+        const equals = otherterms.reduce((prev, term) =>
+          prev || term.equals(our), false);
+
+        if (!equals) { // same term isn't in other terms
+          return false;
+        }
+      }
+      else if (!our.equals(others[i])) {
         return false;
       }
     }
@@ -392,7 +455,7 @@ class Filter extends Model {
     f.id = this.id;
     f.filter_type = this.filter_type;
 
-    f._setTerms([...this.getTerms()]);
+    f._setTerms([...this.getAllTerms()]);
     return f;
   }
 
@@ -504,6 +567,23 @@ class Filter extends Model {
   }
 
   /**
+   * Merge other filter with an and operation
+   *
+   * @param {Filter} filter  Filter to be merged with and operation
+   *
+   * @return {Filter} This filter
+   */
+  and(filter) {
+    const nonExtraTerms = this.getAllTerms().filter(
+      term => !EXTRA_KEYWORDS.includes(term.keyword));
+
+    if (nonExtraTerms.length > 0) {
+      this._addTerm(AND);
+    }
+    return this._merge(filter);
+  }
+
+  /**
    * Returns the sort order of the current filter
    *
    * @return {String} The sort order. 'sort' or 'sort-reverse'.
@@ -562,7 +642,7 @@ class Filter extends Model {
    */
   mergeExtraKeywords(filter) {
     const f = this.copy();
-    return f._merge(filter);
+    return f._mergeExtraKeywords(filter);
   }
 
   /**
@@ -599,9 +679,21 @@ class Filter extends Model {
     const f = new Filter();
 
     f.parseString(filterstring);
-    f._merge(filter);
+    f._mergeExtraKeywords(filter);
 
     return f;
+  }
+
+  /**
+   * Creates a new Filter from FilterTerms
+   *
+   * @param {FilterTerm} term  FilterTerms to set for the new Filter
+   *
+   * @returns {Filter} The new Filter
+   */
+  static fromTerm(...term) {
+    const f = new Filter();
+    return f._addTerm(...term);
   }
 
 }

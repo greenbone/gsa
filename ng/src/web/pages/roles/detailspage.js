@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +23,11 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale.js';
+
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {permission_description} from '../../utils/render.js';
@@ -42,14 +47,19 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 import ListIcon from '../../components/icon/listicon.js';
 
 import Divider from '../../components/layout/divider.js';
 import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
-import Section from '../../components/section/section.js';
+import Tab from '../../components/tab/tab.js';
+import TabLayout from '../../components/tab/tablayout.js';
+import TabList from '../../components/tab/tablist.js';
+import TabPanel from '../../components/tab/tabpanel.js';
+import TabPanels from '../../components/tab/tabpanels.js';
+import Tabs from '../../components/tab/tabs.js';
 
 import Table from '../../components/table/stripedtable.js';
 import TableBody from '../../components/table/body.js';
@@ -61,6 +71,22 @@ import TableRow from '../../components/table/row.js';
 import RoleComponent from './component.js';
 import RoleDetails from './details.js';
 
+const TabTitleCount = glamorous.span({
+  fontSize: '0.7em',
+});
+
+const TabTitle = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
+  </Layout>
+);
+
+TabTitle.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
 const ToolBarIcons = ({
   entity,
   onRoleCloneClick,
@@ -71,9 +97,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="role_details"
-        title={_('Help: Role Details')}
+      <ManualIcon
+        page="gui_administration"
+        anchor="user-roles"
+        title={_('Help: Roles')}
       />
       <ListIcon
         title={_('Roles List')}
@@ -126,56 +153,68 @@ const Details = ({
         entity={entity}
         links={links}
       />
-
-      <Section
-        title={_('General Command Permissions')}
-        foldable={true}
-      >
-        {general_permissions.length > 0 ?
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Description')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {general_permissions.map(perm => (
-                <TableRow key={perm.id}>
-                  <EntityNameTableData
-                    entity={perm}
-                    link={links}
-                    type="permission"
-                    displayName={_('Permission')}
-                  />
-                  <TableData>
-                    {permission_description(perm.name, perm.resource)}
-                  </TableData>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table> :
-          _('None')
-        }
-      </Section>
     </Layout>
   );
 };
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
-  general_permissions: PropTypes.collection,
+  general_permissions: PropTypes.object,
   links: PropTypes.bool,
+};
+
+const GeneralPermissions = ({
+  permissions = [],
+  links,
+}) => {
+  return (
+    <Layout
+      title={_('General Command Permissions')}
+    >
+      {permissions.length > 0 ?
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                {_('Name')}
+              </TableHead>
+              <TableHead>
+                {_('Description')}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {permissions.map(perm => (
+              <TableRow key={perm.id}>
+                <EntityNameTableData
+                  entity={perm}
+                  links={links}
+                  type="permission"
+                  displayName={_('Permission')}
+                />
+                <TableData>
+                  {permission_description(perm.name, perm.resource)}
+                </TableData>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table> :
+        _('None')
+      }
+    </Layout>
+  );
+};
+
+GeneralPermissions.propTypes = {
+  links: PropTypes.bool,
+  permissions: PropTypes.array,
 };
 
 const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  general_permissions,
   ...props
 }) => (
   <RoleComponent
@@ -211,12 +250,90 @@ const Page = ({
         onPermissionChanged={onChanged}
         onPermissionDownloaded={onDownloaded}
         onPermissionDownloadError={onError}
-      />
+      >
+        {({
+          activeTab = 0,
+          links = true,
+          permissionsComponent,
+          permissionsTitle,
+          tagsComponent,
+          tagsTitle,
+          onActivateTab,
+          entity,
+          ...other
+        }) => {
+          const genPermsCount = is_defined(general_permissions) ?
+            general_permissions.entities.length : 0;
+
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <Tab>
+                    <TabTitle
+                      title={_('General Command Permissions')}
+                      count={genPermsCount}
+                    />
+                  </Tab>
+                  {is_defined(tagsComponent) &&
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
+                  }
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                      links={links}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <GeneralPermissions
+                      permissions={is_defined(general_permissions) ?
+                        general_permissions.entities : []}
+                    />
+                  </TabPanel>
+                  {is_defined(tagsComponent) &&
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                  }
+                  {is_defined(permissionsComponent) &&
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
+                  }
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
   </RoleComponent>
 );
 
 Page.propTypes = {
+  general_permissions: PropTypes.object,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

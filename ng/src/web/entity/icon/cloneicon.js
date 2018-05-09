@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils.js';
+import {is_defined, capitalize_first_letter} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 

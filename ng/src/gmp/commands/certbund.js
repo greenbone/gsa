@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterlkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
@@ -44,9 +45,25 @@ class CertBundsCommand extends InfoEntitiesCommand {
   constructor(http) {
     super(http, 'cert_bund_adv', CertBundAdv, info_filter);
   }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'cert_bund_adv',
+      group_column: 'created',
+      filter,
+    });
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'cert_bund_adv',
+      group_column: 'severity',
+      filter,
+    });
+  }
 }
 
-register_command('certbundadv', CertBundCommand);
-register_command('certbundadvs', CertBundsCommand);
+register_command('certbund', CertBundCommand);
+register_command('certbunds', CertBundsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

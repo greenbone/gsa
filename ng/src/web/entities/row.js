@@ -27,6 +27,8 @@ import glamorous from 'glamorous';
 
 import Text from '../components/form/text.js';
 
+import Theme from '../utils/theme';
+
 import EntityActions from './actions.js';
 
 export const withEntityRow = (actions = EntityActions, options = {}) =>
@@ -49,13 +51,13 @@ export const RowDetailsToggle = glamorous(Text)(
   {
     cursor: 'pointer',
     textDecoration: 'none',
-    color: 'blue',
+    color: Theme.blue,
     ':hover': {
       textDecoration: 'underline',
-      color: 'blue',
+      color: Theme.blue,
     },
     '@media print': {
-      color: 'black',
+      color: Theme.black,
     },
   },
 );

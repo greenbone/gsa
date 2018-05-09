@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 import React from 'react';
 
-import  _ from 'gmp/locale.js';
+import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -35,47 +36,71 @@ const Header = ({
     actions = true,
     links = true,
     sort = true,
+    currentSortBy,
+    currentSortDir,
     onSortChange,
   }) => {
   return (
     <TableHeader>
 
       <TableRow>
-        <TableHead rowSpan="2"
-          sortby={sort ? 'name' : false}
+        <TableHead
+          width="72%"
+          rowSpan="2"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'name' : false}
           onSortChange={onSortChange}>
           {_('Name')}
         </TableHead>
-        <TableHead colSpan="2">{_('Familiy')}</TableHead>
-        <TableHead colSpan="2">{_('NVTs')}</TableHead>
+        <TableHead
+          width="10%"
+          colSpan="2"
+        >
+          {_('Familiy')}
+        </TableHead>
+        <TableHead
+          width="10%"
+          colSpan="2"
+        >
+          {_('NVTs')}
+        </TableHead>
         {actions &&
-          <TableHead rowSpan="2" width="6em">{_('Actions')}</TableHead>
+          <TableHead rowSpan="2" width="8%">{_('Actions')}</TableHead>
         }
       </TableRow>
 
       <TableRow>
         <TableHead
-          width="6em"
-          sortby={sort ? 'families_total' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'families_total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'families_trend' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'families_trend' : false}
           onSortChange={onSortChange}>
           {_('Trend')}
         </TableHead>
 
         <TableHead
-          width="6em"
-          sortby={sort ? 'nvts_total' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvts_total' : false}
           onSortChange={onSortChange}>
           {_('Total')}
         </TableHead>
         <TableHead
-          width="6em"
-          sortby={sort ? 'nvts_trend' : false}
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'nvts_trend' : false}
           onSortChange={onSortChange}>
           {_('Trend')}
         </TableHead>
@@ -86,6 +111,8 @@ const Header = ({
 
 Header.propTypes = {
   actions: PropTypes.element,
+  currentSortBy: PropTypes.string,
+  currentSortDir: PropTypes.string,
   links: PropTypes.bool,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {is_string} from '../utils.js';
+import {is_string} from '../utils/identity';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
@@ -31,23 +31,35 @@ import Target from '../models/target.js';
 
 const log = logger.getLogger('gmp.commands.targets');
 
-export class TargetCommand extends EntityCommand {
+class TargetCommand extends EntityCommand {
 
   constructor(http) {
     super(http, 'target', Target);
   }
 
   create(args) {
-    let {name, comment = '', target_source, target_exclude_source, hosts,
+    const {
+      name,
+      comment = '',
+      target_source,
+      target_exclude_source,
+      hosts,
       exclude_hosts,
-      reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
-      ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
-      hosts_filter} = args;
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      port_list_id,
+      alive_tests,
+      ssh_credential_id = 0,
+      port, smb_credential_id = 0,
+      esxi_credential_id = 0,
+      snmp_credential_id = 0,
+      file,
+      exclude_file,
+      hosts_filter,
+    } = args;
     log.debug('Creating new target', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'create_target',
-      next: 'get_target',
       name,
       comment,
       target_source,
@@ -66,20 +78,32 @@ export class TargetCommand extends EntityCommand {
       file,
       exclude_file,
       hosts_filter,
-    }).then(this.transformResponse);
+    });
   }
 
   save(args) {
-    let {id, name, comment = '', target_source, target_exclude_source, hosts,
+    const {
+      id,
+      name,
+      comment = '',
+      target_source,
+      target_exclude_source,
+      hosts,
       exclude_hosts,
-      reverse_lookup_only, reverse_lookup_unify, port_list_id, alive_tests,
-      ssh_credential_id = 0, port, smb_credential_id = 0,
-      esxi_credential_id = 0, snmp_credential_id = 0, file, exclude_file,
-      in_use} = args;
+      reverse_lookup_only,
+      reverse_lookup_unify,
+      port_list_id, alive_tests,
+      ssh_credential_id = 0,
+      port, smb_credential_id = 0,
+      esxi_credential_id = 0,
+      snmp_credential_id = 0,
+      file,
+      exclude_file,
+      in_use,
+    } = args;
     log.debug('Saving target', args);
-    return this.httpPost({
+    return this.action({
       cmd: 'save_target',
-      next: 'get_target',
       target_id: id,
       alive_tests,
       comment,
@@ -99,7 +123,7 @@ export class TargetCommand extends EntityCommand {
       ssh_credential_id,
       target_source,
       target_exclude_source,
-    }).then(this.transformResponse);
+    });
   }
 
   getElementFromRoot(root) {
@@ -107,7 +131,7 @@ export class TargetCommand extends EntityCommand {
   }
 }
 
-export class TargetsCommand extends EntitiesCommand {
+class TargetsCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'target', Target);

@@ -4,7 +4,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@
 
 import glamorous from 'glamorous';
 
+import Theme from '../../utils/theme';
+
 /**
 * Can be used as link anchor. Offsets the target so that it doesn't hide
 * behind the top menu bar.
@@ -36,7 +38,7 @@ const Target = glamorous.div({
   content: '',
   display: 'block',
   height: '35px',
-  zIndex: '-100',
+  zIndex: Theme.Layers.belowAll,
   margin: '-35px 0 0 0',
   position: 'relative', // needs to be set for z-index to work in Firefox
 });

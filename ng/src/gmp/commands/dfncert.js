@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils.js';
+import {is_defined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
@@ -44,9 +45,25 @@ class DfnCertAdvsCommand extends InfoEntitiesCommand {
   constructor(http) {
     super(http, 'dfn_cert_adv', DfnCertAdv, info_filter);
   }
+
+  getCreatedAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'dfn_cert_adv',
+      group_column: 'created',
+      filter,
+    });
+  }
+
+  getSeverityAggregates({filter} = {}) {
+    return this.getAggregates({
+      aggregate_type: 'dfn_cert_adv',
+      group_column: 'severity',
+      filter,
+    });
+  }
 }
 
-register_command('dfncertadv', DfnCertAdvCommand);
-register_command('dfncertadvs', DfnCertAdvsCommand);
+register_command('dfncert', DfnCertAdvCommand);
+register_command('dfncerts', DfnCertAdvsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

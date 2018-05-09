@@ -25,18 +25,19 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
+import Wrapper from '../../components/layout/wrapper.js';
+
 import CommonCharts from '../../components/dashboard/commoncharts.js';
 
-const CertBundCharts = ({filter}) => {
-  return (
-    <div>
-      <CommonCharts
-        type="cert_bund_adv"
-        titleType="CERT-Bund Advisiories"
-        filter={filter}/>
-    </div>
-  );
-};
+const CertBundCharts = ({filter}) => (
+  <Wrapper>
+    <CommonCharts
+      type="cert_bund_adv"
+      titleType="CERT-Bund Advisiories"
+      filter={filter}
+    />
+  </Wrapper>
+);
 
 CertBundCharts.propTypes = {
   filter: PropTypes.filter,

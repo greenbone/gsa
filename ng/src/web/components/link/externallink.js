@@ -5,7 +5,7 @@
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ class ExternalLink extends React.Component {
 
   handleOpenLink() {
     const url = this.props.to;
-    window.open(url, '_blank', 'noopener');
+    window.open(url, '_blank', 'noopener, scrollbars=1, resizable=1');
   }
 
   render() {
@@ -88,15 +88,16 @@ class ExternalLink extends React.Component {
         >
           {children}
         </a>
-        <LinkConfirmationDialog
-          visible={dialogvisible}
-          onClose={this.handleCloseDialog}
-          onResumeClick={this.handleOpenLink}
-          text={dialogtext}
-          title={dialogtitle}
-          to={to}
-          width="500px"
-        />
+        {dialogvisible &&
+          <LinkConfirmationDialog
+            onClose={this.handleCloseDialog}
+            onResumeClick={this.handleOpenLink}
+            text={dialogtext}
+            title={dialogtitle}
+            to={to}
+            width="500px"
+          />
+        }
       </span>
     );
   };

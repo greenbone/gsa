@@ -26,7 +26,7 @@ import {Col} from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils.js';
+import {is_defined} from 'gmp/utils';
 
 import AlertsTable from '../alerts/table.js';
 import AgentsTable from '../agents/table.js';
@@ -61,7 +61,7 @@ import LinkTarget from '../../components/link/target.js';
 
 import Button from '../../components/form/button.js';
 
-import HelpIcon from '../../components/icon/helpicon.js';
+import ManualIcon from '../../components/icon/manualicon.js';
 
 import Loading from '../../components/loading/loading.js';
 
@@ -73,8 +73,9 @@ import TrashActions from './trashactions.js';
 
 
 const ToolBarIcons = () => (
-  <HelpIcon
-    page="trashcan"
+  <ManualIcon
+    page="search"
+    searchTerm="trashcan"
     title={_('Help: Trashcan')}
   />
 );

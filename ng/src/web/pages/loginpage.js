@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +28,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, KeyCode, is_empty} from 'gmp/utils.js';
+import {is_defined, KeyCode, is_empty} from 'gmp/utils';
 
 import Layout from '../components/layout/layout.js';
 
@@ -48,14 +49,11 @@ import Main from '../components/structure/main.js';
 const log = logger.getLogger('web.login');
 
 const panelcss = {
-  marginTop: '30px',
-  marginBottom: '30px',
-  padding: '10px',
-  width: '480px',
+  marginTop: '5px',
+  marginBottom: '5px',
+  paddingBottom: '10px',
+  width: '380px',
   fontSize: '9pt',
-  backgroundColor: '#dddddd',
-  borderRadius: '15px',
-  boxShadow: '10px 10px 15px #1a1a1a',
 };
 
 const Panel = glamorous.div(
@@ -71,7 +69,7 @@ const LoginPanel = glamorous(Layout)(
 const Error = glamorous.p(
   'error',
   {
-    color: 'red',
+    color: '#d83636',
     fontWeight: 'bold',
     textAlign: 'center',
     margin: '10px',
@@ -114,12 +112,7 @@ class LoginForm extends React.Component {
     const {username, password} = this.state;
     const protocol_insecure = window.location.protocol !== 'https:';
     return (
-      <Layout flex="column">
-        {is_defined(error) &&
-          <Panel>
-            <Error>{error}</Error>
-          </Panel>
-        }
+      <Layout flex="column" shrink="0">
         {protocol_insecure &&
           <Panel>
             <Error>{_('Warning: Connection unencrypted')}</Error>
@@ -129,40 +122,55 @@ class LoginForm extends React.Component {
               'or ask your administrator to do so as soon as possible.')}</p>
           </Panel>
         }
+
         <LoginPanel
-          flex
+          flex="column"
           align="space-around">
-          <Icon img="login-label.png" size="default"/>
           <Layout
             flex="column"
             align="space-around"
-            grow="1">
-            <Layout flex="column">
-              <FormGroup title={_('Username')} titleSize="4">
-                <TextField
-                  name="username"
-                  grow="1"
-                  placeholder={_('e.g. johndoe')}
-                  value={username}
-                  autoFocus="autofocus"
-                  tabIndex="1"
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-              <FormGroup title={_('Password')} titleSize="4">
-                <PasswordField
-                  name="password"
-                  grow="1"
-                  placeholder={_('Password')}
-                  value={password}
-                  onKeyDown={this.onKeyDown}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
+            grow="1"
+            width="380px"
+          >
+            <Layout flex="row">
+              <StyledIcon img="login-label.png" size="default"/>
+              <Layout flex="column">
+                <FormGroup title={_('Username')} titleSize="4">
+                  <TextField
+                    name="username"
+                    grow="1"
+                    placeholder={_('e.g. johndoe')}
+                    value={username}
+                    autoFocus="autofocus"
+                    tabIndex="1"
+                    onChange={this.onValueChange}/>
+                </FormGroup>
+                <FormGroup title={_('Password')} titleSize="4">
+                  <PasswordField
+                    name="password"
+                    grow="1"
+                    placeholder={_('Password')}
+                    value={password}
+                    onKeyDown={this.onKeyDown}
+                    onChange={this.onValueChange}/>
+                </FormGroup>
+                <FormGroup size="4" offset="4">
+                  <SubmitButton
+                    flex
+                    grow
+                    title={_('Login')}
+                    onClick={this.onSubmit}
+                  />
+                </FormGroup>
+              </Layout>
             </Layout>
-            <FormGroup size="6" offset="6">
-              <SubmitButton title={_('Login')} onClick={this.onSubmit}/>
-            </FormGroup>
           </Layout>
         </LoginPanel>
+        {is_defined(error) &&
+          <Panel>
+            <Error>{error}</Error>
+          </Panel>
+        }
       </Layout>
     );
   }
@@ -174,11 +182,17 @@ LoginForm.propTypes = {
 };
 
 const GreenboneIcon = glamorous(GBIcon)({
-  width: '400px',
+  minWidth: '60px',
+  width: '100%',
+  minHeight: '60px',
+  height: '100%', // for IE11 fix
+  maxHeight: '315px',
+  margin: '40px 0px',
 });
 
 const LoginMain = glamorous(Main)({
-  background: '#393637',
+  background: '#fefefe',
+  height: '100%',
 });
 
 const LoginLayout = glamorous(Layout)({
@@ -187,6 +201,26 @@ const LoginLayout = glamorous(Layout)({
 
 const LoginHeader = glamorous(Header)({
   color: '#393637',
+});
+
+const StyledIcon = glamorous(Icon)({
+  height: '95px',
+  marginTop: '-7px',
+});
+
+const StyledLayout = glamorous(Layout)({
+  margin: '0 auto',
+  height: '100%',
+});
+
+const MenuSpacer = glamorous.div({
+  minHeight: '35px',
+  background: '#393637',
+});
+
+const Wrapper = glamorous.div({
+    border: '1px solid #ddd',
+    padding: '10px',
 });
 
 class LoginPage extends React.Component {
@@ -226,38 +260,8 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const {type} = this.props.location.query;
     const {error} = this.state;
     let message;
-
-    switch (type) {
-      case 'failed':
-        message = _('Login failed.');
-        break;
-      case 'error':
-        message = _('Login failed. Error during authentication.');
-        break;
-      case 'gmpdown':
-        message = _('Login failed. GMP Service is down.');
-        break;
-      case 'session':
-        message = _('Session expired. Please login again.');
-        break;
-      case 'already':
-        message = _('Already logged out.');
-        break;
-      case 'token':
-        message = _('Token missing or bad. Please login again.');
-        break;
-      case 'cookie':
-        message = _('Cookie missing or bad. Please login again.');
-        break;
-      case 'logout':
-        message = _('Successfully logged out.');
-        break;
-      default:
-        break;
-    }
 
     if (error) {
       if (is_empty(error.message)) {
@@ -271,15 +275,18 @@ class LoginPage extends React.Component {
     return (
       <LoginLayout flex="column" className="login">
         <LoginHeader/>
+        <MenuSpacer/>
         <LoginMain>
-          <Layout
-            flex
-            align={['space-around', 'center']}
+          <StyledLayout
+            flex="column"
+            align={['start', 'center']}
             grow="1"
-            wrap>
-            <LoginForm onSubmit={this.onSubmit} error={message}/>
+            position="relative">
             <GreenboneIcon/>
-          </Layout>
+            <Wrapper>
+              <LoginForm onSubmit={this.onSubmit} error={message}/>
+            </Wrapper>
+          </StyledLayout>
         </LoginMain>
         <Footer/>
       </LoginLayout>
