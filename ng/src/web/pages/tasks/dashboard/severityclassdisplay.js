@@ -20,79 +20,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {TasksSeverityLoader} from './loaders';
 
-export const TasksSeverityDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Tasks by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </TasksSeverityLoader>
-);
+export const TasksSeverityDisplay = createDisplay({
+  displayComponent: SeverityClassDisplay,
+  loaderComponent: TasksSeverityLoader,
+  title: ({data: tdata}) =>
+    _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayId: 'tasks-by-severity-class',
+  displayName: 'TasksSeverityDisplay',
+});
 
-TasksSeverityDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-const DISPLAY_ID = 'task-by-severity-class';
-
-TasksSeverityDisplay.displayId = DISPLAY_ID;
-
-export const TasksSeverityTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Tasks')]}
-        title={({data: tdata}) =>
-          _('Tasks by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </TasksSeverityLoader>
-);
-
-TasksSeverityTableDisplay.displayId = 'task-by-severity-class-table';
-
-TasksSeverityTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
+export const TasksSeverityTableDisplay = createDisplay({
+  displayComponent: SeverityClassTableDisplay,
+  loaderComponent: TasksSeverityLoader,
+  dataTitles: [_('Severity'), _('# of Tasks')],
+  title: ({data: tdata}) =>
+    _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayId: 'task-by-severity-class-table',
+  displayName: 'TasksSeverityTableDisplay',
+});
 
 registerDisplay(TasksSeverityTableDisplay.displayId,
   TasksSeverityTableDisplay, {
   title: _('Table: Tasks by Severity Class'),
 });
 
-registerDisplay(DISPLAY_ID, TasksSeverityDisplay, {
+registerDisplay(TasksSeverityDisplay.displayId, TasksSeverityDisplay, {
   title: _('Chart: Tasks by Severity Class'),
 });
 

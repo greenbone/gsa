@@ -32,12 +32,16 @@ import Filter from 'gmp/models/filter';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import FilterTerm from 'gmp/models/filter/filterterm';
+
 import PropTypes from 'web/utils/proptypes';
 
 import DonutChart from 'web/components/chart/donut3d';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTable from 'web/components/dashboard2/display/datatable';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   totalCount,
@@ -45,7 +49,6 @@ import {
 } from 'web/components/dashboard2/display/utils';
 
 import {TaskStatusLoader} from './loaders';
-import FilterTerm from 'gmp/models/filter/filterterm';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
@@ -171,32 +174,18 @@ TasksStatusDisplay.propTypes = {
 
 TasksStatusDisplay.displayId = 'task-by-status';
 
-export const TasksStatusTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TaskStatusLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformStatusData}
-        dataTitles={[_('Status'), _('# of Tasks')]}
-        dataRow={row => [row.label, row.value]}
-        title={({data: tdata}) =>
-          _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
-      />
-    )}
-  </TaskStatusLoader>
-);
-
-TasksStatusTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-TasksStatusTableDisplay.displayId = 'task-by-status-table';
+export const TasksStatusTableDisplay = createDisplay({
+  chartComponent: DataTable,
+  displayComponent: DataTableDisplay,
+  loaderComponent: TaskStatusLoader,
+  dataTransform: transformStatusData,
+  dataTitles: [_('Status'), _('# of Tasks')],
+  dataRow: row => [row.label, row.value],
+  title: ({data: tdata}) =>
+    _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
+  displayId: 'task-by-status-table',
+  displayName: 'TasksStatusTableDisplay',
+});
 
 registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {
   title: _('Chart: Tasks by Status'),
