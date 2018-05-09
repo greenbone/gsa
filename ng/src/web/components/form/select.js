@@ -118,6 +118,7 @@ class Select extends React.Component {
       className,
       disabled = false,
       items,
+      itemToString,
       menuPosition,
       value,
       width = DEFAULT_WIDTH,
@@ -139,6 +140,7 @@ class Select extends React.Component {
     return (
       <Downshift
         selectedItem={value}
+        itemToString={itemToString}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         render={({
@@ -227,6 +229,7 @@ class Select extends React.Component {
 
 Select.propTypes = {
   disabled: PropTypes.bool,
+  itemToString: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.any.isRequired,
     value: PropTypes.any.isRequired,
