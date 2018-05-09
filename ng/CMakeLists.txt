@@ -210,6 +210,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createddisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createdtransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/createDisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstabledisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstransform.js
