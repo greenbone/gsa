@@ -25,12 +25,14 @@ import React from 'react';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+import withFilterSelection from './withFilterSelection';
 
 const createDisplay = ({
   chartComponent: Chart,
   displayComponent: Display,
   displayId,
   displayName,
+  filtersFilter,
   loaderComponent: Loader,
   ...other
 }) => {
@@ -65,7 +67,9 @@ const createDisplay = ({
 
   DisplayComponent.displayId = displayId;
 
-  return DisplayComponent;
+  return withFilterSelection({
+    filtersFilter,
+  })(DisplayComponent);
 };
 
 export default createDisplay;
