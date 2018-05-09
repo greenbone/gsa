@@ -20,18 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _, {datetime} from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
 
 import ScheduleChart from 'web/components/chart/schedule';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import DataTable from 'web/components/dashboard2/display/datatable';
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {TasksSchedulesLoader} from './loaders';
@@ -52,64 +50,27 @@ const transformScheduleData = (data = []) => {
     });
 };
 
-export const TasksSchedulesDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksSchedulesLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformScheduleData}
-        title={() => _('Next Scheduled Tasks')}
-      >
-        {({width, height, data: tdata, svgRef}) => (
-          <ScheduleChart
-            svgRef={svgRef}
-            width={width}
-            height={height}
-            data={tdata}
-          />
-        )}
-      </DataDisplay>
-    )}
-  </TasksSchedulesLoader>
-);
+export const TasksSchedulesDisplay = createDisplay({
+  loaderComponent: TasksSchedulesLoader,
+  displayComponent: DataDisplay,
+  chartComponent: ScheduleChart,
+  dataTransform: transformScheduleData,
+  title: () => _('Next Scheduled Tasks'),
+  displayName: 'TasksScheduleDisplay',
+  displayId: 'task-by-schedules',
+});
 
-TasksSchedulesDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-TasksSchedulesDisplay.displayId = 'task-by-schedules';
-
-export const TasksSchedulesTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksSchedulesLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('Task Name'), _('Next Schedule Time')]}
-        dataRow={row => [row.label, datetime(row.start)]}
-        dataTransform={transformScheduleData}
-        title={() => _('Next Scheduled Tasks')}
-      />
-    )}
-  </TasksSchedulesLoader>
-);
-
-TasksSchedulesTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-TasksSchedulesTableDisplay.displayId = 'task-by-schedules-table';
+export const TasksSchedulesTableDisplay = createDisplay({
+  loaderComponent: TasksSchedulesLoader,
+  displayComponent: DataTableDisplay,
+  chartComponent: DataTable,
+  dataTitles: [_('Task Name'), _('Next Schedule Time')],
+  dataRow: row => [row.label, datetime(row.start)],
+  dataTransform: transformScheduleData,
+  title: () => _('Next Scheduled Tasks'),
+  displayId: 'task-by-schedules-table',
+  displayName: 'TasksSchedulesTableDisplay',
+});
 
 registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
   title: _('Chart: Next Scheduled Tasks'),

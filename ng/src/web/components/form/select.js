@@ -118,6 +118,7 @@ class Select extends React.Component {
       className,
       disabled = false,
       items,
+      itemToString,
       menuPosition,
       value,
       width = DEFAULT_WIDTH,
@@ -139,6 +140,7 @@ class Select extends React.Component {
     return (
       <Downshift
         selectedItem={value}
+        itemToString={itemToString}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         render={({
@@ -202,12 +204,16 @@ class Select extends React.Component {
                   />
                   <ItemContainer>
                     {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
+                      .map(({
+                        label: itemLabel,
+                        value: itemValue,
+                        key = itemValue,
+                      }, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
                           isSelected={itemValue === selectedItem}
                           isActive={i === highlightedIndex}
-                          key={itemValue}
+                          key={key}
                           onMouseDown={() => selectItem(itemValue)}
                         >
                           {itemLabel}
@@ -227,9 +233,11 @@ class Select extends React.Component {
 
 Select.propTypes = {
   disabled: PropTypes.bool,
+  itemToString: PropTypes.func,
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.any.isRequired,
     value: PropTypes.any.isRequired,
+    key: PropTypes.toString,
   })),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
