@@ -96,7 +96,7 @@ export const OverridesCreatedTableDisplay = ({
           _('# of created Overrides'),
           _('Total Overrides'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
       />
     )}

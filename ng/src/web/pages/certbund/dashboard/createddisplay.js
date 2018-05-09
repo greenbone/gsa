@@ -87,7 +87,7 @@ export const CertBundCreatedTableDisplay = ({
           _('# of CERT-Bund Advisories'),
           _('Total CERT-Bund Advisories'),
         ]}
-        dataRow={({row}) => [row.label, row.y, row.y2]}
+        dataRow={row => [row.label, row.y, row.y2]}
         dataTransform={transformCreated}
         title={() => _('CERT-Bund Advisories by Creation Time')}
       />

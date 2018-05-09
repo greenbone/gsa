@@ -23,12 +23,15 @@
  */
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
+import {is_defined} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
 
 import DataDisplay from './datadisplay';
 import DataTable from './datatable';
 
 const DataTableDisplay = ({
+  children,
   dataRow,
   dataTitles,
   ...props
@@ -39,16 +42,23 @@ const DataTableDisplay = ({
     dataTitles={dataTitles}
   >
     {({data}) => (
-      <DataTable
-        header={dataTitles}
-        data={data}
-        row={dataRow}
-      />
+      is_defined(children) ?
+        children({
+          data,
+          dataRow,
+          dataTitles,
+        }) :
+        <DataTable
+          data={data}
+          dataRow={dataRow}
+          dataTitles={dataTitles}
+        />
     )}
   </DataDisplay>
 );
 
 DataTableDisplay.propTypes = {
+  children: PropTypes.func,
   data: PropTypes.any,
   dataRow: PropTypes.func.isRequired,
   dataTitles: PropTypes.arrayOf(PropTypes.string).isRequired,

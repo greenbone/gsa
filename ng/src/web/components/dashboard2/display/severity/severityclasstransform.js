@@ -49,7 +49,7 @@ import {
 
 const format = value => value.toFixed(1);
 
-export const severityClassDataRow = ({row}) => [row.label, row.value];
+export const severityClassDataRow = row => [row.label, row.value];
 
 const transformSeverityData = (
   data = {},

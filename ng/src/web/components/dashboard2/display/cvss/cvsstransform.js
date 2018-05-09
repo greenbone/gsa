@@ -39,7 +39,7 @@ import {
 
 import {totalCount, percent, riskFactorColorScale} from '../utils';
 
-export const cvssDataRow = ({row}) => [row.x, row.y];
+export const cvssDataRow = row => [row.x, row.y];
 
 const getSeverityClassLabel = value => {
   switch (value) {

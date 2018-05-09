@@ -151,8 +151,10 @@ export class TasksStatusDisplay extends React.Component {
                 width={width}
                 height={height}
                 data={tdata}
-                onDataClick={this.handleDataClick}
-                onLegendItemClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
+                onLegendItemClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>
@@ -164,7 +166,7 @@ export class TasksStatusDisplay extends React.Component {
 
 TasksStatusDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 TasksStatusDisplay.displayId = 'task-by-status';
@@ -182,7 +184,7 @@ export const TasksStatusTableDisplay = ({
         {...loaderProps}
         dataTransform={transformStatusData}
         dataTitles={[_('Status'), _('# of Tasks')]}
-        dataRow={({row}) => [row.label, row.value]}
+        dataRow={row => [row.label, row.value]}
         title={({data: tdata}) =>
           _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
       />

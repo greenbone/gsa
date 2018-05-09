@@ -164,7 +164,7 @@ export const HostsVulnScoreTableDisplay = ({
           _('Host Name'),
           _('Max. average Severity Score'),
         ]}
-        dataRow={({row}) => [row.x, row.y]}
+        dataRow={row => [row.x, row.y]}
         title={() => _('Most Vulnerable Hosts')}
       />
     )}

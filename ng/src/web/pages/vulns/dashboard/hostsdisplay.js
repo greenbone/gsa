@@ -236,7 +236,7 @@ export const VulnsHostsTableDisplay = ({
         {...loaderProps}
         dataTransform={transformHostsData}
         dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
-        dataRow={({row}) => [row.x, row.y]}
+        dataRow={row => [row.x, row.y]}
         title={({data: tdata}) =>
           _('Vulnerabilities by Hosts (Total: {{count}})',
             {count: tdata.total})}
