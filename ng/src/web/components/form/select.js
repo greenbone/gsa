@@ -204,12 +204,16 @@ class Select extends React.Component {
                   />
                   <ItemContainer>
                     {displayedItems
-                      .map(({label: itemLabel, value: itemValue}, i) => (
+                      .map(({
+                        label: itemLabel,
+                        value: itemValue,
+                        key = itemValue,
+                      }, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
                           isSelected={itemValue === selectedItem}
                           isActive={i === highlightedIndex}
-                          key={itemValue}
+                          key={key}
                           onMouseDown={() => selectItem(itemValue)}
                         >
                           {itemLabel}
@@ -233,6 +237,7 @@ Select.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.any.isRequired,
     value: PropTypes.any.isRequired,
+    key: PropTypes.toString,
   })),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
