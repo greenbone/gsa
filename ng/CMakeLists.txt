@@ -782,6 +782,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
      ${NG_SRC_DIR}/src/web/store/index.js
      ${NG_SRC_DIR}/src/web/store/reducers.js
+     ${NG_SRC_DIR}/src/web/store/entities/selectors.js
+     ${NG_SRC_DIR}/src/web/store/entities/filters/actions.js
+     ${NG_SRC_DIR}/src/web/store/entities/filters/reducers.js
+     ${NG_SRC_DIR}/src/web/store/entities/filters/selectors.js
+     ${NG_SRC_DIR}/src/web/store/entities/reducers.js
      ${NG_SRC_DIR}/src/web/utils/cert.js
      ${NG_SRC_DIR}/src/web/utils/compose.js
      ${NG_SRC_DIR}/src/web/utils/cpe.js

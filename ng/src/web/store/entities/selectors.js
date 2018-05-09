@@ -20,19 +20,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {is_defined} from 'gmp/utils/identity';
 
-import dashboardData from '../components/dashboard2/data/reducers';
-import dashboardSettings from '../components/dashboard2/settings/reducers';
+class EntitiesSelector {
 
-import entities from './entities/reducers';
+  constructor(state) {
+    this.state = state;
+  }
 
-const rootReducer = combineReducers({
-  dashboardData,
-  dashboardSettings,
-  entities,
-});
+  _getByFilter(filter) {
+    if (is_defined(this.state)) {
+      const filterString = is_defined(filter) ? filter.toFilterString() :
+        'default';
+      return this.state[filterString];
+    }
+    return undefined;
+  }
 
-export default rootReducer;
+  getIsLoading(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.isLoading : false;
+  }
+
+  getError(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.error : undefined;
+  }
+
+  getEntities(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.entities : undefined;
+  }
+};
+
+export default EntitiesSelector;
 
 // vim: set ts=2 sw=2 tw=80:

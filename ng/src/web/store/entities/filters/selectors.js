@@ -20,19 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import EntitiesSelector from '../selectors';
 
-import dashboardData from '../components/dashboard2/data/reducers';
-import dashboardSettings from '../components/dashboard2/settings/reducers';
+const getFilters = rootState => {
+  return new EntitiesSelector(rootState.entities.filters);
+};
 
-import entities from './entities/reducers';
-
-const rootReducer = combineReducers({
-  dashboardData,
-  dashboardSettings,
-  entities,
-});
-
-export default rootReducer;
+export default getFilters;
 
 // vim: set ts=2 sw=2 tw=80:

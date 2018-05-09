@@ -22,17 +22,12 @@
  */
 import {combineReducers} from 'redux';
 
-import dashboardData from '../components/dashboard2/data/reducers';
-import dashboardSettings from '../components/dashboard2/settings/reducers';
+import filters from './filters/reducers.js';
 
-import entities from './entities/reducers';
-
-const rootReducer = combineReducers({
-  dashboardData,
-  dashboardSettings,
-  entities,
+const entitiesReducer = combineReducers({
+  filters,
 });
 
-export default rootReducer;
+export default entitiesReducer;
 
 // vim: set ts=2 sw=2 tw=80:
