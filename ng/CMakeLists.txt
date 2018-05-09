@@ -219,10 +219,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatabledisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/display.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/displaymenu.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/filterselection.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstabledisplay.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstransform.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/utils.js
+     ${NG_SRC_DIR}/src/web/components/dashboard2/display/withFilterSelection.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
