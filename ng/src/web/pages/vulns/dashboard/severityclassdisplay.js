@@ -20,72 +20,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
-
-import PropTypes from 'web/utils/proptypes';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {VulnsSeverityLoader} from './loaders';
+import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
-export const VulnsSeverityDisplay = ({
-  filter,
-  ...props
-}) => (
-  <VulnsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Vulnerabilities')]}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsSeverityLoader>
-);
+export const VulnsSeverityDisplay = createDisplay({
+  loaderComponent: VulnsSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  dataTitles: [_('Severity Class'), _('# of Vulnerabilities')],
+  title: ({data: tdata}) =>
+    _('Vulnerabilities by Severity Class (Total: {{count}})',
+      {count: tdata.total}),
+  displayId: 'vuln-by-severity-class',
+  displayName: 'VulnsSeverityDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
-VulnsSeverityDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-VulnsSeverityDisplay.displayId = 'vuln-by-severity-class';
-
-export const VulnsSeverityTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <VulnsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Vulnerabilities')]}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsSeverityLoader>
-);
-
-VulnsSeverityTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-VulnsSeverityTableDisplay.displayId = 'vuln-by-severity-class-table';
+export const VulnsSeverityTableDisplay = createDisplay({
+  loaderComponent: VulnsSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  dataTitles: [_('Severity Class'), _('# of Vulnerabilities')],
+  title: ({data: tdata}) =>
+    _('Vulnerabilities by Severity Class (Total: {{count}})',
+      {count: tdata.total}),
+  displayId: 'vuln-by-severity-class-table',
+  displayName: 'VulnsSeverityTableDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
 registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
   title: _('Chart: Vulnerabilities by Severity Class'),

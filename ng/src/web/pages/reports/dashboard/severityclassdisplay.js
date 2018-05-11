@@ -20,71 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsSeverityLoader} from './loaders';
 
-export const ReportsSeverityDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ReportsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Reports by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ReportsSeverityLoader>
-);
+export const ReportsSeverityDisplay = createDisplay({
+  loaderComponent: ReportsSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) => _('Reports by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: REPORTS_FILTER_FILTER,
+  displayName: 'ReportsSeverityDisplay',
+  displayId: 'report-by-severity-class',
+});
 
-ReportsSeverityDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ReportsSeverityDisplay.displayId = 'report-by-severity-class';
-
-export const ReportsSeverityTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ReportsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Reports')]}
-        title={({data: tdata}) =>
-          _('Reports by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ReportsSeverityLoader>
-);
-
-ReportsSeverityTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ReportsSeverityTableDisplay.displayId = 'report-by-severity-class-table';
+export const ReportsSeverityTableDisplay = createDisplay({
+  loaderComponent: ReportsSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  filtersFilter: REPORTS_FILTER_FILTER,
+  dataTitles: [_('Severity Class'), _('# of Reports')],
+  title: ({data: tdata}) => _('Reports by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  displayName: 'ReportsSeverityTableDisplay',
+  displayId: 'report-by-severity-class-table',
+});
 
 registerDisplay(ReportsSeverityDisplay.displayId, ReportsSeverityDisplay, {
   title: _('Chart: Reports by Severity Class'),

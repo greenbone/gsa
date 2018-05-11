@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import {
   NOTE_ACTIVE_UNLIMITED_VALUE,
   NOTE_INACTIVE_VALUE,
@@ -41,6 +41,8 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut3d';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {
   totalCount,
   percent,
@@ -185,41 +187,29 @@ export class NotesActiveDaysDisplay extends React.Component {
 
 NotesActiveDaysDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+NotesActiveDaysDisplay = withFilterSelection({
+  filtersFilter: NOTES_FILTER_FILTER,
+})(NotesActiveDaysDisplay);
 
 NotesActiveDaysDisplay.displayId = 'note-by-active-days';
 
-export const NotesActiveDaysTableDisplay = ({
-  filter,
-  ...props
-}) => (
-
-  <NotesActiveDaysLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Active'),
-          _('# of Notes'),
-        ]}
-        dataRow={row => [row.label, row.value]}
-        dataTransform={transformActiveDaysData}
-        title={({data: tdata}) => _('Notes by Active Days (Total: ' +
-          '{{count}})', {count: tdata.total})}
-      />
-    )}
-  </NotesActiveDaysLoader>
-);
-
-NotesActiveDaysTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NotesActiveDaysTableDisplay.displayId = 'note-by-active-days-table';
+export const NotesActiveDaysTableDisplay = createDisplay({
+  loaderComponent: NotesActiveDaysLoader,
+  displayComponent: DataTableDisplay,
+  dataTitles: [
+    _('Active'),
+    _('# of Notes'),
+  ],
+  dataRow: row => [row.label, row.value],
+  dataTransform: transformActiveDaysData,
+  title: ({data: tdata}) => _('Notes by Active Days (Total: ' +
+    '{{count}})', {count: tdata.total}),
+  displayId: 'note-by-active-days-table',
+  displayName: 'NotesActiveDaysTableDisplay',
+  filtersFilter: NOTES_FILTER_FILTER,
+});
 
 registerDisplay(NotesActiveDaysDisplay.displayId, NotesActiveDaysDisplay, {
   title: _('Chart: Notes by Active Days'),

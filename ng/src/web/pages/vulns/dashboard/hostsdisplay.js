@@ -28,7 +28,7 @@ import {format as d3format} from 'd3-format';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
@@ -37,6 +37,8 @@ import PropTypes from 'web/utils/proptypes';
 import BarChart from 'web/components/chart/bar';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {
   vulnsByHostsColorScale,
   percent,
@@ -218,38 +220,27 @@ export class VulnsHostsDisplay extends React.Component {
 
 VulnsHostsDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+
+VulnsHostsDisplay = withFilterSelection({
+  filtersFilter: VULNS_FILTER_FILTER,
+})(VulnsHostsDisplay);
 
 VulnsHostsDisplay.displayId = 'vuln-by-hosts';
 
-export const VulnsHostsTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <VulnsHostsLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformHostsData}
-        dataTitles={[_('# of Hosts'), _('# of Vulnerabilities')]}
-        dataRow={row => [row.x, row.y]}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by Hosts (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsHostsLoader>
-);
-
-VulnsHostsTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-VulnsHostsTableDisplay.displayId = 'vuln-by-hosts-table';
+export const VulnsHostsTableDisplay = createDisplay({
+  loaderComponent: VulnsHostsLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformHostsData,
+  dataTitles: [_('# of Hosts'), _('# of Vulnerabilities')],
+  dataRow: row => [row.x, row.y],
+  title: ({data: tdata}) => _('Vulnerabilities by Hosts (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'vuln-by-hosts-table',
+  displayName: 'VulnsHostsTableDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
 registerDisplay(VulnsHostsDisplay.displayId, VulnsHostsDisplay, {
   title: _('Chart: Vulnerabilities by Hosts'),
