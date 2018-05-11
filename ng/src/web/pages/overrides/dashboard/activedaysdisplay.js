@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
 import {parse_float} from 'gmp/parser';
 
@@ -37,6 +37,8 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut3d';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {
   totalCount,
   percent,
@@ -184,40 +186,30 @@ export class OverridesActiveDaysDisplay extends React.Component {
 
 OverridesActiveDaysDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+
+OverridesActiveDaysDisplay = withFilterSelection({
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+})(OverridesActiveDaysDisplay);
 
 OverridesActiveDaysDisplay.displayId = 'override-by-active-days';
 
-export const OverridesActiveDaysTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OverridesActiveDaysLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataRow={row => [row.label, row.value]}
-        dataTitles={[
-          _('Active'),
-          _('# of Overrides'),
-        ]}
-        dataTransform={transformActiveDaysData}
-        title={({data: tdata}) => _('Overrides by Active Days (Total: ' +
-          '{{count}})', {count: tdata.total})}
-      />
-    )}
-  </OverridesActiveDaysLoader>
-);
-
-OverridesActiveDaysTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OverridesActiveDaysTableDisplay.displayId = 'override-by-active-days-table';
+export const OverridesActiveDaysTableDisplay = createDisplay({
+  loaderComponent: OverridesActiveDaysLoader,
+  displayComponent: DataTableDisplay,
+  dataRow: row => [row.label, row.value],
+  dataTitles: [
+    _('Active'),
+    _('# of Overrides'),
+  ],
+  dataTransform: transformActiveDaysData,
+  title: ({data: tdata}) => _('Overrides by Active Days (Total: {{count}})',
+    {count: tdata.total}),
+  displayName: 'OverridesActiveDaysTableDisplay',
+  displayId: 'override-by-active-days-table',
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+});
 
 registerDisplay(OverridesActiveDaysDisplay.displayId,
   OverridesActiveDaysDisplay, {
