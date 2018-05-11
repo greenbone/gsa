@@ -20,76 +20,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {VulnsSeverityLoader} from './loaders';
 
-export const VulnsCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <VulnsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Vulnerabilities')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsSeverityLoader>
-);
+export const VulnsCvssDisplay = createDisplay({
+  loaderComponent: VulnsSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of Vulnerabilities'),
+  title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'vuln-by-cvss',
+  displayName: 'VulnsCvssDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
-VulnsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-VulnsCvssDisplay.displayId = 'vuln-by-cvss';
-
-export const VulnsCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <VulnsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Vulnerabilties')]}
-        title={({data: tdata}) =>
-          _('Vulnerabilities by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </VulnsSeverityLoader>
-);
-
-VulnsCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-VulnsCvssTableDisplay.displayId = 'vuln-by-cvss-table';
+export const VulnsCvssTableDisplay = createDisplay({
+  loaderComponent: VulnsSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of Vulnerabilties')],
+  title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'vuln-by-cvss-table',
+  displayName: 'VulnsCvssTableDisplay',
+  filtersFilter: VULNS_FILTER_FILTER,
+});
 
 registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
   title: _('Chart: Vulnerabilities by CVSS'),
 });
+
 registerDisplay(VulnsCvssTableDisplay.displayId, VulnsCvssTableDisplay, {
   title: _('Table: Vulnerabilities by CVSS'),
 });
