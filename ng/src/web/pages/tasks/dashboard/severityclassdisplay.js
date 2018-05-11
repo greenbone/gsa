@@ -22,6 +22,8 @@
  */
 import _ from 'gmp/locale';
 
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard2/display/createDisplay';
@@ -36,6 +38,7 @@ export const TasksSeverityDisplay = createDisplay({
     _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
   displayId: 'tasks-by-severity-class',
   displayName: 'TasksSeverityDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 export const TasksSeverityTableDisplay = createDisplay({
@@ -46,6 +49,7 @@ export const TasksSeverityTableDisplay = createDisplay({
     _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
   displayId: 'task-by-severity-class-table',
   displayName: 'TasksSeverityTableDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 registerDisplay(TasksSeverityTableDisplay.displayId,

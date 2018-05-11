@@ -108,7 +108,7 @@ class DashboardControls extends React.Component {
             active={canAdd}
             title={
               canAdd ?
-                _('Add new Chart Display') :
+                _('Add new Dashboard Display') :
                 _('Dashboard limit reached')
             }
             onClick={canAdd ? this.handleNewClick : undefined}
@@ -121,7 +121,7 @@ class DashboardControls extends React.Component {
         </IconDivider>
         {showNewDialog &&
           <SaveDialog
-            title={_('Add new Chart Display')}
+            title={_('Add new Dashboard Display')}
             buttonTitle={_('Add')}
             minHeight={163}
             width="500px"

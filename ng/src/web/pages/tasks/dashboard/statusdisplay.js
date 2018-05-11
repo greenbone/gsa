@@ -28,7 +28,7 @@ import {interpolateHcl} from 'd3-interpolate';
 
 import _ from 'gmp/locale';
 
-import Filter from 'gmp/models/filter';
+import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -42,6 +42,7 @@ import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTable from 'web/components/dashboard2/display/datatable';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   totalCount,
@@ -174,6 +175,10 @@ TasksStatusDisplay.propTypes = {
 
 TasksStatusDisplay.displayId = 'task-by-status';
 
+TasksStatusDisplay = withFilterSelection({
+  filtersFilter: TASKS_FILTER_FILTER,
+})(TasksStatusDisplay);
+
 export const TasksStatusTableDisplay = createDisplay({
   chartComponent: DataTable,
   displayComponent: DataTableDisplay,
@@ -185,6 +190,7 @@ export const TasksStatusTableDisplay = createDisplay({
     _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
   displayId: 'task-by-status-table',
   displayName: 'TasksStatusTableDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {

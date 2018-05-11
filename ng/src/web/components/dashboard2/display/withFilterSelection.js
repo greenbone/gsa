@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,19 +24,39 @@ import React from 'react';
 
 import hoistStatics from 'hoist-non-react-statics';
 
-const withContext = contextTypes => Component => {
-  const ContextWrapper = (props, context) => (
-    <Component
-      {...props}
-      {...context}
-    />
+import PropTypes from 'web/utils/proptypes';
+
+import FilterSelection from './filterselection';
+
+const withFilterSelection = ({filtersFilter}) => Component => {
+  const FilterSelectionWrapper = ({
+    showFilterSelection = false,
+    ...props
+  }) => (
+    showFilterSelection ?
+      <FilterSelection
+        filtersFilter={filtersFilter}
+      >
+        {({filterSelectionMenuEntry, filter}) => (
+          <Component
+            {...props}
+            filter={filter}
+            menuEntries={[filterSelectionMenuEntry]}
+          />
+        )}
+      </FilterSelection> :
+      <Component
+        {...props}
+      />
   );
 
-  ContextWrapper.contextTypes = contextTypes;
+  FilterSelectionWrapper.propTypes = {
+    showFilterSelection: PropTypes.bool,
+  };
 
-  return hoistStatics(ContextWrapper, Component);
+  return hoistStatics(FilterSelectionWrapper, Component);
 };
 
-export default withContext;
+export default withFilterSelection;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,23 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
-import hoistStatics from 'hoist-non-react-statics';
+import _ from 'gmp/locale.js';
 
-const withContext = contextTypes => Component => {
-  const ContextWrapper = (props, context) => (
-    <Component
-      {...props}
-      {...context}
-    />
-  );
+import DashboardControls from 'web/components/dashboard2/controls.js';
 
-  ContextWrapper.contextTypes = contextTypes;
+import Section from 'web/components/section/section.js';
 
-  return hoistStatics(ContextWrapper, Component);
-};
+import ScansDashboard, {SCANS_DASHBOARD_ID} from './dashboard.js';
+import SubscriptionProvider from 'web/components/provider/subscriptionprovider.js'; // eslint-disable-line
 
-export default withContext;
+const ScansPage = () => (
+  <SubscriptionProvider>
+    {({notify}) => (
+      <Section
+        title={_('Scans Dashboard')}
+        img="scan.svg"
+        extra={
+          <DashboardControls
+            dashboardId={SCANS_DASHBOARD_ID}
+          />
+        }
+      >
+        <ScansDashboard
+          notify={notify}
+        />
+      </Section>
+    )}
+  </SubscriptionProvider>
+);
+
+export default ScansPage;
 
 // vim: set ts=2 sw=2 tw=80:
