@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -36,6 +36,8 @@ import PropTypes from 'web/utils/proptypes';
 import WordCloudChart from 'web/components/chart/wordcloud';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {randomColor} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -125,40 +127,29 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
 
 ResultsDescriptionWordCloudDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+
+ResultsDescriptionWordCloudDisplay = withFilterSelection({
+  filtersFilter: RESULTS_FILTER_FILTER,
+})(ResultsDescriptionWordCloudDisplay);
 
 ResultsDescriptionWordCloudDisplay.displayId = 'result-by-desc-words';
 
-export const ResultsDescriptionWordCloudTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsDescriptionWordCountLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformWordCountData}
-        dataTitles={[
-          _('Description'),
-          _('Word Count'),
-        ]}
-        dataRow={row => [row.label, row.value]}
-        title={({data: tdata}) =>
-          _('Results Description Word Cloud')}
-      />
-    )}
-  </ResultsDescriptionWordCountLoader>
-);
-
-ResultsDescriptionWordCloudTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsDescriptionWordCloudTableDisplay.displayId = 'result-by-desc-words-table'; // eslint-disable-line max-len
+export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
+  loaderComponent: ResultsDescriptionWordCountLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformWordCountData,
+  dataTitles: [
+    _('Description'),
+    _('Word Count'),
+  ],
+  dataRow: row => [row.label, row.value],
+  title: ({data: tdata}) => _('Results Description Word Cloud'),
+  displayId: 'result-by-desc-words-table',
+  displayName: 'ResultsDescriptionWordCloudTableDisplay',
+  filtersFilter: RESULTS_FILTER_FILTER,
+});
 
 registerDisplay(ResultsDescriptionWordCloudDisplay.displayId,
   ResultsDescriptionWordCloudDisplay, {

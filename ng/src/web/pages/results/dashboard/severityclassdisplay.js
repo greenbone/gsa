@@ -20,71 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsSeverityLoader} from './loaders';
 
-export const ResultsSeverityDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Results by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ResultsSeverityLoader>
-);
+export const ResultsSeverityDisplay = createDisplay({
+  loaderComponent: ResultsSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) => _('Results by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: RESULTS_FILTER_FILTER,
+  displayId: 'result-by-severity-class',
+  displayName: 'ResultsSeverityDisplay',
+});
 
-ResultsSeverityDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsSeverityDisplay.displayId = 'result-by-severity-class';
-
-export const ResultsSeverityTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Results')]}
-        title={({data: tdata}) =>
-          _('Results by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ResultsSeverityLoader>
-);
-
-ResultsSeverityTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsSeverityTableDisplay.displayId = 'result-by-severity-class-table';
+export const ResultsSeverityTableDisplay = createDisplay({
+  loaderComponent: ResultsSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) => _('Results by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of Results')],
+  filtersFilter: RESULTS_FILTER_FILTER,
+  displayId: 'result-by-severity-class-table',
+  displayName: 'ResultsSeverityTableDisplay',
+});
 
 registerDisplay(ResultsSeverityDisplay.displayId, ResultsSeverityDisplay, {
   title: _('Chart: Results by Severity Class'),
@@ -95,7 +61,5 @@ registerDisplay(ResultsSeverityTableDisplay.displayId,
     title: _('Table: Results by Severity Class'),
   },
 );
-
-export default ResultsSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:
