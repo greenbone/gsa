@@ -154,6 +154,7 @@ export class NotesActiveDaysDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -176,7 +177,8 @@ export class NotesActiveDaysDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>

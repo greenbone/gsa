@@ -183,6 +183,7 @@ export class VulnsHostsDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -209,7 +210,8 @@ export class VulnsHostsDisplay extends React.Component {
                 width={width}
                 xLabel={_('# of Hosts')}
                 yLabel={_('# of Vulnerabilities')}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>

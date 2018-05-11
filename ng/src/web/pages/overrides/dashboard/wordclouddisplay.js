@@ -93,6 +93,7 @@ export class OverridesWordCloudDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -116,7 +117,8 @@ export class OverridesWordCloudDisplay extends React.Component {
                 displayLegend={false}
                 height={height}
                 width={width}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>

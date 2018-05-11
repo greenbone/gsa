@@ -90,6 +90,7 @@ class CreatedDisplay extends React.Component {
       y2AxisLabel,
       yLine,
       y2Line,
+      onFilterChanged,
       ...props
     } = this.props;
     return (
@@ -110,7 +111,8 @@ class CreatedDisplay extends React.Component {
             xAxisLabel={xAxisLabel}
             yLine={yLine}
             y2Line={y2Line}
-            onRangeSelected={this.handleRangeSelect}
+            onRangeSelected={is_defined(onFilterChanged) ?
+              this.handleRangeSelect : undefined}
           />
         )}
       </DataDisplay>
