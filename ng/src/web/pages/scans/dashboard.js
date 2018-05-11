@@ -118,6 +118,7 @@ class ScansDashboard extends React.Component {
     return (
       <Dashboard
         showFilterSelection
+        showFilterString
         id={SCANS_DASHBOARD_ID}
         permittedDisplays={[
           ...TASKS_DISPLAYS,
