@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -36,6 +36,8 @@ import PropTypes from 'web/utils/proptypes';
 import WordCloudChart from 'web/components/chart/wordcloud';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 import {randomColor} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -125,40 +127,29 @@ export class ResultsWordCloudDisplay extends React.Component {
 
 ResultsWordCloudDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+
+ResultsWordCloudDisplay = withFilterSelection({
+  filtersFilter: RESULTS_FILTER_FILTER,
+})(ResultsWordCloudDisplay);
 
 ResultsWordCloudDisplay.displayId = 'result-by-vuln-words';
 
-export const ResultsWordCloudTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsWordCountLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformWordCountData}
-        dataTitles={[
-          _('Vulnerability'),
-          _('Word Count'),
-        ]}
-        dataRow={row => [row.label, row.value]}
-        title={({data: tdata}) =>
-        _('Results Vulnerability Word Cloud')}
-      />
-    )}
-  </ResultsWordCountLoader>
-);
-
-ResultsWordCloudTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsWordCloudTableDisplay.displayId = 'result-by-vuln-words-table';
+export const ResultsWordCloudTableDisplay = createDisplay({
+  loaderComponent: ResultsWordCountLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformWordCountData,
+  dataTitles: [
+    _('Vulnerability'),
+    _('Word Count'),
+  ],
+  dataRow: row => [row.label, row.value],
+  title: ({data: tdata}) => _('Results Vulnerability Word Cloud'),
+  filtersFilter: RESULTS_FILTER_FILTER,
+  displayId: 'result-by-vuln-words-table',
+  displayName: 'ResultsWordCloudTableDisplay',
+});
 
 registerDisplay(ResultsWordCloudDisplay.displayId, ResultsWordCloudDisplay, {
   title: _('Chart: Results Vulnerability Word Cloud'),

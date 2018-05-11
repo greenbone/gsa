@@ -31,7 +31,7 @@ import {parse_int, parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -40,10 +40,11 @@ import LineChart from 'web/components/chart/line';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsHighResultsLoader} from './loaders';
-
 
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;
@@ -154,40 +155,27 @@ ReportsHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
   onFilterChanged: PropTypes.func,
 };
+ReportsHighResultsDisplay = withFilterSelection({
+  filtersFilter: REPORTS_FILTER_FILTER,
+})(ReportsHighResultsDisplay);
 
 ReportsHighResultsDisplay.displayId = 'report-by-high-results';
 
-export const ReportsHighResultsTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ReportsHighResultsLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformHighResults}
-        dataTitles={[
-          _('Created Time'),
-          _('Max High'),
-          _('Max High per Host'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Reports with High Results')}
-      />
-    )}
-  </ReportsHighResultsLoader>
-);
-
-ReportsHighResultsTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ReportsHighResultsTableDisplay.displayId = 'report-by-high-results-table';
+export const ReportsHighResultsTableDisplay = createDisplay({
+  loaderComponent: ReportsHighResultsLoader,
+  displayComponent: DataTableDisplay,
+  filtersFilter: REPORTS_FILTER_FILTER,
+  dataTransform: transformHighResults,
+  dataTitles: [
+    _('Created Time'),
+    _('Max High'),
+    _('Max High per Host'),
+  ],
+  dataRow: row => [row.label, row.y, row.y2],
+  title: ({data: tdata}) => _('Reports with High Results'),
+  displayName: 'ReportsHighResultsTableDisplay',
+  displayId: 'report-by-high-results-table',
+});
 
 registerDisplay(ReportsHighResultsDisplay.displayId,
   ReportsHighResultsDisplay, {

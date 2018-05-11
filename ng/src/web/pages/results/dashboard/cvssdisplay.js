@@ -20,72 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ResultsSeverityLoader} from './loaders';
 
-export const ResultsCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Results')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Results by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ResultsSeverityLoader>
-);
+export const ResultsCvssDisplay = createDisplay({
+  loaderComponent: ResultsSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of Results'),
+  title: ({data: tdata}) => _('Results by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'result-by-cvss',
+  displayName: 'ResultsCvssDisplay',
+  filtersFilter: RESULTS_FILTER_FILTER,
+});
 
-ResultsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsCvssDisplay.displayId = 'result-by-cvss';
-
-export const ResultsCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ResultsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Results')]}
-        title={({data: tdata}) =>
-          _('Results by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ResultsSeverityLoader>
-);
-
-ResultsCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ResultsCvssTableDisplay.displayId = 'result-by-cvss-table';
+export const ResultsCvssTableDisplay = createDisplay({
+  loaderComponent: ResultsSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of Results')],
+  title: ({data: tdata}) => _('Results by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'result-by-cvss-table',
+  displayName: 'ResultsCvssTableDisplay',
+  filtersFilter: RESULTS_FILTER_FILTER,
+});
 
 registerDisplay(ResultsCvssDisplay.displayId, ResultsCvssDisplay, {
   title: _('Chart: Results by CVSS'),

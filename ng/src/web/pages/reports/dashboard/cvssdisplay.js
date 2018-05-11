@@ -20,73 +20,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {ReportsSeverityLoader} from './loaders';
 
-export const ReportsCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ReportsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Reports')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Reports by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ReportsSeverityLoader>
-);
+export const ReportsCvssDisplay = createDisplay({
+  loaderComponent: ReportsSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of Reports'),
+  title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  displayId: 'report-by-cvss',
+  displayName: 'ReportsCvssDisplay',
+  filtersFilter: REPORTS_FILTER_FILTER,
+});
 
-ReportsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ReportsCvssDisplay.displayId = 'report-by-cvss';
-
-export const ReportsCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <ReportsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Reports')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Reports')]}
-        title={({data: tdata}) =>
-          _('Reports by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </ReportsSeverityLoader>
-);
-
-ReportsCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-ReportsCvssTableDisplay.displayId = 'reports-by-cvss-table';
+export const ReportsCvssTableDisplay = createDisplay({
+  loaderComponent: ReportsSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  yLabel: _('# of Reports'),
+  title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  dataTitles: [_('Severity'), _('# of Reports')],
+  displayId: 'report-by-cvss-table',
+  displayName: 'ReportsCvssTableDisplay',
+  filtersFilter: REPORTS_FILTER_FILTER,
+});
 
 registerDisplay(ReportsCvssDisplay.displayId, ReportsCvssDisplay, {
   title: _('Chart: Reports by CVSS'),

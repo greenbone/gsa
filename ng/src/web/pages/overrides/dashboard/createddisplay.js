@@ -20,56 +20,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
+
 import Theme from 'web/utils/theme';
 
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OverridesCreatedLoader} from './loaders';
 
-export const OverridesCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OverridesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Overrides by Creation Time')}
-        yAxisLabel={_('# of created Overrides')}
-        y2AxisLabel={_('Total Overrides')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created Overrides'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total Overrides'),
-        }}
-      />
-    )}
-  </OverridesCreatedLoader>
-);
-
-OverridesCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OverridesCreatedDisplay.displayId = 'override-by-created';
+export const OverridesCreatedDisplay = createDisplay({
+  loaderComponent: OverridesCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('Overrides by Creation Time'),
+  yAxisLabel: _('# of created Overrides'),
+  y2AxisLabel: _('Total Overrides'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created Overrides'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total Overrides'),
+  },
+  displayId: 'override-by-created',
+  displayName: 'OverridesCreatedDisplay',
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+});
 
 registerDisplay(OverridesCreatedDisplay.displayId,
   OverridesCreatedDisplay, {
@@ -77,37 +61,21 @@ registerDisplay(OverridesCreatedDisplay.displayId,
   },
 );
 
-export const OverridesCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OverridesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Overrides by Creation Time')}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of created Overrides'),
-          _('Total Overrides'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-      />
-    )}
-  </OverridesCreatedLoader>
-);
-
-OverridesCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OverridesCreatedTableDisplay.displayId = 'override-by-created-table';
+export const OverridesCreatedTableDisplay = createDisplay({
+  loaderComponent: OverridesCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('Overrides by Creation Time'),
+  dataTitles: [
+    _('Creation Time'),
+    _('# of created Overrides'),
+    _('Total Overrides'),
+  ],
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTransform: transformCreated,
+  displayName: 'OverridesCreatedTableDisplay',
+  displayId: 'override-by-created-table',
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+});
 
 registerDisplay(OverridesCreatedDisplay.displayId,
   OverridesCreatedDisplay, {

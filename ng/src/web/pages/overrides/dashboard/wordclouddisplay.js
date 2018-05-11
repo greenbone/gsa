@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -36,6 +36,8 @@ import PropTypes from 'web/utils/proptypes';
 import WordCloudChart from 'web/components/chart/wordcloud';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 import {randomColor} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -125,40 +127,29 @@ export class OverridesWordCloudDisplay extends React.Component {
 
 OverridesWordCloudDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
+
+OverridesWordCloudDisplay = withFilterSelection({
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+})(OverridesWordCloudDisplay);
 
 OverridesWordCloudDisplay.displayId = 'override-by-text-words';
 
-export const OverridesWordCloudTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OverridesWordCountLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformWordCountData}
-        dataRow={row => [row.label, row.value]}
-        dataTitles={[
-          _('Text'),
-          _('Count'),
-        ]}
-        title={({data: tdata}) =>
-          _('Overrides Text Word Cloud')}
-      />
-    )}
-  </OverridesWordCountLoader>
-);
-
-OverridesWordCloudTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OverridesWordCloudTableDisplay.displayId = 'override-by-text-words-table';
+export const OverridesWordCloudTableDisplay = createDisplay({
+  loaderComponent: OverridesWordCountLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformWordCountData,
+  dataRow: row => [row.label, row.value],
+  dataTitles: [
+    _('Text'),
+    _('Count'),
+  ],
+  title: ({data: tdata}) => _('Overrides Text Word Cloud'),
+  displayId: 'override-by-text-words-table',
+  displayName: 'OverridesWordCloudTableDisplay',
+  filtersFilter: OVERRIDES_FILTER_FILTER,
+});
 
 registerDisplay(OverridesWordCloudDisplay.displayId,
   OverridesWordCloudDisplay, {
