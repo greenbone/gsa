@@ -107,11 +107,12 @@ export class TasksHighResultsDisplay extends React.Component {
             dataTransform={transformHighResultsData}
             title={() => _('Tasks by High Results per Host')}
           >
-            {({width, height, data: tdata}) => (
+            {({width, height, data: tdata, svgRef}) => (
               <BubbleChart
                 width={width}
                 height={height}
                 data={tdata}
+                svgRef={svgRef}
                 onDataClick={this.handleDataClick}
               />
             )}
