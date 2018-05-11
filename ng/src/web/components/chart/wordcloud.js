@@ -122,7 +122,7 @@ class WordCloudChart extends React.Component {
       <Svg
         width={width}
         height={height}
-        svgRef={svgRef}
+        innerRef={svgRef}
       >
         <Group
           top={height / 2 + margin.top}
