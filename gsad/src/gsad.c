@@ -630,7 +630,7 @@ init_validator ()
   openvas_validator_add (validator, "hostpath",   "^[-[:alnum:]\\. :/]{1,80}$");
   openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]+$");
   openvas_validator_add (validator, "hosts_allow", "^(0|1)$");
-  openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:], \\./]*$");
+  openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:],: \\./]*$");
   openvas_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
   openvas_validator_add (validator, "hour",        "^([01]?[0-9]|2[0-3])$");
   openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
