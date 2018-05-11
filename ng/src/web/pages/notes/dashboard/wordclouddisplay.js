@@ -127,7 +127,7 @@ export class NotesWordCloudDisplay extends React.Component {
 
 NotesWordCloudDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 NotesWordCloudDisplay = withFilterSelection({
