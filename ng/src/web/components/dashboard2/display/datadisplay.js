@@ -43,6 +43,7 @@ import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
 import DisplayMenu from './displaymenu';
+import {Layout} from '../../layout/layout';
 
 const ownProps = [
   'title',
@@ -55,6 +56,7 @@ const ownProps = [
   'id',
   'dataTitles',
   'dataRow',
+  'showFilterString',
   'onRemoveClick',
 ];
 
@@ -70,6 +72,13 @@ const Download = glamorous.a({
     color: Theme.white,
     textDecoration: 'none',
   },
+});
+
+const FilterString = glamorous.div({
+  fontSize: '10px',
+  color: Theme.mediumGray,
+  padding: '5px',
+  overflow: 'hidden',
 });
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
@@ -237,6 +246,7 @@ class DataDisplay extends React.Component {
       height,
       width,
       isLoading,
+      showFilterString = false,
     } = this.props;
     const {
       children,
@@ -244,6 +254,7 @@ class DataDisplay extends React.Component {
       id,
       dataTitles,
       dataRow,
+      filter,
       onRemoveClick,
       ...props
     } = this.props;
@@ -257,6 +268,11 @@ class DataDisplay extends React.Component {
 
     const otherProps = exclude_object_props(props, ownProps);
     const showDataMenus = is_defined(dataRow) && is_defined(dataTitles);
+
+    showFilterString = showFilterString && is_defined(filter);
+    if (showFilterString) {
+      height = height - 20; // padding top + bottom + font size
+    }
     return (
       <Display
         menu={
@@ -284,16 +300,25 @@ class DataDisplay extends React.Component {
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
-        {isLoading ?
-          <Loading/> :
-          children({
-            id,
-            data: transformedData,
-            width,
-            height,
-            svgRef: this.svgRef,
-          })
-        }
+        <Layout flex="column" grow="1">
+          {isLoading ?
+            <Loading/> :
+            children({
+              id,
+              data: transformedData,
+              width,
+              height,
+              svgRef: this.svgRef,
+            })
+          }
+          {showFilterString &&
+            <FilterString>
+              ({_('Applied filter: ')}
+              <b>{filter.name}</b>&nbsp;
+              <i>{filter.toFilterString()}</i>
+            </FilterString>
+          }
+        </Layout>
         <Download innerRef={this.downloadRef}>
         </Download>
       </Display>
@@ -307,10 +332,12 @@ DataDisplay.propTypes = {
   dataRow: PropTypes.func,
   dataTitles: PropTypes.arrayOf(PropTypes.string),
   dataTransform: PropTypes.func,
+  filter: PropTypes.filter,
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
   menuEntries: PropTypes.arrayOf(PropTypes.element),
+  showFilterString: PropTypes.bool,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
