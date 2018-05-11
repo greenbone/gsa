@@ -31,15 +31,17 @@ import PropTypes from '../../utils/proptypes.js';
 const EmptyGridRow = glamorous.div({
   margin: '8px 0px',
   minHeight: '50px',
-}, ({active, isDraggingOver}) => ({
+}, ({active, isDraggingOver, height}) => ({
   display: active ? 'flex' : 'none',
   border: '1px dashed lightgray',
   background: isDraggingOver ? 'lightblue' : 'none',
+  height,
 }));
 
 const EmptyRow = ({
   children,
   active = false,
+  height,
 }) => (
   <Droppable
     droppableId="empty"
@@ -48,6 +50,7 @@ const EmptyRow = ({
     {(provided, snapshot) => (
       <EmptyGridRow
         active={active}
+        height={height}
         innerRef={provided.innerRef}
         isDraggingOver={snapshot.isDraggingOver}
       >
@@ -60,6 +63,7 @@ const EmptyRow = ({
 
 EmptyRow.propTypes = {
   active: PropTypes.bool,
+  height: PropTypes.number.isRequired,
 };
 
 export default EmptyRow;
