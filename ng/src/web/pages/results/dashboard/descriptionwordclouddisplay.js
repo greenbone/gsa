@@ -104,6 +104,7 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformWordCountData}
             title={({data: tdata}) =>
             _('Results Description Word Cloud')}
