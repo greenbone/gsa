@@ -194,6 +194,7 @@ export class VulnsHostsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformHostsData}
             title={({data: tdata}) =>
             _('Vulnerabilities by Hosts (Total: {{count}})',

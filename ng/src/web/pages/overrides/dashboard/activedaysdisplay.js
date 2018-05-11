@@ -164,6 +164,7 @@ export class OverridesActiveDaysDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformActiveDaysData}
             title={({data: tdata}) => _('Overrides by Active Days (Total: ' +
               '{{count}})', {count: tdata.total})}

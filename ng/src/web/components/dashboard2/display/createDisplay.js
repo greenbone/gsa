@@ -48,6 +48,7 @@ const createDisplay = ({
           {...other}
           {...loaderProps}
           {...props}
+          filter={filter}
         >
           {is_defined(Chart) ? displayProps => (
             <Chart

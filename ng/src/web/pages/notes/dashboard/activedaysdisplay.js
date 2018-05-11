@@ -165,6 +165,7 @@ export class NotesActiveDaysDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformActiveDaysData}
             title={({data: tdata}) => _('Notes by Active Days (Total: ' +
               '{{count}})', {count: tdata.total})}

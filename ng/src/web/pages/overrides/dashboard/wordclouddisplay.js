@@ -104,6 +104,7 @@ export class OverridesWordCloudDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformWordCountData}
             title={({data: tdata}) =>
             _('Overrides Text Word Cloud')}

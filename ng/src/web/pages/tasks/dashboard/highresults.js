@@ -110,6 +110,7 @@ export class TasksHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks by High Results per Host')}
           >

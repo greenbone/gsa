@@ -104,6 +104,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTitles={[_('Task Name'), _('Max. High per Host')]}
             dataRow={row => [row.x, row.y]}
             dataTransform={transformHighResultsData}
