@@ -30,14 +30,18 @@ import _ from 'gmp/locale';
 
 import {parse_float, parse_severity} from 'gmp/parser';
 
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {resultSeverityRiskFactor} from 'web/utils/severity';
 import PropTypes from 'web/utils/proptypes';
-
+import compose from 'web/utils/compose';
 
 import BarChart from 'web/components/chart/bar';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   riskFactorColorScale,
@@ -127,39 +131,28 @@ export class TasksMostHighResultsDisplay extends React.Component {
 TasksMostHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
-TasksMostHighResultsDisplay = withRouter(
-  TasksMostHighResultsDisplay);
+TasksMostHighResultsDisplay = compose(
+  withRouter,
+  withFilterSelection({
+    filtersFilter: TASKS_FILTER_FILTER,
+  }),
+)(TasksMostHighResultsDisplay);
 
 TasksMostHighResultsDisplay.displayId = 'task-by-most-high-results';
 
-export const TasksMostHighResultsTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksHighResultsLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('Task Name'), _('Max. High per Host')]}
-        dataRow={row => [row.x, row.y]}
-        dataTransform={transformHighResultsData}
-        title={() => _('Tasks with most High Results per Host')}
-      />
-    )}
-  </TasksHighResultsLoader>
-);
-
-TasksMostHighResultsTableDisplay.displayId = 'task-by-most-high-results-table';
-
-TasksMostHighResultsTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
+export const TasksMostHighResultsTableDisplay = createDisplay({
+  loaderComponent: TasksHighResultsLoader,
+  displayComponent: DataTableDisplay,
+  dataTitles: [_('Task Name'), _('Max. High per Host')],
+  dataRow: row => [row.x, row.y],
+  dataTransform: transformHighResultsData,
+  title: () => _('Tasks with most High Results per Host'),
+  displayId: 'task-by-most-high-results-table',
+  displayName: 'TasksMostHighResultsTableDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
+});
 
 registerDisplay(TasksMostHighResultsDisplay.displayId,
   TasksMostHighResultsDisplay, {

@@ -32,17 +32,23 @@ import {parse_float, parse_severity} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
-import {severityFormat} from '../../../utils/render';
-import {resultSeverityRiskFactor, _NA} from '../../../utils/severity';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
-import BubbleChart from '../../../components/chart/bubble';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import {severityFormat} from 'web/utils/render';
+import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import {registerDisplay} from '../../../components/dashboard2/registry';
+import BubbleChart from 'web/components/chart/bubble';
+
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   riskFactorColorScale,
-} from '../../../components/dashboard2/display/utils';
+} from 'web/components/dashboard2/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
 
@@ -126,38 +132,28 @@ export class TasksHighResultsDisplay extends React.Component {
 TasksHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
-TasksHighResultsDisplay = withRouter(TasksHighResultsDisplay);
+TasksHighResultsDisplay = compose(
+  withRouter,
+  withFilterSelection({
+    filtersFilter: TASKS_FILTER_FILTER,
+  })
+)(TasksHighResultsDisplay);
 
 TasksHighResultsDisplay.displayId = 'task-by-high-results';
 
-export const TasksHighResultsTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <TasksHighResultsLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('Task Name'), _('High per Host'), _('Severity')]}
-        dataRow={row => [row.label, row.value, row.severity]}
-        dataTransform={transformHighResultsData}
-        title={() => _('Tasks by High Results per Host')}
-      />
-    )}
-  </TasksHighResultsLoader>
-);
-
-TasksHighResultsTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-TasksHighResultsTableDisplay.displayId = 'task-by-high-results-table';
+export const TasksHighResultsTableDisplay = createDisplay({
+  loaderComponent: TasksHighResultsLoader,
+  displayComponent: DataTableDisplay,
+  dataTitles: [_('Task Name'), _('High per Host'), _('Severity')],
+  dataRow: row => [row.label, row.value, row.severity],
+  dataTransform: transformHighResultsData,
+  title: () => _('Tasks by High Results per Host'),
+  displayId: 'task-by-high-results-table',
+  displayName: 'TasksHighResultsTableDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
+});
 
 registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
   title: _('Chart: Tasks by High Results per Host'),

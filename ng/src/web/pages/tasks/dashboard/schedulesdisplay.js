@@ -24,6 +24,8 @@ import _, {datetime} from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+
 import ScheduleChart from 'web/components/chart/schedule';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
@@ -58,6 +60,7 @@ export const TasksSchedulesDisplay = createDisplay({
   title: () => _('Next Scheduled Tasks'),
   displayName: 'TasksScheduleDisplay',
   displayId: 'task-by-schedules',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 export const TasksSchedulesTableDisplay = createDisplay({
@@ -70,6 +73,7 @@ export const TasksSchedulesTableDisplay = createDisplay({
   title: () => _('Next Scheduled Tasks'),
   displayId: 'task-by-schedules-table',
   displayName: 'TasksSchedulesTableDisplay',
+  filtersFilter: TASKS_FILTER_FILTER,
 });
 
 registerDisplay(TasksSchedulesDisplay.displayId, TasksSchedulesDisplay, {
