@@ -273,6 +273,8 @@ class DataDisplay extends React.Component {
     if (showFilterString) {
       height = height - 20; // padding top + bottom + font size
     }
+
+    const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     return (
       <Display
         menu={
@@ -303,7 +305,7 @@ class DataDisplay extends React.Component {
         <Layout flex="column" grow="1">
           {isLoading ?
             <Loading/> :
-            children({
+            showContent && children({
               id,
               data: transformedData,
               width,
