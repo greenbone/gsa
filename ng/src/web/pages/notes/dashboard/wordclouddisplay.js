@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -36,6 +36,8 @@ import PropTypes from 'web/utils/proptypes';
 import WordCloudChart from 'web/components/chart/wordcloud';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {randomColor} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -128,37 +130,26 @@ NotesWordCloudDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
+NotesWordCloudDisplay = withFilterSelection({
+  filtersFilter: NOTES_FILTER_FILTER,
+})(NotesWordCloudDisplay);
+
 NotesWordCloudDisplay.displayId = 'note-by-text-words';
 
-export const NotesWordCloudTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NotesWordCountLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformWordCountData}
-        dataRow={row => [row.label, row.value]}
-        dataTitles={[
-          _('Text'),
-          _('Count'),
-        ]}
-        title={({data: tdata}) =>
-        _('Notes Text Word Cloud')}
-      />
-    )}
-  </NotesWordCountLoader>
-);
-
-NotesWordCloudTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NotesWordCloudTableDisplay.displayId = 'note-by-text-words-table';
+export const NotesWordCloudTableDisplay = createDisplay({
+  loaderComponent: NotesWordCountLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformWordCountData,
+  dataRow: row => [row.label, row.value],
+  dataTitles: [
+    _('Text'),
+    _('Count'),
+  ],
+  title: ({data: tdata}) => _('Notes Text Word Cloud'),
+  displayId: 'note-by-text-words-table',
+  displayName: 'NotesWordCloudTableDisplay',
+  filtersFilter: NOTES_FILTER_FILTER,
+});
 
 registerDisplay(NotesWordCloudDisplay.displayId, NotesWordCloudDisplay, {
   title: _('Chart: Notes Text Word Cloud'),

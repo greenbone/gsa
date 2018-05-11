@@ -20,89 +20,57 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
+
 import Theme from 'web/utils/theme';
 
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NotesCreatedLoader} from './loaders';
 
-export const NotesCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NotesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Notes by Creation Time')}
-        yAxisLabel={_('# of Created Notes')}
-        y2AxisLabel={_('Total Notes')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created Notes'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total Notes'),
-        }}
-      />
-    )}
-  </NotesCreatedLoader>
-);
+export const NotesCreatedDisplay = createDisplay({
+  loaderComponent: NotesCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('Notes by Creation Time'),
+  yAxisLabel: _('# of Created Notes'),
+  y2AxisLabel: _('Total Notes'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created Notes'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total Notes'),
+  },
+  displayName: 'NotesCreatedDisplay',
+  displayId: 'note-by-created',
+  filtersFilter: NOTES_FILTER_FILTER,
+});
 
-NotesCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
 
-NotesCreatedDisplay.displayId = 'note-by-created';
-
-export const NotesCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NotesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Notes by Creation Time')}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of Notes'),
-          _('Total Notes'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-      />
-    )}
-  </NotesCreatedLoader>
-
-);
-
-NotesCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NotesCreatedTableDisplay.displayId = 'note-by-created-table';
+export const NotesCreatedTableDisplay = createDisplay({
+  loaderComponent: NotesCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('Notes by Creation Time'),
+  dataTitles: [
+    _('Creation Time'),
+    _('# of Notes'),
+    _('Total Notes'),
+  ],
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTransform: transformCreated,
+  displayName: 'NotesCreatedTableDisplay',
+  displayId: 'note-by-created-table',
+  filtersFilter: NOTES_FILTER_FILTER,
+});
 
 registerDisplay(NotesCreatedDisplay.displayId,
   NotesCreatedDisplay, {
