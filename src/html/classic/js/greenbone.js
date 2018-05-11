@@ -1269,7 +1269,8 @@
         for (elem_i = 0; elem_i < this.form.length; elem_i++) {
           var elem = this.form[elem_i];
 
-          if (!elem.matches('div[style*="display: none"] *')) {
+          if (!elem.matches('div[style*="display: none"] *') &&
+              !elem.matches('.select2-search__field')) {
             if (elem.matches('select')) {
               var val_i;
               for (val_i = 0; val_i < elem.length; val_i++) {
