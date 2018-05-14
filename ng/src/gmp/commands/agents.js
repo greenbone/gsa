@@ -76,7 +76,7 @@ class AgentCommand extends EntityCommand {
       cmd: 'download_agent',
       agent_format: 'installer',
       agent_id: id,
-    }, {transform: DefaultTransform});
+    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 }
 
