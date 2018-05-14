@@ -125,7 +125,8 @@ class LoginForm extends React.Component {
 
         <LoginPanel
           flex="column"
-          align="space-around">
+          align="space-around"
+        >
           <Layout
             flex="column"
             align="space-around"
@@ -143,7 +144,8 @@ class LoginForm extends React.Component {
                     value={username}
                     autoFocus="autofocus"
                     tabIndex="1"
-                    onChange={this.onValueChange}/>
+                    onChange={this.onValueChange}
+                  />
                 </FormGroup>
                 <FormGroup title={_('Password')} titleSize="4">
                   <PasswordField
@@ -152,7 +154,8 @@ class LoginForm extends React.Component {
                     placeholder={_('Password')}
                     value={password}
                     onKeyDown={this.onKeyDown}
-                    onChange={this.onValueChange}/>
+                    onChange={this.onValueChange}
+                  />
                 </FormGroup>
                 <FormGroup size="4" offset="4">
                   <SubmitButton
@@ -281,10 +284,14 @@ class LoginPage extends React.Component {
             flex="column"
             align={['start', 'center']}
             grow="1"
-            position="relative">
+            position="relative"
+          >
             <GreenboneIcon/>
             <Wrapper>
-              <LoginForm onSubmit={this.onSubmit} error={message}/>
+              <LoginForm
+                error={message}
+                onSubmit={this.onSubmit}
+              />
             </Wrapper>
           </StyledLayout>
         </LoginMain>
