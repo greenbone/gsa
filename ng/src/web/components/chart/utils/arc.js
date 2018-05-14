@@ -24,6 +24,8 @@ import {is_defined} from 'gmp/utils/identity';
 
 import path from './path';
 
+const EPSILON = 1e-12; // 1 * 10^(-12)
+
 const PI2 = Math.PI * 2;
 
 class Arc {
@@ -82,9 +84,14 @@ class Arc {
     endAngle = PI2,
   } = {}) {
     const paths = path();
+    const diff = endAngle - startAngle;
 
-    if (endAngle - startAngle === 0) {
+    if (diff < EPSILON) {
       return paths.move(0, 0);
+    }
+
+    if (diff > PI2 - EPSILON) {
+      endAngle = PI2;
     }
 
     this._checkRadius();
