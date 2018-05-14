@@ -83,27 +83,29 @@ class LoginForm extends React.Component {
 
     this.state = {};
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  onSubmit() {
-    if (!this.props.onSubmit) {
+  handleSubmit() {
+    const {onSubmit} = this.props;
+
+    if (!is_defined(onSubmit)) {
       return;
     }
 
     const {username, password} = this.state;
-    this.props.onSubmit(username, password);
+    onSubmit(username, password);
   }
 
-  onValueChange(value, name) {
+  handleValueChange(value, name) {
     this.setState({[name]: value});
   }
 
-  onKeyDown(event) {
+  handleKeyDown(event) {
     if (event.keyCode === KeyCode.ENTER) {
-      this.onSubmit(event);
+      this.handleSubmit(event);
     }
   }
 
@@ -144,7 +146,7 @@ class LoginForm extends React.Component {
                     value={username}
                     autoFocus="autofocus"
                     tabIndex="1"
-                    onChange={this.onValueChange}
+                    onChange={this.handleValueChange}
                   />
                 </FormGroup>
                 <FormGroup title={_('Password')} titleSize="4">
@@ -153,8 +155,8 @@ class LoginForm extends React.Component {
                     grow="1"
                     placeholder={_('Password')}
                     value={password}
-                    onKeyDown={this.onKeyDown}
-                    onChange={this.onValueChange}
+                    onKeyDown={this.handleKeyDown}
+                    onChange={this.handleValueChange}
                   />
                 </FormGroup>
                 <FormGroup size="4" offset="4">
@@ -162,7 +164,7 @@ class LoginForm extends React.Component {
                     flex
                     grow
                     title={_('Login')}
-                    onClick={this.onSubmit}
+                    onClick={this.handleSubmit}
                   />
                 </FormGroup>
               </Layout>
