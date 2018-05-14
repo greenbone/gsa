@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import {withRouter} from 'react-router';
+
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
@@ -33,6 +35,8 @@ import {is_defined, KeyCode, is_empty} from 'gmp/utils';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
+import compose from '../utils/compose';
+import withGmp from '../utils/withGmp';
 
 import FormGroup from '../components/form/formgroup.js';
 import PasswordField from '../components/form/passwordfield.js';
@@ -244,7 +248,7 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(username, password) {
-    const {router, gmp} = this.context;
+    const {router, gmp} = this.props;
 
     gmp.login(username, password).then(token => {
       const {location} = this.props;
@@ -263,7 +267,7 @@ class LoginPage extends React.Component {
 
   componentWillMount() {
     // reset token
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     gmp.token = undefined;
   }
 
@@ -306,11 +310,14 @@ class LoginPage extends React.Component {
   }
 }
 
-LoginPage.contextTypes = {
-  router: PropTypes.object.isRequired,
+LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
-export default LoginPage;
+export default compose(
+  withRouter,
+  withGmp,
+)(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:
