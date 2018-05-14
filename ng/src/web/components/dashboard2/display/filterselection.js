@@ -86,7 +86,15 @@ class FilterSelection extends React.Component {
   }
 
   handleSaveDialog({filterId}) {
-    this.setState({filterId, showDialog: false});
+    const {onChanged} = this.props;
+    this.setState({showDialog: false});
+
+    if (is_defined(onChanged)) {
+      onChanged({
+        filterId: is_defined(filterId) && filterId !== UNSET_VALUE ?
+          filterId : undefined,
+      });
+    }
   }
 
   render() {
@@ -157,6 +165,7 @@ FilterSelection.propTypes = {
   ),
   filtersFilter: PropTypes.filter.isRequired,
   loadFilters: PropTypes.func.isRequired,
+  onChanged: PropTypes.func,
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
