@@ -81,7 +81,10 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      username: '',
+      password: '',
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
