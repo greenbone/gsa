@@ -157,6 +157,7 @@ class FilterSelection extends React.Component {
 
 FilterSelection.propTypes = {
   children: PropTypes.func.isRequired,
+  filterId: PropTypes.id,
   filters: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.id,
