@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: wiegandm/gsa-7.0-debian-jessie
+      - image: greenbone/build-env-gsa-gsa-7.0-debian-jessie-gcc-core
     steps:
       - run:
           working_directory: ~/gvm-libs
