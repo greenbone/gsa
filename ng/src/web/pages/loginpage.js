@@ -240,10 +240,10 @@ class LoginPage extends React.Component {
       error: false,
     };
 
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit(username, password) {
+  handleSubmit(username, password) {
     const {router, gmp} = this.context;
 
     gmp.login(username, password).then(token => {
@@ -295,7 +295,7 @@ class LoginPage extends React.Component {
             <Wrapper>
               <LoginForm
                 error={message}
-                onSubmit={this.onSubmit}
+                onSubmit={this.handleSubmit}
               />
             </Wrapper>
           </StyledLayout>
