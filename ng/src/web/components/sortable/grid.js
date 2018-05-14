@@ -228,7 +228,7 @@ class Grid extends React.Component {
     const {maxItemsPerRow, maxRows, items = [], children} = this.props;
     const showEmptyRow = !is_defined(maxRows) || items.length < maxRows;
 
-    let emptyRowHeight;
+    let emptyRowHeight = DEFAULT_ROW_HEIGHT;
     if (isDragging) {
       const dragRow = items.find(row => row.id === dragSourceRowId);
       const {height = DEFAULT_ROW_HEIGHT} = dragRow;
