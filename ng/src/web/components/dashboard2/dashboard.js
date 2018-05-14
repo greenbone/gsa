@@ -163,7 +163,7 @@ class Dashboard extends React.Component {
           remove,
           update,
         }) => {
-          const {name} = itemProps;
+          const {name, filterId} = itemProps;
           const Component = this.components[name];
           return is_defined(Component) ? (
             <Component
@@ -172,6 +172,7 @@ class Dashboard extends React.Component {
               height={height}
               width={width}
               id={id}
+              filterId={filterId}
               onChanged={update}
               onRemoveClick={remove}
             />
