@@ -51,12 +51,26 @@ class FilterSelection extends React.Component {
 
     this.state = {
       showDialog: false,
-      filter: UNSET_VALUE,
+      filter: undefined,
     };
 
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleSaveDialog = this.handleSaveDialog.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {filters, filterId} = nextProps;
+    if (prevState.filterId !== filterId &&
+      is_defined(filters) && filters.length > 0) {
+      const filter = is_defined(filterId) ?
+        filters.find(f => f.id === filterId) : undefined;
+      return {
+        filter,
+        filterId,
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
@@ -71,8 +85,8 @@ class FilterSelection extends React.Component {
     this.setState({showDialog: true});
   }
 
-  handleSaveDialog({filter}) {
-    this.setState({filter, showDialog: false});
+  handleSaveDialog({filterId}) {
+    this.setState({filterId, showDialog: false});
   }
 
   render() {
@@ -80,7 +94,7 @@ class FilterSelection extends React.Component {
       children,
       filters = [],
     } = this.props;
-    const {filter, showDialog} = this.state;
+    const {filter, filterId, showDialog} = this.state;
     const filterSelectionMenuEntry = (
       <MenuEntry
         key="filter-selection"
@@ -92,12 +106,14 @@ class FilterSelection extends React.Component {
     return (
       <React.Fragment>
         {children({
-          filter: filter === UNSET_VALUE ? undefined : filter,
+          filter,
           filterSelectionMenuEntry,
         })}
         {showDialog &&
           <SaveDialog
-            defaultValues={{filter}}
+            defaultValues={{
+              filterId: is_defined(filterId) ? filterId : UNSET_VALUE,
+            }}
             title={_('Select Filter')}
             buttonTitle={_('Select')}
             width="500px"
@@ -109,19 +125,17 @@ class FilterSelection extends React.Component {
                 title={_('Filter')}
               >
                 <Select
-                  itemToString={item => item.name}
                   items={[{
                       label: UNSET_LABEL,
                       value: UNSET_VALUE,
                     },
                     ...filters.map(f => ({
                       label: f.name,
-                      value: f,
-                      key: f.id,
+                      value: f.id,
                     })),
                   ]}
-                  value={values.filter}
-                  name="filter"
+                  value={values.filterId}
+                  name="filterId"
                   onChange={onValueChange}
                 />
               </FormGroup>
