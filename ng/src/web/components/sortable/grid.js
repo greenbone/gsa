@@ -140,6 +140,27 @@ class Grid extends React.Component {
     this.notifyChange(items);
   }
 
+  handleUpdateItem(row, item, props) {
+    item = {
+      ...item,
+      ...props,
+    };
+
+    const rowItems = [
+      ...row.items,
+    ];
+    const index = rowItems.findIndex(i => i.id === item.id);
+    rowItems[index] = item;
+
+    const {items} = this.props;
+    const rows = [...items];
+
+    const rowIndex = findRowIndex(rows, row.id);
+    rows[rowIndex] = updateRow(row, {items: rowItems});
+
+    this.notifyChange(rows);
+  }
+
   handleDragEnd(result) {
     this.setState({
       isDragging: false,
@@ -253,6 +274,8 @@ class Grid extends React.Component {
                           height={itemHeight}
                           width={itemWidth}
                           remove={() => this.handleRemoveItem(id)}
+                          update={(...args) => this.handleUpdateItem(
+                            row, item, ...args)}
                         >
                           {children}
                         </Item>
