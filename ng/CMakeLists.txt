@@ -715,7 +715,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
-     ${NG_SRC_DIR}/src/web/pages/secinfopage.js
+     ${NG_SRC_DIR}/src/web/pages/securityinfo/dashboard.js
+     ${NG_SRC_DIR}/src/web/pages/securityinfo/page.js
      ${NG_SRC_DIR}/src/web/pages/tags/component.js
      ${NG_SRC_DIR}/src/web/pages/tags/details.js
      ${NG_SRC_DIR}/src/web/pages/tags/detailspage.js
