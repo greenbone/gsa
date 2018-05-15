@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {OS_FILTER_FILTER} from 'gmp/models/filter';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../../components/layout/layout.js';
@@ -41,7 +43,6 @@ import OsFilterDialog from './filterdialog.js';
 import OsTable from './table.js';
 import OsComponent from './component.js';
 
-import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 import OsDashboard from './dashboard';
 import {OS_DASHBOARD_ID} from './dashboard/index.js';
 
@@ -110,5 +111,5 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('operatingsystem', {
-  filtersFilter: ASSETS_FILTER_FILTER,
+  filtersFilter: OS_FILTER_FILTER,
 })(Page);
