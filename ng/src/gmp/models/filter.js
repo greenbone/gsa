@@ -720,6 +720,8 @@ export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
   'type=report_format');
 export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
 export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
+export const HOSTS_FILTER_FILTER = Filter.fromString('type=host');
+export const OS_FILTER_FILTER = Filter.fromString('type=os');
 
 export default Filter;
 
