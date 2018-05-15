@@ -112,6 +112,8 @@ class ScansDashboard extends React.Component {
     this.notifyResults();
     this.notifyTask();
     this.notifyVulns();
+
+    this.startTimer();
   }
 
   render() {
