@@ -317,7 +317,7 @@ class DataDisplay extends React.Component {
             <FilterString>
               ({_('Applied filter: ')}
               <b>{filter.name}</b>&nbsp;
-              <i>{filter.toFilterString()}</i>
+              <i>{filter.simple().toFilterString()}</i>)
             </FilterString>
           }
         </Layout>

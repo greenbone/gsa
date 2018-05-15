@@ -35,6 +35,7 @@ const withFilterSelection = ({filtersFilter}) => Component => {
   }) => (
     showFilterSelection ?
       <FilterSelection
+        {...props}
         filtersFilter={filtersFilter}
       >
         {({filterSelectionMenuEntry, filter}) => (
