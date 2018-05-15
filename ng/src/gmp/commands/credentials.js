@@ -123,7 +123,7 @@ class CredentialCommand extends EntityCommand {
       cmd: 'download_credential',
       package_format: format,
       credential_id: id,
-    }, {transform: DefaultTransform});
+    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 
   getElementFromRoot(root) {
