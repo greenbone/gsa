@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import {withRouter} from 'react-router';
+
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
@@ -33,6 +35,8 @@ import {is_defined, KeyCode, is_empty} from 'gmp/utils';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
+import compose from '../utils/compose';
+import withGmp from '../utils/withGmp';
 
 import FormGroup from '../components/form/formgroup.js';
 import PasswordField from '../components/form/passwordfield.js';
@@ -81,29 +85,34 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      username: '',
+      password: '',
+    };
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  onSubmit() {
-    if (!this.props.onSubmit) {
+  handleSubmit() {
+    const {onSubmit} = this.props;
+
+    if (!is_defined(onSubmit)) {
       return;
     }
 
     const {username, password} = this.state;
-    this.props.onSubmit(username, password);
+    onSubmit(username, password);
   }
 
-  onValueChange(value, name) {
+  handleValueChange(value, name) {
     this.setState({[name]: value});
   }
 
-  onKeyDown(event) {
+  handleKeyDown(event) {
     if (event.keyCode === KeyCode.ENTER) {
-      this.onSubmit(event);
+      this.handleSubmit(event);
     }
   }
 
@@ -125,7 +134,8 @@ class LoginForm extends React.Component {
 
         <LoginPanel
           flex="column"
-          align="space-around">
+          align="space-around"
+        >
           <Layout
             flex="column"
             align="space-around"
@@ -143,7 +153,8 @@ class LoginForm extends React.Component {
                     value={username}
                     autoFocus="autofocus"
                     tabIndex="1"
-                    onChange={this.onValueChange}/>
+                    onChange={this.handleValueChange}
+                  />
                 </FormGroup>
                 <FormGroup title={_('Password')} titleSize="4">
                   <PasswordField
@@ -151,15 +162,16 @@ class LoginForm extends React.Component {
                     grow="1"
                     placeholder={_('Password')}
                     value={password}
-                    onKeyDown={this.onKeyDown}
-                    onChange={this.onValueChange}/>
+                    onKeyDown={this.handleKeyDown}
+                    onChange={this.handleValueChange}
+                  />
                 </FormGroup>
                 <FormGroup size="4" offset="4">
                   <SubmitButton
                     flex
                     grow
                     title={_('Login')}
-                    onClick={this.onSubmit}
+                    onClick={this.handleSubmit}
                   />
                 </FormGroup>
               </Layout>
@@ -232,11 +244,11 @@ class LoginPage extends React.Component {
       error: false,
     };
 
-    this.onSubmit = this.onSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit(username, password) {
-    const {router, gmp} = this.context;
+  handleSubmit(username, password) {
+    const {router, gmp} = this.props;
 
     gmp.login(username, password).then(token => {
       const {location} = this.props;
@@ -255,7 +267,7 @@ class LoginPage extends React.Component {
 
   componentWillMount() {
     // reset token
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     gmp.token = undefined;
   }
 
@@ -281,10 +293,14 @@ class LoginPage extends React.Component {
             flex="column"
             align={['start', 'center']}
             grow="1"
-            position="relative">
+            position="relative"
+          >
             <GreenboneIcon/>
             <Wrapper>
-              <LoginForm onSubmit={this.onSubmit} error={message}/>
+              <LoginForm
+                error={message}
+                onSubmit={this.handleSubmit}
+              />
             </Wrapper>
           </StyledLayout>
         </LoginMain>
@@ -294,11 +310,14 @@ class LoginPage extends React.Component {
   }
 }
 
-LoginPage.contextTypes = {
-  router: PropTypes.object.isRequired,
+LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
-export default LoginPage;
+export default compose(
+  withRouter,
+  withGmp,
+)(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:

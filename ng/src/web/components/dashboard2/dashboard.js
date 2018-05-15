@@ -155,8 +155,15 @@ class Dashboard extends React.Component {
         maxRows={maxRows}
         onChange={this.handleItemsChange}
       >
-        {({dragHandleProps, id, props: itemProps, height, width, remove}) => {
-          const {name} = itemProps;
+        {({
+          dragHandleProps, id,
+          props: itemProps,
+          height,
+          width,
+          remove,
+          update,
+        }) => {
+          const {name, filterId} = itemProps;
           const Component = this.components[name];
           return is_defined(Component) ? (
             <Component
@@ -165,6 +172,8 @@ class Dashboard extends React.Component {
               height={height}
               width={width}
               id={id}
+              filterId={filterId}
+              onChanged={update}
               onRemoveClick={remove}
             />
           ) : null;
