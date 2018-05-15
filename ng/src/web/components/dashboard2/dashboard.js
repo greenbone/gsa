@@ -29,7 +29,14 @@ import {connect} from 'react-redux';
 import Logger from 'gmp/log';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
-import {debounce} from 'gmp/utils/event.js';
+import {debounce} from 'gmp/utils/event';
+import {exclude_object_props} from 'gmp/utils/object';
+
+import {
+  loadSettings,
+  saveSettings,
+} from 'web/store/dashboard/settings/actions';
+import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
 import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
 
@@ -37,11 +44,7 @@ import PropTypes from '../../utils/proptypes';
 import withGmp from '../../utils/withGmp';
 import compose from '../../utils/compose';
 
-import {loadSettings, saveSettings} from './settings/actions.js';
-import DashboardSettings from './settings/selectors.js';
-
 import {getDisplay} from './registry';
-import {exclude_object_props} from 'gmp/utils/index.js';
 
 const log = Logger.getLogger('web.components.dashboard');
 

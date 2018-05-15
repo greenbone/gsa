@@ -22,8 +22,9 @@
  */
 import {is_defined, is_array} from 'gmp/utils/identity';
 
+import {createRow, createItem} from 'web/components/sortable/grid';
+
 import getDashboardSettings from './selectors';
-import {createRow, createItem} from '../../sortable/grid';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';

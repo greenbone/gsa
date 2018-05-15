@@ -22,8 +22,8 @@
  */
 import {combineReducers} from 'redux';
 
-import dashboardData from '../components/dashboard2/data/reducers';
-import dashboardSettings from '../components/dashboard2/settings/reducers';
+import dashboardData from './dashboard/data/reducers';
+import dashboardSettings from './dashboard/settings/reducers';
 
 import entities from './entities/reducers';
 

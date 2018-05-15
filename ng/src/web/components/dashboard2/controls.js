@@ -33,6 +33,9 @@ import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
 import PropTypes from '../../utils/proptypes.js';
 
+import {resetSettings, addDisplay} from 'web/store/dashboard/settings/actions';
+import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+
 import SaveDialog from '../dialog/savedialog';
 
 import FormGroup from '../form/formgroup';
@@ -42,9 +45,6 @@ import IconDivider from '../layout/icondivider';
 
 import NewIcon from '../icon/newicon';
 import Icon from '../icon/icon';
-
-import {resetSettings, addDisplay} from './settings/actions';
-import getDashboardSettings from './settings/selectors';
 
 import {getDisplay} from './registry';
 
