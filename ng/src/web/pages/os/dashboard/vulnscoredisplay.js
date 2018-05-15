@@ -150,7 +150,6 @@ export class OsVulnScoreDisplay extends React.Component {
 OsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
 OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';

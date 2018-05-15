@@ -129,11 +129,21 @@ class DataDisplay extends React.Component {
       dataTransform(data, tprops) : data;
   }
 
+  hasFilterChanged(nextProps) {
+    if (is_defined(this.props.filter)) {
+      return this.props.filter.equals(nextProps.filter);
+    }
+
+    return is_defined(nextProps.filter);
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
-      nextState.hasSvg !== this.state.hasSvg;
+      nextState.hasSvg !== this.state.hasSvg ||
+      nextProps.showFilterString !== this.props.showFilterString ||
+      this.hasFilterChanged(nextProps);
   }
 
   createSvgUrl() {
