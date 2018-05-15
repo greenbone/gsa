@@ -46,16 +46,14 @@ import OsComponent from './component.js';
 import OsDashboard from './dashboard';
 import {OS_DASHBOARD_ID} from './dashboard/index.js';
 
-const ToolBarIcons = props => {
-  return (
-    <Layout flex box>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="operating-systems-view"
-        title={_('Help: Operating Systems')}/>
-    </Layout>
-  );
-};
+const ToolBarIcons = () => (
+  <Layout flex box>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="operating-systems-view"
+      title={_('Help: Operating Systems')}/>
+  </Layout>
+);
 
 const Page = ({
   onChanged,
