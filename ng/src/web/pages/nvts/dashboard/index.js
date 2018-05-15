@@ -39,6 +39,21 @@ import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
 
+export const NVTS_DISPLAYS = [
+  NvtsCvssDisplay.displayId,
+  NvtsFamilyDisplay.displayId,
+  NvtsSeverityDisplay.displayId,
+  NvtsQodDisplay.displayId,
+  NvtsQodTypeDisplay.displayId,
+  NvtsCreatedDisplay.displayId,
+  NvtsCvssTableDisplay.displayId,
+  NvtsSeverityTableDisplay.displayId,
+  NvtsFamilyTableDisplay.displayId,
+  NvtsCreatedTableDisplay.displayId,
+  NvtsQodTableDisplay.displayId,
+  NvtsQodTypeTableDisplay.displayId,
+];
+
 const NvtsDashboard = ({
   filter,
   onFilterChanged,
@@ -46,20 +61,7 @@ const NvtsDashboard = ({
   <Dashboard
     id={NVTS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      NvtsCvssDisplay.displayId,
-      NvtsFamilyDisplay.displayId,
-      NvtsSeverityDisplay.displayId,
-      NvtsQodDisplay.displayId,
-      NvtsQodTypeDisplay.displayId,
-      NvtsCreatedDisplay.displayId,
-      NvtsCvssTableDisplay.displayId,
-      NvtsSeverityTableDisplay.displayId,
-      NvtsFamilyTableDisplay.displayId,
-      NvtsCreatedTableDisplay.displayId,
-      NvtsQodTableDisplay.displayId,
-      NvtsQodTypeTableDisplay.displayId,
-    ]}
+    permittedDisplays={NVTS_DISPLAYS}
     defaultContent={[
       [
         NvtsSeverityDisplay.displayId,

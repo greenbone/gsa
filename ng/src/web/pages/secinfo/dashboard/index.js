@@ -40,6 +40,17 @@ import {SecInfosTypeDisplay, SecInfosTypeTableDisplay} from './typedisplay';
 
 export const SECINFO_DASHBOARD_ID = '4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864';
 
+export const SECINFO_DISPLAYS = [
+  SecInfosCreatedDisplay.displayId,
+  SecInfosCreatedTableDisplay.displayId,
+  SecInfosCvssDisplay.displayId,
+  SecInfosCvssTableDisplay.displayId,
+  SecInfosSeverityDisplay.displayId,
+  SecInfosSeverityTableDisplay.displayId,
+  SecInfosTypeDisplay.displayId,
+  SecInfosTypeTableDisplay.displayId,
+];
+
 export const SecInfoDashboard = ({
   filter,
   onFilterChanged,
@@ -47,16 +58,7 @@ export const SecInfoDashboard = ({
   <Dashboard
     id={SECINFO_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      SecInfosCreatedDisplay.displayId,
-      SecInfosCreatedTableDisplay.displayId,
-      SecInfosCvssDisplay.displayId,
-      SecInfosCvssTableDisplay.displayId,
-      SecInfosSeverityDisplay.displayId,
-      SecInfosSeverityTableDisplay.displayId,
-      SecInfosTypeDisplay.displayId,
-      SecInfosTypeTableDisplay.displayId,
-    ]}
+    permittedDisplays={SECINFO_DISPLAYS}
     defaultContent={[
       [
         SecInfosSeverityDisplay.displayId,
