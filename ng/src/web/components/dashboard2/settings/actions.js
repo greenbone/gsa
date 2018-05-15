@@ -44,7 +44,10 @@ const settingsV1toDashboardSettings = settings => {
   Object.entries(settings).forEach(([id, value]) => {
     const {data: rows} = value;
     items[id] = rows.map(({height, data}) =>
-      createRow(data.map(item => createItem({name: item.name})), height));
+      createRow(data.map(item => createItem({
+        name: item.name,
+        filterId: item.filt_id,
+      })), height));
   });
   return {
     items,
@@ -56,8 +59,9 @@ const dashboardSettings2SettingsV1 = ({items}) => ({
   data: items.map(({height, items: rowItems}) => ({
     height,
     type: 'row',
-    data: rowItems.map(({id, ...other}) => ({
+    data: rowItems.map(({id, filterId, ...other}) => ({
       ...other,
+      filt_id: filterId,
       type: 'chart',
     })),
   })),
