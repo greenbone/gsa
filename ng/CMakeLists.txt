@@ -225,10 +225,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstransform.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/utils.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/display/withFilterSelection.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/data/actions.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/data/loader.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/data/reducers.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/data/selectors.js
      ${NG_SRC_DIR}/src/web/components/dashboard2/registry.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
@@ -784,6 +780,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${NG_SRC_DIR}/src/web/pages/vulns/row.js
      ${NG_SRC_DIR}/src/web/pages/vulns/table.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/data/actions.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/data/loader.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/data/reducers.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/data/selectors.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/settings/actions.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/settings/reducers.js
+     ${NG_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${NG_SRC_DIR}/src/web/store/index.js
      ${NG_SRC_DIR}/src/web/store/reducers.js
      ${NG_SRC_DIR}/src/web/store/entities/selectors.js

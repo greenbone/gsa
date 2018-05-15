@@ -25,7 +25,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from '../../../components/dashboard2/data/loader';
+} from 'web/store/dashboard/data/loader';
 
 export const OVERRIDES_ACTIVE_DAYS = 'overrides-active-days';
 export const OVERRIDES_CREATED = 'overrides-created';

@@ -25,7 +25,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from '../../../components/dashboard2/data/loader';
+} from 'web/store/dashboard/data/loader';
 
 export const REPORTS_HIGH_RESULTS = 'reports-high-results';
 export const REPORTS_SEVERITY = 'reports-severity';

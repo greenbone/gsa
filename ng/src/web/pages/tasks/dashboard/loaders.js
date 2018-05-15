@@ -25,7 +25,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from '../../../components/dashboard2/data/loader';
+} from 'web/store/dashboard/data/loader';
 
 export const TASKS_STATUS = 'tasks-status';
 export const TASKS_SEVERITY = 'tasks-severity';
