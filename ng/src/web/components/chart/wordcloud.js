@@ -27,7 +27,6 @@ import {scaleLinear} from 'd3-scale';
 
 import d3cloud from 'd3-cloud';
 
-import {arrays_equal} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
@@ -51,60 +50,80 @@ class WordCloudChart extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {
-      words: [],
-    };
+    this.state = {};
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const {data, width, height} = nextProps;
+
+    if (data !== prevState.data ||
+      width !== prevState.width ||
+      height !== prevState.width) {
+
+      const state = {
+        height,
+        width,
+        words: undefined, // reset words -> words must be recalculated
+      };
+
+      if (data !== prevState.data) {
+        // only update origWords if data has changed
+
+        let values = data.map(d => d.value).sort();
+
+        if (values.length > DEFAULT_MAX_WORDS) {
+          values = values.slice(0, DEFAULT_MAX_WORDS);
+        }
+
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+
+        const wordScale = scaleLinear()
+          .domain([min, max])
+          .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
+
+        state.origWords = data.map(word => ({
+          size: wordScale(word.value),
+          text: word.label,
+          color: word.color,
+          filterValue: word.filterValue,
+        }));
+      }
+      return state;
+    }
+    return null;
   }
 
   componentDidMount() {
-    this.updateWords(this.props.data);
+    this.updateWords();
   }
 
-  componentWillReceiveProps(next) {
-    const {data, width, height} = this.props;
-
-    if (!arrays_equal(next.data, data) ||
-      next.width !== width || next.height !== height) {
-      this.updateWords(next.data);
+  componentDidUpdate() {
+    if (!is_defined(this.state.words)) {
+      // words have been reset => recalcuate words
+      this.updateWords();
     }
   }
 
-  updateWords(data) {
-    const {width, height} = this.props;
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.origWords !== this.state.origWords ||
+      nextState.words !== this.state.words;
+  }
+
+  updateWords() {
+    const {width, height, origWords} = this.state;
 
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    let values = data.map(d => d.value).sort();
-
-    if (values.length > DEFAULT_MAX_WORDS) {
-      values = values.slice(0, DEFAULT_MAX_WORDS);
-    }
-
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-
-    const wordScale = scaleLinear()
-      .domain([min, max])
-      .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
-
-    const words = data.map(word => ({
-      size: wordScale(word.value),
-      text: word.label,
-      color: word.color,
-      filterValue: word.filterValue,
-    }));
-
-    const cloud = d3cloud();
-
-    cloud
+    d3cloud()
       .size([maxWidth, maxHeight])
       .fontSize(d => d.size)
       .rotate(0)
       .padding(2)
       .font('Sans')
-      .words(words)
-      .on('end', wrds => this.setState({words: wrds}))
+      .words(origWords)
+      .on('end', words => this.setState({words}))
       .start();
   }
 
@@ -117,7 +136,7 @@ class WordCloudChart extends React.Component {
     } = this.props;
 
     const {
-      words,
+      words = [],
     } = this.state;
     return (
       <Svg
