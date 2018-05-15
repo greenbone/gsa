@@ -21,28 +21,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+
 import {withRouter} from 'react-router';
 
 import glamorous from 'glamorous';
+
 import moment from 'moment';
 
 import _ from 'gmp/locale';
 
 import {parse_float, parse_severity} from 'gmp/parser';
 
-import {resultSeverityRiskFactor} from '../../../utils/severity';
-import PropTypes from '../../../utils/proptypes';
+import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
-import BarChart from '../../../components/chart/bar';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import DataTableDisplay from '../../../components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import BarChart from 'web/components/chart/bar';
+
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard2/registry';
 import {
   riskFactorColorScale,
-} from '../../../components/dashboard2/display/utils';
+} from 'web/components/dashboard2/display/utils';
 
 import {OsVulnScoreLoader} from './loaders';
-import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const ToolTip = glamorous.div({
     fontWeight: 'normal',
@@ -117,12 +124,8 @@ export class OsVulnScoreDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformVulnScoreData}
-            dataTitles={[
-              _('Operating System Name'),
-              _('Max. Average Severity Score'),
-            ]}
-            dataRow={row => [row.x, row.y]}
             title={() => _('Most Vulnerable Operating Systems')}
           >
             {({width, height, data: tdata, svgRef}) => (
@@ -152,44 +155,33 @@ OsVulnScoreDisplay.propTypes = {
 
 OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';
 
-export const OsVulnScoreDisplayWithRouter =
-  withRouter(OsVulnScoreDisplay);
+OsVulnScoreDisplay = compose(
+  withRouter,
+  withFilterSelection({
+    filtersFilter: OS_FILTER_FILTER,
+  })
+)(OsVulnScoreDisplay);
 
-export const OsVulnScoreTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OsVulnScoreLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Operating Sytem Name'),
-          _('Max. Average Severity Score'),
-        ]}
-        dataRow={row => [row.x, row.y]}
-        dataTransform={transformVulnScoreData}
-        title={({data: tdata}) => _('Most Vulnerable Operating Systems')}
-      />
-    )}
-  </OsVulnScoreLoader>
-);
-
-OsVulnScoreTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
-};
-
-OsVulnScoreTableDisplay.displayId = 'os-by-most-vulnerable-table';
+export const OsVulnScoreTableDisplay = createDisplay({
+  loaderComponent: OsVulnScoreLoader,
+  displayComponent: DataTableDisplay,
+  dataTitles: [
+    _('Operating Sytem Name'),
+    _('Max. Average Severity Score'),
+  ],
+  dataRow: row => [row.x, row.y],
+  dataTransform: transformVulnScoreData,
+  title: ({data: tdata}) => _('Most Vulnerable Operating Systems'),
+  displayId: 'os-by-most-vulnerable-table',
+  displayName: 'OsVulnScoreTableDisplay',
+  filtersFilter: OS_FILTER_FILTER,
+});
 
 registerDisplay(
-  OsVulnScoreDisplayWithRouter.displayId,
-  OsVulnScoreDisplayWithRouter, {
-  title: _('Chart: Operating Systems by Vulnerability Score'),
-});
+  OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
+    title: _('Chart: Operating Systems by Vulnerability Score'),
+  },
+);
 
 registerDisplay(
   OsVulnScoreTableDisplay.displayId,

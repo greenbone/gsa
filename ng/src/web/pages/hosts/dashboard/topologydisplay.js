@@ -21,18 +21,24 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+
 import {withRouter} from 'react-router';
 
 import _ from 'gmp/locale';
+
 import {is_defined, has_value} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import TopologyChart from '../../../components/chart/topology';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+
+import TopologyChart from 'web/components/chart/topology';
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsTopologyLoader} from './loaders';
-import {registerDisplay} from '../../../components/dashboard2/registry';
 
 const transformTopologyData = (data = []) => {
   if (!has_value(data)) {
@@ -119,7 +125,7 @@ const transformTopologyData = (data = []) => {
   return {hosts, links};
 };
 
-class HostsTopologyDisplay extends React.Component {
+export class HostsTopologyDisplay extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -146,6 +152,7 @@ class HostsTopologyDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformTopologyData}
             title={() => _('Hosts Topology')}
           >
@@ -173,14 +180,17 @@ HostsTopologyDisplay.propTypes = {
 
 const DISPLAY_ID = 'host-by-topology';
 
-const HostsTopologyDisplayWithRouter = withRouter(HostsTopologyDisplay);
+HostsTopologyDisplay = compose(
+  withRouter,
+  withFilterSelection({
+    filtersFilter: HOSTS_FILTER_FILTER,
+  }),
+)(HostsTopologyDisplay);
 
-HostsTopologyDisplayWithRouter.displayId = DISPLAY_ID;
+HostsTopologyDisplay.displayId = DISPLAY_ID;
 
-registerDisplay(DISPLAY_ID, HostsTopologyDisplayWithRouter, {
+registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
   title: _('Chart: Hosts Topology'),
 });
-
-export default HostsTopologyDisplayWithRouter;
 
 // vim: set ts=2 sw=2 tw=80:
