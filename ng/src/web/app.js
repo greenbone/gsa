@@ -50,7 +50,7 @@ import globalcss from './utils/globalcss.js';
 
 import configureStore from './store';
 
-import AssetsPage from './pages/assetspage.js';
+import AssetsPage from './pages/assets/page.js';
 import HomePage from './pages/homepage.js';
 import LoginPage from './pages/loginpage.js';
 import Page from './pages/page.js';

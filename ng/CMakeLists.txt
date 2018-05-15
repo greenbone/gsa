@@ -420,7 +420,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${NG_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
-     ${NG_SRC_DIR}/src/web/pages/assetspage.js
+     ${NG_SRC_DIR}/src/web/pages/assets/page.js
+     ${NG_SRC_DIR}/src/web/pages/assets/dashboard.js
      ${NG_SRC_DIR}/src/web/pages/credentials/component.js
      ${NG_SRC_DIR}/src/web/pages/credentials/details.js
      ${NG_SRC_DIR}/src/web/pages/credentials/detailspage.js
