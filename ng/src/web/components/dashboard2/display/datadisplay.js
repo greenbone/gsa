@@ -236,9 +236,11 @@ class DataDisplay extends React.Component {
   }
 
   setHasSvg() {
-    const {current: svg} = this.svgRef;
-
-    this.setState({hasSvg: svg !== null});
+    this.setState(prevState => {
+      const {current: svg} = this.svgRef;
+      const hasSvg = svg !== null;
+      return prevState.hasSvg === hasSvg ? null : {hasSvg};
+    });
   }
 
   componentDidUpdate() {

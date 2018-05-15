@@ -26,9 +26,12 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -46,11 +49,11 @@ import HostComponent from './component.js';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
-import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
-const ToolBarIcons = ({
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onHostCreateClick,
-}, {capabilities}) => (
+}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
@@ -63,13 +66,10 @@ const ToolBarIcons = ({
         onClick={onHostCreateClick}/>
     }
   </IconDivider>
-);
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+));
 
 ToolBarIcons.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
@@ -98,6 +98,10 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard2={HostsDashboard}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
+        )}
         filterEditDialog={HostsFilterDialog}
         sectionIcon="host.svg"
         table={HostsTable}
@@ -122,11 +126,7 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('host', {
-  dashboard2: HostsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
-  ),
-  filtersFilter: ASSETS_FILTER_FILTER,
+  filtersFilter: HOSTS_FILTER_FILTER,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
