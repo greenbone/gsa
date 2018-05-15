@@ -253,7 +253,6 @@ class Grid extends React.Component {
                 const itemHeight = height - GRID_ITEM_MARGIN.top -
                   GRID_ITEM_MARGIN.bottom;
                 const itemWidth = fullWidth / itemCount -
-                  rowItems.length *
                   (GRID_ITEM_MARGIN.left + GRID_ITEM_MARGIN.right);
                 return (
                   <Row
