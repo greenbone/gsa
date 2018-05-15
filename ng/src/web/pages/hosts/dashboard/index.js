@@ -48,6 +48,20 @@ import {
 
 export const HOSTS_DASHBOARD_ID = 'd3f5f2de-a85b-43f2-a817-b127457cc8ba';
 
+export const HOSTS_DISPLAYS = [
+  HostsCvssDisplay.displayId,
+  HostsModifiedDisplay.displayId,
+  HostsModifiedHighDisplay.displayId,
+  HostsSeverityClassDisplay.displayId,
+  HostsTopologyDisplay.displayId,
+  HostsVulnScoreDisplay.displayId,
+  HostsCvssTableDisplay.displayId,
+  HostsSeverityClassTableDisplay.displayId,
+  HostsModifiedTableDisplay.displayId,
+  HostsModifiedHighTableDisplay.displayId,
+  HostsVulnScoreTableDisplay.displayId,
+];
+
 const HostsDashboard = ({
   filter,
   onFilterChanged,
@@ -55,19 +69,7 @@ const HostsDashboard = ({
   <Dashboard
     id={HOSTS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      HostsCvssDisplay.displayId,
-      HostsModifiedDisplay.displayId,
-      HostsModifiedHighDisplay.displayId,
-      HostsSeverityClassDisplay.displayId,
-      HostsTopologyDisplay.displayId,
-      HostsVulnScoreDisplay.displayId,
-      HostsCvssTableDisplay.displayId,
-      HostsSeverityClassTableDisplay.displayId,
-      HostsModifiedTableDisplay.displayId,
-      HostsModifiedHighTableDisplay.displayId,
-      HostsVulnScoreTableDisplay.displayId,
-    ]}
+    permittedDisplays={HOSTS_DISPLAYS}
     defaultContent={[
       [
         HostsSeverityClassDisplay.displayId,
