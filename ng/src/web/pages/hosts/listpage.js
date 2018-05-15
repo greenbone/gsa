@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -46,7 +48,6 @@ import HostComponent from './component.js';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
-import {ASSETS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({
   onHostCreateClick,
@@ -126,7 +127,7 @@ export default withEntitiesContainer('host', {
   dashboardControls: () => (
     <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
   ),
-  filtersFilter: ASSETS_FILTER_FILTER,
+  filtersFilter: HOSTS_FILTER_FILTER,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
