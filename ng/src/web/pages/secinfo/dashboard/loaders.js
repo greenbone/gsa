@@ -25,7 +25,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from '../../../components/dashboard2/data/loader';
+} from 'web/store/dashboard/data/loader';
 
 export const SEC_INFOS_CREATED = 'secinfos-created';
 export const SEC_INFOS_SEVERITY = 'secinfos-severity';

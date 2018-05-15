@@ -25,7 +25,7 @@ import React from 'react';
 import Loader, {
   loadFunc,
   loaderPropTypes,
-} from '../../../components/dashboard2/data/loader';
+} from 'web/store/dashboard/data/loader';
 
 export const NVTS_FAMILY = 'nvt-family';
 export const NVTS_SEVERITY = 'nvt-severity';

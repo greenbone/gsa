@@ -56,7 +56,6 @@ const exclude_props = [
   'children',
   'component',
   'gmpname',
-  'filtersFilter',
   'onDownload',
 ];
 
@@ -109,7 +108,6 @@ class EntitiesContainer extends React.Component {
   componentDidMount() {
     const {filter} = this.props.location.query;
     this.updateFilter(filter, true); // use data from cache and reload afterwards
-    this.loadFilters();
   }
 
   componentWillUnmount() {
@@ -199,25 +197,6 @@ class EntitiesContainer extends React.Component {
         this.handleError(error);
         return PromiseFactory.reject(error);
       });
-  }
-
-  loadFilters() {
-    const {cache, filtersFilter, gmp} = this.props;
-
-    if (!filtersFilter) {
-      return;
-    }
-
-    gmp.filters.getAll({filter: filtersFilter}, {cache})
-      .then(response => {
-        // display cached filters
-        this.setState({filters: response.data});
-        // reload all filters from backend
-        return gmp.filters.getAll({filter: filtersFilter},
-          {cache, force: true});
-      }).then(response => {
-        this.setState({filters: response.data});
-      }, this.handleError);
   }
 
   reload({invalidate = false} = {}) {
@@ -398,7 +377,6 @@ class EntitiesContainer extends React.Component {
   }
 
   handleFilterCreated(filter) {
-    this.loadFilters();
     this.load({filter});
   }
 
@@ -422,7 +400,6 @@ class EntitiesContainer extends React.Component {
     const {
       entities,
       entities_counts,
-      filters,
       loaded_filter,
       loading,
       selected,
@@ -448,7 +425,6 @@ class EntitiesContainer extends React.Component {
           entitiesCounts={entities_counts}
           entitiesSelected={selected}
           filter={loaded_filter}
-          filters={filters}
           selectionType={selection_type}
           sortBy={sortBy}
           sortDir={sortDir}
@@ -484,7 +460,6 @@ EntitiesContainer.propTypes = {
   entities: PropTypes.array,
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
-  filtersFilter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.oneOfType([
     PropTypes.string,

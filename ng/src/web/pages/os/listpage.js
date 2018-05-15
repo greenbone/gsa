@@ -87,6 +87,7 @@ const Page = ({
         dashboardControls={() => (
           <DashboardControls dashboardId={OS_DASHBOARD_ID} />
         )}
+        filtersFilter={OS_FILTER_FILTER}
         filterEditDialog={OsFilterDialog}
         sectionIcon="os.svg"
         table={OsTable}
@@ -109,6 +110,4 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('operatingsystem', {
-  filtersFilter: OS_FILTER_FILTER,
-})(Page);
+export default withEntitiesContainer('operatingsystem')(Page);

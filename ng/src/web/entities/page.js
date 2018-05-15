@@ -23,9 +23,14 @@
 
 import React from 'react';
 
-import {is_defined, exclude_object_props} from 'gmp/utils';
+import {connect} from 'react-redux';
+
+import {is_defined, has_value} from 'gmp/utils/identity';
+import {exclude_object_props} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
 import {render_section_title} from '../utils/render.js';
 
 import Toolbar from '../components/bar/toolbar.js';
@@ -40,6 +45,9 @@ import Loading from '../components/loading/loading.js';
 import PowerFilter from '../components/powerfilter/powerfilter.js';
 
 import Section from '../components/section/section.js';
+
+import getFilters from 'web/store/entities/filters/selectors';
+import {loadFilters} from 'web/store/entities/filters/actions';
 
 const exclude_props = [
   'children',
@@ -68,6 +76,10 @@ class EntitiesPage extends React.Component {
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
     this.handleFilterDialogCloseClick =
       this.handleFilterDialogCloseClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.loadFilters();
   }
 
   getSectionTitle() {
@@ -279,6 +291,8 @@ EntitiesPage.propTypes = {
   filter: PropTypes.filter,
   filterEditDialog: PropTypes.component,
   filters: PropTypes.array,
+  filtersFilter: PropTypes.filter,
+  loadFilters: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   powerfilter: PropTypes.componentOrFalse,
   section: PropTypes.componentOrFalse,
@@ -301,6 +315,27 @@ export const createEntitiesPage = (options = {}) => {
   return EntitiesPageWrapper;
 };
 
-export default EntitiesPage;
+const mapStateToProps = (state, {filtersFilter}) => {
+  if (!is_defined(filtersFilter)) {
+    return {
+      filters: [],
+    };
+  }
+
+  const filterSelector = getFilters(state);
+  const filters = filterSelector.getEntities(filtersFilter);
+  return {
+    filters: has_value(filters) ? filters : [],
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
+  loadFilters: () => dispatch(loadFilters({gmp, filter: filtersFilter})),
+});
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:
