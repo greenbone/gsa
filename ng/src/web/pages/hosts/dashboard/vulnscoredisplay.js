@@ -21,25 +21,32 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+
 import {withRouter} from 'react-router';
 
 import glamorous from 'glamorous';
+
 import moment from 'moment';
 
 import _ from 'gmp/locale';
 
 import {parse_float, parse_severity} from 'gmp/parser';
 
-import {resultSeverityRiskFactor} from '../../../utils/severity';
-import PropTypes from '../../../utils/proptypes';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import BarChart from '../../../components/chart/bar';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
+import BarChart from 'web/components/chart/bar';
+
+import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection';  // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {
   riskFactorColorScale,
-} from '../../../components/dashboard2/display/utils';
+} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsVulnScoreLoader} from './loaders';
@@ -116,6 +123,7 @@ export class HostsVulnScoreDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            filter={filter}
             dataTransform={transformVulnScoreData}
             title={() => _('Most Vulnerable Hosts')}
           >
@@ -144,38 +152,29 @@ HostsVulnScoreDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-HostsVulnScoreDisplay = withRouter(HostsVulnScoreDisplay);
+HostsVulnScoreDisplay = compose(
+  withRouter,
+  withFilterSelection({
+    filtersFilter: HOSTS_FILTER_FILTER,
+  })
+)(HostsVulnScoreDisplay);
 
 HostsVulnScoreDisplay.displayId = 'host-by-most-vulnerable';
 
-export const HostsVulnScoreTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsVulnScoreLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformVulnScoreData}
-        dataTitles={[
-          _('Host Name'),
-          _('Max. average Severity Score'),
-        ]}
-        dataRow={row => [row.x, row.y]}
-        title={() => _('Most Vulnerable Hosts')}
-      />
-    )}
-  </HostsVulnScoreLoader>
-);
-
-HostsVulnScoreTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsVulnScoreTableDisplay.displayId = 'host-by-most-vulnerable-table';
+export const HostsVulnScoreTableDisplay = createDisplay({
+  loaderComponent: HostsVulnScoreLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformVulnScoreData,
+  dataTitles: [
+    _('Host Name'),
+    _('Max. average Severity Score'),
+  ],
+  dataRow: row => [row.x, row.y],
+  title: () => _('Most Vulnerable Hosts'),
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'HostsVulnScoreTableDisplay',
+  displayName: 'host-by-most-vulnerable-table',
+});
 
 registerDisplay(HostsVulnScoreDisplay.displayId, HostsVulnScoreDisplay, {
     title: _('Chart: Hosts by Vulnerability Score'),

@@ -30,7 +30,7 @@ import {parse_int} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import Filter from 'gmp/models/filter';
+import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 
 import PropTypes from 'web/utils/proptypes';
@@ -40,6 +40,8 @@ import LineChart, {lineDataPropType} from 'web/components/chart/line';
 
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {totalCount} from 'web/components/dashboard2/display/utils';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
@@ -171,42 +173,29 @@ HostsModifiedHighDisplay.propTypes = {
   onFilterChanged: PropTypes.func,
 };
 
+HostsModifiedHighDisplay = withFilterSelection({
+  filtersFilter: HOSTS_FILTER_FILTER,
+})(HostsModifiedHighDisplay);
+
 HostsModifiedHighDisplay.displayId = 'host-by-high-modification-time';
 
-export const HostsModifiedHighTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsModifiedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTransform={transformModified}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Hosts (High) by Modification Time (Total: {{count}})',
-            {count: tdata.total})
-        }
-        dataTitles={[
-          _('Creation Time'),
-          _('# of Modified Hosts (High)'),
-          _('Total Hosts (High)'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-      />
-    )}
-  </HostsModifiedLoader>
-);
-
-HostsModifiedHighTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsModifiedHighTableDisplay.displayId =
-  'host-by-high-modification-time-table';
+export const HostsModifiedHighTableDisplay = createDisplay({
+  loaderComponent: HostsModifiedLoader,
+  displayComponent: DataTableDisplay,
+  dataTransform: transformModified,
+  title: ({data: tdata}) =>
+    _('Hosts (High) by Modification Time (Total: {{count}})',
+      {count: tdata.total}),
+  dataTitles: [
+    _('Creation Time'),
+    _('# of Modified Hosts (High)'),
+    _('Total Hosts (High)'),
+  ],
+  dataRow: row => [row.label, row.y, row.y2],
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-high-modification-time-table',
+  displayName: 'HostsModifiedHighTableDisplay',
+});
 
 registerDisplay(HostsModifiedHighDisplay.displayId, HostsModifiedHighDisplay, {
   title: _('Chart: Hosts (High) by Modification Time'),

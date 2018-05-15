@@ -40,7 +40,7 @@ import {
   HostsSeverityClassDisplay,
   HostsSeverityClassTableDisplay,
 } from './severityclassdisplay';
-import HostsTopologyDisplay from './topologydisplay';
+import {HostsTopologyDisplay} from './topologydisplay';
 import {
   HostsVulnScoreDisplay,
   HostsVulnScoreTableDisplay,

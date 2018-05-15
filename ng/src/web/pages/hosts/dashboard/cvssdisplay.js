@@ -20,72 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsSeverityLoader} from './loaders';
 
-export const HostsCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of Hosts')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Hosts by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </HostsSeverityLoader>
-);
+export const HostsCvssDisplay = createDisplay({
+  loaderComponent: HostsSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of Hosts'),
+  title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-cvss',
+  displayName: 'HostsCvssDisplay',
+});
 
-HostsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsCvssDisplay.displayId = 'host-by-cvss';
-
-export const HostsCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of Hosts')]}
-        title={({data: tdata}) =>
-          _('Hosts by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </HostsSeverityLoader>
-);
-
-HostsCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsCvssTableDisplay.displayId = 'host-by-cvss-table';
+export const HostsCvssTableDisplay = createDisplay({
+  loaderComponent: HostsSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of Hosts')],
+  title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-cvss-table',
+  displayName: 'HostsCvssTableDisplay',
+});
 
 registerDisplay(HostsCvssDisplay.displayId, HostsCvssDisplay, {
   title: _('Chart: Hosts by CVSS'),

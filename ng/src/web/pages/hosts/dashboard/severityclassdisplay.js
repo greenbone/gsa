@@ -20,71 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {HostsSeverityLoader} from './loaders';
 
-export const HostsSeverityClassDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('Hosts by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </HostsSeverityLoader>
-);
+export const HostsSeverityClassDisplay = createDisplay({
+  loaderComponent: HostsSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) => _('Hosts by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-severity-class',
+  displayName: 'HostsSeverityClassDisplay',
+});
 
-HostsSeverityClassDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsSeverityClassDisplay.displayId = 'host-by-severity-class';
-
-export const HostsSeverityClassTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <HostsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of Hosts')]}
-        title={({data: tdata}) =>
-          _('Hosts by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </HostsSeverityLoader>
-);
-
-HostsSeverityClassTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-HostsSeverityClassTableDisplay.displayId = 'host-by-severity-class-table';
+export const HostsSeverityClassTableDisplay = createDisplay({
+  loaderComponent: HostsSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) => _('Hosts by Severity Class (Total: {{count}})',
+    {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of Hosts')],
+  filtersFilter: HOSTS_FILTER_FILTER,
+  displayId: 'host-by-severity-class-table',
+  displayName: 'HostsSeverityClassTableDisplay',
+});
 
 registerDisplay(HostsSeverityClassDisplay.displayId,
   HostsSeverityClassDisplay, {
