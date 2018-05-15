@@ -20,72 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CvesSeverityLoader} from './loaders';
 
-export const CvesSeverityClassDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CVEs')]}
-        title={({data: tdata}) =>
-          _('CVEs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CvesSeverityLoader>
-);
+export const CvesSeverityClassDisplay = createDisplay({
+  loaderComponent: CvesSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) =>
+    _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayId: 'cve-by-severity-class',
+  displayName: 'CvesSeverityClassDisplay',
+  filtersFilter: CVES_FILTER_FILTER,
+});
 
-CvesSeverityClassDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CvesSeverityClassDisplay.displayId = 'cve-by-severity-class';
-
-export const CvesSeverityClassTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CVEs')]}
-        title={({data: tdata = {}}) =>
-          _('CVEs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CvesSeverityLoader>
-);
-
-CvesSeverityClassTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CvesSeverityClassTableDisplay.displayId = 'cve-by-severity-table';
+export const CvesSeverityClassTableDisplay = createDisplay({
+  loaderComponent: CvesSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) =>
+    _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of CVEs')],
+  displayId: 'cve-by-severity-table',
+  displayName: 'CvesSeverityClassTableDisplay',
+  filtersFilter: CVES_FILTER_FILTER,
+});
 
 registerDisplay(CvesSeverityClassDisplay.displayId, CvesSeverityClassDisplay, {
   title: _('Chart: CVEs by Severity Class'),
