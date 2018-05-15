@@ -92,6 +92,8 @@ class AssetsDashboard extends React.Component {
 
     this.notifyHosts();
     this.notifyOs();
+
+    this.startTimer();
   }
 
   render() {
