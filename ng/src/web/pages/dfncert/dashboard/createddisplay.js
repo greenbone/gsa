@@ -20,88 +20,56 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
+import Theme from 'web/utils/theme';
 
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {DfnCertsCreatedLoader} from './loaders';
 
-export const DfnCertsCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <DfnCertsCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('DFN-CERT Advisories by Creation Time')}
-        yAxisLabel={_('# of created DFN-CERT Advisories')}
-        y2AxisLabel={_('Total DFN-CERT Advisories')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created DFN-CERT Advs'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total DFN-CERT Advs'),
-        }}
-      />
-    )}
-  </DfnCertsCreatedLoader>
-);
+export const DfnCertsCreatedDisplay = createDisplay({
+  loaderComponent: DfnCertsCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('DFN-CERT Advisories by Creation Time'),
+  yAxisLabel: _('# of created DFN-CERT Advs'),
+  y2AxisLabel: _('Total DFN-CERT Advs'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created DFN-CERT Advs'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total DFN-CERT Advs'),
+  },
+  displayId: 'dfn_cert_adv-by-created',
+  displayName: 'DfnCertsCreatedDisplay',
+  filtersFilter: DFNCERT_FILTER_FILTER,
+});
 
-DfnCertsCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-DfnCertsCreatedDisplay.displayId = 'dfn_cert_adv-by-created';
-
-
-export const DfnCertsCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <DfnCertsCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of DFN-CERT Advisories'),
-          _('Total DFN-CERT Advisories'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-        title={() => _('DFN-CERT Advisories by Creation Time')}
-      />
-    )}
-  </DfnCertsCreatedLoader>
-);
-
-DfnCertsCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-DfnCertsCreatedTableDisplay.displayId = 'dfn_cert_adv-by-created-table';
+export const DfnCertsCreatedTableDisplay = createDisplay({
+  loaderComponent: DfnCertsCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('DFN-CERT Advisories by Creation Time'),
+    dataTitles: [
+      _('Creation Time'),
+      _('# of DFN-CERT Advs'),
+      _('Total DFN-CERT Advs'),
+    ],
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTransform: transformCreated,
+  displayId: 'dfn_cert_adv-by-created-table',
+  displayName: 'DfnCertsCreatedTableDisplay',
+  filtersFilter: DFNCERT_FILTER_FILTER,
+});
 
 registerDisplay(DfnCertsCreatedTableDisplay.displayId,
   DfnCertsCreatedTableDisplay, {
