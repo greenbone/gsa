@@ -39,6 +39,15 @@ import {
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 
+export const OS_DISPLAYS = [
+  OsCvssDisplay.displayId,
+  OsCvssTableDisplay.displayId,
+  OsSeverityClassDisplay.displayId,
+  OsSeverityClassTableDisplay.displayId,
+  OsVulnScoreDisplay.displayId,
+  OsVulnScoreTableDisplay.displayId,
+];
+
 const OsDashboard = ({
   filter,
   onFilterChanged,
@@ -46,14 +55,7 @@ const OsDashboard = ({
   <Dashboard
     id={OS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      OsCvssDisplay.displayId,
-      OsCvssTableDisplay.displayId,
-      OsSeverityClassDisplay.displayId,
-      OsSeverityClassTableDisplay.displayId,
-      OsVulnScoreDisplay.displayId,
-      OsVulnScoreTableDisplay.displayId,
-    ]}
+    permittedDisplays={OS_DISPLAYS}
     defaultContent={[
       [
         OsSeverityClassDisplay.displayId,
