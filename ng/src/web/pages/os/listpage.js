@@ -80,6 +80,7 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        createFilterType="os"
         dashboard2={dashboardProps => (
           <OsDashboard {...dashboardProps} />
         )}
