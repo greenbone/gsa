@@ -31,6 +31,7 @@ import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities';
 
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
@@ -49,9 +50,10 @@ import HostComponent from './component.js';
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
 
-const ToolBarIcons = ({
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onHostCreateClick,
-}, {capabilities}) => (
+}) => (
   <IconDivider>
     <ManualIcon
       page="vulnerabilitymanagement"
@@ -64,13 +66,10 @@ const ToolBarIcons = ({
         onClick={onHostCreateClick}/>
     }
   </IconDivider>
-);
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+));
 
 ToolBarIcons.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
