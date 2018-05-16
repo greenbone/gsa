@@ -155,6 +155,15 @@ export const resetSettings = ({gmp}) => id =>
     );
 };
 
+export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
+  if (is_array(rows) && rows.length > 0 &&
+    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
+    const lastRow = rows[rows.length - 1];
+    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
+  }
+  return true;
+};
+
 export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   (dispatch, getState) => {
   if (!is_defined(displayId) || !is_defined(dashboardId)) {
@@ -166,21 +175,23 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   const defaults = settingsSelector.getDefaultsById(dashboardId);
   const settings = settingsSelector.getById(dashboardId);
   const {rows: currentRows = []} = settings || {};
-  const {maxItemsPerRow, maxRows} = defaults;
+  const {maxItemsPerRow} = defaults;
+
+  if (!canAddDisplay({...defaults, rows: currentRows})) {
+    return;
+  }
 
   const lastRow = is_array(currentRows) && currentRows.length > 0 ?
     currentRows[currentRows.length - 1] : {items: []};
 
   let rows;
   if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
-    if (is_defined(maxRows) && currentRows.length >= maxRows) {
-      // dashboard is full
-      return;
-    }
+    // create new row
     const newRow = createRow([createItem({name: displayId})]);
     rows = [...currentRows, newRow];
   }
   else {
+    // add new display to last row
     const newRow = {
       ...lastRow,
       items: [...lastRow.items, createItem({name: displayId})],
