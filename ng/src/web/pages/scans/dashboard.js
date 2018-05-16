@@ -140,8 +140,6 @@ class ScansDashboard extends React.Component {
             TasksSeverityDisplay.displayId,
           ],
         ]}
-        maxItemsPerRow={4}
-        maxRows={4}
       />
     );
   }
