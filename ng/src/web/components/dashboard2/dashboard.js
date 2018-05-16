@@ -48,6 +48,9 @@ import {getDisplay} from './registry';
 
 const log = Logger.getLogger('web.components.dashboard');
 
+const DEFAULT_MAX_ITEMS_PER_ROW = 4;
+const DEFAULT_MAX_ROWS = 4;
+
 const ownPropNames = [
   'defaultContent',
   'gmp',
@@ -145,8 +148,8 @@ class Dashboard extends React.Component {
       items,
     } = this.state;
     const {
-      maxItemsPerRow,
-      maxRows,
+      maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
+      maxRows = DEFAULT_MAX_ROWS,
       ...props
     } = this.props;
 
