@@ -172,7 +172,7 @@ const canAdd = (settings = {}, {maxItemsPerRow, maxRows}) => {
 
 const mapStateToProps = (rootState, {dashboardId}) => {
   const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getItemsById(dashboardId);
+  const settings = settingsSelector.getById(dashboardId);
   const defaults = settingsSelector.getDefaultsById(dashboardId);
   return {
     canAdd: canAdd(settings, defaults),

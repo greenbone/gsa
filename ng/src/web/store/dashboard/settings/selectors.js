@@ -28,7 +28,7 @@ class DashboardSetting {
     this.state = rootState;
   }
 
-  getItemsById(id) {
+  getById(id) {
     if (is_defined(this.state) && has_value(this.state.byId)) {
       const settings = this.state.byId[id];
       return is_defined(settings) ? settings : null;

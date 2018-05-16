@@ -191,7 +191,7 @@ class Dashboard extends React.Component {
 
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
-  const settings = settingsSelector.getItemsById(id);
+  const settings = settingsSelector.getById(id);
   return {
     isLoading: settingsSelector.getIsLoading(),
     items: has_value(settings) ? settings.rows : undefined,
