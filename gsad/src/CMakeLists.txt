@@ -31,6 +31,8 @@ if (NOT PKG_CONFIG_FOUND)
   message(FATAL_ERROR "pkg-config executable not found. Aborting.")
 endif (NOT PKG_CONFIG_FOUND)
 
+OPTION (ENABLE_COVERAGE "Enable support for coverage analysis" OFF)
+
 ## Check for existence of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
@@ -73,12 +75,16 @@ endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
 
 ## Program
 
+if (ENABLE_COVERAGE)
+  set (COVERAGE_FLAGS "--coverage")
+endif (ENABLE_COVERAGE)
+
 set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
 set (LINKER_HARDENING_FLAGS     "-Wl,-z,relro -Wl,-z,now")
 
 set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall -Wformat -Wformat-security")
 
-set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror")
+set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Werror ${COVERAGE_FLAGS}")
 set (CMAKE_C_FLAGS_RELEASE      "${CMAKE_C_FLAGS_RELEASE} ${HARDENING_FLAGS}")
 
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
