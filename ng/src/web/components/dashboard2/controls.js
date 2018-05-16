@@ -160,21 +160,22 @@ DashboardControls.propTypes = {
   onResetClick: PropTypes.func.isRequired,
 };
 
-const canAdd = (items, {maxItemsPerRow, maxRows}) => {
-  if (is_array(items) && items.length > 0 &&
+const canAdd = (settings = {}, {maxItemsPerRow, maxRows}) => {
+  const {rows} = settings;
+  if (is_array(rows) && rows.length > 0 &&
     is_defined(maxItemsPerRow) && is_defined(maxRows)) {
-    const lastRow = items[items.length - 1];
-    return lastRow.items.length < maxItemsPerRow || items.length < maxRows;
+    const lastRow = rows[rows.length - 1];
+    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
   }
   return true;
 };
 
 const mapStateToProps = (rootState, {dashboardId}) => {
-  const settings = getDashboardSettings(rootState);
-  const items = settings.getItemsById(dashboardId);
-  const defaults = settings.getDefaultsById(dashboardId);
+  const settingsSelector = getDashboardSettings(rootState);
+  const settings = settingsSelector.getItemsById(dashboardId);
+  const defaults = settingsSelector.getDefaultsById(dashboardId);
   return {
-    canAdd: canAdd(items, defaults),
+    canAdd: canAdd(settings, defaults),
     displayIds: defaults.permittedDisplays,
   };
 };
