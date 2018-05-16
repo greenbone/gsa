@@ -1063,9 +1063,8 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
  *
  * @param[in]  name      Param name.
  * @param[in]  op_name   Operation name.
- * @param[in]  unused    Unused.
  */
-#define CHECK_PARAM_INVALID(name, op_name, unused)                             \
+#define CHECK_PARAM_INVALID(name, op_name)                                     \
   if (name == NULL)                                                            \
     {                                                                          \
       return message_invalid (connection, credentials, params, response_data,  \
@@ -3655,13 +3654,13 @@ create_report_gmp (gvm_connection_t *connection,
 
   if (task_id == NULL)
     {
-      CHECK_PARAM_INVALID (name, "Create Report", "new_container_task");
-      CHECK_PARAM_INVALID (comment, "Create Report", "new_container_task");
+      CHECK_PARAM_INVALID (name, "Create Report");
+      CHECK_PARAM_INVALID (comment, "Create Report");
     }
-  CHECK_PARAM_INVALID (xml_file, "Create Report", "new_container_task");
+  CHECK_PARAM_INVALID (xml_file, "Create Report");
 
   if (params_given (params, "in_assets"))
-    CHECK_PARAM_INVALID (xml_file, "Create Report", "new_container_task");
+    CHECK_PARAM_INVALID (xml_file, "Create Report");
 
   if (strlen (xml_file) == 0)
     {
@@ -3795,7 +3794,7 @@ import_report_gmp (gvm_connection_t *connection,
 }
 
 #define CHECK(name)                                                        \
-CHECK_PARAM_INVALID (name, "Create Task", "new_task")
+CHECK_PARAM_INVALID (name, "Create Task")
 
 /**
  * @brief Create a container task, serve next page.
@@ -3819,8 +3818,8 @@ create_container_task_gmp (gvm_connection_t *connection,
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  CHECK_PARAM_INVALID (name, "Create Container Task", "new_container_task");
-  CHECK_PARAM_INVALID (comment, "Create Container Task", "new_container_task");
+  CHECK_PARAM_INVALID (name, "Create Container Task");
+  CHECK_PARAM_INVALID (comment, "Create Container Task");
 
   command = g_markup_printf_escaped ("<create_task>"
                                      "<target id=\"0\"/>"
@@ -4444,7 +4443,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   auto_delete_data = params_value (params, "auto_delete_data");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
-  CHECK_PARAM_INVALID (scanner_type, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (scanner_type, "Save Task");
   if (!strcmp (scanner_type, "1"))
     {
       hosts_ordering = "";
@@ -4461,31 +4460,31 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
       max_hosts = "";
     }
 
-  CHECK_PARAM_INVALID (name, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (comment, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (target_id, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (hosts_ordering, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (config_id, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (schedule_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (name, "Save Task");
+  CHECK_PARAM_INVALID (comment, "Save Task");
+  CHECK_PARAM_INVALID (target_id, "Save Task");
+  CHECK_PARAM_INVALID (hosts_ordering, "Save Task");
+  CHECK_PARAM_INVALID (config_id, "Save Task");
+  CHECK_PARAM_INVALID (schedule_id, "Save Task");
   if (params_given (params, "schedule_periods"))
     {
       CHECK (schedule_periods);
     }
   else
     schedule_periods = "0";
-  CHECK_PARAM_INVALID (scanner_id, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (max_checks, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (source_iface, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (auto_delete, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (max_hosts, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (scanner_id, "Save Task");
+  CHECK_PARAM_INVALID (task_id, "Save Task");
+  CHECK_PARAM_INVALID (max_checks, "Save Task");
+  CHECK_PARAM_INVALID (source_iface, "Save Task");
+  CHECK_PARAM_INVALID (auto_delete, "Save Task");
+  CHECK_PARAM_INVALID (auto_delete_data, "Save Task");
+  CHECK_PARAM_INVALID (max_hosts, "Save Task");
+  CHECK_PARAM_INVALID (in_assets, "Save Task");
 
   if (!strcmp (in_assets, "1"))
     {
-      CHECK_PARAM_INVALID (apply_overrides, "Save Task", "edit_task");
-      CHECK_PARAM_INVALID (min_qod, "Save Task", "edit_task");
+      CHECK_PARAM_INVALID (apply_overrides, "Save Task");
+      CHECK_PARAM_INVALID (min_qod, "Save Task");
     }
   else
     {
@@ -4672,12 +4671,12 @@ char * save_container_task_gmp (gvm_connection_t *connection,
   task_id = params_value (params, "task_id");
   auto_delete = params_value (params, "auto_delete");
   auto_delete_data = params_value (params, "auto_delete_data");
-  CHECK_PARAM_INVALID (name, "Save Task", "edit_task")
-  CHECK_PARAM_INVALID (comment, "Save Task", "edit_task")
-  CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task")
-  CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task")
-  CHECK_PARAM_INVALID (auto_delete, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (name, "Save Task")
+  CHECK_PARAM_INVALID (comment, "Save Task")
+  CHECK_PARAM_INVALID (task_id, "Save Task")
+  CHECK_PARAM_INVALID (in_assets, "Save Task")
+  CHECK_PARAM_INVALID (auto_delete, "Save Task");
+  CHECK_PARAM_INVALID (auto_delete_data, "Save Task");
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
@@ -5738,10 +5737,10 @@ create_credential_gmp (gvm_connection_t *connection,
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Credential", "new_credential");
 
-  CHECK_PARAM_INVALID (name, "Create Credential", "new_credential");
-  CHECK_PARAM_INVALID (comment, "Create Credential", "new_credential");
-  CHECK_PARAM_INVALID (type, "Create Credential", "new_credential");
-  CHECK_PARAM_INVALID (allow_insecure, "Create Credential", "new_credential");
+  CHECK_PARAM_INVALID (name, "Create Credential");
+  CHECK_PARAM_INVALID (comment, "Create Credential");
+  CHECK_PARAM_INVALID (type, "Create Credential");
+  CHECK_PARAM_INVALID (allow_insecure, "Create Credential");
 
   if (autogenerate)
     {
@@ -5767,7 +5766,7 @@ create_credential_gmp (gvm_connection_t *connection,
       else
         {
           // Auto-generate types with username
-          CHECK_PARAM_INVALID (login, "Create Credential", "new_credential");
+          CHECK_PARAM_INVALID (login, "Create Credential");
 
           ret = gmpf (connection, credentials,
                       &response,
@@ -5792,9 +5791,9 @@ create_credential_gmp (gvm_connection_t *connection,
       if (type && (strcmp (type, "up") == 0))
         {
           CHECK_PARAM_INVALID (login,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (password,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
 
           ret = gmpf (connection, credentials,
                       &response,
@@ -5818,11 +5817,11 @@ create_credential_gmp (gvm_connection_t *connection,
       else if (type && (strcmp (type, "usk") == 0))
         {
           CHECK_PARAM_INVALID (login,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (passphrase,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (private_key,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
 
           ret = gmpf (connection, credentials,
                       &response,
@@ -5850,9 +5849,9 @@ create_credential_gmp (gvm_connection_t *connection,
       else if (type && (strcmp (type, "cc") == 0))
         {
           CHECK_PARAM_INVALID (certificate,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (private_key,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
 
           ret = gmpf (connection, credentials,
                       &response,
@@ -5879,17 +5878,17 @@ create_credential_gmp (gvm_connection_t *connection,
       else if (type && (strcmp (type, "snmp") == 0))
         {
           CHECK_PARAM_INVALID (community,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (login,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (password,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (privacy_password,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (auth_algorithm,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
           CHECK_PARAM_INVALID (privacy_algorithm,
-                                "Create Credential", "new_credential");
+                                "Create Credential");
 
           if (privacy_password && strcmp (privacy_password, ""))
             ret = gmpf (connection, credentials,
@@ -6418,31 +6417,29 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
 
-  CHECK_PARAM_INVALID (credential_id, "Save Credential", "edit_credential");
-  CHECK_PARAM_INVALID (name, "Save Credential", "edit_credential");
-  CHECK_PARAM_INVALID (comment, "Save Credential", "edit_credential");
-  CHECK_PARAM_INVALID (allow_insecure, "Save Credential", "edit_credential");
+  CHECK_PARAM_INVALID (credential_id, "Save Credential");
+  CHECK_PARAM_INVALID (name, "Save Credential");
+  CHECK_PARAM_INVALID (comment, "Save Credential");
+  CHECK_PARAM_INVALID (allow_insecure, "Save Credential");
   if (params_given (params, "certificate"))
-    CHECK_PARAM_INVALID (certificate, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (certificate, "Save Credential");
   if (params_given (params, "private_key"))
-    CHECK_PARAM_INVALID (private_key, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (private_key, "Save Credential");
   if (params_given (params, "login"))
-    CHECK_PARAM_INVALID (login, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (login, "Save Credential");
   if (params_given (params, "auth_algorithm"))
-    CHECK_PARAM_INVALID (auth_algorithm, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (auth_algorithm, "Save Credential");
   if (params_given (params, "privacy_algorithm"))
-    CHECK_PARAM_INVALID (privacy_algorithm,
-                          "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (privacy_algorithm, "Save Credential");
 
   if (params_given (params, "change_community"))
-    CHECK_PARAM_INVALID (community, "Save Credential", "change_community");
+    CHECK_PARAM_INVALID (community, "Save Credential");
   if (params_given (params, "change_passphrase"))
-    CHECK_PARAM_INVALID (passphrase, "Save Credential", "change_passphrase");
+    CHECK_PARAM_INVALID (passphrase, "Save Credential");
   if (params_given (params, "change_password"))
-    CHECK_PARAM_INVALID (password, "Save Credential", "change_password");
+    CHECK_PARAM_INVALID (password, "Save Credential");
   if (params_given (params, "change_privacy_password"))
-    CHECK_PARAM_INVALID (privacy_password, "Save Credential",
-                         "change_privacy_password");
+    CHECK_PARAM_INVALID (privacy_password, "Save Credential");
 
   change_community = params_value_bool (params, "change_community");
   change_passphrase = params_value_bool (params, "change_passphrase");
@@ -6663,8 +6660,8 @@ create_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   howto_use = params_value (params, "howto_use");
   howto_use_size = params_value_size (params, "howto_use");
 
-  CHECK_PARAM_INVALID (name, "Create Agent", "new_agent");
-  CHECK_PARAM_INVALID (comment, "Create Agent", "new_agent");
+  CHECK_PARAM_INVALID (name, "Create Agent");
+  CHECK_PARAM_INVALID (comment, "Create Agent");
 
   /* Create the agent. */
 
@@ -7019,9 +7016,9 @@ save_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, param
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_INVALID (agent_id, "Save Agent", "edit_agent");
-  CHECK_PARAM_INVALID (name, "Save Agent", "edit_agent");
-  CHECK_PARAM_INVALID (comment, "Save Agent", "edit_agent");
+  CHECK_PARAM_INVALID (agent_id, "Save Agent");
+  CHECK_PARAM_INVALID (name, "Save Agent");
+  CHECK_PARAM_INVALID (comment, "Save Agent");
 
   /* Modify the agent. */
 
@@ -7947,13 +7944,13 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   method = params_value (params, "method");
   filter_id = params_value (params, "filter_id");
 
-  CHECK_PARAM_INVALID (name, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (active, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (comment, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (condition, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (event, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (method, "Create Alert", "new_alert");
-  CHECK_PARAM_INVALID (filter_id, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (name, "Create Alert");
+  CHECK_PARAM_INVALID (active, "Create Alert");
+  CHECK_PARAM_INVALID (comment, "Create Alert");
+  CHECK_PARAM_INVALID (condition, "Create Alert");
+  CHECK_PARAM_INVALID (event, "Create Alert");
+  CHECK_PARAM_INVALID (method, "Create Alert");
+  CHECK_PARAM_INVALID (filter_id, "Create Alert");
 
   /* Create the alert. */
 
@@ -8702,14 +8699,14 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   filter_id = params_value (params, "filter_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM_INVALID (name, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (comment, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (alert_id, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (condition, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (event, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (method, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (filter_id, "Save Alert", "edit_alert");
-  CHECK_PARAM_INVALID (active, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (name, "Save Alert");
+  CHECK_PARAM_INVALID (comment, "Save Alert");
+  CHECK_PARAM_INVALID (alert_id, "Save Alert");
+  CHECK_PARAM_INVALID (condition, "Save Alert");
+  CHECK_PARAM_INVALID (event, "Save Alert");
+  CHECK_PARAM_INVALID (method, "Save Alert");
+  CHECK_PARAM_INVALID (filter_id, "Save Alert");
+  CHECK_PARAM_INVALID (active, "Save Alert");
 
   xml = g_string_new ("");
 
@@ -9161,10 +9158,10 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   file = params_value (params, "file");
   exclude_file = params_value (params, "exclude_file");
 
-  CHECK_PARAM_INVALID (name, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
+  CHECK_PARAM_INVALID (name, "Create Target");
+  CHECK_PARAM_INVALID (target_source, "Create Target")
   if (strcmp (target_source, "manual") == 0)
-    CHECK_PARAM_INVALID (hosts, "Create Target", "new_target");
+    CHECK_PARAM_INVALID (hosts, "Create Target");
   if (strcmp (target_source, "file") == 0 && file == NULL)
     return message_invalid (connection, credentials, params, response_data,
                             "Missing hosts file",
@@ -9172,15 +9169,15 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                             "Create Target", "new_target");
   /* require hosts_filter if target_source is "asset_hosts" */
   if (strcmp (target_source, "asset_hosts") == 0)
-    CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
+    CHECK_PARAM_INVALID (hosts_filter, "Create Target");
 
   if (params_given (params, "target_exclude_source"))
     {
-      CHECK_PARAM_INVALID (target_exclude_source, "Create Target", "new_target")
+      CHECK_PARAM_INVALID (target_exclude_source, "Create Target")
       if (strcmp (target_exclude_source, "manual") == 0
           /* In case browser doesn't send empty field. */
           && params_given (params, "exclude_hosts"))
-        CHECK_PARAM_INVALID (exclude_hosts, "Create Target", "new_target");
+        CHECK_PARAM_INVALID (exclude_hosts, "Create Target");
       if (strcmp (target_exclude_source, "file") == 0 && exclude_file == NULL)
         return message_invalid (connection, credentials, params, response_data,
                                 "Missing exclude hosts file",
@@ -9188,15 +9185,15 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                                 "Create Target", "new_target");
     }
 
-  CHECK_PARAM_INVALID (comment, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (port_list_id, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (target_ssh_credential, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (comment, "Create Target");
+  CHECK_PARAM_INVALID (port_list_id, "Create Target");
+  CHECK_PARAM_INVALID (target_ssh_credential, "Create Target");
   if (strcmp (target_ssh_credential, "--"))
-    CHECK_PARAM_INVALID (port, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (target_smb_credential, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (target_esxi_credential, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (target_snmp_credential, "Create Target", "new_target");
-  CHECK_PARAM_INVALID (alive_tests, "Create Target", "new_target");
+    CHECK_PARAM_INVALID (port, "Create Target");
+  CHECK_PARAM_INVALID (target_smb_credential, "Create Target");
+  CHECK_PARAM_INVALID (target_esxi_credential, "Create Target");
+  CHECK_PARAM_INVALID (target_snmp_credential, "Create Target");
+  CHECK_PARAM_INVALID (alive_tests, "Create Target");
 
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -9880,12 +9877,12 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM_INVALID (name, "Create Tag", "new_tag")
-  CHECK_PARAM_INVALID (comment, "Create Tag", "new_tag")
-  CHECK_PARAM_INVALID (value, "Create Tag", "new_tag")
-  CHECK_PARAM_INVALID (resource_type, "Create Tag", "new_tag")
-  CHECK_PARAM_INVALID (resource_id, "Create Tag", "new_tag")
-  CHECK_PARAM_INVALID (active, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (name, "Create Tag")
+  CHECK_PARAM_INVALID (comment, "Create Tag")
+  CHECK_PARAM_INVALID (value, "Create Tag")
+  CHECK_PARAM_INVALID (resource_type, "Create Tag")
+  CHECK_PARAM_INVALID (resource_id, "Create Tag")
+  CHECK_PARAM_INVALID (active, "Create Tag")
 
   response = NULL;
   entity = NULL;
@@ -10112,13 +10109,13 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM_INVALID (tag_id, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (name, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (comment, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (value, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (resource_type, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (resource_id, "Save Tag", "edit_tag")
-  CHECK_PARAM_INVALID (active, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (tag_id, "Save Tag")
+  CHECK_PARAM_INVALID (name, "Save Tag")
+  CHECK_PARAM_INVALID (comment, "Save Tag")
+  CHECK_PARAM_INVALID (value, "Save Tag")
+  CHECK_PARAM_INVALID (resource_type, "Save Tag")
+  CHECK_PARAM_INVALID (resource_id, "Save Tag")
+  CHECK_PARAM_INVALID (active, "Save Tag")
 
   response = NULL;
   entity = NULL;
@@ -10677,11 +10674,11 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   in_use = params_value (params, "in_use");
   target_id = params_value (params, "target_id");
 
-  CHECK_PARAM_INVALID (name, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_id, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (comment, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (alive_tests, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (in_use, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (name, "Save Target");
+  CHECK_PARAM_INVALID (target_id, "Save Target");
+  CHECK_PARAM_INVALID (comment, "Save Target");
+  CHECK_PARAM_INVALID (alive_tests, "Save Target");
+  CHECK_PARAM_INVALID (in_use, "Save Target");
 
   if (strcmp (in_use, "0"))
     {
@@ -10762,17 +10759,17 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
 
-  CHECK_PARAM_INVALID (target_source, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_exclude_source, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (port_list_id, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_ssh_credential, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_smb_credential, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_esxi_credential, "Save Target", "edit_target");
-  CHECK_PARAM_INVALID (target_snmp_credential, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_source, "Save Target");
+  CHECK_PARAM_INVALID (target_exclude_source, "Save Target");
+  CHECK_PARAM_INVALID (port_list_id, "Save Target");
+  CHECK_PARAM_INVALID (target_ssh_credential, "Save Target");
+  CHECK_PARAM_INVALID (target_smb_credential, "Save Target");
+  CHECK_PARAM_INVALID (target_esxi_credential, "Save Target");
+  CHECK_PARAM_INVALID (target_snmp_credential, "Save Target");
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
-    CHECK_PARAM_INVALID (port, "Save Target", "edit_target");
+    CHECK_PARAM_INVALID (port, "Save Target");
 
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
@@ -11103,13 +11100,13 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   comment = params_value (params, "comment");
   base = params_value (params, "base");
 
-  CHECK_PARAM_INVALID (name, "New Config", "new_config");
-  CHECK_PARAM_INVALID (comment, "New Config", "new_config");
-  CHECK_PARAM_INVALID (base, "New Config", "new_config");
+  CHECK_PARAM_INVALID (name, "New Config");
+  CHECK_PARAM_INVALID (comment, "New Config");
+  CHECK_PARAM_INVALID (base, "New Config");
   if (!strcmp (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
-      CHECK_PARAM_INVALID (scanner, "New Config", "new_config");
+      CHECK_PARAM_INVALID (scanner, "New Config");
     }
 
   /* Create the config. */
@@ -11682,9 +11679,9 @@ save_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
   comment = params_value (params, "comment");
   scanner_id = params_value (params, "scanner_id");
 
-  CHECK_PARAM_INVALID (config_id, "Save Config", "edit_config");
-  CHECK_PARAM_INVALID (name, "Save Config", "edit_config");
-  CHECK_PARAM_INVALID (comment, "Save Config", "edit_config");
+  CHECK_PARAM_INVALID (config_id, "Save Config");
+  CHECK_PARAM_INVALID (name, "Save Config");
+  CHECK_PARAM_INVALID (comment, "Save Config");
 
   /* Save name and comment. */
 
@@ -15390,7 +15387,7 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
   entity_t entity;
 
   oid = params_value (params, "oid");
-  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (oid, "Create Note");
 
   port = get_port_from_params (params);
   hosts = get_hosts_from_params (params);
@@ -15398,11 +15395,11 @@ create_note_gmp (gvm_connection_t *connection, credentials_t *credentials, param
   severity = get_severity_from_params (params);
   result_id = get_result_id_from_params (params);
 
-  CHECK_PARAM_INVALID (severity, "Create Note", "new_note");
-  CHECK_PARAM_INVALID (hosts, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (severity, "Create Note");
+  CHECK_PARAM_INVALID (hosts, "Create Note");
 
   active = params_value (params, "active");
-  CHECK_PARAM_INVALID (active, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (active, "Create Note");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -15630,10 +15627,10 @@ save_note_gmp (gvm_connection_t *connection, credentials_t * credentials,
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  CHECK_PARAM_INVALID (oid, "Save Note", "get_note");
-  CHECK_PARAM_INVALID (active, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (note_id, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (days, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (oid, "Save Note");
+  CHECK_PARAM_INVALID (active, "Save Note");
+  CHECK_PARAM_INVALID (note_id, "Save Note");
+  CHECK_PARAM_INVALID (days, "Save Note");
 
   response = NULL;
   entity = NULL;
@@ -16002,7 +15999,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t entity;
 
   oid = params_value (params, "oid");
-  CHECK_PARAM_INVALID (oid, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (oid, "Create Override");
 
   port = get_port_from_params (params);
   hosts = get_hosts_from_params (params);
@@ -16011,7 +16008,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
   result_id = get_result_id_from_params (params);
 
   custom_severity = params_value (params, "custom_severity");
-  CHECK_PARAM_INVALID (custom_severity, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (custom_severity, "Create Override");
 
   if (custom_severity != NULL && strcmp (custom_severity, "0"))
     {
@@ -16022,7 +16019,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM_INVALID (new_severity, "Create Override", "new_override");
+      CHECK_PARAM_INVALID (new_severity, "Create Override");
     }
   else
     {
@@ -16035,12 +16032,12 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM_INVALID (new_severity, "Create Override", "new_override");
+      CHECK_PARAM_INVALID (new_severity, "Create Override");
     }
 
 
   active = params_value (params, "active");
-  CHECK_PARAM_INVALID (active, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (active, "Create Override");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -16277,11 +16274,11 @@ save_override_gmp (gvm_connection_t *connection, credentials_t * credentials,
   days = params_value (params, "days");
   oid = params_value (params, "oid");
 
-  CHECK_PARAM_INVALID (active, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (override_id, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (new_severity, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (days, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (oid, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (active, "Save Override");
+  CHECK_PARAM_INVALID (override_id, "Save Override");
+  CHECK_PARAM_INVALID (new_severity, "Save Override");
+  CHECK_PARAM_INVALID (days, "Save Override");
+  CHECK_PARAM_INVALID (oid, "Save Override");
 
   response = NULL;
   entity = NULL;
@@ -16660,14 +16657,14 @@ create_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM_INVALID (name, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (comment, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (host, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (port, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (type, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (name, "Create Scanner");
+  CHECK_PARAM_INVALID (comment, "Create Scanner");
+  CHECK_PARAM_INVALID (host, "Create Scanner");
+  CHECK_PARAM_INVALID (port, "Create Scanner");
+  CHECK_PARAM_INVALID (type, "Create Scanner");
   if (params_given (params, "ca_pub"))
-    CHECK_PARAM_INVALID (ca_pub, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (credential_id, "Create Scanner", "new_scanner");
+    CHECK_PARAM_INVALID (ca_pub, "Create Scanner");
+  CHECK_PARAM_INVALID (credential_id, "Create Scanner");
 
   if (ca_pub)
     ret = gmpf (connection, credentials, &response, &entity, response_data,
@@ -16899,22 +16896,22 @@ save_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   which_cert = params_value (params, "which_cert");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM_INVALID (scanner_id, "Edit Scanner", "edit_scanner");
-  CHECK_PARAM_INVALID (name, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (scanner_id, "Edit Scanner");
+  CHECK_PARAM_INVALID (name, "Edit Scanner");
   if (params_given (params, "scanner_host") == 0)
     in_use = 1;
   else
    {
      in_use = 0;
-     CHECK_PARAM_INVALID (host, "Edit Scanner", "edit_scanner");
-     CHECK_PARAM_INVALID (port, "Edit Scanner", "edit_scanner");
-     CHECK_PARAM_INVALID (type, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_INVALID (host, "Edit Scanner");
+     CHECK_PARAM_INVALID (port, "Edit Scanner");
+     CHECK_PARAM_INVALID (type, "Edit Scanner");
    }
   if (is_unix_socket == 0)
     {
-      CHECK_PARAM_INVALID (ca_pub, "Edit Scanner", "edit_scanner");
-      CHECK_PARAM_INVALID (credential_id, "Edit Scanner", "edit_scanner");
-      CHECK_PARAM_INVALID (which_cert, "Edit Scanner", "edit_scanner");
+      CHECK_PARAM_INVALID (ca_pub, "Edit Scanner");
+      CHECK_PARAM_INVALID (credential_id, "Edit Scanner");
+      CHECK_PARAM_INVALID (which_cert, "Edit Scanner");
     }
 
   if (is_unix_socket)
@@ -17195,18 +17192,18 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  CHECK_PARAM_INVALID (name, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (comment, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (hour, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (minute, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (day_of_month, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (duration, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (duration_unit, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (month, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (period, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (period_unit, "period_unit", "new_schedule");
-  CHECK_PARAM_INVALID (year, "Create Schedule", "new_schedule");
-  CHECK_PARAM_INVALID (timezone, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (name, "Create Schedule");
+  CHECK_PARAM_INVALID (comment, "Create Schedule");
+  CHECK_PARAM_INVALID (hour, "Create Schedule");
+  CHECK_PARAM_INVALID (minute, "Create Schedule");
+  CHECK_PARAM_INVALID (day_of_month, "Create Schedule");
+  CHECK_PARAM_INVALID (duration, "Create Schedule");
+  CHECK_PARAM_INVALID (duration_unit, "Create Schedule");
+  CHECK_PARAM_INVALID (month, "Create Schedule");
+  CHECK_PARAM_INVALID (period, "Create Schedule");
+  CHECK_PARAM_INVALID (period_unit, "period_unit");
+  CHECK_PARAM_INVALID (year, "Create Schedule");
+  CHECK_PARAM_INVALID (timezone, "Create Schedule");
 
   response = NULL;
   entity = NULL;
@@ -17984,11 +17981,10 @@ save_report_format_gmp (gvm_connection_t *connection, credentials_t * credential
   summary = params_value (params, "summary");
   enable = params_value (params, "enable");
 
-  CHECK_PARAM_INVALID (report_format_id, "Save Report Format",
-                        "edit_report_format");
-  CHECK_PARAM_INVALID (name, "Save Report Format", "edit_report_format");
-  CHECK_PARAM_INVALID (summary, "Save Report Format", "edit_report_format");
-  CHECK_PARAM_INVALID (enable, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_INVALID (report_format_id, "Save Report Format");
+  CHECK_PARAM_INVALID (name, "Save Report Format");
+  CHECK_PARAM_INVALID (summary, "Save Report Format");
+  CHECK_PARAM_INVALID (enable, "Save Report Format");
 
   id_list_params = params_values (params, "id_list:");
   include_id_lists = params_values (params, "include_id_list:");
@@ -20066,9 +20062,9 @@ create_group_gmp (gvm_connection_t *connection, credentials_t *credentials, para
   grant_full = params_value (params, "grant_full");
   users = params_value (params, "users");
 
-  CHECK_PARAM_INVALID (name, "Create Group", "new_group");
-  CHECK_PARAM_INVALID (comment, "Create Group", "new_group");
-  CHECK_PARAM_INVALID (users, "Create Group", "new_group");
+  CHECK_PARAM_INVALID (name, "Create Group");
+  CHECK_PARAM_INVALID (comment, "Create Group");
+  CHECK_PARAM_INVALID (users, "Create Group");
 
   /* Create the group. */
 
@@ -20241,10 +20237,10 @@ save_group_gmp (gvm_connection_t *connection, credentials_t * credentials, param
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_INVALID (group_id, "Save Group", "edit_group");
-  CHECK_PARAM_INVALID (name, "Save Group", "edit_group");
-  CHECK_PARAM_INVALID (comment, "Save Group", "edit_group");
-  CHECK_PARAM_INVALID (users, "Save Group", "edit_group");
+  CHECK_PARAM_INVALID (group_id, "Save Group");
+  CHECK_PARAM_INVALID (name, "Save Group");
+  CHECK_PARAM_INVALID (comment, "Save Group");
+  CHECK_PARAM_INVALID (users, "Save Group");
 
   /* Modify the Group. */
 
@@ -20636,18 +20632,17 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
-  CHECK_PARAM_INVALID (name, "Create Permission", "new_permission");
-  CHECK_PARAM_INVALID (comment, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (name, "Create Permission");
+  CHECK_PARAM_INVALID (comment, "Create Permission");
   if (params_given (params, "id_or_empty"))
-    CHECK_PARAM_INVALID (resource_id, "Create Permission", "new_permission");
-  CHECK_PARAM_INVALID (subject_type, "Create Permission", "new_permission");
+    CHECK_PARAM_INVALID (resource_id, "Create Permission");
+  CHECK_PARAM_INVALID (subject_type, "Create Permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM_INVALID (resource_type, "Create Permission", "new_permission");
+    CHECK_PARAM_INVALID (resource_type, "Create Permission");
 
   if (params_given (params, "subject_name"))
     {
-      CHECK_PARAM_INVALID (subject_name,
-                            "Create Permission", "new_permission");
+      CHECK_PARAM_INVALID (subject_name, "Create Permission");
       subject_id = NULL;
       ret = gmpf (connection, credentials,
                   &subject_response,
@@ -20723,7 +20718,8 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM_INVALID (subject_id, "Create Permission", "new_permission");
+
+  CHECK_PARAM_INVALID (subject_id, "Create Permission");
 
   /* Create the permission(s). */
 
@@ -22020,13 +22016,13 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
   resource_id = params_value (params, "id_or_empty");
   resource_type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_INVALID (permission_id, "Save Permission", "edit_permission");
-  CHECK_PARAM_INVALID (name, "Save Permission", "edit_permission");
-  CHECK_PARAM_INVALID (comment, "Save Permission", "edit_permission");
-  CHECK_PARAM_INVALID (resource_id, "Save Permission", "edit_permission");
-  CHECK_PARAM_INVALID (subject_type, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (permission_id, "Save Permission");
+  CHECK_PARAM_INVALID (name, "Save Permission");
+  CHECK_PARAM_INVALID (comment, "Save Permission");
+  CHECK_PARAM_INVALID (resource_id, "Save Permission");
+  CHECK_PARAM_INVALID (subject_type, "Save Permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM_INVALID (resource_type, "Save Permission", "edit_permission");
+    CHECK_PARAM_INVALID (resource_type, "Save Permission");
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -22036,7 +22032,7 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
     subject_id = params_value (params, "role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM_INVALID (subject_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (subject_id, "Save Permission");
 
   /* Modify the permission. */
 
@@ -22197,10 +22193,10 @@ create_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
   port_range = params_value (params, "port_range");
   from_file = params_value (params, "from_file");
 
-  CHECK_PARAM_INVALID (name, "Create Port List", "new_port_list");
-  CHECK_PARAM_INVALID (comment, "Create Port List", "new_port_list");
-  CHECK_PARAM_INVALID (port_range, "Create Port List", "new_port_list");
-  CHECK_PARAM_INVALID (from_file, "Create Port List", "new_port_list");
+  CHECK_PARAM_INVALID (name, "Create Port List");
+  CHECK_PARAM_INVALID (comment, "Create Port List");
+  CHECK_PARAM_INVALID (port_range, "Create Port List");
+  CHECK_PARAM_INVALID (from_file, "Create Port List");
 
   /* Create the port_list. */
 
@@ -22325,10 +22321,10 @@ create_port_range_gmp (gvm_connection_t *connection, credentials_t * credentials
   end = params_value (params, "port_range_end");
   type = params_value (params, "port_type");
 
-  CHECK_PARAM_INVALID (port_list_id, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_INVALID (start, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_INVALID (end, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_INVALID (type, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_INVALID (port_list_id, "Create Port Range");
+  CHECK_PARAM_INVALID (start, "Create Port Range");
+  CHECK_PARAM_INVALID (end, "Create Port Range");
+  CHECK_PARAM_INVALID (type, "Create Port Range");
 
   /* Create the port range. */
 
@@ -22538,9 +22534,9 @@ save_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_INVALID (port_list_id, "Save Port List", "edit_port_list");
-  CHECK_PARAM_INVALID (name, "Save Port List", "edit_port_list");
-  CHECK_PARAM_INVALID (comment, "Save Port List", "edit_port_list");
+  CHECK_PARAM_INVALID (port_list_id, "Save Port List");
+  CHECK_PARAM_INVALID (name, "Save Port List");
+  CHECK_PARAM_INVALID (comment, "Save Port List");
 
   /* Modify the Port List. */
 
@@ -22827,9 +22823,9 @@ create_role_gmp (gvm_connection_t *connection, credentials_t *credentials, param
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_INVALID (name, "Create Role", "new_role");
-  CHECK_PARAM_INVALID (comment, "Create Role", "new_role");
-  CHECK_PARAM_INVALID (users, "Create Role", "new_role");
+  CHECK_PARAM_INVALID (name, "Create Role");
+  CHECK_PARAM_INVALID (comment, "Create Role");
+  CHECK_PARAM_INVALID (users, "Create Role");
 
   response = NULL;
   entity = NULL;
@@ -23156,10 +23152,10 @@ save_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_INVALID (role_id, "Save Role", "edit_role");
-  CHECK_PARAM_INVALID (name, "Save Role", "edit_role");
-  CHECK_PARAM_INVALID (comment, "Save Role", "edit_role");
-  CHECK_PARAM_INVALID (users, "Save Role", "edit_role");
+  CHECK_PARAM_INVALID (role_id, "Save Role");
+  CHECK_PARAM_INVALID (name, "Save Role");
+  CHECK_PARAM_INVALID (comment, "Save Role");
+  CHECK_PARAM_INVALID (users, "Save Role");
 
   /* Modify the Role. */
 
@@ -23542,10 +23538,10 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_INVALID (name, "Create Filter", "new_filter");
-  CHECK_PARAM_INVALID (comment, "Create Filter", "new_filter");
-  CHECK_PARAM_INVALID (term, "Create Filter", "new_filter");
-  CHECK_PARAM_INVALID (type, "Create Filter", "new_filter");
+  CHECK_PARAM_INVALID (name, "Create Filter");
+  CHECK_PARAM_INVALID (comment, "Create Filter");
+  CHECK_PARAM_INVALID (term, "Create Filter");
+  CHECK_PARAM_INVALID (type, "Create Filter");
 
   switch (gmpf (connection, credentials,
                 &response,
@@ -23804,11 +23800,11 @@ save_filter_gmp (gvm_connection_t *connection, credentials_t * credentials,
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_INVALID (filter_id, "Save Filter", "edit_filter");
-  CHECK_PARAM_INVALID (name, "Save Filter", "edit_filter");
-  CHECK_PARAM_INVALID (comment, "Save Filter", "edit_filter");
-  CHECK_PARAM_INVALID (term, "Save Filter", "edit_filter");
-  CHECK_PARAM_INVALID (type, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (filter_id, "Save Filter");
+  CHECK_PARAM_INVALID (name, "Save Filter");
+  CHECK_PARAM_INVALID (comment, "Save Filter");
+  CHECK_PARAM_INVALID (term, "Save Filter");
+  CHECK_PARAM_INVALID (type, "Save Filter");
 
   {
     int ret;
@@ -23980,19 +23976,19 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  CHECK_PARAM_INVALID (schedule_id, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (name, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (comment, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (hour, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (minute, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (day_of_month, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (duration, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (duration_unit, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (month, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (period, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (period_unit, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (year, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_INVALID (timezone, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (schedule_id, "Save Schedule");
+  CHECK_PARAM_INVALID (name, "Save Schedule");
+  CHECK_PARAM_INVALID (comment, "Save Schedule");
+  CHECK_PARAM_INVALID (hour, "Save Schedule");
+  CHECK_PARAM_INVALID (minute, "Save Schedule");
+  CHECK_PARAM_INVALID (day_of_month, "Save Schedule");
+  CHECK_PARAM_INVALID (duration, "Save Schedule");
+  CHECK_PARAM_INVALID (duration_unit, "Save Schedule");
+  CHECK_PARAM_INVALID (month, "Save Schedule");
+  CHECK_PARAM_INVALID (period, "Save Schedule");
+  CHECK_PARAM_INVALID (period_unit, "Save Schedule");
+  CHECK_PARAM_INVALID (year, "Save Schedule");
+  CHECK_PARAM_INVALID (timezone, "Save Schedule");
 
   response = NULL;
   entity = NULL;
@@ -24585,20 +24581,20 @@ create_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
   auth_method = params_value (params, "auth_method");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_INVALID (name, "Create User", "new_user");
-  CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
-  CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
-  CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
-  CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
+  CHECK_PARAM_INVALID (name, "Create User");
+  CHECK_PARAM_INVALID (hosts, "Create User");
+  CHECK_PARAM_INVALID (hosts_allow, "Create User");
+  CHECK_PARAM_INVALID (ifaces, "Create User");
+  CHECK_PARAM_INVALID (ifaces_allow, "Create User");
 
   if (auth_method && strcmp (auth_method, "1") == 0)
     {
-      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+      CHECK_PARAM_INVALID (password, "Create User");
     }
 
   if (params_given (params, "comment"))
     {
-      CHECK_PARAM_INVALID (comment, "Create User", "new_user");
+      CHECK_PARAM_INVALID (comment, "Create User");
     }
 
   /* Create the user. */
@@ -24961,7 +24957,7 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
 
   name = params_value (params, "name");
 
-  CHECK_PARAM_INVALID (name, "Auth settings", "auth_settings");
+  CHECK_PARAM_INVALID (name, "Auth settings");
 
   xml = g_string_new ("");
   buf = g_markup_printf_escaped ("<auth_settings name=\"%s\">", name);
@@ -25063,28 +25059,28 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   user_id = params_value (params, "user_id");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_INVALID (user_id, "Edit User", "edit_user");
-  CHECK_PARAM_INVALID (modify_password, "Edit User", "edit_user");
-  CHECK_PARAM_INVALID (hosts, "Edit User", "edit_user");
-  CHECK_PARAM_INVALID (hosts_allow, "Edit User", "edit_user");
-  CHECK_PARAM_INVALID (ifaces, "Save User", "edit_user");
-  CHECK_PARAM_INVALID (ifaces_allow, "Save User", "edit_user");
+  CHECK_PARAM_INVALID (user_id, "Edit User");
+  CHECK_PARAM_INVALID (modify_password, "Edit User");
+  CHECK_PARAM_INVALID (hosts, "Edit User");
+  CHECK_PARAM_INVALID (hosts_allow, "Edit User");
+  CHECK_PARAM_INVALID (ifaces, "Save User");
+  CHECK_PARAM_INVALID (ifaces_allow, "Save User");
 
   if (modify_password && strcmp (modify_password, "1"))
     {
-      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+      CHECK_PARAM_INVALID (password, "Create User");
     }
 
   if (params_given (params, "comment"))
     {
-      CHECK_PARAM_INVALID (comment, "Save User", "edit_user");
+      CHECK_PARAM_INVALID (comment, "Save User");
     }
 
   if (params_given (params, "login")
       && !(params_given (params, "current_user")))
     {
-      CHECK_PARAM_INVALID (login, "Save User", "edit_user");
-      CHECK_PARAM_INVALID (old_login, "Save User", "edit_user");
+      CHECK_PARAM_INVALID (login, "Save User");
+      CHECK_PARAM_INVALID (old_login, "Save User");
     }
 
   /* Modify the user. */
@@ -25577,7 +25573,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
     truefalse = "false";
 
   method = params_value (params, "group");
-  CHECK_PARAM_INVALID (method, "Save Authentication", "get_users");
+  CHECK_PARAM_INVALID (method, "Save Authentication");
   if (!strcmp (method, "method:ldap_connect"))
     {
       const char *ldaphost, *authdn, *certificate;
@@ -25585,11 +25581,11 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
       authdn = params_value (params, "authdn");
       certificate = params_value (params, "certificate");
 
-      CHECK_PARAM_INVALID (ldaphost, "Save Authentication", "get_users");
-      CHECK_PARAM_INVALID (authdn, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (ldaphost, "Save Authentication");
+      CHECK_PARAM_INVALID (authdn, "Save Authentication");
       if (params_given (params, "certificate") && strcmp (certificate, ""))
         {
-          CHECK_PARAM_INVALID (certificate, "Save Authentication", "get_users");
+          CHECK_PARAM_INVALID (certificate, "Save Authentication");
           /** @warning authdn shall contain a single %s, handle with care. */
           ret = gmpf (connection, credentials, &response, &entity,
                       response_data,
@@ -25620,8 +25616,8 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
       radiushost = params_value (params, "radiushost");
       radiuskey = params_value (params, "radiuskey");
 
-      CHECK_PARAM_INVALID (radiushost, "Save Authentication", "get_users");
-      CHECK_PARAM_INVALID (radiuskey, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (radiushost, "Save Authentication");
+      CHECK_PARAM_INVALID (radiuskey, "Save Authentication");
       /** @warning authdn shall contain a single %s, handle with care. */
       ret = gmpf (connection, credentials, &response, &entity, response_data,
                   "<modify_auth>"
@@ -25752,8 +25748,8 @@ save_setting_gmp (gvm_connection_t *connection,
   const gchar *setting_id = params_value (params, "setting_id");
   const gchar *setting_value = params_value (params, "setting_value");
 
-  CHECK_PARAM_INVALID (setting_id, "Save Chart Preferences", "get_users");
-  CHECK_PARAM_INVALID (setting_value, "Save Chart Preferences", "get_users");
+  CHECK_PARAM_INVALID (setting_id, "Save Setting");
+  CHECK_PARAM_INVALID (setting_value, "Save Setting");
 
   gchar* value_64 = g_base64_encode ((guchar*)setting_value,
                                      strlen (setting_value));
@@ -26557,10 +26553,10 @@ create_host_gmp (gvm_connection_t *connection, credentials_t * credentials,
   GString *xml;
 
   name = params_value (params, "name");
-  CHECK_PARAM_INVALID (name, "Create Host", "new_host");
+  CHECK_PARAM_INVALID (name, "Create Host");
 
   comment = params_value (params, "comment");
-  CHECK_PARAM_INVALID (comment, "Create Host", "new_host");
+  CHECK_PARAM_INVALID (comment, "Create Host");
 
   /* Create the host. */
 
@@ -26826,8 +26822,8 @@ create_asset_gmp (gvm_connection_t *connection, credentials_t *credentials,
   report_id = params_value (params, "report_id");
   filter = params_value (params, "filter");
 
-  CHECK_PARAM_INVALID (report_id, "Create Asset", "get_report_section");
-  CHECK_PARAM_INVALID (filter, "Create Asset", "get_report_section");
+  CHECK_PARAM_INVALID (report_id, "Create Asset");
+  CHECK_PARAM_INVALID (filter, "Create Asset");
 
   response = NULL;
   entity = NULL;
@@ -27157,8 +27153,8 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   asset_id = params_value (params, "asset_id");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_INVALID (asset_id, "Save Asset", "edit_asset");
-  CHECK_PARAM_INVALID (comment, "Save Asset", "edit_asset");
+  CHECK_PARAM_INVALID (asset_id, "Save Asset");
+  CHECK_PARAM_INVALID (comment, "Save Asset");
 
   /* Modify the asset. */
 
