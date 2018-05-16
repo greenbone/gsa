@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 import {parse_float} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
@@ -42,6 +42,8 @@ import {
   OVAL_CLASS_TYPES,
 } from '../../../components/dashboard2/display/utils';
 import {registerDisplay} from '../../../components/dashboard2/registry';
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 
 import {OvaldefClassLoader} from './loaders';
 
@@ -98,6 +100,7 @@ export class OvaldefClassDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -122,7 +125,8 @@ export class OvaldefClassDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>
@@ -137,35 +141,24 @@ OvaldefClassDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
+OvaldefClassDisplay = withFilterSelection({
+  filtersFilter: OVALDEFS_FILTER_FILTER,
+})(OvaldefClassDisplay);
+
 OvaldefClassDisplay.displayId = 'ovaldef-by-class';
 
-export const OvaldefClassTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OvaldefClassLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('Class'), _('# of OVAL Definitions')]}
-        dataRow={row => [row.label, row.value]}
-        dataTransform={transformClassData}
-        title={({data: tdata}) =>
-          _('OVAL Definitions by Class (Total: {{count}})',
-          {count: tdata.total})}
-      />
-    )}
-  </OvaldefClassLoader>
-);
-
-OvaldefClassTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OvaldefClassTableDisplay.displayId = 'ovaldef-by-class-table';
+export const OvaldefClassTableDisplay = createDisplay({
+  loaderComponent: OvaldefClassLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) =>
+    _('OVAL Definitions by Class (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('Class'), _('# of OVAL Defs')],
+  dataRow: row => [row.label, row.value],
+  dataTransform: transformClassData,
+  displayId: 'ovaldef-by-class-table',
+  displayName: 'OvaldefClassTableDisplay',
+  filtersFilter: OVALDEFS_FILTER_FILTER,
+});
 
 registerDisplay(OvaldefClassDisplay.displayId, OvaldefClassDisplay, {
   title: _('Chart: OVAL Definitions by Class'),

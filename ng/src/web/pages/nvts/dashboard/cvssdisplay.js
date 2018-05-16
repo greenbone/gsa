@@ -21,71 +21,38 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
-export const NvtsCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NvtsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of NVTs')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('NVTs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </NvtsSeverityLoader>
-);
+export const NvtsCvssDisplay = createDisplay({
+  loaderComponent: NvtsSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of NVTs'),
+  title: ({data: tdata}) => _('NVTs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: NVTS_FILTER_FILTER,
+  displayId: 'nvt-by-cvss',
+  displayName: 'NvtsCvssDisplay',
+});
 
-NvtsCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NvtsCvssDisplay.displayId = 'nvt-by-cvss';
-
-export const NvtsCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NvtsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of NVTs')]}
-        title={({data: tdata = {}}) =>
-          _('NVTs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </NvtsSeverityLoader>
-);
-
-NvtsCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NvtsCvssTableDisplay.displayId = 'nvt-by-cvss-table';
+export const NvtsCvssTableDisplay = createDisplay({
+  loaderComponent: NvtsSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of NVTs')],
+  title: ({data: tdata}) => _('NVTs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: NVTS_FILTER_FILTER,
+  displayId: 'nvt-by-cvss-table',
+  displayName: 'NvtsCvssTableDisplay',
+});
 
 registerDisplay(NvtsCvssDisplay.displayId, NvtsCvssDisplay, {
   title: _('Chart: NVTs by CVSS'),

@@ -20,74 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundSeverityLoader} from './loaders';
 
-export const CertBundCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of CERT-Bund Advisories')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CERT-Bund Advisories')]}
-        title={({data: tdata}) =>
-          _('CERT-Bund Advisories by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CertBundSeverityLoader>
-);
+export const CertBundCvssDisplay = createDisplay({
+  loaderComponent: CertBundSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of CERT-Bund Advs'),
+  title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CERTBUND_FILTER_FILTER,
+  displayId: 'cert_bund_adv-by-cvss',
+  displayName: 'CertBundCvssDisplay',
+});
 
-CertBundCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundCvssDisplay.displayId = 'cert_bund_adv-by-cvss';
-
-export const CertBundCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CERT-Bund Advisories')]}
-        title={({data: tdata = {}}) =>
-          _('CERT-Bund Advisories by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CertBundSeverityLoader>
-);
-
-CertBundCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundCvssTableDisplay.displayId = 'cert_bund_adv-by-cvss-table';
-
+export const CertBundCvssTableDisplay = createDisplay({
+  loaderComponent: CertBundSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of CERT-Bund Advisories')],
+  title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CERTBUND_FILTER_FILTER,
+  displayId: 'cert_bund_adv-by-cvss-table',
+  displayName: 'CertBundCvssTableDisplay',
+});
 
 registerDisplay(CertBundCvssDisplay.displayId, CertBundCvssDisplay, {
   title: _('Chart: CERT-Bund Advisories by CVSS'),
