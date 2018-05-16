@@ -439,6 +439,34 @@ describe('dashboard settings reducers test for saving', () => {
       defaults: {},
     });
   });
+
+  test('should store any data as settings', () => {
+    const state = {
+      byId: {
+        a1: [{
+          items: ['abc', 'def'],
+        }],
+      },
+    };
+
+    const id = 'a1';
+    const settings = {
+      foo: 'bar',
+      thisIsWeird: true,
+    };
+
+    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
+      error: null,
+      isLoading: false,
+      byId: {
+        a1: {
+          foo: 'bar',
+          thisIsWeird: true,
+        },
+      },
+      defaults: {},
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
