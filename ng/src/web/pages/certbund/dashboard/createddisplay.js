@@ -20,86 +20,55 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
+
 import Theme from 'web/utils/theme';
 
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundCreatedLoader} from './loaders';
 
-export const CertBundCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('CERT-Bund Advisories by Creation Time')}
-        yAxisLabel={_('# of created CERT-Bund Advisories')}
-        y2AxisLabel={_('Total CERT-Bund Advisories')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created CERT-Bund Advs'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total CERT-Bund Advs'),
-        }}
-      />
-    )}
-  </CertBundCreatedLoader>
-);
+export const CertBundCreatedDisplay = createDisplay({
+  loaderComponent: CertBundCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('CERT-Bund Advisories by Creation Time'),
+  yAxisLabel: _('# of created CERT-Bund Advisories'),
+  y2AxisLabel: _('Total CERT-Bund Advisories'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created CERT-Bund Advs'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total CERT-Bund Advs'),
+  },
+  displayId: 'cert_bund_adv-by-created',
+  displayName: 'CertBundCreatedDisplay',
+  filtersFilter: CERTBUND_FILTER_FILTER,
+});
 
-CertBundCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundCreatedDisplay.displayId = 'cert_bund_adv-by-created';
-
-export const CertBundCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of CERT-Bund Advisories'),
-          _('Total CERT-Bund Advisories'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-        title={() => _('CERT-Bund Advisories by Creation Time')}
-      />
-    )}
-  </CertBundCreatedLoader>
-);
-
-CertBundCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundCreatedTableDisplay.displayId = 'cert_bund_adv-by-created-table';
+export const CertBundCreatedTableDisplay = createDisplay({
+  loaderComponent: CertBundCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('CERT-Bund Advisories by Creation Time'),
+    dataTitles: [
+      _('Creation Time'),
+      _('# of CERT-Bund Advs'),
+      _('Total CERT-Bund Advs')],
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTransform: transformCreated,
+  displayId: 'cert_bund_adv-by-created-table',
+  displayName: 'CertBundCreatedTableDisplay',
+  filtersFilter: CERTBUND_FILTER_FILTER,
+});
 
 registerDisplay(CertBundCreatedTableDisplay.displayId,
   CertBundCreatedTableDisplay, {
