@@ -21,73 +21,38 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {DfnCertSeverityLoader} from './loaders';
 
-export const DfnCertCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <DfnCertSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of DFN-CERT Advisories')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
-        title={({data: tdata}) =>
-          _('DFN-CERT Advisories by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </DfnCertSeverityLoader>
-);
+export const DfnCertCvssDisplay = createDisplay({
+  loaderComponent: DfnCertSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of DFN-CERT Advs'),
+  title: ({data: tdata}) => _('DFN-CERT Advisories by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: DFNCERT_FILTER_FILTER,
+  displayId: 'dfn_cert_adv-by-cvss',
+  displayName: 'DfnCertCvssDisplay',
+});
 
-DfnCertCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-DfnCertCvssDisplay.displayId = 'dfn_cert_adv-by-cvss';
-
-export const DfnCertCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <DfnCertSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of DFN-CERT Advisories')]}
-        title={({data: tdata = {}}) =>
-          _('DFN-CERT Advisories by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </DfnCertSeverityLoader>
-);
-
-DfnCertCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-DfnCertCvssTableDisplay.displayId = 'dfn_cert_adv-by-cvss-table';
-
+export const DfnCertCvssTableDisplay = createDisplay({
+  loaderComponent: DfnCertSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of DFN-CERT Advisories')],
+  title: ({data: tdata}) => _('DFN-CERT Advisories by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: DFNCERT_FILTER_FILTER,
+  displayId: 'dfn_cert_adv-by-cvss-table',
+  displayName: 'DfnCertCvssTableDisplay',
+});
 
 registerDisplay(DfnCertCvssDisplay.displayId, DfnCertCvssDisplay, {
   title: _('Chart: DFN-CERT Advisories by CVSS'),

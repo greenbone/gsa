@@ -702,26 +702,33 @@ export const ALL_FILTER = new Filter().all();
 export const AGENTS_FILTER_FILTER = Filter.fromString('type=agent');
 export const ALERTS_FILTER_FILTER = Filter.fromString('type=alert');
 export const ASSETS_FILTER_FILTER = Filter.fromString('type=asset');
+export const CERTBUND_FILTER_FILTER = Filter.fromString('type=cert_bund_adv');
+export const CPES_FILTER_FILTER = Filter.fromString('type=cpe');
 export const CREDENTIALS_FILTER_FILTER = Filter.fromString('type=credential');
-export const GROUPS_FILTER_FILTER = Filter.fromString('type=group');
+export const CVES_FILTER_FILTER = Filter.fromString('type=cve');
+export const DFNCERT_FILTER_FILTER = Filter.fromString('type=dfn_cert_adv');
 export const FILTERS_FILTER_FILTER = Filter.fromString('type=filter');
+export const GROUPS_FILTER_FILTER = Filter.fromString('type=group');
+export const HOSTS_FILTER_FILTER = Filter.fromString('type=host');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
+export const NVTS_FILTER_FILTER = Filter.fromString('type=nvt');
+export const OS_FILTER_FILTER = Filter.fromString('type=os');
+export const OVALDEFS_FILTER_FILTER = Filter.fromString('type=ovaldef');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
+export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
+  'type=report_format');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');
 export const SCANNERS_FILTER_FILTER = Filter.fromString('type=scanner');
+export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
+export const SECINFO_FILTER_FILTER = Filter.fromString('type=allinfo');
 export const TARGETS_FILTER_FILTER = Filter.fromString('type=target');
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
-export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
-export const USERS_FILTER_FILTER = Filter.fromString('type=user');
-export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
-  'type=report_format');
-export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
 export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
-export const HOSTS_FILTER_FILTER = Filter.fromString('type=host');
-export const OS_FILTER_FILTER = Filter.fromString('type=os');
+export const USERS_FILTER_FILTER = Filter.fromString('type=user');
+export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 
 export default Filter;
 

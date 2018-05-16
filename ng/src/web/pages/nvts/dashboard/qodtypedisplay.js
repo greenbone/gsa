@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -34,6 +34,9 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut3d';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+
 import {
   totalCount,
   percent,
@@ -97,6 +100,7 @@ export class NvtsQodTypeDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -118,7 +122,8 @@ export class NvtsQodTypeDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>
@@ -133,34 +138,25 @@ NvtsQodTypeDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
+NvtsQodTypeDisplay = withFilterSelection({
+  filterFilter: NVTS_FILTER_FILTER,
+})(NvtsQodTypeDisplay);
+
 NvtsQodTypeDisplay.displayId = 'nvt-by-qod_type';
 
-export const NvtsQodTypeTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NvtsQodTypeLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('QoD-Type'), _('# of NVTs')]}
-        dataRow={row => [row.label, row.value]}
-        dataTransform={transformQodTypeData}
-        title={({data: tdata}) => _('NVTs by QoD-Type (Total: {{count}})',
-          {count: tdata.total})}
-      />
-    )}
-  </NvtsQodTypeLoader>
-);
+export const NvtsQodTypeTableDisplay = createDisplay({
+  loaderComponent: NvtsQodTypeLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) =>
+    _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('QoD-Type'), _('# of NVTs')],
+  dataRow: row => [row.label, row.value],
+  dataTransform: transformQodTypeData,
+  displayId: 'nvt-by-qod-type-table',
+  displayName: 'NvtsQodTypeTableDisplay',
+  filtersFilter: NVTS_FILTER_FILTER,
+});
 
-NvtsQodTypeTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NvtsQodTypeTableDisplay.displayId = 'nvt-by-qod-type-table';
 
 registerDisplay(NvtsQodTypeDisplay.displayId, NvtsQodTypeDisplay, {
   title: _('Chart: NVTs by QoD-Type'),

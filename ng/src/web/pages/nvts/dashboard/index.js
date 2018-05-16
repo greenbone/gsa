@@ -30,14 +30,29 @@ import Dashboard from '../../../components/dashboard2/dashboard';
 import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
 import {NvtsFamilyDisplay, NvtsFamilyTableDisplay} from './familydisplay';
 import {
-  NvtsSeverityDisplay,
-  NvtsSeverityTableDisplay,
+  NvtsSeverityClassDisplay,
+  NvtsSeverityClassTableDisplay,
 } from './severityclassdisplay';
 import {NvtsQodDisplay, NvtsQodTableDisplay} from './qoddisplay';
 import {NvtsQodTypeDisplay, NvtsQodTypeTableDisplay} from './qodtypedisplay';
 import {NvtsCreatedDisplay, NvtsCreatedTableDisplay} from './createddisplay';
 
 export const NVTS_DASHBOARD_ID = 'f68d9369-1945-477b-968f-121c6029971b';
+
+export const NVTS_DISPLAYS = [
+  NvtsCvssDisplay.displayId,
+  NvtsFamilyDisplay.displayId,
+  NvtsSeverityClassDisplay.displayId,
+  NvtsQodDisplay.displayId,
+  NvtsQodTypeDisplay.displayId,
+  NvtsCreatedDisplay.displayId,
+  NvtsCvssTableDisplay.displayId,
+  NvtsSeverityClassTableDisplay.displayId,
+  NvtsFamilyTableDisplay.displayId,
+  NvtsCreatedTableDisplay.displayId,
+  NvtsQodTableDisplay.displayId,
+  NvtsQodTypeTableDisplay.displayId,
+];
 
 const NvtsDashboard = ({
   filter,
@@ -46,23 +61,10 @@ const NvtsDashboard = ({
   <Dashboard
     id={NVTS_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      NvtsCvssDisplay.displayId,
-      NvtsFamilyDisplay.displayId,
-      NvtsSeverityDisplay.displayId,
-      NvtsQodDisplay.displayId,
-      NvtsQodTypeDisplay.displayId,
-      NvtsCreatedDisplay.displayId,
-      NvtsCvssTableDisplay.displayId,
-      NvtsSeverityTableDisplay.displayId,
-      NvtsFamilyTableDisplay.displayId,
-      NvtsCreatedTableDisplay.displayId,
-      NvtsQodTableDisplay.displayId,
-      NvtsQodTypeTableDisplay.displayId,
-    ]}
+    permittedDisplays={NVTS_DISPLAYS}
     defaultContent={[
       [
-        NvtsSeverityDisplay.displayId,
+        NvtsSeverityClassDisplay.displayId,
         NvtsCreatedDisplay.displayId,
         NvtsFamilyDisplay.displayId,
       ],
