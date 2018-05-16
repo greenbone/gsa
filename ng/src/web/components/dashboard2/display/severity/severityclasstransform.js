@@ -96,7 +96,7 @@ const transformSeverityData = (
       case HIGH:
         toolTip = `${label} (${format(high)} - 10.0)`;
         filterValue = {
-          start: high,
+          start: format(high - 0.1),
           end: 10,
         };
         break;
@@ -104,16 +104,16 @@ const transformSeverityData = (
         limit = format(high - 0.1);
         toolTip = `${label} (${format(medium)} - ${limit})`;
         filterValue = {
-          start: medium,
-          end: limit,
+          start: format(medium - 0.1),
+          end: high,
         };
         break;
       case LOW:
         limit = format(medium - 0.1);
         toolTip = `${label} (${format(low)} - ${limit})`;
         filterValue = {
-          start: low,
-          end: limit,
+          start: low - 0.05, // to include 0.1 but exclude 0
+          end: medium,
         };
         break;
       case LOG:

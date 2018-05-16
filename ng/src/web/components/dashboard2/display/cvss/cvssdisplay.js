@@ -60,12 +60,7 @@ class CvssDisplay extends React.Component {
 
     if (is_defined(start) && start > 0 && end < 10) {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
-
-      // use end + 0.1 as upper limit
-      // this is a bit hackish and only works for severity
-      // it would be better if gvmd does support <=
-      const endVal = (end + 0.1).toFixed(1);
-      const endTerm = FilterTerm.fromString(`severity<${endVal}`);
+      const endTerm = FilterTerm.fromString(`severity<${end}`);
 
       if (is_defined(filter) && filter.hasTerm(startTerm) &&
         filter.hasTerm(endTerm)) {
