@@ -117,8 +117,8 @@ class Dashboard extends React.Component {
       id,
       permittedDisplays,
       defaultContent,
-      maxItemsPerRow,
-      maxRows,
+      maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
+      maxRows = DEFAULT_MAX_ROWS,
     } = this.props;
 
     const defaults = {
