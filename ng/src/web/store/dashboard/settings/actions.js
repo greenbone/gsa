@@ -43,23 +43,23 @@ export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
 const settingsV1toDashboardSettings = settings => {
-  const items = {};
+  const convertedRows = {};
   Object.entries(settings).forEach(([id, value]) => {
     const {data: rows} = value;
-    items[id] = rows.map(({height, data}) =>
-      createRow(data.map(item => createItem({
-        name: item.name,
-        filterId: item.filt_id,
-      })), height));
+    convertedRows[id] = {
+      rows: rows.map(({height, data}) =>
+        createRow(data.map(item => createItem({
+          name: item.name,
+          filterId: item.filt_id,
+        })), height)),
+      };
   });
-  return {
-    items,
-  };
+  return convertedRows;
 };
 
-const dashboardSettings2SettingsV1 = ({items}) => ({
+const dashboardSettings2SettingsV1 = ({rows}) => ({
   version: 1,
-  data: items.map(({height, items: rowItems}) => ({
+  data: rows.map(({height, items: rowItems}) => ({
     height,
     type: 'row',
     data: rowItems.map(({id, filterId, ...other}) => ({
@@ -162,36 +162,37 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   }
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
-  const defaults = settings.getDefaultsById(dashboardId);
-  const currentItems = settings.getItemsById(dashboardId) || [];
+  const settingsSelector = getDashboardSettings(rootState);
+  const defaults = settingsSelector.getDefaultsById(dashboardId);
+  const settings = settingsSelector.getItemsById(dashboardId);
+  const {rows: currentRows = []} = settings || {};
   const {maxItemsPerRow, maxRows} = defaults;
 
-  const lastRow = is_array(currentItems) && currentItems.length > 0 ?
-    currentItems[currentItems.length - 1] : {items: []};
+  const lastRow = is_array(currentRows) && currentRows.length > 0 ?
+    currentRows[currentRows.length - 1] : {items: []};
 
-  let items;
+  let rows;
   if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
-    if (is_defined(maxRows) && currentItems.length >= maxRows) {
+    if (is_defined(maxRows) && currentRows.length >= maxRows) {
       // dashboard is full
       return;
     }
     const newRow = createRow([createItem({name: displayId})]);
-    items = [...currentItems, newRow];
+    rows = [...currentRows, newRow];
   }
   else {
     const newRow = {
       ...lastRow,
       items: [...lastRow.items, createItem({name: displayId})],
     };
-    items = [...currentItems];
-    items.pop();
-    items.push(newRow);
+    rows = [...currentRows];
+    rows.pop();
+    rows.push(newRow);
   }
 
   const newSettings = {
     ...defaults,
-    items,
+    rows,
   };
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));

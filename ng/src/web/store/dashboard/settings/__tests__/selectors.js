@@ -93,7 +93,7 @@ describe('dashboard setting selector getItemsById tests', () => {
     const id = 'a1';
     const rootState = {
       dashboardSettings: {
-        items: {
+        byId: {
           [id]: ['a', 'b'],
         },
       },
@@ -107,7 +107,7 @@ describe('dashboard setting selector getItemsById tests', () => {
   test('should return null for items if unknown id is passed', () => {
     const rootState = {
       dashboardSettings: {
-        items: {
+        byId: {
         },
       },
     };

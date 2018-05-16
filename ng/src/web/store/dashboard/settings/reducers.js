@@ -43,24 +43,24 @@ const defaults = (state = {}, action) => {
   }
 };
 
-const items = (state = null, action) => {
+const byId = (state = null, action) => {
   const {
     id,
-    defaults: actionDefaults = {},
-    settings = {},
+    defaults: actionDefaults,
+    settings,
   } = action;
 
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
       return {
         ...state,
-        [id]: actionDefaults.items,
-        ...settings.items,
+        [id]: actionDefaults,
+        ...settings,
       };
     case DASHBOARD_SETTINGS_SAVING_REQUEST:
       return {
         ...state,
-        [id]: settings.items,
+        [id]: settings,
       };
     default:
       return state;
@@ -93,7 +93,7 @@ const isLoading = (state = false, action) => {
 
 const dashboardSettings = combineReducers({
   isLoading,
-  items,
+  byId,
   error,
   defaults,
 });
