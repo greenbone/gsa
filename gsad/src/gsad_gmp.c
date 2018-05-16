@@ -307,10 +307,6 @@ int token_user_remove (const char *);
 
 static int gmp_success (entity_t entity);
 
-static gchar *next_page_url (credentials_t *, params_t *, const char *,
-                             const char *, const char *, const char *,
-                             const char *);
-
 static gchar *action_result_page (gvm_connection_t *, credentials_t *,
                                   params_t *, cmd_response_data_t *,
                                   const char*, const char*, const char*,
@@ -684,11 +680,6 @@ check_modify_config (gvm_connection_t *connection,
     {
       const char* message = "The config is now in use by a task,"
                             " so only name and comment can be modified.";
-      gchar *next_url = next_page_url (credentials, params,
-                                       NULL, fail_next,
-                                       "Save Config",
-                                       entity_attribute (entity, "status"),
-                                       message);
 
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
@@ -696,29 +687,22 @@ check_modify_config (gvm_connection_t *connection,
         = action_result_page (connection, credentials, params, response_data,
                               "Save Config",
                               entity_attribute (entity, "status"),
-                              message, NULL, next_url);
+                              message, NULL, NULL);
 
-      g_free (next_url);
       free_entity (entity);
       return response;
     }
   else if (strcmp (status_text, "MODIFY_CONFIG name must be unique") == 0)
     {
       const char* message = "A config with the given name exists already.";
-      gchar *next_url = next_page_url (credentials, params,
-                                       NULL, fail_next,
-                                       "Save Config",
-                                       entity_attribute (entity, "status"),
-                                       message);
 
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
       response
         = action_result_page (connection, credentials, params, response_data, "Save Config",
                               entity_attribute (entity, "status"),
-                              message, NULL, next_url);
+                              message, NULL, NULL);
 
-      g_free (next_url);
       free_entity (entity);
       return response;
     }
@@ -1079,15 +1063,15 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
  *
  * @param[in]  name      Param name.
  * @param[in]  op_name   Operation name.
- * @param[in]  next_cmd  Next command.
+ * @param[in]  unused    Unused.
  */
-#define CHECK_PARAM_INVALID(name, op_name, next_cmd)                           \
+#define CHECK_PARAM_INVALID(name, op_name, unused)                             \
   if (name == NULL)                                                            \
     {                                                                          \
       return message_invalid (connection, credentials, params, response_data,  \
                               "Given " G_STRINGIFY (name) " was invalid",      \
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
-                              op_name, next_cmd);                              \
+                              op_name, NULL);                                  \
     }
 
 /**
@@ -1199,99 +1183,6 @@ capitalize (const char* input)
 /* Generic page handlers. */
 
 /**
- * @brief Generate a page URL for a redirect.
- *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  override_next  Command to redirect to, ignoring "next" or NULL.
- * @param[in]  default_next   Command to redirect to if next" is missing.
- * @param[in]  prev_action    Previous action.
- * @param[in]  action_status  Status code of previous action.
- * @param[in]  action_message Status message of previous action.
- *
- * @return  Newly allocated redirect URL.
- */
-static gchar *
-next_page_url (credentials_t *credentials, params_t *params,
-               const char* override_next, const char *default_next,
-               const char* prev_action, const char* action_status,
-               const char* action_message)
-{
-  GString *url;
-  const char *next_cmd;
-  params_iterator_t iter;
-  gchar *param_name;
-  param_t *current_param;
-  int error;
-  if (action_status && strcmp (action_status, "") && action_status[0] != '2')
-    error = 1;
-  else
-    error = 0;
-
-  url = g_string_new ("/omp?cmd=");
-
-  if (override_next)
-    next_cmd = override_next;
-  else if (error && params_valid (params, "next_error"))
-    next_cmd = params_value (params, "next_error");
-  else if (!error && params_valid (params, "next"))
-    next_cmd = params_value (params, "next");
-  else if (default_next)
-    next_cmd = default_next;
-  else
-    next_cmd = "get_tasks";
-
-  g_string_append (url, next_cmd);
-
-  params_iterator_init (&iter, params);
-  while (params_iterator_next (&iter, &param_name, &current_param))
-    {
-      if (strcmp (param_name, "asset_type") == 0
-          || strcmp (param_name, "filter") == 0
-          || strcmp (param_name, "filt_id") == 0
-          || (strstr (param_name, "_id")
-                == param_name + strlen (param_name) - strlen ("_id"))
-          || (strcmp (param_name, "name") == 0
-              && strcasecmp (prev_action, "Run Wizard") == 0)
-          || (strcmp (param_name, "get_name") == 0
-              && strcasecmp (next_cmd, "wizard_get") == 0))
-        {
-          g_string_append_printf (url, "&%s=%s",
-                                  param_name,
-                                  current_param->value
-                                    ? current_param->value
-                                    : "");
-        }
-    }
-
-  if (action_status)
-    {
-      gchar *escaped = g_uri_escape_string (action_status, NULL, FALSE);
-      g_string_append_printf (url, "&action_status=%s", escaped);
-      g_free (escaped);
-    }
-
-  if (action_message)
-    {
-      gchar *escaped = g_uri_escape_string (action_message, NULL, FALSE);
-      g_string_append_printf (url, "&action_message=%s", escaped);
-      g_free (escaped);
-    }
-
-  if (prev_action)
-    {
-      gchar *escaped = g_uri_escape_string (prev_action, NULL, FALSE);
-      g_string_append_printf (url, "&prev_action=%s", escaped);
-      g_free (escaped);
-    }
-
-
-  g_string_append_printf (url, "&token=%s", credentials->token);
-
-  return g_string_free (url, FALSE);
-}
-
-/**
  * @brief Generate a enveloped GMP XML containing a result.
  *
  * @param[in]  connection     Connection to manager
@@ -1302,7 +1193,7 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @param[in]  status         Status code.
  * @param[in]  message        Status message.
  * @param[in]  details        Status details.
- * @param[in]  next_url       URL of next page.
+ * @param[in]  unused         Not used anymore.
  *
  * @return Enveloped XML object.
  */
@@ -1312,7 +1203,7 @@ action_result_page (gvm_connection_t *connection,
                     cmd_response_data_t *response_data,
                     const char* action, const char* status,
                     const char* message, const char* details,
-                    const char* next_url)
+                    const char* unused)
 {
   gchar *xml;
   xml = g_markup_printf_escaped ("<action_result>"
@@ -1404,15 +1295,10 @@ message_invalid (gvm_connection_t *connection,
                  const char *status, const char *op_name, const char *next_cmd)
 {
   gchar *ret;
-  gchar *next_url;
-
-  next_url = next_page_url (credentials, params, next_cmd, NULL, op_name,
-                            status, message);
   ret = action_result_page (connection, credentials, params, response_data,
                             op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            message, NULL,
-                            next_url);
-  g_free (next_url);
+                            message, NULL, NULL);
+
   cmd_response_data_set_status_code (response_data,
                                      MHD_HTTP_BAD_REQUEST);
   return ret;
@@ -21392,7 +21278,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                         cmd_response_data_t* response_data)
 {
   int ret;
-  gchar *html, *response, *summary_response, *next_url;
+  gchar *html, *response, *summary_response;
   int successes;
   const char  *permission, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
@@ -21869,19 +21755,11 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   summary_response = g_strdup_printf("Successfully created %i permissions",
                                      successes);
 
-  next_url = next_page_url (credentials, params,
-                            NULL, "new_permissions",
-                            "Create Permissions",
-                            G_STRINGIFY (MHD_HTTP_CREATED),
-                            summary_response);
-
   html = action_result_page (connection, credentials, params, response_data,
                               "Create Permissions",
                               G_STRINGIFY (MHD_HTTP_CREATED),
                               summary_response,
-                              NULL,
-                              next_url);
-  g_free (next_url);
+                              NULL, NULL);
   return html;
 }
 
@@ -25690,7 +25568,7 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   int ret;
   entity_t entity = NULL;
   char *html, *response = NULL, *truefalse;
-  const char  *method, *name;
+  const char  *method;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -25703,7 +25581,6 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   if (!strcmp (method, "method:ldap_connect"))
     {
       const char *ldaphost, *authdn, *certificate;
-      name = "ldap";
       ldaphost = params_value (params, "ldaphost");
       authdn = params_value (params, "authdn");
       certificate = params_value (params, "certificate");
@@ -25740,7 +25617,6 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   else if (!strcmp (method, "method:radius_connect"))
     {
       const char *radiushost, *radiuskey;
-      name = "radius";
       radiushost = params_value (params, "radiushost");
       radiuskey = params_value (params, "radiuskey");
 
@@ -25796,12 +25672,10 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
                              response_data);
     }
 
-  gchar* next_url = g_strdup_printf ("auth_settings&name=%s", name);
   html = response_from_entity (connection, credentials, params, entity,
                               "Save Authentication Configuration",
                               response_data);
   free_entity (entity);
-  g_free (next_url);
   g_free (response);
   return html;
 }
