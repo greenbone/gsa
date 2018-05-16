@@ -33,8 +33,8 @@ import {
 } from './createddisplay';
 import {SecInfosCvssDisplay, SecInfosCvssTableDisplay} from './cvssdisplay';
 import {
-  SecInfosSeverityDisplay,
-  SecInfosSeverityTableDisplay,
+  SecInfosSeverityClassDisplay,
+  SecInfosSeverityClassTableDisplay,
 } from './severityclassdisplay';
 import {SecInfosTypeDisplay, SecInfosTypeTableDisplay} from './typedisplay';
 
@@ -45,8 +45,8 @@ export const SECINFO_DISPLAYS = [
   SecInfosCreatedTableDisplay.displayId,
   SecInfosCvssDisplay.displayId,
   SecInfosCvssTableDisplay.displayId,
-  SecInfosSeverityDisplay.displayId,
-  SecInfosSeverityTableDisplay.displayId,
+  SecInfosSeverityClassDisplay.displayId,
+  SecInfosSeverityClassTableDisplay.displayId,
   SecInfosTypeDisplay.displayId,
   SecInfosTypeTableDisplay.displayId,
 ];
@@ -61,7 +61,7 @@ export const SecInfoDashboard = ({
     permittedDisplays={SECINFO_DISPLAYS}
     defaultContent={[
       [
-        SecInfosSeverityDisplay.displayId,
+        SecInfosSeverityClassDisplay.displayId,
         SecInfosCreatedDisplay.displayId,
         SecInfosCvssDisplay.displayId,
       ],
