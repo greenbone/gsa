@@ -1070,7 +1070,7 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
       return message_invalid (connection, credentials, params, response_data,  \
                               "Given " G_STRINGIFY (name) " was invalid",      \
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
-                              op_name, NULL);                                  \
+                              op_name);                                        \
     }
 
 /**
@@ -1283,7 +1283,6 @@ action_result (gvm_connection_t *connection,
  * @param[in]  message        Message.
  * @param[in]  status         Status code.
  * @param[in]  op_name        Operation name.
- * @param[in]  next_cmd       Next command.
  *
  * @return Enveloped XML object.
  */
@@ -1291,7 +1290,7 @@ gchar *
 message_invalid (gvm_connection_t *connection,
                  credentials_t *credentials, params_t *params,
                  cmd_response_data_t *response_data, const char *message,
-                 const char *status, const char *op_name, const char *next_cmd)
+                 const char *status, const char *op_name)
 {
   gchar *ret;
   ret = action_result_page (connection, credentials, params, response_data,
@@ -3668,7 +3667,7 @@ create_report_gmp (gvm_connection_t *connection,
         return message_invalid (connection, credentials, params, response_data,
                                 "Report required",
                                 G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                                "Create Report", "new_container_task");
+                                "Create Report");
 
       /* Create only the container task. */
 
@@ -5735,7 +5734,7 @@ create_credential_gmp (gvm_connection_t *connection,
     return message_invalid (connection, credentials, params, response_data,
                             "Given autogenerate was invalid",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            "Create Credential", "new_credential");
+                            "Create Credential");
 
   CHECK_PARAM_INVALID (name, "Create Credential");
   CHECK_PARAM_INVALID (comment, "Create Credential");
@@ -9166,7 +9165,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
     return message_invalid (connection, credentials, params, response_data,
                             "Missing hosts file",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            "Create Target", "new_target");
+                            "Create Target");
   /* require hosts_filter if target_source is "asset_hosts" */
   if (strcmp (target_source, "asset_hosts") == 0)
     CHECK_PARAM_INVALID (hosts_filter, "Create Target");
@@ -9182,7 +9181,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
         return message_invalid (connection, credentials, params, response_data,
                                 "Missing exclude hosts file",
                                 G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                                "Create Target", "new_target");
+                                "Create Target");
     }
 
   CHECK_PARAM_INVALID (comment, "Create Target");
@@ -10776,14 +10775,14 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
       return message_invalid (connection, credentials, params, response_data,
                               "Given hosts was invalid",
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                              "Save Target", "edit_target");
+                              "Save Target");
     }
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       return message_invalid (connection, credentials, params, response_data,
                               "Given target_source was invalid",
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                              "Save Target", "edit_target");
+                              "Save Target");
     }
 
   {
