@@ -167,10 +167,10 @@ DashboardControls.propTypes = {
 const mapStateToProps = (rootState, {dashboardId}) => {
   const settingsSelector = getDashboardSettings(rootState);
   const settings = settingsSelector.getById(dashboardId);
-  const defaults = settingsSelector.getDefaultsById(dashboardId);
+  const {permittedDisplays: displayIds} = settings || {};
   return {
-    canAdd: canAddDisplay({...defaults, ...settings}),
-    displayIds: defaults.permittedDisplays,
+    canAdd: canAddDisplay(settings),
+    displayIds,
   };
 };
 

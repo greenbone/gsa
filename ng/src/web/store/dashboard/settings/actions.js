@@ -172,12 +172,10 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
 
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
-  const defaults = settingsSelector.getDefaultsById(dashboardId);
   const settings = settingsSelector.getById(dashboardId);
-  const {rows: currentRows = []} = settings || {};
-  const {maxItemsPerRow} = defaults;
+  const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
-  if (!canAddDisplay({...defaults, rows: currentRows})) {
+  if (!canAddDisplay(settings)) {
     return;
   }
 
@@ -202,7 +200,6 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   }
 
   const newSettings = {
-    ...defaults,
     rows,
   };
 
