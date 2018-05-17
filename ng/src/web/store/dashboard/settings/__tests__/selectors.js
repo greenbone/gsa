@@ -88,20 +88,23 @@ describe('dashboard setting selector getItemsById tests', () => {
   });
 });
 
-describe('dashboard setting selector getItemsById tests', () => {
-  test('should return items', () => {
+describe('dashboard setting selector getById tests', () => {
+
+  test('should return settings', () => {
     const id = 'a1';
     const rootState = {
       dashboardSettings: {
         byId: {
-          [id]: ['a', 'b'],
+          [id]: {
+            foo: 'bar',
+          },
         },
       },
     };
 
     const selector = getDashboardSettings(rootState);
 
-    expect(selector.getById(id)).toEqual(['a', 'b']);
+    expect(selector.getById(id)).toEqual({foo: 'bar'});
   });
 
   test('should return undefined if unknown id is passed', () => {
