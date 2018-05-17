@@ -22,9 +22,10 @@
  */
 import uuid from 'uuid/v4';
 
+import {is_array} from '../utils/identity';
 import {for_each} from '../utils/array';
 
-import logger from '../log.js';
+import logger from '../log';
 
 import HttpCommand from './http';
 import GmpCommand from './gmp';
@@ -58,6 +59,27 @@ const settingsV1toDashboardSettings = ({data: rows} = {}) => ({
 const convertLoadedSettings = (settings = {}) => {
   if (settings.version === 1) {
     return settingsV1toDashboardSettings(settings);
+  }
+  return settings;
+};
+
+const dashboardSettings2SettingsV1 = ({rows}) => ({
+  version: 1,
+  data: rows.map(({height, items: rowItems}) => ({
+    height,
+    type: 'row',
+    data: rowItems.map(({id, filterId, ...other}) => ({
+      ...other,
+      filt_id: filterId,
+      type: 'chart',
+    })),
+  })),
+});
+
+const convertSaveSettings = (settings = {}) => {
+  if (is_array(settings.row)) {
+    // we like have settings which can be stored as version 1 settings
+    return dashboardSettings2SettingsV1(settings);
   }
   return settings;
 };
@@ -106,6 +128,9 @@ class DashboardCommand extends GmpCommand {
 
   saveSetting(id, settings) {
     log.debug('Saving dashboard settings', id, settings);
+
+    settings = convertSaveSettings(settings);
+
     return this.action({
       setting_id: id,
       setting_value: JSON.stringify(settings),

@@ -42,19 +42,6 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
-const dashboardSettings2SettingsV1 = ({rows}) => ({
-  version: 1,
-  data: rows.map(({height, items: rowItems}) => ({
-    height,
-    type: 'row',
-    data: rowItems.map(({id, filterId, ...other}) => ({
-      ...other,
-      filt_id: filterId,
-      type: 'chart',
-    })),
-  })),
-});
-
 export const receivedDashboardSettings = (id, settings, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
@@ -114,9 +101,7 @@ export const saveSettings = ({gmp}) => (id, settings) =>
 
   dispatch(saveDashboardSettings(id, settings));
 
-  const settingsV1 = dashboardSettings2SettingsV1(settings);
-
-  return gmp.dashboard.saveSetting(id, settingsV1)
+  return gmp.dashboard.saveSetting(id, settings)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
@@ -132,8 +117,7 @@ export const resetSettings = ({gmp}) => id =>
 
   dispatch(saveDashboardSettings(id, defaults));
 
-  const settingsV1 = dashboardSettings2SettingsV1(defaults);
-  return gmp.dashboard.saveSetting(id, settingsV1)
+  return gmp.dashboard.saveSetting(id, defaults)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
@@ -190,8 +174,7 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
-  const settingsV1 = dashboardSettings2SettingsV1(newSettings);
-  return gmp.dashboard.saveSetting(dashboardId, settingsV1)
+  return gmp.dashboard.saveSetting(dashboardId, newSettings)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
