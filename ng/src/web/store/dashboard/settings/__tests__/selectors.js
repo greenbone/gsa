@@ -104,7 +104,7 @@ describe('dashboard setting selector getItemsById tests', () => {
     expect(selector.getById(id)).toEqual(['a', 'b']);
   });
 
-  test('should return null for items if unknown id is passed', () => {
+  test('should return undefined if unknown id is passed', () => {
     const rootState = {
       dashboardSettings: {
         byId: {
@@ -114,7 +114,7 @@ describe('dashboard setting selector getItemsById tests', () => {
 
     const selector = getDashboardSettings(rootState);
 
-    expect(selector.getById('a')).toBeNull();
+    expect(selector.getById('a')).toBeUndefined();
   });
 });
 
