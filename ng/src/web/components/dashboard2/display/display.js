@@ -88,6 +88,7 @@ const DisplayContent = glamorous.div('display-content', {
   borderLeft: '1px solid ' + Theme.lightGray,
   borderRight: '1px solid ' + Theme.lightGray,
   borderBottom: '1px solid ' + Theme.lightGray,
+  overflow: 'hidden',
 });
 
 const DisplayTitle = glamorous.div('display-title', {
