@@ -25,17 +25,13 @@ import {is_defined} from '../utils/identity';
 
 import logger from '../log.js';
 
-import {filter_string} from '../models/filter/utils.js';
-
-import ActionResult from '../models/actionresult';
-
 import DefaultTransform from '../http/transform/default.js';
 
-import HttpCommand from './http.js';
+import GmpCommand from './gmp.js';
 
 const log = logger.getLogger('gmp.commands.entities');
 
-class EntityCommand extends HttpCommand {
+class EntityCommand extends GmpCommand {
 
   constructor(http, name, clazz) {
     super(http, {cmd: 'get_' + name});
@@ -51,9 +47,6 @@ class EntityCommand extends HttpCommand {
     const {id, filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
-    if (is_defined(filter)) {
-      rparams.filter = filter_string(filter);
-    }
     if (is_defined(id)) {
       rparams[this.id_name] = id;
     }
@@ -71,22 +64,6 @@ class EntityCommand extends HttpCommand {
       entity = undefined;
     }
     return response.setData(entity);
-  }
-
-  transformActionResult(response) {
-    return response.setData(new ActionResult(response.data));
-  }
-
-  /**
-   * Creates a HTTP POST Request returning an ActionResult
-   *
-   * @param {*} args  Arguments to be passed to httpPost
-   *
-   * @returns {Promise} A Promise returning a Response with an
-   *                    ActionResult model as data
-   */
-  action(...args) {
-    return this.httpPost(...args).then(this.transformActionResult);
   }
 
   get({id}, {filter, ...options} = {}) {

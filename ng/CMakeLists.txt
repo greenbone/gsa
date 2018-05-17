@@ -71,6 +71,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/entity.js
      ${NG_SRC_DIR}/src/gmp/commands/feedstatus.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
+     ${NG_SRC_DIR}/src/gmp/commands/gmp.js
      ${NG_SRC_DIR}/src/gmp/commands/groups.js
      ${NG_SRC_DIR}/src/gmp/commands/hosts.js
      ${NG_SRC_DIR}/src/gmp/commands/http.js
