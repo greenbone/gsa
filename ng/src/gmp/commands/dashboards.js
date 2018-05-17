@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import uuid from 'uuid/v4';
+
 import {for_each} from '../utils/array';
 
 import logger from '../log.js';
@@ -29,6 +31,36 @@ import GmpCommand from './gmp';
 import registerCommand from '../command';
 
 const log = logger.getLogger('gmp.commands.dashboards');
+
+const createRow = (items, height) => ({
+  id: uuid(),
+  height,
+  items,
+});
+
+const createItem = props => {
+  const id = uuid();
+
+  return {
+    id,
+    ...props,
+  };
+};
+
+const settingsV1toDashboardSettings = ({data: rows} = {}) => ({
+  rows: rows.map(({height, data}) =>
+    createRow(data.map(item => createItem({
+      name: item.name,
+      filterId: item.filt_id,
+    })), height)),
+  });
+
+const convertLoadedSettings = (settings = {}) => {
+  if (settings.version === 1) {
+    return settingsV1toDashboardSettings(settings);
+  }
+  return settings;
+};
 
 class DashboardsCommand extends HttpCommand {
 
@@ -42,20 +74,30 @@ class DashboardsCommand extends HttpCommand {
 
       log.debug('DashboardSettings loaded', prefs);
 
-      const settings = {};
+      const allSettings = {};
 
       for_each(prefs, pref => {
         const {_id: id, value} = pref;
 
+        let settings;
         try {
-          settings[id] = JSON.parse(value);
+          settings = JSON.parse(value);
         }
         catch (e) {
           log.warn('Could not parse dashboard setting', pref);
+          return;
+        }
+
+        try {
+          allSettings[id] = convertLoadedSettings(settings);
+        }
+        catch (e) {
+          log.warn('Could not convert dashboard setting', settings);
+          return;
         }
       });
 
-      return response.setData(settings);
+      return response.setData(allSettings);
     });
   }
 }
