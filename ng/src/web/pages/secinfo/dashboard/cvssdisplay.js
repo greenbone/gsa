@@ -21,71 +21,38 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {SecInfosSeverityLoader} from './loaders';
 
-export const SecInfosCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <SecInfosSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of SecInfo Items')}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('SecInfo Items by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </SecInfosSeverityLoader>
-);
+export const SecInfosCvssDisplay = createDisplay({
+  loaderComponent: SecInfosSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of SecInfo Items'),
+  title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: SECINFO_FILTER_FILTER,
+  displayId: 'allinfo-by-cvss',
+  displayName: 'SecInfosCvssDisplay',
+});
 
-SecInfosCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-SecInfosCvssDisplay.displayId = 'allinfo-by-cvss';
-
-export const SecInfosCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <SecInfosSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of SecInfo Items')]}
-        title={({data: tdata = {}}) =>
-          _('SecInfo Items by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </SecInfosSeverityLoader>
-);
-
-SecInfosCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-SecInfosCvssTableDisplay.displayId = 'allinfo-by-cvss-table';
+export const SecInfosCvssTableDisplay = createDisplay({
+  loaderComponent: SecInfosSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of SecInfo Items')],
+  title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: SECINFO_FILTER_FILTER,
+  displayId: 'allinfo-by-cvss-table',
+  displayName: 'SecInfoCvssTableDisplay',
+});
 
 registerDisplay(SecInfosCvssDisplay.displayId, SecInfosCvssDisplay, {
   title: _('Chart: SecInfo Items by CVSS'),

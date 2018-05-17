@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import Filter from 'gmp/models/filter';
+import Filter, {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -34,12 +34,14 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut3d';
 import DataDisplay from 'web/components/dashboard2/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {
   totalCount,
   percent,
   secInfoTypeColorScale,
   SEC_INFO_TYPES,
 } from 'web/components/dashboard2/display/utils';
+import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {SecInfosTypeLoader} from './loaders';
@@ -97,6 +99,7 @@ export class SecInfosTypeDisplay extends React.Component {
   render() {
     const {
       filter,
+      onFilterChanged,
       ...props
     } = this.props;
 
@@ -119,7 +122,8 @@ export class SecInfosTypeDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={this.handleDataClick}
+                onDataClick={is_defined(onFilterChanged) ?
+                  this.handleDataClick : undefined}
               />
             )}
           </DataDisplay>
@@ -134,34 +138,24 @@ SecInfosTypeDisplay.propTypes = {
   onFilterChanged: PropTypes.func.isRequired,
 };
 
+SecInfosTypeDisplay = withFilterSelection({
+  filtersFilter: SECINFO_FILTER_FILTER,
+})(SecInfosTypeDisplay);
+
 SecInfosTypeDisplay.displayId = 'allinfo-by-type';
 
-export const SecInfosTypeTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <SecInfosTypeLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[_('Type'), _('# of SecInfo Items')]}
-        dataRow={row => [row.label, row.value]}
-        dataTransform={transformTypeData}
-        title={({data: tdata}) => _('SecInfo Items by Type (Total: {{count}})',
-          {count: tdata.total})}
-      />
-    )}
-  </SecInfosTypeLoader>
-);
-
-SecInfosTypeTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-SecInfosTypeTableDisplay.displayId = 'allinfo-by-qod-type-table';
+export const SecInfosTypeTableDisplay = createDisplay({
+  loaderComponent: SecInfosTypeLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) =>
+    _('SecInfo Items by type (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('Type'), _('# of SecInfo Items')],
+  dataRow: row => [row.label, row.value],
+  dataTransform: transformTypeData,
+  displayId: 'allinfo-by-type-table',
+  displayName: 'SecInfoTypeTableDisplay',
+  filtersFilter: SECINFO_FILTER_FILTER,
+});
 
 registerDisplay(SecInfosTypeDisplay.displayId, SecInfosTypeDisplay, {
   title: _('Chart: SecInfo Items by Type'),
