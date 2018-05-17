@@ -72,7 +72,10 @@ const byId = (state = {}, action) => {
     case DASHBOARD_SETTINGS_SAVING_REQUEST:
       return {
         ...state,
-        [id]: settings,
+        [id]: {
+          ...state[id],
+          ...settings,
+        },
       };
     default:
       return state;

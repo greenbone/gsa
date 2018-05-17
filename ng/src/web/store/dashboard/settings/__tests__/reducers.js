@@ -437,18 +437,19 @@ describe('dashboard settings reducers test for saving', () => {
     });
   });
 
-  test('should store any data as settings', () => {
+  test('should merge saved settings into current state', () => {
     const state = {
       byId: {
         a1: {
           items: ['abc', 'def'],
+          foo: 'bar',
         },
       },
     };
 
     const id = 'a1';
     const settings = {
-      foo: 'bar',
+      foo: 'ipsum',
       thisIsWeird: true,
     };
 
@@ -457,7 +458,8 @@ describe('dashboard settings reducers test for saving', () => {
       isLoading: false,
       byId: {
         a1: {
-          foo: 'bar',
+          items: ['abc', 'def'],
+          foo: 'ipsum',
           thisIsWeird: true,
         },
       },
