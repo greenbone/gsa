@@ -131,7 +131,7 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
 
   dispatch(requestDashboardSettings(id, defaults));
 
-  const promise = gmp.user.currentDashboardSettings();
+  const promise = gmp.dashboards.currentSettings();
   return promise.then(
     response => dispatch(receivedDashboardSettings(id,
       convertLoadedSettings(response.data), defaults)),
@@ -146,7 +146,7 @@ export const saveSettings = ({gmp}) => (id, settings) =>
 
   const settingsV1 = dashboardSettings2SettingsV1(settings);
 
-  return gmp.user.saveDashboardSetting(id, settingsV1)
+  return gmp.dashboard.saveSetting(id, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
@@ -163,7 +163,7 @@ export const resetSettings = ({gmp}) => id =>
   dispatch(saveDashboardSettings(id, defaults));
 
   const settingsV1 = dashboardSettings2SettingsV1(defaults);
-  return gmp.user.saveDashboardSetting(id, settingsV1)
+  return gmp.dashboard.saveSetting(id, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
@@ -221,7 +221,7 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
   const settingsV1 = dashboardSettings2SettingsV1(newSettings);
-  return gmp.user.saveDashboardSetting(dashboardId, settingsV1)
+  return gmp.dashboard.saveSetting(dashboardId, settingsV1)
     .then(
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
