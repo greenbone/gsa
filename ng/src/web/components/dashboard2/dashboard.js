@@ -117,12 +117,12 @@ class Dashboard extends React.Component {
       id,
       permittedDisplays,
       defaultContent,
-      maxItemsPerRow,
-      maxRows,
+      maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
+      maxRows = DEFAULT_MAX_ROWS,
     } = this.props;
 
     const defaults = {
-      items: convertDefaultContent(defaultContent),
+      rows: convertDefaultContent(defaultContent),
       permittedDisplays,
       maxItemsPerRow,
       maxRows,
@@ -140,7 +140,7 @@ class Dashboard extends React.Component {
   save(items) {
     const {id} = this.props;
 
-    this.props.saveSettings(id, {items});
+    this.props.saveSettings(id, {rows: items});
   }
 
   render() {
@@ -190,10 +190,11 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = (rootState, {id}) => {
-  const settings = DashboardSettings(rootState);
+  const settingsSelector = DashboardSettings(rootState);
+  const settings = settingsSelector.getById(id);
   return {
-    isLoading: settings.getIsLoading(),
-    items: settings.getItemsById(id),
+    isLoading: settingsSelector.getIsLoading(),
+    items: has_value(settings) ? settings.rows : undefined,
   };
 };
 
