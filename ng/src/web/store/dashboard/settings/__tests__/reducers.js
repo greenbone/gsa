@@ -190,6 +190,7 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should handle receive dashboard settings and override defaults', () => {
     const id = 'a1';
     const defaults = {
+      other: 'ipsum',
       data: ['abc', 'def'],
     };
 
