@@ -21,71 +21,39 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CertBundSeverityLoader} from './loaders';
 
-export const CertBundSeverityClassDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CERT-Bund Advisories')]}
-        title={({data: tdata}) =>
-          _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CertBundSeverityLoader>
-);
+export const CertBundSeverityClassDisplay = createDisplay({
+  loaderComponent: CertBundSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) =>
+    _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
+      {count: tdata.total}),
+  displayId: 'cert_bund_adv-by-severity-class',
+  displayName: 'CertBundSeverityClassDisplay',
+  filtersFilter: CERTBUND_FILTER_FILTER,
+});
 
-CertBundSeverityClassDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundSeverityClassDisplay.displayId = 'cert_bund_adv-by-severity-class';
-
-export const CertBundSeverityClassTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CertBundSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CERT-Bund Advisories')]}
-        title={({data: tdata = {}}) =>
-          _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CertBundSeverityLoader>
-);
-
-CertBundSeverityClassTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CertBundSeverityClassTableDisplay.displayId = 'cert_bund_adv-by-severity-table';
+export const CertBundSeverityClassTableDisplay = createDisplay({
+  loaderComponent: CertBundSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) =>
+    _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
+      {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of CERT-Bund Advisories')],
+  displayId: 'cert_bund_adv-by-severity-table',
+  displayName: 'CertBundSeverityClassTableDisplay',
+  filtersFilter: CERTBUND_FILTER_FILTER,
+});
 
 registerDisplay(
   CertBundSeverityClassDisplay.displayId,

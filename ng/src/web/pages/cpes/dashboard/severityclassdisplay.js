@@ -21,71 +21,37 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CpesSeverityLoader} from './loaders';
 
-export const CpesSeverityClassDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CpesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CPEs')]}
-        title={({data: tdata}) =>
-          _('CPEs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CpesSeverityLoader>
-);
+export const CpesSeverityClassDisplay = createDisplay({
+  loaderComponent: CpesSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) =>
+    _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayId: 'cpe-by-severity-class',
+  displayName: 'CpesSeverityClassDisplay',
+  filtersFilter: CPES_FILTER_FILTER,
+});
 
-CpesSeverityClassDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CpesSeverityClassDisplay.displayId = 'cpe-by-severity-class';
-
-export const CpesSeverityClassTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CpesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of CPEs')]}
-        title={({data: tdata = {}}) =>
-          _('CPEs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CpesSeverityLoader>
-);
-
-CpesSeverityClassTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CpesSeverityClassTableDisplay.displayId = 'cpe-by-severity-table';
+export const CpesSeverityClassTableDisplay = createDisplay({
+  loaderComponent: CpesSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) =>
+    _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of CPEs')],
+  displayId: 'cpe-by-severity-table',
+  displayName: 'CpesSeverityClassTableDisplay',
+  filtersFilter: CPES_FILTER_FILTER,
+});
 
 registerDisplay(CpesSeverityClassDisplay.displayId, CpesSeverityClassDisplay, {
   title: _('Chart: CPEs by Severity Class'),

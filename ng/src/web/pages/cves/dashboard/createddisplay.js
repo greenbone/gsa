@@ -20,88 +20,52 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
+import Theme from 'web/utils/theme';
 
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CvesCreatedLoader} from './loaders';
 
-export const CvesCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('CVEs by Creation Time')}
-        yAxisLabel={_('# of created CVEs')}
-        y2AxisLabel={_('Total CVEs')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created CVEs'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total CVEs'),
-        }}
-      />
-    )}
-  </CvesCreatedLoader>
-);
+export const CvesCreatedDisplay = createDisplay({
+  loaderComponent: CvesCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('CVEs by Creation Time'),
+  yAxisLabel: _('# of created CVEs'),
+  y2AxisLabel: _('Total CVEs'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created CVEs'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total CVEs'),
+  },
+  displayId: 'cve-by-created',
+  displayName: 'CveCreatedDisplay',
+  filtersFilter: CVES_FILTER_FILTER,
+});
 
-CvesCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CvesCreatedDisplay.displayId = 'cve-by-created';
-
-
-export const CvesCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of CVEs'),
-          _('Total CVEs'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-        title={() => _('CVEs by Creation Time')}
-      />
-    )}
-  </CvesCreatedLoader>
-);
-
-CvesCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CvesCreatedTableDisplay.displayId = 'cve-by-created-table';
+export const CvesCreatedTableDisplay = createDisplay({
+  loaderComponent: CvesCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('CVEs by Creation Time'),
+    dataTitles: [_('Creation Time'), _('# of CVEs'), _('Total CVEs')],
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTransform: transformCreated,
+  displayId: 'cve-by-created-table',
+  displayName: 'CveCreatedTableDisplay',
+  filtersFilter: CVES_FILTER_FILTER,
+});
 
 registerDisplay(CvesCreatedTableDisplay.displayId,
   CvesCreatedTableDisplay, {title: _('Table: CVEs by Creation Time')});

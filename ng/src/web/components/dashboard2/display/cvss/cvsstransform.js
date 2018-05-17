@@ -41,6 +41,8 @@ import {totalCount, percent, riskFactorColorScale} from '../utils';
 
 export const cvssDataRow = row => [row.x, row.y];
 
+const format = value => value.toFixed(1);
+
 const getSeverityClassLabel = value => {
   switch (value) {
     case NA_VALUE:
@@ -81,7 +83,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
 
     const severity = parse_severity(value);
 
-    const cvss = is_defined(severity) ? Math.ceil(severity) : NA_VALUE;
+    const cvss = is_defined(severity) ? Math.floor(severity) : NA_VALUE;
 
     count = parse_int(count);
 
@@ -107,15 +109,11 @@ const transformCvssData = (data = {}, {severityClass}) => {
       let filterValue;
 
       if (value > 0) {
-        const start = value - 1;
-        const end = value;
-
         filterValue = {
-          start,
-          end,
+          start: format(value - 0.1),
+          end: format(value + 1),
         };
-
-        toolTip = `${start}.1 - ${end}.0 (${label}): ${perc}% (${count})`;
+        toolTip = `${value}.0 - ${value}.9 (${label}): ${perc}% (${count})`;
       }
       else {
         filterValue = {

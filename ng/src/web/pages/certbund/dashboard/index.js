@@ -39,6 +39,15 @@ import {
 
 export const CERTBUND_DASHBOARD_ID = 'a6946f44-480f-4f37-8a73-28a4cd5310c4';
 
+export const CERTBUND_DISPLAYS = [
+  CertBundCreatedDisplay.displayId,
+  CertBundCreatedTableDisplay.displayId,
+  CertBundCvssDisplay.displayId,
+  CertBundCvssTableDisplay.displayId,
+  CertBundSeverityClassDisplay.displayId,
+  CertBundSeverityClassTableDisplay.displayId,
+];
+
 const CertBundDashboard = ({
   filter,
   onFilterChanged,
@@ -46,14 +55,7 @@ const CertBundDashboard = ({
   <Dashboard
     id={CERTBUND_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      CertBundCreatedDisplay.displayId,
-      CertBundCreatedTableDisplay.displayId,
-      CertBundCvssDisplay.displayId,
-      CertBundCvssTableDisplay.displayId,
-      CertBundSeverityClassDisplay.displayId,
-      CertBundSeverityClassTableDisplay.displayId,
-    ]}
+    permittedDisplays={CERTBUND_DISPLAYS}
     defaultContent={[
       [
         CertBundSeverityClassDisplay.displayId,
@@ -61,8 +63,6 @@ const CertBundDashboard = ({
         CertBundCvssDisplay.displayId,
       ],
     ]}
-    maxItemsPerRow={4}
-    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );

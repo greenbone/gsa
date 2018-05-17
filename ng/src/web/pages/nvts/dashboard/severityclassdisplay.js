@@ -20,82 +20,46 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
 import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {NvtsSeverityLoader} from './loaders';
 
-export const NvtsSeverityDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NvtsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('NVTs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </NvtsSeverityLoader>
-);
+export const NvtsSeverityClassDisplay = createDisplay({
+  loaderComponent: NvtsSeverityLoader,
+  displayComponent: SeverityClassDisplay,
+  title: ({data: tdata}) =>
+    _('NVTs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  displayId: 'nvt-by-severity-class',
+  displayName: 'NvtsSeverityClassDisplay',
+  filtersFilter: NVTS_FILTER_FILTER,
+});
 
-NvtsSeverityDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
+export const NvtsSeverityClassTableDisplay = createDisplay({
+  loaderComponent: NvtsSeverityLoader,
+  displayComponent: SeverityClassTableDisplay,
+  title: ({data: tdata}) =>
+    _('NVTs by Severity Class (Total: {{count}})', {count: tdata.total}),
+  dataTitles: [_('Severity Class'), _('# of NVTs')],
+  displayId: 'nvt-by-severity-table',
+  displayName: 'NvtsSeverityClassTableDisplay',
+  filtersFilter: NVTS_FILTER_FILTER,
+});
 
-NvtsSeverityDisplay.displayId = 'nvt-by-severity-class';
-
-export const NvtsSeverityTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <NvtsSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <SeverityClassTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity Class'), _('# of NVTs')]}
-        title={({data: tdata = {}}) =>
-          _('NVTs by Severity Class (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </NvtsSeverityLoader>
-);
-
-NvtsSeverityTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-NvtsSeverityTableDisplay.displayId = 'nvt-by-severity-table';
-
-registerDisplay(NvtsSeverityDisplay.displayId, NvtsSeverityDisplay, {
+registerDisplay(NvtsSeverityClassDisplay.displayId, NvtsSeverityClassDisplay, {
   title: _('Chart: NVTs by Severity Class'),
 });
 
-registerDisplay(NvtsSeverityTableDisplay.displayId,
-  NvtsSeverityTableDisplay, {
+registerDisplay(NvtsSeverityClassTableDisplay.displayId,
+  NvtsSeverityClassTableDisplay, {
     title: _('Table: NVTs by Severity Class'),
   },
 );
-
-export default NvtsSeverityDisplay;
 
 // vim: set ts=2 sw=2 tw=80:

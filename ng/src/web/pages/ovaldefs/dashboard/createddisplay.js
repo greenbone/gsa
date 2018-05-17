@@ -20,87 +20,56 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
+import Theme from 'web/utils/theme';
 
 import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
 import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
 import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {OvaldefCreatedLoader} from './loaders';
 
-export const OvaldefsCreatedDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OvaldefCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CreatedDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        title={({data: tdata}) =>
-          _('OVAL Definitions by Creation Time')}
-        yAxisLabel={_('# of created OVAL Definitions')}
-        y2AxisLabel={_('Total OVAL Definitions')}
-        xAxisLabel={_('Time')}
-        yLine={{
-          color: Theme.darkGreen,
-          label: _('Created OVAL Defs'),
-        }}
-        y2Line={{
-          color: Theme.darkGreen,
-          dashArray: '3, 2',
-          label: _('Total OVAL Defs'),
-        }}
-      />
-    )}
-  </OvaldefCreatedLoader>
-);
+export const OvaldefsCreatedDisplay = createDisplay({
+  loaderComponent: OvaldefCreatedLoader,
+  displayComponent: CreatedDisplay,
+  title: ({data: tdata}) => _('OVAL Definitions by Creation Time'),
+  yAxisLabel: _('# of created OVAL Definitions'),
+  y2AxisLabel: _('Total OVAL Definitions'),
+  xAxisLabel: _('Time'),
+  yLine: {
+    color: Theme.darkGreen,
+    label: _('Created OVAL Defs'),
+  },
+  y2Line: {
+    color: Theme.darkGreen,
+    dashArray: '3, 2',
+    label: _('Total OVAL Defs'),
+  },
+  displayId: 'ovaldef-by-created',
+  displayName: 'OvaldefsCreatedDisplay',
+  filtersFilter: OVALDEFS_FILTER_FILTER,
+});
 
-OvaldefsCreatedDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OvaldefsCreatedDisplay.displayId = 'ovaldef-by-created';
-
-export const OvaldefsCreatedTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <OvaldefCreatedLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <DataTableDisplay
-        {...props}
-        {...loaderProps}
-        dataTitles={[
-          _('Creation Time'),
-          _('# of OVAL Definitions'),
-          _('Total OVAL Definitions'),
-        ]}
-        dataRow={row => [row.label, row.y, row.y2]}
-        dataTransform={transformCreated}
-        title={() => _('OVAL Definitions by Creation Time')}
-      />
-    )}
-  </OvaldefCreatedLoader>
-);
-
-OvaldefsCreatedTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-OvaldefsCreatedTableDisplay.displayId = 'ovaldef-by-created-table';
+export const OvaldefsCreatedTableDisplay = createDisplay({
+  loaderComponent: OvaldefCreatedLoader,
+  displayComponent: DataTableDisplay,
+  title: ({data: tdata}) => _('OVAL Definitions by Creation Time'),
+  dataRow: row => [row.label, row.y, row.y2],
+  dataTitles: [
+    _('Creation Time'),
+    _('# of OVAL Defs'),
+    _('Total OVAL Defs'),
+  ],
+  dataTransform: transformCreated,
+  displayId: 'ovaldef-by-created-table',
+  displayName: 'OvaldefsCreatedTableDisplay',
+  filtersFilter: OVALDEFS_FILTER_FILTER,
+});
 
 registerDisplay(OvaldefsCreatedTableDisplay.displayId,
   OvaldefsCreatedTableDisplay, {

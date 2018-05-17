@@ -40,6 +40,17 @@ import {
 
 export const OVALDEF_DASHBOARD_ID = '9563efc0-9f4e-4d1f-8f8d-0205e32b90a4';
 
+export const OVALDEF_DISPLAYS = [
+  OvaldefClassDisplay.displayId,
+  OvaldefClassTableDisplay.displayId,
+  OvaldefsCreatedDisplay.displayId,
+  OvaldefsCreatedTableDisplay.displayId,
+  OvaldefCvssDisplay.displayId,
+  OvaldefCvssTableDisplay.displayId,
+  OvaldefSeverityClassDisplay.displayId,
+  OvaldefSeverityClassTableDisplay.displayId,
+];
+
 const OvaldefDashboard = ({
   filter,
   onFilterChanged,
@@ -47,16 +58,7 @@ const OvaldefDashboard = ({
   <Dashboard
     id={OVALDEF_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      OvaldefClassDisplay.displayId,
-      OvaldefClassTableDisplay.displayId,
-      OvaldefsCreatedDisplay.displayId,
-      OvaldefsCreatedTableDisplay.displayId,
-      OvaldefCvssDisplay.displayId,
-      OvaldefCvssTableDisplay.displayId,
-      OvaldefSeverityClassDisplay.displayId,
-      OvaldefSeverityClassTableDisplay.displayId,
-    ]}
+    permittedDisplays={OVALDEF_DISPLAYS}
     defaultContent={[
       [
         OvaldefSeverityClassDisplay.displayId,
@@ -64,8 +66,6 @@ const OvaldefDashboard = ({
         OvaldefClassDisplay.displayId,
       ],
     ]}
-    maxItemsPerRow={4}
-    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
