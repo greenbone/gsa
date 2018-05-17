@@ -7738,16 +7738,21 @@ get_aggregate_omp (openvas_connection_t *connection,
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
+  response = NULL;
   ret = omp (connection, credentials, &response, &entity, response_data,
              command->str);
   g_string_free (command, TRUE);
+
+  if (ret)
+    {
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+    }
+
   switch (ret)
     {
       case 0:
         break;
-      case -1:
-        /* 'omp' set response. */
-        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -7771,10 +7776,14 @@ get_aggregate_omp (openvas_connection_t *connection,
                              "/omp?cmd=get_tasks", response_data);
     }
 
+  if (omp_success (entity) == 0)
+    set_http_status_from_entity (entity, response_data);
   g_string_append (xml, response);
 
   g_string_append (xml, "</get_aggregate>");
 
+  free_entity (entity);
+  g_free (response);
   return xsl_transform_omp (connection, credentials, params,
                             g_string_free (xml, FALSE), response_data);
 }
