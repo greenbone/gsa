@@ -107,9 +107,9 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   (dispatch, getState) => {
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
+  const settingsSelector = getDashboardSettings(rootState);
 
-  if (settings.getIsLoading()) {
+  if (settingsSelector.getIsLoading()) {
     // we are already loading data
     return Promise.resolve();
   }
@@ -142,8 +142,8 @@ export const resetSettings = ({gmp}) => id =>
   (dispatch, getState) => {
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
-  const defaults = settings.getDefaultsById(id);
+  const settingsSelector = getDashboardSettings(rootState);
+  const defaults = settingsSelector.getDefaultsById(id);
 
   dispatch(saveDashboardSettings(id, defaults));
 
