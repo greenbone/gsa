@@ -257,6 +257,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     const state = {
       byId: {
         [id]: {
+          other: 'ipsum',
           rows: ['abc', 'def'],
         },
       },
