@@ -187,7 +187,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     });
   });
 
-  test('should handle receive dashboard settings and override defaults', () => {
+  test('should handle receive dashboard settings and merge defaults', () => {
     const id = 'a1';
     const defaults = {
       other: 'ipsum',
@@ -208,6 +208,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       error: null,
       byId: {
         a1: {
+          other: 'ipsum',
           height: 100,
           data: ['foo', 'bar'],
         },
@@ -253,7 +254,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     });
   });
 
-  test('should handle receive dashboard settings and override state', () => {
+  test('should handle receive dashboard settings and merge state', () => {
     const id = 'a1';
     const state = {
       byId: {
@@ -278,6 +279,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       error: null,
       byId: {
         a1: {
+          other: 'ipsum',
           height: 100,
           rows: ['foo', 'bar'],
         },
