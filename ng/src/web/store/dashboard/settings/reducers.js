@@ -43,7 +43,7 @@ const defaults = (state = {}, action) => {
   }
 };
 
-const byId = (state = null, action) => {
+const byId = (state = {}, action) => {
   const {
     id,
     defaults: actionDefaults,
