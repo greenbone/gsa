@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -29,6 +30,7 @@ import {color as d3color} from 'd3-color';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
+import {setRef} from '../../utils/render';
 import Theme from '../../utils/theme';
 
 import path from './utils/path';
@@ -44,6 +46,7 @@ import Svg from './svg';
 import Group from './group';
 
 const LEGEND_MARGIN = 20;
+const MIN_ANGLE_FOR_LABELS = 0.15;
 
 const StyledLayout = glamorous(Layout)({
   overflow: 'hidden',
@@ -151,6 +154,7 @@ const PieOuterPath = ({
   endAngle = PI2,
   donutHeight,
   color,
+  innerRef,
   outerRadiusX,
   outerRadiusY,
 }) => (
@@ -162,6 +166,7 @@ const PieOuterPath = ({
       outerRadiusY,
       donutHeight,
     )}
+    ref={innerRef}
     fill={color}
   />
 );
@@ -170,6 +175,7 @@ PieOuterPath.propTypes = {
   color: PropTypes.toString.isRequired,
   donutHeight: PropTypes.number.isRequired,
   endAngle: PropTypes.number,
+  innerRef: PropTypes.ref,
   outerRadiusX: PropTypes.number.isRequired,
   outerRadiusY: PropTypes.number.isRequired,
   startAngle: PropTypes.number,
@@ -224,6 +230,28 @@ EmptyDonut.propTypes = {
   top: PropTypes.number.isRequired,
 };
 
+const AllLabels = ({
+  allLabels,
+}) => {
+  return (
+    allLabels.map(label => {
+      const {innerRef, value, x, y, show, hide} = label;
+      return (
+        <Label
+          x={x}
+          y={y}
+          innerRef={innerRef}
+          key={innerRef}
+          onMouseEnter={show}
+          onMouseLeave={hide}
+        >
+          {value}
+        </Label>
+      );
+    })
+  );
+};
+
 class Donut3DChart extends React.Component {
 
   constructor(...args) {
@@ -261,6 +289,7 @@ class Donut3DChart extends React.Component {
     if (width !== this.state.width) {
       this.setState({width});
     }
+   this.separateLabels();
   }
 
   componentDidUpdate() {
@@ -270,6 +299,63 @@ class Donut3DChart extends React.Component {
   componentDidMount() {
     this.update();
   }
+
+  separateLabels() {
+
+    if (!is_defined(this.svg)) {
+      return;
+    }
+
+    let overlapFound = false;
+
+    let target;
+    let targetWidth;
+    let targetX;
+    let targetY;
+    let comparison;
+    let comparisonWidth;
+    let comparisonX;
+    let comparisonY;
+
+    const SPACING = 15;
+    const labels = this.svg.querySelectorAll('.pie-label');
+
+    labels.forEach(label => {
+      target = label;
+      targetWidth = target.getComputedTextLength();
+      targetX = target.getAttribute('x');
+      targetY = target.getAttribute('y');
+
+      // compare target label with all other labels
+      labels.forEach(label => { // eslint-disable-line no-shadow
+        comparison = label;
+        if (target === comparison) {
+          return;
+        }
+        comparisonWidth = comparison.getComputedTextLength();
+        comparisonX = comparison.getAttribute('x');
+        comparisonY = comparison.getAttribute('y');
+
+        const deltaX = targetX - comparisonX;
+        if (Math.abs(deltaX) * 2 > (targetWidth + comparisonWidth)) {
+          return;
+        }
+
+        const deltaY = targetY - comparisonY;
+        if (Math.abs(deltaY) > SPACING) {
+          return;
+        }
+
+        overlapFound = true;
+        const adjustment = deltaX > 0 ? 1 : -1;
+        target.setAttribute('x', Math.abs(targetX) + adjustment);
+        comparison.setAttribute('x', Math.abs(comparisonX) - adjustment);
+      });
+    });
+    if (overlapFound) {
+      this.separateLabels();
+    }
+  };
 
   render() {
     const {width} = this.state;
@@ -303,75 +389,101 @@ class Donut3DChart extends React.Component {
       innerRadiusX,
       innerRadiusY,
     };
+
+    const allLabels = [];
+
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
           width={width}
           height={height}
-          innerRef={svgRef}
+          innerRef={setRef(svgRef, ref => this.svg = ref)}
         >
           {data.length > 0 ?
-            <Pie
-              data={data}
-              pieSort={null}
-              pieValue={d => d.value}
-              arcsSort={sortArcsByStartAngle}
-              top={centerY}
-              left={centerX}
-              {...props}
-            >
-              {({
-                data: arcData,
-                index,
-                startAngle,
-                endAngle,
-                path: arcPath,
-                x,
-                y,
-              }) => {
-                const {color = Theme.lightGray, toolTip} = arcData;
-                const darker = d3color(color).darker();
-                return (
-                  <ToolTip
-                    key={index}
-                    content={toolTip}
-                  >
-                    {({targetRef, hide, show}) => (
-                      <Group
-                        onMouseEnter={show}
-                        onMouseLeave={hide}
-                        onClick={is_defined(onDataClick) ?
-                          () => onDataClick(arcData) : undefined}
+            <React.Fragment>
+              <Pie
+                data={data}
+                pieSort={null}
+                pieValue={d => d.value}
+                arcsSort={sortArcsByStartAngle}
+                top={centerY}
+                left={centerX}
+                svgElement={this.svg}
+                {...props}
+              >
+                {({
+                  data: arcData,
+                  index,
+                  startAngle,
+                  endAngle,
+                  path: arcPath,
+                  x,
+                  y,
+                }) => {
+                  const {color = Theme.lightGray, toolTip} = arcData;
+                  const darker = d3color(color).darker();
+                  const angleAbs = Math.abs(startAngle - endAngle);
+                    return (
+                      <ToolTip
+                        key={index}
+                        content={toolTip}
                       >
-                        <PieInnerPath
-                          startAngle={startAngle}
-                          endAngle={endAngle}
-                          color={darker}
-                          {...props}
-                        />
-                        <PieTopPath
-                          color={color}
-                          path={arcPath}
-                        />
-                        <PieOuterPath
-                          startAngle={startAngle}
-                          endAngle={endAngle}
-                          color={darker}
-                          {...props}
-                        />
-                        <Label
-                          x={x}
-                          y={y}
-                          innerRef={targetRef}
-                        >
-                          {arcData.value}
-                        </Label>
-                      </Group>
-                    )}
-                  </ToolTip>
-                );
-              }}
-            </Pie> :
+                        {({targetRef, hide, show}) => {
+                          if (angleAbs > MIN_ANGLE_FOR_LABELS) {
+                            allLabels.push({
+                              x,
+                              y,
+                              show,
+                              hide,
+                              value: arcData.value,
+                            });
+                          }
+                          return (
+                            <Group
+                              onMouseEnter={show}
+                              onMouseLeave={hide}
+                              onClick={is_defined(onDataClick) ?
+                                () => onDataClick(arcData) : undefined}
+                            >
+                              <PieInnerPath
+                                startAngle={startAngle}
+                                endAngle={endAngle}
+                                color={darker}
+                                {...props}
+                              />
+                              <PieTopPath
+                                color={color}
+                                path={arcPath}
+                              />
+                              <PieOuterPath
+                                startAngle={startAngle}
+                                endAngle={endAngle}
+                                color={darker}
+                                {...props}
+                              />
+                              <circle // used as positioning ref for tooltips
+                                ref={targetRef}
+                                cx={x}
+                                cy={y}
+                                r="1"
+                                visibility="hidden"
+                              />
+                            </Group>
+                          );
+                        }}
+                      </ToolTip>
+                    );
+                }}
+              </Pie>
+              <Group
+                top={centerY}
+                left={centerX}
+              >
+                <AllLabels
+                  allLabels={allLabels}
+                />
+              </Group>
+            </React.Fragment> :
             <EmptyDonut
               left={centerX}
               top={centerY}
