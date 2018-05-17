@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import Theme from 'web/utils/theme';
+
 import PropTypes from '../../utils/proptypes';
 
 const Label = ({
@@ -29,16 +31,19 @@ const Label = ({
   y,
   innerRef,
   children,
+  ...props
 }) => (
   <text
     ref={innerRef}
-    fill="white"
+    fill={Theme.dialogGray} // to have labels a bit visible on white background
     textAnchor="middle"
     x={x}
     y={y}
     dy=".33em"
     fontSize="12px"
     fontWeight="bold"
+    className="pie-label"
+    {...props}
   >
     {children}
   </text>
