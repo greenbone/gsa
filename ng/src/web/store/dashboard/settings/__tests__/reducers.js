@@ -47,37 +47,14 @@ describe('dashboard settings reducers tests for initial state', () => {
 });
 
 describe('dashboard settings reducers tests for loading requests', () => {
-  test('should handle request dashboard settings', () => {
-    const action = requestDashboardSettings();
-
-    expect(dashboardSettings({}, action)).toEqual({
-      byId: {},
-      isLoading: true,
-      error: null,
-      defaults: {},
-    });
-  });
-
-  test('should reset isLoading and error in request dashboard settings', () => {
-    const action = requestDashboardSettings();
-
-    expect(dashboardSettings({
-      isLoading: false,
-      error: 'an previous error',
-    }, action)).toEqual({
-      byId: {},
-      isLoading: true,
-      error: null,
-      defaults: {},
-    });
-  });
-
   test('should handle request dashboard settings with id', () => {
     const id = 'a1';
     const action = requestDashboardSettings(id);
 
     expect(dashboardSettings({}, action)).toEqual({
-      byId: {},
+      byId: {
+        a1: {},
+      },
       isLoading: true,
       error: null,
       defaults: {
@@ -92,7 +69,11 @@ describe('dashboard settings reducers tests for loading requests', () => {
     const action = requestDashboardSettings(id, defaults);
 
     expect(dashboardSettings({}, action)).toEqual({
-      byId: {},
+      byId: {
+        a1: {
+          foo: 'bar',
+        },
+      },
       isLoading: true,
       error: null,
       defaults: {
@@ -102,6 +83,26 @@ describe('dashboard settings reducers tests for loading requests', () => {
       },
     });
   });
+
+  test('should reset isLoading and error in request dashboard settings', () => {
+    const id = 'a1';
+    const action = requestDashboardSettings(id);
+
+    expect(dashboardSettings({
+      isLoading: false,
+      error: 'an previous error',
+    }, action)).toEqual({
+      byId: {
+        a1: {},
+      },
+      isLoading: true,
+      error: null,
+      defaults: {
+        a1: undefined,
+      },
+    });
+  });
+
 });
 
 describe('dashboard settings reducers tests for loading success', () => {

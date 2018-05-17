@@ -46,11 +46,19 @@ const defaults = (state = {}, action) => {
 const byId = (state = {}, action) => {
   const {
     id,
-    defaults: actionDefaults,
+    defaults: actionDefaults = {},
     settings = {},
   } = action;
 
   switch (action.type) {
+    case DASHBOARD_SETTINGS_LOADING_REQUEST:
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          ...actionDefaults,
+        },
+      };
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
       return {
         ...state,
