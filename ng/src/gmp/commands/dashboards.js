@@ -81,7 +81,7 @@ const dashboardSettings2SettingsV1 = ({rows}) => ({
 });
 
 const convertSaveSettings = (settings = {}) => {
-  if (is_array(settings.row)) {
+  if (is_array(settings.rows)) {
     // we like have settings which can be stored as version 1 settings
     return dashboardSettings2SettingsV1(settings);
   }
