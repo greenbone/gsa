@@ -295,7 +295,6 @@ init_validator ()
                          "|(create_task)"
                          "|(cvss_calculator)"
                          "|(create_user)"
-                         "|(dashboard)"
                          "|(delete_agent)"
                          "|(delete_asset)"
                          "|(delete_config)"
@@ -1947,11 +1946,6 @@ exec_gmp_get (http_connection_t *con,
 
   cmd = params_value (params, "cmd");
 
-  if (cmd == NULL)
-    {
-      cmd = "dashboard";  // TODO: Allow settings for face + users(?)
-    }
-
   if (openvas_validate (validator, "cmd", cmd))
     cmd = NULL;
 
@@ -2056,9 +2050,6 @@ exec_gmp_get (http_connection_t *con,
 
   if (!strcmp (cmd, "cvss_calculator"))
     res = cvss_calculator (&connection, credentials, params, response_data);
-
-  else if (!strcmp (cmd, "dashboard"))
-    res = dashboard (&connection, credentials, params, response_data);
 
   ELSE (new_filter)
   ELSE (new_container_task)
