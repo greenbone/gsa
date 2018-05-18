@@ -62,6 +62,7 @@
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
+#include <gvm/util/xmlutils.h> /* for xml_string_append, read_string_c, ... */
 #include <gvm/gmp/gmp.h>
 
 #undef G_LOG_DOMAIN
