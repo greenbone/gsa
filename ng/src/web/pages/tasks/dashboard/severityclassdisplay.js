@@ -36,7 +36,7 @@ export const TasksSeverityDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
   title: ({data: tdata}) =>
     _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
-  displayId: 'tasks-by-severity-class',
+  displayId: 'task-by-severity-class',
   displayName: 'TasksSeverityDisplay',
   filtersFilter: TASKS_FILTER_FILTER,
 });
