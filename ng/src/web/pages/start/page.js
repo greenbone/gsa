@@ -20,70 +20,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import Dashboard from '../components/dashboard/dashboard.js';
-import DashboardControls from '../components/dashboard/controls.js';
+import Section from 'web/components/section/section';
 
-import CacheProvider from '../components/provider/cacheprovider.js';
+import Dashboard from './dashboard';
 
-import Section from '../components/section/section.js';
+const DEFAULT_DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 
-import TaskCharts from './tasks/charts.js';
-import ReportCharts from './reports/charts.js';
-import ResultCharts from './results/charts.js';
-import NoteCharts from './notes/charts.js';
-import OverrideCharts from './overrides/charts.js';
-import VulnCharts from './vulns/charts.js';
-import HostCharts from './hosts/charts.js';
-import OsCharts from './os/charts.js';
-import NvtCharts from './nvts/charts.js';
-import OvaldefCharts from './ovaldefs/charts.js';
-import CertBundCharts from './certbund/charts.js';
-import CveCharts from './cves/charts.js';
-import CpeCharts from './cpes/charts.js';
-import DfnCertCharts from './dfncert/charts.js';
-import SecinfoCharts from './secinfo/charts.js';
-
-const Home = () => (
-  <CacheProvider name="homedashboard">
-    <Section
-      title={_('Dashboard')}
-      img="dashboard.svg"
-      extra={<DashboardControls/>}>
-      <Dashboard
-        configPrefId="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
-        defaultControllersString={
-          'task-by-severity-class|task-by-status#' +
-          'cve-by-created|host-by-topology|nvt-by-severity-class'
-        }
-        defaultControllerString="task-by-severity-class"
-        maxComponents="8">
-        <TaskCharts/>
-        <ReportCharts/>
-        <ResultCharts/>
-        <NoteCharts/>
-        <OverrideCharts/>
-        <VulnCharts/>
-        <HostCharts/>
-        <OsCharts/>
-        <NvtCharts/>
-        <OvaldefCharts/>
-        <CertBundCharts/>
-        <CveCharts/>
-        <CpeCharts/>
-        <DfnCertCharts/>
-        <SecinfoCharts/>
-      </Dashboard>
-    </Section>
-  </CacheProvider>
+const StartPage = () => (
+  <Section
+    title={_('Dashboard')}
+    img="dashboard.svg"
+  >
+    <Dashboard id={DEFAULT_DASHBOARD_ID}/>
+  </Section>
 );
 
 
-export default Home;
+export default StartPage;
 
 // vim: set ts=2 sw=2 tw=80:
 
