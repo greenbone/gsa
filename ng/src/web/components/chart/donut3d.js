@@ -349,7 +349,7 @@ class Donut3DChart extends React.Component {
         }
 
         overlapFound = true;
-        const adjustment = deltaX > 0 ? 1 : -1;
+        const adjustment = deltaX > 0 ? 5 : -5;
         target.setAttribute('x', Math.abs(targetX) + adjustment);
         comparison.setAttribute('x', Math.abs(comparisonX) - adjustment);
       });
