@@ -7432,6 +7432,7 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
+  entity_t entity;
   GString *xml, *command;
   int ret;
 
@@ -7549,15 +7550,21 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
-  ret = gmp (connection, credentials, &response, NULL, response_data, command->str);
+  response = NULL;
+  ret = gmp (connection, credentials, &response, &entity, response_data,
+             command->str);
   g_string_free (command, TRUE);
+
+  if (ret)
+    {
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+    }
+
   switch (ret)
     {
       case 0:
         break;
-      case -1:
-        /* 'gmp' set response. */
-        return response;
       case 1:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
@@ -7584,12 +7591,16 @@ get_aggregate_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                              response_data);
     }
 
+  if (gmp_success (entity) == 0)
+    set_http_status_from_entity (entity, response_data);
   g_string_append (xml, response);
-  g_free (response);
+
   g_string_append (xml, "</get_aggregate>");
 
-  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                       response_data);
+  free_entity (entity);
+  g_free (response);
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
 }
 
 /**
