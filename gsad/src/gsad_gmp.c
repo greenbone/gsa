@@ -62,6 +62,7 @@
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
+#include <gvm/util/xmlutils.h> /* for xml_string_append, read_string_c, ... */
 #include <gvm/gmp/gmp.h>
 
 #undef G_LOG_DOMAIN
@@ -25601,9 +25602,15 @@ save_setting_gmp (gvm_connection_t *connection,
 {
   const gchar *setting_id = params_value (params, "setting_id");
   const gchar *setting_value = params_value (params, "setting_value");
+  const gchar *setting_name = NULL;
 
   CHECK_PARAM_INVALID (setting_id, "Save Setting");
   CHECK_PARAM_INVALID (setting_value, "Save Setting");
+
+  if (params_given (params, "setting_name")) {
+    setting_name = params_value (params, "setting_name");
+    CHECK_PARAM_INVALID (setting_name, "Save Settings")
+  }
 
   gchar* value_64 = g_base64_encode ((guchar*)setting_value,
                                      strlen (setting_value));
@@ -25611,16 +25618,31 @@ save_setting_gmp (gvm_connection_t *connection,
   gchar* response = NULL;
   entity_t entity = NULL;
   int ret;
+  GString *xml = g_string_new ("");
+
+  xml_string_append (xml,
+                     "<modify_setting setting_id=\"%s\">"
+                     "<value>%s</value>",
+                     setting_id,
+                     value_64);
+
+  if (setting_name) {
+    xml_string_append (xml,
+                       "<name>%s</name>",
+                       setting_name);
+  }
+
+  xml_string_append (xml,
+                     "</modify_setting>");
 
   cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
 
-  ret = gmpf (connection, credentials, &response, &entity, response_data,
-              "<modify_setting setting_id=\"%s\">"
-              "<value>%s</value>"
-              "</modify_setting>",
-              setting_id, value_64);
+  ret = gmp (connection, credentials, &response, &entity, response_data,
+              xml->str);
 
   g_free (value_64);
+  g_string_free (xml, TRUE);
+
   switch (ret)
     {
       case 0:
