@@ -601,8 +601,6 @@ char * wizard_get_gmp (gvm_connection_t *, credentials_t *, params_t *,
 
 char * cvss_calculator (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
-char * dashboard (gvm_connection_t *, credentials_t *, params_t *,
-                  cmd_response_data_t*);
 
 char * get_trash_gmp (gvm_connection_t *, credentials_t *, params_t *params,
                       cmd_response_data_t*);
