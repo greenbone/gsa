@@ -64,7 +64,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
       ifaces_allow = ACCESS_ALLOW_ALL,
       name = _('Unnamed'),
       old_name,
-      password,
+      password = '',
       roles,
       role_ids = [],
       settings,

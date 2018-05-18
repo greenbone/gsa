@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/values';
+
 import React from 'react';
 
 import {withRouter} from 'react-router';
@@ -175,7 +177,6 @@ export class HostsTopologyDisplay extends React.Component {
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';

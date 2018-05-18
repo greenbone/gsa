@@ -21,6 +21,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/for-each';
+
 import React from 'react';
 
 import glamorous from 'glamorous';
@@ -318,7 +320,7 @@ class Donut3DChart extends React.Component {
     let comparisonY;
 
     const SPACING = 15;
-    const labels = this.svg.querySelectorAll('.pie-label');
+    const labels = [...this.svg.querySelectorAll('.pie-label')];
 
     labels.forEach(label => {
       target = label;
@@ -347,7 +349,7 @@ class Donut3DChart extends React.Component {
         }
 
         overlapFound = true;
-        const adjustment = deltaX > 0 ? 1 : -1;
+        const adjustment = deltaX > 0 ? 5 : -5;
         target.setAttribute('x', Math.abs(targetX) + adjustment);
         comparison.setAttribute('x', Math.abs(comparisonX) - adjustment);
       });
