@@ -56,7 +56,7 @@ import LoginPage from './pages/loginpage.js';
 import Page from './pages/page.js';
 import PageNotFound from './pages/notfoundpage.js';
 import ScansPage from './pages/scans/page.js';
-import SecinfoPage from './pages/secinfopage.js';
+import SecinfoPage from './pages/securityinfo/page.js';
 
 import AboutPage from './pages/help/about.js';
 import AgentsPage from './pages/agents/listpage.js';

@@ -80,8 +80,6 @@ const TaskDashboard = ({
         TasksStatusDisplay.displayId,
       ],
     ]}
-    maxItemsPerRow={4}
-    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );

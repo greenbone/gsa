@@ -20,77 +20,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CvesSeverityLoader} from './loaders';
 
-export const CvesCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of CVEs')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CVEs')]}
-        title={({data: tdata}) =>
-          _('CVEs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CvesSeverityLoader>
-);
+export const CvesCvssDisplay = createDisplay({
+  loaderComponent: CvesSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of CVEs'),
+  title: ({data: tdata}) => _('CVEs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CVES_FILTER_FILTER,
+  displayId: 'cve-by-cvss',
+  displayName: 'CvesCvssDisplay',
+});
 
-CvesCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
+export const CvesCvssTableDisplay = createDisplay({
+  loaderComponent: CvesSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of CVEs')],
+  title: ({data: tdata}) => _('CVEs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CVES_FILTER_FILTER,
+  displayId: 'cve-by-cvss-table',
+  displayName: 'CvesCvssTableDisplay',
+});
 
-const DISPLAY_ID = 'cve-by-cvss';
 
-CvesCvssDisplay.displayId = DISPLAY_ID;
-
-export const CvesCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CvesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CVEs')]}
-        title={({data: tdata = {}}) =>
-          _('CVEs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CvesSeverityLoader>
-);
-
-CvesCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CvesCvssTableDisplay.displayId = 'cve-by-cvss-table';
-
-registerDisplay(DISPLAY_ID, CvesCvssDisplay, {
+registerDisplay(CvesCvssDisplay.displayId, CvesCvssDisplay, {
   title: _('Chart: CVEs by CVSS'),
 });
 

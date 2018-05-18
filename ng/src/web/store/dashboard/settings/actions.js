@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+
 import {is_defined, is_array} from 'gmp/utils/identity';
 
 import {createRow, createItem} from 'web/components/sortable/grid';
@@ -41,23 +43,23 @@ export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
 const settingsV1toDashboardSettings = settings => {
-  const items = {};
+  const convertedRows = {};
   Object.entries(settings).forEach(([id, value]) => {
     const {data: rows} = value;
-    items[id] = rows.map(({height, data}) =>
-      createRow(data.map(item => createItem({
-        name: item.name,
-        filterId: item.filt_id,
-      })), height));
+    convertedRows[id] = {
+      rows: rows.map(({height, data}) =>
+        createRow(data.map(item => createItem({
+          name: item.name,
+          filterId: item.filt_id,
+        })), height)),
+      };
   });
-  return {
-    items,
-  };
+  return convertedRows;
 };
 
-const dashboardSettings2SettingsV1 = ({items}) => ({
+const dashboardSettings2SettingsV1 = ({rows}) => ({
   version: 1,
-  data: items.map(({height, items: rowItems}) => ({
+  data: rows.map(({height, items: rowItems}) => ({
     height,
     type: 'row',
     data: rowItems.map(({id, filterId, ...other}) => ({
@@ -105,9 +107,9 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   (dispatch, getState) => {
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
+  const settingsSelector = getDashboardSettings(rootState);
 
-  if (settings.getIsLoading()) {
+  if (settingsSelector.getIsLoading()) {
     // we are already loading data
     return Promise.resolve();
   }
@@ -140,8 +142,8 @@ export const resetSettings = ({gmp}) => id =>
   (dispatch, getState) => {
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
-  const defaults = settings.getDefaultsById(id);
+  const settingsSelector = getDashboardSettings(rootState);
+  const defaults = settingsSelector.getDefaultsById(id);
 
   dispatch(saveDashboardSettings(id, defaults));
 
@@ -153,6 +155,15 @@ export const resetSettings = ({gmp}) => id =>
     );
 };
 
+export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
+  if (is_array(rows) && rows.length > 0 &&
+    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
+    const lastRow = rows[rows.length - 1];
+    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
+  }
+  return true;
+};
+
 export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   (dispatch, getState) => {
   if (!is_defined(displayId) || !is_defined(dashboardId)) {
@@ -160,36 +171,36 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   }
 
   const rootState = getState();
-  const settings = getDashboardSettings(rootState);
-  const defaults = settings.getDefaultsById(dashboardId);
-  const currentItems = settings.getItemsById(dashboardId) || [];
-  const {maxItemsPerRow, maxRows} = defaults;
+  const settingsSelector = getDashboardSettings(rootState);
+  const settings = settingsSelector.getById(dashboardId);
+  const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
-  const lastRow = is_array(currentItems) && currentItems.length > 0 ?
-    currentItems[currentItems.length - 1] : {items: []};
+  if (!canAddDisplay(settings)) {
+    return;
+  }
 
-  let items;
+  const lastRow = is_array(currentRows) && currentRows.length > 0 ?
+    currentRows[currentRows.length - 1] : {items: []};
+
+  let rows;
   if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
-    if (is_defined(maxRows) && currentItems.length >= maxRows) {
-      // dashboard is full
-      return;
-    }
+    // create new row
     const newRow = createRow([createItem({name: displayId})]);
-    items = [...currentItems, newRow];
+    rows = [...currentRows, newRow];
   }
   else {
+    // add new display to last row
     const newRow = {
       ...lastRow,
       items: [...lastRow.items, createItem({name: displayId})],
     };
-    items = [...currentItems];
-    items.pop();
-    items.push(newRow);
+    rows = [...currentRows];
+    rows.pop();
+    rows.push(newRow);
   }
 
   const newSettings = {
-    ...defaults,
-    items,
+    rows,
   };
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));

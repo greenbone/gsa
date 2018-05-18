@@ -26,14 +26,18 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 
 import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
 import PropTypes from '../../utils/proptypes.js';
 
-import {resetSettings, addDisplay} from 'web/store/dashboard/settings/actions';
+import {
+  resetSettings,
+  addDisplay,
+  canAddDisplay,
+} from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 
 import SaveDialog from '../dialog/savedialog';
@@ -160,22 +164,13 @@ DashboardControls.propTypes = {
   onResetClick: PropTypes.func.isRequired,
 };
 
-const canAdd = (items, {maxItemsPerRow, maxRows}) => {
-  if (is_array(items) && items.length > 0 &&
-    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
-    const lastRow = items[items.length - 1];
-    return lastRow.items.length < maxItemsPerRow || items.length < maxRows;
-  }
-  return true;
-};
-
 const mapStateToProps = (rootState, {dashboardId}) => {
-  const settings = getDashboardSettings(rootState);
-  const items = settings.getItemsById(dashboardId);
-  const defaults = settings.getDefaultsById(dashboardId);
+  const settingsSelector = getDashboardSettings(rootState);
+  const settings = settingsSelector.getById(dashboardId);
+  const {permittedDisplays: displayIds} = settings || {};
   return {
-    canAdd: canAdd(items, defaults),
-    displayIds: defaults.permittedDisplays,
+    canAdd: canAddDisplay(settings),
+    displayIds,
   };
 };
 

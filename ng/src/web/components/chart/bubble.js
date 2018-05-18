@@ -24,6 +24,8 @@ import React from 'react';
 
 import {pack, hierarchy} from 'd3-hierarchy';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
 
@@ -84,7 +86,8 @@ const BubbleChart = ({
                       top={y}
                       onMouseEnter={show}
                       onMouseLeave={hide}
-                      onClick={() => onDataClick(d)}
+                      onClick={is_defined(onDataClick) ?
+                        () => onDataClick(d) : undefined}
                     >
                       <circle
                         fill={d.color}

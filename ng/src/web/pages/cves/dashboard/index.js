@@ -36,6 +36,15 @@ import {
 
 export const CVES_DASHBOARD_ID = '815ddd2e-8654-46c7-a05b-d73224102240';
 
+export const CVES_DISPLAYS = [
+  CvesCreatedDisplay.displayId,
+  CvesCreatedTableDisplay.displayId,
+  CvesCvssDisplay.displayId,
+  CvesCvssTableDisplay.displayId,
+  CvesSeverityClassDisplay.displayId,
+  CvesSeverityClassTableDisplay.displayId,
+];
+
 const CvesDashboard = ({
   filter,
   onFilterChanged,
@@ -43,14 +52,7 @@ const CvesDashboard = ({
   <Dashboard
     id={CVES_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      CvesCreatedDisplay.displayId,
-      CvesCreatedTableDisplay.displayId,
-      CvesCvssDisplay.displayId,
-      CvesCvssTableDisplay.displayId,
-      CvesSeverityClassDisplay.displayId,
-      CvesSeverityClassTableDisplay.displayId,
-    ]}
+    permittedDisplays={CVES_DISPLAYS}
     defaultContent={[
       [
         CvesSeverityClassDisplay.displayId,
@@ -58,8 +60,6 @@ const CvesDashboard = ({
         CvesCvssDisplay.displayId,
       ],
     ]}
-    maxItemsPerRow={4}
-    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );

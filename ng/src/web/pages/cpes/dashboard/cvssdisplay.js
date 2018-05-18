@@ -20,73 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
 import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
 import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard2/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard2/registry';
 
 import {CpesSeverityLoader} from './loaders';
 
-export const CpesCvssDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CpesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssDisplay
-        {...props}
-        {...loaderProps}
-        yLabel={_('# of CPEs')}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CPEs')]}
-        title={({data: tdata}) =>
-          _('CPEs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CpesSeverityLoader>
-);
+export const CpesCvssDisplay = createDisplay({
+  loaderComponent: CpesSeverityLoader,
+  displayComponent: CvssDisplay,
+  yLabel: _('# of CPEs'),
+  title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CPES_FILTER_FILTER,
+  displayId: 'cpe-by-cvss',
+  displayName: 'CpesCvssDisplay',
+});
 
-CpesCvssDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CpesCvssDisplay.displayId = 'cpe-by-cvss';
-
-export const CpesCvssTableDisplay = ({
-  filter,
-  ...props
-}) => (
-  <CpesSeverityLoader
-    filter={filter}
-  >
-    {loaderProps => (
-      <CvssTableDisplay
-        {...props}
-        {...loaderProps}
-        filter={filter}
-        dataTitles={[_('Severity'), _('# of CPEs')]}
-        title={({data: tdata = {}}) =>
-          _('CPEs by CVSS (Total: {{count}})',
-            {count: tdata.total})}
-      />
-    )}
-  </CpesSeverityLoader>
-);
-
-CpesCvssTableDisplay.propTypes = {
-  filter: PropTypes.filter,
-};
-
-CpesCvssTableDisplay.displayId = 'cpe-by-cvss-table';
+export const CpesCvssTableDisplay = createDisplay({
+  loaderComponent: CpesSeverityLoader,
+  displayComponent: CvssTableDisplay,
+  dataTitles: [_('Severity'), _('# of CPEs')],
+  title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
+    {count: tdata.total}),
+  filtersFilter: CPES_FILTER_FILTER,
+  displayId: 'cpe-by-cvss-table',
+  displayName: 'CpesCvssTableDisplay',
+});
 
 registerDisplay(CpesCvssDisplay.displayId, CpesCvssDisplay, {
   title: _('Chart: CPEs by CVSS'),

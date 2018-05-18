@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,39 +23,36 @@
  */
 import React from 'react';
 
-import Theme from 'web/utils/theme';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes';
+import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
-const Label = ({
-  x,
-  y,
-  innerRef,
-  children,
-  ...props
-}) => (
-  <text
-    ref={innerRef}
-    fill={Theme.dialogGray} // to have labels a bit visible on white background
-    textAnchor="middle"
-    x={x}
-    y={y}
-    dy=".33em"
-    fontSize="12px"
-    fontWeight="bold"
-    className="pie-label"
-    {...props}
-  >
-    {children}
-  </text>
+import DashboardControls from 'web/components/dashboard2/controls';
+
+import Section from 'web/components/section/section';
+
+import SecurityInfoDashboard, {SECURITYINFO_DASHBOARD_ID} from './dashboard';
+
+const SecurityInfoPage = () => (
+  <SubscriptionProvider>
+    {({notify}) => (
+      <Section
+        title={_('SecInfo Dashboard')}
+        img="allinfo.svg"
+        extra={
+          <DashboardControls
+            dashboardId={SECURITYINFO_DASHBOARD_ID}
+          />
+        }
+      >
+        <SecurityInfoDashboard
+          notify={notify}
+        />
+      </Section>
+    )}
+  </SubscriptionProvider>
 );
 
-Label.propTypes = {
-  innerRef: PropTypes.ref,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-};
-
-export default Label;
+export default SecurityInfoPage;
 
 // vim: set ts=2 sw=2 tw=80:

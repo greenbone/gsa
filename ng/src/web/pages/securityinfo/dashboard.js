@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,42 +33,29 @@ import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 
-import {
-  ResultsSeverityDisplay,
-} from '../results/dashboard/severityclassdisplay';
-import {
-  ReportsSeverityDisplay,
-} from '../reports/dashboard/severityclassdisplay';
-import {TasksStatusDisplay} from '../tasks/dashboard/statusdisplay';
-import {
-  ReportsHighResultsDisplay,
-} from '../reports/dashboard/highresultsdisplay';
-import {
-  TasksSeverityDisplay,
-} from '../tasks/dashboard/severityclassdisplay';
+import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
+import {CPES_DISPLAYS} from '../cpes/dashboard';
+import {CVES_DISPLAYS} from '../cves/dashboard';
+import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
+import {NVTS_DISPLAYS} from '../nvts/dashboard';
+import {OVALDEF_DISPLAYS} from '../ovaldefs/dashboard';
+import {SECINFO_DISPLAYS} from '../secinfo/dashboard';
+import {NvtsSeverityClassDisplay} from '../nvts/dashboard/severityclassdisplay';
+import {CvesCreatedDisplay} from '../cves/dashboard/createddisplay';
+import {CvesSeverityClassDisplay} from '../cves/dashboard/severityclassdisplay';
+import {CertBundCreatedDisplay} from '../certbund/dashboard/createddisplay';
+import {CertBundCvssDisplay} from '../certbund/dashboard/cvssdisplay'; // eslint-disable-line max-len
 
-import {TASKS_DISPLAYS} from '../tasks/dashboard';
-import {REPORTS_DISPLAYS} from '../reports/dashboard';
-import {RESULTS_DISPLAYS} from '../results/dashboard';
-import {NOTES_DISPLAYS} from '../notes/dashboard';
-import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
-import {VULNS_DISPLAYS} from '../vulns/dashboard/index';
+export const SECURITYINFO_DASHBOARD_ID = '84ab32da-fe69-44d8-8a8f-70034cf28d4e';
 
-export const SCANS_DASHBOARD_ID = 'c7584d7c-649f-4f8b-9ded-9e1dc20f24c8';
+const log = logger.getLogger('web.securityinfo.dashboard');
 
-const log = logger.getLogger('web.scans.dashboard');
-
-class ScansDashboard extends React.Component {
+class SecurityInfoDashboard extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    this.notifyTask = this.props.notify('tasks.timer');
-    this.notifyReports = this.props.notify('reports.timer');
-    this.notifyResults = this.props.notify('results.timer');
-    this.notifyNotes = this.props.notify('notes.timer');
-    this.notifyOverrides = this.props.notify('overrides.timer');
-    this.notifyVulns = this.props.notify('vulns.timer');
+    this.notifyCpes = this.props.notify('cpe.timer');
 
     this.handleTimer = this.handleTimer.bind(this);
   }
@@ -106,14 +94,7 @@ class ScansDashboard extends React.Component {
 
     this.timer = undefined;
 
-    this.notifyNotes();
-    this.notifyOverrides();
-    this.notifyReports();
-    this.notifyResults();
-    this.notifyTask();
-    this.notifyVulns();
-
-    this.startTimer();
+    this.notifyCpes();
   }
 
   render() {
@@ -121,23 +102,24 @@ class ScansDashboard extends React.Component {
       <Dashboard
         showFilterSelection
         showFilterString
-        id={SCANS_DASHBOARD_ID}
+        id={SECURITYINFO_DASHBOARD_ID}
         permittedDisplays={[
-          ...TASKS_DISPLAYS,
-          ...REPORTS_DISPLAYS,
-          ...RESULTS_DISPLAYS,
-          ...NOTES_DISPLAYS,
-          ...OVERRIDES_DISPLAYS,
-          ...VULNS_DISPLAYS,
+          ...CERTBUND_DISPLAYS,
+          ...CPES_DISPLAYS,
+          ...CVES_DISPLAYS,
+          ...DFNCERT_DISPLAYS,
+          ...NVTS_DISPLAYS,
+          ...OVALDEF_DISPLAYS,
+          ...SECINFO_DISPLAYS,
         ]}
         defaultContent={[
           [
-            ResultsSeverityDisplay.displayId,
-            ReportsSeverityDisplay.displayId,
+            NvtsSeverityClassDisplay.displayId,
+            CvesCreatedDisplay.displayId,
+            CvesSeverityClassDisplay.displayId,
           ], [
-            TasksStatusDisplay.displayId,
-            ReportsHighResultsDisplay.displayId,
-            TasksSeverityDisplay.displayId,
+            CertBundCreatedDisplay.displayId,
+            CertBundCvssDisplay.displayId,
           ],
         ]}
       />
@@ -145,13 +127,13 @@ class ScansDashboard extends React.Component {
   }
 }
 
-ScansDashboard.propTypes = {
+SecurityInfoDashboard.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   notify: PropTypes.func.isRequired,
 };
 
 export default compose(
   withGmp,
-)(ScansDashboard);
+)(SecurityInfoDashboard);
 
 // vim: set ts=2 sw=2 tw=80:

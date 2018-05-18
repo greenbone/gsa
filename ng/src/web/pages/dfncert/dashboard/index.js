@@ -39,6 +39,15 @@ import {
 
 export const DFNCERT_DASHBOARD_ID = '9812ea49-682d-4f99-b3cc-eca051d1ce59';
 
+export const DFNCERT_DISPLAYS = [
+  DfnCertsCreatedDisplay.displayId,
+  DfnCertsCreatedTableDisplay.displayId,
+  DfnCertCvssDisplay.displayId,
+  DfnCertCvssTableDisplay.displayId,
+  DfnCertSeverityClassDisplay.displayId,
+  DfnCertSeverityClassTableDisplay.displayId,
+];
+
 const DfnCertDashboard = ({
   filter,
   onFilterChanged,
@@ -46,14 +55,7 @@ const DfnCertDashboard = ({
   <Dashboard
     id={DFNCERT_DASHBOARD_ID}
     filter={filter}
-    permittedDisplays={[
-      DfnCertsCreatedDisplay.displayId,
-      DfnCertsCreatedTableDisplay.displayId,
-      DfnCertCvssDisplay.displayId,
-      DfnCertCvssTableDisplay.displayId,
-      DfnCertSeverityClassDisplay.displayId,
-      DfnCertSeverityClassTableDisplay.displayId,
-    ]}
+    permittedDisplays={DFNCERT_DISPLAYS}
     defaultContent={[
       [
         DfnCertSeverityClassDisplay.displayId,
@@ -61,8 +63,6 @@ const DfnCertDashboard = ({
         DfnCertCvssDisplay.displayId,
       ],
     ]}
-    maxItemsPerRow={4}
-    maxRows={4}
     onFilterChanged={onFilterChanged}
   />
 );
