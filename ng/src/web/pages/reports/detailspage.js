@@ -65,6 +65,7 @@ class ReportDetails extends React.Component {
     this.state = {
       activeTab: 1,
       filters: [],
+      showFilterDialog: false,
     };
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
@@ -86,6 +87,7 @@ class ReportDetails extends React.Component {
     this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
       .bind(this);
+    this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
   }
@@ -346,9 +348,11 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterEditClick() {
-    if (this.filter_dialog) {
-      this.filter_dialog.show();
-    }
+    this.setState({showFilterDialog: true});
+  }
+
+  handleFilterDialogClose() {
+    this.setState({showFilterDialog: false});
   }
 
   handleReportDownload() {
@@ -437,7 +441,7 @@ class ReportDetails extends React.Component {
   }
 
   render() {
-    const {filter, entity = {}} = this.state;
+    const {filter, entity = {}, showFilterDialog = false} = this.state;
     const {report} = entity;
     return (
       <Wrapper>
@@ -467,12 +471,14 @@ class ReportDetails extends React.Component {
             />
           )}
         </TargetComponent>
-        <FilterDialog
-          filter={filter}
-          delta={is_defined(report) && report.isDeltaReport()}
-          ref={ref => this.filter_dialog = ref}
-          onFilterChanged={this.handleFilterChange}
-        />
+        {showFilterDialog &&
+          <FilterDialog
+            filter={filter}
+            delta={is_defined(report) && report.isDeltaReport()}
+            onFilterChanged={this.handleFilterChange}
+            onCloseClick={this.handleFilterDialogClose}
+          />
+        }
       </Wrapper>
     );
   }
