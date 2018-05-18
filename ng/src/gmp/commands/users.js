@@ -120,42 +120,6 @@ class UserCommand extends EntityCommand {
     });
   }
 
-  currentDashboardSettings(options = {}) {
-    return this.httpGet({
-      cmd: 'get_dashboard_settings',
-    }, options,
-    ).then(response => {
-      const {setting: prefs} = response.data.get_dashboard_settings
-        .get_settings_response;
-
-      log.debug('DashboardSettings loaded', prefs);
-
-      const settings = {};
-
-      for_each(prefs, pref => {
-        const {_id: id, value} = pref;
-
-        try {
-          settings[id] = JSON.parse(value);
-        }
-        catch (e) {
-          log.warn('Could not parse dashboard setting', pref);
-        }
-      });
-
-      return response.setData(settings);
-    });
-  }
-
-  saveDashboardSetting(id, settings) {
-    log.debug('Saving dashboard settings', id, settings);
-    return this.action({
-      setting_id: id,
-      setting_value: JSON.stringify(settings),
-      cmd: 'save_setting',
-    });
-  }
-
   create({
     access_hosts,
     access_ifaces,
