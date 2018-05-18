@@ -131,9 +131,9 @@ class DashboardsCommand extends HttpCommand {
 class DashboardCommand extends GmpCommand {
 
   saveSetting(id, settings) {
-    log.debug('Saving dashboard settings', id, settings);
-
     settings = convertSaveSettings(settings);
+
+    log.debug('Saving dashboard settings', id, settings);
 
     return this.action({
       setting_id: id,
