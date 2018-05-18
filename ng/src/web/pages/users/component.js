@@ -67,9 +67,11 @@ class UserComponent extends React.Component {
           dialogVisible: true,
           access_hosts: user.hosts.addresses,
           access_ifaces: user.ifaces.addresses,
+          comment: user.comment,
           group_ids: group_ids,
           hosts_allow: user.hosts.allow,
           ifaces_allow: user.ifaces.allow,
+          name: user.name,
           old_name: user.name,
           role_ids: role_ids,
           settings: response.data,
@@ -79,8 +81,15 @@ class UserComponent extends React.Component {
       }
       else {
         this.setState({
+          access_hosts: undefined,
+          access_ifaces: undefined,
           comment: undefined,
           dialogVisible: true,
+          group_ids: undefined,
+          hosts_allow: undefined,
+          ifaces_allow: undefined,
+          name: undefined,
+          old_name: undefined,
           settings: response.data,
           title: undefined,
           user: undefined,
@@ -111,11 +120,13 @@ class UserComponent extends React.Component {
     const {
       access_hosts,
       access_ifaces,
+      comment,
       dialogVisible,
       group_ids,
       groups,
       hosts_allow,
       ifaces_allow,
+      name,
       old_name,
       role_ids,
       roles,
@@ -152,10 +163,12 @@ class UserComponent extends React.Component {
               <UserDialog
                 access_hosts={access_hosts}
                 access_ifaces={access_ifaces}
+                comment={comment}
                 group_ids={group_ids}
                 groups={groups}
                 hosts_allow={hosts_allow}
                 ifaces_allow={ifaces_allow}
+                name={name}
                 old_name={old_name}
                 role_ids={role_ids}
                 roles={roles}
