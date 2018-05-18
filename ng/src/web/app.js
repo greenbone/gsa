@@ -51,12 +51,12 @@ import globalcss from './utils/globalcss.js';
 import configureStore from './store';
 
 import AssetsPage from './pages/assets/page.js';
-import HomePage from './pages/homepage.js';
 import LoginPage from './pages/loginpage.js';
 import Page from './pages/page.js';
 import PageNotFound from './pages/notfoundpage.js';
 import ScansPage from './pages/scans/page.js';
 import SecinfoPage from './pages/securityinfo/page.js';
+import StartPage from './pages/start/page.js';
 
 import AboutPage from './pages/help/about.js';
 import AgentsPage from './pages/agents/listpage.js';
@@ -228,8 +228,11 @@ ReactDOM.render(
       <Route
         path="/ng"
         component={Page}
-        onEnter={is_logged_in}>
-        <IndexRoute component={HomePage}/>
+        onEnter={is_logged_in}
+      >
+        <IndexRoute
+          component={StartPage}
+        />
         <Route
           path="about"
           component={AboutPage}/>

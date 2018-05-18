@@ -177,7 +177,6 @@ export class HostsTopologyDisplay extends React.Component {
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
   router: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';

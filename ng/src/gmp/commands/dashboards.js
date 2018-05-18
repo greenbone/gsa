@@ -48,19 +48,23 @@ const createItem = props => {
   };
 };
 
-const settingsV1toDashboardSettings = ({data: rows} = {}) => ({
+const settingsV1toDashboardSettings = ({data: rows} = {}, name) => ({
   rows: rows.map(({height, data}) =>
     createRow(data.map(item => createItem({
       name: item.name,
       filterId: item.filt_id,
     })), height)),
-  });
+  name,
+});
 
-const convertLoadedSettings = (settings = {}) => {
+const convertLoadedSettings = (settings = {}, name) => {
   if (settings.version === 1) {
-    return settingsV1toDashboardSettings(settings);
+    return settingsV1toDashboardSettings(settings, name);
   }
-  return settings;
+  return {
+    name,
+    ...settings,
+  };
 };
 
 const dashboardSettings2SettingsV1 = ({rows}) => ({
@@ -77,7 +81,7 @@ const dashboardSettings2SettingsV1 = ({rows}) => ({
 });
 
 const convertSaveSettings = (settings = {}) => {
-  if (is_array(settings.row)) {
+  if (is_array(settings.rows)) {
     // we like have settings which can be stored as version 1 settings
     return dashboardSettings2SettingsV1(settings);
   }
@@ -99,7 +103,7 @@ class DashboardsCommand extends HttpCommand {
       const allSettings = {};
 
       for_each(prefs, pref => {
-        const {_id: id, value} = pref;
+        const {_id: id, value, name} = pref;
 
         let settings;
         try {
@@ -111,7 +115,7 @@ class DashboardsCommand extends HttpCommand {
         }
 
         try {
-          allSettings[id] = convertLoadedSettings(settings);
+          allSettings[id] = convertLoadedSettings(settings, name);
         }
         catch (e) {
           log.warn('Could not convert dashboard setting', settings);
@@ -127,9 +131,9 @@ class DashboardsCommand extends HttpCommand {
 class DashboardCommand extends GmpCommand {
 
   saveSetting(id, settings) {
-    log.debug('Saving dashboard settings', id, settings);
-
     settings = convertSaveSettings(settings);
+
+    log.debug('Saving dashboard settings', id, settings);
 
     return this.action({
       setting_id: id,
