@@ -34,17 +34,17 @@ import {is_defined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import DonutChart from 'web/components/chart/donut3d';
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 
 import {
   totalCount,
   percent,
   qodColorScale,
-} from 'web/components/dashboard2/display/utils';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+} from 'web/components/dashboard/display/utils';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsQodLoader} from './loaders';
 

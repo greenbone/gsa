@@ -35,15 +35,15 @@ import {is_defined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import BarChart from 'web/components/chart/bar';
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {
   vulnsByHostsColorScale,
   percent,
-} from 'web/components/dashboard2/display/utils';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+} from 'web/components/dashboard/display/utils';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {VulnsHostsLoader} from './loaders';
 

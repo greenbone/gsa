@@ -32,7 +32,7 @@ import FilterDialog from '../certbund/filterdialog.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import DashboardControls from '../../components/dashboard2/controls';
+import DashboardControls from '../../components/dashboard/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 

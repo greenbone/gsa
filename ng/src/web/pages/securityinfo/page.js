@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
-import DashboardControls from 'web/components/dashboard2/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
 import Section from 'web/components/section/section';
 

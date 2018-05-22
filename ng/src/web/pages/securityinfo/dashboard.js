@@ -27,7 +27,7 @@ import logger from 'gmp/log.js';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import Dashboard from 'web/components/dashboard2/dashboard';
+import Dashboard from 'web/components/dashboard/dashboard';
 
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';

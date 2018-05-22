@@ -34,12 +34,12 @@ import {is_empty} from 'gmp/utils/string';
 import PropTypes from 'web/utils/proptypes';
 
 import WordCloudChart from 'web/components/chart/wordcloud';
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {randomColor} from 'web/components/dashboard2/display/utils';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {randomColor} from 'web/components/dashboard/display/utils';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {ResultsDescriptionWordCountLoader} from './loaders';
 

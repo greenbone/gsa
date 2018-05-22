@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../../../utils/proptypes';
 
-import Dashboard from '../../../components/dashboard2/dashboard';
+import Dashboard from '../../../components/dashboard/dashboard';
 
 import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './createddisplay';
 import {CvesCvssDisplay, CvesCvssTableDisplay} from './cvssdisplay';

@@ -38,14 +38,14 @@ import compose from 'web/utils/compose';
 
 import BarChart from 'web/components/chart/bar';
 
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import {
   riskFactorColorScale,
-} from 'web/components/dashboard2/display/utils';
+} from 'web/components/dashboard/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
 

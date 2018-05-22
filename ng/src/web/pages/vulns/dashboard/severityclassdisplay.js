@@ -22,10 +22,10 @@
  */
 import _ from 'gmp/locale';
 
-import SeverityClassDisplay from 'web/components/dashboard2/display/severity/severityclassdisplay'; // eslint-disable-line max-len
-import SeverityClassTableDisplay from 'web/components/dashboard2/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay'; // eslint-disable-line max-len
+import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {VulnsSeverityLoader} from './loaders';
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
