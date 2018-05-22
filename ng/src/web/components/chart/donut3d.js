@@ -234,25 +234,21 @@ EmptyDonut.propTypes = {
 
 const AllLabels = ({
   allLabels,
-}) => {
+}) => allLabels.map(label => {
+  const {innerRef, value, x, y, show, hide, id} = label;
   return (
-    allLabels.map(label => {
-      const {innerRef, value, x, y, show, hide} = label;
-      return (
-        <Label
-          x={x}
-          y={y}
-          innerRef={innerRef}
-          key={innerRef}
-          onMouseEnter={show}
-          onMouseLeave={hide}
-        >
-          {value}
-        </Label>
-      );
-    })
+    <Label
+      x={x}
+      y={y}
+      innerRef={innerRef}
+      key={id}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
+      {value}
+    </Label>
   );
-};
+});
 
 class Donut3DChart extends React.Component {
 
@@ -435,6 +431,7 @@ class Donut3DChart extends React.Component {
                             allLabels.push({
                               x,
                               y,
+                              id: index,
                               show,
                               hide,
                               value: arcData.value,
