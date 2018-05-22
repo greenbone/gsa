@@ -24,10 +24,10 @@ import _ from 'gmp/locale';
 
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
-import CvssDisplay from 'web/components/dashboard2/display/cvss/cvssdisplay';
-import CvssTableDisplay from 'web/components/dashboard2/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import CvssDisplay from 'web/components/dashboard/display/cvss/cvssdisplay';
+import CvssTableDisplay from 'web/components/dashboard/display/cvss/cvsstabledisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {CvesSeverityLoader} from './loaders';
 

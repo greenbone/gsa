@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import DashboardControls from 'web/components/dashboard2/controls.js';
+import DashboardControls from 'web/components/dashboard/controls.js';
 
 import Section from 'web/components/section/section.js';
 

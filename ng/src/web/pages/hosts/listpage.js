@@ -38,7 +38,7 @@ import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
 import {goto_details} from '../../entity/component.js';
 
-import DashboardControls from '../../components/dashboard2/controls';
+import DashboardControls from '../../components/dashboard/controls';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import NewIcon from '../../components/icon/newicon.js';

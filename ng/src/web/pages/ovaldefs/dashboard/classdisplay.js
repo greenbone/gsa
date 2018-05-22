@@ -33,17 +33,17 @@ import {is_defined} from 'gmp/utils/identity';
 import PropTypes from '../../../utils/proptypes';
 
 import DonutChart from '../../../components/chart/donut3d';
-import DataDisplay from '../../../components/dashboard2/display/datadisplay';
-import DataTableDisplay from '../../../components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
+import DataDisplay from '../../../components/dashboard/display/datadisplay';
+import DataTableDisplay from '../../../components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
   ovalClassColorScale,
   OVAL_CLASS_TYPES,
-} from '../../../components/dashboard2/display/utils';
-import {registerDisplay} from '../../../components/dashboard2/registry';
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
+} from '../../../components/dashboard/display/utils';
+import {registerDisplay} from '../../../components/dashboard/registry';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 
 import {OvaldefClassLoader} from './loaders';
 

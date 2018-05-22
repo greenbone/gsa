@@ -28,11 +28,11 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import ScheduleChart from 'web/components/chart/schedule';
 
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import DataTable from 'web/components/dashboard2/display/datatable';
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import DataTable from 'web/components/dashboard/display/datatable';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {TasksSchedulesLoader} from './loaders';
 

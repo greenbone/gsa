@@ -184,26 +184,26 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/bar/titlebar.js
      ${NG_SRC_DIR}/src/web/components/bar/toolbar.js
      ${NG_SRC_DIR}/src/web/components/comment/comment.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/controls.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/dashboard.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createddisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/created/createdtransform.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/createDisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvssdisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstabledisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/cvss/cvsstransform.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datadisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatable.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/datatabledisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/display.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/displaymenu.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/filterselection.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstabledisplay.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/severity/severityclasstransform.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/utils.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/display/withFilterSelection.js
-     ${NG_SRC_DIR}/src/web/components/dashboard2/registry.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/controls.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/dashboard.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/created/createddisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/created/createdtransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/createDisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/cvss/cvssdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/cvss/cvsstabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/cvss/cvsstransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/datadisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/datatable.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/datatabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/display.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/displaymenu.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/filterselection.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/severity/severityclassdisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstabledisplay.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstransform.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/utils.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
+     ${NG_SRC_DIR}/src/web/components/dashboard/registry.js
      ${NG_SRC_DIR}/src/web/components/dialog/button.js
      ${NG_SRC_DIR}/src/web/components/dialog/container.js
      ${NG_SRC_DIR}/src/web/components/dialog/content.js

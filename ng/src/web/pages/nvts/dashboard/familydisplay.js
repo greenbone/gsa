@@ -38,13 +38,13 @@ import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 import BubbleChart from 'web/components/chart/bubble';
 
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import DataTable from 'web/components/dashboard2/display/datatable';
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {riskFactorColorScale} from 'web/components/dashboard2/display/utils';
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import DataTable from 'web/components/dashboard/display/datatable';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 

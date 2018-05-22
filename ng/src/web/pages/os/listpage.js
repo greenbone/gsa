@@ -35,7 +35,7 @@ import Layout from '../../components/layout/layout.js';
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
-import DashboardControls from '../../components/dashboard2/controls.js';
+import DashboardControls from '../../components/dashboard/controls.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 

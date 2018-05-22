@@ -26,11 +26,11 @@ import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
 import Theme from 'web/utils/theme';
 
-import DataTableDisplay from 'web/components/dashboard2/display/datatabledisplay'; // eslint-disable-line max-len
-import transformCreated from 'web/components/dashboard2/display/created/createdtransform'; // eslint-disable-line max-len
-import CreatedDisplay from 'web/components/dashboard2/display/created/createddisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard2/display/createDisplay';
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import transformCreated from 'web/components/dashboard/display/created/createdtransform'; // eslint-disable-line max-len
+import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay'; // eslint-disable-line max-len
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {DfnCertsCreatedLoader} from './loaders';
 

@@ -28,14 +28,14 @@ import {storiesOf} from '@storybook/react';
 
 import configureStore from 'web/store';
 
-import Dashboard from 'web/components/dashboard2/dashboard';
+import Dashboard from 'web/components/dashboard/dashboard';
 
 import MenuEntry from 'web/components/menu/menuentry';
 
-import DisplayMenu from 'web/components/dashboard2/display/displaymenu';
+import DisplayMenu from 'web/components/dashboard/display/displaymenu';
 
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import loader from 'web/components/dashboard2/data/loader';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import loader from 'web/components/dashboard/data/loader';
 
 import compose from '../../utils/compose';
 import {withComponentDefaults} from '../../utils/withComponentDefaults';

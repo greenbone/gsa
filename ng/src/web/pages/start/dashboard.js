@@ -24,8 +24,8 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Dashboard from 'web/components/dashboard2/dashboard';
-import DashboardControls from '../../components/dashboard2/controls';
+import Dashboard from 'web/components/dashboard/dashboard';
+import DashboardControls from '../../components/dashboard/controls';
 
 import Layout from '../../components/layout/layout';
 

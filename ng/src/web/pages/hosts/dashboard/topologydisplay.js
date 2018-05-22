@@ -36,9 +36,9 @@ import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 
 import TopologyChart from 'web/components/chart/topology';
-import DataDisplay from 'web/components/dashboard2/display/datadisplay';
-import withFilterSelection from 'web/components/dashboard2/display/withFilterSelection'; // eslint-disable-line max-len
-import {registerDisplay} from 'web/components/dashboard2/registry';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {HostsTopologyLoader} from './loaders';
 
