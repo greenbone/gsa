@@ -803,12 +803,6 @@ set (NG_JS_SRC_FILES
      ${NG_JS_SRC_FILES}
      PARENT_SCOPE)
 
-
-set (NG_CSS_SRC_FILES
-     ${NG_SRC_DIR}/src/web/components/dashboard/css/dashboard.css
-     ${NG_SRC_DIR}/src/web/components/dashboard/legacy/select2.css
-     )
-
 set (NG_FILES
      ${NG_BUILD_DIR}/config.js
      ${NG_BUILD_DIR}/index.html)
