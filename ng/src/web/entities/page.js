@@ -35,8 +35,6 @@ import {render_section_title} from '../utils/render.js';
 
 import Toolbar from '../components/bar/toolbar.js';
 
-import DashboardControls from '../components/dashboard/controls.js';
-
 import Layout from '../components/layout/layout.js';
 import Wrapper from '../components/layout/wrapper.js';
 
@@ -120,13 +118,8 @@ class EntitiesPage extends React.Component {
       SectionComponent = Section;
     }
 
-    let extra;
-    if (is_defined(dashboardControls)) {
-      extra = dashboardControls();
-    }
-    else {
-      extra = is_defined(DashboardComponent) ? <DashboardControls/> : null;
-    }
+    const extra = is_defined(dashboardControls) ? dashboardControls() :
+      undefined;
     return (
       <SectionComponent
         title={this.getSectionTitle()}
