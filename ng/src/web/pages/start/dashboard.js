@@ -32,7 +32,6 @@ import Layout from '../../components/layout/layout';
 import {TasksSeverityDisplay} from '../tasks/dashboard/severityclassdisplay';
 import {CvesCreatedDisplay} from '../cves/dashboard/createddisplay';
 import {TasksStatusDisplay} from '../tasks/dashboard/statusdisplay';
-import {HostsTopologyDisplay} from '../hosts/dashboard/topologydisplay';
 import {NvtsSeverityClassDisplay} from '../nvts/dashboard/severityclassdisplay';
 
 import {TASKS_DISPLAYS} from '../tasks/dashboard';
@@ -57,7 +56,6 @@ const DEFAULT_DISPLAYS = [
     TasksStatusDisplay.displayId,
   ], [
     CvesCreatedDisplay.displayId,
-    HostsTopologyDisplay.displayId,
     NvtsSeverityClassDisplay.displayId,
   ],
 ];
