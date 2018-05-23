@@ -133,20 +133,8 @@ export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   return true;
 };
 
-export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
-  (dispatch, getState) => {
-  if (!is_defined(displayId) || !is_defined(dashboardId)) {
-    return;
-  }
-
-  const rootState = getState();
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(dashboardId);
+export const addDisplayToSettings = (settings, displayId) => {
   const {rows: currentRows = [], maxItemsPerRow} = settings || {};
-
-  if (!canAddDisplay(settings)) {
-    return;
-  }
 
   const lastRow = is_array(currentRows) && currentRows.length > 0 ?
     currentRows[currentRows.length - 1] : {items: []};
@@ -163,14 +151,33 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
       ...lastRow,
       items: [...lastRow.items, createItem({name: displayId})],
     };
+
     rows = [...currentRows];
     rows.pop();
     rows.push(newRow);
   }
 
-  const newSettings = {
+  return {
+    ...settings,
     rows,
   };
+};
+
+export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
+  (dispatch, getState) => {
+  if (!is_defined(displayId) || !is_defined(dashboardId)) {
+    return;
+  }
+
+  const rootState = getState();
+  const settingsSelector = getDashboardSettings(rootState);
+  const settings = settingsSelector.getById(dashboardId);
+
+  if (!canAddDisplay(settings)) {
+    return;
+  }
+
+  const newSettings = addDisplayToSettings(settings, displayId);
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
