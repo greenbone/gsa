@@ -24,10 +24,12 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Dashboard from 'web/components/dashboard/dashboard';
-import DashboardControls from '../../components/dashboard/controls';
+import {canAddDisplay} from 'web/store/dashboard/settings/actions';
 
-import Layout from '../../components/layout/layout';
+import {Dashboard} from 'web/components/dashboard/dashboard';
+import {DashboardControls} from 'web/components/dashboard/controls';
+
+import Layout from 'web/components/layout/layout';
 
 import {TasksSeverityDisplay} from '../tasks/dashboard/severityclassdisplay';
 import {CvesCreatedDisplay} from '../cves/dashboard/createddisplay';
@@ -80,27 +82,41 @@ const ALL_DISPLAYS = [
 
 const StartDashboard = ({
   id,
+  loadSettings,
+  saveSettings,
+  onNewDisplay,
+  onResetDashboard,
   ...props
 }) => (
   <Layout flex="column" grow>
     <Layout align="end">
       <DashboardControls
+        canAdd={canAddDisplay(props)}
         dashboardId={id}
-        permittedDisplays={ALL_DISPLAYS}
+        displayIds={ALL_DISPLAYS}
+        onNewDisplay={onNewDisplay}
+        onResetClick={onResetDashboard}
       />
     </Layout>
     <Dashboard
+      {...props}
       id={id}
       showFilterSelection
       showFilterString
       defaultContent={DEFAULT_DISPLAYS}
       permittedDisplays={ALL_DISPLAYS}
+      loadSettings={loadSettings}
+      saveSettings={saveSettings}
     />
   </Layout>
 );
 
 StartDashboard.propTypes = {
   id: PropTypes.id.isRequired,
+  loadSettings: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  onNewDisplay: PropTypes.func.isRequired,
+  onResetDashboard: PropTypes.func.isRequired,
 };
 
 export default StartDashboard;
