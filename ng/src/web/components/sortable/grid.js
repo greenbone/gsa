@@ -244,12 +244,12 @@ class Grid extends React.Component {
           {({width: fullWidth}) => (
             <Layout flex="column" grow="1">
               {items.map((row, i) => {
-                const isRowFull = is_defined(maxItemsPerRow) &&
-                  maxItemsPerRow <= row.items.length;
-                const disabled = isRowFull && dragSourceRowId !== row.id;
-
                 const {items: rowItems = [], height = DEFAULT_ROW_HEIGHT} = row;
                 const {length: itemCount} = rowItems;
+
+                const isRowFull = is_defined(maxItemsPerRow) &&
+                  maxItemsPerRow <= itemCount;
+                const disabled = isRowFull && dragSourceRowId !== row.id;
 
                 const itemHeight = height - GRID_ITEM_MARGIN.top -
                   GRID_ITEM_MARGIN.bottom;
