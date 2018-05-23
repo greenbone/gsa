@@ -52,7 +52,7 @@ import Icon from '../icon/icon';
 
 import {getDisplay} from './registry';
 
-class DashboardControls extends React.Component {
+export class DashboardControls extends React.Component {
 
   constructor(...args) {
     super(...args);

@@ -67,7 +67,7 @@ const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
     row.map(item => createItem({name: item}))));
 
-class Dashboard extends React.Component {
+export class Dashboard extends React.Component {
 
   static propTypes = {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
