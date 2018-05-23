@@ -694,7 +694,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${NG_SRC_DIR}/src/web/pages/securityinfo/dashboard.js
      ${NG_SRC_DIR}/src/web/pages/securityinfo/page.js
+     ${NG_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${NG_SRC_DIR}/src/web/pages/start/dashboard.js
+     ${NG_SRC_DIR}/src/web/pages/start/newdashboarddialog.js
      ${NG_SRC_DIR}/src/web/pages/start/page.js
      ${NG_SRC_DIR}/src/web/pages/tags/component.js
      ${NG_SRC_DIR}/src/web/pages/tags/details.js
