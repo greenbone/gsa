@@ -50,6 +50,7 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('dfncert', {
+  createFilterType: 'info',
   dashboard2: DfnCertDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>

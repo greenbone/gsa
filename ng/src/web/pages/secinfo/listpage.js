@@ -51,6 +51,7 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('secinfo', {
+  createFilterType: 'info',
   dashboard2: SecInfoDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>

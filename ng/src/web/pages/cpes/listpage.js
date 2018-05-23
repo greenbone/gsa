@@ -48,6 +48,7 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('cpe', {
+  createFilterType: 'info',
   dashboard2: CpesDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>

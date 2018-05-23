@@ -47,6 +47,7 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('nvt', {
+  createFilterType: 'info',
   dashboard2: NvtsDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={NVTS_DASHBOARD_ID}/>

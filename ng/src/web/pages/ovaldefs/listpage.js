@@ -49,6 +49,7 @@ const ToolBarIcons = props => {
 };
 
 export default withEntitiesContainer('ovaldef', {
+  createFilterType: 'info',
   dashboard2: OvaldefDashboard,
   dashboardControls: () => (
     <DashboardControls dashboardId={OVALDEF_DASHBOARD_ID}/>
