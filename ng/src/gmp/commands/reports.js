@@ -127,7 +127,7 @@ class ReportCommand extends EntityCommand {
       id,
       delta_report_id,
       filter,
-    }, options);
+    }, options).then(this.transformResponse);
   }
 
   getElementFromRoot(root) {
