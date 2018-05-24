@@ -195,79 +195,79 @@ class UserSettings extends React.Component {
         const filtersList = response.data;
         const filtersListAgent = filtersList.filter(
           item => {
-            return item.filter_type === 'Agent';
+            return item.filter_type === 'agent';
           });
         const filtersListAlert = filtersList.filter(
           item => {
-            return item.filter_type === 'Alert';
+            return item.filter_type === 'alert';
           });
         const filtersListAsset = filtersList.filter(
           item => {
-            return item.filter_type === 'Asset';
+            return item.filter_type === 'asset';
           });
         const filtersListConfig = filtersList.filter(
           item => {
-            return item.filter_type === 'Config';
+            return item.filter_type === 'config';
           });
         const filtersListCredential = filtersList.filter(
           item => {
-            return item.filter_type === 'Credential';
+            return item.filter_type === 'credential';
           });
         const filtersListFilter = filtersList.filter(
           item => {
-            return item.filter_type === 'Filter';
+            return item.filter_type === 'filter';
           });
         const filtersListNote = filtersList.filter(
           item => {
-            return item.filter_type === 'Note';
+            return item.filter_type === 'note';
           });
         const filtersListOverride = filtersList.filter(
           item => {
-            return item.filter_type === 'Override';
+            return item.filter_type === 'override';
           });
         const filtersListPermission = filtersList.filter(
           item => {
-            return item.filter_type === 'Permission';
+            return item.filter_type === 'permission';
           });
         const filtersListPortlist = filtersList.filter(
           item => {
-            return item.filter_type === 'Portlist';
+            return item.filter_type === 'port_list';
           });
         const filtersListReport = filtersList.filter(
           item => {
-            return item.filter_type === 'Report';
+            return item.filter_type === 'report';
           });
         const filtersListReportformat = filtersList.filter(
           item => {
-            return item.filter_type === 'Reportformat';
+            return item.filter_type === 'report_format';
           });
         const filtersListResult = filtersList.filter(
           item => {
-            return item.filter_type === 'Result';
+            return item.filter_type === 'result';
           });
         const filtersListRole = filtersList.filter(
           item => {
-            return item.filter_type === 'Role';
+            return item.filter_type === 'role';
           });
         const filtersListSchedule = filtersList.filter(
           item => {
-            return item.filter_type === 'Schedule';
+            return item.filter_type === 'schedule';
           });
         const filtersListTag = filtersList.filter(
           item => {
-            return item.filter_type === 'Tag';
+            return item.filter_type === 'tag';
           });
         const filtersListTarget = filtersList.filter(
           item => {
-            return item.filter_type === 'Target';
+            return item.filter_type === 'target';
           });
         const filtersListTask = filtersList.filter(
           item => {
-            return item.filter_type === 'Task';
+            return item.filter_type === 'task';
           });
         const filtersListSecinfo = filtersList.filter(
           item => {
-            return item.filter_type === 'SecInfo';
+            return item.filter_type === 'info';
           });
         option_lists.filtersList = {};
         option_lists.filtersList.agent = filtersListAgent;
