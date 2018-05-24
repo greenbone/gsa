@@ -62,7 +62,7 @@ or (if you want to use the default installation path /usr/local)
 
     $ cmake ..
 
-This only needs to be done once.  Note: It is assumed that the other OpenVAS
+This only needs to be done once.  Note: It is assumed that the other GVM
 components are installed to the same path.  If not, you need to set some paths
 separately, see below for details.
 
@@ -76,20 +76,20 @@ Thereafter, the following commands are useful.
 
 
 In case you have installed the Greenbone Security Assistant into a path
-different from the other OpenVAS modules, you might need to set some paths
+different from the other GVM modules, you might need to set some paths
 explicitly before running cmake. The certificate and key locations in
-OPENVAS_SERVER_CERTIFICATE, OPENVAS_SERVER_KEY and OPENVAS_CA_CERTIFICATE in
+GVM_SERVER_CERTIFICATE, GVM_SERVER_KEY and GVM_CA_CERTIFICATE in
 the top level CMakeLists.txt may need modifying.
 
 
-Compiling Greenbone Security Assistant Next Generation GUI
-----------------------------------------------------------
+Compiling Greenbone Security Assistant GUI
+------------------------------------------
 
-Prerequisites for using the Next Generation GUI:
+Prerequisites for using the GUI:
 * node.js >= 6.0
 * Either yarn or npm. yarn is faster and more reliable, but younger.
 
-On Debian Jessie node.js is too old. Follow these steps for a
+On Debian Stretch node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
 current installation of node.js, npm and related packages.
 
@@ -116,12 +116,12 @@ When using npm you might need to install the additional nodejs legacy symlink.
 $ sudo apt-get install nodejs-legacy
 ```
 
-Developing Greenbone Security Assistant Next Generation GUI
------------------------------------------------------------
+Developing Greenbone Security Assistant GUI
+-------------------------------------------
 
 Installing gsad requires to re-build the JavaScript bundle. This process is
 very time consuming and therefore may be avoided during development. It is
-possible to run GSA NG in a special web development server. The development
+possible to run GSA in a special web development server. The development
 server can be started with:
 
 ```sh
@@ -129,8 +129,8 @@ $ cd /path/to/gsa-sources/src/html/classic/ng && yarn run start
 ```
 
 Afterwards the development web server is set up and a new browser window is
-opened for the url http://127.0.0.1:8080 containing the GSA NG web application.
-If a JavaScript file of GSA NG in the src folder is changed the browser window
+opened for the url http://127.0.0.1:8080 containing the GSA web application.
+If a JavaScript file of GSA in the src folder is changed the browser window
 will reload automatically.
 
 Besides the development server gsad needs to be running with CORS enabled.
