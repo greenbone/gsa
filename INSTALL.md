@@ -125,7 +125,7 @@ possible to run GSA in a special web development server. The development
 server can be started with:
 
 ```sh
-$ cd /path/to/gsa-sources/src/html/classic/ng && yarn run start
+$ cd /path/to/gsa-sources/ng && yarn run start
 ```
 
 Afterwards the development web server is set up and a new browser window is
@@ -141,7 +141,7 @@ $ gsad --http-cors="http://127.0.0.1:8080"
 
 To be able to communicate with gsad the web application needs to know the server
 url. This can be accomplished by editing the
-/path/to/gsa-sources/src/html/classic/ng/public/config.js file.
+/path/to/gsa-sources/ng/public/config.js file.
 The following lines can be used for a local gsad running with https on port
 9392:
 
