@@ -110,10 +110,10 @@ const MultiplePermissionDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={data}
+      defaultValues={data}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
