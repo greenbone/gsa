@@ -69,7 +69,7 @@ const DEFAULTS = {
   ],
   byId: {
     [DASHBOARD_ID]: {
-      title: _('Default'),
+      title: _('Overview'),
     },
   },
 };
