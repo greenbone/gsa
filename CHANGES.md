@@ -7,7 +7,7 @@ $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
 
-## gsa 8.0+beta1 (2018-XX-XX)
+## gsa 8.0+beta1 (2018-05-25)
 
 This is the first beta release of the gsa module 8.0 for the Greenbone
 Vulnerability Management (GVM) framework.
@@ -27,16 +27,39 @@ Apart from this, the module covers a number of significant advances
 and clean-ups compared to the previous gsa module.
 
 Many thanks to everyone who has contributed to this release:
-Steffen Waterkamp, Björn Ricks, Jan-Oliver Wagner and Michael Wiegand.
-TODO
+Hani Benhabiles, Christian Fischer, Juan Jose Nicola, Matthew Mundell,
+Timo Pollmeier, Bjoern Ricks, Steffen Waterkamp, Jan-Oliver Wagner and
+Michael Wiegand.
 
 Main changes compared to the 7.0 series:
-  * nodejs >= 6 is required to generate the new JS based version of GSA
-  * npm or yarn is required for installing the JavaScript dependencies
-  * libxslt is no longer required because all XSLT has been removed
-  * The its "face" got removed
-  * The extra help pages got replaced by links to the documentation
-TODO
+
+  * The web user interface has been transformed into a single page application
+    which is loaded once and then only updates the in-browser data from the
+    server.
+  * All data loading processes are asynchronous and don't block the GUI from
+    reacting to user input.
+  * Refreshing of data is done in the background now. Therefore the user doesn't
+    need to specify a refresh rate anymore.
+  * The its "face" has been removed.
+  * The extra help pages has been replaced by links to the documentation.
+  * The 'excluded' list option when a New Target is created has been added.
+  * The 'classic hosts' asset has been removed.
+  * New view on scan results by vulnerability has been added.
+  * A link to Scanconfigs from scanner details has been added.
+  * The edit dialog for overrides and notes has been improved and is now more
+    flexible.
+  * The report details view has been overhauled.
+  * Multiple dashboards can be defined by the user at the main entry page.
+  * The edit mode of the dashboards has been removed. Dashboards are always
+    editable now.
+  * nodejs >= 6 is required to generate the new JS based version of GSA.
+  * npm or yarn is required for installing the JavaScript dependencies.
+  * libxslt is no longer required because all XSLT has been removed.
+  * The required minimum version of new dependency GVM Libraries is 1.0 and
+    the dependency to the openvas-libraries module has been removed. Therefore
+    many include directives have been adapted to the new source code.
+  * Minimum required version of glib has been raised to 2.42.
+  * Minimum required version of cmake has been raised to 3.0.
 
 ## gsa 7.0.0 (2016-11-09)
 
