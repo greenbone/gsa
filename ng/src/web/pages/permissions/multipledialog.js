@@ -64,7 +64,7 @@ const MultiplePermissionDialog = ({
   title = _('Create Multiple Permissions'),
   user_id,
   users = [],
-  visible,
+  visible = true,
   onClose,
   onSave,
 }, {capabilities}) => {
@@ -279,7 +279,7 @@ MultiplePermissionDialog.propTypes = {
   title: PropTypes.string,
   user_id: PropTypes.id,
   users: PropTypes.array,
-  visible: PropTypes.bool.isRequired,
+  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
