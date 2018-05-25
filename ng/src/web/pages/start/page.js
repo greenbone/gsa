@@ -24,6 +24,8 @@ import React from 'react';
 
 import uuid from 'uuid/v4';
 
+import glamorous from 'glamorous';
+
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
@@ -47,6 +49,7 @@ import CloseButton from 'web/components/dialog/closebutton';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
@@ -69,13 +72,17 @@ const DEFAULTS = {
   ],
   byId: {
     [DASHBOARD_ID]: {
-      title: _('Default'),
+      title: _('Overview'),
     },
   },
 };
 
 const DEFAULT_TAB = 0;
 const MAX_DASHBOARDS = 10;
+
+const StyledNewIcon = glamorous(NewIcon)({
+  margin: '0 10px',
+});
 
 class StartPage extends React.Component {
 
@@ -133,7 +140,13 @@ class StartPage extends React.Component {
   handleRemoveDashboard(dashboardId) {
     const {byId, dashboards} = this.props;
 
-    delete byId[dashboardId];
+    if (dashboards.length <= 1) {
+      return;
+    }
+
+    const copyById = {...byId};
+
+    delete copyById[dashboardId];
 
     this.setState({
       showConfirmRemoveDialog: false,
@@ -141,7 +154,7 @@ class StartPage extends React.Component {
     });
 
     this.saveSettings({
-      byId,
+      byId: copyById,
       dashboards: dashboards.filter(id => id !== dashboardId),
       removeDashboardId: undefined,
     });
@@ -305,14 +318,6 @@ class StartPage extends React.Component {
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
       <React.Fragment>
-        <NewIcon
-          title={canAdd ?
-            _('Add new Dashboard') :
-            _('Dashboards limit reached')
-          }
-          active={canAdd}
-          onClick={canAdd ? this.handleOpenNewDashboardDialog : undefined}
-        />
         <Section
           title={_('Dashboards')}
           img="dashboard.svg"
@@ -335,7 +340,7 @@ class StartPage extends React.Component {
                   >
                     <Divider>
                       <span>{title}</span>
-                      {id !== DASHBOARD_ID &&
+                      {dashboards.length > 1 &&
                         <CloseButton
                           size="small"
                           title={_('Remove Dashboard')}
@@ -347,6 +352,23 @@ class StartPage extends React.Component {
                   </Tab>
                 );
               })}
+
+              <Layout
+                align={['center', 'center']}
+                grow
+              >
+                <StyledNewIcon
+                  title={canAdd ?
+                    _('Add new Dashboard') :
+                    _('Dashboards limit reached')
+                  }
+                  active={canAdd}
+                  onClick={canAdd ?
+                    this.handleOpenNewDashboardDialog :
+                    undefined
+                  }
+                />
+              </Layout>
             </TabList>
           </TabLayout>
 
