@@ -201,6 +201,11 @@
 #define DEFAULT_GSAD_HSTS_MAX_AGE 31536000
 
 /**
+ * @brief Default value for the maximum number of connection per IP address.
+ */
+#define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
+
+/**
  * @brief Flag for signal handler.
  */
 volatile int termination_signal = 0;
@@ -2758,7 +2763,7 @@ start_unix_http_daemon (const char *unix_socket_path,
            | MHD_USE_DEBUG, 0, NULL, NULL, handler, http_handlers,
            MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -2786,7 +2791,7 @@ start_http_daemon (int port,
            | MHD_USE_DEBUG | ipv6_flag, port,
            NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -2815,7 +2820,7 @@ start_https_daemon (int port, const char *key, const char *cert,
            MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
            MHD_OPTION_SOCK_ADDR, address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
            MHD_OPTION_HTTPS_PRIORITIES, priorities,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
 /* LibmicroHTTPD 0.9.35 and higher. */
@@ -2946,6 +2951,7 @@ main (int argc, char **argv)
   static int hsts_max_age = DEFAULT_GSAD_HSTS_MAX_AGE;
   static gchar *http_cors = "";
   static gboolean ignore_x_real_ip = FALSE;
+  static int per_ip_connection_limit = DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT;
   static int verbose = 0;
   GError *error = NULL;
   GOptionContext *option_context;
@@ -3057,6 +3063,10 @@ main (int argc, char **argv)
     {"ignore-x-real-ip", '\0',
      0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
      "Do not use X-Real-IP to determine the client address.", NULL},
+    {"per-ip-connection-limit", '\0',
+     0, G_OPTION_ARG_INT, &per_ip_connection_limit,
+     "Sets the maximum number of connections per ip. Use 0 for unlimited.",
+     "<number>" },
     {"unix-socket", '\0',
      0, G_OPTION_ARG_FILENAME, &unix_socket_path,
      "Path to unix socket to listen on", "<file>"},
@@ -3099,6 +3109,11 @@ main (int argc, char **argv)
     set_http_strict_transport_security (NULL);
 
   set_ignore_http_x_real_ip (ignore_x_real_ip);
+
+  if (per_ip_connection_limit >= 0)
+    set_per_ip_connection_limit (per_ip_connection_limit);
+  else
+    set_per_ip_connection_limit (DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT);
 
   if (register_signal_handlers ())
     {

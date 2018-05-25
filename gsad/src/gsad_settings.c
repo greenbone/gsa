@@ -83,6 +83,11 @@ const gchar *http_cors_origin;
 gboolean ignore_http_x_real_ip;
 
 /**
+ * @brief Current maximum number of connection per IP address.
+ */
+int per_ip_connection_limit;
+
+/**
  * @brief Unix socket to listen on.
  */
 int unix_socket = 0;
@@ -276,6 +281,21 @@ gboolean
 is_ignore_http_x_real_ip ()
 {
   return ignore_http_x_real_ip;
+}
+
+void
+set_per_ip_connection_limit (int limit)
+{
+  if (limit >= 0)
+    per_ip_connection_limit = limit;
+  else
+    per_ip_connection_limit = 0;
+}
+
+int
+get_per_ip_connection_limit ()
+{
+  return per_ip_connection_limit;
 }
 
 void
