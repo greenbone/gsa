@@ -55,6 +55,7 @@ const MultiplePermissionDialog = ({
   entity_type,
   group_id,
   groups = [],
+  id,
   include_related,
   permission = 'read',
   related = [],
@@ -72,6 +73,7 @@ const MultiplePermissionDialog = ({
 
   const data = {
     ...DEFAULTS,
+    id,
     permission,
     related,
     users,
