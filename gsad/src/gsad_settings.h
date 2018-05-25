@@ -83,6 +83,11 @@ void set_ignore_http_x_real_ip (gboolean ignore);
 gboolean get_ignore_http_x_real_ip ();
 
 
+void set_per_ip_connection_limit (int limit);
+
+int get_per_ip_connection_limit ();
+
+
 void set_unix_socket (int socket);
 
 gboolean is_unix_socket ();
