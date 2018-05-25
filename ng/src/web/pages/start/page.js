@@ -133,6 +133,10 @@ class StartPage extends React.Component {
   handleRemoveDashboard(dashboardId) {
     const {byId, dashboards} = this.props;
 
+    if (dashboards.length <= 1) {
+      return;
+    }
+
     const copyById = {...byId};
 
     delete copyById[dashboardId];
@@ -337,7 +341,7 @@ class StartPage extends React.Component {
                   >
                     <Divider>
                       <span>{title}</span>
-                      {id !== DASHBOARD_ID &&
+                      {dashboards.length > 1 &&
                         <CloseButton
                           size="small"
                           title={_('Remove Dashboard')}
