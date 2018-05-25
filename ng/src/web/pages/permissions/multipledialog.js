@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
+import {map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {type_name} from '../../utils/render.js';
@@ -42,28 +42,22 @@ import Layout from '../../components/layout/layout.js';
 
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';
-export const RELATED_RESOURCES_ONY = '2';
-
-const DEFAULTS = {
-  include_related: INCLUDE_RELATED_RESOURCES,
-  permission: 'read',
-  subject_type: 'user',
-};
+export const RELATED_RESOURCES_ONLY = '2';
 
 const MultiplePermissionDialog = ({
-  entity_name,
-  entity_type,
-  group_id,
+  entity_name = '',
+  entity_type = '',
+  group_id = '',
   groups = [],
   id,
-  include_related,
+  include_related = INCLUDE_RELATED_RESOURCES,
   permission = 'read',
   related = [],
-  role_id,
+  role_id = '',
   roles = [],
   subject_type = 'user',
   title = _('Create Multiple Permissions'),
-  user_id,
+  user_id = '',
   users = [],
   visible = true,
   onClose,
@@ -72,38 +66,19 @@ const MultiplePermissionDialog = ({
   const has_related = related.length > 0;
 
   const data = {
-    ...DEFAULTS,
+    entity_name,
+    entity_type,
+    group_id,
+    groups,
     id,
+    include_related,
     permission,
     related,
+    role_id,
+    roles,
+    subject_type,
+    user_id,
     users,
-  };
-  if (is_defined(entity_name)) {
-    data.entity_name = entity_name;
-  };
-  if (is_defined(entity_type)) {
-    data.entity_type = entity_type;
-  };
-  if (is_defined(group_id)) {
-    data.group_id = group_id;
-  };
-  if (is_defined(groups)) {
-    data.groups = groups;
-  };
-  if (is_defined(include_related)) {
-    data.include_related = include_related;
-  };
-  if (is_defined(role_id)) {
-    data.role_id = role_id;
-  };
-  if (is_defined(roles)) {
-    data.roles = roles;
-  };
-  if (is_defined(subject_type)) {
-    data.subject_type = subject_type;
-  };
-  if (is_defined(user_id)) {
-    data.user_id = user_id;
   };
 
   return (
@@ -234,7 +209,7 @@ const MultiplePermissionDialog = ({
                   </option>
 
                   {has_related &&
-                    <option value={RELATED_RESOURCES_ONY}>
+                    <option value={RELATED_RESOURCES_ONLY}>
                       {_('for related resources only')}
                     </option>
                   }
@@ -261,16 +236,16 @@ const MultiplePermissionDialog = ({
 };
 
 MultiplePermissionDialog.propTypes = {
-  entity_name: PropTypes.string.isRequired,
-  entity_type: PropTypes.string.isRequired,
+  entity_name: PropTypes.string,
+  entity_type: PropTypes.string,
   group_id: PropTypes.id,
   groups: PropTypes.array,
   id: PropTypes.id.isRequired,
   include_related: PropTypes.oneOf([
     CURRENT_RESOURCE_ONLY,
     INCLUDE_RELATED_RESOURCES,
-    RELATED_RESOURCES_ONY,
-  ]).isRequired,
+    RELATED_RESOURCES_ONLY,
+  ]),
   permission: PropTypes.oneOf(['read', 'proxy']),
   related: PropTypes.array, // array of models
   role_id: PropTypes.id,
