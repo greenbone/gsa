@@ -108,7 +108,7 @@ export class OsVulnScoreDisplay extends React.Component {
   handleDataClick(data) {
     const {router} = this.props;
 
-    router.push(`/ng/operatingsystem/${data.id}`);
+    router.push(`/operatingsystem/${data.id}`);
   }
 
   render() {

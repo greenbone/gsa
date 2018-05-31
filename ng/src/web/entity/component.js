@@ -31,12 +31,12 @@ import withGmp from '../utils/withGmp.js';
 
 export const goto_details = (type, props) => ({data}) => {
   const {router} = props;
-  return router.push('/ng/' + type + '/' + data.id);
+  return router.push('/' + type + '/' + data.id);
 };
 
 export const goto_list = (type, props) => () => {
   const {router} = props;
-  return router.push('/ng/' + type);
+  return router.push('/' + type);
 };
 
 class EntityComponent extends React.Component {

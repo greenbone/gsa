@@ -107,7 +107,7 @@ export class HostsVulnScoreDisplay extends React.Component {
   handleDataClick(data) {
     const {router} = this.props;
 
-    router.push(`/ng/host/${data.id}`);
+    router.push(`/host/${data.id}`);
   }
 
   render() {
