@@ -74,7 +74,7 @@ let Link = ({
   ...other
 }) => {
 
-  let pathname = '/ng';
+  let pathname = '';
 
   if (to.startsWith('/')) {
     pathname += to;
