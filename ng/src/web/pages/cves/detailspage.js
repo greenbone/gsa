@@ -164,8 +164,7 @@ const Details = ({
             {nvts.map(nvt => (
               <DetailsLink
                 key={nvt.id}
-                type="info"
-                page="nvt"
+                type="nvt"
                 id={nvt.id}
               >
                 {nvt.name}
