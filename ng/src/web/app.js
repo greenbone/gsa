@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,6 @@ import {Provider as StoreProvider} from 'react-redux';
 import {
   browserHistory,
   IndexRoute,
-  Redirect,
   Route,
   Router,
 } from 'react-router';
@@ -224,9 +224,8 @@ ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={App}>
       <Route path="/login" component={LoginPage}/>
-      <Route path="/ng/login" component={LoginPage}/>
       <Route
-        path="/ng"
+        path="/"
         component={Page}
         onEnter={is_logged_in}
       >
@@ -474,7 +473,6 @@ ReactDOM.render(
           component={ScanConfigDetailsPage}
         />
       </Route>
-      <Redirect from="/" to="/ng"/>
       <Route path="*" component={PageNotFound} />
     </Route>
   </Router>,
