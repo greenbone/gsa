@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,12 +46,12 @@ const CertLink = ({
   let title;
 
   if (type === 'CERT-Bund') {
-    info_type = 'certbundadv';
+    info_type = 'certbund';
     title = _('View details of CERT-Bund Advisory {{name}}', {name: id});
   }
   else if (type === 'DFN-CERT') {
     title = _('View details of DFN-CERT Advisory {{name}}', {name: id});
-    info_type = 'dfncertadv';
+    info_type = 'dfncert';
   }
   return (
     <DetailsLink
