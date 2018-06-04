@@ -44,7 +44,7 @@ class EntityCommand extends GmpCommand {
   }
 
   getParams(params, extra_params = {}) {
-    const {id, filter, ...other} = params;
+    const {id, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
     if (is_defined(id)) {
