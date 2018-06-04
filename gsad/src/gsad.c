@@ -761,7 +761,7 @@ init_validator ()
   openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
-  openvas_validator_add (validator, "severity_class", "^(classic|nist|bsi|pci\\-dss)$");
+  openvas_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
