@@ -694,10 +694,10 @@ handle_system_report (http_connection_t *connection,
 }
 
 int
-handle_index_ng (http_connection_t *connection,
-                 const char *method, const char *url,
-                 gsad_connection_info_t *con_info,
-                 http_handler_t *handler, void *data)
+handle_index (http_connection_t *connection,
+              const char *method, const char *url,
+              gsad_connection_info_t *con_info,
+              http_handler_t *handler, void *data)
 {
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -778,14 +778,14 @@ init_http_handlers()
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);
 
-  url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
+  url_handler_add (anon_url_handlers, "^/login/?$", handle_index);
   url_handler_add (anon_url_handlers, "^/login/.+$",
                    handle_redirect_to_login_page);
 
   url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_file);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
                    handle_static_file);
-  url_handler_add (anon_url_handlers, "^/ng.*$", handle_index_ng);
+  url_handler_add (anon_url_handlers, "^/ng.*$", handle_index);
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);
