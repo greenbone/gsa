@@ -819,10 +819,10 @@ init_http_handlers()
   url_handler_add (anon_url_handlers, "^/login/.+$",
                    handle_redirect_to_login_page);
 
-  url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
   url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
                    handle_static_ng_file);
+  url_handler_add (anon_url_handlers, "^/ng.*$", handle_index_ng);
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);
