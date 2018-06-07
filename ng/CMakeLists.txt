@@ -119,7 +119,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/alert.js
      ${NG_SRC_DIR}/src/gmp/models/asset.js
      ${NG_SRC_DIR}/src/gmp/models/certbund.js
-     ${NG_SRC_DIR}/src/gmp/models/chartpreferences.js
      ${NG_SRC_DIR}/src/gmp/models/cpe.js
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/cve.js
