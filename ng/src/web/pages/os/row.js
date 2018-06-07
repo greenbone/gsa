@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,6 @@ const Row = ({entity, links = true, actions, ...props}) => {
           <CpeIcon name={entity.name}/>
           <DetailsLink
             type="os"
-            page="operatingsystem"
             id={entity.id}
             textOnly={!links}>
             {entity.name}

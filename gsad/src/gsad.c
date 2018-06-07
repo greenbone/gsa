@@ -296,6 +296,7 @@ init_validator ()
                          "|(create_scanner)"
                          "|(create_schedule)"
                          "|(create_tag)"
+                         "|(create_tags)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(cvss_calculator)"
@@ -760,7 +761,7 @@ init_validator ()
   openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
-  openvas_validator_add (validator, "severity_class", "^(classic|nist|bsi|pci\\-dss)$");
+  openvas_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
@@ -901,6 +902,8 @@ init_validator ()
   openvas_validator_alias (validator, "privacy_password", "lsc_password");
   openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
+  openvas_validator_alias (validator, "resource_ids:name",     "number");
+  openvas_validator_alias (validator, "resource_ids:value",    "id_optional");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "result_uuid", "optional_id");
@@ -1130,7 +1133,8 @@ params_append_mhd (params_t *params,
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
       || (strcmp(name, "group_ids:") == 0)
-      || (strcmp(name, "id_list:") == 0))
+      || (strcmp(name, "id_list:") == 0)
+      || (strcmp(name, "resource_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -1531,6 +1535,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_scanner)
   ELSE (create_schedule)
   ELSE (create_tag)
+  ELSE (create_tags)
   ELSE (create_target)
   ELSE (create_config)
   ELSE (create_note)

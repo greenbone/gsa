@@ -146,6 +146,9 @@ class TagComponent extends React.Component {
     if (capabilities.mayAccess('configs')) {
       resource_types.push(['config', _('Scan Config')]);
     }
+    if (capabilities.mayAccess('scanners')) {
+      resource_types.push(['scanner', _('Scanner')]);
+    }
     if (capabilities.mayAccess('schedules')) {
       resource_types.push(['schedule', _('Schedule')]);
     }

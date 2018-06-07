@@ -52,7 +52,6 @@ import Languages, {BROWSER_LANGUAGE} from '../../utils/languages';
 import {
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_BSI,
-  SEVERITY_CLASS_CLASSIC,
   SEVERITY_CLASS_PCI_DSS,
 } from '../../utils/severity';
 
@@ -66,7 +65,6 @@ const CA_CERT_ID = '9ac801ea-39f8-11e6-bbaa-28d24461215b';
 const SEVERITY_CLASSES = [
   {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
   {id: SEVERITY_CLASS_BSI, name: 'BSI Schwachstellenampel (Germany)'},
-  {id: SEVERITY_CLASS_CLASSIC, name: 'OpenVAS Classic'},
   {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
 ];
 
