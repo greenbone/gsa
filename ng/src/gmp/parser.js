@@ -25,7 +25,7 @@ import 'core-js/fn/string/starts-with';
 
 import moment from 'moment';
 
-import {is_defined} from './utils/identity';
+import {is_defined, is_string} from './utils/identity';
 import {is_empty} from './utils/string';
 
 export function parse_severity(value) {
@@ -121,7 +121,10 @@ export function parse_envelope_meta(envelope) {
 export const parse_properties = (element, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
-  copy.id = element._id;
+  if (is_string(element._id) && element._id.length > 0) {
+    // only set id if it id defined
+    copy.id = element._id;
+  }
 
   if (is_defined(element.creation_time)) {
     copy.creation_time = moment(element.creation_time);
