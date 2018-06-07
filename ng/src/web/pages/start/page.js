@@ -63,15 +63,17 @@ import Tabs from 'web/components/tab/tabs';
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog from './newdashboarddialog';
+import Loading from '../../components/loading/loading';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
+const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 
 const DEFAULTS = {
   dashboards: [
-    DASHBOARD_ID,
+    OVERVIEW_DASHBOARD_ID,
   ],
   byId: {
-    [DASHBOARD_ID]: {
+    [OVERVIEW_DASHBOARD_ID]: {
       title: _('Overview'),
     },
   },
@@ -289,9 +291,9 @@ class StartPage extends React.Component {
       ...DEFAULTS,
       byId: {
         ...byId,
-        [DASHBOARD_ID]: {
-          ...DEFAULTS.byId[DASHBOARD_ID],
-          ...defaults[DASHBOARD_ID],
+        [OVERVIEW_DASHBOARD_ID]: {
+          ...DEFAULTS.byId[OVERVIEW_DASHBOARD_ID],
+          ...defaults[OVERVIEW_DASHBOARD_ID],
         },
       },
     });
@@ -439,12 +441,12 @@ const mapStateToProps = rootState => {
 
   if (is_defined(rows)) {
     byId = {
-      [DASHBOARD_ID]: {
-        ...DEFAULTS.byId[DASHBOARD_ID],
+      [OVERVIEW_DASHBOARD_ID]: {
+        ...DEFAULTS.byId[OVERVIEW_DASHBOARD_ID],
         rows,
       },
     };
-    dashboards = [DASHBOARD_ID];
+    dashboards = [OVERVIEW_DASHBOARD_ID];
   }
 
   const props = {
