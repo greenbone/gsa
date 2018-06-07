@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {CVES_FILTER_FILTER} from 'gmp/models/filter';
+
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
@@ -54,6 +56,7 @@ export default withEntitiesContainer('cve', {
     <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
   ),
   filterEditDialog: CveFilterDialog,
+  filtersFilter: CVES_FILTER_FILTER,
   sectionIcon: 'cve.svg',
   table: CvesTable,
   title: _('CVEs'),

@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +24,27 @@
 
 import React from 'react';
 
+import {is_defined} from 'gmp/utils';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import Link from './link.js';
 
+const types = {
+  os: 'operatingsystem',
+};
+
+const checkType = type => {
+  const ctype = types[type];
+  if (is_defined(ctype)) {
+    return ctype;
+  }
+  return type;
+};
+
 const DetailsLink = ({
   id,
   type,
-  page = type,
   textOnly = false,
   ...props
 }, {capabilities}) => {
@@ -41,7 +55,7 @@ const DetailsLink = ({
     <Link
       {...props}
       textOnly={textOnly}
-      to={'/' + page + '/' + encodeURIComponent(id)}
+      to={'/' + checkType(type) + '/' + encodeURIComponent(id)}
     />
   );
 };
@@ -52,7 +66,6 @@ DetailsLink.contextTypes = {
 
 DetailsLink.propTypes = {
   id: PropTypes.id.isRequired,
-  page: PropTypes.string,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };

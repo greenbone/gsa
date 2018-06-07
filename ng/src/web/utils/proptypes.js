@@ -41,7 +41,6 @@ import Settings from 'gmp/models/settings.js';
 
 import {
   SEVERITY_CLASS_BSI,
-  SEVERITY_CLASS_CLASSIC,
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_PCI_DSS,
 } from './severity';
@@ -173,7 +172,6 @@ const toString = mayRequire(toStringValidator);
 
 const severityClass = ReactPropTypes.objectOf([
   SEVERITY_CLASS_BSI,
-  SEVERITY_CLASS_CLASSIC,
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_PCI_DSS,
 ]);
