@@ -36,7 +36,6 @@ import User, {
   AUTH_METHOD_RADIUS,
 } from '../models/user.js';
 import Settings from '../models/settings.js';
-import ChartPreferences from '../models/chartpreferences.js';
 
 const log = logger.getLogger('gmp.commands.users');
 
@@ -104,19 +103,6 @@ class UserCommand extends EntityCommand {
       const {command: commands} = data.capabilities.help_response.schema;
       const caps = map(commands, command => command.name);
       return response.setData(new Capabilities(caps));
-    });
-  }
-
-  currentChartPreferences(options = {}) {
-    // FIXME remove after legacy dashboards are obsolete
-    return this.httpGet({
-      cmd: 'get_dashboard_settings',
-    }, options,
-    ).then(response => {
-      const {setting: prefs} = response.data.get_dashboard_settings
-        .get_settings_response;
-      log.debug('ChartPreferences loaded', prefs);
-      return response.setData(new ChartPreferences(prefs));
     });
   }
 
