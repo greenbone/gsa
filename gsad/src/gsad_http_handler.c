@@ -340,40 +340,6 @@ handle_not_found (http_connection_t *connection, const char * method,
 }
 
 int
-handle_static_file (http_connection_t *connection, const char * method,
-                    const char *url, gsad_connection_info_t *con_info,
-                    http_handler_t *handler, void * data)
-{
-  gchar* path;
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-  char *default_file = "index.html";
-
-  response_data = cmd_response_data_new ();
-  cmd_response_data_set_allow_caching (response_data, 1);
-
-  /** @todo validation, URL length restriction (allows you to view ANY
-    *       file that the user running the gsad might look at!) */
-  /** @todo use glibs path functions */
-  /* Attempt to prevent disclosing non-gsa content. */
-  if (strstr (url, ".."))
-    path = g_strconcat (default_file, NULL);
-  else
-    {
-      /* Ensure that url is relative. */
-      const char* relative_url = url;
-      if (*url == '/') relative_url = url + 1;
-      path = g_strconcat (relative_url, NULL);
-    }
-
-  response = file_content_response(connection, url, path, response_data);
-
-  g_free (path);
-
-  return handler_send_response (connection, response, response_data, NULL);
-}
-
-int
 handle_redirect_to_login_page (http_connection_t *connection,
                                const char *method, const char *url,
                                gsad_connection_info_t *con_info,
@@ -746,7 +712,7 @@ handle_index_ng (http_connection_t *connection,
 }
 
 int
-handle_static_ng_file (http_connection_t *connection, const char * method,
+handle_static_file (http_connection_t *connection, const char * method,
                        const char *url, gsad_connection_info_t *con_info,
                        http_handler_t *handler, void * data)
 {
@@ -808,17 +774,17 @@ init_http_handlers()
 
   anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
   url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
-                   handle_static_ng_file);
+                   handle_static_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
-                   handle_static_ng_file);
+                   handle_static_file);
 
   url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
   url_handler_add (anon_url_handlers, "^/login/.+$",
                    handle_redirect_to_login_page);
 
-  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_ng_file);
+  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_file);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
-                   handle_static_ng_file);
+                   handle_static_file);
   url_handler_add (anon_url_handlers, "^/ng.*$", handle_index_ng);
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
