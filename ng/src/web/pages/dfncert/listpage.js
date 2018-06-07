@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
+
  // DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog.js';
 
@@ -56,6 +58,7 @@ export default withEntitiesContainer('dfncert', {
     <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
   ),
   filterEditDialog: FilterDialog,
+  filtersFilter: DFNCERT_FILTER_FILTER,
   sectionIcon: 'dfn_cert_adv.svg',
   table: DfnCertTable,
   title: _('DFN-CERT Advisories'),
