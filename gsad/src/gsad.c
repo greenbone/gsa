@@ -165,9 +165,9 @@
 #define DEFAULT_CLIENT_WATCH_INTERVAL 1
 
 /**
- * @brief Default face name.
+ * @brief Default directory for web content.
  */
-#define DEFAULT_GSAD_FACE "classic"
+#define DEFAULT_WEB_DIRECTORY "web"
 
 /**
  * @brief Default value for HTTP header "X-Frame-Options"
@@ -3541,10 +3541,10 @@ main (int argc, char **argv)
 
   /* Chroot and drop privileges, if requested. */
 
-  if (chroot_drop_privileges (do_chroot, drop, DEFAULT_GSAD_FACE))
+  if (chroot_drop_privileges (do_chroot, drop, DEFAULT_WEB_DIRECTORY))
     {
       g_critical ("%s: Cannot use drop privileges for directory \"%s\"!\n",
-                  __FUNCTION__, DEFAULT_GSAD_FACE);
+                  __FUNCTION__, DEFAULT_WEB_DIRECTORY);
       exit (EXIT_FAILURE);
     }
 

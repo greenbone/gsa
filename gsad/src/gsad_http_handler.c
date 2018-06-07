@@ -740,7 +740,7 @@ handle_index_ng (http_connection_t *connection,
   cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url,
-                                    "ng/index.html",
+                                    "index.html",
                                     response_data);
   return handler_send_response (connection, response, response_data, NULL);
 }
@@ -766,7 +766,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
       /* Ensure that url is relative. */
       const char* relative_url = url;
       if (*url == '/') relative_url = url + 1;
-      path = g_strconcat ("ng/", relative_url, NULL);
+      path = g_strconcat (relative_url, NULL);
     }
 
   g_debug ("Requesting url %s for static ng path %s", url, path);
