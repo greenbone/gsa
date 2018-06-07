@@ -2534,17 +2534,17 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
 
   if (do_chroot)
     {
-      gchar* root_face_dir = g_build_filename ("/", subdir, NULL);
-      if (chdir (root_face_dir))
+      gchar* root_dir = g_build_filename ("/", subdir, NULL);
+      if (chdir (root_dir))
         {
           g_critical ("%s: failed change to chroot root directory (%s): %s\n",
                       __FUNCTION__,
-                      root_face_dir,
+                      root_dir,
                       strerror (errno));
-          g_free (root_face_dir);
+          g_free (root_dir);
           return 1;
         }
-      g_free (root_face_dir);
+      g_free (root_dir);
     }
   else
     {
@@ -2943,7 +2943,6 @@ main (int argc, char **argv)
   static gchar *unix_socket_path = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
-  static gchar *face_name = NULL;
   static gchar *guest_user = NULL;
   static gchar *guest_pass = NULL;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
@@ -3032,9 +3031,6 @@ main (int argc, char **argv)
     {"gnutls-priorities", '\0',
      0, G_OPTION_ARG_STRING, &gnutls_priorities,
      "GnuTLS priorities string.", "<string>"},
-    {"face", 0,
-     0, G_OPTION_ARG_STRING, &face_name,
-     "Use interface files from subdirectory <dir>", "<dir>"},
     {"guest-username", 0,
      0, G_OPTION_ARG_STRING, &guest_user,
      "Username for guest user.  Enables guest logins.", "<name>"},
@@ -3545,21 +3541,11 @@ main (int argc, char **argv)
 
   /* Chroot and drop privileges, if requested. */
 
-  if (chroot_drop_privileges (do_chroot, drop,
-                              face_name ? face_name : DEFAULT_GSAD_FACE))
+  if (chroot_drop_privileges (do_chroot, drop, DEFAULT_GSAD_FACE))
     {
-      if (face_name && strcmp (face_name, DEFAULT_GSAD_FACE))
-        {
-          g_critical ("%s: Cannot use custom face \"%s\".\n",
-                      __FUNCTION__, face_name);
-          exit (EXIT_FAILURE);
-        }
-      else
-        {
-          g_critical ("%s: Cannot use default face \"%s\"!\n",
-                      __FUNCTION__, DEFAULT_GSAD_FACE);
-          exit (EXIT_FAILURE);
-        }
+      g_critical ("%s: Cannot use drop privileges for directory \"%s\"!\n",
+                  __FUNCTION__, DEFAULT_GSAD_FACE);
+      exit (EXIT_FAILURE);
     }
 
   /* Wait forever for input or interrupts. */
