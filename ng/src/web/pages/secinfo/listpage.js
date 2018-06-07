@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
+
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
@@ -57,6 +59,7 @@ export default withEntitiesContainer('secinfo', {
     <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
   ),
   filterEditDialog: SecInfoFilterDialog,
+  filtersFilter: SECINFO_FILTER_FILTER,
   sectionIcon: 'allinfo.svg',
   table: SecInfosTable,
   title: _('All SecInfo Information'),

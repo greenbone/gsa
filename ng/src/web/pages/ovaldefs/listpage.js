@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
+
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
@@ -55,6 +57,7 @@ export default withEntitiesContainer('ovaldef', {
     <DashboardControls dashboardId={OVALDEF_DASHBOARD_ID}/>
   ),
   filterEditDialog: OvaldefFilterDialog,
+  filtersFilter: OVALDEFS_FILTER_FILTER,
   sectionIcon: 'ovaldef.svg',
   table: OvaldefsTable,
   title: _('OVAL Definitions'),
