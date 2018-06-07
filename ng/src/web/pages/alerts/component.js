@@ -273,7 +273,7 @@ class AlertComponent extends React.Component {
           name: alert.name,
           comment: alert.comment,
           filters,
-          filter_id: is_defined(alert.filter) ? alert.filter.id : '0',
+          filter_id: is_defined(alert.filter) ? alert.filter.id : NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
