@@ -281,18 +281,18 @@ url_handler_free (http_handler_t *handler)
 }
 
 http_handler_t *
-url_handler_new (const gchar *regexp, http_handler_func_t handle)
+url_handler_new (const gchar *regexp, http_handler_t *handler)
 {
-  http_handler_t * handler = http_handler_new (handle);
   url_map_t * map = url_map_new (regexp, handler);
   return http_handler_new_with_data (&handle_url, url_handler_free, map);
 }
 
 http_handler_t *
-url_handler_add (http_handler_t *handlers, const gchar *regexp,
-                 http_handler_func_t handle)
+url_handler_add_func (http_handler_t *handlers, const gchar *regexp,
+                      http_handler_func_t handle)
 {
-  http_handler_t *url_handler = url_handler_new (regexp, handle);
+  http_handler_t *handler = http_handler_new (handle);
+  http_handler_t *url_handler = url_handler_new (regexp, handler);
   return http_handler_add (handlers, url_handler);
 }
 
@@ -772,26 +772,26 @@ init_http_handlers()
 
   http_handler_add (handlers, method_router);
 
-  anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
-  url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
-                   handle_static_file);
-  url_handler_add (anon_url_handlers, "^/robots.txt$",
-                   handle_static_file);
+  anon_url_handlers = url_handler_new("^/(img|js|css|locales)/.+$",
+                                      http_handler_new (handle_static_file));
+  url_handler_add_func (anon_url_handlers, "^/robots.txt$",
+                        handle_static_file);
 
-  url_handler_add (anon_url_handlers, "^/login/?$", handle_index);
-  url_handler_add (anon_url_handlers, "^/login/.+$",
-                   handle_redirect_to_login_page);
+  url_handler_add_func (anon_url_handlers, "^/login/?$", handle_index);
+  url_handler_add_func (anon_url_handlers, "^/login/.+$",
+                        handle_redirect_to_login_page);
 
-  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_file);
-  url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
-                   handle_static_file);
-  url_handler_add (anon_url_handlers, "^/ng.*$", handle_index);
+  url_handler_add_func (anon_url_handlers, "^/config.*js$", handle_static_file);
+  url_handler_add_func (anon_url_handlers, "^/static/(img|js|css)/.+$",
+                        handle_static_file);
+  url_handler_add_func (anon_url_handlers, "^/ng.*$", handle_index);
 
-  user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
+  user_url_handlers = url_handler_new("^/logout/?$",
+                                      http_handler_new (handle_logout));
   http_handler_add (user_url_handlers, credential_handler);
-  url_handler_add (user_url_handlers, "^/omp$", handle_gmp_get);
-  url_handler_add (user_url_handlers, "^/system_report/.+$",
-                   handle_system_report);
+  url_handler_add_func (user_url_handlers, "^/omp$", handle_gmp_get);
+  url_handler_add_func (user_url_handlers, "^/system_report/.+$",
+                        handle_system_report);
   http_handler_add (user_url_handlers, not_found_handler);
 
   http_handler_add (anon_url_handlers, user_handler);
