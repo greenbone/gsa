@@ -807,13 +807,10 @@ init_http_handlers()
   http_handler_add (handlers, method_router);
 
   anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
-
-#ifdef SERVE_STATIC_ASSETS
   url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
                    handle_static_ng_file);
   url_handler_add (anon_url_handlers, "^/robots.txt$",
                    handle_static_file);
-#endif
 
   url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
   url_handler_add (anon_url_handlers, "^/login/.+$",

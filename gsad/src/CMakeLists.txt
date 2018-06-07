@@ -65,12 +65,6 @@ endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
   (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT
   LIBGVM_GMP_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
-## Config
-
-if (NOT SERVE_STATIC_ASSETS EQUAL 0)
-  set (SERVE_STATIC_ASSETS 1)
-endif (NOT SERVE_STATIC_ASSETS EQUAL 0)
-
 ## Program
 
 set (HARDENING_FLAGS            "-D_FORTIFY_SOURCE=2 -fstack-protector")
@@ -120,13 +114,6 @@ add_executable (gsad
 
 target_link_libraries (gsad gsad_gmp gsad_base gsad_i18n_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
-
-if (SERVE_STATIC_ASSETS)
-  message (STATUS "Static asset serving is builtin, use with care.")
-  add_definitions (-DSERVE_STATIC_ASSETS)
-else (SERVE_STATIC_ASSETS)
-  message (STATUS "Static asset serving not builtin, use an external server")
-endif (SERVE_STATIC_ASSETS)
 
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION="${GSAD_VERSION}")
