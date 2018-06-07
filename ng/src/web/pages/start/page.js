@@ -307,6 +307,7 @@ class StartPage extends React.Component {
 
     const {
       byId = {},
+      isLoading = false,
     } = this.props;
 
     let {
@@ -322,79 +323,85 @@ class StartPage extends React.Component {
           title={_('Dashboards')}
           img="dashboard.svg"
         >
-          <TabLayout
-            grow="1"
-            align={['start', 'end']}
-          >
-            <TabList
-              active={activeTab}
-              align={['start', 'stretch']}
-              onActivateTab={this.handleActivateTab}
-            >
-              {dashboards.map(id => {
-                const dashboard = byId[id];
-                const {title} = dashboard;
-                return (
-                  <Tab
-                    key={id}
-                  >
-                    <Divider>
-                      <span>{title}</span>
-                      {dashboards.length > 1 &&
-                        <CloseButton
-                          size="small"
-                          title={_('Remove Dashboard')}
-                          onClick={event =>
-                            this.handleConfirmRemoveDashboard(event, id)}
-                        />
-                      }
-                    </Divider>
-                  </Tab>
-                );
-              })}
+          {isLoading ?
+            <Loading/> :
+            <React.Fragment>
 
-              <Layout
-                align={['center', 'center']}
-                grow
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
               >
-                <StyledNewIcon
-                  title={canAdd ?
-                    _('Add new Dashboard') :
-                    _('Dashboards limit reached')
-                  }
-                  active={canAdd}
-                  onClick={canAdd ?
-                    this.handleOpenNewDashboardDialog :
-                    undefined
-                  }
-                />
-              </Layout>
-            </TabList>
-          </TabLayout>
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={this.handleActivateTab}
+                >
+                  {dashboards.map(id => {
+                    const dashboard = byId[id];
+                    const {title} = dashboard;
+                    return (
+                      <Tab
+                        key={id}
+                      >
+                        <Divider>
+                          <span>{title}</span>
+                          {dashboards.length > 1 &&
+                            <CloseButton
+                              size="small"
+                              title={_('Remove Dashboard')}
+                              onClick={event =>
+                                this.handleConfirmRemoveDashboard(event, id)}
+                            />
+                          }
+                        </Divider>
+                      </Tab>
+                    );
+                  })}
 
-          <Tabs active={activeTab}>
-            <TabPanels>
-              {dashboards.map(id => {
-                const dashboard = byId[id];
-                const {rows, title, ...settings} = dashboard;
-                return (
-                  <TabPanel
-                    key={id}
+                  <Layout
+                    align={['center', 'center']}
+                    grow
                   >
-                    <Dashboard
-                      {...settings}
-                      id={id}
-                      items={rows}
-                      loadSettings={this.handleLoadDashboardSettings}
-                      saveSettings={this.handleSaveDashboardSettings}
-                      onNewDisplay={this.handleAddNewDisplay}
-                      onResetDashboard={this.handleResetDashboard}
+                    <StyledNewIcon
+                      title={canAdd ?
+                        _('Add new Dashboard') :
+                        _('Dashboards limit reached')
+                      }
+                      active={canAdd}
+                      onClick={canAdd ?
+                        this.handleOpenNewDashboardDialog :
+                        undefined
+                      }
                     />
-                  </TabPanel>
-                );
-              })}
-            </TabPanels>
-          </Tabs>
+                  </Layout>
+                </TabList>
+              </TabLayout>
+
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  {dashboards.map(id => {
+                    const dashboard = byId[id];
+                    const {rows, title, ...settings} = dashboard;
+                    return (
+                      <TabPanel
+                        key={id}
+                      >
+                        <Dashboard
+                          {...settings}
+                          id={id}
+                          items={rows}
+                          loadSettings={this.handleLoadDashboardSettings}
+                          saveSettings={this.handleSaveDashboardSettings}
+                          onNewDisplay={this.handleAddNewDisplay}
+                          onResetDashboard={this.handleResetDashboard}
+                        />
+                      </TabPanel>
+                    );
+                  })}
+                </TabPanels>
+              </Tabs>
+            </React.Fragment>
+          }
         </Section>
         {showConfirmRemoveDialog &&
           <ConfirmRemoveDialog
@@ -419,6 +426,7 @@ StartPage.propTypes = {
   byId: PropTypes.object,
   dashboards: PropTypes.array,
   defaults: PropTypes.object,
+  isLoading: PropTypes.bool,
   loadSettings: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
 };
@@ -472,4 +480,3 @@ export default compose(
 )(StartPage);
 
 // vim: set ts=2 sw=2 tw=80:
-
