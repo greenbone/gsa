@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
+
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
@@ -53,6 +55,7 @@ export default withEntitiesContainer('nvt', {
     <DashboardControls dashboardId={NVTS_DASHBOARD_ID}/>
   ),
   filterEditDialog: NvtsFilterDialog,
+  filtersFilter: NVTS_FILTER_FILTER,
   sectionIcon: 'nvt.svg',
   table: NvtsTable,
   title: _('NVTs'),

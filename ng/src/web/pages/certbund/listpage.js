@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
+
 import EntitiesPage from '../../entities/page.js';
 import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
 
@@ -54,6 +56,7 @@ export default withEntitiesContainer('certbund', {
     <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
   ),
   filterEditDialog: CertBundFilterDialog,
+  filtersFilter: CERTBUND_FILTER_FILTER,
   sectionIcon: 'cert_bund_adv.svg',
   table: CertBundTable,
   title: _('CERT-Bund Advisories'),
