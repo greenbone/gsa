@@ -140,9 +140,9 @@ export class Gmp {
   }
 
   logout() {
-    const uri = this.buildUrl('logout');
-    const args = {xml: 1};
-    return this.http.request('get', {uri, args})
+    const url = this.buildUrl('logout');
+    const args = {token: this.token};
+    return this.http.request('get', {url, args})
       .then(xhr => {
         this.token = undefined;
         return xhr;
