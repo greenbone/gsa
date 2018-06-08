@@ -156,7 +156,7 @@ class Page extends React.Component {
 
     if (is_defined(selectedDeltaReport)) {
       const {router} = this.props;
-      router.push('/ng/report/delta/' + selectedDeltaReport.id + '/' +
+      router.push('/report/delta/' + selectedDeltaReport.id + '/' +
         report.id);
     }
     else {
