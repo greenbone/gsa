@@ -541,6 +541,8 @@ handle_logout (http_connection_t *connection,
 {
   user_t * user = (user_t *)data;
 
+  g_debug ("Logged out user %s\n", user->username);
+
   user_remove (user);
 
   return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
