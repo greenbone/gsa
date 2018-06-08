@@ -754,11 +754,8 @@ init_http_handlers()
 {
   http_handler_t *method_router;
   http_handler_t *not_found_handler;
-  http_handler_t *user_handler;
-  http_handler_t *credential_handler;
   http_handler_t *gmp_post_handler;
-  http_handler_t *anon_url_handlers;
-  http_handler_t *user_url_handlers;
+  http_handler_t *url_handlers;
 
   http_validator = openvas_validator_new ();
   openvas_validator_add (http_validator, "slave_id", SLAVE_ID_REGEXP);
@@ -768,38 +765,45 @@ init_http_handlers()
 
   method_router = method_router_new ();
   not_found_handler = http_handler_new (handle_not_found);
-  user_handler = http_handler_new (handle_setup_user);
-  credential_handler = http_handler_new (handle_setup_credentials);
   gmp_post_handler = http_handler_new (handle_gmp_post);
 
   http_handler_add (handlers, method_router);
 
-  anon_url_handlers = url_handler_new("^/(img|js|css|locales)/.+$",
+  url_handlers = url_handler_new("^/(img|js|css|locales)/.+$",
                                       http_handler_new (handle_static_file));
-  url_handler_add_func (anon_url_handlers, "^/robots.txt$",
+  url_handler_add_func (url_handlers, "^/robots.txt$",
                         handle_static_file);
 
-  url_handler_add_func (anon_url_handlers, "^/login/?$", handle_index);
-  url_handler_add_func (anon_url_handlers, "^/login/.+$",
-                        handle_redirect_to_login_page);
-
-  url_handler_add_func (anon_url_handlers, "^/config.*js$", handle_static_file);
-  url_handler_add_func (anon_url_handlers, "^/static/(img|js|css)/.+$",
+  url_handler_add_func (url_handlers, "^/config.*js$", handle_static_file);
+  url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
                         handle_static_file);
-  url_handler_add_func (anon_url_handlers, "^/ng.*$", handle_index);
 
-  user_url_handlers = url_handler_new("^/logout/?$",
-                                      http_handler_new (handle_logout));
-  http_handler_add (user_url_handlers, credential_handler);
-  url_handler_add_func (user_url_handlers, "^/omp$", handle_gmp_get);
-  url_handler_add_func (user_url_handlers, "^/system_report/.+$",
-                        handle_system_report);
-  http_handler_add (user_url_handlers, not_found_handler);
+  http_handler_t *omp_handler = http_handler_new (handle_setup_user);
+  http_handler_add (omp_handler, http_handler_new (handle_setup_credentials));
+  http_handler_add (omp_handler, http_handler_new (handle_gmp_get));
+  http_handler_t *omp_url_handler = url_handler_new ("^/omp$", omp_handler);
 
-  http_handler_add (anon_url_handlers, user_handler);
-  http_handler_add (user_handler, user_url_handlers);
+  http_handler_t *system_report_handler = http_handler_new (handle_setup_user);
+  http_handler_add (system_report_handler,
+                    http_handler_new(handle_setup_credentials));
+  http_handler_add (system_report_handler,
+                    http_handler_new (handle_system_report));
+  http_handler_t *system_report_url_handler =
+      url_handler_new ("^/system_report/.+$", system_report_handler);
 
-  method_router_set_get_handler (method_router, anon_url_handlers);
+  http_handler_t *logout_handler = http_handler_new (handle_setup_user);
+  http_handler_add(logout_handler, http_handler_new (handle_logout));
+  http_handler_t *logout_url_handler = url_handler_new ("^/logout/?$",
+                                                        logout_handler);
+
+  http_handler_add (url_handlers, omp_url_handler);
+  http_handler_add (url_handlers, system_report_url_handler);
+  http_handler_add (url_handlers, logout_url_handler);
+
+  url_handler_add_func (url_handlers, "^/.*$", handle_index);
+  http_handler_add (url_handlers, not_found_handler);
+
+  method_router_set_get_handler (method_router, url_handlers);
   method_router_set_post_handler (method_router, gmp_post_handler);
 
   http_handler_add (handlers, http_handler_new (handle_invalid_method));
