@@ -88,7 +88,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
   handleDataClick(data) {
     const {router} = this.props;
 
-    router.push(`/ng/task/${data.id}`);
+    router.push(`/task/${data.id}`);
   }
 
   render() {

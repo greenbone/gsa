@@ -257,7 +257,7 @@ class LoginPage extends React.Component {
         router.replace(location.state.next);
       }
       else {
-        router.replace('/ng');
+        router.replace('/');
       }
     }, rej => {
       log.error(rej);
