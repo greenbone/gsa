@@ -27,7 +27,7 @@ find_package (Node 6.0 REQUIRED)
 find_package (Yarn QUIET)
 
 set (NG_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
-set (NG_DEST_DIR ${GSA_DATA_DIR}/classic/ng)
+set (NG_DEST_DIR ${GSA_DATA_DIR}/web)
 set (NG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (NG_PKG_FILES
@@ -836,7 +836,7 @@ install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
 
 install (FILES public/robots.txt
-         DESTINATION ${NG_DEST_DIR}/..)
+         DESTINATION ${NG_DEST_DIR})
 
 # remove old generated files
 install (CODE "file(REMOVE_RECURSE ${NG_DEST_DIR}/static)")
