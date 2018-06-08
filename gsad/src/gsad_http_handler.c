@@ -281,18 +281,18 @@ url_handler_free (http_handler_t *handler)
 }
 
 http_handler_t *
-url_handler_new (const gchar *regexp, http_handler_func_t handle)
+url_handler_new (const gchar *regexp, http_handler_t *handler)
 {
-  http_handler_t * handler = http_handler_new (handle);
   url_map_t * map = url_map_new (regexp, handler);
   return http_handler_new_with_data (&handle_url, url_handler_free, map);
 }
 
 http_handler_t *
-url_handler_add (http_handler_t *handlers, const gchar *regexp,
-                 http_handler_func_t handle)
+url_handler_add_func (http_handler_t *handlers, const gchar *regexp,
+                      http_handler_func_t handle)
 {
-  http_handler_t *url_handler = url_handler_new (regexp, handle);
+  http_handler_t *handler = http_handler_new (handle);
+  http_handler_t *url_handler = url_handler_new (regexp, handler);
   return http_handler_add (handlers, url_handler);
 }
 
@@ -337,40 +337,6 @@ handle_not_found (http_connection_t *connection, const char * method,
                   http_handler_t *handler, void * data)
 {
   return handler_send_not_found (connection, url);
-}
-
-int
-handle_static_file (http_connection_t *connection, const char * method,
-                    const char *url, gsad_connection_info_t *con_info,
-                    http_handler_t *handler, void * data)
-{
-  gchar* path;
-  http_response_t *response;
-  cmd_response_data_t *response_data;
-  char *default_file = "index.html";
-
-  response_data = cmd_response_data_new ();
-  cmd_response_data_set_allow_caching (response_data, 1);
-
-  /** @todo validation, URL length restriction (allows you to view ANY
-    *       file that the user running the gsad might look at!) */
-  /** @todo use glibs path functions */
-  /* Attempt to prevent disclosing non-gsa content. */
-  if (strstr (url, ".."))
-    path = g_strconcat (default_file, NULL);
-  else
-    {
-      /* Ensure that url is relative. */
-      const char* relative_url = url;
-      if (*url == '/') relative_url = url + 1;
-      path = g_strconcat (relative_url, NULL);
-    }
-
-  response = file_content_response(connection, url, path, response_data);
-
-  g_free (path);
-
-  return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
@@ -575,6 +541,8 @@ handle_logout (http_connection_t *connection,
 {
   user_t * user = (user_t *)data;
 
+  g_debug ("Logged out user %s\n", user->username);
+
   user_remove (user);
 
   return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
@@ -728,10 +696,10 @@ handle_system_report (http_connection_t *connection,
 }
 
 int
-handle_index_ng (http_connection_t *connection,
-                 const char *method, const char *url,
-                 gsad_connection_info_t *con_info,
-                 http_handler_t *handler, void *data)
+handle_index (http_connection_t *connection,
+              const char *method, const char *url,
+              gsad_connection_info_t *con_info,
+              http_handler_t *handler, void *data)
 {
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -740,13 +708,13 @@ handle_index_ng (http_connection_t *connection,
   cmd_response_data_set_allow_caching (response_data, 1);
 
   response = file_content_response (connection, url,
-                                    "ng/index.html",
+                                    "index.html",
                                     response_data);
   return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
-handle_static_ng_file (http_connection_t *connection, const char * method,
+handle_static_file (http_connection_t *connection, const char * method,
                        const char *url, gsad_connection_info_t *con_info,
                        http_handler_t *handler, void * data)
 {
@@ -766,7 +734,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
       /* Ensure that url is relative. */
       const char* relative_url = url;
       if (*url == '/') relative_url = url + 1;
-      path = g_strconcat ("ng/", relative_url, NULL);
+      path = g_strconcat (relative_url, NULL);
     }
 
   g_debug ("Requesting url %s for static ng path %s", url, path);
@@ -786,11 +754,8 @@ init_http_handlers()
 {
   http_handler_t *method_router;
   http_handler_t *not_found_handler;
-  http_handler_t *user_handler;
-  http_handler_t *credential_handler;
   http_handler_t *gmp_post_handler;
-  http_handler_t *anon_url_handlers;
-  http_handler_t *user_url_handlers;
+  http_handler_t *url_handlers;
 
   http_validator = openvas_validator_new ();
   openvas_validator_add (http_validator, "slave_id", SLAVE_ID_REGEXP);
@@ -800,41 +765,45 @@ init_http_handlers()
 
   method_router = method_router_new ();
   not_found_handler = http_handler_new (handle_not_found);
-  user_handler = http_handler_new (handle_setup_user);
-  credential_handler = http_handler_new (handle_setup_credentials);
   gmp_post_handler = http_handler_new (handle_gmp_post);
 
   http_handler_add (handlers, method_router);
 
-  anon_url_handlers = url_handler_new ("^/$", handle_redirect_to_login_page);
+  url_handlers = url_handler_new("^/(img|js|css|locales)/.+$",
+                                      http_handler_new (handle_static_file));
+  url_handler_add_func (url_handlers, "^/robots.txt$",
+                        handle_static_file);
 
-#ifdef SERVE_STATIC_ASSETS
-  url_handler_add (anon_url_handlers, "^/(img|js|css|locales)/.+$",
-                   handle_static_ng_file);
-  url_handler_add (anon_url_handlers, "^/robots.txt$",
-                   handle_static_file);
-#endif
+  url_handler_add_func (url_handlers, "^/config.*js$", handle_static_file);
+  url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
+                        handle_static_file);
 
-  url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
-  url_handler_add (anon_url_handlers, "^/login/.+$",
-                   handle_redirect_to_login_page);
+  http_handler_t *omp_handler = http_handler_new (handle_setup_user);
+  http_handler_add (omp_handler, http_handler_new (handle_setup_credentials));
+  http_handler_add (omp_handler, http_handler_new (handle_gmp_get));
+  http_handler_t *omp_url_handler = url_handler_new ("^/omp$", omp_handler);
 
-  url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
-  url_handler_add (anon_url_handlers, "^/config.*js$", handle_static_ng_file);
-  url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
-                   handle_static_ng_file);
+  http_handler_t *system_report_handler = http_handler_new (handle_setup_user);
+  http_handler_add (system_report_handler,
+                    http_handler_new(handle_setup_credentials));
+  http_handler_add (system_report_handler,
+                    http_handler_new (handle_system_report));
+  http_handler_t *system_report_url_handler =
+      url_handler_new ("^/system_report/.+$", system_report_handler);
 
-  user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
-  http_handler_add (user_url_handlers, credential_handler);
-  url_handler_add (user_url_handlers, "^/omp$", handle_gmp_get);
-  url_handler_add (user_url_handlers, "^/system_report/.+$",
-                   handle_system_report);
-  http_handler_add (user_url_handlers, not_found_handler);
+  http_handler_t *logout_handler = http_handler_new (handle_setup_user);
+  http_handler_add(logout_handler, http_handler_new (handle_logout));
+  http_handler_t *logout_url_handler = url_handler_new ("^/logout/?$",
+                                                        logout_handler);
 
-  http_handler_add (anon_url_handlers, user_handler);
-  http_handler_add (user_handler, user_url_handlers);
+  http_handler_add (url_handlers, omp_url_handler);
+  http_handler_add (url_handlers, system_report_url_handler);
+  http_handler_add (url_handlers, logout_url_handler);
 
-  method_router_set_get_handler (method_router, anon_url_handlers);
+  url_handler_add_func (url_handlers, "^/.*$", handle_index);
+  http_handler_add (url_handlers, not_found_handler);
+
+  method_router_set_get_handler (method_router, url_handlers);
   method_router_set_post_handler (method_router, gmp_post_handler);
 
   http_handler_add (handlers, http_handler_new (handle_invalid_method));

@@ -57,14 +57,12 @@ http_handler_t * init_http_handlers();
 
 void cleanup_http_handlers ();
 
-
 http_handler_t * url_handler_new(const gchar *regexp,
-                                 http_handler_func_t handle);
+                                 http_handler_t *handler);
 
-http_handler_t * url_handler_add(http_handler_t *handlers,
-                                 const gchar *regexp,
-                                 http_handler_func_t handle);
-
+http_handler_t * url_handler_add_func(http_handler_t *handlers,
+                                      const gchar *regexp,
+                                      http_handler_func_t handle);
 
 http_handler_t * method_router_new();
 

@@ -165,9 +165,9 @@
 #define DEFAULT_CLIENT_WATCH_INTERVAL 1
 
 /**
- * @brief Default face name.
+ * @brief Default directory for web content.
  */
-#define DEFAULT_GSAD_FACE "classic"
+#define DEFAULT_WEB_DIRECTORY "web"
 
 /**
  * @brief Default value for HTTP header "X-Frame-Options"
@@ -296,6 +296,7 @@ init_validator ()
                          "|(create_scanner)"
                          "|(create_schedule)"
                          "|(create_tag)"
+                         "|(create_tags)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(cvss_calculator)"
@@ -760,7 +761,7 @@ init_validator ()
   openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
-  openvas_validator_add (validator, "severity_class", "^(classic|nist|bsi|pci\\-dss)$");
+  openvas_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
@@ -901,6 +902,8 @@ init_validator ()
   openvas_validator_alias (validator, "privacy_password", "lsc_password");
   openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
+  openvas_validator_alias (validator, "resource_ids:name",     "number");
+  openvas_validator_alias (validator, "resource_ids:value",    "id_optional");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "result_uuid", "optional_id");
@@ -1130,7 +1133,8 @@ params_append_mhd (params_t *params,
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
       || (strcmp(name, "group_ids:") == 0)
-      || (strcmp(name, "id_list:") == 0))
+      || (strcmp(name, "id_list:") == 0)
+      || (strcmp(name, "resource_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -1531,6 +1535,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_scanner)
   ELSE (create_schedule)
   ELSE (create_tag)
+  ELSE (create_tags)
   ELSE (create_target)
   ELSE (create_config)
   ELSE (create_note)
@@ -2529,17 +2534,17 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
 
   if (do_chroot)
     {
-      gchar* root_face_dir = g_build_filename ("/", subdir, NULL);
-      if (chdir (root_face_dir))
+      gchar* root_dir = g_build_filename ("/", subdir, NULL);
+      if (chdir (root_dir))
         {
           g_critical ("%s: failed change to chroot root directory (%s): %s\n",
                       __FUNCTION__,
-                      root_face_dir,
+                      root_dir,
                       strerror (errno));
-          g_free (root_face_dir);
+          g_free (root_dir);
           return 1;
         }
-      g_free (root_face_dir);
+      g_free (root_dir);
     }
   else
     {
@@ -2938,7 +2943,6 @@ main (int argc, char **argv)
   static gchar *unix_socket_path = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
-  static gchar *face_name = NULL;
   static gchar *guest_user = NULL;
   static gchar *guest_pass = NULL;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
@@ -3027,9 +3031,6 @@ main (int argc, char **argv)
     {"gnutls-priorities", '\0',
      0, G_OPTION_ARG_STRING, &gnutls_priorities,
      "GnuTLS priorities string.", "<string>"},
-    {"face", 0,
-     0, G_OPTION_ARG_STRING, &face_name,
-     "Use interface files from subdirectory <dir>", "<dir>"},
     {"guest-username", 0,
      0, G_OPTION_ARG_STRING, &guest_user,
      "Username for guest user.  Enables guest logins.", "<name>"},
@@ -3540,21 +3541,11 @@ main (int argc, char **argv)
 
   /* Chroot and drop privileges, if requested. */
 
-  if (chroot_drop_privileges (do_chroot, drop,
-                              face_name ? face_name : DEFAULT_GSAD_FACE))
+  if (chroot_drop_privileges (do_chroot, drop, DEFAULT_WEB_DIRECTORY))
     {
-      if (face_name && strcmp (face_name, DEFAULT_GSAD_FACE))
-        {
-          g_critical ("%s: Cannot use custom face \"%s\".\n",
-                      __FUNCTION__, face_name);
-          exit (EXIT_FAILURE);
-        }
-      else
-        {
-          g_critical ("%s: Cannot use default face \"%s\"!\n",
-                      __FUNCTION__, DEFAULT_GSAD_FACE);
-          exit (EXIT_FAILURE);
-        }
+      g_critical ("%s: Cannot use drop privileges for directory \"%s\"!\n",
+                  __FUNCTION__, DEFAULT_WEB_DIRECTORY);
+      exit (EXIT_FAILURE);
     }
 
   /* Wait forever for input or interrupts. */

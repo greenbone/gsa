@@ -22,7 +22,6 @@
  */
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
 
 import Model from '../model.js';
 
@@ -33,12 +32,10 @@ class Tag extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(elem.resource) && !is_empty(elem.resource._id)) {
+    if (is_defined(elem.resource)) {
       ret.resource = new Model(elem.resource, elem.resource.type);
     }
-    else {
-      delete ret.resource;
-    }
+
     return ret;
   }
 }

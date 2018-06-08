@@ -24,7 +24,9 @@
 import React from 'react';
 
 import _, {short_date} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+
+import {is_defined} from 'gmp/utils/identity';
+import {has_id} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -156,7 +158,7 @@ const Row = ({
         {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
       </TableData>
       <TableData>
-        {is_defined(entity.resource) && (
+        {has_id(entity.resource) && (
           entity.isOrphan() ?
             <span>{N_A}{' '}
               <i>({entity.resource.id})</i>

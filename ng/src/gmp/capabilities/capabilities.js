@@ -37,6 +37,8 @@ const types = {
   cpes: 'info',
   dfncert: 'info',
   dfncerts: 'info',
+  nvt: 'info',
+  nvts: 'info',
   ovaldefs: 'info',
   ovaldef: 'info',
   certbund: 'info',

@@ -207,22 +207,23 @@ class EntityPermissions extends React.Component {
             onPermissionEditClick={this.openPermissionDialog}
           />
         }
-        <MultiplePermissionDialog
-          visible={multiplePermissionDialogVisible}
-          entity_type={entity_type}
-          entity_name={entity_name}
-          group_id={group_id}
-          groups={groups}
-          id={id}
-          include_related={include_related}
-          role_id={role_id}
-          roles={roles}
-          title={title}
-          user_id={user_id}
-          users={users}
-          onClose={this.closeMultiplePermissionDialog}
-          onSave={this.handleMultipleSave}
-        />
+        {multiplePermissionDialogVisible &&
+          <MultiplePermissionDialog
+            entity_type={entity_type}
+            entity_name={entity_name}
+            group_id={group_id}
+            groups={groups}
+            id={id}
+            include_related={include_related}
+            role_id={role_id}
+            roles={roles}
+            title={title}
+            user_id={user_id}
+            users={users}
+            onClose={this.closeMultiplePermissionDialog}
+            onSave={this.handleMultipleSave}
+          />
+        }
       </Layout>
     );
   }

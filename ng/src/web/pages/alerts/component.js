@@ -262,8 +262,8 @@ class AlertComponent extends React.Component {
           is_defined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
-        const tp_sms_credential_id = value(
-          method.data.tp_sms_credential.credential);
+        const tp_sms_credential_id = is_defined(method.data.tp_sms_credential) ?
+          value(method.data.tp_sms_credential.credential) : undefined;
 
         this.setState({
           alertDialogVisible: true,
@@ -273,7 +273,7 @@ class AlertComponent extends React.Component {
           name: alert.name,
           comment: alert.comment,
           filters,
-          filter_id: is_defined(alert.filter) ? alert.filter.id : '0',
+          filter_id: is_defined(alert.filter) ? alert.filter.id : NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
