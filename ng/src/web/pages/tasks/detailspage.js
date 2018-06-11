@@ -150,7 +150,13 @@ const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        <ScheduleIcon task={entity} links={links} />
+        {is_defined(entity.schedule) &&
+          <ScheduleIcon
+            schedule={entity.schedule}
+            schedulePeriods={entity.schedule_periods}
+            links={links}
+          />
+        }
         <StartIcon task={entity} onClick={onTaskStartClick}/>
 
         <ImportReportIcon task={entity} onClick={onReportImportClick}/>
