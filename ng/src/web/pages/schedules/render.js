@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,29 +20,113 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _, {interval, long_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-export const render_period = ({period, period_months}) => {
-  if (period === 0 && period_months === 0) {
-    return _('Once');
+export const renderRecurrence = ({
+  years = 0,
+  months = 0,
+  weeks = 0,
+  days = 0,
+  hours = 0,
+  minutes = 0,
+  seconds = 0,
+}) => {
+  if (years !== 0) {
+    if (years === 1) {
+      return _('One year');
+    }
+    return _('{{number}} years', {number: months});
   }
-  if (period === 0 && period_months === 1) {
-    return _('One month');
+
+  if (months !== 0) {
+    if (months === 1) {
+      return _('One month');
+    }
+    return _('{{number}} months', {number: months});
   }
-  if (period === 0) {
-    return _('{{number}} months', {number: period_months});
+
+  if (weeks !== 0) {
+    if (weeks === 1) {
+      return _('One week');
+    }
+    return _('{{number}} weeks', {number: weeks});
   }
-  return interval(period);
+
+  if (days !== 0) {
+    if (days === 1) {
+      return _('One day');
+    }
+    return _('{{number}} days', {number: days});
+  }
+
+  if (hours !== 0) {
+    if (hours === 1) {
+      return _('One hour');
+    }
+    return _('{{number}} hours', {number: hours});
+  }
+
+  if (minutes !== 0) {
+    if (minutes === 1) {
+      return _('One minute');
+    }
+    return _('{{number}} minutes', {number: minutes});
+  }
+
+  if (seconds !== 0) {
+    if (seconds === 1) {
+      return _('One second');
+    }
+    return _('{{number}} seconds', {number: seconds});
+  }
+
+  return _('Once');
 };
 
-export const render_duration = duration => {
-  if (duration === 0) {
-    return _('Entire Operation');
+export const renderDuration = ({
+  days = 0,
+  hours = 0,
+  minutes = 0,
+  weeks = 0,
+  seconds = 0,
+} = {}) => {
+  if (weeks !== 0) {
+    if (weeks === 1) {
+      return _('One week');
+    }
+    return _('{{number}} weeks', {number: weeks});
   }
-  return interval(duration);
-};
 
-export const render_next_time = next_time => next_time === 'over' ?
-    '-' : long_date(next_time);
+  if (days !== 0) {
+    if (days === 1) {
+      return _('One day');
+    }
+    return _('{{number}} days', {number: days});
+  }
+
+  if (hours !== 0) {
+    if (hours === 1) {
+      return _('One hour');
+    }
+    return _('{{number}} hours', {number: hours});
+  }
+
+  if (minutes !== 0) {
+    if (minutes === 1) {
+      return _('One minute');
+    }
+    return _('{{number}} minutes', {number: minutes});
+  }
+
+  if (seconds !== 0) {
+    if (seconds === 1) {
+      return _('One second');
+    }
+
+    return _('{{number}} seconds', {number: seconds});
+  }
+
+  return _('Entire Operation');
+};
 
 // vim: set ts=2 sw=2 tw=80:
