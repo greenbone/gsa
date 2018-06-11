@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@ import React from 'react';
 
 import _, {long_date} from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
@@ -43,9 +45,8 @@ import IconDivider from '../../components/layout/icondivider.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 import {
-  render_duration,
-  render_next_time,
-  render_period,
+  renderDuration,
+  renderRecurrence,
 } from './render.js';
 
 const Actions = ({
@@ -99,6 +100,8 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const {event} = entity;
+  const {startDate, nextDate, duration, recurrence} = event;
   return (
     <TableRow>
       <EntityNameTableData
@@ -109,16 +112,16 @@ const Row = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        {long_date(entity.first_time)}
+        {long_date(startDate)}
       </TableData>
       <TableData>
-        {render_next_time(entity.next_time)}
+        {is_defined(nextDate) ? long_date(nextDate) : '-'}
       </TableData>
       <TableData>
-        {render_period(entity)}
+        {renderRecurrence(recurrence)}
       </TableData>
       <TableData>
-        {render_duration(entity.duration)}
+        {renderDuration(duration)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
