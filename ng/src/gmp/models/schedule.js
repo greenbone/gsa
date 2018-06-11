@@ -20,16 +20,85 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import moment from 'moment-timezone';
 
+import ical from 'ical.js';
+
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Model from '../model.js';
 
-import {parse_int} from '../parser.js';
+const convertIcalDate = (date, timezone) => is_defined(timezone) ?
+  moment.unix(date.toUnixTime()).tz(timezone) :
+  moment.unix(date.toUnixTime());
+
+const INTERVAL_NAMES = {
+  YEARLY: 'years',
+  MONTHLY: 'months',
+  WEEKLY: 'weeks',
+  DAILY: 'days',
+  HOURLY: 'hours',
+  MINUTELY: 'minutes',
+  SECONDLY: 'seconds',
+};
+
+class Event {
+
+  constructor(icalendar, timezone) {
+    const jcal = ical.parse(icalendar);
+    const comp = new ical.Component(jcal);
+    const vevent = comp.getFirstSubcomponent('vevent');
+    this.event = new ical.Event(vevent);
+    this.timezone = timezone;
+  }
+
+  get startDate() {
+    return convertIcalDate(this.event.startDate, this.timezone);
+  }
+
+  get duration() {
+    return this.event.duration;
+  }
+
+  get recurrence() {
+    const rules = this.event.component.getAllProperties('rrule');
+
+    const result = {};
+
+    for (const rule of rules) {
+
+      const value = rule.getFirstValue();
+
+      const {freq, interval = 0} = value;
+      const name = INTERVAL_NAMES[freq];
+
+      result[name] = interval;
+
+    }
+
+    return result;
+  }
+
+  get nextDate() {
+    if (this.isRecurring()) {
+      const now = ical.Time.now();
+      const it = this.event.iterator();
+
+      while (true) {
+        const next = it.next();
+        if (next.compare(now) >= 0) {
+          return convertIcalDate(next, this.timezone);
+        }
+      }
+    }
+    return undefined;
+  }
+
+  isRecurring() {
+    return this.event.isRecurring();
+  }
+}
 
 class Schedule extends Model {
 
@@ -38,48 +107,12 @@ class Schedule extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.period = parse_int(ret.period);
-    ret.period_months = parse_int(ret.period_months);
-    ret.duration = parse_int(ret.duration);
+    const {timezone, icalendar} = elem;
 
-    if (is_defined(ret.simple_duration)) {
-      ret.simple_duration = {
-        value: parse_int(ret.simple_duration.__text),
-        unit: is_empty(ret.simple_duration.unit) ? undefined :
-          ret.simple_duration.unit,
-      };
-    }
-    else {
-      ret.simple_duration = {
-      };
-    }
+    if (is_defined(icalendar)) {
+      ret.event = new Event(icalendar, timezone);
 
-    if (is_defined(ret.simple_period)) {
-      ret.simple_period = {
-        value: parse_int(ret.simple_period.__text),
-        unit: is_empty(ret.simple_period.unit) ? undefined :
-          ret.simple_period.unit,
-      };
-    }
-    else {
-      ret.simple_period = {
-      };
-    }
-
-    const has_timezone = is_defined(ret.timezone);
-
-    // FIXME check what's happening during parsing without having a timezone
-    ret.first_time = has_timezone ? moment(ret.first_time).tz(ret.timezone) :
-      moment(ret.first_time);
-
-    if (is_defined(ret.next_time)) {
-      if (ret.next_time !== 'over') {
-        ret.next_time = has_timezone ? moment(ret.next_time).tz(ret.timezone) :
-          moment(ret.next_time);
-      }
-    }
-    else {
-      delete ret.next_time;
+      delete ret.icalendar;
     }
 
     if (is_defined(ret.tasks)) {

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _, {long_date} from 'gmp/locale.js';
+import _, {datetime} from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils';
 
@@ -38,9 +38,8 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 import {
-  render_duration,
-  render_next_time,
-  render_period,
+  renderDuration,
+  renderRecurrence,
 } from './render.js';
 
 const ScheduleDetails = ({
@@ -50,12 +49,11 @@ const ScheduleDetails = ({
   const {
     comment,
     tasks = [],
-    first_time,
-    next_time,
-    duration,
     timezone,
     timezone_abbrev,
+    event,
   } = entity;
+  const {startDate, nextDate, duration, recurrence} = event;
   return (
     <Layout
       grow
@@ -79,7 +77,7 @@ const ScheduleDetails = ({
               {_('First Run')}
             </TableData>
             <TableData>
-              {long_date(first_time)}
+              {datetime(startDate)}
             </TableData>
           </TableRow>
 
@@ -88,7 +86,7 @@ const ScheduleDetails = ({
               {_('Next Run')}
             </TableData>
             <TableData>
-              {render_next_time(next_time)}
+              {is_defined(nextDate) ? datetime(nextDate) : '-'}
             </TableData>
           </TableRow>
 
@@ -111,7 +109,7 @@ const ScheduleDetails = ({
               {_('Period')}
             </TableData>
             <TableData>
-              {render_period(entity)}
+              {renderRecurrence(recurrence)}
             </TableData>
           </TableRow>
 
@@ -120,7 +118,7 @@ const ScheduleDetails = ({
               {_('Duration')}
             </TableData>
             <TableData>
-              {render_duration(duration)}
+              {renderDuration(duration)}
             </TableData>
           </TableRow>
 
