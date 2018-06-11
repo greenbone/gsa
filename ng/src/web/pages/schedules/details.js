@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _, {long_date} from 'gmp/locale.js';
+import _, {datetime} from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils';
 
@@ -77,7 +77,7 @@ const ScheduleDetails = ({
               {_('First Run')}
             </TableData>
             <TableData>
-              {long_date(startDate)}
+              {datetime(startDate)}
             </TableData>
           </TableRow>
 
@@ -86,7 +86,7 @@ const ScheduleDetails = ({
               {_('Next Run')}
             </TableData>
             <TableData>
-              {is_defined(nextDate) ? long_date(nextDate) : '-'}
+              {is_defined(nextDate) ? datetime(nextDate) : '-'}
             </TableData>
           </TableRow>
 
