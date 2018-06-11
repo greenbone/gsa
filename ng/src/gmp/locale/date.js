@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import logger from '../log';
 
@@ -65,6 +65,7 @@ export function long_date(date) {
 export function datetime(date) {
   return date_format(date, 'llll');
 }
+
 export function interval(seconds = 0) {
   if (seconds % WEEK === 0) {
     if (seconds === WEEK) {
