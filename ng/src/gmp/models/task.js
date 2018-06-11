@@ -20,8 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import moment from 'moment';
+
+import _ from 'gmp/locale';
 
 import {is_defined, is_array} from '../utils/identity';
 import {is_empty} from '../utils/string';
@@ -45,6 +46,20 @@ export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
 export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
+/* eslint-disable quote-props */
+export const TASK_STATUS = {
+  'Running': _('Running'),
+  'Stop Requested': _('Stop Requested'),
+  'Delete Requested': _('Delete Requested'),
+  'Ultimate Delete Requested': _('Ultimate Delete Requested'),
+  'Resume Requested': _('Resume Requested'),
+  'Requested': _('Requested'),
+  'Stopped': _('Stopped'),
+  'New': _('New'),
+  'Interrupted': _('Interrupted'),
+};
+/* eslint-disable quote-props */
+
 function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
@@ -54,10 +69,12 @@ class Task extends Model {
   static entity_type = 'task';
 
   isActive() {
-    return this.status === 'Running' || this.status === 'Stop Requested' ||
+    return this.status === 'Running' ||
+      this.status === 'Stop Requested' ||
       this.status === 'Delete Requested' ||
       this.status === 'Ultimate Delete Requested' ||
-      this.status === 'Resume Requested' || this.status === 'Requested';
+      this.status === 'Resume Requested' ||
+      this.status === 'Requested';
   }
 
   isRunning() {
@@ -66,6 +83,10 @@ class Task extends Model {
 
   isStopped() {
     return this.status === 'Stopped';
+  }
+
+  isInterrupted() {
+    return this.status === 'Interrupted';
   }
 
   isNew() {
