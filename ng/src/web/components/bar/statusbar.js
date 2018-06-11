@@ -45,7 +45,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
   }
 
   let background;
-  if (st === 'stopped' || st.includes('requested')) {
+  if (st === 'stopped' || st.includes('requested') || st === 'interrupted') {
     background = 'warn';
   }
   else if (st.includes('error')) {
