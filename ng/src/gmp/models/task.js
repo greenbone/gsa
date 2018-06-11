@@ -46,8 +46,23 @@ export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
 export const AUTO_DELETE_DEFAULT_VALUE = 5;
 
-/* eslint-disable quote-props */
 export const TASK_STATUS = {
+  running: 'Running',
+  stoprequested: 'Stop Requested',
+  deleterequested: 'Delete Requested',
+  ultimatedeleterequested: 'Ultimate Delete Requested',
+  resumerequested: 'Resume Requested',
+  requested: 'Requested',
+  stopped: 'Stopped',
+  new: 'New',
+  interrupted: 'Interrupted',
+  container: 'Container',
+  uploading: 'Uploading',
+  done: 'Done',
+};
+
+/* eslint-disable quote-props */
+const TASK_STATUS_TRANSLATIONS = {
   'Running': _('Running'),
   'Stop Requested': _('Stop Requested'),
   'Delete Requested': _('Delete Requested'),
@@ -57,6 +72,9 @@ export const TASK_STATUS = {
   'Stopped': _('Stopped'),
   'New': _('New'),
   'Interrupted': _('Interrupted'),
+  'Container': _('Container'),
+  'Uploading': _('Uploading'),
+  'Done': _('Done'),
 };
 /* eslint-disable quote-props */
 
@@ -64,33 +82,37 @@ function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
+export const getTranslatableTaskStatus = status => {
+  return TASK_STATUS_TRANSLATIONS[status];
+};
+
 class Task extends Model {
 
   static entity_type = 'task';
 
   isActive() {
-    return this.status === 'Running' ||
-      this.status === 'Stop Requested' ||
-      this.status === 'Delete Requested' ||
-      this.status === 'Ultimate Delete Requested' ||
-      this.status === 'Resume Requested' ||
-      this.status === 'Requested';
+    return this.status === TASK_STATUS.running ||
+      this.status === TASK_STATUS.stoprequested ||
+      this.status === TASK_STATUS.deleterequested ||
+      this.status === TASK_STATUS.ultimatedeleterequested ||
+      this.status === TASK_STATUS.resumerequested ||
+      this.status === TASK_STATUS.requested;
   }
 
   isRunning() {
-    return this.status === 'Running';
+    return this.status === TASK_STATUS.running;
   }
 
   isStopped() {
-    return this.status === 'Stopped';
+    return this.status === TASK_STATUS.stopped;
   }
 
   isInterrupted() {
-    return this.status === 'Interrupted';
+    return this.status === TASK_STATUS.interrupted;
   }
 
   isNew() {
-    return this.status === 'New';
+    return this.status === TASK_STATUS.new;
   }
 
   isChangeable() {
@@ -104,6 +126,10 @@ class Task extends Model {
   isContainer() {
     return !is_defined(this.target);
   }
+
+  getTranslatableStatus() {
+    return getTranslatableTaskStatus(this.status);
+  };
 
   parseProperties(elem) {
     elem = super.parseProperties(elem);
