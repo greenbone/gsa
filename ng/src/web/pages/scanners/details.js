@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {datetimeWithTimezone} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -72,7 +72,7 @@ const CertInfo = ({
             {_('Activation')}
           </TableData>
           <TableData>
-            {datetimeWithTimezone(activation_time)}
+            {dateTimeWithTimeZone(activation_time)}
           </TableData>
         </TableRow>
 
@@ -81,7 +81,7 @@ const CertInfo = ({
             {_('Expiration')}
           </TableData>
           <TableData>
-            {datetimeWithTimezone(expiration_time)}
+            {dateTimeWithTimeZone(expiration_time)}
           </TableData>
         </TableRow>
 

@@ -26,7 +26,7 @@ import React from 'react';
 import moment from 'moment';
 
 import _ from 'gmp/locale';
-import {datetimeWithTimezone} from 'gmp/locale/date';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -282,7 +282,7 @@ const TaskDetails = ({
                   {_('Next')}
                 </TableData>
                 <TableData>
-                  {datetimeWithTimezone(schedule.next_time)}
+                  {dateTimeWithTimeZone(schedule.next_time)}
                 </TableData>
               </TableRow>
             </TableBody>
