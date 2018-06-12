@@ -54,7 +54,7 @@ function date_format(date, format) {
   return date.format(format);
 }
 
-export function short_date(date) {
+export function shortDate(date) {
   return date_format(date, 'L');
 }
 
