@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -62,7 +63,7 @@ const AgentDetails = ({
               {_('Trust')}
             </TableData>
             <TableData>
-              {trust.status} ({short_date(trust.time)})
+              {trust.status} ({shortDate(trust.time)})
             </TableData>
           </TableRow>
         </TableBody>

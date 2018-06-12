@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -120,7 +121,7 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      {entity.trust.status} ({short_date(entity.trust.time)})
+      {entity.trust.status} ({shortDate(entity.trust.time)})
     </TableData>
     {render_component(actions, {...props, entity})}
   </TableRow>

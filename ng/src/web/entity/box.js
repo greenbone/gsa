@@ -25,8 +25,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -80,7 +82,7 @@ const EntityBox = ({
                 {_('Active until')}
               </TableData>
               <TableData>
-                {datetime(end)}
+                {longDate(end)}
               </TableData>
             </TableRow>
           }
@@ -89,7 +91,7 @@ const EntityBox = ({
               {_('Modifed')}
             </TableData>
             <TableData>
-              {datetime(modified)}
+              {longDate(modified)}
             </TableData>
           </TableRow>
         </TableBody>

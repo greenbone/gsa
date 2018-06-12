@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import {render_yesno} from '../../utils/render.js';
 import PropTypes from '../../utils/proptypes.js';
@@ -164,7 +166,7 @@ const Details = ({
               {render_yesno(entity.isActive())}
               {entity.isActive() && is_defined(entity.end_time) &&
                 ' ' + _('until {{- enddate}}',
-                  {enddate: datetime(entity.end_time)})
+                  {enddate: longDate(entity.end_time)})
               }
             </TableData>
           </TableRow>

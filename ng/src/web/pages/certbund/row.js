@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
 import {na, render_component} from '../../utils/render.js';
@@ -58,7 +58,7 @@ const Row = ({
         {na(entity.title)}
       </TableData>
       <TableData>
-        {datetime(entity.creation_time)}
+        {longDate(entity.creation_time)}
       </TableData>
       <TableData flex align="end">
         {entity.cve_refs}

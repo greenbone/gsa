@@ -25,8 +25,10 @@ import React from 'react';
 
 import glamorous, {Span} from 'glamorous';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_entities_counts, render_options} from '../../utils/render.js';
@@ -334,7 +336,7 @@ const PageContent = ({
         {_('Report:')}
       </span>
       <span>
-        {datetime(timestamp)}
+        {longDate(timestamp)}
       </span>
       <Span marginTop="2px">
         <StatusBar

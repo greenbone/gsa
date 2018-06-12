@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _, {datetime, duration} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate, duration} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -119,8 +121,8 @@ const ReportScanInfoTable = ({
               {delta ? _('Scan Time Report 1') : _('Scan Time')}
             </TableData>
             <TableData>
-              {datetime(scan_start)}
-              {is_ended ? ' - ' + datetime(scan_end) : ''}
+              {longDate(scan_start)}
+              {is_ended ? ' - ' + longDate(scan_end) : ''}
             </TableData>
           </TableRow>
         }
@@ -166,10 +168,10 @@ const ReportScanInfoTable = ({
               {_('Scan Time Report 2')}
             </TableData>
             <TableData>
-              {datetime(delta_report.scan_start)}
+              {longDate(delta_report.scan_start)}
               {is_defined(delta_report.scan_end) &&
                 delta_report.scan_end.isValid() ?
-                ' - ' + datetime(delta_report.scan_end) : ''}
+                ' - ' + longDate(delta_report.scan_end) : ''}
             </TableData>
           </TableRow>
         }

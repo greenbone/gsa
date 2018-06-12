@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -139,7 +140,7 @@ const Row = ({
         {render_yesno(entity.trust.value)}
       </span>
       {entity.trust.time &&
-        <span>({short_date(entity.trust.time)})</span>
+        <span>({shortDate(entity.trust.time)})</span>
       }
     </TableData>
     <TableData>

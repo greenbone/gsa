@@ -29,7 +29,9 @@ import {LinearGradient} from '@vx/gradient';
 
 import {scaleBand, scaleUtc} from 'd3-scale';
 
-import _, {datetime} from 'gmp/locale';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes';
@@ -74,11 +76,11 @@ const getFutureRunLabel = runs => {
 const cloneSchedule = (d, start = d.start) => {
   const {duration = 0} = d;
   const toolTip = duration === 0 ?
-    _('{{name}} Start: {{date}}', {name: d.label, date: datetime(start)}) :
+    _('{{name}} Start: {{date}}', {name: d.label, date: longDate(start)}) :
     _('{{name}} Start: {{startdate}} End: {{enddate}}', {
       name: d.label,
-      startdate: datetime(start),
-      enddate: datetime(start.clone().add(duration, 'seconds')),
+      startdate: longDate(start),
+      enddate: longDate(start.clone().add(duration, 'seconds')),
     });
   return {
     ...d,
