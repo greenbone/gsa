@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {long_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {datetimeWithTimezone} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -112,10 +113,10 @@ const Row = ({
         onToggleDetailsClick={onToggleDetailsClick}
       />
       <TableData>
-        {long_date(startDate)}
+        {datetimeWithTimezone(startDate)}
       </TableData>
       <TableData>
-        {is_defined(nextDate) ? long_date(nextDate) : '-'}
+        {is_defined(nextDate) ? datetimeWithTimezone(nextDate) : '-'}
       </TableData>
       <TableData>
         {renderRecurrence(recurrence)}

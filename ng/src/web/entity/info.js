@@ -25,8 +25,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _, {long_date} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {datetimeWithTimezone} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -75,9 +77,9 @@ const EntityInfo = ({
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Created:')}</div>
-      <div>{long_date(creation_time)}</div>
+      <div>{datetimeWithTimezone(creation_time)}</div>
       <div>{_('Modified:')}</div>
-      <div>{long_date(modification_time)}</div>
+      <div>{datetimeWithTimezone(modification_time)}</div>
       <div>{_('Owner:')}</div>
       <OwnerInfo owner={owner}/>
     </InfoLayout>

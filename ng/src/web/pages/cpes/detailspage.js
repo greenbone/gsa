@@ -24,7 +24,8 @@
 
 import React from 'react';
 
-import _, {long_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {datetimeWithTimezone} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils';
 
@@ -102,11 +103,11 @@ const EntityInfo = ({
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Modified:')}</div>
-      <div>{long_date(modification_time)}</div>
+      <div>{datetimeWithTimezone(modification_time)}</div>
       <div>{_('Created:')}</div>
-      <div>{long_date(creation_time)}</div>
+      <div>{datetimeWithTimezone(creation_time)}</div>
       <div>{_('Last updated:')}</div>
-      <div>{long_date(update_time)}</div>
+      <div>{datetimeWithTimezone(update_time)}</div>
     </InfoLayout>
   );
 };
