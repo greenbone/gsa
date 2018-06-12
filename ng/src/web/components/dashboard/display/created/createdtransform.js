@@ -23,7 +23,7 @@
 
 import moment from 'moment';
 
-import {short_date} from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import {parse_int} from 'gmp/parser';
 
@@ -34,7 +34,7 @@ const transformCreated = (data = {}) => {
     const date = moment(value);
     return {
       x: date,
-      label: short_date(date),
+      label: shortDate(date),
       y: parse_int(count),
       y2: parse_int(c_count),
     };
