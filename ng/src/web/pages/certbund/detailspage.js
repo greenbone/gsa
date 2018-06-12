@@ -24,9 +24,10 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -134,7 +135,7 @@ const Details = ({
                     {rev.revision}
                   </TableData>
                   <TableData>
-                    {datetime(rev.date)}
+                    {longDate(rev.date)}
                   </TableData>
                   <TableData>
                     {rev.description}

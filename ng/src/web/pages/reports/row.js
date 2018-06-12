@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -121,7 +123,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
           type="report"
           id={entity.id}
           textOnly={!links}>
-          {datetime(report.timestamp)}
+          {longDate(report.timestamp)}
         </DetailsLink>
       </TableData>
       <TableData>

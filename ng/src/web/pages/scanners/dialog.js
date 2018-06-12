@@ -24,9 +24,14 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined, filter, map, select_save_id} from 'gmp/utils';
-import {parse_int} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {filter, map} from 'gmp/utils/array';
+import {is_defined} from 'gmp/utils/identity';
+import {select_save_id} from 'gmp/utils/id';
+
+import {parse_int} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -91,14 +96,14 @@ const render_certificate_info = info => {
 
   if (info.time_status === 'expired') {
     return _('Certificate currently in use expired at {{date}}',
-      {date: datetime(info.expiration_time)});
+      {date: longDate(info.expiration_time)});
   }
   if (info.time_status === 'inactive') {
     return _('Certificate currently in not valid until {{date}}',
-      {date: datetime(info.activation_time)});
+      {date: longDate(info.activation_time)});
   }
   return _('Certificate in use will expire at {{date}}',
-      {date: datetime(info.expiration_time)});
+      {date: longDate(info.expiration_time)});
 };
 
 const CertStatus = ({

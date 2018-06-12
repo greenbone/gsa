@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -95,7 +96,7 @@ const Row = ({
         {entity.port}
       </TableData>
       <TableData>
-        {datetime(entity.modification_time)}
+        {longDate(entity.modification_time)}
       </TableData>
       {render_component(actions, {...other, entity})}
     </TableRow>

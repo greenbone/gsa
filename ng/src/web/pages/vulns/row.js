@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -56,10 +56,10 @@ const Row = ({
         </DetailsLink>
       </TableData>
       <TableData>
-        {datetime(results.oldest)}
+        {longDate(results.oldest)}
       </TableData>
       <TableData>
-        {datetime(results.newest)}
+        {longDate(results.newest)}
       </TableData>
       <TableData flex align="center">
         <SeverityBar severity={entity.severity}/>

@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils';
 
@@ -99,7 +100,7 @@ const CpeDetails = ({
                 {_('Last updated')}
               </TableData>
               <TableData>
-                {datetime(update_time)}
+                {longDate(update_time)}
               </TableData>
             </TableRow>
           }

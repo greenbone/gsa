@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -68,10 +68,10 @@ const Row = ({
         </Link>
       </TableData>
       <TableData>
-        {datetime(entity.creation_time)}
+        {longDate(entity.creation_time)}
       </TableData>
       <TableData>
-        {datetime(entity.modification_time)}
+        {longDate(entity.modification_time)}
       </TableData>
       <TableData flex align="center">
         {entity.version}
