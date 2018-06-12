@@ -58,7 +58,7 @@ export function short_date(date) {
   return date_format(date, 'L');
 }
 
-export function long_date(date) {
+export function datetimeWithTimezone(date) {
   return date_format(date, 'llll z');
 }
 
