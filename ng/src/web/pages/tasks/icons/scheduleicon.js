@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../../utils/proptypes.js';
 
@@ -35,14 +34,9 @@ import DetailsLink from '../../../components/link/detailslink.js';
 const ScheduleIcon = ({
   size,
   links = true,
-  task,
+  schedule,
+  schedulePeriods,
 }) => {
-  const {schedule} = task;
-
-  if (!is_defined(schedule)) {
-    return null;
-  }
-
   if (schedule.user_capabilities.areDefined() &&
     schedule.user_capabilities.length === 0) {
     return (
@@ -53,21 +47,22 @@ const ScheduleIcon = ({
           {name: schedule.name, id: schedule.id})}/>
     );
   }
+
   let title;
   if (schedule.next_time === 'over') {
     title = _('View Details of Schedule {{name}} (Next due: over)',
       {name: schedule.name});
   }
-  else if (task.schedule_periods === 1) {
+  else if (schedulePeriods === 1) {
     title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)',
       {name: schedule.name, time: schedule.next_time});
   }
-  else if (task.schedule_periods > 1) {
+  else if (schedulePeriods > 1) {
     title = _('View Details of Schedule {{name}} (Next due: ' +
       '{{next_time}}, {{periods}} more times )', {
         name: schedule.name,
         time: schedule.next_time,
-        periods: task.schedule_periods,
+        periods: schedulePeriods,
       });
   }
   else {
@@ -80,19 +75,22 @@ const ScheduleIcon = ({
       type="schedule"
       id={schedule.id}
       title={title}
-      textOnly={!links}>
+      textOnly={!links}
+    >
       <Icon
         size={size}
         img="scheduled.svg"
-        alt={_('Schedule Details')}/>
+        alt={_('Schedule Details')}
+      />
     </DetailsLink>
   );
 };
 
 ScheduleIcon.propTypes = {
-  size: PropTypes.iconSize,
-  task: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  schedule: PropTypes.model.isRequired,
+  schedulePeriods: PropTypes.number,
+  size: PropTypes.iconSize,
 };
 
 export default ScheduleIcon;
