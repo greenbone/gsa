@@ -37,7 +37,7 @@ const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
 
-function date_format(date, format) {
+function dateFormat(date, format) {
   if (!is_defined(date)) {
     return undefined;
   }
@@ -55,15 +55,15 @@ function date_format(date, format) {
 }
 
 export function shortDate(date) {
-  return date_format(date, 'L');
+  return dateFormat(date, 'L');
 }
 
 export function datetimeWithTimezone(date) {
-  return date_format(date, 'llll z');
+  return dateFormat(date, 'llll z');
 }
 
 export function longDate(date) {
-  return date_format(date, 'llll');
+  return dateFormat(date, 'llll');
 }
 
 export function interval(seconds = 0) {
