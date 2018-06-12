@@ -62,7 +62,7 @@ export function datetimeWithTimezone(date) {
   return date_format(date, 'llll z');
 }
 
-export function datetime(date) {
+export function longDate(date) {
   return date_format(date, 'llll');
 }
 
