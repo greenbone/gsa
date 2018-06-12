@@ -28,7 +28,8 @@ import {is_defined, is_empty} from 'gmp/utils';
 
 import glamorous, {Col, Div} from 'glamorous';
 
-import _, {datetime} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -261,7 +262,7 @@ class Identifiers extends React.Component {
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  {datetime(identifier.creation_time)}
+                  {longDate(identifier.creation_time)}
                 </TableData>
                 <TableData>
                   <Source

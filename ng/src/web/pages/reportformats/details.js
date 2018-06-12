@@ -23,9 +23,10 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_yesno} from '../../utils/render.js';
@@ -87,7 +88,7 @@ const ReportFormatDetails = ({
                   {render_yesno(trust.value)}
                 </span>
                 {is_defined(trust.time) &&
-                  <span>({short_date(trust.time)})</span>
+                  <span>({shortDate(trust.time)})</span>
                 }
               </Divider>
             </TableData>

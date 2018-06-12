@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale';
 
 import {shorten} from 'gmp/utils';
 
@@ -78,7 +78,7 @@ const Row = ({
           {na(entity.availability_impact)}
         </TableData>
         <TableData>
-          {datetime(entity.creation_time)}
+          {longDate(entity.creation_time)}
         </TableData>
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>

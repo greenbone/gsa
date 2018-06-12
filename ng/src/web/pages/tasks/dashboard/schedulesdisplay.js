@@ -20,7 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _, {datetime} from 'gmp/locale';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -68,7 +69,7 @@ export const TasksSchedulesTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   chartComponent: DataTable,
   dataTitles: [_('Task Name'), _('Next Schedule Time')],
-  dataRow: row => [row.label, datetime(row.start)],
+  dataRow: row => [row.label, longDate(row.start)],
   dataTransform: transformScheduleData,
   title: () => _('Next Scheduled Tasks'),
   displayId: 'task-by-schedules-table',

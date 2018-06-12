@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _, {long_date} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import {
   scanner_type_name,
@@ -70,7 +72,7 @@ const CertInfo = ({
             {_('Activation')}
           </TableData>
           <TableData>
-            {long_date(activation_time)}
+            {dateTimeWithTimeZone(activation_time)}
           </TableData>
         </TableRow>
 
@@ -79,7 +81,7 @@ const CertInfo = ({
             {_('Expiration')}
           </TableData>
           <TableData>
-            {long_date(expiration_time)}
+            {dateTimeWithTimeZone(expiration_time)}
           </TableData>
         </TableRow>
 

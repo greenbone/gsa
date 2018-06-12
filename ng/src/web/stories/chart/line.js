@@ -24,11 +24,12 @@ import React from 'react';
 
 import moment from 'moment';
 
+import {longDate} from 'gmp/locale/date';
+
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
 
 import LineChart from 'web/components/chart/line';
-import {datetime} from 'gmp/locale';
 
 const linedata = [{
   label: 'Foo',
@@ -136,17 +137,17 @@ storiesOf('Chart/Line', module)
         height={300}
         timeline
         data={[{
-          label: `Ipsum: ${datetime(dates[0])}`,
+          label: `Ipsum: ${longDate(dates[0])}`,
           x: dates[0],
           y: 5,
           y2: 7,
         }, {
-          label: `Ipsum: ${datetime(dates[1])}`,
+          label: `Ipsum: ${longDate(dates[1])}`,
           x: dates[1],
           y: 7,
           y2: 3,
         }, {
-          label: `Foo: ${datetime(dates[2])}`,
+          label: `Foo: ${longDate(dates[2])}`,
           x: dates[2],
           y: 3,
           y2: 5,

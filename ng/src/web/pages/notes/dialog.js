@@ -24,7 +24,8 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -191,7 +192,7 @@ const NoteDialog = ({
                       value={ACTIVE_YES_UNTIL_VALUE}
                       onChange={onValueChange}
                     />
-                    <Text>{datetime(note.end_time)}</Text>
+                    <Text>{longDate(note.end_time)}</Text>
                   </Divider>
                 }
               </Divider>

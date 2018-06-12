@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale/date';
 
-import {shorten} from 'gmp/utils';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -65,10 +65,10 @@ const Row = ({
           {secinfo_type(entity.info_type)}
         </TableData>
         <TableData>
-          {datetime(entity.creation_time)}
+          {longDate(entity.creation_time)}
         </TableData>
         <TableData>
-          {datetime(entity.modification_time)}
+          {longDate(entity.modification_time)}
         </TableData>
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>
