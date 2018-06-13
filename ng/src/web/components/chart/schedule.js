@@ -73,7 +73,7 @@ const getFutureRunLabel = runs => {
   return _('{{num}} more runs not shown', {num: runs});
 };
 
-const cloneSchedule = (d, start = d.start) => {
+const cloneSchedule = (d, start) => {
   const {duration = 0} = d;
   const toolTip = duration === 0 ?
     _('{{name}} Start: {{date}}', {name: d.label, date: longDate(start)}) :
@@ -229,56 +229,22 @@ class ScheduleChart extends React.Component {
       .domain(yValues)
       .padding(0.125);
 
-    const starts = [];
     const futureRuns = [];
+    let schedules = [];
 
     for (const d of data) {
       const {
-        period = 0,
-        periods = 0,
-        periodMonth = 0,
-        start,
         label,
+        isInfinite = false,
+        starts,
       } = d;
 
-      let futureRun = 1;
+      schedules = [
+        ...schedules,
+        ...starts.map(next => cloneSchedule(d, next)),
+      ];
 
-      // check if start date is in this week
-      if (start.isSameOrBefore(endDate)) {
-        starts.push(cloneSchedule(d));
-
-        futureRun = 0;
-
-        /* eslint-disable max-depth */
-        if (periods > 0 || (periods === 0 && period > 0)) {
-          let newStart = start.clone().add(period, 'seconds');
-
-          if (periods === 0) {
-            while (newStart.isSameOrBefore(end)) {
-              starts.push(cloneSchedule(d, newStart));
-              newStart = newStart.clone();
-              newStart.add(period, 'seconds');
-            }
-          }
-          else {
-            for (let j = 0; j < periods; j++) {
-              if (newStart.isSameOrBefore(endDate)) {
-                starts.push(cloneSchedule(d, newStart));
-              }
-              else {
-                futureRun++;
-              }
-              newStart = newStart.clone();
-              newStart.add(period, 'seconds');
-            }
-          }
-        }
-        /* eslint-enable max-depth */
-      }
-
-      if (periods === 0 && (period > 0 || periodMonth > 0)) {
-        futureRun = Number.POSITIVE_INFINITY;
-      }
+      const futureRun = isInfinite ? Number.POSITIVE_INFINITY : starts.length;
 
       if (futureRun > 0) {
         futureRuns.push({
@@ -316,7 +282,7 @@ class ScheduleChart extends React.Component {
             />
             <StrokeGradient/>
             <FillGradient/>
-            {starts.map((d, i) => {
+            {schedules.map((d, i) => {
               const {
                 duration = 0,
                 period = 0,
@@ -396,12 +362,11 @@ class ScheduleChart extends React.Component {
 
 ScheduleChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-    start: PropTypes.momentDate.isRequired,
+    starts: PropTypes.arrayOf(PropTypes.momentDate).isRequired,
     label: PropTypes.toString.isRequired,
+    isInfinite: PropTypes.bool,
     duration: PropTypes.number,
     period: PropTypes.number,
-    periods: PropTypes.number,
-    periodMonth: PropTypes.number,
   })).isRequired,
   endDate: PropTypes.momentDate,
   height: PropTypes.number.isRequired,
