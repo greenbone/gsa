@@ -61,11 +61,9 @@ const Actions = ({
       align={['center', 'center']}
       grow
     >
-
       {is_defined(entity.schedule) ?
         <ScheduleIcon
           schedule={entity.schedule}
-          schedulePeriods={entity.schedule_periods}
           links={links}
         /> :
         <StartIcon task={entity} onClick={onTaskStartClick}/>
