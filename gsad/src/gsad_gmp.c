@@ -1038,29 +1038,6 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name     Param name.
- * @param[in]  op_name  Operation name.
- */
-#define CHECK_PARAM(name, op_name)                                             \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      gchar *msg, *resp;                                                       \
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
-                             "Given " G_STRINGIFY (name) " was invalid",       \
-                             op_name);                                         \
-      cmd_response_data_set_status_code (response_data,                        \
-                                         MHD_HTTP_BAD_REQUEST);                \
-      resp = gsad_message (credentials,                                        \
-                           "Invalid Request", __FUNCTION__, __LINE__,          \
-                           msg,                                                \
-                           response_data);                                     \
-      g_free (msg);                                                            \
-      return resp;                                                             \
-    }
-
-/**
  * @brief Check a param using the direct response method.
  *
  * @param[in]  name      Param name.
@@ -11207,7 +11184,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
   char *ret;
 
   config_id = params_value (params, "config_id");
-  CHECK_PARAM (config_id, "Synchronize Config");
+  CHECK_PARAM_INVALID (config_id, "Synchronize Config");
 
   if (gvm_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
                             config_id)
@@ -15746,7 +15723,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
   entity_t entity;
 
   scanner_id = params_value (params, "scanner_id");
-  CHECK_PARAM (scanner_id, "Verify Scanner");
+  CHECK_PARAM_INVALID (scanner_id, "Verify Scanner");
 
 
   ret = gmpf (connection, credentials,
@@ -19839,18 +19816,18 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   subject_name = params_value (params, "subject_name");
 
   include_related = atoi (params_value (params, "include_related"));
-  CHECK_PARAM (params_value (params, "include_related"),
-               "Create Permission");
+  CHECK_PARAM_INVALID (params_value (params, "include_related"),
+                       "Create Permission");
 
-  CHECK_PARAM (permission, "Create Permission");
-  CHECK_PARAM (comment, "Create Permission");
-  CHECK_PARAM (resource_id, "Create Permission");
-  CHECK_PARAM (subject_type, "Create Permission");
-  CHECK_PARAM (resource_type, "Create Permission");
+  CHECK_PARAM_INVALID (permission, "Create Permission");
+  CHECK_PARAM_INVALID (comment, "Create Permission");
+  CHECK_PARAM_INVALID (resource_id, "Create Permission");
+  CHECK_PARAM_INVALID (subject_type, "Create Permission");
+  CHECK_PARAM_INVALID (resource_type, "Create Permission");
 
   if (params_given (params, "subject_name"))
     {
-      CHECK_PARAM (subject_name, "Create Permission");
+      CHECK_PARAM_INVALID (subject_name, "Create Permission");
       subject_id = NULL;
       ret = gmpf (connection, credentials,
                   &subject_response,
@@ -19927,7 +19904,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   else
     subject_id = NULL;
 
-  CHECK_PARAM (subject_id, "Create Permission");
+  CHECK_PARAM_INVALID (subject_id, "Create Permission");
 
   successes = 0;
 
