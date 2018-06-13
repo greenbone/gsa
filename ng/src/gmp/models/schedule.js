@@ -99,6 +99,34 @@ class Event {
     return undefined;
   }
 
+  getNextDates(until) {
+    if (this.isRecurring()) {
+      const now = moment();
+      const it = this.event.iterator();
+      const dates = [];
+
+      while (true) {
+        const next = it.next();
+
+        if (it.completed || !next) {
+          return dates;
+        }
+
+        const mnext = convertIcalDate(next);
+
+        if (mnext.isAfter(until)) {
+          return dates;
+        }
+
+        if (mnext.isSameOrAfter(now)) {
+          dates.push(mnext);
+        }
+      }
+    }
+
+    return [];
+  }
+
   isRecurring() {
     return this.event.isRecurring();
   }
