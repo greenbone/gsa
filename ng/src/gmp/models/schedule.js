@@ -147,6 +147,16 @@ class Schedule extends Model {
       delete ret.icalendar;
     }
 
+    // remove legacy schedule fields
+    delete ret.first_time;
+    delete ret.next_time;
+    delete ret.duration;
+    delete ret.period;
+    delete ret.periods;
+    delete ret.period_months;
+    delete ret.simple_duration;
+    delete ret.simple_period;
+
     if (is_defined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
     }
