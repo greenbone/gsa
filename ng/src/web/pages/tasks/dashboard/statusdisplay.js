@@ -60,7 +60,7 @@ const taskStatusColorScale = scaleOrdinal()
   .domain([
     'Delete Requested',
     'Ultimate Delete Requested',
-    'Internal Error',
+    'Interrupted',
     'New',
     'Requested',
     'Running',
