@@ -33,14 +33,14 @@ const convertIcalDate = (date, timezone) => is_defined(timezone) ?
   moment.unix(date.toUnixTime()).tz(timezone) :
   moment.unix(date.toUnixTime());
 
-const INTERVAL_NAMES = {
-  YEARLY: 'years',
-  MONTHLY: 'months',
-  WEEKLY: 'weeks',
-  DAILY: 'days',
-  HOURLY: 'hours',
-  MINUTELY: 'minutes',
-  SECONDLY: 'seconds',
+export const ReccurenceFrequency = {
+  YEARLY: 'YEARLY',
+  MONTHLY: 'MONTHLY',
+  WEEKLY: 'WEEKLY',
+  DAILY: 'DAILY',
+  HOURLY: 'HOURLY',
+  MINUTELY: 'MINUTELY',
+  SECONDLY: 'SECONDLY',
 };
 
 class Event {
@@ -61,23 +61,27 @@ class Event {
     return this.event.duration;
   }
 
+  get durationInSeconds() {
+    const {
+      days = 0,
+      hours = 0,
+      minutes = 0,
+      weeks = 0,
+      seconds = 0,
+    } = this.event.duration;
+    return seconds +
+      minutes * 60 +
+      hours * 60 * 60 +
+      days * 24 * 60 * 60 +
+      weeks * 7 * 24 * 60 * 60;
+  }
+
   get recurrence() {
-    const rules = this.event.component.getAllProperties('rrule');
-
-    const result = {};
-
-    for (const rule of rules) {
-
-      const value = rule.getFirstValue();
-
-      const {freq, interval = 0} = value;
-      const name = INTERVAL_NAMES[freq];
-
-      result[name] = interval;
-
+    if (this.isRecurring()) {
+      const rrule = this.event.component.getFirstPropertyValue('rrule');
+      return rrule === null ? undefined : rrule;
     }
-
-    return result;
+    return undefined;
   }
 
   get nextDate() {
@@ -93,6 +97,34 @@ class Event {
       }
     }
     return undefined;
+  }
+
+  getNextDates(until) {
+    if (this.isRecurring()) {
+      const now = moment();
+      const it = this.event.iterator();
+      const dates = [];
+
+      while (true) {
+        const next = it.next();
+
+        if (it.completed || !next) {
+          return dates;
+        }
+
+        const mnext = convertIcalDate(next);
+
+        if (mnext.isAfter(until)) {
+          return dates;
+        }
+
+        if (mnext.isSameOrAfter(now)) {
+          dates.push(mnext);
+        }
+      }
+    }
+
+    return [];
   }
 
   isRecurring() {
@@ -114,6 +146,16 @@ class Schedule extends Model {
 
       delete ret.icalendar;
     }
+
+    // remove legacy schedule fields
+    delete ret.first_time;
+    delete ret.next_time;
+    delete ret.duration;
+    delete ret.period;
+    delete ret.periods;
+    delete ret.period_months;
+    delete ret.simple_duration;
+    delete ret.simple_period;
 
     if (is_defined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));

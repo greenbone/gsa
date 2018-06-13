@@ -22,65 +22,48 @@
  */
 import _ from 'gmp/locale';
 
-export const renderRecurrence = ({
-  years = 0,
-  months = 0,
-  weeks = 0,
-  days = 0,
-  hours = 0,
-  minutes = 0,
-  seconds = 0,
-}) => {
-  if (years !== 0) {
-    if (years === 1) {
-      return _('One year');
-    }
-    return _('{{number}} years', {number: months});
-  }
+import {ReccurenceFrequency} from 'gmp/models/schedule';
 
-  if (months !== 0) {
-    if (months === 1) {
-      return _('One month');
-    }
-    return _('{{number}} months', {number: months});
+export const renderRecurrence = ({freq, interval = 1} = {}) => {
+  switch (freq) {
+    case ReccurenceFrequency.YEARLY:
+      if (interval === 1) {
+        return _('One year');
+      }
+      return _('{{interval}} years', {interval});
+    case ReccurenceFrequency.MONTHLY:
+      if (interval === 1) {
+        return _('One month');
+      }
+      return _('{{interval}} months', {interval});
+    case ReccurenceFrequency.WEEKLY:
+      if (interval === 1) {
+        return _('One week');
+      }
+      return _('{{interval}} weeks', {interval});
+    case ReccurenceFrequency.DAILY:
+      if (interval === 1) {
+        return _('One day');
+      }
+      return _('{{interval}} days', {interval});
+    case ReccurenceFrequency.HOURLY:
+      if (interval === 1) {
+        return _('One hour');
+      }
+      return _('{{interval}} hours', {interval});
+    case ReccurenceFrequency.MINUTELY:
+      if (interval === 1) {
+        return _('One minute');
+      }
+      return _('{{interval}} minutes', {interval});
+    case ReccurenceFrequency.SECONDLY:
+      if (interval === 1) {
+        return _('One second');
+      }
+      return _('{{interval}} seconds', {interval});
+    default:
+      return _('Once');
   }
-
-  if (weeks !== 0) {
-    if (weeks === 1) {
-      return _('One week');
-    }
-    return _('{{number}} weeks', {number: weeks});
-  }
-
-  if (days !== 0) {
-    if (days === 1) {
-      return _('One day');
-    }
-    return _('{{number}} days', {number: days});
-  }
-
-  if (hours !== 0) {
-    if (hours === 1) {
-      return _('One hour');
-    }
-    return _('{{number}} hours', {number: hours});
-  }
-
-  if (minutes !== 0) {
-    if (minutes === 1) {
-      return _('One minute');
-    }
-    return _('{{number}} minutes', {number: minutes});
-  }
-
-  if (seconds !== 0) {
-    if (seconds === 1) {
-      return _('One second');
-    }
-    return _('{{number}} seconds', {number: seconds});
-  }
-
-  return _('Once');
 };
 
 export const renderDuration = ({

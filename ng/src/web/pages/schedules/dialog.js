@@ -42,19 +42,30 @@ import TimeZoneSelect from '../../components/form/timezoneselect.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-const TimeUnitSelect = props => {
+const TimeUnitSelect = ({
+  month = false,
+  ...props
+ }) => {
   const unitOptions = [
     {value: 'hour', label: _('hour(s)')},
     {value: 'day', label: _('day(s)')},
     {value: 'week', label: _('week(s)')},
-    {value: 'month', label: _('month(s)')},
   ];
+
+  if (month) {
+    unitOptions.push({value: 'month', label: _('month(s)')});
+  }
+
   return (
     <Select
       {...props}
       items={unitOptions}
     />
   );
+};
+
+TimeUnitSelect.propTypes = {
+  month: PropTypes.bool,
 };
 
 const ScheduleDialog = ({
@@ -173,6 +184,7 @@ const ScheduleDialog = ({
                   onChange={onValueChange}
                 />
                 <TimeUnitSelect
+                  month
                   name="period_unit"
                   value={state.period_unit}
                   onChange={onValueChange}

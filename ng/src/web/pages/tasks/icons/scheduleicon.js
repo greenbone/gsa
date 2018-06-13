@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import PropTypes from '../../../utils/proptypes.js';
 
 import Icon from '../../../components/icon/icon.js';
@@ -35,7 +37,6 @@ const ScheduleIcon = ({
   size,
   links = true,
   schedule,
-  schedulePeriods,
 }) => {
   if (schedule.user_capabilities.areDefined() &&
     schedule.user_capabilities.length === 0) {
@@ -48,26 +49,29 @@ const ScheduleIcon = ({
     );
   }
 
+  const {event = {}, name} = schedule;
+  const {nextDate, recurrence = {}} = event;
+  const {count} = recurrence;
+
   let title;
-  if (schedule.next_time === 'over') {
-    title = _('View Details of Schedule {{name}} (Next due: over)',
-      {name: schedule.name});
+  if (!is_defined(nextDate)) {
+    title = _('View Details of Schedule {{name}} (Next due: over)', {name});
   }
-  else if (schedulePeriods === 1) {
+  else if (count === 1) {
     title = _('View Details of Schedule {{name}} (Next due: {{time}} Once)',
-      {name: schedule.name, time: schedule.next_time});
+      {name, time: nextDate});
   }
-  else if (schedulePeriods > 1) {
+  else if (count > 1) {
     title = _('View Details of Schedule {{name}} (Next due: ' +
       '{{next_time}}, {{periods}} more times )', {
-        name: schedule.name,
-        time: schedule.next_time,
-        periods: schedulePeriods,
+        name,
+        time: nextDate,
+        periods: count,
       });
   }
   else {
     title = _('View Details of Schedule {{name}} (Next due: {{time}})',
-      {name: schedule.name, time: schedule.next_time});
+      {name, time: nextDate});
   }
 
   return (

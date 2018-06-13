@@ -30,6 +30,8 @@ import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils';
 
+import {ReccurenceFrequency} from 'gmp/models/schedule';
+
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
 
@@ -38,6 +40,14 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import ScheduleDialog from './dialog.js';
+
+const PERIOD_UNIT = {
+  [ReccurenceFrequency.MINUTELY]: 'minute',
+  [ReccurenceFrequency.HOURLY]: 'hour',
+  [ReccurenceFrequency.DAILY]: 'day',
+  [ReccurenceFrequency.WEEKLY]: 'week',
+  [ReccurenceFrequency.MONTHLY]: 'month',
+};
 
 class ScheduleComponent extends React.Component {
 
@@ -54,23 +64,54 @@ class ScheduleComponent extends React.Component {
     const {gmp} = this.props;
 
     if (is_defined(schedule)) {
-      const date = schedule.first_time;
+      const {event} = schedule;
+      const {startDate: date, recurrence = {}, duration = {}} = event;
+      const {
+        weeks = 0,
+        days = 0,
+        hours = 0,
+        minutes = 0,
+        seconds = 0,
+      } = duration;
+      const {freq, interval = 1} = recurrence;
+
+      let dur = 0;
+      let dur_unit = 'hour';
+      if (weeks > 0) {
+        dur = weeks;
+        dur_unit = 'week';
+      }
+      else if (days > 0) {
+        dur = days;
+        dur_unit = 'day';
+      }
+      else if (hours > 0) {
+        dur = hours;
+        dur_unit = 'hour';
+      }
+      else if (minutes > 0) {
+        dur = minutes;
+        dur_unit = 'minute';
+      }
+      else if (seconds > 0) {
+        dur = seconds;
+        dur_unit = 'second';
+      }
 
       this.setState({
         comment: schedule.comment,
         date,
         dialogVisible: true,
-        duration: schedule.simple_duration.value,
-        duration_unit: is_defined(schedule.simple_duration.unit) ?
-          schedule.simple_duration.unit : 'hour',
+        duration: dur,
+        duration_unit: dur_unit,
         hour: date.hours(),
         id: schedule.id,
         minute: date.minutes(),
         name: schedule.name,
-        period: schedule.simple_period.value,
-        period_unit: is_defined(schedule.simple_period.unit) ?
-          schedule.simple_period.unit : 'hour',
+        period: is_defined(freq) ? interval : undefined,
+        period_unit: is_defined(freq) ? PERIOD_UNIT[freq] : 'hour',
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
+        timezone: schedule.timezone,
       });
     }
     else {
