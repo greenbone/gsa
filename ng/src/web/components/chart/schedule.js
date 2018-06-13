@@ -203,6 +203,8 @@ class ScheduleChart extends React.Component {
       svgRef,
       width,
       yAxisLabel,
+      startDate = moment(),
+      endDate = startDate.clone().add(7, 'days'),
     } = this.props;
 
     const yValues = data.map(d => d.label);
@@ -213,17 +215,14 @@ class ScheduleChart extends React.Component {
     // adjust left margin for label length on horizontal bars
     // 4px for each letter is just a randomly chosen value
     const marginLeft = margin.left +
-    Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
+      Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4;
 
     const maxWidth = width - marginLeft - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    const today = moment();
-    const end = today.clone().add(7, 'days');
-
     const xScale = scaleUtc()
       .range([0, maxWidth])
-      .domain([today.toDate(), end.toDate()]);
+      .domain([startDate.toDate(), endDate.toDate()]);
 
     const yScale = scaleBand()
       .range([0, maxHeight])
@@ -245,7 +244,7 @@ class ScheduleChart extends React.Component {
       let futureRun = 1;
 
       // check if start date is in this week
-      if (start.isSameOrBefore(end)) {
+      if (start.isSameOrBefore(endDate)) {
         starts.push(cloneSchedule(d));
 
         futureRun = 0;
@@ -263,7 +262,7 @@ class ScheduleChart extends React.Component {
           }
           else {
             for (let j = 0; j < periods; j++) {
-              if (newStart.isSameOrBefore(end)) {
+              if (newStart.isSameOrBefore(endDate)) {
                 starts.push(cloneSchedule(d, newStart));
               }
               else {
@@ -288,6 +287,7 @@ class ScheduleChart extends React.Component {
         });
       }
     }
+
     const bandwidth = yScale.bandwidth();
     return (
       <Layout align={['start', 'start']}>
@@ -326,23 +326,23 @@ class ScheduleChart extends React.Component {
 
               const startX = xScale(start);
 
-              let endDate = start.clone();
+              let end = start.clone();
               const hasDuration = duration > 0;
               if (hasDuration) {
-                endDate.add(d.duration, 'seconds');
+                end.add(d.duration, 'seconds');
               }
               else if (period > 0) {
-                endDate.add(Math.min(period, ONE_DAY), 'seconds');
+                end.add(Math.min(period, ONE_DAY), 'seconds');
               }
               else {
-                endDate.add(1, 'day');
+                end.add(1, 'day');
               }
 
-              if (endDate.isAfter(end)) {
-                endDate = end;
+              if (end.isAfter(endDate)) {
+                end = endDate;
               }
 
-              const endX = xScale(endDate.toDate());
+              const endX = xScale(end.toDate());
               const rwidth = endX - startX;
               return (
                 <ToolTip
@@ -403,7 +403,9 @@ ScheduleChart.propTypes = {
     periods: PropTypes.number,
     periodMonth: PropTypes.number,
   })).isRequired,
+  endDate: PropTypes.momentDate,
   height: PropTypes.number.isRequired,
+  startDate: PropTypes.momentDate,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   yAxisLabel: PropTypes.string,
