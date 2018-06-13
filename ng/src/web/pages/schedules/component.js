@@ -71,6 +71,7 @@ class ScheduleComponent extends React.Component {
         period_unit: is_defined(schedule.simple_period.unit) ?
           schedule.simple_period.unit : 'hour',
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
+        timezone: schedule.timezone,
       });
     }
     else {
