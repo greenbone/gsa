@@ -36,17 +36,23 @@ import Select from './select.js';
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
 
-  const timezone_opts = map(timezones, zone => {
-    return <option key={zone.name} value={zone.name}>{zone.name}</option>;
-  });
+  const timezoneItems = [
+    {
+      label: _('Coordinated Universal Time/UTC'),
+      value: 'UTC',
+    },
+    ...map(timezones, ({name}) => ({
+      label: name,
+      value: name,
+    })),
+  ];
 
   return (
-    <Select {...props} value={value}>
-      <option value="UTC">
-        {_('Coordinated Universal Time/UTC')}
-      </option>
-      {timezone_opts}
-    </Select>
+    <Select
+      {...props}
+      items={timezoneItems}
+      value={value}
+    />
   );
 };
 
