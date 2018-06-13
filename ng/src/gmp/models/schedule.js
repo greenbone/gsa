@@ -61,23 +61,13 @@ class Event {
     return this.event.duration;
   }
 
+
   get recurrence() {
-    const rules = this.event.component.getAllProperties('rrule');
-
-    const result = {};
-
-    for (const rule of rules) {
-
-      const value = rule.getFirstValue();
-
-      const {freq, interval = 0} = value;
-      const name = INTERVAL_NAMES[freq];
-
-      result[name] = interval;
-
+    if (this.isRecurring()) {
+      const rrule = this.event.component.getFirstPropertyValue('rrule');
+      return rrule === null ? undefined : rrule;
     }
-
-    return result;
+    return undefined;
   }
 
   get nextDate() {
