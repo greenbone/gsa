@@ -46,6 +46,3 @@ Greenbone Security Assistant is licensed under GNU General Public License
 Version 2 or any later version. Please see file [LICENSE](./LICENSE) for details.
 
 Copyright (C) by Greenbone Networks GmbH (see https://www.greenbone.net).
-
-Greenbone Security Assistant integrates helper libraries. Respective
-copyright and license details are provided in file [COPYING](./COPYING).
