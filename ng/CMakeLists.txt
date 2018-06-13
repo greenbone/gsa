@@ -403,7 +403,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/credentials/listpage.js
      ${NG_SRC_DIR}/src/web/pages/credentials/row.js
      ${NG_SRC_DIR}/src/web/pages/credentials/table.js
-     ${NG_SRC_DIR}/src/web/pages/certbund/charts.js
      ${NG_SRC_DIR}/src/web/pages/certbund/details.js
      ${NG_SRC_DIR}/src/web/pages/certbund/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/certbund/listpage.js
@@ -415,7 +414,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/certbund/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/cpes/charts.js
      ${NG_SRC_DIR}/src/web/pages/cpes/details.js
      ${NG_SRC_DIR}/src/web/pages/cpes/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/cpes/filterdialog.js
@@ -427,7 +425,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/cpes/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/cves/charts.js
      ${NG_SRC_DIR}/src/web/pages/cves/details.js
      ${NG_SRC_DIR}/src/web/pages/cves/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/cves/filterdialog.js
@@ -439,7 +436,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/cves/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/dfncert/charts.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/details.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/dfncert/listpage.js
@@ -471,7 +467,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/groups/row.js
      ${NG_SRC_DIR}/src/web/pages/groups/table.js
      ${NG_SRC_DIR}/src/web/pages/help/about.js
-     ${NG_SRC_DIR}/src/web/pages/hosts/charts.js
      ${NG_SRC_DIR}/src/web/pages/hosts/component.js
      ${NG_SRC_DIR}/src/web/pages/hosts/details.js
      ${NG_SRC_DIR}/src/web/pages/hosts/detailspage.js
@@ -491,7 +486,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
      ${NG_SRC_DIR}/src/web/pages/ldap/ldappage.js
      ${NG_SRC_DIR}/src/web/pages/loginpage.js
-     ${NG_SRC_DIR}/src/web/pages/notes/charts.js
      ${NG_SRC_DIR}/src/web/pages/notes/component.js
      ${NG_SRC_DIR}/src/web/pages/notes/details.js
      ${NG_SRC_DIR}/src/web/pages/notes/detailspage.js
@@ -506,7 +500,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/notes/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/notes/dashboard/wordclouddisplay.js
      ${NG_SRC_DIR}/src/web/pages/notfoundpage.js
-     ${NG_SRC_DIR}/src/web/pages/nvts/charts.js
      ${NG_SRC_DIR}/src/web/pages/nvts/component.js
      ${NG_SRC_DIR}/src/web/pages/nvts/details.js
      ${NG_SRC_DIR}/src/web/pages/nvts/detailspage.js
@@ -526,7 +519,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/qoddisplay.js
      ${NG_SRC_DIR}/src/web/pages/nvts/dashboard/qodtypedisplay.js
-     ${NG_SRC_DIR}/src/web/pages/os/charts.js
      ${NG_SRC_DIR}/src/web/pages/os/component.js
      ${NG_SRC_DIR}/src/web/pages/os/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/os/filterdialog.js
@@ -538,7 +530,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/severityclassdisplay.js
      ${NG_SRC_DIR}/src/web/pages/os/dashboard/vulnscoredisplay.js
-     ${NG_SRC_DIR}/src/web/pages/ovaldefs/charts.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/details.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js
@@ -551,7 +542,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/overrides/charts.js
      ${NG_SRC_DIR}/src/web/pages/overrides/component.js
      ${NG_SRC_DIR}/src/web/pages/overrides/details.js
      ${NG_SRC_DIR}/src/web/pages/overrides/detailspage.js
@@ -597,7 +587,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reportformats/table.js
      ${NG_SRC_DIR}/src/web/pages/reports/alertactions.js
      ${NG_SRC_DIR}/src/web/pages/reports/applicationstable.js
-     ${NG_SRC_DIR}/src/web/pages/reports/charts.js
      ${NG_SRC_DIR}/src/web/pages/reports/closedcvestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/cvestable.js
      ${NG_SRC_DIR}/src/web/pages/reports/deltaresultsfiltergroup.js
@@ -628,7 +617,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/reports/dashboard/index.js
      ${NG_SRC_DIR}/src/web/pages/reports/dashboard/loaders.js
      ${NG_SRC_DIR}/src/web/pages/reports/dashboard/severityclassdisplay.js
-     ${NG_SRC_DIR}/src/web/pages/results/charts.js
      ${NG_SRC_DIR}/src/web/pages/results/delta.js
      ${NG_SRC_DIR}/src/web/pages/results/details.js
      ${NG_SRC_DIR}/src/web/pages/results/detailspage.js
@@ -679,7 +667,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
-     ${NG_SRC_DIR}/src/web/pages/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/details.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/listpage.js
@@ -715,7 +702,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/tasks/actions.js
      ${NG_SRC_DIR}/src/web/pages/tasks/addresultstoassetsgroup.js
      ${NG_SRC_DIR}/src/web/pages/tasks/autodeletereportsgroup.js
-     ${NG_SRC_DIR}/src/web/pages/tasks/charts.js
      ${NG_SRC_DIR}/src/web/pages/tasks/component.js
      ${NG_SRC_DIR}/src/web/pages/tasks/containerdialog.js
      ${NG_SRC_DIR}/src/web/pages/tasks/dashboard/cvssdisplay.js
@@ -751,7 +737,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/users/table.js
      ${NG_SRC_DIR}/src/web/pages/usersettings/dialog.js
      ${NG_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
-     ${NG_SRC_DIR}/src/web/pages/vulns/charts.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
      ${NG_SRC_DIR}/src/web/pages/vulns/dashboard/index.js
