@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import {
   CERTIFICATE_STATUS_INACTIVE,
@@ -158,7 +160,7 @@ const Details = ({
                 <TableData>
                   <Divider>
                     <span>
-                      {datetime(cert.activation_time)}
+                      {longDate(cert.activation_time)}
                     </span>
                     {cert.time_status === CERTIFICATE_STATUS_INACTIVE &&
                       <span>{_('inactive')}</span>
@@ -174,7 +176,7 @@ const Details = ({
                 <TableData>
                   <Divider>
                     <span>
-                      {datetime(cert.expiration_time)}
+                      {longDate(cert.expiration_time)}
                     </span>
                     {cert.time_status === CERTIFICATE_STATUS_EXPIRED &&
                       <span>{_('expired')}</span>

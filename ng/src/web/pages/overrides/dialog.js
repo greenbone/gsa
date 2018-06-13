@@ -24,9 +24,12 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
-import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
+
+import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
   ANY,
@@ -227,7 +230,7 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <Text>{datetime(override.end_time)}</Text>
+                    <Text>{longDate(override.end_time)}</Text>
                   </Divider>
                 </Layout>
               }

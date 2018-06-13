@@ -24,11 +24,14 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
-import Promise from 'gmp/promise.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
-import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target.js';
+import {is_defined} from 'gmp/utils/identity';
+
+import Promise from 'gmp/promise';
+
+import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_yesno} from '../../utils/render.js';
@@ -150,7 +153,13 @@ const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        <ScheduleIcon task={entity} links={links} />
+        {is_defined(entity.schedule) &&
+          <ScheduleIcon
+            schedule={entity.schedule}
+            schedulePeriods={entity.schedule_periods}
+            links={links}
+          />
+        }
         <StartIcon task={entity} onClick={onTaskStartClick}/>
 
         <ImportReportIcon task={entity} onClick={onReportImportClick}/>
@@ -170,7 +179,7 @@ const ToolBarIcons = ({
               id={entity.current_report.id}
               title={_('Current Report for Task {{name}} from {{- date}}', {
                 name: entity.name,
-                date: short_date(entity.current_report.scan_start),
+                date: shortDate(entity.current_report.scan_start),
               })}
             >
               <Icon
@@ -185,7 +194,7 @@ const ToolBarIcons = ({
               id={entity.last_report.id}
               title={_('Last Report for Task {{name}} from {{- date}}', {
                 name: entity.name,
-                date: short_date(entity.last_report.scan_start),
+                date: shortDate(entity.last_report.scan_start),
               })}
             >
               <Icon

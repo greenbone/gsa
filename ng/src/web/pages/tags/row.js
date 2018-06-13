@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 import {has_id} from 'gmp/utils/id';
@@ -167,7 +168,7 @@ const Row = ({
         )}
       </TableData>
       <TableData>
-        {short_date(entity.modification_time)}
+        {shortDate(entity.modification_time)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>

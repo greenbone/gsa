@@ -23,7 +23,8 @@
 
 import React from 'react';
 
-import _, {short_date} from 'gmp/locale.js';
+import _ from 'gmp/locale';
+import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -146,10 +147,10 @@ const Row = ({
         {serial}
       </TableData>
       <TableData flex align="end">
-        {short_date(notbefore)}
+        {shortDate(notbefore)}
       </TableData>
       <TableData flex align="end">
-        {short_date(notafter)}
+        {shortDate(notafter)}
       </TableData>
       <TableData>
         <Link

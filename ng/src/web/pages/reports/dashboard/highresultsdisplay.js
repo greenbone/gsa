@@ -24,7 +24,8 @@ import React from 'react';
 
 import moment from 'moment';
 
-import _, {datetime} from 'gmp/locale';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import {parse_int, parse_float} from 'gmp/parser';
 
@@ -51,7 +52,7 @@ const transformHighResults = (data = {}) => {
   return groups.map(group => {
     const date = moment(group.value);
     return {
-      label: datetime(date),
+      label: longDate(date),
       x: date,
       y: parse_int(group.stats.high.max),
       y2: parse_float(group.stats.high_per_host.max),

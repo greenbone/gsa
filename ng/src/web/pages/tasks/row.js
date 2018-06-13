@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -60,7 +62,7 @@ const render_report = (report, links) => {
   if (!is_defined(report)) {
     return null;
   }
-  const date = datetime(report.timestamp);
+  const date = longDate(report.timestamp);
   return (
     <DetailsLink
       type="report"
@@ -156,7 +158,7 @@ const Row = ({
               entity={entity}
               userName={userName}
             />
-            {!is_empty(observers) &&
+            {is_defined(observers) && observers.length > 0 &&
               <Icon
                 size="small"
                 img="provide_view.svg"

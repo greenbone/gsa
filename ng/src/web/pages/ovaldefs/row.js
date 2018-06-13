@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {datetime} from 'gmp/locale.js';
+import {longDate} from 'gmp/locale';
 
 import {shorten} from 'gmp/utils';
 
@@ -70,10 +70,10 @@ const Row = ({
           {na(entity.class)}
         </TableData>
         <TableData>
-          {datetime(entity.creation_time)}
+          {longDate(entity.creation_time)}
         </TableData>
         <TableData>
-          {datetime(entity.modification_time)}
+          {longDate(entity.modification_time)}
         </TableData>
         <TableData>
           {entity.cve_refs}

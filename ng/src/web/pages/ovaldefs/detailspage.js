@@ -26,8 +26,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _, {datetime} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
+
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -306,7 +308,7 @@ const Details = ({
                     </Divider>
                   </TableData>
                   <TableData>
-                    {datetime(change.date)}
+                    {longDate(change.date)}
                   </TableData>
                   <TableData>
                     <Divider>
