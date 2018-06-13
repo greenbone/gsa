@@ -61,6 +61,20 @@ class Event {
     return this.event.duration;
   }
 
+  get durationInSeconds() {
+    const {
+      days = 0,
+      hours = 0,
+      minutes = 0,
+      weeks = 0,
+      seconds = 0,
+    } = this.event.duration;
+    return seconds +
+      minutes * 60 +
+      hours * 60 * 60 +
+      days * 24 * 60 * 60 +
+      weeks * 7 * 24 * 60 * 60;
+  }
 
   get recurrence() {
     if (this.isRecurring()) {
