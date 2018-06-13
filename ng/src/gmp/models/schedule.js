@@ -33,14 +33,14 @@ const convertIcalDate = (date, timezone) => is_defined(timezone) ?
   moment.unix(date.toUnixTime()).tz(timezone) :
   moment.unix(date.toUnixTime());
 
-const INTERVAL_NAMES = {
-  YEARLY: 'years',
-  MONTHLY: 'months',
-  WEEKLY: 'weeks',
-  DAILY: 'days',
-  HOURLY: 'hours',
-  MINUTELY: 'minutes',
-  SECONDLY: 'seconds',
+export const ReccurenceFrequency = {
+  YEARLY: 'YEARLY',
+  MONTHLY: 'MONTHLY',
+  WEEKLY: 'WEEKLY',
+  DAILY: 'DAILY',
+  HOURLY: 'HOURLY',
+  MINUTELY: 'MINUTELY',
+  SECONDLY: 'SECONDLY',
 };
 
 class Event {
