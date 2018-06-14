@@ -9795,7 +9795,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   xml_string_append (command,
                      "</resources>"
-                     "</create_tag>");
+                     "</modify_tag>");
 
   response = NULL;
   entity = NULL;
