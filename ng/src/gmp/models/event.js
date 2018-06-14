@@ -24,11 +24,32 @@ import moment from 'moment-timezone';
 
 import ical from 'ical.js';
 
+import uuid from 'uuid/v4';
+
 import {is_defined} from '../utils/identity';
+import {is_empty} from '../utils/string';
 
 const convertIcalDate = (date, timezone) => is_defined(timezone) ?
   moment.unix(date.toUnixTime()).tz(timezone) :
   moment.unix(date.toUnixTime());
+
+const setEventDuration = (event, duration) => {
+  // setting the duration of an event directly isn't possible in
+  // ical.js 1.2.2 yet. Therefore add same logic from ical.js master here
+  if (event.component.hasProperty('dtend')) {
+    event.component.removeProperty('dtend');
+  }
+
+  event._setProp('duration', duration);
+};
+
+const setEventRecurrence = (event, recurrence) => {
+  event._setProp('rrule', recurrence);
+};
+
+const DAYS = 'day';
+const WEEKS = 'week';
+const MONTHS = 'month';
 
 export const ReccurenceFrequency = {
   YEARLY: 'YEARLY',
@@ -52,6 +73,74 @@ class Event {
     const comp = new ical.Component(jcal);
     const vevent = comp.getFirstSubcomponent('vevent');
     const event = new ical.Event(vevent);
+    return new Event(event, timezone);
+  }
+
+  static fromData({
+    description,
+    date,
+    hour = 0,
+    minute = 0,
+    duration = 0,
+    durationUnit,
+    period = 0,
+    periodUnit,
+    summary,
+  }, timezone) {
+
+    const event = new ical.Event();
+
+    const startDate = moment(date); // create copy with tz support
+
+    if (is_defined(timezone)) {
+      startDate.tz(timezone);
+    }
+
+    startDate.hour(hour).minute(minute);
+
+    event.uid = uuid();
+    event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
+
+    if (duration > 0) {
+      const eventDuration = new ical.Duration();
+      if (durationUnit === DAYS) {
+          eventDuration.days = duration;
+      }
+      else if (durationUnit === WEEKS) {
+        eventDuration.weeks = duration;
+      }
+      else {
+        eventDuration.hours = duration;
+      }
+      setEventDuration(event, eventDuration);
+    }
+
+    if (period > 0) {
+      const eventRecur = new ical.Recur();
+      if (periodUnit === MONTHS) {
+        eventRecur.freq = ReccurenceFrequency.MONTHLY;
+      }
+      else if (periodUnit === WEEKS) {
+        eventRecur.freq = ReccurenceFrequency.WEEKLY;
+      }
+      else if (periodUnit === DAYS) {
+        eventRecur.freq = ReccurenceFrequency.WEEKLY;
+      }
+      else {
+        eventRecur.freq = ReccurenceFrequency.HOURLY;
+      }
+      eventRecur.interval = period;
+
+      setEventRecurrence(event, eventRecur);
+    }
+
+    if (!is_empty(summary)) {
+      event.summary = summary;
+    }
+    if (!is_empty(description)) {
+      event.description = description;
+    }
+
     return new Event(event, timezone);
   }
 
