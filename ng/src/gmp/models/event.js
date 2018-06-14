@@ -47,6 +47,9 @@ const setEventRecurrence = (event, recurrence) => {
   event._setProp('rrule', recurrence);
 };
 
+const PROD_ID = '-//Greenbone.net//NONSGML Greenbone Security Assistent';
+const ICAL_VERSION = '2.0';
+
 const DAYS = 'day';
 const WEEKS = 'week';
 const MONTHS = 'month';
@@ -220,6 +223,16 @@ class Event {
 
   isRecurring() {
     return this.event.isRecurring();
+  }
+
+  toIcalString() {
+    const comp = new ical.Component(['vcalendar', [], []]);
+    comp.addPropertyWithValue('prodid', PROD_ID);
+    comp.addPropertyWithValue('version', ICAL_VERSION);
+
+    const {component: vevent} = this.event;
+    comp.addSubcomponent(vevent);
+    return comp.toString();
   }
 }
 
