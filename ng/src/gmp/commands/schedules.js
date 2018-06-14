@@ -39,33 +39,16 @@ class ScheduleCommand extends EntityCommand {
     const {
       name,
       comment = '',
-      hour,
-      minute,
+      icalendar,
       timezone,
-      date,
-      period,
-      period_unit,
-      duration,
-      duration_unit,
     } = args;
-    const day_of_month = date.date();
-    const month = date.month() + 1;
-    const year = date.year();
     log.debug('Creating new schedule', args);
     return this.action({
       cmd: 'create_schedule',
       name,
       comment,
-      day_of_month,
-      month,
-      year,
-      hour,
-      minute,
+      icalendar,
       timezone,
-      period,
-      period_unit,
-      duration,
-      duration_unit,
     });
   }
 
