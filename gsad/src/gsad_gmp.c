@@ -9469,104 +9469,7 @@ empty_trashcan_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Create a tag, get report, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                params_t *params, cmd_response_data_t* response_data)
-{
-  char *ret;
-  gchar *response;
-  const char *name, *comment, *value, *resource_type, *resource_id, *active;
-  entity_t entity;
-
-  name = params_value (params, "tag_name");
-  comment = params_value (params, "comment");
-  value = params_value (params, "tag_value");
-  resource_type = params_value (params, "resource_type");
-  resource_id = params_value (params, "resource_id");
-  active = params_value (params, "active");
-
-  CHECK_PARAM_INVALID (name, "Create Tag")
-  CHECK_PARAM_INVALID (comment, "Create Tag")
-  CHECK_PARAM_INVALID (value, "Create Tag")
-  CHECK_PARAM_INVALID (resource_type, "Create Tag")
-  CHECK_PARAM_INVALID (resource_id, "Create Tag")
-  CHECK_PARAM_INVALID (active, "Create Tag")
-
-  response = NULL;
-  entity = NULL;
-  switch (gmpf (connection, credentials,
-                &response,
-                &entity,
-                response_data,
-                "<create_tag>"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<value>%s</value>"
-                "<resource id=\"%s\">"
-                "<type>%s</type>"
-                "</resource>"
-                "<active>%s</active>"
-                "</create_tag>",
-                name,
-                comment,
-                value,
-                resource_id,
-                resource_type,
-                active))
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new tag. "
-                             "No new tag was created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             response_data);
-      case 2:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new tag. "
-                             "It is unclear whether the tag has been created or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             response_data);
-      default:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new tag. "
-                             "It is unclear whether the tag has been created or not. "
-                             "Diagnostics: Internal Error.",
-                             response_data);
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "tag_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (connection, credentials, params, entity,
-                              "Create Tag", response_data);
-
-  free_entity (entity);
-  g_free (response);
-  return ret;
-}
-
-/**
- * @brief Create multiple tags, envelope the result.
+ * @brief Create a tag, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -9576,8 +9479,8 @@ create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
  * @return Enveloped XML object.
  */
 char *
-create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                 params_t *params, cmd_response_data_t* response_data)
+create_tag_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -9605,7 +9508,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
   command = g_string_new ("");
 
   xml_string_append (command,
-                     "<create_tags>"
+                     "<create_tag>"
                      "<name>%s</name>"
                      "<comment>%s</comment>"
                      "<value>%s</value>"
@@ -9635,7 +9538,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   xml_string_append (command,
                      "</resources>"
-                     "</create_tags>");
+                     "</create_tag>");
 
   response = NULL;
   entity = NULL;
@@ -9654,7 +9557,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
         g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating new tags. "
+                             "An internal error occurred while creating a new tag. "
                              "No new tag was created. "
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
@@ -9664,7 +9567,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
         g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating new tags. "
+                             "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
@@ -9674,7 +9577,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
         g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating new tags. "
+                             "An internal error occurred while creating a new tag. "
                              "It is unclear whether the tag has been created or not. "
                              "Diagnostics: Internal Error.",
                              response_data);
@@ -9682,7 +9585,7 @@ create_tags_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   g_string_free (command, TRUE);
   ret = response_from_entity (connection, credentials, params, entity,
-                              "Create Tags", response_data);
+                              "Create Tag", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -9837,17 +9740,20 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
-  const char *name, *comment, *value, *resource_type, *resource_id, *active;
+  const char *name, *comment, *filter, *value, *resource_type, *active;
+  params_t *resource_ids;
   const char *tag_id;
+  GString *command;
   entity_t entity;
   char* ret;
 
   tag_id = params_value (params, "tag_id");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
+  filter = params_value (params, "filter");
   value = params_value (params, "tag_value");
   resource_type = params_value (params, "resource_type");
-  resource_id = params_value (params, "resource_id");
+  resource_ids = params_values (params, "resource_ids:");
   active = params_value (params, "active");
 
   CHECK_PARAM_INVALID (tag_id, "Save Tag")
@@ -9855,31 +9761,49 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_PARAM_INVALID (comment, "Save Tag")
   CHECK_PARAM_INVALID (value, "Save Tag")
   CHECK_PARAM_INVALID (resource_type, "Save Tag")
-  CHECK_PARAM_INVALID (resource_id, "Save Tag")
   CHECK_PARAM_INVALID (active, "Save Tag")
+
+  command = g_string_new ("");
+
+  xml_string_append (command,
+                     "<modify_tag tag_id=\"%s\">"
+                     "<name>%s</name>"
+                     "<comment>%s</comment>"
+                     "<value>%s</value>"
+                     "<resources filter=\"%s\">"
+                     "<type>%s</type>",
+                     tag_id,
+                     name,
+                     comment,
+                     value,
+                     filter,
+                     resource_type);
+
+  if (resource_ids)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, resource_ids);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "0"))
+          g_string_append_printf (command,
+                                  "<resource id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+
+  xml_string_append (command,
+                     "</resources>"
+                     "</create_tag>");
 
   response = NULL;
   entity = NULL;
-  switch (gmpf (connection, credentials,
-                &response,
-                &entity,
-                response_data,
-                "<modify_tag tag_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<value>%s</value>"
-                "<resource id=\"%s\">"
-                "<type>%s</type>"
-                "</resource>"
-                "<active>%s</active>"
-                "</modify_tag>",
-                tag_id,
-                name,
-                comment,
-                value,
-                resource_id,
-                resource_type,
-                active))
+  switch (gmp (connection, credentials,
+               &response,
+               &entity,
+               response_data,
+               command->str))
     {
       case 0:
       case -1:
@@ -9887,6 +9811,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case 1:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
+        g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -9897,6 +9822,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
       case 2:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
+        g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -9908,6 +9834,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
       default:
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
+        g_string_free (command, TRUE);
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a tag. "
@@ -9917,6 +9844,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              response_data);
     }
 
+  g_string_free (command, TRUE);
   ret = response_from_entity (connection, credentials, params, entity,
                               "Save Tag", response_data);
 

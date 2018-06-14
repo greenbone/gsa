@@ -1506,7 +1506,6 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_scanner)
   ELSE (create_schedule)
   ELSE (create_tag)
-  ELSE (create_tags)
   ELSE (create_target)
   ELSE (create_config)
   ELSE (create_note)
