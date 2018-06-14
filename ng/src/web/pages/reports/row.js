@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,8 @@ import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
+
+import {TASK_STATUS} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -54,10 +57,10 @@ const IconActions = ({
   onReportDeltaSelect,
 }) => {
   const {report} = entity;
-  const active = report.scan_run_status !== 'Running' &&
-    report.scan_run_status !== 'Requested' &&
-    report.scan_run_status !== 'Stop Requested' &&
-    report.scan_run_status !== 'Resume Requested';
+  const active = report.scan_run_status !== TASK_STATUS.running &&
+    report.scan_run_status !== TASK_STATUS.requested &&
+    report.scan_run_status !== TASK_STATUS.stoprequested &&
+    report.scan_run_status !== TASK_STATUS.resumerequested;
 
   const title = active ? _('Delete Report') : _('Scan is active');
 
@@ -111,7 +114,9 @@ const Row = ({entity, links = true, actions, ...other}) => {
 
   if (is_defined(task)) {
     if (task.isContainer()) {
-      status = status === 'Running' ? 'Uploading' : 'Container';
+      status = status === TASK_STATUS.running ?
+        TASK_STATUS.uploading :
+        TASK_STATUS.container;
     }
     progress = task.progress;
   }

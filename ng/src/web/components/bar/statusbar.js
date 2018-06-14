@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -24,46 +25,64 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
+import {
+  getTranslatableTaskStatus,
+  TASK_STATUS,
+} from 'gmp/models/task';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import ProgressBar from './progressbar.js';
 
 const StatusBar = ({status = 'Unknown', progress = '0'}) => {
-  const st = status.toLowerCase();
-  let text = status;
-
-  if (st === 'unknown' || st === 'new' || st === 'done' || st === 'container' ||
-      st.includes('requested')) {
+  let text = getTranslatableTaskStatus(status);
+  if (status === 'Unknown' ||
+    status === TASK_STATUS.new ||
+    status === TASK_STATUS.done ||
+    status === TASK_STATUS.container ||
+    status === TASK_STATUS.stoprequested ||
+    status === TASK_STATUS.deleterequested ||
+    status === TASK_STATUS.ultimatedeleterequested ||
+    status === TASK_STATUS.resumerequested ||
+    status === TASK_STATUS.requested) {
     progress = '100';
   }
 
-  if (st === 'stopped') {
-    text = status + ' at ' + progress + ' %';
+  if (status === TASK_STATUS.stopped || status === TASK_STATUS.interrupted) {
+    text = _('{{status}} at {{progress}} %', {status, progress});
   }
-  else if (st === 'running') {
-    text = progress + ' %';
+  else if (status === TASK_STATUS.running) {
+    text = _('{{progress}} %', {progress});
   }
 
   let background;
-  if (st === 'stopped' || st.includes('requested')) {
+  if (status === TASK_STATUS.stopped ||
+    status === TASK_STATUS.stoprequested ||
+    status === TASK_STATUS.deleterequested ||
+    status === TASK_STATUS.ultimatedeleterequested ||
+    status === TASK_STATUS.resumerequested ||
+    status === TASK_STATUS.requested) {
     background = 'warn';
   }
-  else if (st.includes('error')) {
+  else if (status === TASK_STATUS.interrupted) {
     background = 'error';
   }
-  else if (st === 'uploading' || st === 'container' ||
-    st === 'done') {
+  else if (status === TASK_STATUS.uploading ||
+    status === TASK_STATUS.container ||
+    status === TASK_STATUS.done) {
     background = 'low';
   }
-  else if (st === 'new') {
+  else if (status === TASK_STATUS.new) {
     background = 'new';
   }
-  else if (st === 'running') {
+  else if (status === TASK_STATUS.running) {
     background = 'run';
   }
   return (
     <ProgressBar
-      title={status}
+      title={getTranslatableTaskStatus(status)}
       progress={progress}
       background={background}
     >
