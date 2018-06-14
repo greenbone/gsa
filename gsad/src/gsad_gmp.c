@@ -16276,40 +16276,23 @@ get_schedules_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  * @return Enveloped XML object.
  */
 char *
-create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                     cmd_response_data_t* response_data)
+create_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                     params_t *params, cmd_response_data_t *response_data)
 {
   char *ret;
   gchar *response;
-  const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
-  const char *period, *period_unit, *duration, *duration_unit, *timezone;
+  const char *name, *comment, *timezone, *icalendar;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  hour = params_value (params, "hour");
-  minute = params_value (params, "minute");
-  day_of_month = params_value (params, "day_of_month");
-  duration = params_value (params, "duration");
-  duration_unit = params_value (params, "duration_unit");
-  month = params_value (params, "month");
-  period = params_value (params, "period");
-  period_unit = params_value (params, "period_unit");
-  year = params_value (params, "year");
   timezone = params_value (params, "timezone");
+  icalendar = params_value (params, "icalendar");
 
   CHECK_PARAM_INVALID (name, "Create Schedule");
   CHECK_PARAM_INVALID (comment, "Create Schedule");
-  CHECK_PARAM_INVALID (hour, "Create Schedule");
-  CHECK_PARAM_INVALID (minute, "Create Schedule");
-  CHECK_PARAM_INVALID (day_of_month, "Create Schedule");
-  CHECK_PARAM_INVALID (duration, "Create Schedule");
-  CHECK_PARAM_INVALID (duration_unit, "Create Schedule");
-  CHECK_PARAM_INVALID (month, "Create Schedule");
-  CHECK_PARAM_INVALID (period, "Create Schedule");
-  CHECK_PARAM_INVALID (period_unit, "period_unit");
-  CHECK_PARAM_INVALID (year, "Create Schedule");
   CHECK_PARAM_INVALID (timezone, "Create Schedule");
+  CHECK_PARAM_INVALID (icalendar, "Create Schedule");
 
   response = NULL;
   entity = NULL;
@@ -16320,39 +16303,13 @@ create_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                 "<create_schedule>"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
-                "<first_time>"
-                "<hour>%s</hour>"
-                "<minute>%s</minute>"
-                "<day_of_month>%s</day_of_month>"
-                "<month>%s</month>"
-                "<year>%s</year>"
-                "</first_time>"
-                "<period>"
-                "<unit>%s</unit>"
-                "%s"
-                "</period>"
-                "<duration>"
-                "<unit>%s</unit>"
-                "%s"
-                "</duration>"
                 "<timezone>%s</timezone>"
+                "<icalendar>%s</icalendar>"
                 "</create_schedule>",
                 name,
                 comment,
-                hour,
-                minute,
-                day_of_month,
-                month,
-                year,
-                (strcmp (period_unit, "")
-                  ? period_unit
-                  : "second"),
-                period,
-                (strcmp (duration_unit, "")
-                  ? duration_unit
-                  : "second"),
-                duration,
-                timezone))
+                timezone,
+                icalendar))
     {
       case 0:
       case -1:
