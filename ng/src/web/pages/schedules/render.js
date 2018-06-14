@@ -22,7 +22,7 @@
  */
 import _ from 'gmp/locale';
 
-import {ReccurenceFrequency} from 'gmp/models/schedule';
+import {ReccurenceFrequency} from 'gmp/models/event';
 
 export const renderRecurrence = ({freq, interval = 1} = {}) => {
   switch (freq) {

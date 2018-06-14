@@ -28,7 +28,7 @@ import {longDate} from 'gmp/locale/date';
 import {is_defined} from 'gmp/utils/identity';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-import {ReccurenceFrequency} from 'gmp/models/schedule';
+import {ReccurenceFrequency} from 'gmp/models/event';
 
 import ScheduleChart from 'web/components/chart/schedule';
 
