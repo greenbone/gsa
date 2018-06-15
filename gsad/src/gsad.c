@@ -464,29 +464,8 @@ init_validator ()
                          "|(import_report_format)"
                          "|(login)"
                          "|(move_task)"
-                         "|(new_agent)"
                          "|(new_alert)"
-                         "|(new_config)"
-                         "|(new_container_task)"
-                         "|(new_credential)"
-                         "|(new_filter)"
-                         "|(new_group)"
-                         "|(new_host)"
-                         "|(new_note)"
-                         "|(new_override)"
-                         "|(new_permission)"
-                         "|(new_permissions)"
-                         "|(new_port_list)"
-                         "|(new_port_range)"
-                         "|(new_report_format)"
-                         "|(new_role)"
-                         "|(new_scanner)"
-                         "|(new_schedule)"
-                         "|(new_tag)"
-                         "|(new_target)"
                          "|(new_task)"
-                         "|(new_user)"
-                         "|(process_bulk)"
                          "|(report_alert)"
                          "|(restore)"
                          "|(resume_task)"
@@ -1580,7 +1559,6 @@ exec_gmp_post (http_connection_t *con,
   ELSE (import_port_list)
   ELSE (import_report)
   ELSE (import_report_format)
-  ELSE (process_bulk)
   ELSE (move_task)
   ELSE (report_alert)
   ELSE (restore)
@@ -2053,15 +2031,8 @@ exec_gmp_get (http_connection_t *con,
   if (!strcmp (cmd, "cvss_calculator"))
     res = cvss_calculator (&connection, credentials, params, response_data);
 
-  ELSE (new_filter)
-  ELSE (new_container_task)
-  ELSE (new_target)
-  ELSE (new_tag)
   ELSE (new_task)
-  ELSE (new_user)
   ELSE (new_alert)
-  ELSE (new_group)
-  ELSE (new_role)
   ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
@@ -2282,19 +2253,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
-  ELSE (new_agent)
-  ELSE (new_host)
-  ELSE (new_config)
-  ELSE (new_credential)
-  ELSE (new_note)
-  ELSE (new_override)
-  ELSE (new_permission)
-  ELSE (new_permissions)
-  ELSE (new_port_list)
-  ELSE (new_port_range)
-  ELSE (new_report_format)
-  ELSE (new_scanner)
-  ELSE (new_schedule)
   ELSE (upload_config)
   ELSE (upload_port_list)
   ELSE (upload_report)
