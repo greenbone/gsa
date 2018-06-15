@@ -9759,6 +9759,8 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_PARAM_INVALID (tag_id, "Save Tag")
   CHECK_PARAM_INVALID (name, "Save Tag")
   CHECK_PARAM_INVALID (comment, "Save Tag")
+  if (params_given (params, "filter"))
+    CHECK_PARAM_INVALID (filter, "Save Tag")
   CHECK_PARAM_INVALID (value, "Save Tag")
   CHECK_PARAM_INVALID (resource_type, "Save Tag")
   CHECK_PARAM_INVALID (active, "Save Tag")
@@ -9776,7 +9778,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      name,
                      comment,
                      value,
-                     filter,
+                     filter ? filter : "",
                      resource_type);
 
   if (resource_ids)
