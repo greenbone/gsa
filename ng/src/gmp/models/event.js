@@ -81,9 +81,7 @@ class Event {
 
   static fromData({
     description,
-    date,
-    hour = 0,
-    minute = 0,
+    startDate,
     duration,
     period = 0,
     periodUnit,
@@ -91,14 +89,6 @@ class Event {
   }, timezone) {
 
     const event = new ical.Event();
-
-    const startDate = moment(date); // create copy with tz support
-
-    if (is_defined(timezone)) {
-      startDate.tz(timezone);
-    }
-
-    startDate.hour(hour).minute(minute);
 
     event.uid = uuid();
     event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
