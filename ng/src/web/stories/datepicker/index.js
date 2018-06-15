@@ -64,7 +64,7 @@ class ControlledDatePicker extends React.Component {
 }
 
 ControlledDatePicker.propTypes = {
-  value: PropTypes.momentDate,
+  value: PropTypes.date,
 };
 
 const StyledDatePicker = glamorous(ControlledDatePicker)({

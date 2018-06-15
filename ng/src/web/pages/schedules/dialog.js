@@ -306,7 +306,8 @@ class ScheduleDialog extends React.Component {
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,
-  duration: PropTypes.momentDuration,
+  date: PropTypes.date,
+  duration: PropTypes.duration,
   id: PropTypes.string,
   name: PropTypes.string,
   period: PropTypes.number,

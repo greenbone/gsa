@@ -146,7 +146,7 @@ const momentDateValidator = (props, prop_name, component_name) => {
   return undefined;
 };
 
-const momentDate = mayRequire(momentDateValidator);
+const date = mayRequire(momentDateValidator);
 
 const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
@@ -162,7 +162,7 @@ const momentDurationValidator = (props, prop_name, component_name) => {
   return undefined;
 };
 
-const momentDuration = mayRequire(momentDurationValidator);
+const duration = mayRequire(momentDurationValidator);
 
 const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
@@ -228,8 +228,8 @@ export default {
   gmp,
   iconSize,
   model,
-  momentDate,
-  momentDuration,
+  date,
+  duration,
   numberString,
   numberOrNumberString,
   icon,

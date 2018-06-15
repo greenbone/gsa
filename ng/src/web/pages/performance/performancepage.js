@@ -162,13 +162,13 @@ const ReportImage = ({
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
-  endDate: PropTypes.momentDate,
+  endDate: PropTypes.date,
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
   slaveId: PropTypes.idOrZero.isRequired,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   startHour: PropTypes.number,
   startMinute: PropTypes.number,
 };

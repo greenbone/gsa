@@ -143,11 +143,11 @@ class DatePickerComponent extends React.Component {
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
   minDate: PropTypes.oneOfType([
-    PropTypes.momentDate,
+    PropTypes.date,
     PropTypes.oneOf([false]),
   ]),
   name: PropTypes.string,
-  value: PropTypes.momentDate.isRequired,
+  value: PropTypes.date.isRequired,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };

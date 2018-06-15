@@ -153,7 +153,7 @@ class LineChart extends React.Component {
     data: PropTypes.arrayOf(PropTypes.shape({
       x: PropTypes.oneOfType([
         PropTypes.number,
-        PropTypes.momentDate,
+        PropTypes.date,
       ]).isRequired,
       y: PropTypes.number.isRequired,
       y2: PropTypes.number.isRequired,

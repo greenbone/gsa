@@ -347,7 +347,7 @@ AdvancedTaskWizard.propTypes = {
   ]),
   config_id: PropTypes.idOrZero,
   credentials: PropTypes.array,
-  date: PropTypes.momentDate,
+  date: PropTypes.date,
   esxi_credential: PropTypes.idOrZero,
   scan_configs: PropTypes.array,
   smb_credential: PropTypes.idOrZero,

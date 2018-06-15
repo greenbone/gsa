@@ -218,7 +218,7 @@ ModifyTaskWizard.contextTypes = {
 
 ModifyTaskWizard.propTypes = {
   alert_email: PropTypes.string,
-  date: PropTypes.momentDate,
+  date: PropTypes.date,
   reschedule: PropTypes.oneOf([
     NO_VALUE, YES_VALUE,
   ]),

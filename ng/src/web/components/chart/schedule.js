@@ -362,15 +362,15 @@ class ScheduleChart extends React.Component {
 
 ScheduleChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-    starts: PropTypes.arrayOf(PropTypes.momentDate).isRequired,
+    starts: PropTypes.arrayOf(PropTypes.date).isRequired,
     label: PropTypes.toString.isRequired,
     isInfinite: PropTypes.bool,
     duration: PropTypes.number,
     period: PropTypes.number,
   })).isRequired,
-  endDate: PropTypes.momentDate,
+  endDate: PropTypes.date,
   height: PropTypes.number.isRequired,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   yAxisLabel: PropTypes.string,
