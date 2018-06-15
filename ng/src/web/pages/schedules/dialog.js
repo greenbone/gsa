@@ -21,12 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
 
 import {NO_VALUE} from 'gmp/parser';
+
+import {is_defined} from 'gmp/utils/identity';
+
+import Event from 'gmp/models/event';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -68,53 +71,90 @@ TimeUnitSelect.propTypes = {
   month: PropTypes.bool,
 };
 
-const ScheduleDialog = ({
-  comment = '',
-  date,
-  duration = NO_VALUE,
-  duration_unit = 'hour',
-  hour,
-  id,
-  minute,
-  name = _('Unnamed'),
-  period = NO_VALUE,
-  period_unit = 'hour',
-  timezone = 'UTC',
-  title = _('New Schedule'),
-  visible = true,
-  onClose,
-  onSave,
-}) => {
+class ScheduleDialog extends React.Component {
 
-  const data = {
+  constructor(...args) {
+    super(...args);
+
+    this.handleSave = this.handleSave.bind(this);
+  }
+
+  handleSave({
     comment,
-    date,
-    duration,
     duration_unit,
-    hour,
     id,
-    minute,
     name,
-    period,
     period_unit,
     timezone,
-  };
+    ...other
+  }) {
+    const {onSave} = this.props;
 
-  return (
-    <SaveDialog
-      visible={visible}
-      title={title}
-      onClose={onClose}
-      onSave={onSave}
-      defaultValues={data}
-    >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-        return (
+    if (!is_defined(onSave)) {
+      return Promise.resolve();
+    }
+
+    const event = Event.fromData({
+      summary: name,
+      description: comment,
+      durationUnit: duration_unit,
+      periodUnit: period_unit,
+      ...other,
+    }, timezone);
+
+    return onSave({
+      id,
+      name,
+      comment,
+      icalendar: event.toIcalString(),
+      timezone,
+    });
+  }
+
+  render() {
+    const {
+      comment = '',
+      date,
+      duration = NO_VALUE,
+      duration_unit = 'hour',
+      hour,
+      id,
+      minute,
+      name = _('Unnamed'),
+      period = NO_VALUE,
+      period_unit = 'hour',
+      timezone = 'UTC',
+      title = _('New Schedule'),
+      visible = true,
+      onClose,
+    } = this.props;
+
+    const data = {
+      comment,
+      date,
+      duration,
+      duration_unit,
+      hour,
+      id,
+      minute,
+      name,
+      period,
+      period_unit,
+      timezone,
+    };
+    return (
+      <SaveDialog
+        visible={visible}
+        title={title}
+        onClose={onClose}
+        onSave={this.handleSave}
+        defaultValues={data}
+      >
+        {({
+          values: state,
+          onValueChange,
+        }) => (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
@@ -210,15 +250,11 @@ const ScheduleDialog = ({
               </Divider>
             </FormGroup>
           </Layout>
-        );
-      }}
-    </SaveDialog>
-  );
-};
-
-ScheduleDialog.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
+        )}
+      </SaveDialog>
+    );
+  }
+}
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,

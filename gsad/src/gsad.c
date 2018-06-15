@@ -745,6 +745,7 @@ init_validator ()
   openvas_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
   openvas_validator_add (validator, "chart_title", "(?s)^.*$");
+  openvas_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
 
   /* Beware, the rule must be defined before the alias. */
 
