@@ -9741,6 +9741,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
 {
   gchar *response;
   const char *name, *comment, *filter, *value, *resource_type, *active;
+  const char *resources_action;
   params_t *resource_ids;
   const char *tag_id;
   GString *command;
@@ -9754,6 +9755,7 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   value = params_value (params, "tag_value");
   resource_type = params_value (params, "resource_type");
   resource_ids = params_values (params, "resource_ids:");
+  resources_action = params_value (params, "resources_action");
   active = params_value (params, "active");
 
   CHECK_PARAM_INVALID (tag_id, "Save Tag")
@@ -9762,6 +9764,8 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (params_given (params, "filter"))
     CHECK_PARAM_INVALID (filter, "Save Tag")
   CHECK_PARAM_INVALID (value, "Save Tag")
+  if (params_given (params, "resources_action"))
+    CHECK_PARAM_INVALID (resources_action, "Save Tag")
   CHECK_PARAM_INVALID (resource_type, "Save Tag")
   CHECK_PARAM_INVALID (active, "Save Tag")
 
@@ -9772,12 +9776,13 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      "<name>%s</name>"
                      "<comment>%s</comment>"
                      "<value>%s</value>"
-                     "<resources filter=\"%s\">"
+                     "<resources action=\"%s\" filter=\"%s\">"
                      "<type>%s</type>",
                      tag_id,
                      name,
                      comment,
                      value,
+                     resources_action ? resources_action : "",
                      filter ? filter : "",
                      resource_type);
 
