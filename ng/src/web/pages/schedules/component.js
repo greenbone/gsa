@@ -65,48 +65,16 @@ class ScheduleComponent extends React.Component {
 
     if (is_defined(schedule)) {
       const {event} = schedule;
-      const {startDate: date, recurrence = {}, duration = {}} = event;
-      const {
-        weeks = 0,
-        days = 0,
-        hours = 0,
-        minutes = 0,
-        seconds = 0,
-      } = duration;
+      const {startDate, recurrence = {}, duration, durationInSeconds} = event;
       const {freq, interval = 1} = recurrence;
-
-      let dur = 0;
-      let dur_unit = 'hour';
-      if (weeks > 0) {
-        dur = weeks;
-        dur_unit = 'week';
-      }
-      else if (days > 0) {
-        dur = days;
-        dur_unit = 'day';
-      }
-      else if (hours > 0) {
-        dur = hours;
-        dur_unit = 'hour';
-      }
-      else if (minutes > 0) {
-        dur = minutes;
-        dur_unit = 'minute';
-      }
-      else if (seconds > 0) {
-        dur = seconds;
-        dur_unit = 'second';
-      }
 
       this.setState({
         comment: schedule.comment,
-        date,
+        startDate,
         dialogVisible: true,
-        duration: dur,
-        duration_unit: dur_unit,
-        hour: date.hours(),
+        duration: is_defined(duration) && durationInSeconds > 0 ?
+          moment.duration(duration) : undefined,
         id: schedule.id,
-        minute: date.minutes(),
         name: schedule.name,
         period: is_defined(freq) ? interval : undefined,
         period_unit: is_defined(freq) ? PERIOD_UNIT[freq] : 'hour',
@@ -116,7 +84,6 @@ class ScheduleComponent extends React.Component {
     }
     else {
       const {timezone} = gmp.globals;
-      const now = moment().tz(timezone);
       this.setState({
         comment: undefined,
         dialogVisible: true,
@@ -126,12 +93,9 @@ class ScheduleComponent extends React.Component {
         name: undefined,
         period: undefined,
         period_unit: undefined,
-        schedule: undefined,
+        startDate: undefined,
         timezone,
         title: undefined,
-        minute: now.minutes(),
-        hour: now.hours(),
-        date: now,
       });
     }
   }
@@ -157,17 +121,13 @@ class ScheduleComponent extends React.Component {
 
     const {
       comment,
-      date,
-      hour,
+      startDate,
       dialogVisible,
       duration,
-      duration_unit,
       id,
-      minute,
       name,
       period,
       period_unit,
-      schedule,
       timezone,
       title,
     } = this.state;
@@ -199,16 +159,12 @@ class ScheduleComponent extends React.Component {
             {dialogVisible &&
               <ScheduleDialog
                 comment={comment}
-                date={date}
+                startDate={startDate}
                 duration={duration}
-                duration_unit={duration_unit}
-                hour={hour}
                 id={id}
-                minute={minute}
                 name={name}
                 period={period}
                 period_unit={period_unit}
-                schedule={schedule}
                 timezone={timezone}
                 title={title}
                 onClose={this.closeScheduleDialog}
