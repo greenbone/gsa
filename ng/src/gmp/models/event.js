@@ -152,7 +152,7 @@ class Event {
   }
 
   get duration() {
-    return this.event.duration;
+    return moment.duration({...this.event.duration});
   }
 
   get durationInSeconds() {

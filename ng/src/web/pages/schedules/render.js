@@ -22,6 +22,8 @@
  */
 import _ from 'gmp/locale';
 
+import {is_defined} from 'gmp/utils/identity';
+
 import {ReccurenceFrequency} from 'gmp/models/event';
 
 export const renderRecurrence = ({freq, interval = 1} = {}) => {
@@ -66,50 +68,10 @@ export const renderRecurrence = ({freq, interval = 1} = {}) => {
   }
 };
 
-export const renderDuration = ({
-  days = 0,
-  hours = 0,
-  minutes = 0,
-  weeks = 0,
-  seconds = 0,
-} = {}) => {
-  if (weeks !== 0) {
-    if (weeks === 1) {
-      return _('One week');
-    }
-    return _('{{number}} weeks', {number: weeks});
-  }
-
-  if (days !== 0) {
-    if (days === 1) {
-      return _('One day');
-    }
-    return _('{{number}} days', {number: days});
-  }
-
-  if (hours !== 0) {
-    if (hours === 1) {
-      return _('One hour');
-    }
-    return _('{{number}} hours', {number: hours});
-  }
-
-  if (minutes !== 0) {
-    if (minutes === 1) {
-      return _('One minute');
-    }
-    return _('{{number}} minutes', {number: minutes});
-  }
-
-  if (seconds !== 0) {
-    if (seconds === 1) {
-      return _('One second');
-    }
-
-    return _('{{number}} seconds', {number: seconds});
-  }
-
-  return _('Entire Operation');
+export const renderDuration = duration => {
+  return is_defined(duration) && duration.asSeconds() > 0 ?
+    duration.humanize() :
+    _('Entire Operation');
 };
 
 // vim: set ts=2 sw=2 tw=80:
