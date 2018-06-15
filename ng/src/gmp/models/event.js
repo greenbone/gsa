@@ -84,8 +84,7 @@ class Event {
     date,
     hour = 0,
     minute = 0,
-    duration = 0,
-    durationUnit,
+    duration,
     period = 0,
     periodUnit,
     summary,
@@ -104,17 +103,15 @@ class Event {
     event.uid = uuid();
     event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
 
-    if (duration > 0) {
+    if (is_defined(duration)) {
       const eventDuration = new ical.Duration();
-      if (durationUnit === DAYS) {
-          eventDuration.days = duration;
-      }
-      else if (durationUnit === WEEKS) {
-        eventDuration.weeks = duration;
-      }
-      else {
-        eventDuration.hours = duration;
-      }
+
+      eventDuration.days = duration.days();
+      eventDuration.weeks = duration.weeks();
+      eventDuration.hours = duration.hours();
+      eventDuration.minutes = duration.minutes();
+      eventDuration.seconds = duration.seconds();
+
       setEventDuration(event, eventDuration);
     }
 
