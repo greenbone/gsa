@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import moment from 'moment-timezone';
+
 import _ from 'gmp/locale.js';
 
 import {NO_VALUE} from 'gmp/parser';
@@ -41,6 +43,7 @@ import FormGroup from '../../components/form/formgroup.js';
 import TextField from '../../components/form/textfield.js';
 import DatePicker from '../../components/form/datepicker.js';
 import TimeZoneSelect from '../../components/form/timezoneselect.js';
+import CheckBox from '../../components/form/checkbox.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -81,12 +84,18 @@ class ScheduleDialog extends React.Component {
 
   handleSave({
     comment,
-    duration_unit,
+    endDate,
+    endHour,
+    endMinute,
+    endOpen = false,
     id,
     name,
     period_unit,
+    period,
+    startDate,
+    startHour,
+    startMinute,
     timezone,
-    ...other
   }) {
     const {onSave} = this.props;
 
@@ -94,13 +103,30 @@ class ScheduleDialog extends React.Component {
       return Promise.resolve();
     }
 
+    startDate = moment(startDate)
+      .tz(timezone)
+      .seconds(0)
+      .hours(startHour)
+      .minutes(startMinute);
+
+    if (!endOpen) {
+      endDate = moment(endDate)
+        .tz(timezone)
+        .seconds(0)
+        .hours(endHour)
+        .minutes(endMinute);
+    }
+
     const event = Event.fromData({
-      summary: name,
+      duration: endOpen ? undefined : moment.duration(endDate.diff(startDate)),
       description: comment,
-      durationUnit: duration_unit,
+      period,
       periodUnit: period_unit,
-      ...other,
+      summary: name,
+      startDate,
     }, timezone);
+
+    console.log(event.toIcalString());
 
     return onSave({
       id,
@@ -114,32 +140,35 @@ class ScheduleDialog extends React.Component {
   render() {
     const {
       comment = '',
-      date,
-      duration = NO_VALUE,
-      duration_unit = 'hour',
-      hour,
+      duration,
       id,
-      minute,
       name = _('Unnamed'),
       period = NO_VALUE,
       period_unit = 'hour',
       timezone = 'UTC',
+      startDate = moment().tz(timezone).startOf('hour').add(1, 'hour'),
       title = _('New Schedule'),
       visible = true,
       onClose,
     } = this.props;
 
+    const endDate = is_defined(duration) ?
+      startDate.clone().add(duration) :
+      startDate.clone().add(1, 'hour');
+
     const data = {
       comment,
-      date,
-      duration,
-      duration_unit,
-      hour,
+      endDate,
+      endHour: endDate.hours(),
+      endMinute: endDate.minutes(),
+      endOpen: !is_defined(duration),
       id,
-      minute,
       name,
       period,
       period_unit,
+      startDate,
+      startHour: startDate.hours(),
+      startMinute: startDate.minutes(),
       timezone,
     };
     return (
@@ -177,40 +206,77 @@ class ScheduleDialog extends React.Component {
               />
             </FormGroup>
 
-            <FormGroup title={_('First Time')}>
-              <DatePicker
-                name="date"
-                value={state.date}
-                onChange={onValueChange}
-              />
-              <Divider>
-                <Spinner
-                  name="hour"
-                  type="int"
-                  min="0"
-                  max="23"
-                  size="2"
-                  value={state.hour}
-                  onChange={onValueChange}
-                /> h
-                <Spinner
-                  name="minute"
-                  type="int"
-                  min="0"
-                  max="59"
-                  size="2"
-                  value={state.minute}
-                  onChange={onValueChange}
-                /> m
-              </Divider>
-            </FormGroup>
-
             <FormGroup title={_('Timezone')}>
               <TimeZoneSelect
                 name="timezone"
                 value={state.timezone}
                 onChange={onValueChange}
               />
+            </FormGroup>
+
+            <FormGroup title={_('Start')}>
+              <DatePicker
+                name="startDate"
+                value={state.startDate}
+                onChange={onValueChange}
+              />
+              <Divider>
+                <Spinner
+                  name="startHour"
+                  type="int"
+                  min="0"
+                  max="23"
+                  size="2"
+                  value={state.startHour}
+                  onChange={onValueChange}
+                /> h
+                <Spinner
+                  name="startMinute"
+                  type="int"
+                  min="0"
+                  max="59"
+                  size="2"
+                  value={state.startMinute}
+                  onChange={onValueChange}
+                /> m
+              </Divider>
+            </FormGroup>
+
+            <FormGroup title={_('End')}>
+              <DatePicker
+                disabled={state.endOpen}
+                name="endDate"
+                value={state.endDate}
+                onChange={onValueChange}
+              />
+              <Divider>
+                <Spinner
+                  disabled={state.endOpen}
+                  name="endHour"
+                  type="int"
+                  min="0"
+                  max="23"
+                  size="2"
+                  value={state.endHour}
+                  onChange={onValueChange}
+                /> h
+                <Spinner
+                  disabled={state.endOpen}
+                  name="endMinute"
+                  type="int"
+                  min="0"
+                  max="59"
+                  size="2"
+                  value={state.endMinute}
+                  onChange={onValueChange}
+                /> m
+                <CheckBox
+                  title={_('Open End')}
+                  name="endOpen"
+                  checked={state.endOpen}
+                  onChange={onValueChange}
+                />
+              </Divider>
             </FormGroup>
 
             <FormGroup title={_('Period')}>
@@ -231,24 +297,6 @@ class ScheduleDialog extends React.Component {
                 />
               </Divider>
             </FormGroup>
-
-            <FormGroup title={_('Duration')}>
-              <Divider>
-                <Spinner
-                  name="duration"
-                  type="int"
-                  min="0"
-                  size="3"
-                  value={state.duration}
-                  onChange={onValueChange}
-                />
-                <TimeUnitSelect
-                  name="duration_unit"
-                  value={state.duration_unit}
-                  onChange={onValueChange}
-                />
-              </Divider>
-            </FormGroup>
           </Layout>
         )}
       </SaveDialog>
@@ -258,16 +306,12 @@ class ScheduleDialog extends React.Component {
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,
-  date: PropTypes.momentDate,
-  duration: PropTypes.number,
-  duration_unit: PropTypes.timeunit,
-  hour: PropTypes.number,
+  duration: PropTypes.momentDuration,
   id: PropTypes.string,
-  minute: PropTypes.number,
   name: PropTypes.string,
   period: PropTypes.number,
   period_unit: PropTypes.timeunit,
-  schedule: PropTypes.model,
+  startDate: PropTypes.momentDate,
   timezone: PropTypes.string,
   title: PropTypes.string,
   visible: PropTypes.bool,

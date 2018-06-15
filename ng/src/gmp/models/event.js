@@ -81,11 +81,8 @@ class Event {
 
   static fromData({
     description,
-    date,
-    hour = 0,
-    minute = 0,
-    duration = 0,
-    durationUnit,
+    startDate,
+    duration,
     period = 0,
     periodUnit,
     summary,
@@ -93,28 +90,18 @@ class Event {
 
     const event = new ical.Event();
 
-    const startDate = moment(date); // create copy with tz support
-
-    if (is_defined(timezone)) {
-      startDate.tz(timezone);
-    }
-
-    startDate.hour(hour).minute(minute);
-
     event.uid = uuid();
     event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
 
-    if (duration > 0) {
+    if (is_defined(duration)) {
       const eventDuration = new ical.Duration();
-      if (durationUnit === DAYS) {
-          eventDuration.days = duration;
-      }
-      else if (durationUnit === WEEKS) {
-        eventDuration.weeks = duration;
-      }
-      else {
-        eventDuration.hours = duration;
-      }
+
+      eventDuration.days = duration.days();
+      eventDuration.weeks = duration.weeks();
+      eventDuration.hours = duration.hours();
+      eventDuration.minutes = duration.minutes();
+      eventDuration.seconds = duration.seconds();
+
       setEventDuration(event, eventDuration);
     }
 
@@ -152,7 +139,7 @@ class Event {
   }
 
   get duration() {
-    return this.event.duration;
+    return moment.duration({...this.event.duration});
   }
 
   get durationInSeconds() {
