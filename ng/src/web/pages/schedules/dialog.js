@@ -82,6 +82,7 @@ class ScheduleDialog extends React.Component {
   handleSave({
     comment,
     duration_unit,
+    id,
     name,
     period_unit,
     timezone,
@@ -102,6 +103,7 @@ class ScheduleDialog extends React.Component {
     }, timezone);
 
     return onSave({
+      id,
       name,
       comment,
       icalendar: event.toIcalString(),
