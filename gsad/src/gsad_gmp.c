@@ -22268,42 +22268,24 @@ export_schedules_gmp (gvm_connection_t *connection,
  * @return Enveloped XML object.
  */
 char *
-save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                   cmd_response_data_t* response_data)
+save_schedule_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t *response_data)
 {
   gchar *response;
   entity_t entity;
-  const char  *schedule_id, *name, *comment;
-  const char *hour, *minute, *day_of_month, *month, *year, *timezone;
-  const char *period, *period_unit, *duration, *duration_unit;
+  const char  *schedule_id, *name, *comment, *timezone, *icalendar;
   char *ret;
 
   schedule_id = params_value (params, "schedule_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  hour = params_value (params, "hour");
-  minute = params_value (params, "minute");
-  day_of_month = params_value (params, "day_of_month");
-  duration = params_value (params, "duration");
-  duration_unit = params_value (params, "duration_unit");
-  month = params_value (params, "month");
-  period = params_value (params, "period");
-  period_unit = params_value (params, "period_unit");
-  year = params_value (params, "year");
+  icalendar = params_value (params, "icalendar");
   timezone = params_value (params, "timezone");
 
   CHECK_PARAM_INVALID (schedule_id, "Save Schedule");
   CHECK_PARAM_INVALID (name, "Save Schedule");
   CHECK_PARAM_INVALID (comment, "Save Schedule");
-  CHECK_PARAM_INVALID (hour, "Save Schedule");
-  CHECK_PARAM_INVALID (minute, "Save Schedule");
-  CHECK_PARAM_INVALID (day_of_month, "Save Schedule");
-  CHECK_PARAM_INVALID (duration, "Save Schedule");
-  CHECK_PARAM_INVALID (duration_unit, "Save Schedule");
-  CHECK_PARAM_INVALID (month, "Save Schedule");
-  CHECK_PARAM_INVALID (period, "Save Schedule");
-  CHECK_PARAM_INVALID (period_unit, "Save Schedule");
-  CHECK_PARAM_INVALID (year, "Save Schedule");
+  CHECK_PARAM_INVALID (icalendar, "Save Schedule");
   CHECK_PARAM_INVALID (timezone, "Save Schedule");
 
   response = NULL;
@@ -22315,40 +22297,14 @@ save_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                 "<modify_schedule schedule_id=\"%s\">"
                 "<name>%s</name>"
                 "<comment>%s</comment>"
-                "<first_time>"
-                "<hour>%s</hour>"
-                "<minute>%s</minute>"
-                "<day_of_month>%s</day_of_month>"
-                "<month>%s</month>"
-                "<year>%s</year>"
-                "</first_time>"
                 "<timezone>%s</timezone>"
-                "<period>"
-                "<unit>%s</unit>"
-                "%s"
-                "</period>"
-                "<duration>"
-                "<unit>%s</unit>"
-                "%s"
-                "</duration>"
+                "<icalendar>%s</icalendar>"
                 "</modify_schedule>",
                 schedule_id,
                 name ? name : "",
                 comment ? comment : "",
-                hour,
-                minute,
-                day_of_month,
-                month,
-                year,
                 timezone,
-                (strcmp (period_unit, "")
-                  ? period_unit
-                  : "second"),
-                period,
-                (strcmp (duration_unit, "")
-                  ? duration_unit
-                  : "second"),
-                duration))
+                icalendar))
     {
       case 0:
       case -1:
