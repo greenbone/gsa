@@ -29,6 +29,7 @@ import {interpolateHcl} from 'd3-interpolate';
 import _ from 'gmp/locale';
 
 import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {TASK_STATUS} from 'gmp/models/task';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -58,15 +59,15 @@ const orange = interpolateHcl('#ff7f0e', '#ffbb78');
 
 const taskStatusColorScale = scaleOrdinal()
   .domain([
-    'Delete Requested',
-    'Ultimate Delete Requested',
-    'Internal Error',
-    'New',
-    'Requested',
-    'Running',
-    'Stop Requested',
-    'Stopped',
-    'Done',
+    TASK_STATUS.deleterequested,
+    TASK_STATUS.ultimatedeleterequested,
+    TASK_STATUS.interrupted,
+    TASK_STATUS.new,
+    TASK_STATUS.requested,
+    TASK_STATUS.running,
+    TASK_STATUS.stoprequested,
+    TASK_STATUS.stopped,
+    TASK_STATUS.done,
     'N/A',
   ])
   .range([
