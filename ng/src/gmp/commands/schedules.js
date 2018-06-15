@@ -54,38 +54,20 @@ class ScheduleCommand extends EntityCommand {
 
   save(args) {
     const {
+      comment = '',
+      icalendar,
       id,
       name,
-      comment = '',
-      hour,
-      minute,
       timezone,
-      date,
-      period,
-      period_unit,
-      duration,
-      duration_unit,
     } = args;
-
-    const day_of_month = date.date();
-    const month = date.month() + 1;
-    const year = date.year();
 
     const data = {
       cmd: 'save_schedule',
       comment,
-      day_of_month,
-      duration,
-      duration_unit,
-      hour,
       id,
-      minute,
-      month,
+      icalendar,
       name,
-      period,
-      period_unit,
       timezone,
-      year,
     };
     log.debug('Saving schedule', args, data);
     return this.action(data);
