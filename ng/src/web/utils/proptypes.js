@@ -152,6 +152,18 @@ const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
+const momentDurationValidator = (props, prop_name, component_name) => {
+  const value = props[prop_name];
+  if (is_defined(value) && !moment.isDuration(value)) {
+    return new Error('Invalid prop `' + prop_name + '` supplied to' +
+      ' `' + component_name + '`. Not a valid moment duration. Value is ' +
+      value);
+  }
+  return undefined;
+};
+
+const momentDuration = mayRequire(momentDurationValidator);
+
 const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
   ReactPropTypes.oneOf([
@@ -217,6 +229,7 @@ export default {
   iconSize,
   model,
   momentDate,
+  momentDuration,
   numberString,
   numberOrNumberString,
   icon,
