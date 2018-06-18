@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment-timezone';
-
 import ical from 'ical.js';
 
 import uuid from 'uuid/v4';
@@ -29,9 +27,11 @@ import uuid from 'uuid/v4';
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 
-const convertIcalDate = (date, timezone) => is_defined(timezone) ?
-  moment.unix(date.toUnixTime()).tz(timezone) :
-  moment.unix(date.toUnixTime());
+import date, {duration as createDuration} from './date';
+
+const convertIcalDate = (idate, timezone) => is_defined(timezone) ?
+  date.unix(idate.toUnixTime()).tz(timezone) :
+  date.unix(idate.toUnixTime());
 
 const setEventDuration = (event, duration) => {
   // setting the duration of an event directly isn't possible in
@@ -139,7 +139,7 @@ class Event {
   }
 
   get duration() {
-    return moment.duration({...this.event.duration});
+    return createDuration({...this.event.duration});
   }
 
   get durationInSeconds() {
@@ -182,7 +182,7 @@ class Event {
 
   getNextDates(until) {
     if (this.isRecurring()) {
-      const now = moment();
+      const now = date();
       const it = this.event.iterator();
       const dates = [];
 
