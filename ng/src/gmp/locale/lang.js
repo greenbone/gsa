@@ -57,8 +57,9 @@ i18next
 
     /* keep quiet if translations have not be found.
      * errors can be debugged here */
-  });
 
+    notifyListeners(get_language());
+  });
 
 /**
  * Subscribe to get notified about language changes
