@@ -22,6 +22,14 @@
  */
 import moment from 'moment-timezone';
 
+import 'moment/locale/ar';
+import 'moment/locale/de';
+import 'moment/locale/fr';
+import 'moment/locale/pt-br.js';
+import 'moment/locale/ru.js';
+import 'moment/locale/tr.js';
+import 'moment/locale/zh-cn.js';
+
 export const {
   isDuration,
   isMoment: isDate,
