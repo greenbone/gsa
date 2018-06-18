@@ -27,8 +27,9 @@ import {withRouter} from 'react-router';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
-import {parse_float, parse_severity, parseDate} from 'gmp/parser';
+import {parse_float, parse_severity} from 'gmp/parser';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -69,7 +70,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const {severity} = stats;
       const averageSeverity = parse_severity(severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
-      const modifiedDate = parseDate(modified).format('lll');
+      const modifiedDate = longDate(modified);
       const toolTip = (
         <ToolTip>
           <b>{name}:</b><br/>
