@@ -28,7 +28,7 @@ import {parse_int, parseDate} from '../parser';
 
 import {setLocale, isDate, duration as createDuration} from '../models/date';
 
-import {translate} from './lang';
+import {translate, subscribe} from './lang';
 
 const log = logger.getLogger('gmp.locale.date');
 
@@ -36,6 +36,11 @@ const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
+
+subscribe(lang => {
+  log.debug('Setting date locale to', lang);
+  setLocale(lang);
+});
 
 const dateFormat = (date, format) => {
   if (!is_defined(date)) {
