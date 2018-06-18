@@ -158,13 +158,13 @@ class WizardCommand extends HttpCommand {
   }
 
   runQuickTask(args) {
-    const {date, ...other} = args;
+    const {start_date, ...other} = args;
     const event_data = convert_data('event_data', other,
       event_data_quick_task_fields);
 
-    event_data['event_data:start_day'] = date.day();
-    event_data['event_data:start_month'] = date.month() + 1;
-    event_data['event_data:start_year'] = date.year();
+    event_data['event_data:start_day'] = start_date.day();
+    event_data['event_data:start_month'] = start_date.month() + 1;
+    event_data['event_data:start_year'] = start_date.year();
 
     return this.httpPost({
       ...event_data,
@@ -174,14 +174,14 @@ class WizardCommand extends HttpCommand {
   }
 
   runModifyTask(args) {
-    const {date, ...other} = args;
+    const {start_date, ...other} = args;
 
     const event_data = convert_data('event_data', other,
       event_data_modify_task_fields);
 
-    event_data['event_data:start_day'] = date.day();
-    event_data['event_data:start_month'] = date.month() + 1;
-    event_data['event_data:start_year'] = date.year();
+    event_data['event_data:start_day'] = start_date.day();
+    event_data['event_data:start_month'] = start_date.month() + 1;
+    event_data['event_data:start_year'] = start_date.year();
 
     return this.httpPost({
       ...event_data,

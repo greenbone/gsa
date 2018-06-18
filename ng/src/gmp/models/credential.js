@@ -20,15 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
-import Model from '../model.js';
+import Model from '../model';
 
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import {parse_yesno, NO_VALUE} from '../parser.js';
+import {parse_yesno, NO_VALUE, parseDate} from '../parser';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
@@ -90,10 +87,10 @@ class Credential extends Model {
     const ret = super.parseProperties(elem);
 
     if (is_defined(ret.certificate_info)) {
-      ret.certificate_info.activation_time = moment(
+      ret.certificate_info.activation_time = parseDate(
         ret.certificate_info.activation_time
       );
-      ret.certificate_info.expiration_time = moment(
+      ret.certificate_info.expiration_time = parseDate(
         ret.certificate_info.expiration_time
       );
     }

@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import _ from 'gmp/locale';
 
 import {is_defined, is_array} from '../utils/identity';
@@ -32,6 +30,7 @@ import {
   parse_int,
   parse_progress,
   parse_yesno,
+  parseDuration,
   NO_VALUE,
   YES_VALUE,
 } from '../parser.js';
@@ -239,8 +238,7 @@ class Task extends Model {
     elem.preferences = prefs;
 
     if (is_defined(elem.average_duration)) {
-      elem.average_duration = moment.duration(parse_int(elem.average_duration),
-      'seconds');
+      elem.average_duration = parseDuration(elem.average_duration);
     }
 
     return elem;

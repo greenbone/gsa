@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment-timezone';
-
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
@@ -29,6 +27,7 @@ import {is_defined} from 'gmp/utils/identity';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {ReccurenceFrequency} from 'gmp/models/event';
+import date from 'gmp/models/date';
 
 import ScheduleChart from 'web/components/chart/schedule';
 
@@ -40,7 +39,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {TasksSchedulesLoader} from './loaders';
 
-const today = moment().startOf('day');
+const today = date().startOf('day');
 const week = today.clone().add(7, 'days');
 
 const transformScheduleData = (data = [], {endDate}) => {

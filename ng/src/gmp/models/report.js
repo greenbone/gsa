@@ -20,15 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import {is_defined} from '../utils/identity';
 
-import {parse_severity} from '../parser.js';
+import {parse_severity, parseDate} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import ReportReport from './report/report.js';
+import ReportReport from './report/report';
 
 // FIXME the report xml structure is really ugly
 
@@ -65,11 +63,11 @@ class Report extends Model {
     copy.report_type = type;
     copy.content_type = content_type;
 
-    copy.scan_start = moment(scan_start);
-    copy.timestamp = moment(timestamp);
+    copy.scan_start = parseDate(scan_start);
+    copy.timestamp = parseDate(timestamp);
 
     if (is_defined(scan_end)) {
-      copy.scan_end = moment(scan_end);
+      copy.scan_end = parseDate(scan_end);
     }
 
     return copy;

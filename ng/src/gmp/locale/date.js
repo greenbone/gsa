@@ -20,15 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment-timezone';
-
 import logger from '../log';
 
-import {is_defined, is_string, is_date} from '../utils/identity';
+import {is_defined, is_string, is_jsdate} from '../utils/identity';
 
-import {parse_int} from '../parser';
+import {parse_int, parseDate} from '../parser';
 
-import {translate} from './lang';
+import {setLocale, isDate, duration as createDuration} from '../models/date';
+
+import {translate, subscribe} from './lang';
 
 const log = logger.getLogger('gmp.locale.date');
 
@@ -37,14 +37,19 @@ const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
 
+subscribe(lang => {
+  log.debug('Setting date locale to', lang);
+  setLocale(lang);
+});
+
 const dateFormat = (date, format) => {
   if (!is_defined(date)) {
     return undefined;
   }
 
-  if (!moment.isMoment(date)) {
-    if (is_string(date) || is_date(date)) {
-      date = moment(date);
+  if (!isDate(date)) {
+    if (is_string(date) || is_jsdate(date)) {
+      date = parseDate(date);
     }
     else {
       log.error('Invalid date', date);
@@ -101,7 +106,7 @@ export function interval(seconds = 0) {
 }
 
 export const duration = (start, end) => {
-  const dur = moment.duration(end - start);
+  const dur = createDuration(end.diff(start));
   const hours = dur.hours();
   const days = dur.days();
 

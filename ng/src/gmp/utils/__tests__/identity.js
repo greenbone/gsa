@@ -28,7 +28,7 @@ import {
   is_array,
   is_number,
   is_function,
-  is_date,
+  is_jsdate,
   is_model_element,
 } from '../identity';
 
@@ -241,41 +241,41 @@ describe('is_function function test', () => {
   });
 });
 
-describe('is_date function test', () => {
+describe('is_jsdate function test', () => {
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_date(x)).toBe(false);
+    expect(is_jsdate(x)).toBe(false);
   });
 
   test('should return true for a date', () => {
     const x = new Date();
-    expect(is_date(x)).toBe(true);
+    expect(is_jsdate(x)).toBe(true);
   });
 });
 

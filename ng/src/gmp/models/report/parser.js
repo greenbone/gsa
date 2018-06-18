@@ -25,8 +25,6 @@ import 'core-js/fn/object/values';
 import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
-import moment from 'moment';
-
 import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 import {
@@ -35,7 +33,7 @@ import {
   map,
 } from '../../utils/array';
 
-import {parse_severity} from '../../parser.js';
+import {parse_severity, parseDate} from '../../parser.js';
 
 import {
   parse_collection_list,
@@ -109,7 +107,7 @@ export const parse_tls_certificates = (report, filter) => {
         value.split('|').reduce((c, v) => {
           let [key, val] = v.split(':');
           if (key === 'notAfter' || key === 'notBefore') {
-            val = is_defined(val) ? moment(val) : val;
+            val = parseDate(val);
           }
           c[key.toLowerCase()] = val;
           return c;

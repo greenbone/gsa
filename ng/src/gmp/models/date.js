@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,19 +20,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import moment from 'moment-timezone';
 
-import {mount} from 'enzyme';
-import DatePicker from '../datepicker.js';
+import 'moment/locale/ar';
+import 'moment/locale/de';
+import 'moment/locale/fr';
+import 'moment/locale/pt-br.js';
+import 'moment/locale/ru.js';
+import 'moment/locale/tr.js';
+import 'moment/locale/zh-cn.js';
 
-import date from 'gmp/models/date';
+export const {
+  isDuration,
+  isMoment: isDate,
+  locale: setLocale,
+  duration,
+} = moment;
 
-describe('DatePicker component tests', () => {
-
-  test('should render without crashing', () => {
-    mount(<DatePicker value={date()}/>);
-  });
-
-});
+export default moment;
 
 // vim: set ts=2 sw=2 tw=80:

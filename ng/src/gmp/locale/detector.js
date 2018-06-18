@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import BrowserDetector from 'i18next-browser-languagedetector';
 
 import logger from '../log';
@@ -53,7 +51,6 @@ class LanguageDetector extends BrowserDetector {
     const lang = super.detect(...options);
 
     log.debug('Detected language', lang);
-    moment.locale(lang);
     return lang;
   }
 }

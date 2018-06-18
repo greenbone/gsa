@@ -20,10 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-
-import moment from 'moment';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
@@ -32,6 +29,7 @@ import {is_defined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser.js';
 
+import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
 import {scanner_type_name} from 'gmp/models/scanner.js';
 
@@ -74,20 +72,20 @@ const TaskDetails = ({
   } = entity;
   const {max_checks = {}, iface = {}, max_hosts} = preferences;
 
-  let duration;
+  let dur;
   const has_duration = is_defined(last_report) &&
     is_defined(last_report.scan_start);
   if (has_duration) {
     if (is_defined(last_report.scan_end)) {
       const diff = last_report.scan_end.diff(last_report.scan_start);
-      duration = moment.duration(diff).humanize();
+      dur = duration(diff).humanize();
     }
     else {
-      duration = _('Not finished yet');
+      dur = _('Not finished yet');
     }
   }
   else {
-    duration = _('No scans yet');
+    dur = _('No scans yet');
   }
 
   const has_av_duration = is_defined(average_duration) && average_duration > 0;
@@ -299,7 +297,7 @@ const TaskDetails = ({
                 {_('Duration of last Scan')}
               </TableData>
               <TableData>
-                {duration}
+                {dur}
               </TableData>
             </TableRow>
             {has_av_duration &&

@@ -23,14 +23,13 @@
  */
 import React from 'react';
 
-import moment from 'moment-timezone';
-
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {NO_VALUE} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import date, {duration as createDuration} from 'gmp/models/date';
 import Event from 'gmp/models/event';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -103,14 +102,14 @@ class ScheduleDialog extends React.Component {
       return Promise.resolve();
     }
 
-    startDate = moment(startDate)
+    startDate = date(startDate)
       .tz(timezone)
       .seconds(0)
       .hours(startHour)
       .minutes(startMinute);
 
     if (!endOpen) {
-      endDate = moment(endDate)
+      endDate = date(endDate)
         .tz(timezone)
         .seconds(0)
         .hours(endHour)
@@ -118,7 +117,7 @@ class ScheduleDialog extends React.Component {
     }
 
     const event = Event.fromData({
-      duration: endOpen ? undefined : moment.duration(endDate.diff(startDate)),
+      duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
       description: comment,
       period,
       periodUnit: period_unit,
@@ -146,7 +145,7 @@ class ScheduleDialog extends React.Component {
       period = NO_VALUE,
       period_unit = 'hour',
       timezone = 'UTC',
-      startDate = moment().tz(timezone).startOf('hour').add(1, 'hour'),
+      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
       title = _('New Schedule'),
       visible = true,
       onClose,
@@ -306,12 +305,13 @@ class ScheduleDialog extends React.Component {
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,
-  duration: PropTypes.momentDuration,
+  date: PropTypes.date,
+  duration: PropTypes.duration,
   id: PropTypes.string,
   name: PropTypes.string,
   period: PropTypes.number,
   period_unit: PropTypes.timeunit,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   timezone: PropTypes.string,
   title: PropTypes.string,
   visible: PropTypes.bool,

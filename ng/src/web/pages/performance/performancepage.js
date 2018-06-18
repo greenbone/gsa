@@ -20,18 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-
-import moment from 'moment';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils';
 
-import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
+import date from 'gmp/models/date';
+import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -162,13 +160,13 @@ const ReportImage = ({
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
-  endDate: PropTypes.momentDate,
+  endDate: PropTypes.date,
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
   slaveId: PropTypes.idOrZero.isRequired,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   startHour: PropTypes.number,
   startMinute: PropTypes.number,
 };
@@ -191,7 +189,7 @@ class PerformancePage extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const end = moment();
+    const end = date();
     const start = end.clone().subtract(1, 'day');
 
     this.state = {
@@ -227,7 +225,7 @@ class PerformancePage extends React.Component {
 
   handleDurationChange(duration) {
     if (is_defined(duration)) {
-      const end = moment();
+      const end = date();
       const start = end.clone().subtract(DURATIONS[duration], 'seconds');
 
       this.setState({

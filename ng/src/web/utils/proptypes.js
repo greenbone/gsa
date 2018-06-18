@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
 import ReactPropTypes from 'prop-types';
 
 import {is_defined} from 'gmp/utils/identity';
 
 import {CacheFactory, Cache} from 'gmp/cache.js';
+
+import {isDate, isDuration} from 'gmp/models/date';
 
 import Gmp from 'gmp/gmp.js';
 import Model from 'gmp/model.js';
@@ -137,24 +137,24 @@ const settings = ReactPropTypes.instanceOf(Settings);
 const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
 const cache = ReactPropTypes.instanceOf(Cache);
 
-const momentDateValidator = (props, prop_name, component_name) => {
+const dateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
-  if (is_defined(value) && !moment.isMoment(value)) {
+  if (is_defined(value) && !isDate(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
   }
   return undefined;
 };
 
-const momentDate = mayRequire(momentDateValidator);
+const date = mayRequire(dateValidator);
 
 const timeunit = ReactPropTypes.oneOf([
   'hour', 'day', 'week', 'month',
 ]);
 
-const momentDurationValidator = (props, prop_name, component_name) => {
+const durationValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
-  if (is_defined(value) && !moment.isDuration(value)) {
+  if (is_defined(value) && !isDuration(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Not a valid moment duration. Value is ' +
       value);
@@ -162,7 +162,7 @@ const momentDurationValidator = (props, prop_name, component_name) => {
   return undefined;
 };
 
-const momentDuration = mayRequire(momentDurationValidator);
+const duration = mayRequire(durationValidator);
 
 const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
@@ -228,8 +228,8 @@ export default {
   gmp,
   iconSize,
   model,
-  momentDate,
-  momentDuration,
+  date,
+  duration,
   numberString,
   numberOrNumberString,
   icon,

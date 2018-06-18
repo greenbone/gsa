@@ -32,6 +32,14 @@ import LanguageStore from './store';
 
 const log = logger.getLogger('gmp.locale.lang');
 
+let listeners = [];
+
+const notifyListeners = lang => {
+  for (const listener of listeners) {
+    listener(lang);
+  }
+};
+
 i18next
   .use(XHRBackend) // use ajax backend
   .use(Detector) // use own detector for language detection
@@ -49,9 +57,9 @@ i18next
 
     /* keep quiet if translations have not be found.
      * errors can be debugged here */
-  });
 
-let listeners = [];
+    notifyListeners(get_language());
+  });
 
 /**
  * Subscribe to get notified about language changes
@@ -96,9 +104,7 @@ export const set_language = lang => i18next.changeLanguage(lang, err => {
       LanguageStore.delete();
     }
 
-    for (const listener of listeners) {
-      listener(lang);
-    }
+    notifyListeners(lang);
   }
 });
 

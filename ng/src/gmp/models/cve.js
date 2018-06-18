@@ -22,8 +22,6 @@
  */
 import 'core-js/fn/object/entries';
 
-import moment from 'moment';
-
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
@@ -31,6 +29,7 @@ import {map} from '../utils/array';
 import {
   parse_severity,
   parse_cvss_base_vector,
+  parseDate,
   set_properties,
 } from '../parser.js';
 
@@ -61,7 +60,7 @@ class Cve extends Info {
     const ret = super.parseProperties(elem, 'cve');
 
     if (is_defined(ret.update_time)) {
-      ret.update_time = moment(ret.update_time);
+      ret.update_time = parseDate(ret.update_time);
     }
 
     ret.severity = parse_severity(ret.cvss);
@@ -135,8 +134,9 @@ class Cve extends Info {
         ret.cwe_id = entry.cwe._id;
       }
 
-      ret.published_time = moment(entry['published-datetime'].__text);
-      ret.last_modified_time = moment(entry['last-modified-datetime'].__text);
+      ret.published_time = parseDate(entry['published-datetime'].__text);
+      ret.last_modified_time = parseDate(
+        entry['last-modified-datetime'].__text);
 
       ret.references = map(entry.references, ref => ({
         name: ref.reference.__text,

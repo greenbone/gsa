@@ -24,9 +24,7 @@
 
 import React from 'react';
 
-import moment from 'moment-timezone';
-
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils';
 
@@ -72,8 +70,7 @@ class ScheduleComponent extends React.Component {
         comment: schedule.comment,
         startDate,
         dialogVisible: true,
-        duration: is_defined(duration) && durationInSeconds > 0 ?
-          moment.duration(duration) : undefined,
+        duration: durationInSeconds > 0 ? duration : undefined,
         id: schedule.id,
         name: schedule.name,
         period: is_defined(freq) ? interval : undefined,

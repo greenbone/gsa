@@ -23,14 +23,14 @@
  */
 import React from 'react';
 
-import moment from 'moment';
-
 import {LinearGradient} from '@vx/gradient';
 
 import {scaleBand, scaleUtc} from 'd3-scale';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
+
+import date from 'gmp/models/date';
 
 import {shorten} from 'gmp/utils/string';
 
@@ -203,7 +203,7 @@ class ScheduleChart extends React.Component {
       svgRef,
       width,
       yAxisLabel,
-      startDate = moment(),
+      startDate = date(),
       endDate = startDate.clone().add(7, 'days'),
     } = this.props;
 
@@ -362,15 +362,15 @@ class ScheduleChart extends React.Component {
 
 ScheduleChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
-    starts: PropTypes.arrayOf(PropTypes.momentDate).isRequired,
+    starts: PropTypes.arrayOf(PropTypes.date).isRequired,
     label: PropTypes.toString.isRequired,
     isInfinite: PropTypes.bool,
     duration: PropTypes.number,
     period: PropTypes.number,
   })).isRequired,
-  endDate: PropTypes.momentDate,
+  endDate: PropTypes.date,
   height: PropTypes.number.isRequired,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   yAxisLabel: PropTypes.string,

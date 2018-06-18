@@ -21,8 +21,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import {is_defined, is_model_element} from '../utils/identity';
 import {map} from '../utils/array';
 import {is_empty} from '../utils/string';
@@ -35,6 +33,7 @@ import {
   parse_text,
   parse_yesno,
   YES_VALUE,
+  parseDate,
 } from '../parser.js';
 
 import Nvt from './nvt.js';
@@ -82,7 +81,7 @@ class Note extends Model {
     }
 
     if (is_defined(elem.end_time) && elem.end_time.length > 0) {
-      ret.end_time = moment(elem.end_time);
+      ret.end_time = parseDate(elem.end_time);
     }
     else {
       delete ret.end_time;

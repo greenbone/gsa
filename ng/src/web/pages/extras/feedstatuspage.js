@@ -20,10 +20,11 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+
+import date from 'gmp/models/date';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -33,8 +34,6 @@ import IconDivider from '../../components/layout/icondivider.js';
 import Layout from '../../components/layout/layout.js';
 
 import Link from '../../components/link/link.js';
-
-import moment from 'moment';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -106,8 +105,8 @@ class FeedStatus extends React.Component {
     feed.version = convert_version(feed.version);
     let stat = '';
     let checkstring = '';
-    const lastUpdate = moment(feed.version);
-    const now = moment();
+    const lastUpdate = date(feed.version);
+    const now = date();
     const age = now.diff(lastUpdate, 'days');
 
     if (age >= 10) {

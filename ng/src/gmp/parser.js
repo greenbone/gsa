@@ -23,10 +23,10 @@
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/starts-with';
 
-import moment from 'moment';
-
 import {is_defined, is_string} from './utils/identity';
 import {is_empty} from './utils/string';
+
+import date, {duration} from './models/date';
 
 export function parse_severity(value) {
   return is_empty(value) ? undefined : parse_float(value);
@@ -127,10 +127,10 @@ export const parse_properties = (element, object = {}) => {
   }
 
   if (is_defined(element.creation_time)) {
-    copy.creation_time = moment(element.creation_time);
+    copy.creation_time = parseDate(element.creation_time);
   }
   if (is_defined(element.modification_time)) {
-    copy.modification_time = moment(element.modification_time);
+    copy.modification_time = parseDate(element.modification_time);
   }
 
   if (is_defined(copy.type)) {
@@ -371,6 +371,33 @@ export const parse_cvss_base_from_vector = cvss_vector => {
     integrity_impact: i,
     availability_impact: a,
   };
+};
+
+/**
+ * Parse date(time) from string
+ *
+ * @param {String} value Date as string to be parsed
+ *
+ * @returns {date} A date instance (Not a js Date!)
+ */
+export const parseDate = value => is_defined(value) ?
+  date(value) : undefined;
+
+/**
+ * Parse duration from string or integer
+ *
+ * @param {String|int} value Duration as string or int in seconds.
+ *
+ * @returns duration A duration instance
+ */
+export const parseDuration = value => {
+  if (is_string(value)) {
+    value = parse_int(value);
+  }
+  if (!is_defined(value)) {
+    return undefined;
+  }
+  return duration(value, 'seconds');
 };
 
 // vim: set ts=2 sw=2 tw=80:

@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import moment from 'moment';
+import date from 'gmp/models/date';
 
 import {storiesOf} from '@storybook/react';
 
@@ -35,30 +35,30 @@ const SEVEN_HOURS = 60 * 60 * 7;
 
 const data = [{
   label: 'Foo',
-  start: moment().add(1, 'day'),
+  start: date().add(1, 'day'),
   duration: ONE_DAY,
 }, {
   label: 'Bar',
-  start: moment().add(2, 'day'),
+  start: date().add(2, 'day'),
   period: ONE_WEEK,
 }, {
   label: 'Lorem',
-  start: moment().add(4, 'hours'),
+  start: date().add(4, 'hours'),
   period: TWO_DAYS,
   periods: 4,
   duration: ONE_DAY,
 }, {
   label: 'Ipsum',
-  start: moment().add(2, 'day').add(4, 'hours'),
+  start: date().add(2, 'day').add(4, 'hours'),
   period: SEVEN_HOURS,
 }, {
   label: 'Dolor',
-  start: moment().add(3, 'day').add(4, 'hours'),
+  start: date().add(3, 'day').add(4, 'hours'),
   period: ONE_WEEK,
   periods: 2,
 }, {
   label: 'Sit',
-  start: moment().add(1, 'day').add(4, 'hours'),
+  start: date().add(1, 'day').add(4, 'hours'),
   period: 0,
   periods: 0,
   periodMonth: 2,

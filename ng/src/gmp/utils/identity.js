@@ -47,7 +47,7 @@ export function is_function(value) {
   return typeof value === 'function';
 }
 
-export function is_date(value) {
+export function is_jsdate(value) {
   return Object.prototype.toString.call(value) === '[object Date]';
 }
 

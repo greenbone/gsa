@@ -22,9 +22,9 @@
  */
 import React from 'react';
 
-import moment from 'moment';
-
 import {longDate} from 'gmp/locale/date';
+
+import date from 'gmp/models/date';
 
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -53,7 +53,6 @@ const linedata = [{
   y2: 7,
 },
 ];
-
 
 storiesOf('Chart/Line', module)
   .add('default', () => {
@@ -125,7 +124,7 @@ storiesOf('Chart/Line', module)
     );
   })
   .add('timeline', () => {
-    const start = moment().subtract(2, 'year');
+    const start = date().subtract(2, 'year');
     const dates = [
       start,
       start.clone().add(1, 'year'),

@@ -191,10 +191,10 @@ class StartTimeSelection extends React.Component {
 }
 
 StartTimeSelection.propTypes = {
-  endDate: PropTypes.momentDate,
+  endDate: PropTypes.date,
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   startHour: PropTypes.number,
   startMinute: PropTypes.number,
   onChanged: PropTypes.func.isRequired,

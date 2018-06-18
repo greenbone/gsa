@@ -22,12 +22,10 @@
  */
 import React from 'react';
 
-import moment from 'moment';
-
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {parse_int} from 'gmp/parser';
+import {parse_int, parseDate} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -53,10 +51,10 @@ const transformModified = (data = {}) => {
   const sum = totalCount(groups);
   const tdata = groups.map(group => {
     const {value, count, c_count} = group;
-    const date = moment(value);
+    const modified = parseDate(value);
     return {
-      x: date,
-      label: shortDate(date),
+      x: modified,
+      label: shortDate(modified),
       y: parse_int(count),
       y2: parse_int(c_count),
     };

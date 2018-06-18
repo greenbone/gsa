@@ -24,12 +24,14 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import moment from 'moment-timezone';
-
 import DatePicker from 'react-datepicker';
 
-import _, {get_language} from 'gmp/locale';
+import _ from 'gmp/locale';
+import {get_language} from 'gmp/locale/lang';
+
 import {is_defined} from 'gmp/utils';
+
+import date from 'gmp/models/date';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -112,10 +114,10 @@ class DatePickerComponent extends React.Component {
   render() {
     const {
       disabled,
-      minDate = moment(),
+      minDate = date(),
       name,
       width,
-      value = moment(),
+      value = date(),
       ...props
     } = this.props;
 
@@ -130,7 +132,7 @@ class DatePickerComponent extends React.Component {
           />
         }
         minDate={minDate === false ? undefined : minDate}
-        maxDate={moment().add(3, 'years')}
+        maxDate={date().add(3, 'years')}
         selected={value}
         todayButton={_('Today')}
         locale={get_language()}
@@ -143,11 +145,11 @@ class DatePickerComponent extends React.Component {
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
   minDate: PropTypes.oneOfType([
-    PropTypes.momentDate,
+    PropTypes.date,
     PropTypes.oneOf([false]),
   ]),
   name: PropTypes.string,
-  value: PropTypes.momentDate.isRequired,
+  value: PropTypes.date.isRequired,
   width: PropTypes.string,
   onChange: PropTypes.func,
 };

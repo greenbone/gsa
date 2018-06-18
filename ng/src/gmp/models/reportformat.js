@@ -20,14 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
 import {is_defined, is_object} from '../utils/identity';
 import {map} from '../utils/array';
 import {is_empty} from '../utils/string';
 
-import {parse_yesno, YES_VALUE} from '../parser.js';
+import {parseDate, parse_yesno, YES_VALUE} from '../parser';
 
 import Model from '../model.js';
 
@@ -75,7 +72,7 @@ class ReportFormat extends Model {
     if (is_defined(ret.trust)) {
       ret.trust = {
         value: ret.trust.__text,
-        time: is_empty(ret.trust.time) ? undefined : moment(ret.trust.time),
+        time: is_empty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
       };
     }
     else {
