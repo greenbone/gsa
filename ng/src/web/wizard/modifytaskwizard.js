@@ -51,8 +51,8 @@ import {Wizardess, WizardContent} from './taskwizard';
 
 const ModifyTaskWizard = ({
     alert_email,
-    date,
     reschedule,
+    start_date,
     start_hour,
     start_minute,
     start_timezone,
@@ -67,7 +67,7 @@ const ModifyTaskWizard = ({
 
   const data = {
     alert_email,
-    date,
+    start_date,
     reschedule,
     start_hour,
     start_minute,
@@ -157,8 +157,8 @@ const ModifyTaskWizard = ({
                 </FormGroup>
                 <FormGroup offset="1">
                   <Datepicker
-                    name="date"
-                    value={state.date}
+                    name="start_date"
+                    value={state.start_date}
                     onChange={onValueChange}/>
                 </FormGroup>
                 <FormGroup offset="1">
@@ -218,10 +218,10 @@ ModifyTaskWizard.contextTypes = {
 
 ModifyTaskWizard.propTypes = {
   alert_email: PropTypes.string,
-  date: PropTypes.date,
   reschedule: PropTypes.oneOf([
     NO_VALUE, YES_VALUE,
   ]),
+  start_date: PropTypes.date,
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
   start_timezone: PropTypes.string,

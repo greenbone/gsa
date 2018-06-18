@@ -70,7 +70,7 @@ const AdvancedTaskWizard = ({
     auto_start,
     config_id,
     credentials = [],
-    date,
+    start_date,
     esxi_credential,
     scan_configs,
     smb_credential,
@@ -99,7 +99,7 @@ const AdvancedTaskWizard = ({
     auto_start,
     config_id,
     credentials,
-    date,
+    start_date,
     esxi_credential,
     scan_configs,
     smb_credential,
@@ -237,8 +237,8 @@ const AdvancedTaskWizard = ({
                 </FormGroup>
                 <FormGroup offset="2" box>
                   <Datepicker
-                    name="date"
-                    value={state.date}
+                    name="start_date"
+                    value={state.start_date}
                     onChange={onValueChange}/>
                 </FormGroup>
                 <FormGroup offset="2">
@@ -347,12 +347,12 @@ AdvancedTaskWizard.propTypes = {
   ]),
   config_id: PropTypes.idOrZero,
   credentials: PropTypes.array,
-  date: PropTypes.date,
   esxi_credential: PropTypes.idOrZero,
   scan_configs: PropTypes.array,
   smb_credential: PropTypes.idOrZero,
   ssh_credential: PropTypes.idOrZero,
   ssh_port: PropTypes.number,
+  start_date: PropTypes.date,
   start_hour: PropTypes.number,
   start_minute: PropTypes.number,
   start_timezone: PropTypes.string,

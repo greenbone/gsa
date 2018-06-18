@@ -427,6 +427,7 @@ class TaskComponent extends React.Component {
         esxi_credential,
         scanner_id: settings.get('Default OpenVAS Scanner').value,
         slave_id: settings.get('Default Slave').value,
+        start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
         start_timezone: settings.timezone,
@@ -447,10 +448,10 @@ class TaskComponent extends React.Component {
 
       this.setState({
         modifyTaskWizardVisible: true,
-        date: now,
         tasks: settings.tasks,
         reschedule: NO_VALUE,
         task_id: select_save_id(settings.tasks),
+        start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
         start_timezone: settings.timezone,
@@ -490,7 +491,6 @@ class TaskComponent extends React.Component {
       containerTaskDialogVisible,
       comment,
       credentials,
-      date,
       esxi_credential,
       hosts,
       id,
@@ -510,6 +510,7 @@ class TaskComponent extends React.Component {
       slave_id,
       ssh_credential,
       smb_credential,
+      start_date,
       start_minute,
       start_hour,
       start_timezone,
@@ -626,7 +627,7 @@ class TaskComponent extends React.Component {
           <AdvancedTaskWizard
             credentials={credentials}
             scan_configs={scan_configs}
-            date={date}
+            start_date={start_date}
             task_name={task_name}
             target_hosts={target_hosts}
             port_list_id={port_list_id}
@@ -647,7 +648,7 @@ class TaskComponent extends React.Component {
 
         {modifyTaskWizardVisible &&
           <ModifyTaskWizard
-            date={date}
+            start_date={start_date}
             tasks={tasks}
             reschedule={reschedule}
             task_id={task_id}
