@@ -122,6 +122,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/cpe.js
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/cve.js
+     ${NG_SRC_DIR}/src/gmp/models/date.js
      ${NG_SRC_DIR}/src/gmp/models/dfncert.js
      ${NG_SRC_DIR}/src/gmp/models/event.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
