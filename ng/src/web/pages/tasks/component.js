@@ -24,14 +24,17 @@
 
 import React from 'react';
 
-import moment from 'moment-timezone';
+import _ from 'gmp/locale';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
+import logger from 'gmp/log';
+
 import {NO_VALUE} from 'gmp/parser';
+
 import {first, for_each, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {includes_id, select_save_id} from 'gmp/utils/id';
+
+import date from 'gmp/models/date';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
@@ -408,13 +411,12 @@ class TaskComponent extends React.Component {
       const esxi_credential = select_save_id(credentials,
         settings.get('Default ESXi Credential').value, '');
 
-      const now = moment().tz(settings.timezone);
+      const now = date().tz(settings.timezone);
 
       this.setState({
         advancedTaskWizardVisible: true,
         credentials,
         scan_configs: settings.scan_configs,
-        date: now,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
         port_list_id: settings.get('Default Port List').value,
@@ -441,7 +443,7 @@ class TaskComponent extends React.Component {
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
-      const now = moment().tz(settings.timezone);
+      const now = date().tz(settings.timezone);
 
       this.setState({
         modifyTaskWizardVisible: true,

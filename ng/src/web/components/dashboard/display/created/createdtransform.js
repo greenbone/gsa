@@ -20,21 +20,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
 import {shortDate} from 'gmp/locale/date';
 
-import {parse_int} from 'gmp/parser';
+import {parse_int, parseDate} from 'gmp/parser';
 
 const transformCreated = (data = {}) => {
   const {groups = []} = data;
   return groups.map(group => {
     const {value, count, c_count} = group;
-    const date = moment(value);
+    const createdDate = parseDate(value);
     return {
-      x: date,
-      label: shortDate(date),
+      x: createdDate,
+      label: shortDate(createdDate),
       y: parse_int(count),
       y2: parse_int(c_count),
     };

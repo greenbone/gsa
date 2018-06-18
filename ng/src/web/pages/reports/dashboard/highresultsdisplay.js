@@ -22,12 +22,10 @@
  */
 import React from 'react';
 
-import moment from 'moment';
-
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {parse_int, parse_float} from 'gmp/parser';
+import {parse_int, parse_float, parseDate} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -50,10 +48,10 @@ import {ReportsHighResultsLoader} from './loaders';
 const transformHighResults = (data = {}) => {
   const {groups = []} = data;
   return groups.map(group => {
-    const date = moment(group.value);
+    const reportDate = parseDate(group.value);
     return {
-      label: longDate(date),
-      x: date,
+      label: longDate(reportDate),
+      x: reportDate,
       y: parse_int(group.stats.high.max),
       y2: parse_float(group.stats.high_per_host.max),
     };

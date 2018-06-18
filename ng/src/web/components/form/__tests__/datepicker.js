@@ -21,15 +21,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
-import moment from 'moment';
 
 import {mount} from 'enzyme';
 import DatePicker from '../datepicker.js';
 
+import date from 'gmp/models/date';
+
 describe('DatePicker component tests', () => {
 
   test('should render without crashing', () => {
-    mount(<DatePicker value={moment()}/>);
+    mount(<DatePicker value={date()}/>);
   });
 
 });

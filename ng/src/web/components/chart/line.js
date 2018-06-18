@@ -26,8 +26,6 @@ import 'core-js/library/fn/array/find';
 
 import React from 'react';
 
-import moment from 'moment';
-
 import {css} from 'glamor';
 
 import glamorous from 'glamorous';
@@ -37,6 +35,8 @@ import {scaleLinear, scaleUtc} from 'd3-scale';
 import {Line, LinePath} from '@vx/shape';
 
 import {is_defined} from 'gmp/utils/identity';
+
+import date from 'gmp/models/date';
 
 import Layout from '../layout/layout';
 
@@ -304,8 +304,8 @@ class LineChart extends React.Component {
       xDomain = data.length > 1 ?
         [xMin, xMax] :
         [
-          moment(xMin).subtract(1, 'day').toDate(),
-          moment(xMax).add(1, 'day').toDate(),
+          date(xMin).subtract(1, 'day').toDate(),
+          date(xMax).add(1, 'day').toDate(),
         ];
     }
     else {
