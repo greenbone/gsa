@@ -24,7 +24,7 @@ import moment from 'moment-timezone';
 
 import logger from '../log';
 
-import {is_defined, is_string, is_date} from '../utils/identity';
+import {is_defined, is_string, is_jsdate} from '../utils/identity';
 
 import {parse_int} from '../parser';
 
@@ -43,7 +43,7 @@ const dateFormat = (date, format) => {
   }
 
   if (!moment.isMoment(date)) {
-    if (is_string(date) || is_date(date)) {
+    if (is_string(date) || is_jsdate(date)) {
       date = moment(date);
     }
     else {
