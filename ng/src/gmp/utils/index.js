@@ -27,7 +27,6 @@ export * from './id';
 export * from './array';
 export * from './event';
 export * from './string';
-export * from './calc';
 export * from './object';
 
 // vim: set ts=2 sw=2 tw=80:
