@@ -29,7 +29,7 @@ import {NO_VALUE} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import date from 'gmp/models/date';
+import date, {duration as createDuration} from 'gmp/models/date';
 import Event from 'gmp/models/event';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -117,7 +117,7 @@ class ScheduleDialog extends React.Component {
     }
 
     const event = Event.fromData({
-      duration: endOpen ? undefined : date.duration(endDate.diff(startDate)),
+      duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
       description: comment,
       period,
       periodUnit: period_unit,
