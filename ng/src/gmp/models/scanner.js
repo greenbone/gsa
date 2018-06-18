@@ -20,16 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
-import _ from '../locale.js';
+import _ from '../locale';
 
 import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parse_yesno} from '../parser.js';
+import {parse_int, parse_yesno, parseDate} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -100,10 +97,10 @@ class Scanner extends Model {
 
       if (is_defined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
-        ret.ca_pub.info.activation_time = moment(
+        ret.ca_pub.info.activation_time = parseDate(
           ret.ca_pub.info.activation_time
         );
-        ret.ca_pub.info.expiration_time = moment(
+        ret.ca_pub.info.expiration_time = parseDate(
           ret.ca_pub.info.expiration_time
         );
         delete ret.ca_pub_info;

@@ -20,13 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
 import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 
-import {parse_severity} from '../../parser.js';
+import {parse_severity, parseDate} from '../../parser';
 
 import {parse_filter} from '../../collection/parser.js';
 
@@ -97,10 +94,10 @@ class ReportReport extends Model {
 
     copy.errors = parse_errors(elem, filter);
 
-    copy.scan_start = moment(scan_start);
+    copy.scan_start = parseDate(scan_start);
 
     if (is_defined(scan_end)) {
-      copy.scan_end = moment(scan_end);
+      copy.scan_end = parseDate(scan_end);
     }
 
     if (is_defined(scan) && is_defined(scan.task) &&
@@ -120,9 +117,9 @@ class ReportReport extends Model {
       copy.delta_report = {
         id: delta.report._id,
         scan_run_status: delta.report.scan_run_status,
-        scan_end: moment(delta.report.scan_end),
-        scan_start: moment(delta.report.scan_start),
-        timestamp: moment(delta.report.timestamp),
+        scan_end: parseDate(delta.report.scan_end),
+        scan_start: parseDate(delta.report.scan_start),
+        timestamp: parseDate(delta.report.timestamp),
       };
 
       delete copy.delta;

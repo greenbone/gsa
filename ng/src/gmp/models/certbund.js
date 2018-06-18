@@ -20,14 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import {is_defined} from '../utils/identity';
 import {for_each, map} from '../utils/array';
 
-import {parse_severity} from '../parser.js';
+import {parse_severity, parseDate} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 class CertBundAdv extends Info {
 
@@ -83,7 +81,7 @@ class CertBundAdv extends Info {
         ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
           revision: rev.Number,
           description: rev.Description,
-          date: moment(rev.Date),
+          date: parseDate(rev.Date),
         }));
       }
 

@@ -20,9 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
 import {is_defined} from './utils/identity';
 import {is_empty} from './utils/string';
 import {map} from './utils/array';
@@ -30,6 +27,7 @@ import {map} from './utils/array';
 import {
   parse_properties,
   parse_yesno,
+  parseDate,
   set_properties,
   NO_VALUE,
   YES_VALUE,
@@ -74,7 +72,7 @@ class Model {
         delete copy.end_time;
       }
       else {
-        copy.end_time = moment(elem.end_time);
+        copy.end_time = parseDate(elem.end_time);
       }
     }
 

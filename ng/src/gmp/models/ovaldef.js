@@ -22,13 +22,11 @@
  */
 import 'core-js/fn/object/entries';
 
-import moment from 'moment';
-
 import {map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 
-import {parse_severity, parse_yesno, YES_VALUE} from '../parser.js';
+import {parse_severity, parse_yesno, YES_VALUE, parseDate} from '../parser';
 
 import Info from './info.js';
 
@@ -124,7 +122,7 @@ class Ovaldef extends Info {
           changes: Object.entries(metadata.oval_repository.dates)
             .map(([key, value]) => ({
               name: key,
-              date: moment(value._date),
+              date: parseDate(value._date),
               description: value.__text,
               contributors: map(value.contributor, contributor => ({
                 name: contributor.__text,

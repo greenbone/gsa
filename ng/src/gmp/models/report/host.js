@@ -20,13 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import {set_properties, parse_int} from 'gmp/parser.js';
+import {set_properties, parse_int, parseDate} from 'gmp/parser';
 
 const parse_count = value => {
   const parsed = parse_int(value);
@@ -87,8 +84,8 @@ class Host {
       };
     }
 
-    copy.start = moment(elem.start);
-    copy.end = moment(elem.end);
+    copy.start = parseDate(elem.start);
+    copy.end = parseDate(elem.end);
 
     delete copy.result_count;
 

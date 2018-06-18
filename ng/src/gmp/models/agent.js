@@ -20,23 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import moment from 'moment';
-
-import Model from '../model.js';
+import Model from '../model';
 
 import {is_defined} from '../utils/identity';
+
+import {parseDate} from '../parser';
 
 class Agent extends Model {
 
   static entity_type = 'agent';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (is_defined(elem.installer) && is_defined(elem.installer.trust)) {
       ret.trust = {
-        time: moment(elem.installer.trust.time),
+        time: parseDate(elem.installer.trust.time),
         status: elem.installer.trust.__text,
       };
 
