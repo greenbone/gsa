@@ -23,7 +23,8 @@
 
 import React from 'react';
 import glamorous from 'glamorous';
-import moment from 'moment';
+
+import date from 'gmp/models/date';
 
 import {storiesOf} from '@storybook/react';
 
@@ -31,8 +32,8 @@ import PropTypes from '../../utils/proptypes.js';
 
 import DatePicker from 'web/components/form/datepicker.js';
 
-const today = moment();
-const testdate = moment('2018-10-10');
+const today = date();
+const testdate = date('2018-10-10');
 
 class ControlledDatePicker extends React.Component {
 
