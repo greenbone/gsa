@@ -311,7 +311,7 @@ ScheduleDialog.propTypes = {
   name: PropTypes.string,
   period: PropTypes.number,
   period_unit: PropTypes.timeunit,
-  startDate: PropTypes.momentDate,
+  startDate: PropTypes.date,
   timezone: PropTypes.string,
   title: PropTypes.string,
   visible: PropTypes.bool,
