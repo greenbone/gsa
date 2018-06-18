@@ -24,7 +24,9 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {longDate, duration} from 'gmp/locale/date';
+import {longDate} from 'gmp/locale/date';
+
+import {duration as createDuration} from 'gmp/models/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -38,6 +40,35 @@ import Table from '../../components/table/detailstable.js';
 import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
+
+const scanDuration = (start, end) => {
+  const dur = createDuration(end.diff(start));
+  const hours = dur.hours();
+  const days = dur.days();
+
+  let minutes = dur.minutes();
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+
+  if (days === 0) {
+    return _('{{hours}}:{{minutes}} h', {hours, minutes});
+  }
+
+  if (days === 1) {
+    return _('{{days}} day {{hours}}:{{minutes}} h', {
+      days,
+      hours,
+      minutes,
+    });
+  }
+
+  return _('{{days}} days {{hours}}:{{minutes}} h', {
+    days,
+    hours,
+    minutes,
+  });
+};
 
 const ReportScanInfoTable = ({
   filterString,
@@ -132,7 +163,7 @@ const ReportScanInfoTable = ({
               {delta ? _('Scan  Duration Report 1') : _('Scan Duration')}
             </TableData>
             <TableData>
-              {duration(scan_start, scan_end)}
+              {scanDuration(scan_start, scan_end)}
             </TableData>
           </TableRow>
         }
@@ -181,7 +212,7 @@ const ReportScanInfoTable = ({
               {_('Scan  Duration Report 2')}
             </TableData>
             <TableData>
-              {duration(delta_report.scan_start, delta_report.scan_end)}
+              {scanDuration(delta_report.scan_start, delta_report.scan_end)}
             </TableData>
           </TableRow>
         }
