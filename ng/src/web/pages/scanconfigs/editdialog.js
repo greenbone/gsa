@@ -175,7 +175,7 @@ class ScannerPreference extends React.Component {
       name === 'kb_dont_replay_attacks' || name === 'kb_dont_replay_denials' ||
       name === 'kb_dont_replay_info_gathering' ||
       name === 'kb_dont_replay_scanners' || name === 'kb_restore' ||
-      name === 'log_whole_attack' ||
+      name === 'log_whole_attack' || name === 'test_empty_vhost' ||
       name === 'only_test_hosts_whose_kb_we_dont_have' ||
       name === 'only_test_hosts_whose_kb_we_have' || name === 'optimize_test' ||
       name === 'safe_checks' || name === 'save_knowledge_base' ||
