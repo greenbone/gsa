@@ -30,24 +30,24 @@ import {is_defined} from 'gmp/utils/identity';
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Select from '../../components/form/select.js';
-import Spinner from '../../components/form/spinner.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import DatePicker from '../../components/form/datepicker.js';
-import TimeZoneSelect from '../../components/form/timezoneselect.js';
-import CheckBox from '../../components/form/checkbox.js';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import DatePicker from 'web/components/form/datepicker';
+import TimeZoneSelect from 'web/components/form/timezoneselect';
+import CheckBox from 'web/components/form/checkbox';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
-import {renderDuration} from './render.js';
+import {renderDuration} from './render';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
