@@ -270,6 +270,17 @@ class Event {
     return undefined;
   }
 
+  get weekdays() {
+    const {recurrence} = this;
+
+    if (!is_defined(recurrence)) {
+      return undefined;
+    }
+
+    const byday = recurrence.getComponent('byday');
+    return WeekDays.fromByDay(byday);
+  }
+
   get nextDate() {
     if (this.isRecurring()) {
       const now = ical.Time.now();
