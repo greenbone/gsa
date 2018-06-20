@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+
 import ical from 'ical.js';
 
 import uuid from 'uuid/v4';
@@ -63,6 +65,109 @@ export const ReccurenceFrequency = {
   MINUTELY: 'MINUTELY',
   SECONDLY: 'SECONDLY',
 };
+
+const ISOWEEKDAY_TO_WEEKDAY = {
+  1: 'monday',
+  2: 'tuesday',
+  3: 'wednesday',
+  4: 'thursday',
+  5: 'friday',
+  6: 'saturday',
+  7: 'sunday',
+};
+
+const ABR_TO_WEEKDAY = {
+  mo: 'monday',
+  tu: 'tuesday',
+  we: 'wednesday',
+  th: 'thursday',
+  fr: 'friday',
+  sa: 'saturday',
+  su: 'sunday',
+};
+
+export class WeekDays {
+
+  constructor({
+    monday = false,
+    tuesday = false,
+    wednesday = false,
+    thursday = false,
+    friday = false,
+    saturday = false,
+    sunday = false,
+  } = {}) {
+    this.monday = monday;
+    this.tuesday = tuesday;
+    this.wednesday = wednesday;
+    this.thursday = thursday;
+    this.friday = friday;
+    this.saturday = saturday;
+    this.sunday = sunday;
+  }
+
+  static fromByDay(bydate = []) {
+    const weekdays = new WeekDays();
+
+    for (const part of bydate) {
+      const pday = part.slice(-2).toLowerCase();
+      const pval = part.slice(0, -2);
+
+      const wday = ABR_TO_WEEKDAY[pday];
+      const val = pval.length === 0 ? true : pval;
+
+      if (is_defined(wday)) {
+        weekdays._setWeekDay(wday, val);
+      }
+    }
+
+    return weekdays;
+  }
+
+  _setWeekDay(weekday, value = true) {
+    this[weekday] = value;
+    return this;
+  }
+
+  isDefault() {
+    return this.monday === false && this.tuesday === false &&
+      this.wednesday === false && this.thursday === false &&
+      this.friday === false && this.saturday === false &&
+      this.sunday === false;
+  }
+
+  copy() {
+    return new WeekDays({...this});
+  }
+
+  setWeekDay(weekday, value = true) {
+    const copy = this.copy();
+    return copy._setWeekDay(weekday, value);
+  }
+
+  setWeekDayFromDate(curdate, value = true) {
+    const wday = ISOWEEKDAY_TO_WEEKDAY[curdate.isoWeekday()];
+    return this.setWeekDay(wday, value);
+  }
+
+  toByDate() {
+    const byday = [];
+
+    for (const [abbr, weekday] of Object.entries(ABR_TO_WEEKDAY)) {
+      const value = this[weekday];
+      if (value) {
+        if (value === true) {
+          byday.push(abbr.toUpperCase());
+        }
+        else {
+          byday.push('' + value + abbr.toUpperCase());
+        }
+      }
+    }
+
+    return byday;
+  }
+}
 
 class Event {
 
