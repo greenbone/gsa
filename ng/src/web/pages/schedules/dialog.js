@@ -25,12 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {NO_VALUE} from 'gmp/parser';
-
 import {is_defined} from 'gmp/utils/identity';
 
 import date, {duration as createDuration} from 'gmp/models/date';
-import Event from 'gmp/models/event';
+import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -48,13 +46,160 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import TimeUnitSelect from './timeunitselect';
+import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
+import {renderDuration} from './render.js';
+
+const RECURRENCE_ONCE = 'once';
+const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
+const RECURRENCE_DAILY = ReccurenceFrequency.DAILY;
+const RECURRENCE_WEEKLY = ReccurenceFrequency.WEEKLY;
+const RECURRENCE_MONTHLY = ReccurenceFrequency.MONTHLY;
+const RECURRENCE_YEARLY = ReccurenceFrequency.YEARLY;
+const RECURRENCE_WORKWEEK = 'workweek';
+const RECURRENCE_CUSTOM = 'custom';
+
+const RECURRENCE_TYPE_ITEMS = [{
+  label: _('Once'),
+  value: RECURRENCE_ONCE,
+}, {
+  label: _('Hourly'),
+  value: RECURRENCE_HOURLY,
+}, {
+  label: _('Daily'),
+  value: RECURRENCE_DAILY,
+}, {
+  label: _('Weekly'),
+  value: RECURRENCE_WEEKLY,
+}, {
+  label: _('Monthly'),
+  value: RECURRENCE_MONTHLY,
+}, {
+  label: _('Yearly'),
+  value: RECURRENCE_YEARLY,
+}, {
+  label: _('Workweek (Monday till Friday)'),
+  value: RECURRENCE_WORKWEEK,
+}, {
+  label: _('Custom...'),
+  value: RECURRENCE_CUSTOM,
+}];
 
 class ScheduleDialog extends React.Component {
 
   constructor(...args) {
     super(...args);
 
+    this.state = this.initialState(this.props);
+
     this.handleSave = this.handleSave.bind(this);
+    this.handleRecurrenceTypeChange =
+      this.handleRecurrenceTypeChange.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
+  }
+
+  initialState(props) {
+    const {
+      duration,
+      timezone,
+      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
+    } = props;
+    let {
+      freq,
+      interval = 1,
+      weekdays = new WeekDays(),
+    } = this.props;
+
+    let recurrenceType;
+
+    if (is_defined(freq)) {
+      if (weekdays.isDefault() && interval === 1) {
+        recurrenceType = freq;
+      }
+      else {
+        recurrenceType = RECURRENCE_CUSTOM;
+        if (weekdays.isDefault()) {
+          weekdays = weekdays.setWeekDayFromDate(startDate);
+        }
+      }
+    }
+    else {
+      recurrenceType = RECURRENCE_ONCE;
+    }
+
+    const endDate = is_defined(duration) ?
+      startDate.clone().add(duration) :
+      startDate.clone().add(1, 'hour');
+
+    return {
+      endDate,
+      endHour: endDate.hours(),
+      endMinute: endDate.minutes(),
+      endOpen: !is_defined(duration),
+      interval,
+      freq,
+      recurrenceType,
+      startDate,
+      startHour: startDate.hours(),
+      startMinute: startDate.minutes(),
+      weekdays,
+      initialWeekdays: weekdays,
+    };
+  }
+
+  handleRecurrenceTypeChange(recurrenceType) {
+    if (recurrenceType === RECURRENCE_CUSTOM) {
+      const {startDate, initialWeekdays} = this.state;
+
+      this.setState({
+        interval: 1,
+        freq: RECURRENCE_WEEKLY,
+        recurrenceType,
+        weekdays: initialWeekdays.setWeekDayFromDate(startDate),
+      });
+    }
+    else if (recurrenceType === RECURRENCE_HOURLY ||
+      recurrenceType === RECURRENCE_DAILY ||
+      recurrenceType === RECURRENCE_WEEKLY ||
+      recurrenceType === RECURRENCE_MONTHLY ||
+      recurrenceType === RECURRENCE_YEARLY) {
+
+      this.setState({
+        interval: 1,
+        freq: recurrenceType,
+        recurrenceType,
+        weekdays: new WeekDays(),
+      });
+    }
+    else if (recurrenceType === RECURRENCE_WORKWEEK) {
+      this.setState({
+        interval: 1,
+        freq: RECURRENCE_WEEKLY,
+        recurrenceType,
+        weekdays: new WeekDays({
+          monday: true,
+          tuesday: true,
+          wednesday: true,
+          thursday: true,
+          friday: true,
+        }),
+      });
+    }
+    else if (recurrenceType === RECURRENCE_ONCE) {
+      this.setState({
+        freq: undefined,
+        interval: undefined,
+        recurrenceType,
+      });
+    }
+    else {
+      this.setState({
+        recurrenceType,
+      });
+    }
+  }
+
+  handleValueChange(value, name) {
+    this.setState({[name]: value});
   }
 
   handleSave({
@@ -65,12 +210,13 @@ class ScheduleDialog extends React.Component {
     endOpen = false,
     id,
     name,
-    period_unit,
-    period,
+    interval,
+    freq,
     startDate,
     startHour,
     startMinute,
     timezone,
+    weekdays,
   }) {
     const {onSave} = this.props;
 
@@ -95,13 +241,12 @@ class ScheduleDialog extends React.Component {
     const event = Event.fromData({
       duration: endOpen ? undefined : createDuration(endDate.diff(startDate)),
       description: comment,
-      period,
-      periodUnit: period_unit,
+      interval,
+      freq,
+      weekdays,
       summary: name,
       startDate,
     }, timezone);
-
-    console.log(event.toIcalString());
 
     return onSave({
       id,
@@ -115,44 +260,59 @@ class ScheduleDialog extends React.Component {
   render() {
     const {
       comment = '',
-      duration,
       id,
       name = _('Unnamed'),
-      period = NO_VALUE,
-      period_unit = 'hour',
       timezone = 'UTC',
-      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
       title = _('New Schedule'),
-      visible = true,
       onClose,
     } = this.props;
 
-    const endDate = is_defined(duration) ?
-      startDate.clone().add(duration) :
-      startDate.clone().add(1, 'hour');
-
-    const data = {
-      comment,
+    const {
       endDate,
-      endHour: endDate.hours(),
-      endMinute: endDate.minutes(),
-      endOpen: !is_defined(duration),
+      endHour,
+      endMinute,
+      endOpen,
+      freq,
+      interval,
+      recurrenceType,
+      startDate,
+      startHour,
+      startMinute,
+      weekdays,
+    } = this.state;
+
+    const defaultValues = {
+      comment,
       id,
       name,
-      period,
-      period_unit,
-      startDate,
-      startHour: startDate.hours(),
-      startMinute: startDate.minutes(),
       timezone,
     };
+
+    const duration = endOpen ?
+      undefined :
+      createDuration(endDate.diff(startDate));
+
+    const values = {
+      endDate,
+      endHour,
+      endMinute,
+      endOpen,
+      freq,
+      interval,
+      recurrenceType,
+      startDate,
+      startHour,
+      startMinute,
+      weekdays,
+    };
+
     return (
       <SaveDialog
-        visible={visible}
         title={title}
+        defaultValues={defaultValues}
+        values={values}
         onClose={onClose}
         onSave={this.handleSave}
-        defaultValues={data}
       >
         {({
           values: state,
@@ -193,7 +353,7 @@ class ScheduleDialog extends React.Component {
               <DatePicker
                 name="startDate"
                 value={state.startDate}
-                onChange={onValueChange}
+                onChange={this.handleValueChange}
               />
               <Divider>
                 <Spinner
@@ -203,7 +363,7 @@ class ScheduleDialog extends React.Component {
                   max="23"
                   size="2"
                   value={state.startHour}
-                  onChange={onValueChange}
+                  onChange={this.handleValueChange}
                 /> h
                 <Spinner
                   name="startMinute"
@@ -212,7 +372,7 @@ class ScheduleDialog extends React.Component {
                   max="59"
                   size="2"
                   value={state.startMinute}
-                  onChange={onValueChange}
+                  onChange={this.handleValueChange}
                 /> m
               </Divider>
             </FormGroup>
@@ -222,7 +382,7 @@ class ScheduleDialog extends React.Component {
                 disabled={state.endOpen}
                 name="endDate"
                 value={state.endDate}
-                onChange={onValueChange}
+                onChange={this.handleValueChange}
               />
               <Divider>
                 <Spinner
@@ -233,7 +393,7 @@ class ScheduleDialog extends React.Component {
                   max="23"
                   size="2"
                   value={state.endHour}
-                  onChange={onValueChange}
+                  onChange={this.handleValueChange}
                 /> h
                 <Spinner
                   disabled={state.endOpen}
@@ -243,35 +403,64 @@ class ScheduleDialog extends React.Component {
                   max="59"
                   size="2"
                   value={state.endMinute}
-                  onChange={onValueChange}
+                  onChange={this.handleValueChange}
                 /> m
                 <CheckBox
                   title={_('Open End')}
                   name="endOpen"
                   checked={state.endOpen}
-                  onChange={onValueChange}
+                  onChange={this.handleValueChange}
                 />
               </Divider>
             </FormGroup>
 
-            <FormGroup title={_('Period')}>
-              <Divider>
-                <Spinner
-                  name="period"
-                  type="int"
-                  min="0"
-                  size="3"
-                  value={state.period}
-                  onChange={onValueChange}
-                />
-                <TimeUnitSelect
-                  month
-                  name="period_unit"
-                  value={state.period_unit}
-                  onChange={onValueChange}
-                />
-              </Divider>
+            <FormGroup title={_('Duration')}>
+              <span>
+                {renderDuration(duration)}
+              </span>
             </FormGroup>
+
+            <FormGroup title={_('Recurrence')}>
+              <Select
+                name="recurrenceType"
+                items={RECURRENCE_TYPE_ITEMS}
+                value={state.recurrenceType}
+                onChange={this.handleRecurrenceTypeChange}
+              />
+            </FormGroup>
+
+            {state.recurrenceType === RECURRENCE_CUSTOM &&
+              <React.Fragment>
+                <FormGroup title={_('Repeat')}>
+                  <Divider>
+                    <span>{_('Every')}</span>
+                    <Spinner
+                      name="interval"
+                      type="int"
+                      min="1"
+                      size="3"
+                      value={state.interval}
+                      onChange={this.handleValueChange}
+                    />
+                    <TimeUnitSelect
+                      name="freq"
+                      value={state.freq}
+                      onChange={this.handleValueChange}
+                    />
+                  </Divider>
+                </FormGroup>
+
+                {state.freq === RECURRENCE_WEEKLY &&
+                  <FormGroup title={_('Repeat at')}>
+                    <WeekDaySelect
+                      name="weekdays"
+                      value={weekdays}
+                      onChange={this.handleValueChange}
+                    />
+                  </FormGroup>
+                }
+              </React.Fragment>
+            }
           </Layout>
         )}
       </SaveDialog>
@@ -283,14 +472,20 @@ ScheduleDialog.propTypes = {
   comment: PropTypes.string,
   date: PropTypes.date,
   duration: PropTypes.duration,
+  freq: PropTypes.oneOf([
+    ReccurenceFrequency.HOURLY,
+    ReccurenceFrequency.DAILY,
+    ReccurenceFrequency.WEEKLY,
+    ReccurenceFrequency.MINUTELY,
+    ReccurenceFrequency.YEARLY,
+  ]),
   id: PropTypes.string,
+  interval: PropTypes.number,
   name: PropTypes.string,
-  period: PropTypes.number,
-  period_unit: PropTypes.timeunit,
   startDate: PropTypes.date,
   timezone: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool,
+  weekdays: WeekDaysPropType,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
