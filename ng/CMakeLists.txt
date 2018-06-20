@@ -669,6 +669,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/timeunitselect.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/details.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/listpage.js

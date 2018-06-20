@@ -47,31 +47,7 @@ import CheckBox from '../../components/form/checkbox.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-const TimeUnitSelect = ({
-  month = false,
-  ...props
- }) => {
-  const unitOptions = [
-    {value: 'hour', label: _('hour(s)')},
-    {value: 'day', label: _('day(s)')},
-    {value: 'week', label: _('week(s)')},
-  ];
-
-  if (month) {
-    unitOptions.push({value: 'month', label: _('month(s)')});
-  }
-
-  return (
-    <Select
-      {...props}
-      items={unitOptions}
-    />
-  );
-};
-
-TimeUnitSelect.propTypes = {
-  month: PropTypes.bool,
-};
+import TimeUnitSelect from './timeunitselect';
 
 class ScheduleDialog extends React.Component {
 
