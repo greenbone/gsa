@@ -52,10 +52,6 @@ const setEventRecurrence = (event, recurrence) => {
 const PROD_ID = '-//Greenbone.net//NONSGML Greenbone Security Assistent';
 const ICAL_VERSION = '2.0';
 
-const DAYS = 'day';
-const WEEKS = 'week';
-const MONTHS = 'month';
-
 export const ReccurenceFrequency = {
   YEARLY: 'YEARLY',
   MONTHLY: 'MONTHLY',
@@ -186,11 +182,12 @@ class Event {
 
   static fromData({
     description,
-    startDate,
     duration,
-    period = 0,
-    periodUnit,
+    freq,
+    interval,
+    startDate,
     summary,
+    weekdays,
   }, timezone) {
 
     const event = new ical.Event();
@@ -210,21 +207,17 @@ class Event {
       setEventDuration(event, eventDuration);
     }
 
-    if (period > 0) {
+    if (is_defined(freq)) {
       const eventRecur = new ical.Recur();
-      if (periodUnit === MONTHS) {
-        eventRecur.freq = ReccurenceFrequency.MONTHLY;
+
+      eventRecur.freq = freq;
+      eventRecur.interval = interval;
+
+      const icalweekdays = weekdays.toByDate();
+
+      if (icalweekdays.length > 0) {
+        eventRecur.setComponent('byday', icalweekdays);
       }
-      else if (periodUnit === WEEKS) {
-        eventRecur.freq = ReccurenceFrequency.WEEKLY;
-      }
-      else if (periodUnit === DAYS) {
-        eventRecur.freq = ReccurenceFrequency.WEEKLY;
-      }
-      else {
-        eventRecur.freq = ReccurenceFrequency.HOURLY;
-      }
-      eventRecur.interval = period;
 
       setEventRecurrence(event, eventRecur);
     }
@@ -232,6 +225,7 @@ class Event {
     if (!is_empty(summary)) {
       event.summary = summary;
     }
+
     if (!is_empty(description)) {
       event.description = description;
     }
