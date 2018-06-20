@@ -28,8 +28,6 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils';
 
-import {ReccurenceFrequency} from 'gmp/models/event';
-
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
 
@@ -38,14 +36,6 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import ScheduleDialog from './dialog.js';
-
-const PERIOD_UNIT = {
-  [ReccurenceFrequency.MINUTELY]: 'minute',
-  [ReccurenceFrequency.HOURLY]: 'hour',
-  [ReccurenceFrequency.DAILY]: 'day',
-  [ReccurenceFrequency.WEEKLY]: 'week',
-  [ReccurenceFrequency.MONTHLY]: 'month',
-};
 
 class ScheduleComponent extends React.Component {
 
@@ -63,20 +53,28 @@ class ScheduleComponent extends React.Component {
 
     if (is_defined(schedule)) {
       const {event} = schedule;
-      const {startDate, recurrence = {}, duration, durationInSeconds} = event;
-      const {freq, interval = 1} = recurrence;
+      const {
+        startDate,
+        recurrence = {},
+        duration,
+        durationInSeconds,
+        weekdays,
+      } = event;
+
+      const {interval, freq} = recurrence;
 
       this.setState({
         comment: schedule.comment,
         startDate,
         dialogVisible: true,
         duration: durationInSeconds > 0 ? duration : undefined,
+        freq,
         id: schedule.id,
+        interval,
         name: schedule.name,
-        period: is_defined(freq) ? interval : undefined,
-        period_unit: is_defined(freq) ? PERIOD_UNIT[freq] : 'hour',
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
         timezone: schedule.timezone,
+        weekdays,
       });
     }
     else {
@@ -85,14 +83,14 @@ class ScheduleComponent extends React.Component {
         comment: undefined,
         dialogVisible: true,
         duration: undefined,
-        duration_unit: undefined,
+        freq: undefined,
         id: undefined,
+        interval: undefined,
         name: undefined,
-        period: undefined,
-        period_unit: undefined,
         startDate: undefined,
         timezone,
         title: undefined,
+        weekdays: undefined,
       });
     }
   }
@@ -117,16 +115,8 @@ class ScheduleComponent extends React.Component {
     } = this.props;
 
     const {
-      comment,
-      startDate,
       dialogVisible,
-      duration,
-      id,
-      name,
-      period,
-      period_unit,
-      timezone,
-      title,
+      ...dialogProps
     } = this.state;
 
     return (
@@ -155,15 +145,7 @@ class ScheduleComponent extends React.Component {
             })}
             {dialogVisible &&
               <ScheduleDialog
-                comment={comment}
-                startDate={startDate}
-                duration={duration}
-                id={id}
-                name={name}
-                period={period}
-                period_unit={period_unit}
-                timezone={timezone}
-                title={title}
+                {...dialogProps}
                 onClose={this.closeScheduleDialog}
                 onSave={save}
               />
