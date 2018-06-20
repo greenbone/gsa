@@ -122,15 +122,15 @@ class SpinnerComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    const {step, value, type} = this.props;
+    const {value = 0, type} = this.props;
+
+    let {step} = this.props;
     if (is_defined(step)) {
-      this.step = parse_float(step);
+      step = parse_float(step);
     }
     else {
-      this.step = type === 'float' ? 0.1 : 1;
+      step = type === 'float' ? 0.1 : 1;
     }
-
-    this.value = parse_float(value || 0);
 
     this.allowed = [
       KeyCode.SUBTRACT,
@@ -147,9 +147,10 @@ class SpinnerComponent extends React.Component {
 
     this.state = {
       value_set: value, // external value for the outside world
-      value, // internal value shown in the spinner
+      value: parse_float(value), // internal value shown in the spinner
       up_active: false,
       down_active: false,
+      step,
     };
 
     this.handleBlur = this.handleBlur.bind(this);
@@ -187,7 +188,7 @@ class SpinnerComponent extends React.Component {
   }
 
   handleUp(event) {
-    const {value, step} = this;
+    const {value, step} = this.state;
 
     event.preventDefault();
 
@@ -195,7 +196,7 @@ class SpinnerComponent extends React.Component {
   }
 
   handleDown(event) {
-    const {value, step} = this;
+    const {value, step} = this.state;
 
     event.preventDefault();
 
@@ -244,7 +245,7 @@ class SpinnerComponent extends React.Component {
   }
 
   handleMouseWheel(event) {
-    const {step} = this;
+    const {step} = this.state;
     const direction = event.deltaY > 1 ? 1 : -1;
 
     event.preventDefault();
@@ -277,7 +278,7 @@ class SpinnerComponent extends React.Component {
   }
 
   setAdjustedValue(value) {
-    const {step} = this;
+    const {step} = this.state;
     const {min, disabled} = this.props;
 
     if (disabled) {
@@ -335,7 +336,7 @@ class SpinnerComponent extends React.Component {
   }
 
   getPrecision() {
-    const {step} = this;
+    const {step} = this.state;
     let precision = this.precisionOf(step);
 
     precision = Math.max(precision, this.precisionOf(step));
