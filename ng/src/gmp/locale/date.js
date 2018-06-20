@@ -26,7 +26,7 @@ import {is_defined, is_string, is_jsdate} from '../utils/identity';
 
 import {parse_int, parseDate} from '../parser';
 
-import {setLocale, isDate, duration as createDuration} from '../models/date';
+import {setLocale, isDate} from '../models/date';
 
 import {translate, subscribe} from './lang';
 
@@ -104,34 +104,5 @@ export function interval(seconds = 0) {
 
   return translate('{{number}} seconds', {number: seconds});
 }
-
-export const duration = (start, end) => {
-  const dur = createDuration(end.diff(start));
-  const hours = dur.hours();
-  const days = dur.days();
-
-  let minutes = dur.minutes();
-  if (minutes < 10) {
-    minutes = '0' + minutes;
-  }
-
-  if (days === 0) {
-    return translate('{{hours}}:{{minutes}} h', {hours, minutes});
-  }
-
-  if (days === 1) {
-    return translate('{{days}} day {{hours}}:{{minutes}} h', {
-      days,
-      hours,
-      minutes,
-    });
-  }
-
-  return translate('{{days}} days {{hours}}:{{minutes}} h', {
-    days,
-    hours,
-    minutes,
-  });
-};
 
 // vim: set ts=2 sw=2 tw=80:

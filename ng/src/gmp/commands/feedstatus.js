@@ -20,8 +20,42 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import {HttpCommand, register_command} from '../command.js';
+
+import {parseDate} from '../parser.js';
+
+import {map} from '../utils/array';
+
+import date, {duration} from '../models/date';
+
+const convertVersion = version => version.slice(0, 8) + 'T' +
+  version.slice(8, 12);
+
+export const NVT_FEED = 'NVT';
+export const CERT_FEED = 'CERT';
+export const SCAP_FEED = 'SCAP';
+
+class Feed {
+
+  constructor({
+    type,
+    name,
+    description,
+    status,
+    version,
+  }) {
+    this.feed_type = type;
+    this.name = name;
+    this.description = description;
+    this.status = status;
+
+    const versionDate = convertVersion(version);
+    this.version = versionDate;
+
+    const lastUpdate = parseDate(versionDate);
+    this.age = duration(date().diff(lastUpdate));
+  }
+}
 
 class FeedStatus extends HttpCommand {
 
@@ -31,9 +65,13 @@ class FeedStatus extends HttpCommand {
 
   readFeedInformation() {
     return this.httpGet().then(response => {
-      const envelope = response.data;
-      return response.setData(
-        envelope.get_feeds.commands_response.get_feeds_response);
+      const {data: envelope} = response;
+      const {get_feeds_response: feedsresponse} =
+        envelope.get_feeds.commands_response;
+
+      const feeds = map(feedsresponse.feed, feed => new Feed(feed));
+
+      return response.setData(feeds);
     });
   }
 }

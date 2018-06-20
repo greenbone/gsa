@@ -24,7 +24,9 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import date from 'gmp/models/date';
+import {parse_int} from 'gmp/parser';
+
+import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus.js';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';
@@ -56,8 +58,25 @@ const ToolBarIcons = () => (
   />
 );
 
-const convert_version = version => version.slice(0, 8) + 'T' +
-  version.slice(8, 12);
+const renderCheck = feed => {
+    const age = feed.age.asDays();
+
+    return age >= 10 ?
+      _('Please check the automatic synchronization of your system.') : '';
+};
+
+const renderFeedStatus = feed => {
+    const age = parse_int(feed.age.asDays());
+
+    if (age >= 10) {
+      return _('Too old ({{age}} days)', {age});
+    }
+
+    if (age >= 2) {
+      return _('{{age}} days old', {age});
+    }
+    return _('Current');
+};
 
 class FeedStatus extends React.Component {
 
@@ -65,68 +84,24 @@ class FeedStatus extends React.Component {
     super(...args);
 
     this.state = {
-      nvt_feed: {},
-      scap_feed: {},
-      cert_feed: {},
+      feeds: [],
     };
   }
 
   componentDidMount() {
-    this.readFeeds();
+    this.loadFeeds();
   }
 
-  readFeeds() {
+  loadFeeds() {
     const {gmp} = this.props;
     gmp.feedstatus.readFeedInformation().then(response => {
-      const feedData = response.data;
-
-      for (const current_feed of feedData.feed) {
-        switch (current_feed.type) {
-          case 'NVT':
-            const nvt_feed = this.calculateStatus(current_feed);
-            this.setState({nvt_feed});
-            break;
-          case 'SCAP':
-            const scap_feed = this.calculateStatus(current_feed);
-            this.setState({scap_feed});
-            break;
-          case 'CERT':
-            const cert_feed = this.calculateStatus(current_feed);
-            this.setState({cert_feed});
-            break;
-          default:
-            return undefined;
-        }
-      }
+      const {data: feeds} = response;
+      this.setState({feeds});
     });
   }
 
-  calculateStatus(feed) {
-    feed.version = convert_version(feed.version);
-    let stat = '';
-    let checkstring = '';
-    const lastUpdate = date(feed.version);
-    const now = date();
-    const age = now.diff(lastUpdate, 'days');
-
-    if (age >= 10) {
-      stat = _('Too old ({{age}} days)', {age});
-      checkstring = _('Please check the automatic synchronization of your' +
-        ' system.');
-    }
-    else if (age >= 2) {
-      stat = _('{{age}} days old', {age});
-    }
-    else {
-      stat = _('Current');
-    }
-    feed.status = stat;
-    feed.checkstring = checkstring;
-    return feed;
-  }
-
   render() {
-    const {nvt_feed, scap_feed, cert_feed} = this.state;
+    const {feeds} = this.state;
     return (
       <Layout flex="column">
         <ToolBarIcons/>
@@ -153,123 +128,94 @@ class FeedStatus extends React.Component {
                 {_('Status')}
               </TableHead>
             </TableRow>
-            <TableRow>
-              <TableData>
-                {nvt_feed.type}
-              </TableData>
-              <TableData>
-                <IconDivider>
-                  <Link to="nvts">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="nvt.svg"
-                        size="medium"
-                      />
-                      <span>NVTs</span>
+
+            {feeds.map(feed => (
+              <TableRow key={feed.feed_type}>
+                <TableData>
+                  {feed.feed_type}
+                </TableData>
+                <TableData>
+                  {feed.feed_type === NVT_FEED &&
+                    <IconDivider>
+                      <Link to="nvts">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="nvt.svg"
+                            size="medium"
+                          />
+                          <span>NVTs</span>
+                        </IconDivider>
+                      </Link>
                     </IconDivider>
-                  </Link>
-                </IconDivider>
-              </TableData>
-              <TableData>
-                {nvt_feed.name}
-              </TableData>
-              <TableData>
-                {nvt_feed.version}
-              </TableData>
-              <TableData>
-                <Divider wrap>
-                  <strong>{nvt_feed.status}</strong>
-                  <span>{nvt_feed.checkstring}</span>
-                </Divider>
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {scap_feed.type}
-              </TableData>
-              <TableData>
-                <IconDivider>
-                  <Link to="cves">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="cve.svg"
-                        size="medium"
-                      />
-                      <span>CVEs</span>
+                  }
+                  {feed.feed_type === SCAP_FEED &&
+                    <IconDivider>
+                      <Link to="cves">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="cve.svg"
+                            size="medium"
+                          />
+                          <span>CVEs</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="cpes">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="cpe.svg"
+                            size="medium"
+                          />
+                          <span>CPEs</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="ovaldefs">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="ovaldef.svg"
+                            size="medium"
+                          />
+                          <span>OVAL Definitions</span>
+                        </IconDivider>
+                      </Link>
                     </IconDivider>
-                  </Link>
-                  <Link to="cpes">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="cpe.svg"
-                        size="medium"
-                      />
-                      <span>CPEs</span>
+                  }
+                  {feed.feed_type === CERT_FEED &&
+                    <IconDivider>
+                      <Link to="certbunds">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="cert_bund_adv.svg"
+                            size="medium"
+                          />
+                          <span>CERT-Bund Advisories</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="dfncerts">
+                        <IconDivider align={['start', 'center']}>
+                          <Icon
+                            img="dfn_cert_adv.svg"
+                            size="medium"
+                          />
+                          <span>DFN-CERT Advisories</span>
+                        </IconDivider>
+                      </Link>
                     </IconDivider>
-                  </Link>
-                  <Link to="ovaldefs">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="ovaldef.svg"
-                        size="medium"
-                      />
-                      <span>OVAL Definitions</span>
-                    </IconDivider>
-                  </Link>
-                </IconDivider>
-              </TableData>
-              <TableData>
-                {scap_feed.name}
-              </TableData>
-              <TableData>
-                {scap_feed.version}
-              </TableData>
-              <TableData>
-                <Divider wrap>
-                  <strong>{scap_feed.status}</strong>
-                  <span>{scap_feed.checkstring}</span>
-                </Divider>
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {cert_feed.type}
-              </TableData>
-              <TableData>
-                <IconDivider>
-                  <Link to="certbunds">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="cert_bund_adv.svg"
-                        size="medium"
-                      />
-                      <span>CERT-Bund Advisories</span>
-                    </IconDivider>
-                  </Link>
-                  <Link to="dfncerts">
-                    <IconDivider align={['start', 'center']}>
-                      <Icon
-                        img="dfn_cert_adv.svg"
-                        size="medium"
-                      />
-                      <span>DFN-CERT Advisories</span>
-                    </IconDivider>
-                  </Link>
-                </IconDivider>
-              </TableData>
-              <TableData>
-                {cert_feed.name}
-              </TableData>
-              <TableData>
-                {cert_feed.version}
-              </TableData>
-              <TableData>
-                <Divider wrap>
-                  <strong>{cert_feed.status}</strong>
-                  <span>{cert_feed.checkstring}</span>
-                </Divider>
-              </TableData>
-            </TableRow>
+                  }
+                </TableData>
+                <TableData>
+                  {feed.name}
+                </TableData>
+                <TableData>
+                  {feed.version}
+                </TableData>
+                <TableData>
+                  <Divider wrap>
+                    <strong>{renderFeedStatus(feed)}</strong>
+                    <span>{renderCheck(feed)}</span>
+                  </Divider>
+                </TableData>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </Layout>
