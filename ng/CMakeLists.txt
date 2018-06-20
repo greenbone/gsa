@@ -169,7 +169,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/gmp/timezones.js
      ${NG_SRC_DIR}/src/gmp/utils/array.js
-     ${NG_SRC_DIR}/src/gmp/utils/calc.js
      ${NG_SRC_DIR}/src/gmp/utils/event.js
      ${NG_SRC_DIR}/src/gmp/utils/id.js
      ${NG_SRC_DIR}/src/gmp/utils/identity.js
