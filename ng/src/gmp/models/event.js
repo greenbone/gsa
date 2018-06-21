@@ -308,6 +308,17 @@ class Event {
     return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
   }
 
+  get monthdays() {
+    const {recurrence} = this;
+
+    if (!is_defined(recurrence)) {
+      return undefined;
+    }
+
+    const bymonthday = recurrence.getComponent('bymonthday');
+    return bymonthday.length > 0 ? bymonthday : undefined;
+  }
+
   get nextDate() {
     if (this.isRecurring()) {
       const now = ical.Time.now();
