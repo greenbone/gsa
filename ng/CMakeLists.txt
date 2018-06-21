@@ -667,6 +667,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/schedules/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/pages/schedules/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/monthdaysselect.js
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
