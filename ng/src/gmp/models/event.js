@@ -136,6 +136,34 @@ export class WeekDays {
     return new WeekDays({...this});
   }
 
+  getSelectedWeekDay() {
+    if (this.monday) {
+      return 'monday';
+    }
+    if (this.tuesday) {
+      return 'tuesday';
+    }
+    if (this.wednesday) {
+      return 'wednesday';
+    }
+    if (this.thursday) {
+      return 'thursday';
+    }
+    if (this.friday) {
+      return 'friday';
+    }
+    if (this.saturday) {
+      return 'saturday';
+    }
+    if (this.sunday) {
+      return 'sunday';
+    }
+  }
+
+  get(weekday) {
+    return this[weekday];
+  }
+
   setWeekDay(weekday, value = true) {
     const copy = this.copy();
     return copy._setWeekDay(weekday, value);
