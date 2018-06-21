@@ -55,11 +55,6 @@ import TabPanel from '../../components/tab/tabpanel.js';
 import TabPanels from '../../components/tab/tabpanels.js';
 import Tabs from '../../components/tab/tabs.js';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
-
 import NvtComponent from './component.js';
 import NvtDetails from './details.js';
 import Preferences from './preferences.js';
@@ -155,21 +150,9 @@ const Details = ({
 }) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
-  const {version, family, oid, preferences, default_timeout} = entity;
+  const {preferences, default_timeout} = entity;
   return (
     <Layout flex="column">
-      <InfoTable>
-        <TableBody>
-          <TableRow>
-            <TableData>
-              {_('Family')}
-            </TableData>
-            <TableData>
-              {family}
-            </TableData>
-          </TableRow>
-        </TableBody>
-      </InfoTable>
 
       <NvtDetails
         entity={entity}
