@@ -476,7 +476,7 @@ ScheduleDialog.propTypes = {
     ReccurenceFrequency.HOURLY,
     ReccurenceFrequency.DAILY,
     ReccurenceFrequency.WEEKLY,
-    ReccurenceFrequency.MINUTELY,
+    ReccurenceFrequency.MONTHLY,
     ReccurenceFrequency.YEARLY,
   ]),
   id: PropTypes.string,
