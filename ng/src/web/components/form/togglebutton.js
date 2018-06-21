@@ -30,34 +30,55 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const Styled = glamorous.div({
-  borderRadius: '25%',
-  cursor: 'pointer',
+  borderRadius: '8px',
   padding: '5px',
-  width: '32px',
   userSelect: 'none',
-}, ({checked}) => ({
-  backgroundColor: checked ? Theme.lightGreen : Theme.lightGray,
-  color: checked ? Theme.white : Theme.black,
-}));
+}, ({
+  checked = false,
+  disabled = false,
+  width = '32px',
+}) => {
+  let color;
+  let backgroundColor;
+  if (disabled) {
+    backgroundColor = Theme.lightGray;
+    color = Theme.mediumGray;
+  }
+  else if (checked) {
+    backgroundColor = Theme.lightGreen;
+    color = Theme.white;
+  }
+  else {
+    backgroundColor = Theme.lightGray;
+    color = Theme.darkGray;
+  }
+  return {
+    backgroundColor,
+    color,
+    cursor: disabled ? 'default' : 'pointer',
+    width,
+  };
+});
 
 const ToggleButton = ({
   name,
   checked = false,
-  children,
-  title,
+  disabled,
   onToggle,
+  ...props
 }) => (
   <Styled
-    title={title}
+    {...props}
     checked={checked}
-    onClick={is_defined(onToggle) ? () => onToggle(!checked, name) : undefined}
-  >
-    {children}
-  </Styled>
+    disabled={disabled}
+    onClick={!disabled && is_defined(onToggle) ?
+      () => onToggle(!checked, name) : undefined}
+  />
 );
 
 ToggleButton.propTypes = {
   checked: PropTypes.bool,
+  disabled: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,
   onToggle: PropTypes.func,
