@@ -241,7 +241,7 @@ class Event {
       eventRecur.freq = freq;
       eventRecur.interval = interval;
 
-      const icalweekdays = weekdays.toByDate();
+      const icalweekdays = is_defined(weekdays) ? weekdays.toByDate() : [];
 
       if (icalweekdays.length > 0) {
         eventRecur.setComponent('byday', icalweekdays);
