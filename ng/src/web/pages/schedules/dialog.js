@@ -232,6 +232,12 @@ class ScheduleDialog extends React.Component {
         .seconds(0)
         .hours(endHour)
         .minutes(endMinute);
+
+      if (endDate.isSameOrBefore(startDate)) {
+        return Promise.reject(new Error(_(
+          'End date is same or before start date. Please adjust you start ' +
+          'and/or end date.')));
+      }
     }
 
     if (recurrenceType === RECURRENCE_WORKWEEK) {
