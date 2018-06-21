@@ -300,7 +300,7 @@ class Event {
     }
 
     const byday = recurrence.getComponent('byday');
-    return WeekDays.fromByDay(byday);
+    return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
   }
 
   get nextDate() {
