@@ -58,6 +58,7 @@ class ScheduleComponent extends React.Component {
         recurrence = {},
         duration,
         durationInSeconds,
+        monthdays,
         weekdays,
       } = event;
 
@@ -71,6 +72,7 @@ class ScheduleComponent extends React.Component {
         freq,
         id: schedule.id,
         interval,
+        monthdays,
         name: schedule.name,
         title: _('Edit Schedule {{name}}', {name: schedule.name}),
         timezone: schedule.timezone,
@@ -86,6 +88,7 @@ class ScheduleComponent extends React.Component {
         freq: undefined,
         id: undefined,
         interval: undefined,
+        monthdays: undefined,
         name: undefined,
         startDate: undefined,
         timezone,
