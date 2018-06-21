@@ -168,15 +168,6 @@ const Details = ({
               {family}
             </TableData>
           </TableRow>
-
-          <TableRow>
-            <TableData>
-              {_('OID')}
-            </TableData>
-            <TableData>
-              {oid}
-            </TableData>
-          </TableRow>
         </TableBody>
       </InfoTable>
 
