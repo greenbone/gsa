@@ -177,15 +177,6 @@ const Details = ({
               {oid}
             </TableData>
           </TableRow>
-
-          <TableRow>
-            <TableData>
-              {_('Version')}
-            </TableData>
-            <TableData>
-              {version}
-            </TableData>
-          </TableRow>
         </TableBody>
       </InfoTable>
 
