@@ -662,6 +662,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/scans/page.js
      ${NG_SRC_DIR}/src/web/pages/scans/dashboard.js
      ${NG_SRC_DIR}/src/web/pages/schedules/component.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/dayselect.js
      ${NG_SRC_DIR}/src/web/pages/schedules/details.js
      ${NG_SRC_DIR}/src/web/pages/schedules/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/dialog.js
