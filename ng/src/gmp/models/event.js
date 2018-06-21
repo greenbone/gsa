@@ -213,6 +213,7 @@ class Event {
     duration,
     freq,
     interval,
+    monthdays = [],
     startDate,
     summary,
     weekdays,
@@ -245,6 +246,10 @@ class Event {
 
       if (icalweekdays.length > 0) {
         eventRecur.setComponent('byday', icalweekdays);
+      }
+
+      if (monthdays.length > 0) {
+        eventRecur.setComponent('bymonthday', monthdays);
       }
 
       setEventRecurrence(event, eventRecur);
