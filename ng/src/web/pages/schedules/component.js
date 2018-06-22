@@ -58,11 +58,9 @@ class ScheduleComponent extends React.Component {
         recurrence = {},
         duration,
         durationInSeconds,
-        monthdays,
-        weekdays,
       } = event;
 
-      const {interval, freq} = recurrence;
+      const {interval, freq, monthdays, weekdays} = recurrence;
 
       this.setState({
         comment: schedule.comment,

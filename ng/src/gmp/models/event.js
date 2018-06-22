@@ -82,6 +82,24 @@ const ABR_TO_WEEKDAY = {
   su: 'sunday',
 };
 
+const getWeekDaysFromRRule = rrule => {
+    if (!is_defined(rrule)) {
+      return undefined;
+    }
+
+    const byday = rrule.getComponent('byday');
+    return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
+};
+
+const getMonthDaysFromRRule = rrule => {
+  if (!is_defined(rrule)) {
+    return undefined;
+  }
+
+  const bymonthday = rrule.getComponent('bymonthday');
+  return bymonthday.length > 0 ? bymonthday.sort() : undefined;
+};
+
 export class WeekDays {
 
   constructor({
@@ -266,6 +284,14 @@ class Event {
     return new Event(event, timezone);
   }
 
+  _getReccurenceRule() {
+    if (this.isRecurring()) {
+      const rrule = this.event.component.getFirstPropertyValue('rrule');
+      return rrule === null ? undefined : rrule;
+    }
+    return undefined;
+  }
+
   get startDate() {
     return convertIcalDate(this.event.startDate, this.timezone);
   }
@@ -290,33 +316,13 @@ class Event {
   }
 
   get recurrence() {
-    if (this.isRecurring()) {
-      const rrule = this.event.component.getFirstPropertyValue('rrule');
-      return rrule === null ? undefined : rrule;
-    }
-    return undefined;
-  }
+    const rrule = this._getReccurenceRule();
 
-  get weekdays() {
-    const {recurrence} = this;
-
-    if (!is_defined(recurrence)) {
-      return undefined;
-    }
-
-    const byday = recurrence.getComponent('byday');
-    return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
-  }
-
-  get monthdays() {
-    const {recurrence} = this;
-
-    if (!is_defined(recurrence)) {
-      return undefined;
-    }
-
-    const bymonthday = recurrence.getComponent('bymonthday');
-    return bymonthday.length > 0 ? bymonthday : undefined;
+    return {
+      ...rrule,
+      weekdays: getWeekDaysFromRRule(rrule),
+      monthdays: getMonthDaysFromRRule(rrule),
+    };
   }
 
   get nextDate() {
