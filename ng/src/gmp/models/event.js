@@ -154,6 +154,18 @@ export class WeekDays {
     return new WeekDays({...this});
   }
 
+  entries() {
+    return [
+      ['monday', this.monday],
+      ['tuesday', this.tuesday],
+      ['wednesday', this.wednesday],
+      ['thursday', this.thursday],
+      ['friday', this.friday],
+      ['saturday', this.saturday],
+      ['sunday', this.sunday],
+    ];
+  }
+
   getSelectedWeekDay() {
     if (this.monday) {
       return 'monday';
