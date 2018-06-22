@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import 'core-js/fn/object/entries';
+import 'core-js/fn/object/values';
 
 import ical from 'ical.js';
 
@@ -111,13 +112,15 @@ export class WeekDays {
     saturday = false,
     sunday = false,
   } = {}) {
-    this.monday = monday;
-    this.tuesday = tuesday;
-    this.wednesday = wednesday;
-    this.thursday = thursday;
-    this.friday = friday;
-    this.saturday = saturday;
-    this.sunday = sunday;
+    this._weekdays = {
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+      sunday,
+    };
   }
 
   static fromByDay(bydate = []) {
@@ -139,59 +142,33 @@ export class WeekDays {
   }
 
   _setWeekDay(weekday, value = true) {
-    this[weekday] = value;
+    this._weekdays[weekday] = value;
     return this;
   }
 
   isDefault() {
-    return this.monday === false && this.tuesday === false &&
-      this.wednesday === false && this.thursday === false &&
-      this.friday === false && this.saturday === false &&
-      this.sunday === false;
+    return this.values().some(value => !value);
   }
 
   copy() {
-    return new WeekDays({...this});
+    return new WeekDays({...this._weekdays});
   }
 
   entries() {
-    return [
-      ['monday', this.monday],
-      ['tuesday', this.tuesday],
-      ['wednesday', this.wednesday],
-      ['thursday', this.thursday],
-      ['friday', this.friday],
-      ['saturday', this.saturday],
-      ['sunday', this.sunday],
-    ];
+    return Object.entries(this._weekdays);
+  }
+
+  values() {
+    return Object.values(this._weekdays);
   }
 
   getSelectedWeekDay() {
-    if (this.monday) {
-      return 'monday';
-    }
-    if (this.tuesday) {
-      return 'tuesday';
-    }
-    if (this.wednesday) {
-      return 'wednesday';
-    }
-    if (this.thursday) {
-      return 'thursday';
-    }
-    if (this.friday) {
-      return 'friday';
-    }
-    if (this.saturday) {
-      return 'saturday';
-    }
-    if (this.sunday) {
-      return 'sunday';
-    }
+    const ret = this.entries().find(([, value]) => value);
+    return is_defined(ret) ? ret[0] : undefined;
   }
 
   get(weekday) {
-    return this[weekday];
+    return this._weekdays[weekday];
   }
 
   setWeekDay(weekday, value = true) {
@@ -208,7 +185,7 @@ export class WeekDays {
     const byday = [];
 
     for (const [abbr, weekday] of Object.entries(ABR_TO_WEEKDAY)) {
-      const value = this[weekday];
+      const value = this.get(weekday);
       if (value) {
         if (value === true) {
           byday.push(abbr.toUpperCase());
@@ -220,6 +197,34 @@ export class WeekDays {
     }
 
     return byday;
+  }
+
+  get monday() {
+    return this.get('monday');
+  }
+
+  get tuesday() {
+    return this.get('tuesday');
+  }
+
+  get wednesday() {
+    return this.get('wednesday');
+  }
+
+  get thursday() {
+    return this.get('thursday');
+  }
+
+  get friday() {
+    return this.get('friday');
+  }
+
+  get saturday() {
+    return this.get('saturday');
+  }
+
+  get sunday() {
+    return this.get('sunday');
   }
 }
 
