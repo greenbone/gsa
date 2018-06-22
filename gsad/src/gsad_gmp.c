@@ -4380,21 +4380,25 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   auto_delete_data = params_value (params, "auto_delete_data");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
-  CHECK_PARAM_INVALID (scanner_type, "Save Task");
-  if (!strcmp (scanner_type, "1"))
+
+  if (scanner_type != NULL)
     {
-      hosts_ordering = "";
-      max_checks = "";
-      source_iface = "";
-      max_hosts = "";
-    }
-  else if (!strcmp (scanner_type, "3"))
-    {
-      config_id = "0";
-      hosts_ordering = "";
-      max_checks = "";
-      source_iface = "";
-      max_hosts = "";
+      CHECK_PARAM_INVALID (scanner_type, "Save Task");
+      if (!strcmp (scanner_type, "1"))
+        {
+          hosts_ordering = "";
+          max_checks = "";
+          source_iface = "";
+          max_hosts = "";
+        }
+      else if (!strcmp (scanner_type, "3"))
+        {
+          config_id = "0";
+          hosts_ordering = "";
+          max_checks = "";
+          source_iface = "";
+          max_hosts = "";
+        }
     }
 
   CHECK_PARAM_INVALID (name, "Save Task");
