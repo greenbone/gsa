@@ -35,6 +35,7 @@ export const {
   isMoment: isDate,
   locale: setLocale,
   duration,
+  localeData: _localeData,
 } = moment;
 
 export default moment;
