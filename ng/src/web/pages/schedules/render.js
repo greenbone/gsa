@@ -24,45 +24,101 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import {_localeData} from 'gmp/models/date';
 import {ReccurenceFrequency} from 'gmp/models/event';
 
-export const renderRecurrence = ({freq, interval = 1} = {}) => {
+const WEEKDAY = {
+  monday: _('Monday'),
+  tuesday: _('Tuesday'),
+  wednesday: _('Wednesday'),
+  thursday: _('Thursday'),
+  friday: _('Friday'),
+  saturday: _('Saturday'),
+  sunday: _('Sunday'),
+};
+
+export const renderRecurrence = ({
+  freq,
+  interval = 1,
+  weekdays,
+  monthdays,
+} = {}) => {
   switch (freq) {
     case ReccurenceFrequency.YEARLY:
       if (interval === 1) {
-        return _('One year');
+        return _('Every year');
       }
-      return _('{{interval}} years', {interval});
+      return _('Every {{interval}} years', {interval});
+
     case ReccurenceFrequency.MONTHLY:
-      if (interval === 1) {
-        return _('One month');
+      if (is_defined(monthdays)) {
+        if (interval === 1) {
+          return _('Every month at days {{days}}',
+            {days: monthdays.join(', ')});
+        }
+        return _('Every {{interval}} month at days {{days}}',
+          {interval, days: monthdays.join(', ')});
       }
-      return _('{{interval}} months', {interval});
+      else if (is_defined(weekdays)) {
+        const weekday = weekdays.getSelectedWeekDay();
+        const nth = weekdays.get(weekday);
+        const localeData = _localeData();
+        if (interval === 1) {
+          return _('{{nth}} {{weekday}} every month',
+            {nth: localeData.ordinal(nth), weekday: WEEKDAY[weekday]});
+        }
+        return _('{{nth}} {{weekday}} every {{interval}} month', {
+          nth: localeData.ordinal(nth),
+          weekday: WEEKDAY[weekday],
+          interval,
+        });
+      }
+      else if (interval === 1) {
+        return _('Every month');
+      }
+      return _('Every {{interval}} months', {interval});
+
     case ReccurenceFrequency.WEEKLY:
-      if (interval === 1) {
-        return _('One week');
+      if (is_defined(weekdays)) {
+        const days = weekdays.entries()
+          .filter(([, value]) => value)
+          .map(([day]) => WEEKDAY[day]);
+
+        if (interval === 1) {
+          return _('Every week on {{days}}', {days: days.join(', ')});
+        }
+        return _('Every {{interval}} weeks on {{days}}',
+          {interval, days: days.join(', ')});
       }
-      return _('{{interval}} weeks', {interval});
+      if (interval === 1) {
+        return _('Every week');
+      }
+      return _('Every {{interval}} weeks', {interval});
+
     case ReccurenceFrequency.DAILY:
       if (interval === 1) {
-        return _('One day');
+        return _('Every day');
       }
-      return _('{{interval}} days', {interval});
+      return _('Every {{interval}} days', {interval});
+
     case ReccurenceFrequency.HOURLY:
       if (interval === 1) {
-        return _('One hour');
+        return _('Every hour');
       }
-      return _('{{interval}} hours', {interval});
+      return _('Every {{interval}} hours', {interval});
+
     case ReccurenceFrequency.MINUTELY:
       if (interval === 1) {
-        return _('One minute');
+        return _('Every minute');
       }
-      return _('{{interval}} minutes', {interval});
+      return _('Every {{interval}} minutes', {interval});
+
     case ReccurenceFrequency.SECONDLY:
       if (interval === 1) {
-        return _('One second');
+        return _('Every second');
       }
-      return _('{{interval}} seconds', {interval});
+      return _('Every {{interval}} seconds', {interval});
+
     default:
       return _('Once');
   }
