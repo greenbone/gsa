@@ -24,18 +24,13 @@ import logger from '../log';
 
 import {is_defined, is_string, is_jsdate} from '../utils/identity';
 
-import {parse_int, parseDate} from '../parser';
+import {parseDate} from '../parser';
 
 import {setLocale, isDate} from '../models/date';
 
-import {translate, subscribe} from './lang';
+import {subscribe} from './lang';
 
 const log = logger.getLogger('gmp.locale.date');
-
-const MINUTE = 60;
-const HOUR = MINUTE * 60;
-const DAY = HOUR * 24;
-const WEEK = DAY * 7;
 
 subscribe(lang => {
   log.debug('Setting date locale to', lang);
@@ -64,45 +59,5 @@ export const shortDate = date => dateFormat(date, 'L');
 export const longDate = date => dateFormat(date, 'llll');
 
 export const dateTimeWithTimeZone = date => dateFormat(date, 'llll z');
-
-export function interval(seconds = 0) {
-  if (seconds % WEEK === 0) {
-    if (seconds === WEEK) {
-      return translate('One week');
-    }
-    const weeks = parse_int(seconds / WEEK);
-    return translate('{{number}} weeks', {number: weeks});
-  }
-
-  if (seconds % DAY === 0) {
-    if (seconds === DAY) {
-      return translate('One day');
-    }
-    const days = parse_int(seconds / DAY);
-    return translate('{{number}} days', {number: days});
-  }
-
-  if (seconds % HOUR === 0) {
-    if (seconds === HOUR) {
-      return translate('One hour');
-    }
-    const hours = parse_int(seconds / HOUR);
-    return translate('{{number}} hours', {number: hours});
-  }
-
-  if (seconds % MINUTE === 0) {
-    if (seconds === MINUTE) {
-      return translate('One minute');
-    }
-    const minutes = parse_int(seconds / MINUTE);
-    return translate('{{number}} minutes', {number: minutes});
-  }
-
-  if (seconds === 1) {
-    return translate('One second');
-  }
-
-  return translate('{{number}} seconds', {number: seconds});
-}
 
 // vim: set ts=2 sw=2 tw=80:
