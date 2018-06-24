@@ -359,6 +359,9 @@ class AlertComponent extends React.Component {
             verinice_credential_id),
 
           method_data_URL: value(method.data.URL, ''),
+          method_data_delta_type: value(alert.method.data.delta_type, ''),
+          method_data_delta_report_id: value(alert.method.data.delta_report_id,
+            ''),
           tasks,
           title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
         });
@@ -560,6 +563,8 @@ class AlertComponent extends React.Component {
       method_data_verinice_server_url,
       method_data_verinice_server_credential,
       method_data_URL,
+      method_data_delta_type,
+      method_data_delta_report_id,
       report_formats,
       tasks,
     } = this.state;
@@ -657,6 +662,8 @@ class AlertComponent extends React.Component {
                 method_data_verinice_server_credential=
                   {method_data_verinice_server_credential}
                 method_data_URL={method_data_URL}
+                method_data_delta_type={method_data_delta_type}
+                method_data_delta_report_id={method_data_delta_report_id}
                 tasks={tasks}
                 onClose={this.closeAlertDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}

@@ -46,6 +46,7 @@ const method_data_fields = [
   'scp_report_format', 'smb_credential', 'smb_file_path', 'smb_report_format',
   'smb_share_path', 'tp_sms_hostname', 'tp_sms_credential',
   'tp_sms_tls_certificate', 'tp_sms_tls_workaround',
+  'delta_type', 'delta_report_id',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
