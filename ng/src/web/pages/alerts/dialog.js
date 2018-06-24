@@ -43,6 +43,9 @@ import {
   METHOD_TYPE_SOURCEFIRE,
   METHOD_TYPE_VERINICE,
   METHOD_TYPE_TIPPING_POINT,
+  DELTA_TYPE_NONE,
+  DELTA_TYPE_PREVIOUS,
+  DELTA_TYPE_REPORT,
 } from 'gmp/models/alert.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -205,6 +208,8 @@ const DEFAULTS = {
   method_data_tp_sms_hostname: '',
   method_data_tp_sms_tls_workaround: NO_VALUE,
   method_data_URL: '',
+  method_data_delta_type: DELTA_TYPE_NONE,
+  method_data_delta_report_id: '',
   name: _('Unnamed'),
   report_formats: [],
   result_filters: [],
@@ -506,6 +511,44 @@ class AlertDialog extends React.Component {
                 </FormGroup>
               }
 
+              {is_task_event &&
+                <FormGroup title={_('Delta Report')} flex="column">
+                  <Divider flex="column">
+                    <Radio
+                      title={_('None')}
+                      name="method_data_delta_type"
+                      value={DELTA_TYPE_NONE}
+                      checked={values.method_data_delta_type === DELTA_TYPE_NONE}
+                      onChange={onValueChange}
+                    />
+
+                    <Radio
+                      title={_('Previous completed report of the same task')}
+                      name="method_data_delta_type"
+                      value={DELTA_TYPE_PREVIOUS}
+                      checked={values.method_data_delta_type === DELTA_TYPE_PREVIOUS}
+                      onChange={onValueChange}
+                    />
+
+                    <Divider>
+                      <Radio
+                        title={_('Report with ID')}
+                        name="method_data_delta_type"
+                        value={DELTA_TYPE_REPORT}
+                        checked={values.method_data_delta_type === DELTA_TYPE_REPORT}
+                        onChange={onValueChange}
+                      />
+                      <TextField
+                        grow="1"
+                        name="method_data_delta_report_id"
+                        value={values.method_data_delta_report_id}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                  </Divider>
+                </FormGroup>
+              }
+
               <FormGroup title={_('Method')}>
                 <Select
                   name="method"
@@ -675,6 +718,8 @@ AlertDialog.propTypes = {
   filter_id: PropTypes.idOrZero,
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
+  method_data_delta_type: PropTypes.string,
+  method_data_delta_report_id: PropTypes.string,
   method_data_defense_center_ip: PropTypes.string,
   method_data_defense_center_port: PropTypes.numberOrNumberString,
   method_data_details_url: PropTypes.string,
