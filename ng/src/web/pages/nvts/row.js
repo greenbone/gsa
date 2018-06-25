@@ -73,9 +73,6 @@ const Row = ({
       <TableData>
         {longDate(entity.modification_time)}
       </TableData>
-      <TableData flex align="center">
-        {entity.version}
-      </TableData>
       <TableData>
         <Divider wrap>
           {entity.cves.map(id => (
