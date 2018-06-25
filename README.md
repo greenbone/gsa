@@ -2,16 +2,16 @@
 
 ## About
 
-The Greenbone Security Assistant - **GSA** - is the web interface developed for the
+The Greenbone Security Assistant - is the web interface developed for the
 [Greenbone Security Manager appliances](https://www.greenbone.net/en/product-comparison/).
 It connects to the Greenbone Vulnerability Manager - **GVM** - to provide for a full-featured
 user interface for vulnerability management.
 
-GSA is developed and maintained by [Greenbone Networks](https://www.greenbone.net/).
+Greenbone Security Assistant is developed and maintained by [Greenbone Networks](https://www.greenbone.net/).
 
 It consists of
 
-* [GSA NG](https://github.com/greenbone/gsa/tree/master/ng) - The webpage written in [React](https://reactjs.org/)
+* [GSA](https://github.com/greenbone/gsa/tree/master/gsa) - The webpage written in [React](https://reactjs.org/)
 
 and
 
