@@ -58,6 +58,10 @@ export const METHOD_TYPE_TIPPING_POINT = 'TippingPoint SMS';
 export const EMAIL_NOTICE_INCLUDE = '0';
 export const EMAIL_NOTICE_ATTACH = '2';
 
+export const DELTA_TYPE_NONE = 'None';
+export const DELTA_TYPE_PREVIOUS = 'Previous';
+export const DELTA_TYPE_REPORT = 'Report';
+
 const create_values = data => {
   const value = is_empty(data.__text) ? undefined : data.__text;
   const values = {value};

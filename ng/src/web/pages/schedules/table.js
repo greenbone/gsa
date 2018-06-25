@@ -34,7 +34,7 @@ export const SORT_FIELDS = [
   ['name', _('Name'), '30%'],
   ['first_run', _('First Run'), '20%'],
   ['next_run', _('Next Run'), '20%'],
-  ['period', _('Period'), '11%'],
+  ['period', _('Recurrence'), '11%'],
   ['duration', _('Duration'), '11%'],
 ];
 
