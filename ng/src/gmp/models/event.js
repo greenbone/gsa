@@ -20,6 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+import 'core-js/fn/object/values';
+
 import ical from 'ical.js';
 
 import uuid from 'uuid/v4';
@@ -50,10 +53,6 @@ const setEventRecurrence = (event, recurrence) => {
 const PROD_ID = '-//Greenbone.net//NONSGML Greenbone Security Assistent';
 const ICAL_VERSION = '2.0';
 
-const DAYS = 'day';
-const WEEKS = 'week';
-const MONTHS = 'month';
-
 export const ReccurenceFrequency = {
   YEARLY: 'YEARLY',
   MONTHLY: 'MONTHLY',
@@ -63,6 +62,171 @@ export const ReccurenceFrequency = {
   MINUTELY: 'MINUTELY',
   SECONDLY: 'SECONDLY',
 };
+
+const ISOWEEKDAY_TO_WEEKDAY = {
+  1: 'monday',
+  2: 'tuesday',
+  3: 'wednesday',
+  4: 'thursday',
+  5: 'friday',
+  6: 'saturday',
+  7: 'sunday',
+};
+
+const ABR_TO_WEEKDAY = {
+  mo: 'monday',
+  tu: 'tuesday',
+  we: 'wednesday',
+  th: 'thursday',
+  fr: 'friday',
+  sa: 'saturday',
+  su: 'sunday',
+};
+
+const getWeekDaysFromRRule = rrule => {
+    if (!is_defined(rrule)) {
+      return undefined;
+    }
+
+    const byday = rrule.getComponent('byday');
+    return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
+};
+
+const getMonthDaysFromRRule = rrule => {
+  if (!is_defined(rrule)) {
+    return undefined;
+  }
+
+  const bymonthday = rrule.getComponent('bymonthday');
+  return bymonthday.length > 0 ? bymonthday.sort() : undefined;
+};
+
+export class WeekDays {
+
+  constructor({
+    monday = false,
+    tuesday = false,
+    wednesday = false,
+    thursday = false,
+    friday = false,
+    saturday = false,
+    sunday = false,
+  } = {}) {
+    this._weekdays = {
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+      sunday,
+    };
+  }
+
+  static fromByDay(bydate = []) {
+    const weekdays = new WeekDays();
+
+    for (const part of bydate) {
+      const pday = part.slice(-2).toLowerCase();
+      const pval = part.slice(0, -2);
+
+      const wday = ABR_TO_WEEKDAY[pday];
+      const val = pval.length === 0 ? true : pval;
+
+      if (is_defined(wday)) {
+        weekdays._setWeekDay(wday, val);
+      }
+    }
+
+    return weekdays;
+  }
+
+  _setWeekDay(weekday, value = true) {
+    this._weekdays[weekday] = value;
+    return this;
+  }
+
+  isDefault() {
+    return this.values().some(value => !value);
+  }
+
+  copy() {
+    return new WeekDays({...this._weekdays});
+  }
+
+  entries() {
+    return Object.entries(this._weekdays);
+  }
+
+  values() {
+    return Object.values(this._weekdays);
+  }
+
+  getSelectedWeekDay() {
+    const ret = this.entries().find(([, value]) => value);
+    return is_defined(ret) ? ret[0] : undefined;
+  }
+
+  get(weekday) {
+    return this._weekdays[weekday];
+  }
+
+  setWeekDay(weekday, value = true) {
+    const copy = this.copy();
+    return copy._setWeekDay(weekday, value);
+  }
+
+  setWeekDayFromDate(curdate, value = true) {
+    const wday = ISOWEEKDAY_TO_WEEKDAY[curdate.isoWeekday()];
+    return this.setWeekDay(wday, value);
+  }
+
+  toByDate() {
+    const byday = [];
+
+    for (const [abbr, weekday] of Object.entries(ABR_TO_WEEKDAY)) {
+      const value = this.get(weekday);
+      if (value) {
+        if (value === true) {
+          byday.push(abbr.toUpperCase());
+        }
+        else {
+          byday.push('' + value + abbr.toUpperCase());
+        }
+      }
+    }
+
+    return byday;
+  }
+
+  get monday() {
+    return this.get('monday');
+  }
+
+  get tuesday() {
+    return this.get('tuesday');
+  }
+
+  get wednesday() {
+    return this.get('wednesday');
+  }
+
+  get thursday() {
+    return this.get('thursday');
+  }
+
+  get friday() {
+    return this.get('friday');
+  }
+
+  get saturday() {
+    return this.get('saturday');
+  }
+
+  get sunday() {
+    return this.get('sunday');
+  }
+}
 
 class Event {
 
@@ -81,11 +245,13 @@ class Event {
 
   static fromData({
     description,
-    startDate,
     duration,
-    period = 0,
-    periodUnit,
+    freq,
+    interval,
+    monthdays = [],
+    startDate,
     summary,
+    weekdays,
   }, timezone) {
 
     const event = new ical.Event();
@@ -105,21 +271,21 @@ class Event {
       setEventDuration(event, eventDuration);
     }
 
-    if (period > 0) {
+    if (is_defined(freq)) {
       const eventRecur = new ical.Recur();
-      if (periodUnit === MONTHS) {
-        eventRecur.freq = ReccurenceFrequency.MONTHLY;
+
+      eventRecur.freq = freq;
+      eventRecur.interval = interval;
+
+      const icalweekdays = is_defined(weekdays) ? weekdays.toByDate() : [];
+
+      if (icalweekdays.length > 0) {
+        eventRecur.setComponent('byday', icalweekdays);
       }
-      else if (periodUnit === WEEKS) {
-        eventRecur.freq = ReccurenceFrequency.WEEKLY;
+
+      if (monthdays.length > 0) {
+        eventRecur.setComponent('bymonthday', monthdays);
       }
-      else if (periodUnit === DAYS) {
-        eventRecur.freq = ReccurenceFrequency.WEEKLY;
-      }
-      else {
-        eventRecur.freq = ReccurenceFrequency.HOURLY;
-      }
-      eventRecur.interval = period;
 
       setEventRecurrence(event, eventRecur);
     }
@@ -127,11 +293,20 @@ class Event {
     if (!is_empty(summary)) {
       event.summary = summary;
     }
+
     if (!is_empty(description)) {
       event.description = description;
     }
 
     return new Event(event, timezone);
+  }
+
+  _getReccurenceRule() {
+    if (this.isRecurring()) {
+      const rrule = this.event.component.getFirstPropertyValue('rrule');
+      return rrule === null ? undefined : rrule;
+    }
+    return undefined;
   }
 
   get startDate() {
@@ -158,11 +333,13 @@ class Event {
   }
 
   get recurrence() {
-    if (this.isRecurring()) {
-      const rrule = this.event.component.getFirstPropertyValue('rrule');
-      return rrule === null ? undefined : rrule;
-    }
-    return undefined;
+    const rrule = this._getReccurenceRule();
+
+    return {
+      ...rrule,
+      weekdays: getWeekDaysFromRRule(rrule),
+      monthdays: getMonthDaysFromRRule(rrule),
+    };
   }
 
   get nextDate() {

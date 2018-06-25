@@ -107,7 +107,7 @@ const ScheduleDetails = ({
 
           <TableRow>
             <TableData>
-              {_('Period')}
+              {_('Recurrence')}
             </TableData>
             <TableData>
               {renderRecurrence(recurrence)}

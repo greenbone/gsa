@@ -237,6 +237,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/components/form/textarea.js
      ${NG_SRC_DIR}/src/web/components/form/textfield.js
      ${NG_SRC_DIR}/src/web/components/form/timezoneselect.js
+     ${NG_SRC_DIR}/src/web/components/form/togglebutton.js
      ${NG_SRC_DIR}/src/web/components/form/withChangeHandler.js
      ${NG_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${NG_SRC_DIR}/src/web/components/form/withDownload.js
@@ -661,13 +662,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pages/scans/page.js
      ${NG_SRC_DIR}/src/web/pages/scans/dashboard.js
      ${NG_SRC_DIR}/src/web/pages/schedules/component.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/dayselect.js
      ${NG_SRC_DIR}/src/web/pages/schedules/details.js
      ${NG_SRC_DIR}/src/web/pages/schedules/detailspage.js
      ${NG_SRC_DIR}/src/web/pages/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/pages/schedules/listpage.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/monthdaysselect.js
      ${NG_SRC_DIR}/src/web/pages/schedules/row.js
      ${NG_SRC_DIR}/src/web/pages/schedules/render.js
      ${NG_SRC_DIR}/src/web/pages/schedules/table.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/timeunitselect.js
+     ${NG_SRC_DIR}/src/web/pages/schedules/weekdayselect.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/details.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/filterdialog.js
      ${NG_SRC_DIR}/src/web/pages/secinfo/listpage.js
