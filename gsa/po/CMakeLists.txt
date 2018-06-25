@@ -29,17 +29,17 @@ include (FindPythonModule)
 
 find_python_module(polib)
 
-set (NG_LOCALE_DIR ${NG_SRC_DIR}/public/locales)
+set (GSA_LOCALE_DIR ${GSA_SRC_DIR}/public/locales)
 
 # Create targets for a language _LANG
 macro (MAKE_TRANSLATION _LANG)
   # Files for installation
   # .json for JS
-  add_custom_command (OUTPUT ${NG_LOCALE_DIR}/gsa-${_LANG}.json
+  add_custom_command (OUTPUT ${GSA_LOCALE_DIR}/gsa-${_LANG}.json
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsa-${_LANG}.po
                       COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsa-${_LANG}.po
-                      ${NG_LOCALE_DIR}/gsa-${_LANG}.json)
+                      ${GSA_LOCALE_DIR}/gsa-${_LANG}.json)
 
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsa-${_LANG}-merged.po
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa.pot
@@ -52,7 +52,7 @@ endmacro ()
 if (GETTEXT_FOUND)
   if (PY_POLIB_FOUND)
 
-    file (MAKE_DIRECTORY ${NG_LOCALE_DIR})
+    file (MAKE_DIRECTORY ${GSA_LOCALE_DIR})
 
     MAKE_TRANSLATION (ar)
     MAKE_TRANSLATION (de)
@@ -65,13 +65,13 @@ if (GETTEXT_FOUND)
     # Installed files
     add_custom_target (gettext-json
                        ALL
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-ar.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-de.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-fr.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-pt_BR.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-ru.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-tr.json
-                       DEPENDS ${NG_LOCALE_DIR}/gsa-zh_CN.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-ar.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-de.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-fr.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-pt_BR.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-ru.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-tr.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-zh_CN.json
                        COMMENT "Created translation .json files")
 
     # Merged .po files
@@ -103,13 +103,13 @@ if (GETTEXT_FOUND)
                         COMMAND "${CMAKE_SOURCE_DIR}/tools/js2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsa.pot"
-                                "${CMAKE_SOURCE_DIR}/ng/src"
-                        DEPENDS ${NG_JS_SRC_FILES}
+                                "${GSA_SRC_DIR}/src"
+                        DEPENDS ${GSA_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
 
     install (DIRECTORY
-             ${NG_BUILD_DIR}/locales
-             DESTINATION ${NG_DEST_DIR})
+             ${GSA_BUILD_DIR}/locales
+             DESTINATION ${GSA_DEST_DIR})
 
   else (PY_POLIB_FOUND)
     message (WARNING "Could not build translation files: Python interpreter or polib Python module not found.")

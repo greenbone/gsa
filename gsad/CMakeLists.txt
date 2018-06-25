@@ -33,7 +33,7 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 ## Install
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/src/gsad_log.conf
-         DESTINATION ${GSA_CONFIG_DIR})
+         DESTINATION ${GSAD_CONFIG_DIR})
 
 add_subdirectory (src)
 
