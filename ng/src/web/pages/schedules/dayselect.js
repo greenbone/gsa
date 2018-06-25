@@ -20,24 +20,60 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment-timezone';
+import React from 'react';
 
-import 'moment/locale/ar';
-import 'moment/locale/de';
-import 'moment/locale/fr';
-import 'moment/locale/pt-br.js';
-import 'moment/locale/ru.js';
-import 'moment/locale/tr.js';
-import 'moment/locale/zh-cn.js';
+import _ from 'gmp/locale';
 
-export const {
-  isDuration,
-  isMoment: isDate,
-  locale: setLocale,
-  duration,
-  localeData: _localeData,
-} = moment;
+import PropTyes from 'web/utils/proptypes';
 
-export default moment;
+import Select from 'web/components/form/select';
+
+const DAY_SELECT_ITEMS = [{
+  label: _('Monday'),
+  value: 'monday',
+}, {
+  label: _('Tuesday'),
+  value: 'tuesday',
+}, {
+  label: _('Wednesday'),
+  value: 'wednesday',
+}, {
+  label: _('Thursday'),
+  value: 'thursday',
+}, {
+  label: _('Friday'),
+  value: 'friday',
+}, {
+  label: _('Saturday'),
+  value: 'saturday',
+}, {
+  label: _('Sunday'),
+  value: 'sunday',
+}];
+
+const DaySelect = ({
+  value,
+  ...props
+}) => (
+  <Select
+    {...props}
+    value={value}
+    items={DAY_SELECT_ITEMS}
+  />
+);
+
+DaySelect.propTypes = {
+  value: PropTyes.oneOf([
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ]),
+};
+
+export default DaySelect;
 
 // vim: set ts=2 sw=2 tw=80:

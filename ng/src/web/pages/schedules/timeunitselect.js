@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,24 +21,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment-timezone';
+import React from 'react';
 
-import 'moment/locale/ar';
-import 'moment/locale/de';
-import 'moment/locale/fr';
-import 'moment/locale/pt-br.js';
-import 'moment/locale/ru.js';
-import 'moment/locale/tr.js';
-import 'moment/locale/zh-cn.js';
+import _ from 'gmp/locale';
 
-export const {
-  isDuration,
-  isMoment: isDate,
-  locale: setLocale,
-  duration,
-  localeData: _localeData,
-} = moment;
+import {ReccurenceFrequency} from 'gmp/models/event';
 
-export default moment;
+import Select from 'web/components/form/select.js';
+
+const TIME_UNIT_ITEMS = [
+  {value: ReccurenceFrequency.HOURLY, label: _('hour(s)')},
+  {value: ReccurenceFrequency.DAILY, label: _('day(s)')},
+  {value: ReccurenceFrequency.WEEKLY, label: _('week(s)')},
+  {value: ReccurenceFrequency.MONTHLY, label: _('month(s)')},
+  {value: ReccurenceFrequency.YEARLY, label: _('years(s)')},
+];
+
+const TimeUnitSelect = props => (
+  <Select
+    {...props}
+    items={TIME_UNIT_ITEMS}
+  />
+);
+
+export default TimeUnitSelect;
 
 // vim: set ts=2 sw=2 tw=80:
