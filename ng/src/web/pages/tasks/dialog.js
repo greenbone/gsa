@@ -228,7 +228,7 @@ const TaskDialog = ({
 
   const change_task = task ? task.isChangeable() : true;
 
-  const has_tags = tag_items.length > 0;
+  const has_tags = tags.length > 0;
 
   const uncontrolledData = {
     ...data,
@@ -524,39 +524,38 @@ const TaskDialog = ({
               </FormGroup>
             }
 
-            {capabilities.mayAccess('tags') && capabilities.mayCreate('task') &&
+            {capabilities.mayAccess('tags') && capabilities.mayCreate('tag') &&
               has_tags &&
-              <h3>{_('Tag')}</h3>
+              <React.Fragment>
+                <h3>{_('Tag')}</h3>
+                <FormGroup>
+                  <Divider>
+                    <Checkbox
+                      title={_('Add Tag:')}
+                      name="add_tag"
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      checked={state.add_tag === YES_VALUE}
+                      onChange={onValueChange}
+                    />
+                    <Select
+                      name="tag_name"
+                      items={tag_items}
+                      value={state.tag_name}
+                      onChange={onValueChange}
+                    />
+                    <Text>
+                      {_('with Value')}
+                    </Text>
+                    <TextField
+                      name="tag_value"
+                      value={state.tag_value}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                </FormGroup>
+              </React.Fragment>
             }
-            <FormGroup
-              condition={capabilities.mayAccess('tags') &&
-              capabilities.mayCreate('task') && has_tags}
-            >
-              <Divider>
-                <Checkbox
-                  title={_('Add Tag:')}
-                  name="add_tag"
-                  checkedValue={YES_VALUE}
-                  unCheckedValue={NO_VALUE}
-                  checked={state.add_tag === YES_VALUE}
-                  onChange={onValueChange}
-                />
-                <Select
-                  name="tag_name"
-                  items={tag_items}
-                  value={state.tag_name}
-                  onChange={onValueChange}
-                />
-                <Text>
-                  {_('with Value')}
-                </Text>
-                <TextField
-                  name="tag_value"
-                  value={state.tag_value}
-                  onChange={onValueChange}
-                />
-              </Divider>
-            </FormGroup>
           </Layout>
         );
       }}
