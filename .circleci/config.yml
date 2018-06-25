@@ -10,22 +10,22 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "./ng/yarn.lock"  }}
+            - v1-deps-{{ checksum "./gsa/yarn.lock"  }}
             - v1-deps
       - run:
-          working_directory: ~/gsa/ng
+          working_directory: ~/gsa/gsa
           name: Install JavaScript dependencies
           command: yarn
       - save_cache:
-          key: v1-deps-{{ checksum "./ng/yarn.lock"  }}
+          key: v1-deps-{{ checksum "./gsa/yarn.lock"  }}
           paths:
-            - ./ng/node_modules
+            - ./gsa/node_modules
       - run:
-          working_directory: ~/gsa/ng
+          working_directory: ~/gsa/gsa
           name: Run JavaScript tests
           command: yarn test:coverage
       - run:
-          working_directory: ~/gsa/ng
+          working_directory: ~/gsa/gsa
           name: Submit test coverage to codecov.io
           command: bash <(curl -s https://codecov.io/bash)
   build_gsad:
@@ -43,27 +43,27 @@ jobs:
       - checkout
       - run:
           name: Configure and compile
-          command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_NG=1 .. && make install
-  build_ng:
+          command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_GSA=1 .. && make install
+  build_gsa:
     docker:
       - image: greenbone/build-env-gsa-master-debian-stretch-node6-ng
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "./ng/yarn.lock"  }}
+            - v1-deps-{{ checksum "./gsa/yarn.lock"  }}
             - v1-deps
       - run:
           name: Configure and compile
           command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release -DSKIP_GSAD=1 .. && make install
       - save_cache:
-          key: v1-deps-{{ checksum "./ng/yarn.lock"  }}
+          key: v1-deps-{{ checksum "./gsa/yarn.lock"  }}
           paths:
-            - ./ng/node_modules
+            - ./gsa/node_modules
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build_gsad
-      - build_ng
+      - build_gsa
       - js_test
