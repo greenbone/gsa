@@ -2435,7 +2435,7 @@ drop_privileges (struct passwd * user_pw)
  *
  * @param[in]  do_chroot  Whether to chroot.
  * @param[in]  drop       Username to drop privileges to.  Null for no dropping.
- * @param[in]  subdir     Subdirectory of GSA_DATA_DIR to chroot or chdir to.
+ * @param[in]  subdir     Subdirectory of GSAD_DATA_DIR to chroot or chdir to.
  *
  * @return 0 success, 1 failed (will g_critical in fail case).
  */
@@ -2464,11 +2464,11 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
     {
       /* Chroot into state dir. */
 
-      if (chroot (GSA_DATA_DIR))
+      if (chroot (GSAD_DATA_DIR))
         {
           g_critical ("%s: Failed to chroot to \"%s\": %s\n",
                       __FUNCTION__,
-                      GSA_DATA_DIR,
+                      GSAD_DATA_DIR,
                       strerror (errno));
           return 1;
         }
@@ -2498,7 +2498,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
     }
   else
     {
-      gchar* data_dir = g_build_filename (GSA_DATA_DIR, subdir, NULL);
+      gchar* data_dir = g_build_filename (GSAD_DATA_DIR, subdir, NULL);
       if (chdir (data_dir))
         {
           g_critical ("%s: failed to change to \"%s\": %s\n",
@@ -2548,9 +2548,9 @@ gsad_init ()
   init_users ();
 
   /* Check for required files. */
-  if (gvm_file_check_is_dir (GSA_DATA_DIR) < 1)
+  if (gvm_file_check_is_dir (GSAD_DATA_DIR) < 1)
     {
-      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_DATA_DIR);
+      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSAD_DATA_DIR);
       return MHD_NO;
     }
 
@@ -3134,7 +3134,7 @@ main (int argc, char **argv)
 
   /* Setup logging. */
 
-  rc_name = g_build_filename (GSA_CONFIG_DIR, "gsad_log.conf", NULL);
+  rc_name = g_build_filename (GSAD_CONFIG_DIR, "gsad_log.conf", NULL);
   if (g_file_test (rc_name, G_FILE_TEST_EXISTS))
     log_config = load_log_configuration (rc_name);
   g_free (rc_name);

@@ -146,17 +146,17 @@ endif (NOT GSAD_PID_DIR)
 
 set (GVM_STATE_DIR "${LOCALSTATEDIR}/lib/gvm")
 set (GVM_LOG_DIR   "${LOCALSTATEDIR}/log/gvm")
-set (GSA_DATA_DIR "${DATADIR}/gvm/gsad")
-set (GSA_LOCALE_SUBDIR "locale")
-set (GSA_LOCALE_DIR "${GSA_DATA_DIR}/${GSA_LOCALE_SUBDIR}")
-set (GSA_CHROOT_LOCALE_DIR "/${GSA_LOCALE_SUBDIR}")
+set (GSAD_DATA_DIR "${DATADIR}/gvm/gsad")
+set (GSAD_LOCALE_SUBDIR "locale")
+set (GSAD_LOCALE_DIR "${GSAD_DATA_DIR}/${GSAD_LOCALE_SUBDIR}")
+set (GSAD_CHROOT_LOCALE_DIR "/${GSAD_LOCALE_SUBDIR}")
 
 # TODO: Eventually use own certificates
 set (GVM_SERVER_CERTIFICATE "${GVM_STATE_DIR}/CA/servercert.pem")
 set (GVM_SERVER_KEY         "${GVM_STATE_DIR}/private/CA/serverkey.pem")
 set (GVM_CA_CERTIFICATE     "${GVM_STATE_DIR}/CA/cacert.pem")
 
-set (GSA_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
+set (GSAD_CONFIG_DIR         "${SYSCONFDIR}/gvm/")
 
 if (NOT GVM_RUN_DIR)
   set (GVM_RUN_DIR      "${LOCALSTATEDIR}/run")
@@ -170,13 +170,13 @@ set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
 if (SKIP_SRC)
   # ng has no documentation to build so skip if src should not be build
-  set (SKIP_NG ON)
+  set (SKIP_GSA ON)
   set (SKIP_GSAD ON)
 endif (SKIP_SRC)
 
-if (NOT SKIP_NG)
-  add_subdirectory (ng)
-endif (NOT SKIP_NG)
+if (NOT SKIP_GSA)
+  add_subdirectory (gsa)
+endif (NOT SKIP_GSA)
 
 if (NOT SKIP_GSAD)
   add_subdirectory (gsad)
