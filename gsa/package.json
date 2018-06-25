@@ -20,9 +20,12 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "@storybook/addons": "^3.3.0",
     "@vx/axis": "^0.0.160",
     "@vx/gradient": "^0.0.153",
     "@vx/shape": "^0.0.160",
+    "babel-core": "^6.26.0",
+    "babel-runtime": ">=6.0.0",
     "core-js": "^2.5.5",
     "d3": "^3.5.17",
     "d3-cloud": "^1.2.5",
