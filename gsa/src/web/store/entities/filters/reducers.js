@@ -24,18 +24,14 @@ import {combineReducers} from 'redux';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {
-  FILTERS_LOADING_SUCCESS,
-  FILTERS_LOADING_ERROR,
-  FILTERS_LOADING_REQUEST,
-} from './actions';
+import {types} from './actions';
 
 const isLoading = (state = false, action) => {
   switch (action.type) {
-    case FILTERS_LOADING_REQUEST:
+    case types.REQUEST:
       return true;
-    case FILTERS_LOADING_SUCCESS:
-    case FILTERS_LOADING_ERROR:
+    case types.SUCCESS:
+    case types.ERROR:
       return false;
     default:
       return state;
@@ -44,9 +40,9 @@ const isLoading = (state = false, action) => {
 
 const error = (state = null, action) => {
   switch (action.type) {
-    case FILTERS_LOADING_SUCCESS:
+    case types.SUCCESS:
       return null;
-    case FILTERS_LOADING_ERROR:
+    case types.ERROR:
       return action.error;
     default:
       return state;
@@ -55,7 +51,7 @@ const error = (state = null, action) => {
 
 const entities = (state = null, action) => {
   switch (action.type) {
-    case FILTERS_LOADING_SUCCESS:
+    case types.SUCCESS:
       return action.data;
     default:
       return state;
@@ -70,9 +66,9 @@ const filtersReducer = combineReducers({
 
 const filtersFilterReducer = (state = {}, action) => {
   switch (action.type) {
-    case FILTERS_LOADING_ERROR:
-    case FILTERS_LOADING_REQUEST:
-    case FILTERS_LOADING_SUCCESS:
+    case types.REQUEST:
+    case types.SUCCESS:
+    case types.ERROR:
       const filterString = is_defined(action.filter) ?
         action.filter.toFilterString() : 'default';
       return {

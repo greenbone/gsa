@@ -20,44 +20,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {
+  createLoadingTypes,
+  createActionCreators,
+  createLoadFunc,
+} from '../actions';
+
 import getFilters from './selectors';
 
-export const FILTERS_LOADING_REQUEST = 'FILTERS_LOADING_REQUEST';
-export const FILTERS_LOADING_SUCCESS = 'FILTERS_LOADING_SUCCESS';
-export const FILTERS_LOADING_ERROR = 'FILTERS_LOADING_ERROR';
+export const types = createLoadingTypes('FILTERS');
 
-export const requestFilters = filter => ({
-  type: FILTERS_LOADING_REQUEST,
-  filter,
+const actionCreators = createActionCreators(types);
+
+export const {
+  request: requestFilters,
+  success: receivedFiltersSuccess,
+  error: receivedFiltersError,
+} = actionCreators;
+
+export const loadFilters = createLoadFunc({
+  selector: getFilters,
+  actionCreators,
+  promiseFunc: ({gmp, filter}) => gmp.filters.getAll({filter}),
 });
-
-export const receivedFiltersSuccess = (data, filter) => ({
-  type: FILTERS_LOADING_SUCCESS,
-  data,
-  filter,
-});
-
-export const receivedFiltersError = (error, filter) => ({
-  type: FILTERS_LOADING_ERROR,
-  error,
-  filter,
-});
-
-export const loadFilters = ({gmp, filter}) => (dispatch, getState) => {
-  const rootState = getState();
-  const state = getFilters(rootState);
-
-  if (state.getIsLoading(filter)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-
-  dispatch(requestFilters(filter));
-
-  return gmp.filters.getAll({filter}).then(
-    response => dispatch(receivedFiltersSuccess(response.data, filter)),
-    error => dispatch(receivedFiltersError(error, filter)),
-  );
-};
 
 // vim: set ts=2 sw=2 tw=80:

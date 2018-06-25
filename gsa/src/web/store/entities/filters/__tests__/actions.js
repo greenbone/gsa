@@ -26,9 +26,7 @@ import {
   requestFilters,
   receivedFiltersError,
   receivedFiltersSuccess,
-  FILTERS_LOADING_ERROR,
-  FILTERS_LOADING_REQUEST,
-  FILTERS_LOADING_SUCCESS,
+  types,
 } from '../actions';
 
 describe('filter entities actions tests', () => {
@@ -36,7 +34,7 @@ describe('filter entities actions tests', () => {
   test('should create a load filters request action', () => {
     const action = requestFilters();
     expect(action).toEqual({
-      type: FILTERS_LOADING_REQUEST,
+      type: types.REQUEST,
     });
   });
 
@@ -45,7 +43,7 @@ describe('filter entities actions tests', () => {
     const action = requestFilters(filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_REQUEST,
+      type: types.REQUEST,
       filter,
     });
   });
@@ -53,7 +51,7 @@ describe('filter entities actions tests', () => {
   test('should create a load filters success action', () => {
     const action = receivedFiltersSuccess(['foo', 'bar']);
     expect(action).toEqual({
-      type: FILTERS_LOADING_SUCCESS,
+      type: types.SUCCESS,
       data: ['foo', 'bar'],
     });
   });
@@ -63,7 +61,7 @@ describe('filter entities actions tests', () => {
     const action = receivedFiltersSuccess(['foo', 'bar'], filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_SUCCESS,
+      type: types.SUCCESS,
       data: ['foo', 'bar'],
       filter,
     });
@@ -72,7 +70,7 @@ describe('filter entities actions tests', () => {
   test('should create a load filters error action', () => {
     const action = receivedFiltersError('An error');
     expect(action).toEqual({
-      type: FILTERS_LOADING_ERROR,
+      type: types.ERROR,
       error: 'An error',
     });
   });
@@ -82,7 +80,7 @@ describe('filter entities actions tests', () => {
     const action = receivedFiltersError('An error', filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_ERROR,
+      type: types.ERROR,
       error: 'An error',
       filter,
     });
