@@ -4,7 +4,7 @@
 # cmake files
 */CMakeLists.txt  @bjoernricks @wiegandm
 *.cmake           @bjoernricks @wiegandm
-ng/CMakeLists.txt @bjoernricks
+gsa/CMakeLists.txt @bjoernricks
 
 # web dev files
 *.js              @bjoernricks @swaterkamp
