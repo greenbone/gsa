@@ -50,7 +50,7 @@ const NvtDetails = ({
   entity,
   links = true,
 }) => {
-  const {tags = {}, severity, qod} = entity;
+  const {tags = {}, severity, qod, family} = entity;
   return (
     <Layout
       flex="column"
@@ -154,6 +154,20 @@ const NvtDetails = ({
         solution={tags.solution}
         solutionType={tags.solution_type}
       />
+
+      {is_defined(family) &&
+        <DetailsBlock
+          title={_('Family')}
+        >
+          <Link
+            to="nvts"
+            filter={'family="' + family + '"'}
+            textOnly={!links}
+          >
+            {family}
+          </Link>
+        </DetailsBlock>
+      }
 
       <References
         links={links}

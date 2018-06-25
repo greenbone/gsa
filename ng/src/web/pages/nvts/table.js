@@ -90,14 +90,6 @@ const Header = ({
           {_('Modified')}
         </TableHead>
         <TableHead
-          width="8%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'version' : false}
-          onSortChange={onSortChange}>
-          {_('Version')}
-        </TableHead>
-        <TableHead
           width="18%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
