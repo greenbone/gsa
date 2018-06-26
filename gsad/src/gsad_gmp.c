@@ -3839,7 +3839,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
   const char *in_assets, *hosts_ordering, *alterable, *source_iface;
-  const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
+  const char *add_tag, *tag_id, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod;
   gchar *name_escaped, *comment_escaped;
   params_t *alerts;
@@ -3864,8 +3864,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
   add_tag = params_value (params, "add_tag");
-  tag_name = params_value (params, "tag_name");
-  tag_value = params_value (params, "tag_value");
+  tag_id = params_value (params, "tag_id");
   CHECK (scanner_type);
   if (!strcmp (scanner_type, "1"))
     {
@@ -3921,8 +3920,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (add_tag)
     {
       CHECK (add_tag);
-      CHECK (tag_name);
-      CHECK (tag_value);
+      CHECK (tag_id);
     }
 
   if (schedule_id == NULL || strcmp (schedule_id, "0") == 0)
@@ -4076,27 +4074,13 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
           gchar *tag_command, *tag_response;
           entity_t tag_entity;
 
-          if (tag_value && strcmp (tag_value, ""))
-            tag_command
-              = g_markup_printf_escaped ("<create_tag>"
-                                         "<name>%s</name>"
-                                         "<resource id=\"%s\">"
-                                         "<type>task</type>"
-                                         "</resource>"
-                                         "<value>%s</value>"
-                                         "</create_tag>",
-                                         tag_name,
-                                         new_task_id,
-                                         tag_value);
-          else
-            tag_command
-              = g_markup_printf_escaped ("<create_tag>"
-                                         "<name>%s</name>"
-                                         "<resource id=\"%s\">"
-                                         "<type>task</type>"
-                                         "</resource>"
-                                         "</create_tag>",
-                                         tag_name,
+          tag_command
+              = g_markup_printf_escaped ("<modify_tag tag_id=\"%s\">"
+                                         "<resources action=\"add\">"
+                                         "<resource id=\"%s\"/>"
+                                         "</resources>"
+                                         "</modify_tag>",
+                                         tag_id,
                                          new_task_id);
 
           ret = gmp (connection, credentials,
