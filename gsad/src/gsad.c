@@ -688,6 +688,7 @@ init_validator ()
                          "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
   openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
+  openvas_validator_add (validator, "resources_action", "^(|add|set|remove)$");
   openvas_validator_add (validator, "optional_resource_type",
                          "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|vuln|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|Vulnerability)?$");
@@ -1506,7 +1507,6 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_scanner)
   ELSE (create_schedule)
   ELSE (create_tag)
-  ELSE (create_tags)
   ELSE (create_target)
   ELSE (create_config)
   ELSE (create_note)
