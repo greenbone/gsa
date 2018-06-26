@@ -54,9 +54,9 @@
     "react-redux": "^5.0.7",
     "react-router": "^3.2.1",
     "react-scripts": "^1.1.4",
-    "redux": "^3.7.2",
+    "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0",
+    "redux-thunk": "^2.3.0",
     "select2": "4.0.5",
     "uuid": "^3.2.1",
     "x2js": "^3.2.1"
