@@ -147,10 +147,15 @@ describe('entities actions tests', () => {
         .mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const promiseFunc = jest.fn();
       const getIsLoading = jest
         .fn()
         .mockReturnValue(true);
+      const getAll = jest.fn();
+      const gmp = {
+        foo: {
+          getAll,
+        },
+      };
 
       const selector = jest.fn(() => ({
         getIsLoading,
@@ -159,18 +164,18 @@ describe('entities actions tests', () => {
       const loaderFunc = createLoadFunc({
         selector,
         actionCreators: actions,
-        promiseFunc,
+        name: 'foo',
       });
 
       expect(loaderFunc).toBeDefined();
       expect(is_function(loaderFunc)).toBe(true);
 
-      return loaderFunc({})(dispatch, getState).then(() => {
+      return loaderFunc({gmp})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(getIsLoading).toBeCalled();
         expect(dispatch).not.toBeCalled();
-        expect(promiseFunc).not.toBeCalled();
+        expect(getAll).not.toBeCalled();
       });
     });
 
@@ -186,11 +191,16 @@ describe('entities actions tests', () => {
         .mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const promiseFunc = jest
+      const getAll = jest
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
         }));
+      const gmp = {
+        foo: {
+          getAll,
+        },
+      };
       const getIsLoading = jest
         .fn()
         .mockReturnValue(false);
@@ -202,11 +212,11 @@ describe('entities actions tests', () => {
       const loaderFunc = createLoadFunc({
         selector,
         actionCreators: actions,
-        promiseFunc,
+        name: 'foo',
       });
 
       const props = {
-        gmp: 1,
+        gmp,
         filter: 'myfilter',
         other: 3,
       };
@@ -218,7 +228,7 @@ describe('entities actions tests', () => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(getIsLoading).toBeCalledWith('myfilter');
-        expect(promiseFunc).toBeCalledWith(props);
+        expect(getAll).toBeCalledWith({filter: 'myfilter'});
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).toBeCalledWith('foo', 'myfilter');
         expect(actions.error).not.toBeCalled();
@@ -240,9 +250,14 @@ describe('entities actions tests', () => {
         .mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const promiseFunc = jest
+      const getAll = jest
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
+      const gmp = {
+        foo: {
+          getAll,
+        },
+      };
       const getIsLoading = jest
         .fn()
         .mockReturnValue(false);
@@ -255,11 +270,11 @@ describe('entities actions tests', () => {
       const loaderFunc = createLoadFunc({
         selector,
         actionCreators: actions,
-        promiseFunc,
+        name: 'foo',
       });
 
       const props = {
-        gmp: 1,
+        gmp,
         filter: 'myfilter',
         other: 3,
       };
@@ -274,7 +289,7 @@ describe('entities actions tests', () => {
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).not.toBeCalled();
         expect(actions.error).toBeCalledWith('AnError', 'myfilter');
-        expect(promiseFunc).toBeCalledWith(props);
+        expect(getAll).toBeCalledWith({filter: 'myfilter'});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);

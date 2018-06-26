@@ -50,7 +50,7 @@ export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
 export const createLoadFunc = ({
   selector,
   actionCreators,
-  promiseFunc,
+  name,
 }) => ({gmp, filter, ...props}) => (dispatch, getState) => {
     const rootState = getState();
     const state = selector(rootState);
@@ -62,11 +62,7 @@ export const createLoadFunc = ({
 
     dispatch(actionCreators.request(filter));
 
-    return promiseFunc({
-      gmp,
-      filter,
-      ...props,
-    }).then(
+    return gmp[name].getAll({filter}).then(
       response => dispatch(actionCreators.success(response.data, filter)),
       error => dispatch(actionCreators.error(error, filter)),
     );
