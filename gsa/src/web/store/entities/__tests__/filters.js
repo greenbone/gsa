@@ -24,7 +24,7 @@ import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {actions, types, filtersReducer} from '../filters';
+import {actions, types, reducer} from '../filters';
 
 describe('filter entities actions tests', () => {
 
@@ -94,17 +94,17 @@ describe('filter entities actions tests', () => {
 describe('filter entities reducers tests', () => {
 
   test('Should be a reducer function', () => {
-    expect(is_function(filtersReducer)).toBe(true);
+    expect(is_function(reducer)).toBe(true);
   });
 
   test('Should create initial state', () => {
-    expect(filtersReducer(undefined, {})).toEqual({});
+    expect(reducer(undefined, {})).toEqual({});
   });
 
   test('should set isLoading with default filter', () => {
     const action = actions.request();
 
-    expect(filtersReducer(undefined, action)).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       default: {
         isLoading: true,
         error: null,
@@ -116,7 +116,7 @@ describe('filter entities reducers tests', () => {
   test('should set isLoading with default filter', () => {
     const action = actions.success(['foo', 'bar']);
 
-    expect(filtersReducer(undefined, action)).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       default: {
         isLoading: false,
         error: null,
@@ -128,7 +128,7 @@ describe('filter entities reducers tests', () => {
   test('should set isLoading and error with default filter', () => {
     const action = actions.error('An error');
 
-    expect(filtersReducer(undefined, action)).toEqual({
+    expect(reducer(undefined, action)).toEqual({
       default: {
         isLoading: false,
         error: 'An error',

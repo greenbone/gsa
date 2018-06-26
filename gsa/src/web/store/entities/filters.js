@@ -30,19 +30,19 @@ import {createReducer} from './utils/reducers';
 
 import {createSelector} from './utils/selectors';
 
-export const getFilters = createSelector('filters');
+export const selector = createSelector('filters');
 
 export const types = createLoadingTypes('filters');
 
 export const actions = createActionCreators(types);
 
-export const loadFilters = createLoadFunc({
-  selector: getFilters,
+export const load = createLoadFunc({
+  selector,
   actionCreators: actions,
-  promiseFunc: ({gmp, filter}) => gmp.filters.getAll({filter}),
+  name: 'filters',
 });
 
-export const filtersReducer = createReducer(types);
+export const reducer = createReducer(types);
 
 // vim: set ts=2 sw=2 tw=80:
 
