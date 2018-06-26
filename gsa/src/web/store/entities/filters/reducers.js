@@ -20,66 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
-
-import {is_defined} from 'gmp/utils/identity';
+import {createReducer} from '../utils/reducers';
 
 import {types} from './actions';
 
-const isLoading = (state = false, action) => {
-  switch (action.type) {
-    case types.REQUEST:
-      return true;
-    case types.SUCCESS:
-    case types.ERROR:
-      return false;
-    default:
-      return state;
-  }
-};
-
-const error = (state = null, action) => {
-  switch (action.type) {
-    case types.SUCCESS:
-      return null;
-    case types.ERROR:
-      return action.error;
-    default:
-      return state;
-  }
-};
-
-const entities = (state = null, action) => {
-  switch (action.type) {
-    case types.SUCCESS:
-      return action.data;
-    default:
-      return state;
-  }
-};
-
-const filtersReducer = combineReducers({
-  isLoading,
-  error,
-  entities,
-});
-
-const filtersFilterReducer = (state = {}, action) => {
-  switch (action.type) {
-    case types.REQUEST:
-    case types.SUCCESS:
-    case types.ERROR:
-      const filterString = is_defined(action.filter) ?
-        action.filter.toFilterString() : 'default';
-      return {
-        ...state,
-        [filterString]: filtersReducer(state[filterString], action),
-      };
-    default:
-      return state;
-  }
-};
-
-export default filtersFilterReducer;
+export default createReducer(types);
 
 // vim: set ts=2 sw=2 tw=80:
