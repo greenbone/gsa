@@ -24,11 +24,7 @@ import Filter from 'gmp/models/filter';
 
 import filtersReducer from '../reducers';
 
-import {
-  requestFilters,
-  receivedFiltersSuccess,
-  receivedFiltersError,
-} from '../actions';
+import {actions} from '../actions';
 
 describe('filter entities reducers tests', () => {
 
@@ -39,7 +35,7 @@ describe('filter entities reducers tests', () => {
   describe('reducing filter loading request actions', () => {
 
     test('should set isLoading with default filter', () => {
-      const action = requestFilters();
+      const action = actions.request();
 
       expect(filtersReducer(undefined, action)).toEqual({
         default: {
@@ -52,7 +48,7 @@ describe('filter entities reducers tests', () => {
 
     test('should set isLoading for filter', () => {
       const filter = Filter.fromString('name=foo');
-      const action = requestFilters(filter);
+      const action = actions.request(filter);
 
       expect(filtersReducer(undefined, action)).toEqual({
         'name=foo': {
@@ -65,7 +61,7 @@ describe('filter entities reducers tests', () => {
 
     test('should set isLoading and not override existing state', () => {
       const filter = Filter.fromString('name=foo');
-      const action = requestFilters(filter);
+      const action = actions.request(filter);
       const state = {
         'name=bar': {
           isLoading: false,
@@ -90,7 +86,7 @@ describe('filter entities reducers tests', () => {
 
     test('should set isLoading and not override other properties', () => {
       const filter = Filter.fromString('name=foo');
-      const action = requestFilters(filter);
+      const action = actions.request(filter);
       const state = {
         'name=foo': {
           isLoading: false,
@@ -112,7 +108,7 @@ describe('filter entities reducers tests', () => {
   describe('reducing filter loading success actions', () => {
 
     test('should set isLoading with default filter', () => {
-      const action = receivedFiltersSuccess(['foo', 'bar']);
+      const action = actions.success(['foo', 'bar']);
 
       expect(filtersReducer(undefined, action)).toEqual({
         default: {
@@ -124,7 +120,7 @@ describe('filter entities reducers tests', () => {
     });
 
     test('should reset other properties with default filter', () => {
-      const action = receivedFiltersSuccess(['foo', 'bar']);
+      const action = actions.success(['foo', 'bar']);
       const state = {
         default: {
           isLoading: true,
@@ -144,7 +140,7 @@ describe('filter entities reducers tests', () => {
 
     test('should not override other filters', () => {
       const filter = Filter.fromString('name=bar');
-      const action = receivedFiltersSuccess(['foo', 'bar'], filter);
+      const action = actions.success(['foo', 'bar'], filter);
       const state = {
         'name=foo': {
           isLoading: true,
@@ -171,7 +167,7 @@ describe('filter entities reducers tests', () => {
   describe('reducing filter loading error actions', () => {
 
     test('should set isLoading and error with default filter', () => {
-      const action = receivedFiltersError('An error');
+      const action = actions.error('An error');
 
       expect(filtersReducer(undefined, action)).toEqual({
         default: {
@@ -183,7 +179,7 @@ describe('filter entities reducers tests', () => {
     });
 
     test('should reset isLoading and error with default filter', () => {
-      const action = receivedFiltersError('An error');
+      const action = actions.error('An error');
       const state = {
         default: {
           isLoading: true,
@@ -203,7 +199,7 @@ describe('filter entities reducers tests', () => {
 
     test('should not override other filters', () => {
       const filter = Filter.fromString('name=bar');
-      const action = receivedFiltersError('An error', filter);
+      const action = actions.error('An error', filter);
       const state = {
         'name=foo': {
           isLoading: true,

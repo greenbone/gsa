@@ -30,17 +30,11 @@ import getFilters from './selectors';
 
 export const types = createLoadingTypes('FILTERS');
 
-const actionCreators = createActionCreators(types);
-
-export const {
-  request: requestFilters,
-  success: receivedFiltersSuccess,
-  error: receivedFiltersError,
-} = actionCreators;
+export const actions = createActionCreators(types);
 
 export const loadFilters = createLoadFunc({
   selector: getFilters,
-  actionCreators,
+  actionCreators: actions,
   promiseFunc: ({gmp, filter}) => gmp.filters.getAll({filter}),
 });
 

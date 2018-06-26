@@ -22,17 +22,12 @@
  */
 import Filter from 'gmp/models/filter';
 
-import {
-  requestFilters,
-  receivedFiltersError,
-  receivedFiltersSuccess,
-  types,
-} from '../actions';
+import {actions, types} from '../actions';
 
 describe('filter entities actions tests', () => {
 
   test('should create a load filters request action', () => {
-    const action = requestFilters();
+    const action = actions.request();
     expect(action).toEqual({
       type: types.REQUEST,
     });
@@ -40,7 +35,7 @@ describe('filter entities actions tests', () => {
 
   test('should create a load specific filters request action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = requestFilters(filter);
+    const action = actions.request(filter);
 
     expect(action).toEqual({
       type: types.REQUEST,
@@ -49,7 +44,7 @@ describe('filter entities actions tests', () => {
   });
 
   test('should create a load filters success action', () => {
-    const action = receivedFiltersSuccess(['foo', 'bar']);
+    const action = actions.success(['foo', 'bar']);
     expect(action).toEqual({
       type: types.SUCCESS,
       data: ['foo', 'bar'],
@@ -58,7 +53,7 @@ describe('filter entities actions tests', () => {
 
   test('should create a load specific filters success action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = receivedFiltersSuccess(['foo', 'bar'], filter);
+    const action = actions.success(['foo', 'bar'], filter);
 
     expect(action).toEqual({
       type: types.SUCCESS,
@@ -68,7 +63,7 @@ describe('filter entities actions tests', () => {
   });
 
   test('should create a load filters error action', () => {
-    const action = receivedFiltersError('An error');
+    const action = actions.error('An error');
     expect(action).toEqual({
       type: types.ERROR,
       error: 'An error',
@@ -77,7 +72,7 @@ describe('filter entities actions tests', () => {
 
   test('should create a load specific filters error action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = receivedFiltersError('An error', filter);
+    const action = actions.error('An error', filter);
 
     expect(action).toEqual({
       type: types.ERROR,
