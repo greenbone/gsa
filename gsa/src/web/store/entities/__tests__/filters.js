@@ -20,74 +20,122 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_function} from 'gmp/utils/identity';
+
 import Filter from 'gmp/models/filter';
 
-import {
-  requestFilters,
-  receivedFiltersError,
-  receivedFiltersSuccess,
-  FILTERS_LOADING_ERROR,
-  FILTERS_LOADING_REQUEST,
-  FILTERS_LOADING_SUCCESS,
-} from '../actions';
+import {actions, types, reducer} from '../filters';
 
 describe('filter entities actions tests', () => {
 
+  test('should have action creators', () => {
+    expect(is_function(actions.request)).toBe(true);
+    expect(is_function(actions.success)).toBe(true);
+    expect(is_function(actions.error)).toBe(true);
+  });
+
   test('should create a load filters request action', () => {
-    const action = requestFilters();
+    const action = actions.request();
     expect(action).toEqual({
-      type: FILTERS_LOADING_REQUEST,
+      type: types.REQUEST,
     });
   });
 
   test('should create a load specific filters request action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = requestFilters(filter);
+    const action = actions.request(filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_REQUEST,
+      type: types.REQUEST,
       filter,
     });
   });
 
   test('should create a load filters success action', () => {
-    const action = receivedFiltersSuccess(['foo', 'bar']);
+    const action = actions.success(['foo', 'bar']);
     expect(action).toEqual({
-      type: FILTERS_LOADING_SUCCESS,
+      type: types.SUCCESS,
       data: ['foo', 'bar'],
     });
   });
 
   test('should create a load specific filters success action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = receivedFiltersSuccess(['foo', 'bar'], filter);
+    const action = actions.success(['foo', 'bar'], filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_SUCCESS,
+      type: types.SUCCESS,
       data: ['foo', 'bar'],
       filter,
     });
   });
 
   test('should create a load filters error action', () => {
-    const action = receivedFiltersError('An error');
+    const action = actions.error('An error');
     expect(action).toEqual({
-      type: FILTERS_LOADING_ERROR,
+      type: types.ERROR,
       error: 'An error',
     });
   });
 
   test('should create a load specific filters error action', () => {
     const filter = Filter.fromString('type=abc');
-    const action = receivedFiltersError('An error', filter);
+    const action = actions.error('An error', filter);
 
     expect(action).toEqual({
-      type: FILTERS_LOADING_ERROR,
+      type: types.ERROR,
       error: 'An error',
       filter,
     });
   });
 
+});
+
+describe('filter entities reducers tests', () => {
+
+  test('Should be a reducer function', () => {
+    expect(is_function(reducer)).toBe(true);
+  });
+
+  test('Should create initial state', () => {
+    expect(reducer(undefined, {})).toEqual({});
+  });
+
+  test('should set isLoading with default filter', () => {
+    const action = actions.request();
+
+    expect(reducer(undefined, action)).toEqual({
+      default: {
+        isLoading: true,
+        error: null,
+        entities: null,
+      },
+    });
+  });
+
+  test('should set isLoading with default filter', () => {
+    const action = actions.success(['foo', 'bar']);
+
+    expect(reducer(undefined, action)).toEqual({
+      default: {
+        isLoading: false,
+        error: null,
+        entities: ['foo', 'bar'],
+      },
+    });
+  });
+
+  test('should set isLoading and error with default filter', () => {
+    const action = actions.error('An error');
+
+    expect(reducer(undefined, action)).toEqual({
+      default: {
+        isLoading: false,
+        error: 'An error',
+        entities: null,
+      },
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

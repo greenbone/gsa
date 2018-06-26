@@ -20,39 +20,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {
+  createLoadingTypes,
+  createActionCreators,
+  createLoadFunc,
+} from './actions';
 
-class EntitiesSelector {
+import {createReducer} from './reducers';
 
-  constructor(state) {
-    this.state = state;
-  }
+import {createSelector} from './selectors';
 
-  _getByFilter(filter) {
-    if (is_defined(this.state)) {
-      const filterString = is_defined(filter) ? filter.toFilterString() :
-        'default';
-      return this.state[filterString];
-    }
-    return undefined;
-  }
+export const createAll = name => {
 
-  getIsLoading(filter) {
-    const state = this._getByFilter(filter);
-    return is_defined(state) ? state.isLoading : false;
-  }
+  const selector = createSelector(name);
+  const types = createLoadingTypes(name);
+  const actions = createActionCreators(types);
+  const reducer = createReducer(types);
+  const load = createLoadFunc({
+    selector,
+    actionCreators: actions,
+    name,
+  });
 
-  getError(filter) {
-    const state = this._getByFilter(filter);
-    return is_defined(state) ? state.error : undefined;
-  }
-
-  getEntities(filter) {
-    const state = this._getByFilter(filter);
-    return is_defined(state) ? state.entities : undefined;
-  }
+  return {
+    selector,
+    types,
+    actions,
+    load,
+    reducer,
+  };
 };
-
-export default EntitiesSelector;
 
 // vim: set ts=2 sw=2 tw=80:

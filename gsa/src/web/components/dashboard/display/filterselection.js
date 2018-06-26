@@ -37,8 +37,7 @@ import Select from '../../form/select';
 
 import MenuEntry from '../../menu/menuentry';
 
-import getFilters from 'web/store/entities/filters/selectors';
-import {loadFilters} from 'web/store/entities/filters/actions';
+import {load, selector} from 'web/store/entities/filters';
 
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -178,7 +177,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
     };
   }
 
-  const filterSelector = getFilters(state);
+  const filterSelector = selector(state);
   const filters = filterSelector.getEntities(filtersFilter);
   return {
     filters: has_value(filters) ? filters : [],
@@ -186,7 +185,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
-  loadFilters: () => dispatch(loadFilters({gmp, filter: filtersFilter})),
+  loadFilters: () => dispatch(load({gmp, filter: filtersFilter})),
 });
 
 export default compose(
