@@ -24,7 +24,7 @@ import {
   createLoadingTypes,
   createActionCreators,
   createLoadFunc,
-} from '../actions';
+} from '../utils/actions';
 
 import getFilters from './selectors';
 

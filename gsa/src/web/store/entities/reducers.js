@@ -22,7 +22,7 @@
  */
 import {combineReducers} from 'redux';
 
-import filters from './filters/reducers.js';
+import filters from './filters/reducers';
 
 const entitiesReducer = combineReducers({
   filters,
