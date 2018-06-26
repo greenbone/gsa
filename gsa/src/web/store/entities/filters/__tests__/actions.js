@@ -20,11 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_function} from 'gmp/utils/identity';
+
 import Filter from 'gmp/models/filter';
 
 import {actions, types} from '../actions';
 
 describe('filter entities actions tests', () => {
+
+  test('should have action creators', () => {
+    expect(is_function(actions.request)).toBe(true);
+    expect(is_function(actions.success)).toBe(true);
+    expect(is_function(actions.error)).toBe(true);
+  });
 
   test('should create a load filters request action', () => {
     const action = actions.request();
