@@ -1,7 +1,7 @@
 {
   "name": "gsa",
-  "version": "0.1.0",
-  "description": "Greenbone Security Assistant Next Generation",
+  "version": "8.0.0",
+  "description": "Greenbone Security Assistant",
   "keywords": [
     "openvas",
     "gmp",
