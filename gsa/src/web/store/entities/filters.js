@@ -28,11 +28,9 @@ import {
 
 import {createReducer} from './utils/reducers';
 
-import EntitiesSelector from './utils/selectors';
+import {createSelector} from './utils/selectors';
 
-export const getFilters = rootState => {
-  return new EntitiesSelector(rootState.entities.filters);
-};
+export const getFilters = createSelector('filters');
 
 export const types = createLoadingTypes('filters');
 

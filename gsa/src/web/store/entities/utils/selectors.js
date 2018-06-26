@@ -53,6 +53,7 @@ class EntitiesSelector {
   }
 };
 
-export default EntitiesSelector;
+export const createSelector = name => rootState =>
+  new EntitiesSelector(rootState.entities[name]);
 
 // vim: set ts=2 sw=2 tw=80:
