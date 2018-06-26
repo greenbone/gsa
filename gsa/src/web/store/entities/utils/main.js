@@ -20,23 +20,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {createAll} from './utils/main';
+import {
+  createLoadingTypes,
+  createActionCreators,
+  createLoadFunc,
+} from './actions';
 
-const {
-  load,
-  reducer,
-  types,
-  selector,
-  actions,
-} = createAll('filter');
+import {createReducer} from './reducers';
 
-export {
-  load,
-  reducer,
-  types,
-  selector,
-  actions,
+import {createSelector} from './selectors';
+
+export const createAll = name => {
+
+  const selector = createSelector(name);
+  const types = createLoadingTypes(name);
+  const actions = createActionCreators(types);
+  const reducer = createReducer(types);
+  const load = createLoadFunc({
+    selector,
+    actionCreators: actions,
+    name,
+  });
+
+  return {
+    selector,
+    types,
+    actions,
+    load,
+    reducer,
+  };
 };
 
 // vim: set ts=2 sw=2 tw=80:
-
