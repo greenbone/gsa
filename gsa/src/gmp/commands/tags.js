@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -66,7 +67,9 @@ class TagCommand extends EntityCommand {
     name,
     comment = '',
     active,
+    filter,
     resource_id = '',
+    resource_ids = [resource_id],
     resource_type,
     value = '',
   }) {
@@ -77,7 +80,8 @@ class TagCommand extends EntityCommand {
       tag_value: value,
       comment,
       active,
-      resource_id,
+      filter,
+      'resource_ids:': resource_ids.length > 0 ? resource_ids : undefined,
       resource_type,
     };
     log.debug('Saving tag', data);
