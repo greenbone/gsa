@@ -20,12 +20,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import EntitiesSelector from '../utils/selectors';
+import {
+  createLoadingTypes,
+  createActionCreators,
+  createLoadFunc,
+} from './utils/actions';
 
-const getFilters = rootState => {
+import {createReducer} from './utils/reducers';
+
+import EntitiesSelector from './utils/selectors';
+
+export const getFilters = rootState => {
   return new EntitiesSelector(rootState.entities.filters);
 };
 
-export default getFilters;
+export const types = createLoadingTypes('FILTERS');
+
+export const actions = createActionCreators(types);
+
+export const loadFilters = createLoadFunc({
+  selector: getFilters,
+  actionCreators: actions,
+  promiseFunc: ({gmp, filter}) => gmp.filters.getAll({filter}),
+});
+
+export const filtersReducer = createReducer(types);
 
 // vim: set ts=2 sw=2 tw=80:
+

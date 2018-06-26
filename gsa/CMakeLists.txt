@@ -763,9 +763,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/entities/filters/actions.js
-     ${GSA_SRC_DIR}/src/web/store/entities/filters/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/entities/filters/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/entities/filters.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js

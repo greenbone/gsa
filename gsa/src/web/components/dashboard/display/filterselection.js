@@ -37,8 +37,7 @@ import Select from '../../form/select';
 
 import MenuEntry from '../../menu/menuentry';
 
-import getFilters from 'web/store/entities/filters/selectors';
-import {loadFilters} from 'web/store/entities/filters/actions';
+import {loadFilters, getFilters} from 'web/store/entities/filters';
 
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';

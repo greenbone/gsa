@@ -44,8 +44,7 @@ import PowerFilter from '../components/powerfilter/powerfilter.js';
 
 import Section from '../components/section/section.js';
 
-import getFilters from 'web/store/entities/filters/selectors';
-import {loadFilters} from 'web/store/entities/filters/actions';
+import {loadFilters, getFilters} from 'web/store/entities/filters';
 
 const exclude_props = [
   'children',
