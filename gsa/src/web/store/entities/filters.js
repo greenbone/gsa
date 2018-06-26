@@ -20,12 +20,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import EntitiesSelector from '../selectors';
+import {createAll} from './utils/main';
 
-const getFilters = rootState => {
-  return new EntitiesSelector(rootState.entities.filters);
+const {
+  load,
+  reducer,
+  types,
+  selector,
+  actions,
+} = createAll('filter');
+
+export {
+  load,
+  reducer,
+  types,
+  selector,
+  actions,
 };
 
-export default getFilters;
-
 // vim: set ts=2 sw=2 tw=80:
+

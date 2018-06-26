@@ -20,14 +20,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {is_defined} from 'gmp/utils/identity';
 
-import {reducer as filters} from './filters';
+class EntitiesSelector {
 
-const entitiesReducer = combineReducers({
-  filters,
-});
+  constructor(state) {
+    this.state = state;
+  }
 
-export default entitiesReducer;
+  _getByFilter(filter) {
+    if (is_defined(this.state)) {
+      const filterString = is_defined(filter) ? filter.toFilterString() :
+        'default';
+      return this.state[filterString];
+    }
+    return undefined;
+  }
+
+  getIsLoading(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.isLoading : false;
+  }
+
+  getError(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.error : undefined;
+  }
+
+  getEntities(filter) {
+    const state = this._getByFilter(filter);
+    return is_defined(state) ? state.entities : undefined;
+  }
+};
+
+export const createSelector = name => rootState =>
+  new EntitiesSelector(rootState.entities[name]);
 
 // vim: set ts=2 sw=2 tw=80:
