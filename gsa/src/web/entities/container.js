@@ -49,6 +49,8 @@ import withDialogNotification from '../components/notification/withDialogNotifia
 
 import SortBy from '../components/sortby/sortby.js';
 
+import TagsDialog from './tagsdialog.js';
+
 const log = logger.getLogger('web.entities.container');
 
 const exclude_props = [
@@ -68,6 +70,8 @@ class EntitiesContainer extends React.Component {
       loading: false,
       updating: false,
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
+      tags: [],
+      tagsDialogVisible: false,
     };
 
     const {gmpname, gmp, notify} = this.props;
@@ -90,6 +94,7 @@ class EntitiesContainer extends React.Component {
 
     this.handleChanged = this.handleChanged.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
+    this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
     this.handleError = this.handleError.bind(this);
     this.handleFirst = this.handleFirst.bind(this);
@@ -103,6 +108,8 @@ class EntitiesContainer extends React.Component {
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
+    this.openTagsDialog = this.openTagsDialog.bind(this);
+    this.closeTagsDialog = this.closeTagsDialog.bind(this);
   }
 
   componentDidMount() {
@@ -128,7 +135,6 @@ class EntitiesContainer extends React.Component {
 
     this.load({filter, reload});
   }
-
 
   load(options = {}) {
     const {entities_command} = this;
@@ -162,6 +168,9 @@ class EntitiesContainer extends React.Component {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
+        const entitiesType = entities.length > 0 ?
+          entities[0].entity_type : undefined;
+
         this.cancel = undefined;
 
         let refresh = false;
@@ -175,6 +184,7 @@ class EntitiesContainer extends React.Component {
         this.setState({
           entities,
           entities_counts,
+          entitiesType,
           filter,
           loaded_filter,
           loading: false,
@@ -396,16 +406,38 @@ class EntitiesContainer extends React.Component {
     this.load();
   }
 
+  openTagsDialog() {
+    this.getTagsByType();
+    this.setState({tagsDialogVisible: true});
+  }
+
+  closeTagsDialog() {
+    this.setState({tagsDialogVisible: false});
+  }
+
+  getTagsByType() {
+    const {gmp} = this.props;
+    const {entitiesType} = this.state;
+    const filter = 'resource_type=' + entitiesType;
+    gmp.tags.getAll({filter})
+      .then(response => {
+        const {data} = response;
+        this.setState({tags: data});
+      });
+  }
+
   render() {
     const {
       entities,
       entities_counts,
       loaded_filter,
       loading,
-      selected,
+      selected = {},
       selection_type,
       sortBy,
       sortDir,
+      tags,
+      tagsDialogVisible,
       updating,
     } = this.state;
     const {
@@ -413,6 +445,22 @@ class EntitiesContainer extends React.Component {
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
+
+    let entitiesType;
+    if (is_defined(entities) && is_defined(entities[0])) {
+      entitiesType = entities[0].entity_type;
+    }
+
+    let title;
+    if (selection_type === SelectionType.SELECTION_USER) {
+      title = 'Add Tag to Selection';
+    }
+    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+      title = 'Add Tag to Page Contents';
+    }
+    else {
+      title = 'Add Tag to All Filtered';
+    }
     const Component = this.props.component;
     const other = exclude_object_props(this.props, exclude_props);
     return (
@@ -437,6 +485,7 @@ class EntitiesContainer extends React.Component {
           onSelectionTypeChange={this.handleSelectionTypeChange}
           onDownloadBulk={this.handleDownloadBulk}
           onDeleteBulk={this.handleDeleteBulk}
+          onTagsBulk={this.openTagsDialog}
           onEntitySelected={this.handleSelected}
           onEntityDeselected={this.handleDeselected}
           onFilterCreated={this.handleFilterCreated}
@@ -448,6 +497,17 @@ class EntitiesContainer extends React.Component {
           showSuccess={showSuccessMessage}
           updating={updating}
         />
+        {tagsDialogVisible &&
+          <TagsDialog
+            filter={loaded_filter}
+            tags={tags}
+            title={title}
+            resources={selected}
+            resourceType={entitiesType}
+            selectionType={selection_type}
+            onClose={this.closeTagsDialog}
+          />
+        }
       </Wrapper>
     );
   }

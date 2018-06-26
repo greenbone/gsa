@@ -38,6 +38,46 @@ import EntityComponent from '../../entity/component.js';
 
 import TagDialog from './dialog.js';
 
+export const RESOURCE_TYPES = {
+  agent: _('Agent'),
+  alert: _('Alert'),
+  host: _('Host'),
+  os: _('Operating System'),
+  cpe: _('CPE'),
+  credential: _('Credential'),
+  cve: _('CVE'),
+  cert_bund_adv: _('CERT-Bund Advisory'),
+  dfn_cert_adv: _('DFN-CERT Advisory'),
+  filter: _('Filter'),
+  group: _('Group'),
+  note: _('Note'),
+  nvt: _('NVT'),
+  ovaldef: _('OVAL Definition'),
+  override: _('Override'),
+  permission: _('Permission'),
+  port_list: _('Port Lists'),
+  report: _('Report'),
+  report_format: _('Report Format'),
+  result: _('Result'),
+  role: _('Role'),
+  config: _('Scan Config'),
+  scanner: _('Scanner'),
+  schedule: _('Schedule'),
+  target: _('Target'),
+  task: _('Task'),
+  user: _('User'),
+};
+
+const getType = resource => {
+  if (resource.entity_type === 'asset') {
+    return resource.asset_type;
+  }
+  if (resource.entity_type === 'info') {
+    return resource.info_type;
+  }
+  return resource.entity_type;
+};
+
 class TagComponent extends React.Component {
 
   constructor(...args) {
@@ -73,7 +113,7 @@ class TagComponent extends React.Component {
       value,
       active: 1,
       resource_id: entity.id,
-      resource_type: entity.entity_type,
+      resource_type: getType(entity),
     }).then(onAdded, onAddError);
   }
 
@@ -81,85 +121,85 @@ class TagComponent extends React.Component {
     const {capabilities} = this.props;
     const resource_types = [];
     if (capabilities.mayAccess('agents')) {
-      resource_types.push(['agent', _('Agent')]);
+      resource_types.push(['agent', RESOURCE_TYPES.agent]);
     }
     if (capabilities.mayAccess('alerts')) {
-      resource_types.push(['alert', _('Alert')]);
+      resource_types.push(['alert', RESOURCE_TYPES.alert]);
     }
     if (capabilities.mayAccess('assets')) {
-      resource_types.push(['host', _('Host')]);
+      resource_types.push(['host', RESOURCE_TYPES.host]);
     }
     if (capabilities.mayAccess('assets')) {
-      resource_types.push(['os', _('Operating System')]);
+      resource_types.push(['os', RESOURCE_TYPES.os]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['cpe', _('CPE')]);
+      resource_types.push(['cpe', RESOURCE_TYPES.cpe]);
     }
     if (capabilities.mayAccess('credentials')) {
-      resource_types.push(['credential', _('Credential')]);
+      resource_types.push(['credential', RESOURCE_TYPES.credential]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['cve', _('CVE')]);
+      resource_types.push(['cve', RESOURCE_TYPES.cve]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['cert_bund_adv', _('CERT-Bund Advisory')]);
+      resource_types.push(['cert_bund_adv', RESOURCE_TYPES.cert_bund_adv]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['dfn_cert_adv', _('DFN-CERT Advisory')]);
+      resource_types.push(['dfn_cert_adv', RESOURCE_TYPES.dfn_cert_adv]);
     }
     if (capabilities.mayAccess('filters')) {
-      resource_types.push(['filter', _('Filter')]);
+      resource_types.push(['filter', RESOURCE_TYPES.filter]);
     }
     if (capabilities.mayAccess('groups')) {
-      resource_types.push(['group', _('Group')]);
+      resource_types.push(['group', RESOURCE_TYPES.group]);
     }
     if (capabilities.mayAccess('notes')) {
-      resource_types.push(['note', _('Note')]);
+      resource_types.push(['note', RESOURCE_TYPES.note]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['nvt', _('NVT')]);
+      resource_types.push(['nvt', RESOURCE_TYPES.nvt]);
     }
     if (capabilities.mayAccess('info')) {
-      resource_types.push(['ovaldef', _('OVAL Definition')]);
+      resource_types.push(['ovaldef', RESOURCE_TYPES.ovaldef]);
     }
     if (capabilities.mayAccess('overrides')) {
-      resource_types.push(['override', _('Override')]);
+      resource_types.push(['override', RESOURCE_TYPES.override]);
     }
     if (capabilities.mayAccess('permissions')) {
-      resource_types.push(['Permission', _('Permission')]);
+      resource_types.push(['permission', RESOURCE_TYPES.permission]);
     }
     if (capabilities.mayAccess('port_lists')) {
-      resource_types.push(['port_list', _('Port Lists')]);
+      resource_types.push(['port_list', RESOURCE_TYPES.port_list]);
     }
     if (capabilities.mayAccess('reports')) {
-      resource_types.push(['report', _('Report')]);
+      resource_types.push(['report', RESOURCE_TYPES.report]);
     }
     if (capabilities.mayAccess('report_formats')) {
-      resource_types.push(['report_format', _('Report Format')]);
+      resource_types.push(['report_format', RESOURCE_TYPES.report_format]);
     }
     if (capabilities.mayAccess('results')) {
-      resource_types.push(['result', _('Result')]);
+      resource_types.push(['result', RESOURCE_TYPES.result]);
     }
     if (capabilities.mayAccess('roles')) {
-      resource_types.push(['role', _('Role')]);
+      resource_types.push(['role', RESOURCE_TYPES.role]);
     }
     if (capabilities.mayAccess('configs')) {
-      resource_types.push(['config', _('Scan Config')]);
+      resource_types.push(['config', RESOURCE_TYPES.config]);
     }
     if (capabilities.mayAccess('scanners')) {
-      resource_types.push(['scanner', _('Scanner')]);
+      resource_types.push(['scanner', RESOURCE_TYPES.scanner]);
     }
     if (capabilities.mayAccess('schedules')) {
-      resource_types.push(['schedule', _('Schedule')]);
+      resource_types.push(['schedule', RESOURCE_TYPES.schedule]);
     }
     if (capabilities.mayAccess('targets')) {
-      resource_types.push(['target', _('Target')]);
+      resource_types.push(['target', RESOURCE_TYPES.target]);
     }
     if (capabilities.mayAccess('tasks')) {
-      resource_types.push(['task', _('Task')]);
+      resource_types.push(['task', RESOURCE_TYPES.task]);
     }
     if (capabilities.mayAccess('users')) {
-      resource_types.push(['user', _('User')]);
+      resource_types.push(['user', RESOURCE_TYPES.user]);
     }
     return resource_types;
   }
@@ -177,7 +217,7 @@ class TagComponent extends React.Component {
         tag,
         resource_id: resource.id,
         resource_type: is_defined(resource.entity_type) ?
-          resource.entity_type :
+          getType(resource) :
           first(resource_types, [])[0],
         resource_types,
         title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),

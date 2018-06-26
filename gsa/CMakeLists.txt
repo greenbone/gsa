@@ -257,6 +257,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconCss.js
@@ -344,6 +345,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/row.js
      ${GSA_SRC_DIR}/src/web/entities/selection.js
      ${GSA_SRC_DIR}/src/web/entities/table.js
+     ${GSA_SRC_DIR}/src/web/entities/tagsdialog.js
      ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer.js
      ${GSA_SRC_DIR}/src/web/entities/withRowDetails.js
      ${GSA_SRC_DIR}/src/web/entity/block.js
