@@ -21,11 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const createLoadingTypes = name => ({
-  REQUEST: `${name}_LOADING_REQUEST`,
-  SUCCESS: `${name}_LOADING_SUCCESS`,
-  ERROR: `${name}_LOADING_ERROR`,
-});
+export const createLoadingTypes = name => {
+  name = name.toUpperCase();
+  return {
+    REQUEST: `${name}_LOADING_REQUEST`,
+    SUCCESS: `${name}_LOADING_SUCCESS`,
+    ERROR: `${name}_LOADING_ERROR`,
+  };
+};
 
 export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
   request: filter => ({

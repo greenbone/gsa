@@ -34,7 +34,7 @@ export const getFilters = rootState => {
   return new EntitiesSelector(rootState.entities.filters);
 };
 
-export const types = createLoadingTypes('FILTERS');
+export const types = createLoadingTypes('filters');
 
 export const actions = createActionCreators(types);
 

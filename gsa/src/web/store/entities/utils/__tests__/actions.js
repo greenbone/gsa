@@ -35,7 +35,15 @@ describe('entities actions tests', () => {
   describe('createLoadingTypes tests', () => {
 
     test('should create loading types', () => {
-      const types = createLoadingTypes('FOO');
+      const types = createLoadingTypes('foo');
+
+      expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
+      expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
+      expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
+    });
+
+    test('should not care about case when creating loading types', () => {
+      const types = createLoadingTypes('fOO');
 
       expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
       expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
@@ -46,7 +54,7 @@ describe('entities actions tests', () => {
   describe('createActionCreators tests', () => {
 
     test('should create action creators for loading', () => {
-      const types = createLoadingTypes('FOO');
+      const types = createLoadingTypes('foo');
       const actions = createActionCreators(types);
 
       expect(actions.request).toBeDefined();
@@ -58,7 +66,7 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load request action', () => {
-      const types = createLoadingTypes('FOO');
+      const types = createLoadingTypes('foo');
       const actions = createActionCreators(types);
       const action = actions.request();
 
