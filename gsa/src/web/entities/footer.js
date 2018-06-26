@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +35,7 @@ import SelectionType from '../utils/selectiontype.js';
 
 import DeleteIcon from '../components/icon/deleteicon.js';
 import ExportIcon from '../components/icon/exporticon.js';
+import TagsIcon from '../components/icon/tagsicon.js';
 import TrashIcon from '../components/icon/trashicon.js';
 
 import Select from '../components/form/select.js';
@@ -48,10 +50,12 @@ export const EntitiesFooter = ({
     selection = true,
     selectionType,
     span,
+    tags = true,
     trash,
     onDeleteClick,
     onDownloadClick,
     onSelectionTypeChange,
+    onTagsClick,
     onTrashClick,
     ...props
   }) => {
@@ -79,6 +83,12 @@ export const EntitiesFooter = ({
                   </Select>
                 }
                 <IconDivider>
+                  {tags &&
+                    <TagsIcon
+                      onClick={onTagsClick}
+                      selectionType={selectionType}
+                    />
+                  }
                   {trash &&
                     <TrashIcon
                       onClick={onTrashClick}
@@ -113,22 +123,30 @@ EntitiesFooter.propTypes = {
   selection: PropTypes.bool,
   selectionType: PropTypes.string,
   span: PropTypes.number.isRequired,
+  tags: PropTypes.bool,
   trash: PropTypes.bool,
   onDeleteClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
   onSelectionTypeChange: PropTypes.func,
+  onTagsClick: PropTypes.func,
   onTrashClick: PropTypes.func,
 };
 
 export const withEntitiesFooter = (options = {}) => Component => {
 
-  const EntitiesFooterWrapper = ({onDownloadBulk, onDeleteBulk, ...props}) => {
+  const EntitiesFooterWrapper = ({
+    onDownloadBulk,
+    onDeleteBulk,
+    onTagsBulk,
+    ...props
+  }) => {
     return (
       <Component
         {...options}
         {...props}
         onDownloadClick={onDownloadBulk}
         onDeleteClick={onDeleteBulk}
+        onTagsClick={onTagsBulk}
         onTrashClick={onDeleteBulk}
       />
     );
@@ -137,6 +155,7 @@ export const withEntitiesFooter = (options = {}) => Component => {
   EntitiesFooterWrapper.propTypes = {
     onDeleteBulk: PropTypes.func,
     onDownloadBulk: PropTypes.func,
+    onTagsBulk: PropTypes.func,
   };
 
   return EntitiesFooterWrapper;
