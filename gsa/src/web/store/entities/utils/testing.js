@@ -211,6 +211,37 @@ export const testLoadAll = (name, loadAll, types) => {
         }]);
       });
     });
+
+    test('should not load all entities if isLoading is true', () => {
+      const filter = Filter.fromString('myfilter');
+      const rootState = createState(name, {
+        [filterIdentifier(filter)]: {
+          isLoading: true,
+        },
+      });
+
+      const getState = jest
+        .fn()
+        .mockReturnValue(rootState);
+
+      const dispatch = jest.fn();
+
+      const getAll = jest
+        .fn()
+        .mockReturnValue(Promise.resolve([{id: 'foo'}]));
+
+      const gmp = {
+        [name]: {
+          getAll,
+        },
+      };
+
+      return loadAll({gmp, filter})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(dispatch).not.toBeCalled();
+        expect(getAll).not.toBeCalled();
+      });
+    });
   });
 };
 
