@@ -29,12 +29,9 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {first, is_defined} from 'gmp/utils';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
-
-import TextField from '../components/form/textfield.js';
-import Select from '../components/form/select.js';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -55,115 +52,6 @@ import TableHeader from '../components/table/header.js';
 import TableHead from '../components/table/head.js';
 import TableRow from '../components/table/row.js';
 
-const TagIcon = props => (
-  <Icon
-    {...props}
-    img="tag.svg"
-    size="small" />
-);
-
-class AddTag extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    const {entity} = this.props;
-
-    const tags = new Set(entity.user_tags.map(tag => tag.name));
-    this.state = {
-      name: first(entity.user_tags).name,
-      value: '',
-      tags: [...tags],
-    };
-
-    this.handleAddTag = this.handleAddTag.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-  }
-
-  componentWillReceiveProps(next) {
-    const {entity} = next;
-    const {name} = this.state;
-
-    if (!is_defined(entity)) {
-      this.setState({
-        name: '',
-        tags: [],
-      });
-    }
-
-    if (this.props.entity !== entity) {
-      const tags = new Set(entity.user_tags.map(tag => tag.name));
-      if (!tags.has(name)) {
-        this.setState({
-          name: first(entity.user_tags).name,
-          tags: [...tags],
-        });
-      }
-    }
-  }
-
-  onValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
-  handleAddTag() {
-    const {name, value} = this.state;
-    const {entity, onAddTag} = this.props;
-
-    onAddTag({
-      name,
-      value,
-      entity,
-    }).then(() => {
-      this.setState({
-        name: '',
-        value: '',
-      });
-    });
-  }
-
-  render() {
-    const {name, value, tags} = this.state;
-
-    if (tags.length === 0) {
-      return null;
-    }
-
-    return (
-      <Divider>
-        <b>{_('Add Tag')}</b>
-        <Select
-          name="name"
-          value={name}
-          onChange={this.onValueChange}>
-          {tags.map(tag => {
-            return (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            );
-          })}
-        </Select>
-        <span>with Value</span>
-        <TextField
-          name="value"
-          value={value}
-          onChange={this.onValueChange}
-        />
-        <TagIcon
-          title={_('Add Tag')}
-          onClick={this.handleAddTag}
-        />
-      </Divider>
-    );
-  }
-}
-
-AddTag.propTypes = {
-  entity: PropTypes.model.isRequired,
-  onAddTag: PropTypes.func.isRequired,
-};
-
 const SectionElementDivider = glamorous(Divider)({
   marginBottom: '3px',
 });
@@ -176,10 +64,6 @@ const SectionElements = ({
   return (
     <Layout grow align="end">
       <SectionElementDivider margin="10px">
-        <AddTag
-          entity={entity}
-          onAddTag={onTagAddClick}
-        />
         <IconDivider>
           <NewIcon
             title={_('New Tag')}
