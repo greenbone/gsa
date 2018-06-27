@@ -28,7 +28,7 @@ const {
   types,
   selector,
   actions,
-} = createAll('filter');
+} = createAll('filters');
 
 export {
   load,
