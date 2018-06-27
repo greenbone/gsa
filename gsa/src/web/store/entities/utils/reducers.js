@@ -24,6 +24,10 @@ import {combineReducers} from 'redux';
 
 import {is_defined} from 'gmp/utils/identity';
 
+export const filterIdentifier = filter => is_defined(filter) ?
+  `filter:${filter.toFilterString()}` :
+  'default';
+
 export const createReducer = types => {
 
   const isLoading = (state = false, action) => {
@@ -49,10 +53,25 @@ export const createReducer = types => {
     }
   };
 
-  const entities = (state = null, action) => {
+  const entities = (state = [], action) => {
     switch (action.type) {
       case types.SUCCESS:
-        return action.data;
+        const {data = []} = action;
+        return data.map(entity => entity.id);
+      default:
+        return state;
+    }
+  };
+
+  const byId = (state = {}, action) => {
+    switch (action.type) {
+      case types.SUCCESS:
+        const {data = []} = action;
+        const nextState = {
+          ...state,
+        };
+        data.forEach(d => nextState[d.id] = d);
+        return nextState;
       default:
         return state;
     }
@@ -69,10 +88,10 @@ export const createReducer = types => {
       case types.REQUEST:
       case types.SUCCESS:
       case types.ERROR:
-        const filterString = is_defined(action.filter) ?
-          action.filter.toFilterString() : 'default';
+        const filterString = filterIdentifier(action.filter);
         return {
           ...state,
+          byId: byId(state.byId, action),
           [filterString]: combinedReducer(state[filterString], action),
         };
       default:

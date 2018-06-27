@@ -22,113 +22,106 @@
  */
 import Filter from 'gmp/models/filter';
 
+import {createRootState, createState} from '../testing';
+
 import {createSelector} from '../selectors';
+import {filterIdentifier} from '../reducers';
 
 describe('EntitiesSelector getIsLoading tests', () => {
 
   test('isLoading for undefined state', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
-    expect(selector.getIsLoading()).toEqual(false);
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getIsLoading()).toEqual(false);
   });
 
   test('isLoading for undefined state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
     const filter = Filter.fromString('name=foo');
+    const fooSelector = selector(rootState);
 
-    expect(selector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.getIsLoading(filter)).toEqual(false);
   });
 
   test('isLoading for empty state', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
-    expect(selector.getIsLoading()).toEqual(false);
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getIsLoading()).toEqual(false);
   });
 
   test('isLoading for empty state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(selector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.getIsLoading(filter)).toEqual(false);
   });
 
   test('isLoading should be true with default filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            isLoading: true,
-          },
-          'name=foo': {
-            isLoading: false,
-          },
-        },
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        isLoading: true,
+      },
+      'name=foo': {
+        isLoading: false,
       },
     });
+    const fooSelector = selector(rootState);
 
-    expect(selector.getIsLoading()).toEqual(true);
+    expect(fooSelector.getIsLoading()).toEqual(true);
   });
 
   test('isLoading should be true with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            isLoading: false,
-          },
-          'name=foo': {
-            isLoading: true,
-          },
-        },
+    const filter = Filter.fromString('name=foo');
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        isLoading: false,
+      },
+      [filterIdentifier(filter)]: {
+        isLoading: true,
       },
     });
-    const filter = Filter.fromString('name=foo');
+    const fooSelector = selector(rootState);
 
-    expect(selector.getIsLoading(filter)).toEqual(true);
+    expect(fooSelector.getIsLoading(filter)).toEqual(true);
   });
 
   test('isLoading should be false for unkown filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            isLoading: true,
-          },
-          'name=foo': {
-            isLoading: true,
-          },
-        },
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        isLoading: true,
+      },
+      'name=foo': {
+        isLoading: true,
       },
     });
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(selector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.getIsLoading(filter)).toEqual(false);
   });
 
   test('isLoading should be undefined for undefined isLoading', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-          },
-          'name=foo': {
-            isLoading: false,
-          },
-        },
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+      },
+      'name=foo': {
+        isLoading: false,
       },
     });
+    const fooSelector = selector(rootState);
 
-    expect(selector.getIsLoading()).toBeUndefined();
+    expect(fooSelector.getIsLoading()).toBeUndefined();
   });
 
 });
@@ -136,105 +129,133 @@ describe('EntitiesSelector getIsLoading tests', () => {
 describe('EntitiesSelector getEntities tests', () => {
 
   test('getEntities for undefined state', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
-    expect(selector.getEntities()).toBeUndefined();
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
   test('getEntities for undefined state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(selector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
   });
 
   test('getEntities for empty state', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
-    expect(selector.getEntities()).toBeUndefined();
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
   test('getEntities for empty state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(selector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
+  });
+
+  test('getEntities should return empty array if byId is empty', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {},
+      default: {
+        entities: ['foo', 'bar'],
+      },
+      'name=foo': {
+        entities: ['lorem', 'ipsum'],
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
   test('getEntities should return entities with default filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
         foo: {
-          default: {
-            entities: ['foo', 'bar'],
-          },
-          'name=foo': {
-            entities: ['lorem', 'ipsum'],
-          },
+          id: 'foo',
+        },
+        bar: {
+          id: 'bar',
         },
       },
+      default: {
+        entities: ['foo', 'bar'],
+      },
+      'name=foo': {
+        entities: ['lorem', 'ipsum'],
+      },
     });
+    const fooSelector = selector(rootState);
 
-    expect(selector.getEntities()).toEqual(['foo', 'bar']);
+    expect(fooSelector.getEntities()).toEqual([{id: 'foo'}, {id: 'bar'}]);
   });
 
   test('getEntities should return entities with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            entities: ['foo', 'bar'],
-          },
-          'name=foo': {
-            entities: ['lorem', 'ipsum'],
-          },
-        },
-      },
-    });
     const filter = Filter.fromString('name=foo');
-
-    expect(selector.getEntities(filter)).toEqual(['lorem', 'ipsum']);
-  });
-
-  test('getEntities should return undefined for undefined entities', () => {
-    const selector = createSelector('foo')({
-      entities: {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
         foo: {
-          default: {
-          },
+          id: 'foo',
+        },
+        bar: {
+          id: 'bar',
+        },
+        lorem: {
+          id: 'lorem',
+        },
+        ipsum: {
+          id: 'ipsum',
         },
       },
-    });
-
-    expect(selector.getEntities()).toBeUndefined();
-  });
-
-  test('getEntities should return undefined for unkown filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            entities: ['foo', 'bar'],
-          },
-          'name=foo': {
-            entities: ['lorem', 'ipsum'],
-          },
-        },
+      default: {
+        entities: ['foo', 'bar'],
+      },
+      [filterIdentifier(filter)]: {
+        entities: ['lorem', 'ipsum'],
       },
     });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntities(filter))
+      .toEqual([{id: 'lorem'}, {id: 'ipsum'}]);
+  });
+
+  test('getEntities should return empty array for undefined entities', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntities()).toEqual([]);
+  });
+
+  test('getEntities should return empty array for unkown filter', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        entities: ['foo', 'bar'],
+      },
+      'name=foo': {
+        entities: ['lorem', 'ipsum'],
+      },
+    });
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(selector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
   });
 
 });
@@ -242,107 +263,152 @@ describe('EntitiesSelector getEntities tests', () => {
 describe('EntitiesSelector getError tests', () => {
 
   test('getError for undefined state', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
-    expect(selector.getError()).toBeUndefined();
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getError()).toBeUndefined();
   });
 
   test('getError for undefined state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {},
-    });
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(selector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getError(filter)).toBeUndefined();
   });
 
   test('getError for empty state', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
-    expect(selector.getError()).toBeUndefined();
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getError()).toBeUndefined();
   });
 
   test('getError for empty state with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {},
-      },
-    });
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(selector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getError(filter)).toBeUndefined();
   });
 
   test('getError should return error with default filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            error: 'An error',
-          },
-          'name=foo': {
-            error: 'Another error',
-          },
+    const selector = createSelector('foo');
+    const rootState = createRootState({
+      foo: {
+        default: {
+          error: 'An error',
+        },
+        'name=foo': {
+          error: 'Another error',
         },
       },
     });
+    const fooSelector = selector(rootState);
 
-    expect(selector.getError()).toEqual('An error');
+    expect(fooSelector.getError()).toEqual('An error');
   });
 
   test('getError should return error with filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            error: 'An error',
-          },
-          'name=foo': {
-            error: 'Another error',
-          },
-        },
+    const filter = Filter.fromString('name=foo');
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        error: 'An error',
+      },
+      [filterIdentifier(filter)]: {
+        error: 'Another error',
       },
     });
-    const filter = Filter.fromString('name=foo');
+    const fooSelector = selector(rootState);
 
-    expect(selector.getError(filter)).toEqual('Another error');
+    expect(fooSelector.getError(filter)).toEqual('Another error');
   });
 
   test('getEeror should return undefined for undefined error', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-          },
-        },
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
       },
     });
+    const fooSelector = selector(rootState);
 
-    expect(selector.getError()).toBeUndefined();
+    expect(fooSelector.getError()).toBeUndefined();
   });
 
   test('getError should return undefined for unkown filter', () => {
-    const selector = createSelector('foo')({
-      entities: {
-        foo: {
-          default: {
-            error: 'An error',
-          },
-          'name=foo': {
-            error: 'Another error',
-          },
-        },
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      default: {
+        error: 'An error',
+      },
+      'name=foo': {
+        error: 'Another error',
       },
     });
     const filter = Filter.fromString('name=bar');
+    const fooSelector = selector(rootState);
 
-    expect(selector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getError(filter)).toBeUndefined();
   });
 
+});
+
+describe('EntitiesSelector getEntity tests', () => {
+
+  test('should return undefined for empty state', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for empty byId', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {},
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for unkown id', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return entity data', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        bar: {
+          id: 'bar',
+          lorem: 'ipsum',
+        },
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toEqual({
+      id: 'bar',
+      lorem: 'ipsum',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

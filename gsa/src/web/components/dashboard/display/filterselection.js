@@ -37,7 +37,7 @@ import Select from '../../form/select';
 
 import MenuEntry from '../../menu/menuentry';
 
-import {load, selector} from 'web/store/entities/filters';
+import {loadAll, selector} from 'web/store/entities/filters';
 
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -185,7 +185,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
-  loadFilters: () => dispatch(load({gmp, filter: filtersFilter})),
+  loadFilters: () => dispatch(loadAll({gmp, filter: filtersFilter})),
 });
 
 export default compose(

@@ -47,7 +47,7 @@ export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
   }),
 });
 
-export const createLoadFunc = ({
+export const createLoadAllFunc = ({
   selector,
   actionCreators,
   name,

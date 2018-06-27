@@ -23,29 +23,28 @@
 import {is_function} from 'gmp/utils/identity';
 
 import {createAll} from '../main';
+import {createRootState} from 'web/store/entities/utils/testing';
 
 describe('createAll function tests', () => {
 
   test('should create all functions and objects', () => {
     const {
-      load,
+      loadAll,
       reducer,
       actions,
       types,
       selector,
     } = createAll('foo');
 
-    const rootState = {
-      entities: {
-        foo: {
-          default: {
-            isLoading: true,
-          },
+    const rootState = createRootState({
+      foo: {
+        default: {
+          isLoading: true,
         },
       },
-    };
+    });
 
-    expect(is_function(load)).toBe(true);
+    expect(is_function(loadAll)).toBe(true);
     expect(is_function(reducer)).toBe(true);
     expect(is_function(selector)).toBe(true);
 

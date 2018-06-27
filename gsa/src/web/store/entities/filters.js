@@ -23,7 +23,7 @@
 import {createAll} from './utils/main';
 
 const {
-  load,
+  loadAll,
   reducer,
   types,
   selector,
@@ -31,7 +31,7 @@ const {
 } = createAll('filters');
 
 export {
-  load,
+  loadAll,
   reducer,
   types,
   selector,
