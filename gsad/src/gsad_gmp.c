@@ -3423,7 +3423,7 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
       /* Get tag names. */
 
       if (gvm_connection_sendf (connection,
-                                "<get_tags names_only=\"1\""
+                                "<get_tags"
                                 " filter=\"resource_type=task rows=-1\"/>")
           == -1)
         {
