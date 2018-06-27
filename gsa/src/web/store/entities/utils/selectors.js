@@ -24,17 +24,14 @@ import {is_defined, has_value} from 'gmp/utils/identity';
 
 class EntitiesSelector {
 
-  constructor(state) {
+  constructor(state = {}) {
     this.state = state;
   }
 
   _getByFilter(filter) {
-    if (is_defined(this.state)) {
-      const filterString = is_defined(filter) ? filter.toFilterString() :
-        'default';
-      return this.state[filterString];
-    }
-    return undefined;
+    const filterString = is_defined(filter) ? filter.toFilterString() :
+      'default';
+    return this.state[filterString];
   }
 
   getIsLoading(filter) {
