@@ -27,43 +27,43 @@ import {createRootState, createState} from '../testing';
 import {createSelector} from '../selectors';
 import {filterIdentifier} from '../reducers';
 
-describe('EntitiesSelector getIsLoading tests', () => {
+describe('EntitiesSelector getIsLoadingEntities tests', () => {
 
-  test('isLoading for undefined state', () => {
+  test('should be false for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading()).toEqual(false);
+    expect(fooSelector.isLoadingEntities()).toEqual(false);
   });
 
-  test('isLoading for undefined state with filter', () => {
+  test('should be false for undefined state with filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const filter = Filter.fromString('name=foo');
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
 
-  test('isLoading for empty state', () => {
+  test('should be false for empty state', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading()).toEqual(false);
+    expect(fooSelector.isLoadingEntities()).toEqual(false);
   });
 
-  test('isLoading for empty state with filter', () => {
+  test('should be false for empty state with filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
 
-  test('isLoading should be true with default filter', () => {
+  test('should be true for default filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
@@ -75,10 +75,10 @@ describe('EntitiesSelector getIsLoading tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading()).toEqual(true);
+    expect(fooSelector.isLoadingEntities()).toEqual(true);
   });
 
-  test('isLoading should be true with filter', () => {
+  test('should be true for filter', () => {
     const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -91,10 +91,10 @@ describe('EntitiesSelector getIsLoading tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading(filter)).toEqual(true);
+    expect(fooSelector.isLoadingEntities(filter)).toEqual(true);
   });
 
-  test('isLoading should be false for unkown filter', () => {
+  test('should be false for unkown filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
@@ -107,10 +107,10 @@ describe('EntitiesSelector getIsLoading tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(fooSelector.getIsLoading(filter)).toEqual(false);
+    expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
 
-  test('isLoading should be undefined for undefined isLoading', () => {
+  test('should be undefined for undefined isLoading', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
@@ -121,7 +121,7 @@ describe('EntitiesSelector getIsLoading tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getIsLoading()).toBeUndefined();
+    expect(fooSelector.isLoadingEntities()).toBeUndefined();
   });
 
 });

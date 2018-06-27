@@ -56,7 +56,7 @@ describe('createAll function tests', () => {
     expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
     expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
 
-    expect(selector(rootState).getIsLoading()).toBe(true);
+    expect(selector(rootState).isLoadingEntities()).toBe(true);
   });
 });
 

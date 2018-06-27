@@ -34,7 +34,7 @@ class EntitiesSelector {
     return this.state[filterIdentifier(filter)];
   }
 
-  getIsLoading(filter) {
+  isLoadingEntities(filter) {
     const state = this._getByFilter(filter);
     return is_defined(state) ? state.isLoading : false;
   }

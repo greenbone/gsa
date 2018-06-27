@@ -55,7 +55,7 @@ export const createLoadAllFunc = ({
     const rootState = getState();
     const state = selector(rootState);
 
-    if (state.getIsLoading(filter)) {
+    if (state.isLoadingEntities(filter)) {
       // we are already loading data
       return Promise.resolve();
     }
