@@ -27,4 +27,8 @@ export const createRootState = stateData => ({
   },
 });
 
+export const createState = (name, stateData) => createRootState({
+  [name]: stateData,
+});
+
 // vim: set ts=2 sw=2 tw=80:
