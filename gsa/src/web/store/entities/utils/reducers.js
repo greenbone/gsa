@@ -49,7 +49,7 @@ export const createReducer = types => {
     }
   };
 
-  const entities = (state = null, action) => {
+  const entities = (state = [], action) => {
     switch (action.type) {
       case types.SUCCESS:
         const {data = []} = action;

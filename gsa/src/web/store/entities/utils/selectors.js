@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 
 class EntitiesSelector {
 
@@ -46,10 +46,10 @@ class EntitiesSelector {
 
   getEntities(filter) {
     const state = this._getByFilter(filter);
-    if (is_defined(state) && has_value(state.entities)) {
+    if (is_defined(state) && is_defined(state.entities)) {
       return state.entities.map(id => this.getEntity(id)).filter(is_defined);
     }
-    return undefined;
+    return [];
   }
 
   getEntity(id) {

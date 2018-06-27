@@ -111,7 +111,7 @@ describe('filter entities reducers tests', () => {
       default: {
         isLoading: true,
         error: null,
-        entities: null,
+        entities: [],
       },
     });
   });
@@ -141,7 +141,7 @@ describe('filter entities reducers tests', () => {
       default: {
         isLoading: false,
         error: 'An error',
-        entities: null,
+        entities: [],
       },
     });
   });

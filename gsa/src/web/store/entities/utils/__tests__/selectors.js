@@ -142,7 +142,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    expect(fooSelector.getEntities()).toBeUndefined();
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
   test('getEntities for undefined state with filter', () => {
@@ -151,7 +151,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
   });
 
   test('getEntities for empty state', () => {
@@ -161,7 +161,7 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toBeUndefined();
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
   test('getEntities for empty state with filter', () => {
@@ -172,7 +172,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
   });
 
   test('getEntities should return empty array if byId is empty', () => {
@@ -250,7 +250,7 @@ describe('EntitiesSelector getEntities tests', () => {
       .toEqual([{id: 'lorem'}, {id: 'ipsum'}]);
   });
 
-  test('getEntities should return undefined for undefined entities', () => {
+  test('getEntities should return empty array for undefined entities', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({
       foo: {
@@ -260,10 +260,10 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toBeUndefined();
+    expect(fooSelector.getEntities()).toEqual([]);
   });
 
-  test('getEntities should return undefined for unkown filter', () => {
+  test('getEntities should return empty array for unkown filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({
       foo: {
@@ -278,7 +278,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(fooSelector.getEntities(filter)).toBeUndefined();
+    expect(fooSelector.getEntities(filter)).toEqual([]);
   });
 
 });

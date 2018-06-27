@@ -58,7 +58,7 @@ describe('entities reducers test', () => {
           default: {
             isLoading: true,
             error: null,
-            entities: null,
+            entities: [],
           },
         });
       });
@@ -75,7 +75,7 @@ describe('entities reducers test', () => {
           'name=foo': {
             isLoading: true,
             error: null,
-            entities: null,
+            entities: [],
           },
         });
       });
@@ -99,7 +99,7 @@ describe('entities reducers test', () => {
           'name=foo': {
             isLoading: true,
             error: null,
-            entities: null,
+            entities: [],
           },
           'name=bar': {
             isLoading: false,
@@ -241,7 +241,7 @@ describe('entities reducers test', () => {
           default: {
             isLoading: false,
             error: 'An error',
-            entities: null,
+            entities: [],
           },
         });
       });
@@ -307,7 +307,7 @@ describe('entities reducers test', () => {
           },
           'name=bar': {
             isLoading: false,
-            entities: null,
+            entities: [],
             error: 'An error',
           },
         });
