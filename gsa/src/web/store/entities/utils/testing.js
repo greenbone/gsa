@@ -242,6 +242,46 @@ export const testLoadAll = (name, loadAll, types) => {
         expect(getAll).not.toBeCalled();
       });
     });
+
+    test('should fail loading all with an error', () => {
+      const filter = Filter.fromString('myfilter');
+      const rootState = createState(name, {
+        [filterIdentifier(filter)]: {
+          isLoading: false,
+        },
+      });
+
+      const getState = jest
+        .fn()
+        .mockReturnValue(rootState);
+
+      const dispatch = jest.fn();
+
+      const getAll = jest
+        .fn()
+        .mockReturnValue(Promise.reject('AnError'));
+
+      const gmp = {
+        [name]: {
+          getAll,
+        },
+      };
+
+      return loadAll({gmp, filter})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(getAll).toBeCalledWith({filter});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{
+          type: types.REQUEST,
+          filter,
+        }]);
+        expect(dispatch.mock.calls[1]).toEqual([{
+          type: types.ERROR,
+          filter,
+          error: 'AnError',
+        }]);
+      });
+    });
   });
 };
 
