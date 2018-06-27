@@ -71,6 +71,7 @@ class TagCommand extends EntityCommand {
     resource_id = '',
     resource_ids = [resource_id],
     resource_type,
+    resources_action,
     value = '',
   }) {
     const data = {
@@ -83,6 +84,7 @@ class TagCommand extends EntityCommand {
       filter,
       'resource_ids:': resource_ids.length > 0 ? resource_ids : undefined,
       resource_type,
+      resources_action,
     };
     log.debug('Saving tag', data);
     return this.action(data);

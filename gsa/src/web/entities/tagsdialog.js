@@ -89,6 +89,7 @@ class TagsDialog extends React.Component {
         name,
         resource_ids,
         resource_type: resourceType,
+        resources_action: 'add',
         value,
       });
     }
@@ -100,6 +101,7 @@ class TagsDialog extends React.Component {
         id,
         name,
         resource_type: resourceType,
+        resources_action: 'add',
         value,
       });
     }
@@ -111,6 +113,7 @@ class TagsDialog extends React.Component {
         id,
         name,
         resource_type: resourceType,
+        resources_action: 'add',
         value,
       });
     }
