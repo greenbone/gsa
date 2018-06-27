@@ -318,6 +318,88 @@ describe('entities reducers test', () => {
 
     });
 
+    test('should not override byId accidentially', () => {
+      const types = createLoadingTypes('foo');
+      const actions = createActionCreators(types);
+      const reducer = createReducer(types);
+      const filter = Filter.fromString('byId');
+      const action = actions.success([{id: 'foo'}], filter);
+      const state = {
+        byId: {
+          bar: {
+            id: 'bar',
+          },
+        },
+        default: {
+          isLoading: true,
+          error: null,
+          entities: ['bar'],
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          bar: {
+            id: 'bar',
+          },
+          foo: {
+            id: 'foo',
+          },
+        },
+        default: {
+          isLoading: true,
+          error: null,
+          entities: ['bar'],
+        },
+        [filterIdentifier(filter)]: {
+          isLoading: false,
+          error: null,
+          entities: ['foo'],
+        },
+      });
+    });
+
+    test('should not override default accidentially', () => {
+      const types = createLoadingTypes('foo');
+      const actions = createActionCreators(types);
+      const reducer = createReducer(types);
+      const filter = Filter.fromString('default');
+      const action = actions.success([{id: 'foo'}], filter);
+      const state = {
+        byId: {
+          bar: {
+            id: 'bar',
+          },
+        },
+        default: {
+          isLoading: true,
+          error: null,
+          entities: ['bar'],
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          bar: {
+            id: 'bar',
+          },
+          foo: {
+            id: 'foo',
+          },
+        },
+        default: {
+          isLoading: true,
+          error: null,
+          entities: ['bar'],
+        },
+        [filterIdentifier(filter)]: {
+          isLoading: false,
+          error: null,
+          entities: ['foo'],
+        },
+      });
+    });
+
   });
 });
 
