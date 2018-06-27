@@ -22,8 +22,9 @@
  */
 import Filter from 'gmp/models/filter';
 
+import {createRootState, createState} from '../testing';
+
 import {createSelector} from '../selectors';
-import {createRootState} from 'web/store/entities/utils/testing';
 
 describe('EntitiesSelector getIsLoading tests', () => {
 
@@ -389,6 +390,59 @@ describe('EntitiesSelector getError tests', () => {
     expect(fooSelector.getError(filter)).toBeUndefined();
   });
 
+});
+
+describe('EntitiesSelector getEntity tests', () => {
+
+  test('should return undefined for empty state', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for empty byId', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {},
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return undefined for unkown id', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toBeUndefined();
+  });
+
+  test('should return entity data', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      byId: {
+        bar: {
+          id: 'bar',
+          lorem: 'ipsum',
+        },
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntity('bar')).toEqual({
+      id: 'bar',
+      lorem: 'ipsum',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
