@@ -24,7 +24,8 @@ import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {actions, types, reducer} from '../filters';
+import {actions, types, reducer, loadAll} from '../filters';
+import {createRootState} from 'web/store/entities/utils/testing';
 
 describe('filter entities actions tests', () => {
 
@@ -134,6 +135,58 @@ describe('filter entities reducers tests', () => {
         error: 'An error',
         entities: null,
       },
+    });
+  });
+});
+
+describe('filter loadAll function tests', () => {
+
+  test('test loading success', () => {
+    const rootState = createRootState({
+      myfilter: {
+        isLoading: false,
+      },
+    });
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const dispatch = jest.fn();
+
+    const getAll = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({
+        data: 'foo',
+      }));
+
+    const gmp = {
+      filters: {
+        getAll,
+      },
+    };
+
+    const props = {
+      gmp,
+      filter: 'myfilter',
+      other: 3,
+    };
+
+    expect(loadAll).toBeDefined();
+    expect(is_function(loadAll)).toBe(true);
+
+    return loadAll(props)(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(getAll).toBeCalledWith({filter: 'myfilter'});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        type: types.REQUEST,
+        filter: 'myfilter',
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: types.SUCCESS,
+        filter: 'myfilter',
+        data: 'foo',
+      }]);
     });
   });
 });
