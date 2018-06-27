@@ -110,7 +110,7 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
     expect(fooSelector.isLoadingEntities(filter)).toEqual(false);
   });
 
-  test('should be undefined for undefined isLoading', () => {
+  test('should be false for undefined isLoading', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
@@ -121,7 +121,7 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.isLoadingEntities()).toBeUndefined();
+    expect(fooSelector.isLoadingEntities()).toBe(false);
   });
 
 });

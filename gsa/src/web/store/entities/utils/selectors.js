@@ -36,7 +36,7 @@ class EntitiesSelector {
 
   isLoadingEntities(filter) {
     const state = this._getByFilter(filter);
-    return is_defined(state) ? state.isLoading : false;
+    return is_defined(state) ? !!state.isLoading : false;
   }
 
   getError(filter) {
