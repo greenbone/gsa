@@ -46,14 +46,15 @@ class EntitiesSelector {
 
   getEntities(filter) {
     const state = this._getByFilter(filter);
-    if (is_defined(state) && is_defined(state.entities)) {
-      return state.entities.map(id => this.getEntity(id)).filter(is_defined);
+    if (is_defined(state) && is_defined(state.entities) &&
+      is_defined(this.state.byId)) {
+      return state.entities.map(id => this.state.byId[id]).filter(is_defined);
     }
     return [];
   }
 
   getEntity(id) {
-    return this.state.byId[id];
+    return is_defined(this.state.byId) ? this.state.byId[id] : undefined;
   }
 };
 
