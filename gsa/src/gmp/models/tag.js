@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -21,23 +22,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
-
 import Model from '../model.js';
 
 class Tag extends Model {
 
   static entity_type = 'tag';
 
-  parseProperties(elem) {
-    const ret = super.parseProperties(elem);
-
-    if (is_defined(elem.resource)) {
-      ret.resource = new Model(elem.resource, elem.resource.type);
-    }
-
-    return ret;
-  }
 }
 
 export default Tag;
