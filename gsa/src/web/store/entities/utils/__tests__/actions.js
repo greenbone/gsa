@@ -27,7 +27,7 @@ import Filter from 'gmp/models/filter';
 import {
   createLoadingTypes,
   createActionCreators,
-  createLoadFunc,
+  createLoadAllFunc,
 } from '../actions';
 
 describe('entities actions tests', () => {
@@ -161,7 +161,7 @@ describe('entities actions tests', () => {
         getIsLoading,
       }));
 
-      const loaderFunc = createLoadFunc({
+      const loaderFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
         name: 'foo',
@@ -209,7 +209,7 @@ describe('entities actions tests', () => {
         getIsLoading,
       }));
 
-      const loaderFunc = createLoadFunc({
+      const loaderFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
         name: 'foo',
@@ -267,7 +267,7 @@ describe('entities actions tests', () => {
       }));
 
 
-      const loaderFunc = createLoadFunc({
+      const loaderFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
         name: 'foo',
