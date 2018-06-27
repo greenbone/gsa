@@ -345,7 +345,7 @@ class TaskComponent extends React.Component {
           schedule_id,
           schedules,
           source_iface: undefined,
-          tag_name: first(tags).name,
+          tag_id: first(tags).id,
           tags,
           target_id,
           targets,

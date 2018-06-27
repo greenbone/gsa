@@ -170,8 +170,7 @@ class TaskCommand extends EntityCommand {
       max_checks,
       max_hosts,
       cve_scanner_id,
-      tag_name = '',
-      tag_value = '',
+      tag_id = '',
     } = args;
 
     const data = {
@@ -195,8 +194,7 @@ class TaskCommand extends EntityCommand {
       schedule_id,
       slave_id,
       source_iface,
-      tag_name,
-      tag_value,
+      tag_id,
       target_id,
     };
     log.debug('Creating task', args, data);

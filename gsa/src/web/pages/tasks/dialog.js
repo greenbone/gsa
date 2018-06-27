@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
-import {is_defined, map, select_save_id} from 'gmp/utils';
+import {is_defined, select_save_id} from 'gmp/utils';
 
 import {
   NO_VALUE,
@@ -62,7 +62,6 @@ import Spinner from '../../components/form/spinner.js';
 import FormGroup from '../../components/form/formgroup.js';
 import Checkbox from '../../components/form/checkbox.js';
 import YesNoRadio from '../../components/form/yesnoradio.js';
-import Text from '../../components/form/text.js';
 import TextField from '../../components/form/textfield.js';
 
 import NewIcon from '../../components/icon/newicon.js';
@@ -185,9 +184,8 @@ const TaskDialog = ({
   schedule_periods = NO_VALUE,
   schedules = [],
   source_iface = '',
-  tag_name,
+  tag_id,
   tags = [],
-  tag_value,
   target_id,
   targets,
   task,
@@ -206,10 +204,7 @@ const TaskDialog = ({
   const scanner = get_scanner(scanners, scanner_id);
   const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
 
-  const tag_items = map(tags, tag => ({
-    value: tag.name,
-    label: tag.name,
-  }));
+  const tag_items = render_select_items(tags);
 
   const target_items = render_select_items(targets);
 
@@ -248,9 +243,8 @@ const TaskDialog = ({
     scanner_type,
     scanner_id,
     source_iface,
-    tag_name,
+    tag_id,
     tags,
-    tag_value,
   };
 
   const controlledData = {
@@ -527,11 +521,10 @@ const TaskDialog = ({
             {capabilities.mayAccess('tags') && capabilities.mayCreate('tag') &&
               has_tags &&
               <React.Fragment>
-                <h3>{_('Tag')}</h3>
-                <FormGroup>
+                <FormGroup title={_('Tag')}>
                   <Divider>
                     <Checkbox
-                      title={_('Add Tag:')}
+                      title={_('add:')}
                       name="add_tag"
                       checkedValue={YES_VALUE}
                       unCheckedValue={NO_VALUE}
@@ -539,17 +532,9 @@ const TaskDialog = ({
                       onChange={onValueChange}
                     />
                     <Select
-                      name="tag_name"
+                      name="tag_id"
                       items={tag_items}
-                      value={state.tag_name}
-                      onChange={onValueChange}
-                    />
-                    <Text>
-                      {_('with Value')}
-                    </Text>
-                    <TextField
-                      name="tag_value"
-                      value={state.tag_value}
+                      value={state.tag_id}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -595,8 +580,7 @@ TaskDialog.propTypes = {
   schedule_periods: PropTypes.yesno,
   schedules: PropTypes.array,
   source_iface: PropTypes.string,
-  tag_name: PropTypes.string,
-  tag_value: PropTypes.string,
+  tag_id: PropTypes.string,
   tags: PropTypes.array,
   target_id: PropTypes.idOrZero,
   targets: PropTypes.array,
