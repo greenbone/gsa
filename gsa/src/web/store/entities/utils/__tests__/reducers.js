@@ -25,7 +25,7 @@ import {is_function} from 'gmp/utils/identity';
 import Filter from 'gmp/models/filter';
 
 import {createLoadingTypes, createActionCreators} from '../actions';
-import {createReducer} from '../reducers';
+import {createReducer, filterIdentifier} from '../reducers';
 
 describe('entities reducers test', () => {
 
@@ -72,7 +72,7 @@ describe('entities reducers test', () => {
 
         expect(reducer(undefined, action)).toEqual({
           byId: {},
-          'name=foo': {
+          [filterIdentifier(filter)]: {
             isLoading: true,
             error: null,
             entities: [],
@@ -85,9 +85,10 @@ describe('entities reducers test', () => {
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
         const filter = Filter.fromString('name=foo');
+        const otherFilter = Filter.fromString('name=bar');
         const action = actions.request(filter);
         const state = {
-          'name=bar': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: false,
             entities: [],
             error: null,
@@ -96,12 +97,12 @@ describe('entities reducers test', () => {
 
         expect(reducer(state, action)).toEqual({
           byId: {},
-          'name=foo': {
+          [filterIdentifier(filter)]: {
             isLoading: true,
             error: null,
             entities: [],
           },
-          'name=bar': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: false,
             entities: [],
             error: null,
@@ -116,7 +117,7 @@ describe('entities reducers test', () => {
         const filter = Filter.fromString('name=foo');
         const action = actions.request(filter);
         const state = {
-          'name=foo': {
+          [filterIdentifier(filter)]: {
             isLoading: false,
             entities: ['foo', 'bar'],
             error: 'An error',
@@ -125,7 +126,7 @@ describe('entities reducers test', () => {
 
         expect(reducer(state, action)).toEqual({
           byId: {},
-          'name=foo': {
+          [filterIdentifier(filter)]: {
             isLoading: true,
             entities: ['foo', 'bar'],
             error: 'An error',
@@ -195,9 +196,10 @@ describe('entities reducers test', () => {
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
         const filter = Filter.fromString('name=bar');
+        const otherFilter = Filter.fromString('name=foo');
         const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter);
         const state = {
-          'name=foo': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
             error: 'An error',
@@ -213,12 +215,12 @@ describe('entities reducers test', () => {
               id: 'bar',
             },
           },
-          'name=foo': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
             error: 'An error',
           },
-          'name=bar': {
+          [filterIdentifier(filter)]: {
             isLoading: false,
             entities: ['foo', 'bar'],
             error: null,
@@ -274,6 +276,7 @@ describe('entities reducers test', () => {
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
         const filter = Filter.fromString('name=bar');
+        const otherFilter = Filter.fromString('name=foo');
         const action = actions.error('An error', filter);
         const state = {
           byId: {
@@ -284,7 +287,7 @@ describe('entities reducers test', () => {
               id: 'ipsum',
             },
           },
-          'name=foo': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
             error: 'Another error',
@@ -300,12 +303,12 @@ describe('entities reducers test', () => {
               id: 'ipsum',
             },
           },
-          'name=foo': {
+          [filterIdentifier(otherFilter)]: {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
             error: 'Another error',
           },
-          'name=bar': {
+          [filterIdentifier(filter)]: {
             isLoading: false,
             entities: [],
             error: 'An error',

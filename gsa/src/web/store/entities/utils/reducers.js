@@ -24,6 +24,10 @@ import {combineReducers} from 'redux';
 
 import {is_defined} from 'gmp/utils/identity';
 
+export const filterIdentifier = filter => is_defined(filter) ?
+  `filter:${filter.toFilterString()}` :
+  'default';
+
 export const createReducer = types => {
 
   const isLoading = (state = false, action) => {
@@ -84,8 +88,7 @@ export const createReducer = types => {
       case types.REQUEST:
       case types.SUCCESS:
       case types.ERROR:
-        const filterString = is_defined(action.filter) ?
-          action.filter.toFilterString() : 'default';
+        const filterString = filterIdentifier(action.filter);
         return {
           ...state,
           byId: byId(state.byId, action),

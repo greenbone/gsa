@@ -25,6 +25,7 @@ import Filter from 'gmp/models/filter';
 import {createRootState, createState} from '../testing';
 
 import {createSelector} from '../selectors';
+import {filterIdentifier} from '../reducers';
 
 describe('EntitiesSelector getIsLoading tests', () => {
 
@@ -78,17 +79,17 @@ describe('EntitiesSelector getIsLoading tests', () => {
   });
 
   test('isLoading should be true with filter', () => {
+    const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
         isLoading: false,
       },
-      'name=foo': {
+      [filterIdentifier(filter)]: {
         isLoading: true,
       },
     });
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
 
     expect(fooSelector.getIsLoading(filter)).toEqual(true);
   });
@@ -200,6 +201,7 @@ describe('EntitiesSelector getEntities tests', () => {
   });
 
   test('getEntities should return entities with filter', () => {
+    const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {
@@ -219,12 +221,11 @@ describe('EntitiesSelector getEntities tests', () => {
       default: {
         entities: ['foo', 'bar'],
       },
-      'name=foo': {
+      [filterIdentifier(filter)]: {
         entities: ['lorem', 'ipsum'],
       },
     });
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
 
     expect(fooSelector.getEntities(filter))
       .toEqual([{id: 'lorem'}, {id: 'ipsum'}]);
@@ -313,17 +314,17 @@ describe('EntitiesSelector getError tests', () => {
   });
 
   test('getError should return error with filter', () => {
+    const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
         error: 'An error',
       },
-      'name=foo': {
+      [filterIdentifier(filter)]: {
         error: 'Another error',
       },
     });
     const fooSelector = selector(rootState);
-    const filter = Filter.fromString('name=foo');
 
     expect(fooSelector.getError(filter)).toEqual('Another error');
   });

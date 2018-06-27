@@ -22,6 +22,8 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
+import {filterIdentifier} from './reducers';
+
 class EntitiesSelector {
 
   constructor(state = {}) {
@@ -29,9 +31,7 @@ class EntitiesSelector {
   }
 
   _getByFilter(filter) {
-    const filterString = is_defined(filter) ? filter.toFilterString() :
-      'default';
-    return this.state[filterString];
+    return this.state[filterIdentifier(filter)];
   }
 
   getIsLoading(filter) {
