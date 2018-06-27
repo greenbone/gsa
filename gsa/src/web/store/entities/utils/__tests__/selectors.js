@@ -175,10 +175,35 @@ describe('EntitiesSelector getEntities tests', () => {
     expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
+  test('getEntities should return empty array if byId is empty', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({
+      foo: {
+        byId: {},
+        default: {
+          entities: ['foo', 'bar'],
+        },
+        'name=foo': {
+          entities: ['lorem', 'ipsum'],
+        },
+      },
+    });
+    const fooSelector = selector(rootState);
+    expect(fooSelector.getEntities()).toEqual([]);
+  });
+
   test('getEntities should return entities with default filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({
       foo: {
+        byId: {
+          foo: {
+            id: 'foo',
+          },
+          bar: {
+            id: 'bar',
+          },
+        },
         default: {
           entities: ['foo', 'bar'],
         },
@@ -189,13 +214,27 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toEqual(['foo', 'bar']);
+    expect(fooSelector.getEntities()).toEqual([{id: 'foo'}, {id: 'bar'}]);
   });
 
   test('getEntities should return entities with filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({
       foo: {
+        byId: {
+          foo: {
+            id: 'foo',
+          },
+          bar: {
+            id: 'bar',
+          },
+          lorem: {
+            id: 'lorem',
+          },
+          ipsum: {
+            id: 'ipsum',
+          },
+        },
         default: {
           entities: ['foo', 'bar'],
         },
@@ -207,7 +246,8 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toEqual(['lorem', 'ipsum']);
+    expect(fooSelector.getEntities(filter))
+      .toEqual([{id: 'lorem'}, {id: 'ipsum'}]);
   });
 
   test('getEntities should return undefined for undefined entities', () => {

@@ -54,6 +54,7 @@ describe('entities reducers test', () => {
         const reducer = createReducer(types);
 
         expect(reducer(undefined, action)).toEqual({
+          byId: {},
           default: {
             isLoading: true,
             error: null,
@@ -70,6 +71,7 @@ describe('entities reducers test', () => {
         const action = actions.request(filter);
 
         expect(reducer(undefined, action)).toEqual({
+          byId: {},
           'name=foo': {
             isLoading: true,
             error: null,
@@ -93,6 +95,7 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {},
           'name=foo': {
             isLoading: true,
             error: null,
@@ -121,6 +124,7 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {},
           'name=foo': {
             isLoading: true,
             entities: ['foo', 'bar'],
@@ -137,9 +141,17 @@ describe('entities reducers test', () => {
         const types = createLoadingTypes('FOO');
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
-        const action = actions.success(['foo', 'bar']);
+        const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
 
         expect(reducer(undefined, action)).toEqual({
+          byId: {
+            foo: {
+              id: 'foo',
+            },
+            bar: {
+              id: 'bar',
+            },
+          },
           default: {
             isLoading: false,
             error: null,
@@ -152,7 +164,7 @@ describe('entities reducers test', () => {
         const types = createLoadingTypes('FOO');
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
-        const action = actions.success(['foo', 'bar']);
+        const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
         const state = {
           default: {
             isLoading: true,
@@ -162,6 +174,14 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {
+            foo: {
+              id: 'foo',
+            },
+            bar: {
+              id: 'bar',
+            },
+          },
           default: {
             isLoading: false,
             error: null,
@@ -175,7 +195,7 @@ describe('entities reducers test', () => {
         const actions = createActionCreators(types);
         const reducer = createReducer(types);
         const filter = Filter.fromString('name=bar');
-        const action = actions.success(['foo', 'bar'], filter);
+        const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter);
         const state = {
           'name=foo': {
             isLoading: true,
@@ -185,6 +205,14 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {
+            foo: {
+              id: 'foo',
+            },
+            bar: {
+              id: 'bar',
+            },
+          },
           'name=foo': {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
@@ -209,6 +237,7 @@ describe('entities reducers test', () => {
         const action = actions.error('An error');
 
         expect(reducer(undefined, action)).toEqual({
+          byId: {},
           default: {
             isLoading: false,
             error: 'An error',
@@ -231,6 +260,7 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {},
           default: {
             isLoading: false,
             error: 'An error',
@@ -246,6 +276,14 @@ describe('entities reducers test', () => {
         const filter = Filter.fromString('name=bar');
         const action = actions.error('An error', filter);
         const state = {
+          byId: {
+            lorem: {
+              id: 'lorem',
+            },
+            ipsum: {
+              id: 'ipsum',
+            },
+          },
           'name=foo': {
             isLoading: true,
             entities: ['lorem', 'ipsum'],
@@ -254,6 +292,14 @@ describe('entities reducers test', () => {
         };
 
         expect(reducer(state, action)).toEqual({
+          byId: {
+            lorem: {
+              id: 'lorem',
+            },
+            ipsum: {
+              id: 'ipsum',
+            },
+          },
           'name=foo': {
             isLoading: true,
             entities: ['lorem', 'ipsum'],

@@ -52,7 +52,22 @@ export const createReducer = types => {
   const entities = (state = null, action) => {
     switch (action.type) {
       case types.SUCCESS:
-        return action.data;
+        const {data = []} = action;
+        return data.map(entity => entity.id);
+      default:
+        return state;
+    }
+  };
+
+  const byId = (state = {}, action) => {
+    switch (action.type) {
+      case types.SUCCESS:
+        const {data = []} = action;
+        const nextState = {
+          ...state,
+        };
+        data.forEach(d => nextState[d.id] = d);
+        return nextState;
       default:
         return state;
     }
@@ -73,6 +88,7 @@ export const createReducer = types => {
           action.filter.toFilterString() : 'default';
         return {
           ...state,
+          byId: byId(state.byId, action),
           [filterString]: combinedReducer(state[filterString], action),
         };
       default:

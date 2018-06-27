@@ -24,8 +24,9 @@ import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
+import {createRootState} from '../utils/testing';
+
 import {actions, types, reducer, loadAll} from '../filters';
-import {createRootState} from 'web/store/entities/utils/testing';
 
 describe('filter entities actions tests', () => {
 
@@ -94,18 +95,19 @@ describe('filter entities actions tests', () => {
 
 describe('filter entities reducers tests', () => {
 
-  test('Should be a reducer function', () => {
+  test('should be a reducer function', () => {
     expect(is_function(reducer)).toBe(true);
   });
 
-  test('Should create initial state', () => {
+  test('should create initial state', () => {
     expect(reducer(undefined, {})).toEqual({});
   });
 
-  test('should set isLoading with default filter', () => {
+  test('should reduce request action', () => {
     const action = actions.request();
 
     expect(reducer(undefined, action)).toEqual({
+      byId: {},
       default: {
         isLoading: true,
         error: null,
@@ -114,22 +116,28 @@ describe('filter entities reducers tests', () => {
     });
   });
 
-  test('should set isLoading with default filter', () => {
-    const action = actions.success(['foo', 'bar']);
+  test('should reduce success action', () => {
+    const action = actions.success([{id: 'foo'}]);
 
     expect(reducer(undefined, action)).toEqual({
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
       default: {
         isLoading: false,
         error: null,
-        entities: ['foo', 'bar'],
+        entities: ['foo'],
       },
     });
   });
 
-  test('should set isLoading and error with default filter', () => {
+  test('should reduce error action', () => {
     const action = actions.error('An error');
 
     expect(reducer(undefined, action)).toEqual({
+      byId: {},
       default: {
         isLoading: false,
         error: 'An error',
@@ -142,6 +150,7 @@ describe('filter entities reducers tests', () => {
 describe('filter loadAll function tests', () => {
 
   test('test loading success', () => {
+    const filter = Filter.fromString('myfilter');
     const rootState = createRootState({
       myfilter: {
         isLoading: false,
@@ -167,7 +176,7 @@ describe('filter loadAll function tests', () => {
 
     const props = {
       gmp,
-      filter: 'myfilter',
+      filter,
       other: 3,
     };
 
@@ -176,15 +185,15 @@ describe('filter loadAll function tests', () => {
 
     return loadAll(props)(dispatch, getState).then(() => {
       expect(getState).toBeCalled();
-      expect(getAll).toBeCalledWith({filter: 'myfilter'});
+      expect(getAll).toBeCalledWith({filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         type: types.REQUEST,
-        filter: 'myfilter',
+        filter,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
         type: types.SUCCESS,
-        filter: 'myfilter',
+        filter,
         data: 'foo',
       }]);
     });
