@@ -23,7 +23,7 @@
 import {
   createLoadingTypes,
   createActionCreators,
-  createLoadFunc,
+  createLoadAllFunc,
 } from './actions';
 
 import {createReducer} from './reducers';
@@ -36,7 +36,7 @@ export const createAll = name => {
   const types = createLoadingTypes(name);
   const actions = createActionCreators(types);
   const reducer = createReducer(types);
-  const load = createLoadFunc({
+  const loadAll = createLoadAllFunc({
     selector,
     actionCreators: actions,
     name,
@@ -46,7 +46,7 @@ export const createAll = name => {
     selector,
     types,
     actions,
-    load,
+    loadAll,
     reducer,
   };
 };

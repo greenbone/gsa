@@ -22,19 +22,16 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
+import {filterIdentifier} from './reducers';
+
 class EntitiesSelector {
 
-  constructor(state) {
+  constructor(state = {}) {
     this.state = state;
   }
 
   _getByFilter(filter) {
-    if (is_defined(this.state)) {
-      const filterString = is_defined(filter) ? filter.toFilterString() :
-        'default';
-      return this.state[filterString];
-    }
-    return undefined;
+    return this.state[filterIdentifier(filter)];
   }
 
   getIsLoading(filter) {
@@ -49,7 +46,15 @@ class EntitiesSelector {
 
   getEntities(filter) {
     const state = this._getByFilter(filter);
-    return is_defined(state) ? state.entities : undefined;
+    if (is_defined(state) && is_defined(state.entities) &&
+      is_defined(this.state.byId)) {
+      return state.entities.map(id => this.state.byId[id]).filter(is_defined);
+    }
+    return [];
+  }
+
+  getEntity(id) {
+    return is_defined(this.state.byId) ? this.state.byId[id] : undefined;
   }
 };
 
