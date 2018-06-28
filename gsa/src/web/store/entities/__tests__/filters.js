@@ -22,10 +22,10 @@
  */
 import {testReducers, testActions, testLoadAll} from '../utils/testing';
 
-import {actions, types, reducer, loadAll} from '../filters';
+import {actions, reducer, loadAll} from '../filters';
 
 testReducers('filters', reducer, actions);
-testActions('filters', actions, types);
-testLoadAll('filters', loadAll, types);
+testActions('filters', actions);
+testLoadAll('filters', loadAll);
 
 // vim: set ts=2 sw=2 tw=80:

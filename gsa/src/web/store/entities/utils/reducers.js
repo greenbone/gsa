@@ -24,18 +24,20 @@ import {combineReducers} from 'redux';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import {types} from './actions';
+
 export const filterIdentifier = filter => is_defined(filter) ?
   `filter:${filter.toFilterString()}` :
   'default';
 
-export const createReducer = types => {
+export const createReducer = entityType => {
 
   const isLoading = (state = false, action) => {
     switch (action.type) {
-      case types.REQUEST:
+      case types.ENTITIES_LOADING_REQUEST:
         return true;
-      case types.SUCCESS:
-      case types.ERROR:
+      case types.ENTITIES_LOADING_SUCCESS:
+      case types.ENTITIES_LOADING_ERROR:
         return false;
       default:
         return state;
@@ -44,9 +46,9 @@ export const createReducer = types => {
 
   const error = (state = null, action) => {
     switch (action.type) {
-      case types.SUCCESS:
+      case types.ENTITIES_LOADING_SUCCESS:
         return null;
-      case types.ERROR:
+      case types.ENTITIES_LOADING_ERROR:
         return action.error;
       default:
         return state;
@@ -55,7 +57,7 @@ export const createReducer = types => {
 
   const entities = (state = [], action) => {
     switch (action.type) {
-      case types.SUCCESS:
+      case types.ENTITIES_LOADING_SUCCESS:
         const {data = []} = action;
         return data.map(entity => entity.id);
       default:
@@ -65,7 +67,7 @@ export const createReducer = types => {
 
   const byId = (state = {}, action) => {
     switch (action.type) {
-      case types.SUCCESS:
+      case types.ENTITIES_LOADING_SUCCESS:
         const {data = []} = action;
         const nextState = {
           ...state,
@@ -84,10 +86,14 @@ export const createReducer = types => {
   });
 
   return (state = {}, action) => {
+    if (action.entityType !== entityType) {
+      return state;
+    }
+
     switch (action.type) {
-      case types.REQUEST:
-      case types.SUCCESS:
-      case types.ERROR:
+      case types.ENTITIES_LOADING_REQUEST:
+      case types.ENTITIES_LOADING_SUCCESS:
+      case types.ENTITIES_LOADING_ERROR:
         const filterString = filterIdentifier(action.filter);
         return {
           ...state,

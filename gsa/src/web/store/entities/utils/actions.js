@@ -21,27 +21,27 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const createLoadingTypes = name => {
-  name = name.toUpperCase();
-  return {
-    REQUEST: `${name}_LOADING_REQUEST`,
-    SUCCESS: `${name}_LOADING_SUCCESS`,
-    ERROR: `${name}_LOADING_ERROR`,
-  };
+export const types = {
+  ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
+  ENTITIES_LOADING_SUCCESS: 'ENTITIES_LOADING_SUCCESS',
+  ENTITIES_LOADING_ERROR: 'ENTITIES_LOADING_ERROR',
 };
 
-export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
+export const createEntitiesActionCreators = entityType => ({
   request: filter => ({
-    type: REQUEST,
+    type: types.ENTITIES_LOADING_REQUEST,
+    entityType,
     filter,
   }),
   success: (data, filter) => ({
-    type: SUCCESS,
+    type: types.ENTITIES_LOADING_SUCCESS,
+    entityType,
     filter,
     data,
   }),
   error: (error, filter) => ({
-    type: ERROR,
+    type: types.ENTITIES_LOADING_ERROR,
+    entityType,
     filter,
     error,
   }),
@@ -50,7 +50,7 @@ export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
 export const createLoadAllFunc = ({
   selector,
   actionCreators,
-  name,
+  entityType,
 }) => ({gmp, filter, ...props}) => (dispatch, getState) => {
     const rootState = getState();
     const state = selector(rootState);
@@ -62,7 +62,7 @@ export const createLoadAllFunc = ({
 
     dispatch(actionCreators.request(filter));
 
-    return gmp[name].getAll({filter}).then(
+    return gmp[entityType].getAll({filter}).then(
       response => dispatch(actionCreators.success(response.data, filter)),
       error => dispatch(actionCreators.error(error, filter)),
     );

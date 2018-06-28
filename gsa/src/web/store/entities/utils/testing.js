@@ -23,7 +23,9 @@
 import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
-import {filterIdentifier} from 'web/store/entities/utils/reducers';
+
+import {filterIdentifier} from './reducers';
+import {types} from './actions';
 
 export const createRootState = stateData => ({
   entities: {
@@ -35,8 +37,8 @@ export const createState = (name, stateData) => createRootState({
   [name]: stateData,
 });
 
-export const testReducers = (name, reducer, actions) => {
-  describe(`${name} entities reducer tests`, () => {
+export const testReducers = (entityType, reducer, actions) => {
+  describe(`${entityType} entities reducer tests`, () => {
 
     test('should be a reducer function', () => {
       expect(is_function(reducer)).toBe(true);
@@ -91,8 +93,8 @@ export const testReducers = (name, reducer, actions) => {
   });
 };
 
-export const testActions = (name, actions, types) => {
-  describe(`${name} entities actions tests`, () => {
+export const testActions = (entityType, actions) => {
+  describe(`${entityType} entities actions tests`, () => {
 
     test('should have action creators', () => {
       expect(is_function(actions.request)).toBe(true);
@@ -103,7 +105,8 @@ export const testActions = (name, actions, types) => {
     test('should create a load filters request action', () => {
       const action = actions.request();
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
+        entityType,
       });
     });
 
@@ -112,16 +115,18 @@ export const testActions = (name, actions, types) => {
       const action = actions.request(filter);
 
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
         filter,
+        entityType,
       });
     });
 
     test('should create a load filters success action', () => {
       const action = actions.success(['foo', 'bar']);
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
         data: ['foo', 'bar'],
+        entityType,
       });
     });
 
@@ -130,17 +135,19 @@ export const testActions = (name, actions, types) => {
       const action = actions.success(['foo', 'bar'], filter);
 
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
         data: ['foo', 'bar'],
         filter,
+        entityType,
       });
     });
 
     test('should create a load filters error action', () => {
       const action = actions.error('An error');
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
         error: 'An error',
+        entityType,
       });
     });
 
@@ -149,22 +156,23 @@ export const testActions = (name, actions, types) => {
       const action = actions.error('An error', filter);
 
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
         error: 'An error',
         filter,
+        entityType,
       });
     });
 
   });
 };
 
-export const testLoadAll = (name, loadAll, types) => {
+export const testLoadAll = (entityType, loadAll) => {
 
-  describe(`${name} loadAll function tests`, () => {
+  describe(`${entityType} loadAll function tests`, () => {
 
     test('should load all entities successfully', () => {
       const filter = Filter.fromString('myfilter');
-      const rootState = createState(name, {
+      const rootState = createState(entityType, {
         [filterIdentifier(filter)]: {
           isLoading: false,
         },
@@ -182,7 +190,7 @@ export const testLoadAll = (name, loadAll, types) => {
         }));
 
       const gmp = {
-        [name]: {
+        [entityType]: {
           getAll,
         },
       };
@@ -201,11 +209,13 @@ export const testLoadAll = (name, loadAll, types) => {
         expect(getAll).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
-          type: types.REQUEST,
+          type: types.ENTITIES_LOADING_REQUEST,
           filter,
+          entityType,
         }]);
         expect(dispatch.mock.calls[1]).toEqual([{
-          type: types.SUCCESS,
+          type: types.ENTITIES_LOADING_SUCCESS,
+          entityType,
           filter,
           data: 'foo',
         }]);
@@ -214,7 +224,7 @@ export const testLoadAll = (name, loadAll, types) => {
 
     test('should not load all entities if isLoading is true', () => {
       const filter = Filter.fromString('myfilter');
-      const rootState = createState(name, {
+      const rootState = createState(entityType, {
         [filterIdentifier(filter)]: {
           isLoading: true,
         },
@@ -231,7 +241,7 @@ export const testLoadAll = (name, loadAll, types) => {
         .mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
-        [name]: {
+        [entityType]: {
           getAll,
         },
       };
@@ -245,7 +255,7 @@ export const testLoadAll = (name, loadAll, types) => {
 
     test('should fail loading all with an error', () => {
       const filter = Filter.fromString('myfilter');
-      const rootState = createState(name, {
+      const rootState = createState(entityType, {
         [filterIdentifier(filter)]: {
           isLoading: false,
         },
@@ -262,7 +272,7 @@ export const testLoadAll = (name, loadAll, types) => {
         .mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
-        [name]: {
+        [entityType]: {
           getAll,
         },
       };
@@ -272,11 +282,13 @@ export const testLoadAll = (name, loadAll, types) => {
         expect(getAll).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
-          type: types.REQUEST,
+          type: types.ENTITIES_LOADING_REQUEST,
+          entityType,
           filter,
         }]);
         expect(dispatch.mock.calls[1]).toEqual([{
-          type: types.ERROR,
+          type: types.ENTITIES_LOADING_ERROR,
+          entityType,
           filter,
           error: 'AnError',
         }]);

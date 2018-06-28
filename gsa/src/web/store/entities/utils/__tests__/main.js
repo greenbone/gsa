@@ -32,7 +32,6 @@ describe('createAll function tests', () => {
       loadAll,
       reducer,
       actions,
-      types,
       selector,
     } = createAll('foo');
 
@@ -51,10 +50,6 @@ describe('createAll function tests', () => {
     expect(is_function(actions.request)).toBe(true);
     expect(is_function(actions.success)).toBe(true);
     expect(is_function(actions.error)).toBe(true);
-
-    expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-    expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-    expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
 
     expect(selector(rootState).isLoadingEntities()).toBe(true);
   });

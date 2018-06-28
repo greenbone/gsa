@@ -25,37 +25,17 @@ import {is_function} from 'gmp/utils/identity';
 import Filter from 'gmp/models/filter';
 
 import {
-  createLoadingTypes,
-  createActionCreators,
+  types,
+  createEntitiesActionCreators,
   createLoadAllFunc,
 } from '../actions';
 
 describe('entities actions tests', () => {
 
-  describe('createLoadingTypes tests', () => {
-
-    test('should create loading types', () => {
-      const types = createLoadingTypes('foo');
-
-      expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-      expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-      expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
-    });
-
-    test('should not care about case when creating loading types', () => {
-      const types = createLoadingTypes('fOO');
-
-      expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-      expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-      expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
-    });
-  });
-
-  describe('createActionCreators tests', () => {
+  describe('createEntitiesActionCreators tests', () => {
 
     test('should create action creators for loading', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
 
       expect(actions.request).toBeDefined();
       expect(is_function(actions.request)).toBe(true);
@@ -66,70 +46,70 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load request action', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.request();
 
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
+        entityType: 'foo',
       });
     });
 
     test('should create a load request action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.request(filter);
 
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
+        entityType: 'foo',
         filter,
       });
     });
 
     test('should create a load success action', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.success(['foo', 'bar']);
 
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
+        entityType: 'foo',
         data: ['foo', 'bar'],
       });
     });
 
     test('should create a load success action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.success(['foo', 'bar'], filter);
 
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
+        entityType: 'foo',
         data: ['foo', 'bar'],
         filter,
       });
     });
 
     test('should create a load error action', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.error('An error');
 
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
+        entityType: 'foo',
         error: 'An error',
       });
     });
 
     test('should create a load error action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
       const action = actions.error('An error', filter);
 
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
+        entityType: 'foo',
         error: 'An error',
         filter,
       });
@@ -139,8 +119,7 @@ describe('entities actions tests', () => {
   describe('createLoadAllFunc tests', () => {
 
     test('test isLoading true', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActionCreators('foo');
 
       const getState = jest
         .fn()
@@ -164,7 +143,7 @@ describe('entities actions tests', () => {
       const loadAllFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
-        name: 'foo',
+        entityType: 'foo',
       });
 
       expect(loadAllFunc).toBeDefined();
@@ -212,7 +191,7 @@ describe('entities actions tests', () => {
       const loadAllFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
-        name: 'foo',
+        entityType: 'foo',
       });
 
       const props = {
@@ -269,7 +248,7 @@ describe('entities actions tests', () => {
       const loadAllFunc = createLoadAllFunc({
         selector,
         actionCreators: actions,
-        name: 'foo',
+        entityType: 'foo',
       });
 
       const props = {
