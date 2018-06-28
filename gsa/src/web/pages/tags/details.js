@@ -25,12 +25,9 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils/identity';
-import {has_id} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno, type_name, N_A} from '../../utils/render.js';
-
-import EntityLink from '../../entity/link.js';
+import {render_yesno, type_name} from '../../utils/render.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -45,7 +42,7 @@ const TagDetails = ({
   const {
     comment,
     value,
-    resource,
+    resources,
   } = entity;
   return (
     <Layout
@@ -74,28 +71,13 @@ const TagDetails = ({
             </TableData>
           </TableRow>
 
-          {is_defined(resource) &&
+          {is_defined(resources) &&
             <TableRow>
               <TableData>
                 {_('Resoure Type')}
               </TableData>
               <TableData>
-                {type_name(resource.entity_type)}
-              </TableData>
-            </TableRow>
-          }
-          {has_id(resource) &&
-            <TableRow>
-              <TableData>
-                {_('Resource')}
-              </TableData>
-              <TableData>
-                {entity.isOrphan() ?
-                  <span>{N_A}{' '}
-                    <i>({resource.id})</i>
-                  </span> :
-                  <EntityLink entity={resource} />
-                }
+                {type_name(resources.type)}
               </TableData>
             </TableRow>
           }
