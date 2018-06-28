@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {testReducers, testActions, testLoadEntities} from '../utils/testing';
+import {testReducer, testActions, testLoadEntities} from '../utils/testing';
 
 import {entitiesActions, reducer, loadEntities} from '../filters';
 
-testReducers('filter', reducer, entitiesActions);
+testReducer('filter', reducer, entitiesActions);
 testActions('filter', entitiesActions);
 testLoadEntities('filter', loadEntities);
 

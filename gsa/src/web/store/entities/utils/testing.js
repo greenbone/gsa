@@ -38,7 +38,7 @@ export const createState = (name, stateData) => createRootState({
   [name]: stateData,
 });
 
-export const testReducers = (entityType, reducer, actions) => {
+export const testReducer = (entityType, reducer, actions) => {
   describe(`${entityType} entities reducer tests`, () => {
 
     test('should be a reducer function', () => {
