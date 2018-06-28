@@ -66,11 +66,9 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
   test('should be true for default filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        isLoading: true,
-      },
-      'name=foo': {
-        isLoading: false,
+      isLoading: {
+        default: true,
+        'name=foo': false,
       },
     });
     const fooSelector = selector(rootState);
@@ -82,11 +80,9 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
     const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        isLoading: false,
-      },
-      [filterIdentifier(filter)]: {
-        isLoading: true,
+      isLoading: {
+        default: false,
+        [filterIdentifier(filter)]: true,
       },
     });
     const fooSelector = selector(rootState);
@@ -97,11 +93,9 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
   test('should be false for unkown filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        isLoading: true,
-      },
-      'name=foo': {
-        isLoading: true,
+      isLoading: {
+        default: true,
+        'name=foo': true,
       },
     });
     const fooSelector = selector(rootState);
@@ -113,10 +107,8 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
   test('should be false for undefined isLoading', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-      },
-      'name=foo': {
-        isLoading: false,
+      isLoading: {
+        'name=foo': true,
       },
     });
     const fooSelector = selector(rootState);
@@ -165,12 +157,8 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {},
-      default: {
-        entities: ['foo', 'bar'],
-      },
-      'name=foo': {
-        entities: ['lorem', 'ipsum'],
-      },
+      default: ['foo', 'bar'],
+      'name=foo': ['lorem', 'ipsum'],
     });
     const fooSelector = selector(rootState);
 
@@ -188,12 +176,8 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'bar',
         },
       },
-      default: {
-        entities: ['foo', 'bar'],
-      },
-      'name=foo': {
-        entities: ['lorem', 'ipsum'],
-      },
+      default: ['foo', 'bar'],
+      'name=foo': ['lorem', 'ipsum'],
     });
     const fooSelector = selector(rootState);
 
@@ -218,12 +202,8 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'ipsum',
         },
       },
-      default: {
-        entities: ['foo', 'bar'],
-      },
-      [filterIdentifier(filter)]: {
-        entities: ['lorem', 'ipsum'],
-      },
+      default: ['foo', 'bar'],
+      [filterIdentifier(filter)]: ['lorem', 'ipsum'],
     });
     const fooSelector = selector(rootState);
 
@@ -245,12 +225,8 @@ describe('EntitiesSelector getEntities tests', () => {
   test('getEntities should return empty array for unkown filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        entities: ['foo', 'bar'],
-      },
-      'name=foo': {
-        entities: ['lorem', 'ipsum'],
-      },
+      default: ['foo', 'bar'],
+      'name=foo': ['lorem', 'ipsum'],
     });
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
@@ -297,15 +273,12 @@ describe('EntitiesSelector getError tests', () => {
   });
 
   test('getError should return error with default filter', () => {
+    const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
-    const rootState = createRootState({
-      foo: {
-        default: {
-          error: 'An error',
-        },
-        'name=foo': {
-          error: 'Another error',
-        },
+    const rootState = createState('foo', {
+      errors: {
+        default: 'An error',
+        [filterIdentifier(filter)]: 'Another error',
       },
     });
     const fooSelector = selector(rootState);
@@ -317,11 +290,9 @@ describe('EntitiesSelector getError tests', () => {
     const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        error: 'An error',
-      },
-      [filterIdentifier(filter)]: {
-        error: 'Another error',
+      errors: {
+        default: 'An error',
+        [filterIdentifier(filter)]: 'Another error',
       },
     });
     const fooSelector = selector(rootState);
@@ -341,13 +312,12 @@ describe('EntitiesSelector getError tests', () => {
   });
 
   test('getError should return undefined for unkown filter', () => {
+    const otherFilter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
-      default: {
-        error: 'An error',
-      },
-      'name=foo': {
-        error: 'Another error',
+      errors: {
+        default: 'An error',
+        [filterIdentifier(otherFilter)]: 'Another error',
       },
     });
     const filter = Filter.fromString('name=bar');

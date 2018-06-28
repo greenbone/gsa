@@ -30,25 +30,22 @@ class EntitiesSelector {
     this.state = state;
   }
 
-  _getByFilter(filter) {
-    return this.state[filterIdentifier(filter)];
-  }
-
   isLoadingEntities(filter) {
-    const state = this._getByFilter(filter);
-    return is_defined(state) ? !!state.isLoading : false;
+    return is_defined(this.state.isLoading) ?
+      !!this.state.isLoading[filterIdentifier(filter)] :
+      false;
   }
 
   getError(filter) {
-    const state = this._getByFilter(filter);
-    return is_defined(state) ? state.error : undefined;
+    return is_defined(this.state.errors) ?
+      this.state.errors[filterIdentifier(filter)] :
+      undefined;
   }
 
   getEntities(filter) {
-    const state = this._getByFilter(filter);
-    if (is_defined(state) && is_defined(state.entities) &&
-      is_defined(this.state.byId)) {
-      return state.entities.map(id => this.state.byId[id]).filter(is_defined);
+    const ids = this.state[filterIdentifier(filter)];
+    if (is_defined(ids) && is_defined(this.state.byId)) {
+      return ids.map(id => this.state.byId[id]).filter(is_defined);
     }
     return [];
   }

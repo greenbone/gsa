@@ -20,8 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
-
 import {is_defined} from 'gmp/utils/identity';
 
 import {types} from './actions';
@@ -30,26 +28,48 @@ export const filterIdentifier = filter => is_defined(filter) ?
   `filter:${filter.toFilterString()}` :
   'default';
 
+const initialState = {
+  default: [],
+  byId: {},
+  errors: {},
+  isLoading: {},
+};
+
 export const createReducer = entityType => {
 
-  const isLoading = (state = false, action) => {
+  const isLoading = (state = {}, action) => {
+    const filterString = filterIdentifier(action.filter);
     switch (action.type) {
       case types.ENTITIES_LOADING_REQUEST:
-        return true;
+        return {
+          ...state,
+          [filterString]: true,
+        };
       case types.ENTITIES_LOADING_SUCCESS:
       case types.ENTITIES_LOADING_ERROR:
-        return false;
+        return {
+          ...state,
+          [filterString]: false,
+        };
       default:
         return state;
     }
   };
 
-  const error = (state = null, action) => {
+  const errors = (state = {}, action) => {
+    const filterString = filterIdentifier(action.filter);
     switch (action.type) {
       case types.ENTITIES_LOADING_SUCCESS:
-        return null;
+        state = {
+          ...state,
+        };
+        delete state[filterString];
+        return state;
       case types.ENTITIES_LOADING_ERROR:
-        return action.error;
+        return {
+          ...state,
+          [filterString]: action.error,
+        };
       default:
         return state;
     }
@@ -79,30 +99,19 @@ export const createReducer = entityType => {
     }
   };
 
-  const combinedReducer = combineReducers({
-    isLoading,
-    error,
-    entities,
-  });
-
-  return (state = {}, action) => {
+  return (state = initialState, action) => {
     if (action.entityType !== entityType) {
       return state;
     }
 
-    switch (action.type) {
-      case types.ENTITIES_LOADING_REQUEST:
-      case types.ENTITIES_LOADING_SUCCESS:
-      case types.ENTITIES_LOADING_ERROR:
-        const filterString = filterIdentifier(action.filter);
-        return {
-          ...state,
-          byId: byId(state.byId, action),
-          [filterString]: combinedReducer(state[filterString], action),
-        };
-      default:
-        return state;
-    }
+    const filterString = filterIdentifier(action.filter);
+    return {
+      ...state,
+      byId: byId(state.byId, action),
+      isLoading: isLoading(state.isLoading, action),
+      errors: errors(state.errors, action),
+      [filterString]: entities(state[filterString], action),
+    };
   };
 };
 

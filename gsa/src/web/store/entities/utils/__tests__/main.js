@@ -37,8 +37,8 @@ describe('createAll function tests', () => {
 
     const rootState = createRootState({
       foo: {
-        default: {
-          isLoading: true,
+        isLoading: {
+          default: true,
         },
       },
     });

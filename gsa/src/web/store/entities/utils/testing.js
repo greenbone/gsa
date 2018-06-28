@@ -46,7 +46,12 @@ export const testReducers = (entityType, reducer, actions) => {
     });
 
     test('should create initial state', () => {
-      expect(reducer(undefined, {})).toEqual({});
+      expect(reducer(undefined, {})).toEqual({
+        byId: {},
+        errors: {},
+        isLoading: {},
+        default: [],
+      });
     });
 
     test('should reduce request action', () => {
@@ -54,11 +59,11 @@ export const testReducers = (entityType, reducer, actions) => {
 
       expect(reducer(undefined, action)).toEqual({
         byId: {},
-        default: {
-          isLoading: true,
-          error: null,
-          entities: [],
+        errors: {},
+        isLoading: {
+          default: true,
         },
+        default: [],
       });
     });
 
@@ -71,11 +76,11 @@ export const testReducers = (entityType, reducer, actions) => {
             id: 'foo',
           },
         },
-        default: {
-          isLoading: false,
-          error: null,
-          entities: ['foo'],
+        errors: {},
+        isLoading: {
+          default: false,
         },
+        default: ['foo'],
       });
     });
 
@@ -84,11 +89,13 @@ export const testReducers = (entityType, reducer, actions) => {
 
       expect(reducer(undefined, action)).toEqual({
         byId: {},
-        default: {
-          isLoading: false,
-          error: 'An error',
-          entities: [],
+        errors: {
+          default: 'An error',
         },
+        isLoading: {
+          default: false,
+        },
+        default: [],
       });
     });
   });
@@ -174,8 +181,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
     test('should load all entities successfully', () => {
       const filter = Filter.fromString('myfilter');
       const rootState = createState(entityType, {
-        [filterIdentifier(filter)]: {
-          isLoading: false,
+        isLoading: {
+          [filterIdentifier(filter)]: false,
         },
       });
       const getState = jest
@@ -226,8 +233,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
     test('should not load all entities if isLoading is true', () => {
       const filter = Filter.fromString('myfilter');
       const rootState = createState(entityType, {
-        [filterIdentifier(filter)]: {
-          isLoading: true,
+        isLoading: {
+          [filterIdentifier(filter)]: true,
         },
       });
 
