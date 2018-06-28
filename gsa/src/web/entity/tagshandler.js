@@ -2,9 +2,10 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +82,8 @@ class TagsHandler extends React.Component {
         onDisableError={onError}
         onDeleted={onChanged}
         onDeleteError={onError}
+        onRemoved={onChanged}
+        onRemoveError={onError}
         onSaved={onChanged}
         onSaveError={onError}
         onCreated={onChanged}
@@ -92,6 +95,7 @@ class TagsHandler extends React.Component {
           disable,
           edit,
           enable,
+          remove,
         }) => children({
             add,
             create: entity => this.openCreateTagDialog(entity, create),
@@ -99,6 +103,7 @@ class TagsHandler extends React.Component {
             disable,
             edit: tag => this.openEditTagDialog(tag, edit),
             enable,
+            remove,
           })
         }
       </TagComponent>

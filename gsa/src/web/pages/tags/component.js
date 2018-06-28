@@ -89,6 +89,7 @@ class TagComponent extends React.Component {
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
   }
@@ -250,6 +251,19 @@ class TagComponent extends React.Component {
     this.openTagDialog(undefined, options);
   }
 
+  handleRemove(tag_id, entity) {
+    const {gmp, onRemoved, onRemoveError} = this.props;
+    return gmp.tag.get({id: tag_id})
+      .then(response => response.data)
+      .then(tag => gmp.tag.save({
+        ...tag,
+        resource_id: entity.id,
+        resource_type: tag.resources.type,
+        resources_action: 'remove',
+      }))
+      .then(onRemoved, onRemoveError);
+  }
+
   render() {
     const {
       children,
@@ -305,6 +319,7 @@ class TagComponent extends React.Component {
               edit: this.openTagDialog,
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
+              remove: this.handleRemove,
             })}
             {dialogVisible &&
               <TagDialog
@@ -347,6 +362,8 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
+  onRemoveError: PropTypes.func,
+  onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

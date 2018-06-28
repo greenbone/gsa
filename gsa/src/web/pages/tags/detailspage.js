@@ -179,6 +179,7 @@ const Page = ({
         enable,
         disable,
         save,
+        remove,
       }) => (
         <EntityPage
           {...props}
@@ -195,6 +196,7 @@ const Page = ({
           onTagSaveClick={save}
           onTagEnableClick={enable}
           onTagDisableClick={disable}
+          onTagRemoveClick={remove}
           onPermissionChanged={onChanged}
           onPermissionDownloaded={onDownloaded}
           onPermissionDownloadError={onError}

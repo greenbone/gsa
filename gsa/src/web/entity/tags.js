@@ -29,7 +29,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import {is_defined, capitalize_first_letter} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -37,7 +37,7 @@ import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
 import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
-import TrashIcon from '../components/icon/trashicon.js';
+import DeleteIcon from '../components/icon/deleteicon.js';
 
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
@@ -94,6 +94,7 @@ const EntityTags = ({
   onTagDisableClick,
   onTagEditClick,
   onTagCreateClick,
+  onTagRemoveClick,
 }) => {
   const extra = (
     <SectionElements
@@ -105,6 +106,7 @@ const EntityTags = ({
   const tags = entity.user_tags;
   const has_tags = is_defined(tags);
   const count = has_tags ? tags.length : 0;
+  const entityType = entity.entity_type;
   return (
     <Layout
       flex="column"
@@ -159,10 +161,11 @@ const EntityTags = ({
                           title={_('Disable Tag')}
                           onClick={onTagDisableClick}
                         />
-                        <TrashIcon
+                        <DeleteIcon
                           value={tag}
-                          title={_('Move Tag to Trashcan')}
-                          onClick={onTagDeleteClick}
+                          title={_('Remove Tag from {{type}}',
+                            {type: capitalize_first_letter(entityType)})}
+                          onClick={() => onTagRemoveClick(tag.id, entity)}
                         />
                         <EditIcon
                           value={tag}
@@ -184,11 +187,13 @@ const EntityTags = ({
 
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,
   onTagDisableClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 export default EntityTags;
