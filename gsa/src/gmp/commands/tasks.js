@@ -171,10 +171,12 @@ class TaskCommand extends EntityCommand {
       max_hosts,
       cve_scanner_id,
       tag_id = '',
+      add_tag,
     } = args;
 
     const data = {
       cmd: 'create_task',
+      add_tag,
       'alert_ids:': alert_ids,
       alterable,
       apply_overrides,
