@@ -26,6 +26,8 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
+import glamorous from 'glamorous';
+
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -52,6 +54,8 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import Layout from '../../components/layout/layout.js';
 
+import DetailsLink from '../../components/link/detailslink.js';
+
 import Tab from '../../components/tab/tab.js';
 import TabLayout from '../../components/tab/tablayout.js';
 import TabList from '../../components/tab/tablist.js';
@@ -61,6 +65,22 @@ import Tabs from '../../components/tab/tabs.js';
 
 import TagComponent from './component.js';
 import TagDetails from './details.js';
+
+const TabTitleCount = glamorous.span({
+  fontSize: '0.7em',
+});
+
+const TabTitle = ({title, count}) => (
+  <Layout flex="column" align={['center', 'center']}>
+    <span>{title}</span>
+    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
+  </Layout>
+);
+
+TabTitle.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 const ToolBarIcons = withCapabilties(({
   capabilities,
@@ -205,12 +225,14 @@ const Page = ({
             activeTab = 0,
             permissionsComponent,
             permissionsTitle,
-            tagsComponent,
+            resourcesComponent,
             tagsTitle,
             onActivateTab,
             entity,
             ...other
           }) => {
+            const {resources, resource_type} = entity;
+            const resourcesCount = resources.length;
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -225,11 +247,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {is_defined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      <TabTitle
+                        title={_('Assigned Resources')}
+                        count={resourcesCount}
+                      />
+                    </Tab>
                     {is_defined(permissionsComponent) &&
                       <Tab>
                         {permissionsTitle}
@@ -245,11 +268,17 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {is_defined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {resources.map(resource =>
+                        (<DetailsLink
+                          key={resource.id}
+                          id={resource.id}
+                          type={resource_type}
+                        >
+                          {resource.name}
+                        </DetailsLink>)
+                      )}
+                    </TabPanel>
                     {is_defined(permissionsComponent) &&
                       <TabPanel>
                         {permissionsComponent}
