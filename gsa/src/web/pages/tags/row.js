@@ -138,6 +138,7 @@ const Row = ({
   }, {
     capabilities,
   }) => {
+  const {resource_count, resource_type} = entity;
   return (
     <TableRow>
       <EntityNameTableData
@@ -154,14 +155,10 @@ const Row = ({
         {render_yesno(entity.isActive())}
       </TableData>
       <TableData>
-        {is_defined(entity.resources) &&
-          type_name(entity.resources.type)
-        }
+        {type_name(resource_type)}
       </TableData>
       <TableData>
-        {is_defined(entity.resources) &&
-          entity.resources.count.total
-        }
+        {resource_count}
       </TableData>
       <TableData>
         {shortDate(entity.modification_time)}
