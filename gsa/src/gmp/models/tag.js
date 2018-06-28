@@ -36,9 +36,11 @@ class Tag extends Model {
     if (is_defined(elem.resources)) {
       ret.resources = map(ret.resources.resource, res => new Model(res));
       ret.resource_type = elem.resources.type;
+      ret.resource_count = elem.resources.count.total;
     }
     else {
       ret.resources = [];
+      ret.resource_count = 0;
     }
     return ret;
   }
