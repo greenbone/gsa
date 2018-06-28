@@ -24,7 +24,7 @@ import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {createEntitiesActionCreators} from '../actions';
+import {createEntitiesActions} from '../actions';
 import {createReducer, filterIdentifier} from '../reducers';
 
 describe('entities reducers test', () => {
@@ -51,7 +51,7 @@ describe('entities reducers test', () => {
     describe('reducing loading request actions', () => {
 
       test('should set isLoading with default filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const action = actions.request();
         const reducer = createReducer('foo');
 
@@ -66,7 +66,7 @@ describe('entities reducers test', () => {
       });
 
       test('should set isLoading for filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const filter = Filter.fromString('name=foo');
         const filterId = filterIdentifier(filter);
@@ -84,7 +84,7 @@ describe('entities reducers test', () => {
       });
 
       test('should set isLoading and not override existing state', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const filter = Filter.fromString('name=foo');
         const filterId = filterIdentifier(filter);
@@ -111,7 +111,7 @@ describe('entities reducers test', () => {
       });
 
       test('should set isLoading and not override other properties', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const filter = Filter.fromString('name=foo');
         const filterId = filterIdentifier(filter);
@@ -143,7 +143,7 @@ describe('entities reducers test', () => {
     describe('reducing filter loading success actions', () => {
 
       test('should set isLoading with default filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
 
@@ -165,7 +165,7 @@ describe('entities reducers test', () => {
       });
 
       test('should reset other properties with default filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
         const state = {
@@ -196,7 +196,7 @@ describe('entities reducers test', () => {
       });
 
       test('should not override other filters', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const filter = Filter.fromString('name=bar');
         const filterId = filterIdentifier(filter);
@@ -239,7 +239,7 @@ describe('entities reducers test', () => {
     describe('reducing filter loading error actions', () => {
 
       test('should set isLoading and error with default filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const action = actions.error('An error');
 
@@ -256,7 +256,7 @@ describe('entities reducers test', () => {
       });
 
       test('should reset isLoading and error with default filter', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const action = actions.error('An error');
         const state = {
@@ -282,7 +282,7 @@ describe('entities reducers test', () => {
       });
 
       test('should not override other filters', () => {
-        const actions = createEntitiesActionCreators('foo');
+        const actions = createEntitiesActions('foo');
         const reducer = createReducer('foo');
         const filter = Filter.fromString('name=bar');
         const filterId = filterIdentifier(filter);
@@ -332,7 +332,7 @@ describe('entities reducers test', () => {
     });
 
     test('should not override byId accidentially', () => {
-      const actions = createEntitiesActionCreators('foo');
+      const actions = createEntitiesActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('byId');
       const filterId = filterIdentifier(filter);
@@ -369,7 +369,7 @@ describe('entities reducers test', () => {
     });
 
     test('should not override default accidentially', () => {
-      const actions = createEntitiesActionCreators('foo');
+      const actions = createEntitiesActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('default');
       const filterId = filterIdentifier(filter);

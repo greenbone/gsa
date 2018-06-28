@@ -28,7 +28,7 @@ export const types = {
   ENTITIES_LOADING_ERROR: 'ENTITIES_LOADING_ERROR',
 };
 
-export const createEntitiesActionCreators = entityType => ({
+export const createEntitiesActions = entityType => ({
   request: filter => ({
     type: types.ENTITIES_LOADING_REQUEST,
     entityType,
