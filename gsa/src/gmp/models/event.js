@@ -147,7 +147,7 @@ export class WeekDays {
   }
 
   isDefault() {
-    return this.values().some(value => !value);
+    return !this.values().some(value => value);
   }
 
   copy() {
