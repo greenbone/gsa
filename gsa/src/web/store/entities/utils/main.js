@@ -36,7 +36,7 @@ export const createAll = entityType => {
   const reducer = createReducer(entityType);
   const loadEntities = createLoadEntities({
     selector,
-    actionCreators: entitiesActions,
+    actions: entitiesActions,
     entityType,
   });
 

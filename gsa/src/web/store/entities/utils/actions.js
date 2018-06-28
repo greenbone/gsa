@@ -50,7 +50,7 @@ export const createEntitiesActionCreators = entityType => ({
 
 export const createLoadEntities = ({
   selector,
-  actionCreators,
+  actions,
   entityType,
 }) => ({gmp, filter, ...props}) => (dispatch, getState) => {
     const rootState = getState();
@@ -61,11 +61,11 @@ export const createLoadEntities = ({
       return Promise.resolve();
     }
 
-    dispatch(actionCreators.request(filter));
+    dispatch(actions.request(filter));
 
     return gmp[pluralizeType(entityType)].getAll({filter}).then(
-      response => dispatch(actionCreators.success(response.data, filter)),
-      error => dispatch(actionCreators.error(error, filter)),
+      response => dispatch(actions.success(response.data, filter)),
+      error => dispatch(actions.error(error, filter)),
     );
   };
 

@@ -142,7 +142,7 @@ describe('entities actions tests', () => {
 
       const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
+        actions,
         entityType: 'foo',
       });
 
@@ -190,7 +190,7 @@ describe('entities actions tests', () => {
 
       const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
+        actions,
         entityType: 'foo',
       });
 
@@ -247,7 +247,7 @@ describe('entities actions tests', () => {
 
       const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
+        actions,
         entityType: 'foo',
       });
 
