@@ -28,6 +28,7 @@ import {
   types,
   createEntitiesActions,
   createLoadEntities,
+  createEntityActions,
 } from '../actions';
 
 describe('entities actions tests', () => {
@@ -112,6 +113,55 @@ describe('entities actions tests', () => {
         entityType: 'foo',
         error: 'An error',
         filter,
+      });
+    });
+  });
+
+  describe('createEntityActions tests', () => {
+
+    test('should create actions for loading', () => {
+      const actions = createEntityActions('foo');
+
+      expect(actions.request).toBeDefined();
+      expect(is_function(actions.request)).toBe(true);
+      expect(actions.success).toBeDefined();
+      expect(is_function(actions.success)).toBe(true);
+      expect(actions.error).toBeDefined();
+      expect(is_function(actions.error)).toBe(true);
+    });
+
+    test('should create a load request action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.request('id1');
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType: 'foo',
+        id: 'id1',
+      });
+    });
+
+    test('should create a load success action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.success('id1', {foo: 'bar'});
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType: 'foo',
+        id: 'id1',
+        data: {foo: 'bar'},
+      });
+    });
+
+    test('should create a load error action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.error('id1', 'An error');
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_ERROR,
+        entityType: 'foo',
+        id: 'id1',
+        error: 'An error',
       });
     });
   });

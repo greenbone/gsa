@@ -26,6 +26,9 @@ export const types = {
   ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
   ENTITIES_LOADING_SUCCESS: 'ENTITIES_LOADING_SUCCESS',
   ENTITIES_LOADING_ERROR: 'ENTITIES_LOADING_ERROR',
+  ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
+  ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
+  ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
 };
 
 export const createEntitiesActions = entityType => ({
@@ -45,6 +48,26 @@ export const createEntitiesActions = entityType => ({
     entityType,
     filter,
     error,
+  }),
+});
+
+export const createEntityActions = entityType => ({
+  request: id => ({
+    type: types.ENTITY_LOADING_REQUEST,
+    entityType,
+    id,
+  }),
+  success: (id, data) => ({
+    type: types.ENTITY_LOADING_SUCCESS,
+    entityType,
+    data,
+    id,
+  }),
+  error: (id, error) => ({
+    type: types.ENTITY_LOADING_ERROR,
+    entityType,
+    error,
+    id,
   }),
 });
 
