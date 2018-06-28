@@ -24,10 +24,24 @@
 
 import Model from '../model.js';
 
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+
 class Tag extends Model {
 
   static entity_type = 'tag';
 
+  parseProperties(elem) {
+    const ret = super.parseProperties(elem);
+    if (is_defined(elem.resources)) {
+      ret.resources = map(ret.resources.resource, res => new Model(res));
+      ret.resource_type = elem.resources.type;
+    }
+    else {
+      ret.resources = [];
+    }
+    return ret;
+  }
 }
 
 export default Tag;
