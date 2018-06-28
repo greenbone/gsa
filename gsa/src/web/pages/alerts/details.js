@@ -28,6 +28,8 @@ import {is_defined} from 'gmp/utils';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
+  DELTA_TYPE_PREVIOUS,
+  DELTA_TYPE_REPORT,
 } from 'gmp/models/alert.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -98,6 +100,36 @@ const AlertDetails = ({
               <Event event={event}/>
             </TableData>
           </TableRow>
+
+          {capabilities.mayAccess('report') && is_defined(method.data.delta_type) &&
+            method.data.delta_type.value === DELTA_TYPE_PREVIOUS &&
+            <TableRow>
+              <TableData>
+                {_('Delta Report')}
+              </TableData>
+              <TableData>
+                {_('Previous completed report of the same task')}
+              </TableData>
+            </TableRow>
+          }
+
+          {capabilities.mayAccess('report') && is_defined(method.data.delta_type) &&
+            is_defined(method.data.delta_report_id) &&
+            method.data.delta_type.value === DELTA_TYPE_REPORT &&
+            <TableRow>
+              <TableData>
+                {_('Delta Report')}
+              </TableData>
+              <TableData>
+                <DetailsLink
+                  id={method.data.delta_report_id.value}
+                  type="report"
+                >
+                  {_('Report ')} {method.data.delta_report_id.value}
+                </DetailsLink>
+              </TableData>
+            </TableRow>
+          }
 
           <TableRow>
             <TableData>
