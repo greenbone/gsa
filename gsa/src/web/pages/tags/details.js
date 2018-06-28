@@ -42,6 +42,7 @@ const TagDetails = ({
   const {
     comment,
     value,
+    resource_type,
     resources,
   } = entity;
   return (
@@ -77,7 +78,7 @@ const TagDetails = ({
                 {_('Resoure Type')}
               </TableData>
               <TableData>
-                {type_name(resources.type)}
+                {type_name(resource_type)}
               </TableData>
             </TableRow>
           }
@@ -88,15 +89,6 @@ const TagDetails = ({
             </TableData>
             <TableData>
               {render_yesno(entity.isActive())}
-            </TableData>
-          </TableRow>
-
-          <TableRow>
-            <TableData>
-              {_('Orphan')}
-            </TableData>
-            <TableData>
-              {render_yesno(entity.isOrphan())}
             </TableData>
           </TableRow>
         </TableBody>
