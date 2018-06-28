@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {pluralizeType} from 'gmp/utils/entitytype';
 
 export const types = {
   ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
@@ -62,7 +63,7 @@ export const createLoadAllFunc = ({
 
     dispatch(actionCreators.request(filter));
 
-    return gmp[entityType].getAll({filter}).then(
+    return gmp[pluralizeType(entityType)].getAll({filter}).then(
       response => dispatch(actionCreators.success(response.data, filter)),
       error => dispatch(actionCreators.error(error, filter)),
     );

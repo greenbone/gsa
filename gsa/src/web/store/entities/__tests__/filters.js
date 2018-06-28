@@ -24,8 +24,8 @@ import {testReducers, testActions, testLoadAll} from '../utils/testing';
 
 import {actions, reducer, loadAll} from '../filters';
 
-testReducers('filters', reducer, actions);
-testActions('filters', actions);
-testLoadAll('filters', loadAll);
+testReducers('filter', reducer, actions);
+testActions('filter', actions);
+testLoadAll('filter', loadAll);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -131,7 +131,7 @@ describe('entities actions tests', () => {
         .mockReturnValue(true);
       const getAll = jest.fn();
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };
@@ -176,7 +176,7 @@ describe('entities actions tests', () => {
           data: 'foo',
         }));
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };
@@ -233,7 +233,7 @@ describe('entities actions tests', () => {
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };

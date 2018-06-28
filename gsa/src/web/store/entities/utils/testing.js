@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_function} from 'gmp/utils/identity';
+import {pluralizeType} from 'gmp/utils/entitytype';
 
 import Filter from 'gmp/models/filter';
 
@@ -190,7 +191,7 @@ export const testLoadAll = (entityType, loadAll) => {
         }));
 
       const gmp = {
-        [entityType]: {
+        [pluralizeType(entityType)]: {
           getAll,
         },
       };
@@ -241,7 +242,7 @@ export const testLoadAll = (entityType, loadAll) => {
         .mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
-        [entityType]: {
+        [pluralizeType(entityType)]: {
           getAll,
         },
       };
@@ -272,7 +273,7 @@ export const testLoadAll = (entityType, loadAll) => {
         .mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
-        [entityType]: {
+        [pluralizeType(entityType)]: {
           getAll,
         },
       };
