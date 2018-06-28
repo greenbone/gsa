@@ -29,7 +29,7 @@ describe('createAll function tests', () => {
 
   test('should create all functions and objects', () => {
     const {
-      loadAll,
+      loadEntities,
       reducer,
       actions,
       selector,
@@ -43,7 +43,7 @@ describe('createAll function tests', () => {
       },
     });
 
-    expect(is_function(loadAll)).toBe(true);
+    expect(is_function(loadEntities)).toBe(true);
     expect(is_function(reducer)).toBe(true);
     expect(is_function(selector)).toBe(true);
 

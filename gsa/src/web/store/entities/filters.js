@@ -23,14 +23,14 @@
 import {createAll} from './utils/main';
 
 const {
-  loadAll,
+  loadEntities,
   reducer,
   selector,
   actions,
 } = createAll('filter');
 
 export {
-  loadAll,
+  loadEntities,
   reducer,
   selector,
   actions,

@@ -48,7 +48,7 @@ export const createEntitiesActionCreators = entityType => ({
   }),
 });
 
-export const createLoadAllFunc = ({
+export const createLoadEntities = ({
   selector,
   actionCreators,
   entityType,

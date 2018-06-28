@@ -27,7 +27,7 @@ import Filter from 'gmp/models/filter';
 import {
   types,
   createEntitiesActionCreators,
-  createLoadAllFunc,
+  createLoadEntities,
 } from '../actions';
 
 describe('entities actions tests', () => {
@@ -116,7 +116,7 @@ describe('entities actions tests', () => {
     });
   });
 
-  describe('createLoadAllFunc tests', () => {
+  describe('createLoadEntities tests', () => {
 
     test('test isLoading true', () => {
       const actions = createEntitiesActionCreators('foo');
@@ -140,16 +140,16 @@ describe('entities actions tests', () => {
         isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
         actionCreators: actions,
         entityType: 'foo',
       });
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc({gmp})(dispatch, getState).then(() => {
+      return loadEntities({gmp})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalled();
@@ -188,7 +188,7 @@ describe('entities actions tests', () => {
         isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
         actionCreators: actions,
         entityType: 'foo',
@@ -200,10 +200,10 @@ describe('entities actions tests', () => {
         other: 3,
       };
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc(props)(dispatch, getState).then(() => {
+      return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalledWith('myfilter');
@@ -245,7 +245,7 @@ describe('entities actions tests', () => {
         isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
         actionCreators: actions,
         entityType: 'foo',
@@ -257,10 +257,10 @@ describe('entities actions tests', () => {
         other: 3,
       };
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc(props)(dispatch, getState).then(() => {
+      return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalledWith('myfilter');

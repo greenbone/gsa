@@ -20,12 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {testReducers, testActions, testLoadAll} from '../utils/testing';
+import {testReducers, testActions, testLoadEntities} from '../utils/testing';
 
-import {actions, reducer, loadAll} from '../filters';
+import {actions, reducer, loadEntities} from '../filters';
 
 testReducers('filter', reducer, actions);
 testActions('filter', actions);
-testLoadAll('filter', loadAll);
+testLoadEntities('filter', loadEntities);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -167,9 +167,9 @@ export const testActions = (entityType, actions) => {
   });
 };
 
-export const testLoadAll = (entityType, loadAll) => {
+export const testLoadEntities = (entityType, loadEntities) => {
 
-  describe(`${entityType} loadAll function tests`, () => {
+  describe(`${entityType} loadEntities function tests`, () => {
 
     test('should load all entities successfully', () => {
       const filter = Filter.fromString('myfilter');
@@ -202,10 +202,10 @@ export const testLoadAll = (entityType, loadAll) => {
         other: 3,
       };
 
-      expect(loadAll).toBeDefined();
-      expect(is_function(loadAll)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAll(props)(dispatch, getState).then(() => {
+      return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(getAll).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -247,14 +247,14 @@ export const testLoadAll = (entityType, loadAll) => {
         },
       };
 
-      return loadAll({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(getAll).not.toBeCalled();
       });
     });
 
-    test('should fail loading all with an error', () => {
+    test('should fail loading all entities with an error', () => {
       const filter = Filter.fromString('myfilter');
       const rootState = createState(entityType, {
         [filterIdentifier(filter)]: {
@@ -278,7 +278,7 @@ export const testLoadAll = (entityType, loadAll) => {
         },
       };
 
-      return loadAll({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(getAll).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
