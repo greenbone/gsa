@@ -29,9 +29,9 @@ describe('createAll function tests', () => {
 
   test('should create all functions and objects', () => {
     const {
+      entitiesActions,
       loadEntities,
       reducer,
-      actions,
       selector,
     } = createAll('foo');
 
@@ -47,9 +47,9 @@ describe('createAll function tests', () => {
     expect(is_function(reducer)).toBe(true);
     expect(is_function(selector)).toBe(true);
 
-    expect(is_function(actions.request)).toBe(true);
-    expect(is_function(actions.success)).toBe(true);
-    expect(is_function(actions.error)).toBe(true);
+    expect(is_function(entitiesActions.request)).toBe(true);
+    expect(is_function(entitiesActions.success)).toBe(true);
+    expect(is_function(entitiesActions.error)).toBe(true);
 
     expect(selector(rootState).isLoadingEntities()).toBe(true);
   });

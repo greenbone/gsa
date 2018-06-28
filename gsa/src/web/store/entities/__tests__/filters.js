@@ -22,10 +22,10 @@
  */
 import {testReducers, testActions, testLoadEntities} from '../utils/testing';
 
-import {actions, reducer, loadEntities} from '../filters';
+import {entitiesActions, reducer, loadEntities} from '../filters';
 
-testReducers('filter', reducer, actions);
-testActions('filter', actions);
+testReducers('filter', reducer, entitiesActions);
+testActions('filter', entitiesActions);
 testLoadEntities('filter', loadEntities);
 
 // vim: set ts=2 sw=2 tw=80:

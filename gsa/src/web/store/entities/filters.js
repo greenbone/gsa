@@ -26,14 +26,14 @@ const {
   loadEntities,
   reducer,
   selector,
-  actions,
+  entitiesActions,
 } = createAll('filter');
 
 export {
   loadEntities,
   reducer,
   selector,
-  actions,
+  entitiesActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:

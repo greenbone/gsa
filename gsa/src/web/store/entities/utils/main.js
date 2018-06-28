@@ -32,17 +32,17 @@ import {createSelector} from './selectors';
 export const createAll = entityType => {
 
   const selector = createSelector(entityType);
-  const actions = createEntitiesActionCreators(entityType);
+  const entitiesActions = createEntitiesActionCreators(entityType);
   const reducer = createReducer(entityType);
   const loadEntities = createLoadEntities({
     selector,
-    actionCreators: actions,
+    actionCreators: entitiesActions,
     entityType,
   });
 
   return {
     selector,
-    actions,
+    entitiesActions,
     loadEntities,
     reducer,
   };
