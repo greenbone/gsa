@@ -27,10 +27,14 @@ import ical from 'ical.js';
 
 import uuid from 'uuid/v4';
 
+import Logger from 'gmp/log';
+
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 
 import date, {duration as createDuration} from './date';
+
+const log = Logger.getLogger('gmp.models.event');
 
 const convertIcalDate = (idate, timezone) => is_defined(timezone) ?
   date.unix(idate.toUnixTime()).tz(timezone) :
@@ -347,10 +351,23 @@ class Event {
       const now = ical.Time.now();
       const it = this.event.iterator();
 
-      while (true) {
-        const next = it.next();
-        if (next.compare(now) >= 0) {
-          return convertIcalDate(next, this.timezone);
+      let retries = 0;
+      while (true && retries <= 5) {
+        try {
+          const next = it.next();
+          if (next.compare(now) >= 0) {
+            return convertIcalDate(next, this.timezone);
+          }
+          retries = 0;
+        }
+        catch (err) {
+          // ical.js raises an exception if the same date occurs twice
+          // See https://github.com/mozilla-comm/ical.js/blob/master/lib/ical/recur_iterator.js#L373
+          // But this may be valid e.g. when last day of month and the 31 of a
+          // month are set in the rrule. Therefore ignore error and retry to get
+          // a new date. Fail after 5 unsuccessful attemps
+          retries++;
+          log.error(err);
         }
       }
     }

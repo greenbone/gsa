@@ -249,6 +249,7 @@ const UserTags = ({
         disable,
         enable,
         edit,
+        remove,
       }) => (
         <EntityTags
           entity={report}
@@ -258,6 +259,7 @@ const UserTags = ({
           onTagDisableClick={disable}
           onTagEditClick={edit}
           onTagEndableClick={enable}
+          onTagRemoveClick={remove}
         />
       )}
     </TagsHandler>

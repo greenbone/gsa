@@ -33,11 +33,11 @@ import Row from './row.js';
 
 export const SORT_FIELDS = [
   ['name', _('Name'), '30%'],
-  ['value', _('Value'), '15%'],
-  ['active', _('Active'), '7%'],
-  ['resource_type', _('Resource Type'), '15%'],
-  ['resource_name', _('Resource Name'), '15%'],
-  ['modified', _('Modified'), '10%'],
+  ['value', _('Value'), '30%'],
+  ['active', _('Active'), '8%'],
+  ['resource_type', _('Resource Type'), '8%'],
+  ['resource_count', _('Number of Resources'), '8%'],
+  ['modified', _('Modified'), '8%'],
 ];
 
 const TagsTable = createEntitiesTable({
