@@ -27,8 +27,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_component,
