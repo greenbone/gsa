@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -26,20 +27,15 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
-import {has_id} from 'gmp/utils/id';
-
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_component,
   render_yesno,
   type_name,
-  N_A,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
-import EntityLink from '../../entity/link.js';
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow} from '../../entities/row.js';
 
@@ -140,6 +136,7 @@ const Row = ({
   }, {
     capabilities,
   }) => {
+  const {resource_count, resource_type} = entity;
   return (
     <TableRow>
       <EntityNameTableData
@@ -156,16 +153,10 @@ const Row = ({
         {render_yesno(entity.isActive())}
       </TableData>
       <TableData>
-        {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
+        {type_name(resource_type)}
       </TableData>
       <TableData>
-        {has_id(entity.resource) && (
-          entity.isOrphan() ?
-            <span>{N_A}{' '}
-              <i>({entity.resource.id})</i>
-            </span> :
-            <EntityLink entity={entity.resource}/>
-        )}
+        {resource_count}
       </TableData>
       <TableData>
         {shortDate(entity.modification_time)}

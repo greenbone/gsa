@@ -188,6 +188,7 @@ class EntityPage extends React.Component {
       onTagEditClick,
       onTagEnableClick,
       onTagCreateClick,
+      onTagRemoveClick,
     } = this.props;
     if (TagsComponent === false) {
       return null;
@@ -202,6 +203,7 @@ class EntityPage extends React.Component {
         onTagEditClick={onTagEditClick}
         onTagEnableClick={onTagEnableClick}
         onTagCreateClick={onTagCreateClick}
+        onTagRemoveClick={onTagRemoveClick}
       />
     );
   }
@@ -282,6 +284,7 @@ EntityPage.propTypes = {
   onTagDisableClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
   onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 export default EntityPage;

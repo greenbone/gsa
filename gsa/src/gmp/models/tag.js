@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -21,9 +22,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
-
 import Model from '../model.js';
+
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 class Tag extends Model {
 
@@ -31,11 +33,15 @@ class Tag extends Model {
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
-
-    if (is_defined(elem.resource)) {
-      ret.resource = new Model(elem.resource, elem.resource.type);
+    if (is_defined(elem.resources)) {
+      ret.resources = map(ret.resources.resource, res => new Model(res));
+      ret.resource_type = elem.resources.type;
+      ret.resource_count = elem.resources.count.total;
     }
-
+    else {
+      ret.resources = [];
+      ret.resource_count = 0;
+    }
     return ret;
   }
 }
