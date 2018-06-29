@@ -89,6 +89,7 @@ class TagComponent extends React.Component {
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.openCreateTagDialog = this.openCreateTagDialog.bind(this);
   }
@@ -112,7 +113,7 @@ class TagComponent extends React.Component {
       name,
       value,
       active: 1,
-      resource_id: entity.id,
+      resource_ids: [entity.id],
       resource_type: getType(entity),
     }).then(onAdded, onAddError);
   }
@@ -206,23 +207,25 @@ class TagComponent extends React.Component {
 
   openTagDialog(tag, options = {}) {
     const resource_types = this.getResourceTypes();
-
+    const {gmp} = this.props;
     if (is_defined(tag)) {
-      const {resource = {}} = tag;
-      this.setState({
-        active: tag.active,
-        comment: tag.comment,
-        dialogVisible: true,
-        name: tag.name,
-        tag,
-        resource_id: resource.id,
-        resource_type: is_defined(resource.entity_type) ?
-          getType(resource) :
-          first(resource_types, [])[0],
-        resource_types,
-        title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),
-        value: tag.value,
-        ...options,
+      gmp.tag.get({id: tag.id}).then(response => {
+        const loadedTag = response.data;
+        this.setState({
+          active: loadedTag.active,
+          comment: loadedTag.comment,
+          dialogVisible: true,
+          id: loadedTag.id,
+          name: loadedTag.name,
+          resource_ids: loadedTag.resources.map(res => res.id),
+          resource_type: is_defined(loadedTag.resource_type) ?
+            loadedTag.resource_type :
+            first(resource_types, [])[0],
+          resource_types,
+          title: _('Edit Tag {{name}}', {name: shorten(loadedTag.name)}),
+          value: loadedTag.value,
+          ...options,
+        });
       });
     }
     else {
@@ -230,10 +233,9 @@ class TagComponent extends React.Component {
         active: undefined,
         comment: undefined,
         name: undefined,
-        resource_id: undefined,
+        resource_ids: [],
         resource_type: undefined,
         resource_types,
-        tag: undefined,
         dialogVisible: true,
         title: undefined,
         value: undefined,
@@ -248,6 +250,19 @@ class TagComponent extends React.Component {
 
   openCreateTagDialog(options = {}) {
     this.openTagDialog(undefined, options);
+  }
+
+  handleRemove(tag_id, entity) {
+    const {gmp, onRemoved, onRemoveError} = this.props;
+    return gmp.tag.get({id: tag_id})
+      .then(response => response.data)
+      .then(tag => gmp.tag.save({
+        ...tag,
+        resource_id: entity.id,
+        resource_type: tag.resource_type,
+        resources_action: 'remove',
+      }))
+      .then(onRemoved, onRemoveError);
   }
 
   render() {
@@ -268,11 +283,11 @@ class TagComponent extends React.Component {
     const {
       active,
       comment,
+      id,
       name,
-      resource_id,
+      resource_ids,
       resource_type,
       resource_types = [],
-      tag,
       dialogVisible,
       title,
       value,
@@ -305,16 +320,17 @@ class TagComponent extends React.Component {
               edit: this.openTagDialog,
               enable: this.handleEnableTag,
               disable: this.handleDisableTag,
+              remove: this.handleRemove,
             })}
             {dialogVisible &&
               <TagDialog
                 active={active}
                 comment={comment}
+                id={id}
                 name={name}
-                resource_id={resource_id}
+                resource_ids={resource_ids}
                 resource_type={resource_type}
                 resource_types={resource_types}
-                tag={tag}
                 title={title}
                 value={value}
                 onClose={this.closeTagDialog}
@@ -347,6 +363,8 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
+  onRemoveError: PropTypes.func,
+  onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
