@@ -29,9 +29,10 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
+import {type_name} from '../utils/render';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -161,7 +162,7 @@ const EntityTags = ({
                         <DeleteIcon
                           value={tag}
                           title={_('Remove Tag from {{type}}',
-                            {type: capitalize_first_letter(entityType)})}
+                            {type: type_name(entityType)})}
                           onClick={() => onTagRemoveClick(tag.id, entity)}
                         />
                         <EditIcon
