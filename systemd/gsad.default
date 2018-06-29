@@ -1,0 +1,35 @@
+OPTIONS=""
+
+#
+# The address the Greenbone Security Assistant will listen on.
+#
+
+GSA_ADDRESS=127.0.0.1
+
+#
+# The port the Greenbone Security Assistant will listen on.
+#
+
+GSA_PORT=9392
+R_PORT=80 # redirect from port
+
+# NOT USED BY DEFAULT IN OpenVAS 9
+#
+# The address the OpenVAS Manager is listening on.
+#
+
+#MANAGER_ADDRESS=127.0.0.1
+
+#
+# The port the OpenVAS Manager is listening on.
+#
+
+#MANAGER_PORT=9390
+
+## Determines ciphers that GSAD will use with TLS and their order.
+# Work around with gnutls prorities not working
+GNUTLS_PRIORITIES="NORMAL"
+
+# This is the new standard. DOES NOT WORK BECASUE OF BUG
+#GNUTLS_PRIORITIES="NONE:+SECURE256:+SECURE192:+SUITEB192:+VERS-TLS1.2"
+
