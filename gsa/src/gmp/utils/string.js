@@ -30,6 +30,20 @@ export function capitalize_first_letter(string) {
 export const pluralize_type = type => type[type.length - 1] === 's' ||
   type === 'info' || type === 'version' ? type : type + 's';
 
+const types = {
+  os: 'operatingsystem',
+  cert_bund_adv: 'certbund',
+  dfn_cert_adv: 'dfncert',
+  port_list: 'portlist',
+  report_format: 'reportformat',
+  config: 'scanconfig',
+};
+
+export const normalizeType = type => {
+  const ctype = types[type];
+  return is_defined(ctype) ? ctype : type;
+};
+
 export function shorten(text, length = 60) {
   if (!is_defined(text)) {
     return '';
