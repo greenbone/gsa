@@ -51,6 +51,12 @@ class WordCloudChart extends React.Component {
     super(...args);
 
     this.state = {};
+
+    this.cloud = d3cloud()
+      .fontSize(d => d.size)
+      .rotate(0)
+      .padding(2)
+      .font('Sans');
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -116,12 +122,9 @@ class WordCloudChart extends React.Component {
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
-    d3cloud()
+    this.cloud.stop();
+    this.cloud
       .size([maxWidth, maxHeight])
-      .fontSize(d => d.size)
-      .rotate(0)
-      .padding(2)
-      .font('Sans')
       .words(origWords)
       .on('end', words => this.setState({words}))
       .start();
