@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,7 +145,7 @@ const TargetDetails = ({
               <TableData>
                 <DetailsLink
                   id={port_list.id}
-                  type="port_list">
+                  type="portlist">
                   {port_list.name}
                 </DetailsLink>
               </TableData>
