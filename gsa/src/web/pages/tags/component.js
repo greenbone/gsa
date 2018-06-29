@@ -209,16 +209,16 @@ class TagComponent extends React.Component {
     const resource_types = this.getResourceTypes();
 
     if (is_defined(tag)) {
-      const {resource = {}} = tag;
+      const {resources, resource_type} = tag;
       this.setState({
         active: tag.active,
         comment: tag.comment,
         dialogVisible: true,
         name: tag.name,
         tag,
-        resource_id: resource.id,
-        resource_type: is_defined(resource.entity_type) ?
-          getType(resource) :
+        resource_ids: resources,
+        resource_type: is_defined(resource_type) ?
+          getType(resource_type) :
           first(resource_types, [])[0],
         resource_types,
         title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),
@@ -231,7 +231,7 @@ class TagComponent extends React.Component {
         active: undefined,
         comment: undefined,
         name: undefined,
-        resource_id: undefined,
+        resource_ids: [],
         resource_type: undefined,
         resource_types,
         tag: undefined,
@@ -258,7 +258,7 @@ class TagComponent extends React.Component {
       .then(tag => gmp.tag.save({
         ...tag,
         resource_id: entity.id,
-        resource_type: tag.resources.type,
+        resource_type: tag.resource_type,
         resources_action: 'remove',
       }))
       .then(onRemoved, onRemoveError);
@@ -283,7 +283,7 @@ class TagComponent extends React.Component {
       active,
       comment,
       name,
-      resource_id,
+      resource_ids,
       resource_type,
       resource_types = [],
       tag,
@@ -326,8 +326,6 @@ class TagComponent extends React.Component {
                 active={active}
                 comment={comment}
                 name={name}
-                resource_id={resource_id}
-                resource_type={resource_type}
                 resource_types={resource_types}
                 tag={tag}
                 title={title}
