@@ -58,7 +58,6 @@ const SectionElementDivider = glamorous(Divider)({
 
 const SectionElements = ({
   entity,
-  onTagAddClick,
   onTagCreateClick,
 }) => {
   return (
@@ -89,7 +88,6 @@ SectionElements.propTypes = {
 
 const EntityTags = ({
   entity,
-  onTagAddClick,
   onTagDeleteClick,
   onTagDisableClick,
   onTagEditClick,
@@ -99,7 +97,6 @@ const EntityTags = ({
   const extra = (
     <SectionElements
       entity={entity}
-      onTagAddClick={onTagAddClick}
       onTagCreateClick={onTagCreateClick}
     />
   );
@@ -188,7 +185,6 @@ const EntityTags = ({
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,
   onTagDisableClick: PropTypes.func.isRequired,

@@ -113,7 +113,7 @@ class TagComponent extends React.Component {
       name,
       value,
       active: 1,
-      resource_id: entity.id,
+      resource_ids: [entity.id],
       resource_type: getType(entity),
     }).then(onAdded, onAddError);
   }
@@ -207,23 +207,25 @@ class TagComponent extends React.Component {
 
   openTagDialog(tag, options = {}) {
     const resource_types = this.getResourceTypes();
-
+    const {gmp} = this.props;
     if (is_defined(tag)) {
-      const {resources, resource_type} = tag;
-      this.setState({
-        active: tag.active,
-        comment: tag.comment,
-        dialogVisible: true,
-        name: tag.name,
-        tag,
-        resource_ids: resources,
-        resource_type: is_defined(resource_type) ?
-          getType(resource_type) :
-          first(resource_types, [])[0],
-        resource_types,
-        title: _('Edit Tag {{name}}', {name: shorten(tag.name)}),
-        value: tag.value,
-        ...options,
+      gmp.tag.get({id: tag.id}).then(response => {
+        const loadedTag = response.data;
+        this.setState({
+          active: loadedTag.active,
+          comment: loadedTag.comment,
+          dialogVisible: true,
+          id: loadedTag.id,
+          name: loadedTag.name,
+          resource_ids: loadedTag.resources.map(res => res.id),
+          resource_type: is_defined(loadedTag.resource_type) ?
+            loadedTag.resource_type :
+            first(resource_types, [])[0],
+          resource_types,
+          title: _('Edit Tag {{name}}', {name: shorten(loadedTag.name)}),
+          value: loadedTag.value,
+          ...options,
+        });
       });
     }
     else {
@@ -234,7 +236,6 @@ class TagComponent extends React.Component {
         resource_ids: [],
         resource_type: undefined,
         resource_types,
-        tag: undefined,
         dialogVisible: true,
         title: undefined,
         value: undefined,
@@ -282,11 +283,11 @@ class TagComponent extends React.Component {
     const {
       active,
       comment,
+      id,
       name,
       resource_ids,
       resource_type,
       resource_types = [],
-      tag,
       dialogVisible,
       title,
       value,
@@ -325,9 +326,11 @@ class TagComponent extends React.Component {
               <TagDialog
                 active={active}
                 comment={comment}
+                id={id}
                 name={name}
+                resource_ids={resource_ids}
+                resource_type={resource_type}
                 resource_types={resource_types}
-                tag={tag}
                 title={title}
                 value={value}
                 onClose={this.closeTagDialog}

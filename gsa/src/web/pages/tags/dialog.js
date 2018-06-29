@@ -71,39 +71,24 @@ class TagDialog extends React.Component {
   constructor(...args) {
     super(...args);
 
+    const {resource_ids} = this.props;
+
     this.state = {
       resourceIdText: '',
-      resourceIdsSelect: [],
+      resourceIdsSelected: is_defined(resource_ids) ? resource_ids : [],
       resourceOptions: [],
-      resourceType: undefined,
-      typeIsChosen: false,
+      resourceType: this.props.resource_type,
     };
 
   }
 
   componentDidMount() {
-    let typeIsChosen = false;
-    const {tag = {}, gmp} = this.props;
     const {
-      resource_type,
-    } = tag;
+      resourceType,
+    } = this.state;
 
-    if (is_defined(resource_type)) {
-      this.loadResourcesByType(resource_type);
-      typeIsChosen = true;
-    }
-
-    if (is_defined(tag.id)) {
-      gmp.tag.get({id: tag.id}).then(response => {
-        const {resources} = response.data;
-        const ids = [];
-        resources.map(res => ids.push(res.id));
-        this.setState({
-          typeIsChosen,
-          resourceIdsSelect: ids,
-          resourceType: resource_type,
-        });
-      });
+    if (is_defined(resourceType)) {
+      this.loadResourcesByType(resourceType);
     }
   }
 
@@ -112,9 +97,8 @@ class TagDialog extends React.Component {
       return;
     }
     const {gmp} = this.props;
-    const filter = 'type=' + type;
     const plType = pluralize_type(convertType(type));
-    gmp[plType].getAll({filter})
+    gmp[plType].getAll()
       .then(response => {
         const {data} = response;
         let id = this.state.resourceIdText;
@@ -140,9 +124,8 @@ class TagDialog extends React.Component {
 
     this.loadResourcesByType(type);
     this.setState({
-      resourceIdsSelect: [],
+      resourceIdsSelected: [],
       resourceType: type,
-      typeIsChosen: true,
     });
   }
 
@@ -151,21 +134,21 @@ class TagDialog extends React.Component {
     onValueChange(ids, 'resource_ids');
 
     this.setState({
-      resourceIdsSelect: ids,
+      resourceIdsSelected: ids,
     });
   }
 
   handleIdChangeByText(id, onValueChange) {
     const {gmp} = this.props;
     const {
-      resourceIdsSelect,
+      resourceIdsSelected,
       resourceType,
     } = this.state;
 
     gmp[pluralize_type(convertType(resourceType))]
       .get({filter: 'uuid=' + id})
       .then(response => {
-        const ids = is_defined(resourceIdsSelect) ? resourceIdsSelect : [];
+        const ids = is_defined(resourceIdsSelected) ? resourceIdsSelected : [];
         if (response.data.length === 0) {
 
           let {resourceOptions} = this.state;
@@ -186,22 +169,22 @@ class TagDialog extends React.Component {
           });
         }
         else {
-          const idSelected = ids.filter(res => res === id);
-          if (idSelected.length === 0) {
+          const idSelected = ids.includes(id);
+          if (idSelected) {
+            this.setState({
+              resourceIdText: '',
+            });
+          }
+          else {
             this.setState(prevState => {
-              const prevResourceIdsSelect = prevState.resourceIdsSelect;
+              const prevResourceIdsSelected = prevState.resourceIdsSelected;
               return {
-                resourceIdsSelect: [
-                  ...prevResourceIdsSelect,
+                resourceIdsSelected: [
+                  ...prevResourceIdsSelected,
                   id,
                 ],
                 resourceIdText: '',
               };
-            });
-          }
-          else {
-            this.setState({
-              resourceIdText: '',
             });
           }
         }
@@ -215,7 +198,6 @@ class TagDialog extends React.Component {
       fixed = false,
       name = _('default:unnamed'),
       resource_types = [],
-      tag,
       title = _('New Tag'),
       value = '',
       visible = true,
@@ -231,15 +213,16 @@ class TagDialog extends React.Component {
 
     const data = {
       ...options,
-      ...tag,
       active,
       comment,
       name,
       value,
     };
 
+    const typeIsChosen = is_defined(this.state.resourceType);
+
     const controlledData = {
-      resource_ids: this.state.resourceIdsSelect,
+      resource_ids: this.state.resourceIdsSelected,
       resource_type: this.state.resourceType,
     };
 
@@ -302,8 +285,8 @@ class TagDialog extends React.Component {
                 <MultiSelect
                   name="resource_ids"
                   items={render_select_items(this.state.resourceOptions)}
-                  value={this.state.resourceIdsSelect}
-                  disabled={!this.state.typeIsChosen ||
+                  value={this.state.resourceIdsSelected}
+                  disabled={!typeIsChosen || fixed ||
                     resourceTypesOptions.length === 0}
                   onChange={ids => this.handleIdChange(ids, onValueChange)}
                 />
@@ -314,7 +297,7 @@ class TagDialog extends React.Component {
                   name="resource_id_text"
                   value={this.state.resourceIdText}
                   grow="1"
-                  disabled={!this.state.typeIsChosen}
+                  disabled={!typeIsChosen || fixed}
                   onChange={id => this.handleIdChangeByText(id, onValueChange)}
                 />
               </FormGroup>
@@ -340,6 +323,8 @@ TagDialog.propTypes = {
   fixed: PropTypes.bool,
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string,
+  resource_ids: PropTypes.arrayOf(PropTypes.id),
+  resource_type: PropTypes.string,
   resource_types: PropTypes.array.isRequired,
   tag: PropTypes.model,
   title: PropTypes.string,

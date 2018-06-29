@@ -60,7 +60,7 @@ class TagsHandler extends React.Component {
 
     create({
       fixed: true,
-      resource_id: entity.id,
+      resource_ids: [entity.id],
       resource_type: resourceType,
       name: _('{{type}}:unnamed', {type: name}),
     });
