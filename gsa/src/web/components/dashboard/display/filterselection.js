@@ -60,20 +60,6 @@ class FilterSelection extends React.Component {
     this.handleSaveDialog = this.handleSaveDialog.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const {filters, filterId} = nextProps;
-    if (prevState.filterId !== filterId &&
-      is_defined(filters) && filters.length > 0) {
-      const filter = is_defined(filterId) ?
-        filters.find(f => f.id === filterId) : undefined;
-      return {
-        filter,
-        filterId,
-      };
-    }
-    return null;
-  }
-
   componentDidMount() {
     this.props.loadFilters();
   }
@@ -102,8 +88,9 @@ class FilterSelection extends React.Component {
     const {
       children,
       filters = [],
+      filterId,
     } = this.props;
-    const {filter, filterId, showDialog} = this.state;
+    const {showDialog} = this.state;
     const filterSelectionMenuEntry = (
       <MenuEntry
         key="filter-selection"
@@ -112,6 +99,8 @@ class FilterSelection extends React.Component {
         {_('Select Filter')}
       </MenuEntry>
     );
+    const filter = is_defined(filterId) ?
+      filters.find(f => f.id === filterId) : undefined;
     return (
       <React.Fragment>
         {children({
