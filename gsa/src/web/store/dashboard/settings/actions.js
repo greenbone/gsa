@@ -42,15 +42,15 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
-export const receivedDashboardSettings = (id, settings, defaults) => ({
+export const receivedDashboardSettings = (id, settings) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
   settings,
-  defaults,
 });
 
-export const receivedDashboardSettingsLoadingError = error => ({
+export const receivedDashboardSettingsLoadingError = (id, error) => ({
   type: DASHBOARD_SETTINGS_LOADING_ERROR,
+  id,
   error,
 });
 
@@ -90,9 +90,8 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
 
   const promise = gmp.dashboards.currentSettings();
   return promise.then(
-    response => dispatch(receivedDashboardSettings(
-      id, response.data, defaults)),
-    error => dispatch(receivedDashboardSettingsLoadingError(error)),
+    response => dispatch(receivedDashboardSettings(id, response.data)),
+    error => dispatch(receivedDashboardSettingsLoadingError(id, error)),
   );
 };
 

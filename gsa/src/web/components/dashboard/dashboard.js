@@ -26,9 +26,11 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import glamorous from 'glamorous';
+
 import Logger from 'gmp/log';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {exclude_object_props} from 'gmp/utils/object';
 
@@ -38,7 +40,14 @@ import {
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
-import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
+import Loading from 'web/components/loading/loading';
+
+import Grid, {
+  createRow,
+  createItem,
+  itemsPropType,
+  DEFAULT_ROW_HEIGHT,
+} from 'web/components/sortable/grid';
 
 import PropTypes from '../../utils/proptypes';
 import withGmp from '../../utils/withGmp';
@@ -55,6 +64,7 @@ const ownPropNames = [
   'defaultContent',
   'gmp',
   'id',
+  'isLoading',
   'items',
   'loadSettings',
   'maxItemsPerRow',
@@ -62,6 +72,12 @@ const ownPropNames = [
   'permittedDisplays',
   'saveSettings',
 ];
+
+const RowPlaceHolder = glamorous.div({
+  display: 'flex',
+  grow: 1,
+  height: DEFAULT_ROW_HEIGHT,
+});
 
 const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
@@ -73,6 +89,7 @@ export class Dashboard extends React.Component {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
+    isLoading: PropTypes.bool.isRequired,
     items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
@@ -82,8 +99,8 @@ export class Dashboard extends React.Component {
     onFilterChanged: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
     const {permittedDisplays = []} = this.props;
 
@@ -108,8 +125,15 @@ export class Dashboard extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    return prevState.items === nextProps.items ?
-      null : {items: nextProps.items};
+    // try to synchronize external and internal state
+    // update state items only if prop items have changed or
+    // prop items are different then already set items
+    return prevState.propItems === nextProps.items ||
+      prevState.propItems === nextProps.items ?
+      null : {
+        items: nextProps.items,
+        propItems: nextProps.items,
+      };
   }
 
   componentDidMount() {
@@ -150,13 +174,18 @@ export class Dashboard extends React.Component {
     const {
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
+      isLoading,
       ...props
     } = this.props;
+
+    if (!is_defined(items) && isLoading) {
+      return <RowPlaceHolder><Loading/></RowPlaceHolder>;
+    }
 
     const other = exclude_object_props(props, ownPropNames);
     return (
       <Grid
-        items={has_value(items) ? items : []}
+        items={is_defined(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
@@ -192,9 +221,19 @@ export class Dashboard extends React.Component {
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
   const settings = settingsSelector.getById(id);
+  const hasLoaded = settingsSelector.hasSettings(id);
+  const defaults = settingsSelector.getDefaultsById(id);
+
+  let items;
+  if (hasLoaded && is_defined(settings.rows)) {
+    items = settings.rows;
+  }
+  else if (hasLoaded) {
+    items = defaults.rows;
+  }
   return {
-    isLoading: settingsSelector.getIsLoading(),
-    items: has_value(settings) ? settings.rows : undefined,
+    isLoading: settingsSelector.getIsLoading() || !hasLoaded,
+    items,
   };
 };
 

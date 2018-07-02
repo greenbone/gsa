@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, has_value} from 'gmp/utils/index';
+import {is_defined} from 'gmp/utils/identity';
 
 class DashboardSetting {
 
@@ -29,18 +29,22 @@ class DashboardSetting {
   }
 
   getById(id) {
-    if (is_defined(this.state) && has_value(this.state.byId)) {
+    if (is_defined(this.state) && is_defined(this.state.byId)) {
       return this.state.byId[id];
     }
     return undefined;
   }
 
   getDefaultsById(id) {
-    if (is_defined(this.state) && has_value(this.state.defaults)) {
+    if (is_defined(this.state) && is_defined(this.state.defaults)) {
       const defaults = this.state.defaults[id];
       return is_defined(defaults) ? defaults : {};
     }
     return {};
+  }
+
+  hasSettings(id) {
+    return is_defined(this.getById(id));
   }
 
   getError() {
