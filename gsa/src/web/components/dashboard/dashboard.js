@@ -214,9 +214,19 @@ export class Dashboard extends React.Component {
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
   const settings = settingsSelector.getById(id);
+  const hasLoaded = settingsSelector.hasSettings(id);
+  const defaults = settingsSelector.getDefaultsById(id);
+
+  let items;
+  if (hasLoaded && is_defined(settings.rows)) {
+    items = settings.rows;
+  }
+  else if (hasLoaded) {
+    items = defaults.rows;
+  }
   return {
-    isLoading: settingsSelector.getIsLoading(),
-    items: has_value(settings) ? settings.rows : undefined,
+    isLoading: settingsSelector.getIsLoading() || !hasLoaded,
+    items,
   };
 };
 
