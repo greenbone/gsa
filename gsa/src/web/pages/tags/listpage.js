@@ -104,6 +104,7 @@ const TagsPage = ({
       filterEditDialog={TagsFilterDialog}
       sectionIcon="tag.svg"
       table={TagsTable}
+      tags={false}
       title={_('Tags')}
       toolBarIcons={ToolBarIcons}
       onChanged={onChanged}
