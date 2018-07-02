@@ -26,6 +26,8 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import glamorous from 'glamorous';
+
 import Logger from 'gmp/log';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
@@ -38,7 +40,14 @@ import {
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
-import Grid, {createRow, createItem, itemsPropType} from '../sortable/grid.js';
+import Loading from 'web/components/loading/loading';
+
+import Grid, {
+  createRow,
+  createItem,
+  itemsPropType,
+  DEFAULT_ROW_HEIGHT,
+} from 'web/components/sortable/grid';
 
 import PropTypes from '../../utils/proptypes';
 import withGmp from '../../utils/withGmp';
@@ -55,6 +64,7 @@ const ownPropNames = [
   'defaultContent',
   'gmp',
   'id',
+  'isLoading',
   'items',
   'loadSettings',
   'maxItemsPerRow',
@@ -62,6 +72,12 @@ const ownPropNames = [
   'permittedDisplays',
   'saveSettings',
 ];
+
+const RowPlaceHolder = glamorous.div({
+  display: 'flex',
+  grow: 1,
+  height: DEFAULT_ROW_HEIGHT,
+});
 
 const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
@@ -73,6 +89,7 @@ export class Dashboard extends React.Component {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
+    isLoading: PropTypes.bool.isRequired,
     items: itemsPropType,
     loadSettings: PropTypes.func.isRequired,
     maxItemsPerRow: PropTypes.number,
@@ -150,8 +167,13 @@ export class Dashboard extends React.Component {
     const {
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
+      isLoading,
       ...props
     } = this.props;
+
+    if (!is_defined(items) && isLoading) {
+      return <RowPlaceHolder><Loading/></RowPlaceHolder>;
+    }
 
     const other = exclude_object_props(props, ownPropNames);
     return (
