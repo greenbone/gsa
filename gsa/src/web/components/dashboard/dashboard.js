@@ -30,7 +30,7 @@ import glamorous from 'glamorous';
 
 import Logger from 'gmp/log';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {exclude_object_props} from 'gmp/utils/object';
 
@@ -99,8 +99,8 @@ export class Dashboard extends React.Component {
     onFilterChanged: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
     const {permittedDisplays = []} = this.props;
 
@@ -185,7 +185,7 @@ export class Dashboard extends React.Component {
     const other = exclude_object_props(props, ownPropNames);
     return (
       <Grid
-        items={has_value(items) ? items : []}
+        items={is_defined(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
