@@ -56,7 +56,8 @@ class WordCloudChart extends React.Component {
       .fontSize(d => d.size)
       .rotate(0)
       .padding(2)
-      .font('Sans');
+      .font('Sans')
+      .on('end', words => this.setState({words}));
   }
 
   componentDidMount() {
@@ -64,17 +65,23 @@ class WordCloudChart extends React.Component {
     if (data.length > 0) {
       this.updateSize();
       this.updateWords();
+      this.cloud.start();
     }
   }
 
   componentDidUpdate() {
+    if (this.state.width !== this.props.width ||
+      this.state.height !== this.props.height) {
+      this.updateSize();
+    }
     if (this.state.data !== this.props.data) {
       // data has been changed => recalcuate words
       this.updateWords();
     }
     if (this.state.width !== this.props.width ||
-      this.state.height !== this.props.height) {
-      this.updateSize();
+      this.state.height !== this.props.height ||
+      this.state.data !== this.props.data) {
+      this.cloud.start();
     }
   }
 
@@ -106,10 +113,7 @@ class WordCloudChart extends React.Component {
     this.setState({data});
 
     this.cloud.stop();
-    this.cloud
-      .words(origWords)
-      .on('end', words => this.setState({words}))
-      .start();
+    this.cloud.words(origWords);
   }
 
   updateSize() {
