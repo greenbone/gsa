@@ -62,6 +62,7 @@ class WordCloudChart extends React.Component {
   componentDidMount() {
     const {data = []} = this.props;
     if (data.length > 0) {
+      this.updateSize();
       this.updateWords();
     }
   }
@@ -71,13 +72,14 @@ class WordCloudChart extends React.Component {
       // data has been changed => recalcuate words
       this.updateWords();
     }
+    if (this.state.width !== this.props.width ||
+      this.state.height !== this.props.height) {
+      this.updateSize();
+    }
   }
 
   updateWords() {
-    const {data, width, height} = this.props;
-
-    const maxWidth = width - margin.left - margin.right;
-    const maxHeight = height - margin.top - margin.bottom;
+    const {data} = this.props;
 
     let values = data.map(d => d.value).sort();
 
@@ -105,10 +107,22 @@ class WordCloudChart extends React.Component {
 
     this.cloud.stop();
     this.cloud
-      .size([maxWidth, maxHeight])
       .words(origWords)
       .on('end', words => this.setState({words}))
       .start();
+  }
+
+  updateSize() {
+    const {width, height} = this.props;
+    const maxWidth = width - margin.left - margin.right;
+    const maxHeight = height - margin.top - margin.bottom;
+
+    this.cloud.size([maxWidth, maxHeight]);
+
+    this.setState({
+      height,
+      width,
+    });
   }
 
   render() {
