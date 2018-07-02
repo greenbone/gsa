@@ -43,6 +43,10 @@ class DashboardSetting {
     return {};
   }
 
+  hasSettings(id) {
+    return is_defined(this.getById(id));
+  }
+
   getError() {
     return is_defined(this.state) ? this.state.error : undefined;
   }
