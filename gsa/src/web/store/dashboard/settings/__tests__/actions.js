@@ -38,32 +38,18 @@ import {
   saveDashboardSettingsError,
 } from '../actions';
 
-describe('receive settings action tests', () => {
+describe('dashboard settings action tests', () => {
 
   test('should create an action to request dashboard settings', () => {
-    expect(requestDashboardSettings()).toEqual({
+    const id = 'a1';
+    const defaults = {abc: 'def'};
+
+    expect(requestDashboardSettings(id, defaults)).toEqual({
+      defaults,
+      id,
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
   });
-
-  test('should create an action to receive dashboard settings with defaults', () => {
-    const id = 'a1';
-    const data = {foo: 'bar'};
-    const defaults = {abc: 'def'};
-    const settings = {
-      items: data,
-    };
-
-    expect(receivedDashboardSettings(id, settings, defaults)).toEqual({
-      settings,
-      defaults,
-      id,
-      type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
-    });
-  });
-});
-
-describe('received settings action tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
@@ -78,21 +64,17 @@ describe('received settings action tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
     });
   });
-});
-
-describe('received settings loading error action tests', () => {
 
   test('should create an action to receive an error during loading', () => {
     const error = 'An error occured';
+    const id = 'a1';
 
-    expect(receivedDashboardSettingsLoadingError(error)).toEqual({
+    expect(receivedDashboardSettingsLoadingError(id, error)).toEqual({
       error,
+      id,
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });
   });
-});
-
-describe('save settings action tests', () => {
 
   test('should create an action to save dashboard settings', () => {
     const id = 'a1';
@@ -107,18 +89,12 @@ describe('save settings action tests', () => {
       settings,
     });
   });
-});
-
-describe('saved settings action tests', () => {
 
   test('should create an action after dashboard settings have been saved', () => {
     expect(savedDashboardSettings()).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
     });
   });
-});
-
-describe('save settings error action tests', () => {
 
   test('should create an action if an error has occurred during saving', () => {
     const error = 'An error';
@@ -128,6 +104,7 @@ describe('save settings error action tests', () => {
       error,
     });
   });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

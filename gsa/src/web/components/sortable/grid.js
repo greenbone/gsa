@@ -43,7 +43,7 @@ import AutoSize from '../layout/autosize.js';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-const DEFAULT_ROW_HEIGHT = 250;
+export const DEFAULT_ROW_HEIGHT = 250;
 
 export const createRow = (items, height = DEFAULT_ROW_HEIGHT) => ({
   id: uuid(),

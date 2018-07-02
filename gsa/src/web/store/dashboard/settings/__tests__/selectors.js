@@ -25,6 +25,12 @@
 
 import getDashboardSettings from '../selectors';
 
+const createState = state => ({
+  dashboardSettings: {
+    ...state,
+  },
+});
+
 describe('dashboard settings selector init tests', () => {
   test('should not crash with undefined state', () => {
     const selector = getDashboardSettings();
@@ -33,6 +39,7 @@ describe('dashboard settings selector init tests', () => {
     expect(selector.getIsLoading()).toEqual(false);
     expect(selector.getError()).toBeUndefined();
     expect(selector.getDefaultsById('a')).toEqual({});
+    expect(selector.hasSettings('a')).toBe(false);
   });
 
   test('should not crash with empty state', () => {
@@ -42,12 +49,11 @@ describe('dashboard settings selector init tests', () => {
     expect(selector.getIsLoading()).toEqual(false);
     expect(selector.getError()).toBeUndefined();
     expect(selector.getDefaultsById('a')).toEqual({});
+    expect(selector.hasSettings('a')).toBe(false);
   });
 
   test('should not crash with empty dashboadSettings', () => {
-    const rootState = {
-      dashboardSettings: {},
-    };
+    const rootState = createState({});
 
     const selector = getDashboardSettings(rootState);
 
@@ -55,17 +61,16 @@ describe('dashboard settings selector init tests', () => {
     expect(selector.getIsLoading()).toBeUndefined();
     expect(selector.getError()).toBeUndefined();
     expect(selector.getDefaultsById('a')).toEqual({});
+    expect(selector.hasSettings('a')).toBe(false);
   });
 });
 
 describe('dashboard setting selector isLoading tests', () => {
 
   test('should return isLoading', () => {
-    const rootState = {
-      dashboardSettings: {
-        isLoading: true,
-      },
-    };
+    const rootState = createState({
+      isLoading: true,
+    });
 
     const selector = getDashboardSettings(rootState);
 
@@ -76,11 +81,9 @@ describe('dashboard setting selector isLoading tests', () => {
 describe('dashboard setting selector getItemsById tests', () => {
 
   test('should return error', () => {
-    const rootState = {
-      dashboardSettings: {
-        error: 'An error',
-      },
-    };
+    const rootState = createState({
+      error: 'An error',
+    });
 
     const selector = getDashboardSettings(rootState);
 
@@ -92,15 +95,13 @@ describe('dashboard setting selector getById tests', () => {
 
   test('should return settings', () => {
     const id = 'a1';
-    const rootState = {
-      dashboardSettings: {
-        byId: {
-          [id]: {
-            foo: 'bar',
-          },
+    const rootState = createState({
+      byId: {
+        [id]: {
+          foo: 'bar',
         },
       },
-    };
+    });
 
     const selector = getDashboardSettings(rootState);
 
@@ -108,12 +109,10 @@ describe('dashboard setting selector getById tests', () => {
   });
 
   test('should return undefined if unknown id is passed', () => {
-    const rootState = {
-      dashboardSettings: {
-        byId: {
-        },
+    const rootState = createState({
+      byId: {
       },
-    };
+    });
 
     const selector = getDashboardSettings(rootState);
 
@@ -124,13 +123,11 @@ describe('dashboard setting selector getById tests', () => {
 describe('dashboard setting selector getDefaultsById tests', () => {
   test('should return defaults', () => {
     const id = 'a1';
-    const rootState = {
-      dashboardSettings: {
-        defaults: {
-          [id]: ['a', 'b'],
-        },
+    const rootState = createState({
+      defaults: {
+        [id]: ['a', 'b'],
       },
-    };
+    });
 
     const selector = getDashboardSettings(rootState);
 
@@ -138,16 +135,71 @@ describe('dashboard setting selector getDefaultsById tests', () => {
   });
 
   test('should return null for items if unknown id is passed', () => {
-    const rootState = {
-      dashboardSettings: {
-        defaults: {
-        },
+    const rootState = createState({
+      defaults: {
       },
-    };
+    });
 
     const selector = getDashboardSettings(rootState);
 
     expect(selector.getDefaultsById('a')).toEqual({});
+  });
+});
+
+describe('dashboard setting selector hasSettings tests', () => {
+
+  test('should return false for undefined state', () => {
+    const selector = getDashboardSettings();
+
+    expect(selector.hasSettings('a')).toBe(false);
+  });
+
+  test('should return false for empty state', () => {
+    const selector = getDashboardSettings({});
+
+    expect(selector.hasSettings('a')).toBe(false);
+  });
+
+  test('should return false for empty byId', () => {
+    const rootState = createState({
+      byId: {},
+    });
+    const selector = getDashboardSettings(rootState);
+
+    expect(selector.hasSettings('a')).toBe(false);
+  });
+
+  test('should return false for undefined id in byId', () => {
+    const rootState = createState({
+      byId: {
+        a: undefined,
+      },
+    });
+    const selector = getDashboardSettings(rootState);
+
+    expect(selector.hasSettings('a')).toBe(false);
+  });
+
+  test('should return true for empty id in byId', () => {
+    const rootState = createState({
+      byId: {
+        a: {},
+      },
+    });
+    const selector = getDashboardSettings(rootState);
+
+    expect(selector.hasSettings('a')).toBe(true);
+  });
+
+  test('should return false for other id in byId', () => {
+    const rootState = createState({
+      byId: {
+        a: {},
+      },
+    });
+    const selector = getDashboardSettings(rootState);
+
+    expect(selector.hasSettings('b')).toBe(false);
   });
 });
 
