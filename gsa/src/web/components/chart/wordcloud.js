@@ -59,68 +59,49 @@ class WordCloudChart extends React.Component {
       .font('Sans');
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const {data, width, height} = nextProps;
-
-    if (data !== prevState.data ||
-      width !== prevState.width ||
-      height !== prevState.width) {
-
-      const state = {
-        height,
-        width,
-        words: undefined, // reset words -> words must be recalculated
-      };
-
-      if (data !== prevState.data) {
-        // only update origWords if data has changed
-
-        let values = data.map(d => d.value).sort();
-
-        if (values.length > DEFAULT_MAX_WORDS) {
-          values = values.slice(0, DEFAULT_MAX_WORDS);
-        }
-
-        const min = Math.min(...values);
-        const max = Math.max(...values);
-
-        const wordScale = scaleLinear()
-          .domain([min, max])
-          .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
-
-        state.origWords = data.map(word => ({
-          size: wordScale(word.value),
-          text: word.label,
-          color: word.color,
-          filterValue: word.filterValue,
-        }));
-      }
-      return state;
-    }
-    return null;
-  }
-
   componentDidMount() {
-    this.updateWords();
-  }
-
-  componentDidUpdate() {
-    if (!is_defined(this.state.words)) {
-      // words have been reset => recalcuate words
+    const {data = []} = this.props;
+    if (data.length > 0) {
       this.updateWords();
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.origWords !== this.state.origWords ||
-      nextState.words !== this.state.words;
+  componentDidUpdate() {
+    if (this.state.data !== this.props.data) {
+      // data has been changed => recalcuate words
+      this.updateWords();
+    }
   }
 
   updateWords() {
-    const {width, height, origWords} = this.state;
+    const {data, width, height} = this.props;
 
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
+
+    let values = data.map(d => d.value).sort();
+
+    if (values.length > DEFAULT_MAX_WORDS) {
+      values = values.slice(0, DEFAULT_MAX_WORDS);
+    }
+
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+
+    const wordScale = scaleLinear()
+      .domain([min, max])
+      .range([MIN_FONT_SIZE, MAX_FONT_SIZE]);
+
+    const origWords = data.map(word => ({
+      size: wordScale(word.value),
+      text: word.label,
+      color: word.color,
+      filterValue: word.filterValue,
+    }));
+
+    // store to be rendered data in state
+    // this allows to check if we need to update words on next render phase
+    this.setState({data});
 
     this.cloud.stop();
     this.cloud
