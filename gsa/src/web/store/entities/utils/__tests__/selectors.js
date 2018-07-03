@@ -297,43 +297,43 @@ describe('EntitiesSelector getEntities tests', () => {
 
 });
 
-describe('EntitiesSelector getError tests', () => {
+describe('EntitiesSelector getEntitiesError tests', () => {
 
-  test('getError for undefined state', () => {
+  test('should return undefined for undefined state', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError()).toBeUndefined();
+    expect(fooSelector.getEntitiesError()).toBeUndefined();
   });
 
-  test('getError for undefined state with filter', () => {
+  test('should return undefined for undefined state with filter', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
 
-  test('getError for empty state', () => {
+  test('should return undefined for empty state', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError()).toBeUndefined();
+    expect(fooSelector.getEntitiesError()).toBeUndefined();
   });
 
-  test('getError for empty state with filter', () => {
+  test('should return undefined for empty state with filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
 
-  test('getError should return error with default filter', () => {
+  test('should return error with default filter', () => {
     const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -344,10 +344,10 @@ describe('EntitiesSelector getError tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError()).toEqual('An error');
+    expect(fooSelector.getEntitiesError()).toEqual('An error');
   });
 
-  test('getError should return error with filter', () => {
+  test('should return error with filter', () => {
     const filter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -358,10 +358,10 @@ describe('EntitiesSelector getError tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError(filter)).toEqual('Another error');
+    expect(fooSelector.getEntitiesError(filter)).toEqual('Another error');
   });
 
-  test('getEeror should return undefined for undefined error', () => {
+  test('should return undefined for undefined error', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: {
@@ -369,10 +369,10 @@ describe('EntitiesSelector getError tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError()).toBeUndefined();
+    expect(fooSelector.getEntitiesError()).toBeUndefined();
   });
 
-  test('getError should return undefined for unkown filter', () => {
+  test('should return undefined for unkown filter', () => {
     const otherFilter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -384,7 +384,7 @@ describe('EntitiesSelector getError tests', () => {
     const filter = Filter.fromString('name=bar');
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getError(filter)).toBeUndefined();
+    expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
 
 });

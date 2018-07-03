@@ -42,7 +42,7 @@ class EntitiesSelector {
       false;
   }
 
-  getError(filter) {
+  getEntitiesError(filter) {
     return is_defined(this.state.errors) ?
       this.state.errors[filterIdentifier(filter)] :
       undefined;
