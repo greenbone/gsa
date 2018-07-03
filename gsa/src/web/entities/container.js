@@ -467,7 +467,7 @@ class EntitiesContainer extends React.Component {
       loaded_filter,
       loading,
       newTag,
-      selected = {},
+      selected,
       selection_type,
       sortBy,
       sortDir,
