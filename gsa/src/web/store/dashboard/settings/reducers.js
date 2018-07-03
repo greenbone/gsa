@@ -67,13 +67,6 @@ const byId = (state = {}, action) => {
           ...settings,
         },
       };
-    case DASHBOARD_SETTINGS_LOADING_ERROR:
-      return {
-        ...state,
-        [id]: { // ensure id is set in state
-          ...state[id],
-        },
-      };
     default:
       return state;
   }
