@@ -25,6 +25,7 @@ import 'core-js/fn/object/entries';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {is_defined} from 'gmp/utils/identity';
 import {render_select_items} from 'web/utils/render.js';
 
 import withGmp from 'web/utils/withGmp';
@@ -37,6 +38,9 @@ import SaveDialog from '../components/dialog/savedialog.js';
 import FormGroup from '../components/form/formgroup.js';
 import Select from '../components/form/select.js';
 
+import NewIcon from '../components/icon/newicon.js';
+
+import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
 class TagsDialog extends React.Component {
@@ -44,10 +48,20 @@ class TagsDialog extends React.Component {
   constructor(args) {
     super(...args);
 
-    this.state = {tag: {}};
+    this.state = {};
 
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (is_defined(nextProps.tag) && nextProps.tag.id !== prevState.propId) {
+      return {
+        ...nextProps.tag,
+        propId: nextProps.tag.id,
+      };
+    }
+    return null;
   }
 
   handleChange(value, name) {
@@ -125,10 +139,14 @@ class TagsDialog extends React.Component {
       tags,
       title = _('Add Tag'),
       onClose,
+      onNewTagClick,
     } = this.props;
 
     const {
+      comment,
       id,
+      name,
+      value,
     } = this.state;
 
     return (
@@ -136,6 +154,12 @@ class TagsDialog extends React.Component {
         buttonTitle="Add Tag"
         title={title}
         width="650px"
+        values={{
+          comment,
+          id,
+          name,
+          value,
+        }}
         onClose={onClose}
         onSave={this.save}
       >
@@ -146,14 +170,27 @@ class TagsDialog extends React.Component {
           return (
             <Layout flex="column">
               <FormGroup title={_('Choose Tag')} titleSize="4">
-                <Select
-                  menuPosition="adjust"
-                  name="name"
-                  value={id}
-                  width="230"
-                  items={render_select_items(tags)}
-                  onChange={this.handleChange}
-                />
+                <Divider>
+                  <Select
+                    menuPosition="adjust"
+                    name="name"
+                    value={id}
+                    width="230"
+                    items={render_select_items(tags)}
+                    onChange={this.handleChange}
+                  />
+                  <NewIcon
+                    value={'tag'}
+                    title={_('Create a new Tag')}
+                    onClick={onNewTagClick}
+                  />
+                </Divider>
+              </FormGroup>
+              <FormGroup title={_('Value')} titleSize="4">
+                {is_defined(value) ? value : ''}
+              </FormGroup>
+              <FormGroup title={_('Comment')} titleSize="4">
+                {is_defined(comment) ? comment : ''}
               </FormGroup>
             </Layout>
           );
@@ -173,11 +210,11 @@ TagsDialog.propTypes = {
   resourceType: PropTypes.string.isRequired,
   resources: PropTypes.object,
   selectionType: PropTypes.string.isRequired,
-  tag: PropTypes.model,
   tags: PropTypes.array,
   title: PropTypes.string,
   value: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onNewTagClick: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
 
