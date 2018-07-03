@@ -46,7 +46,7 @@ import TableData from '../../components/table/data.js';
 import ResultDelta from './delta.js';
 
 const Hostname = glamorous.span({
-  fontSize: '10px',
+  fontSize: '0.8em',
 });
 
 const Row = ({
@@ -97,7 +97,7 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
-        {host.hostname &&
+        {host.hostname.length > 0 &&
           <Hostname>({host.hostname})</Hostname>
         }
       </TableData>

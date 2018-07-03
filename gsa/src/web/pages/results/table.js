@@ -143,7 +143,7 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hostname' : false}
           onSortChange={onSortChange}>
-          {_('Hostname')}
+          {_('Name')}
         </TableHead>
       </TableRow>
     </TableHeader>
