@@ -79,6 +79,8 @@ const RowPlaceHolder = glamorous.div({
   display: 'flex',
   grow: 1,
   height: DEFAULT_ROW_HEIGHT,
+  justifyContent: 'center',
+  alignItems: 'center',
 });
 
 const convertDefaultContent = defaultContent =>
