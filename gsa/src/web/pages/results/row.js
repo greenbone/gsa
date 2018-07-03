@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
+
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -45,10 +45,6 @@ import TableData from '../../components/table/data.js';
 
 import ResultDelta from './delta.js';
 
-const Hostname = glamorous.span({
-  fontSize: '0.8em',
-});
-
 const Row = ({
   actions,
   delta = false,
@@ -60,6 +56,16 @@ const Row = ({
   const {host} = entity;
   const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
+  var hostname_elem;
+  if (host.hostname.length > 40)
+    hostname_elem = <span title={host.hostname}>
+                      ({shorten (host.hostname, 40)})
+                    </span>
+  else if (host.hostname.length > 0)
+    hostname_elem = <span>{host.hostname}</span>
+  else
+    hostname_elem = false
+
   return (
     <TableRow>
       {delta &&
@@ -97,9 +103,7 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
-        {host.hostname.length > 0 &&
-          <Hostname>({host.hostname})</Hostname>
-        }
+        {hostname_elem}
       </TableData>
       <TableData>
         {entity.port}
