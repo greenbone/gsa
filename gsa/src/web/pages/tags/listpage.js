@@ -41,7 +41,15 @@ import IconDivider from '../../components/layout/icondivider.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import TagComponent from './component.js';
-import TagsTable, {SORT_FIELDS} from './table.js';
+import TagsTable from './table.js';
+
+export const SORT_FIELDS = [
+  ['name', _('Name'), '30%'],
+  ['value', _('Value'), '30%'],
+  ['active', _('Active'), '8%'],
+  ['resource_type', _('Resource Type'), '8%'],
+  ['modified', _('Modified'), '8%'],
+];
 
 const ToolBarIcons = withCapabilties(({
   capabilities,
