@@ -36,6 +36,12 @@ class EntitiesSelector {
       false;
   }
 
+  isLoadingEntity(id) {
+    return is_defined(this.state.isLoading) ?
+      !!this.state.isLoading[id] :
+      false;
+  }
+
   getError(filter) {
     return is_defined(this.state.errors) ?
       this.state.errors[filterIdentifier(filter)] :

@@ -118,6 +118,67 @@ describe('EntitiesSelector getIsLoadingEntities tests', () => {
 
 });
 
+describe('EntitiesSelector getIsLoadingEntity tests', () => {
+
+  test('should be false for undefined state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.isLoadingEntity(id)).toBe(false);
+  });
+
+  test('should be false for empty state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.isLoadingEntity(id)).toEqual(false);
+  });
+
+  test('should be false for unkown id', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      isLoading: {
+        a2: true,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.isLoadingEntity(id)).toBe(false);
+  });
+
+  test('should be false if false in state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      isLoading: {
+        [id]: false,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.isLoadingEntity(id)).toBe(false);
+  });
+
+  test('should be true if true in state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      isLoading: {
+        [id]: true,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.isLoadingEntity(id)).toBe(true);
+  });
+
+});
+
 describe('EntitiesSelector getEntities tests', () => {
 
   test('getEntities for undefined state', () => {
