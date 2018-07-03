@@ -35,6 +35,7 @@ import Filter from 'gmp/models/filter.js';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
+import {type_name} from '../utils/render.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
@@ -48,6 +49,8 @@ import Wrapper from '../components/layout/wrapper.js';
 import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import SortBy from '../components/sortby/sortby.js';
+
+import TagDialog from '../pages/tags/dialog.js';
 
 import TagsDialog from './tagsdialog.js';
 
@@ -71,6 +74,7 @@ class EntitiesContainer extends React.Component {
       updating: false,
       selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
       tags: [],
+      tagDialogVisible: false,
       tagsDialogVisible: false,
     };
 
@@ -93,6 +97,7 @@ class EntitiesContainer extends React.Component {
     this.notifyChanged = notify(`${entities_command_name}.changed`);
 
     this.handleChanged = this.handleChanged.bind(this);
+    this.handleCreateTag = this.handleCreateTag.bind(this);
     this.handleDeselected = this.handleDeselected.bind(this);
     this.handleDeleteBulk = this.handleDeleteBulk.bind(this);
     this.handleDownloadBulk = this.handleDownloadBulk.bind(this);
@@ -108,6 +113,8 @@ class EntitiesContainer extends React.Component {
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
+    this.openTagDialog = this.openTagDialog.bind(this);
+    this.closeTagDialog = this.closeTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
     this.closeTagsDialog = this.closeTagsDialog.bind(this);
   }
@@ -406,6 +413,33 @@ class EntitiesContainer extends React.Component {
     this.load();
   }
 
+  openTagDialog() {
+    this.setState({tagDialogVisible: true});
+  }
+
+  closeTagDialog() {
+    this.setState({tagDialogVisible: false});
+  }
+
+  handleCreateTag(data) {
+    const {gmp} = this.props;
+    const {tags} = this.state;
+    let newTag;
+    return gmp.tag.create(data).then(response => {
+      newTag = response.data;
+    })
+    .then(() => {
+      return gmp.tag.get(newTag);
+    })
+    .then(response => {
+      tags.push(response.data);
+      this.setState({
+        newTag: response.data,
+        tags,
+      });
+    });
+  }
+
   openTagsDialog() {
     this.getTagsByType();
     this.setState({tagsDialogVisible: true});
@@ -432,11 +466,13 @@ class EntitiesContainer extends React.Component {
       entities_counts,
       loaded_filter,
       loading,
+      newTag,
       selected = {},
       selection_type,
       sortBy,
       sortDir,
       tags,
+      tagDialogVisible,
       tagsDialogVisible,
       updating,
     } = this.state;
@@ -463,6 +499,7 @@ class EntitiesContainer extends React.Component {
     }
     const Component = this.props.component;
     const other = exclude_object_props(this.props, exclude_props);
+
     return (
       <Wrapper>
         <Component
@@ -500,12 +537,24 @@ class EntitiesContainer extends React.Component {
         {tagsDialogVisible &&
           <TagsDialog
             filter={loaded_filter}
+            tag={newTag}
             tags={tags}
             title={title}
             resources={selected}
             resourceType={entitiesType}
             selectionType={selection_type}
             onClose={this.closeTagsDialog}
+            onNewTagClick={this.openTagDialog}
+          />
+        }
+        {tagDialogVisible &&
+          <TagDialog
+            fixed={true}
+            resources={selected}
+            resource_type={entitiesType}
+            resource_types={[[entitiesType, type_name(entitiesType)]]}
+            onClose={this.closeTagDialog}
+            onSave={this.handleCreateTag}
           />
         }
       </Wrapper>
