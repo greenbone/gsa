@@ -92,4 +92,24 @@ export const createLoadEntities = ({
     );
   };
 
+export const createLoadEntity = ({
+  selector,
+  actions,
+  entityType,
+}) => ({gmp, id}) => (dispatch, getState) => {
+    const rootState = getState();
+    const state = selector(rootState);
+
+    if (state.isLoadingEntity(id)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
+
+    dispatch(actions.request(id));
+
+    return gmp[entityType].get({id}).then(
+      response => dispatch(actions.success(id, response.data)),
+      error => dispatch(actions.error(id, error)),
+    );
+  };
 // vim: set ts=2 sw=2 tw=80:

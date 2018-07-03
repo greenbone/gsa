@@ -29,6 +29,7 @@ import {
   createEntitiesActions,
   createLoadEntities,
   createEntityActions,
+  createLoadEntity,
 } from '../actions';
 
 describe('entities actions tests', () => {
@@ -324,6 +325,163 @@ describe('entities actions tests', () => {
       });
     });
   });
-});
 
+  describe('createLoadEntity tests', () => {
+
+    test('test isLoading true', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(true);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({id: 'foo'}));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(dispatch).not.toBeCalled();
+        expect(actions.success).not.toBeCalled();
+        expect(actions.error).not.toBeCalled();
+        expect(actions.request).not.toBeCalled();
+        expect(get).not.toBeCalled();
+      });
+    });
+
+    test('test loading success', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(false);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({data: {id, name: 'foo'}}));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(actions.request).toBeCalledWith(id);
+        expect(actions.success).toBeCalledWith(id, {id, name: 'foo'});
+        expect(actions.error).not.toBeCalled();
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
+        expect(get).toBeCalledWith({id});
+      });
+    });
+
+    test('test loading error', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(false);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.reject('An error'));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(actions.request).toBeCalledWith(id);
+        expect(actions.success).not.toBeCalled();
+        expect(actions.error).toBeCalledWith(id, 'An error');
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
+        expect(get).toBeCalledWith({id});
+      });
+    });
+  });
+
+});
 // vim: set ts=2 sw=2 tw=80:
