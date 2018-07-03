@@ -28,9 +28,11 @@ import {connect} from 'react-redux';
 
 import glamorous from 'glamorous';
 
+import _ from 'gmp/locale';
+
 import Logger from 'gmp/log';
 
-import {is_defined} from 'gmp/utils/identity';
+import {is_defined, has_value} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {exclude_object_props} from 'gmp/utils/object';
 
@@ -87,6 +89,7 @@ export class Dashboard extends React.Component {
 
   static propTypes = {
     defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    error: PropTypes.toString,
     filter: PropTypes.filter,
     id: PropTypes.id.isRequired,
     isLoading: PropTypes.bool.isRequired,
@@ -175,11 +178,23 @@ export class Dashboard extends React.Component {
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
       isLoading,
+      error,
       ...props
     } = this.props;
 
-    if (!is_defined(items) && isLoading) {
-      return <RowPlaceHolder><Loading/></RowPlaceHolder>;
+    if (is_defined(error) && !isLoading) {
+      return (
+        <RowPlaceHolder>
+          {_('Could not load dashboard settings. Reason: {{error}}', {error})}
+        </RowPlaceHolder>
+      );
+    }
+    else if (!is_defined(items) && isLoading) {
+      return (
+        <RowPlaceHolder>
+          <Loading />
+        </RowPlaceHolder>
+      );
     }
 
     const other = exclude_object_props(props, ownPropNames);
@@ -223,6 +238,7 @@ const mapStateToProps = (rootState, {id}) => {
   const settings = settingsSelector.getById(id);
   const hasLoaded = settingsSelector.hasSettings(id);
   const defaults = settingsSelector.getDefaultsById(id);
+  const error = settingsSelector.getError();
 
   let items;
   if (hasLoaded && is_defined(settings.rows)) {
@@ -232,7 +248,8 @@ const mapStateToProps = (rootState, {id}) => {
     items = defaults.rows;
   }
   return {
-    isLoading: settingsSelector.getIsLoading() || !hasLoaded,
+    error: has_value(error) ? error : undefined,
+    isLoading: settingsSelector.getIsLoading(),
     items,
   };
 };
