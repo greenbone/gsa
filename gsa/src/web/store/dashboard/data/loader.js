@@ -72,7 +72,31 @@ class Loader extends React.Component {
 
     this.subscriptions = [];
 
+    this.state = {};
+
     this.load = this.load.bind(this);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const {data} = props;
+    if (is_defined(data)) {
+      // Only update data if data is set and keep latest set data in state.
+
+      // This avoids reloading data for the initial load.
+      // At the initial load the filter is undefined.
+      // After the initial load the default filter is set automatically.
+      // When the default filter is set a re-load is started and the data from
+      // the store is undefined again but actually the same data is loaded twice.
+      // Therefore skip passing undefined data to the children.
+
+      // If no data is loaded from the backend data is defined and an empty
+      // array (or object).
+
+      return {
+        data,
+      };
+    }
+    return null;
   }
 
   componentDidMount() {
@@ -114,7 +138,8 @@ class Loader extends React.Component {
   }
 
   render() {
-    const {children, data, isLoading} = this.props;
+    const {children, isLoading} = this.props;
+    const {data} = this.state;
     return is_defined(children) && children({data, isLoading});
   }
 }
