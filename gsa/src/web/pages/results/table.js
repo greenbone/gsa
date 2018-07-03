@@ -61,6 +61,7 @@ const Header = ({
         {delta &&
           <TableHead
             width="4%"
+            rowSpan="2"
             currentSortDir={currentSortDir}
             currentSortBy={currentSortBy}
             sortBy={sort ? 'delta' : false}
@@ -69,14 +70,15 @@ const Header = ({
           </TableHead>
         }
         <TableHead
-          width="57%"
+          width="55%"
+          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'vulnerability' : false}
           onSortChange={onSortChange}>
           {_('Vulnerability')}
         </TableHead>
-        <TableHead width="2%">
+        <TableHead width="2%" rowSpan="2">
           <Layout flex align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
@@ -88,6 +90,7 @@ const Header = ({
         </TableHead>
         <TableHead
           width="8%"
+          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
@@ -96,22 +99,20 @@ const Header = ({
         </TableHead>
         <TableHead
           width="3%"
+          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
-        <TableHead
-          width="7%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'host' : false}
-          onSortChange={onSortChange}>
+        <TableHead colSpan="2"
+          width="13%">
           {_('Host')}
         </TableHead>
         <TableHead
-          width="13%"
+          width="9%"
+          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'location' : false}
@@ -120,6 +121,7 @@ const Header = ({
         </TableHead>
         <TableHead
           width="10%"
+          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'created' : false}
@@ -127,6 +129,22 @@ const Header = ({
           {_('Created')}
         </TableHead>
         {actionsColumn}
+      </TableRow>
+      <TableRow>
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'host' : false}
+          onSortChange={onSortChange}>
+          {_('IP')}
+        </TableHead>
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hostname' : false}
+          onSortChange={onSortChange}>
+          {_('Hostname')}
+        </TableHead>
       </TableRow>
     </TableHeader>
   );

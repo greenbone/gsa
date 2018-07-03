@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
@@ -42,6 +44,10 @@ import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
 import ResultDelta from './delta.js';
+
+const Hostname = glamorous.span({
+  fontSize: '10px',
+});
 
 const Row = ({
   actions,
@@ -83,7 +89,7 @@ const Row = ({
       <TableData flex align="center">
         {entity.qod.value} %
       </TableData>
-      <TableData flex align="center">
+      <TableData colSpan="2">
         <DetailsLink
           type="host"
           id={host.id}
@@ -91,6 +97,9 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
+        {host.hostname &&
+          <Hostname>({host.hostname})</Hostname>
+        }
       </TableData>
       <TableData>
         {entity.port}
