@@ -66,6 +66,11 @@ const Divider = glamorous.div({
   margin: '0 5px',
 });
 
+const ScrollableContent = glamorous.div({
+  maxHeight: '200px',
+  overflow: 'auto',
+});
+
 class TagDialog extends React.Component {
 
   constructor(...args) {
@@ -282,14 +287,16 @@ class TagDialog extends React.Component {
               </FormGroup>
 
               <FormGroup title={_('Resources')}>
-                <MultiSelect
-                  name="resource_ids"
-                  items={render_select_items(this.state.resourceOptions)}
-                  value={this.state.resourceIdsSelected}
-                  disabled={!typeIsChosen || fixed ||
-                    resourceTypesOptions.length === 0}
-                  onChange={ids => this.handleIdChange(ids, onValueChange)}
-                />
+                <ScrollableContent>
+                  <MultiSelect
+                    name="resource_ids"
+                    items={render_select_items(this.state.resourceOptions)}
+                    value={this.state.resourceIdsSelected}
+                    disabled={!typeIsChosen || fixed ||
+                      resourceTypesOptions.length === 0}
+                    onChange={ids => this.handleIdChange(ids, onValueChange)}
+                  />
+                </ScrollableContent>
                 <Divider>
                   {_('or add by ID:')}
                 </Divider>
