@@ -175,8 +175,15 @@ class EntitiesContainer extends React.Component {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
-        const entitiesType = entities.length > 0 ?
+        let entitiesType = entities.length > 0 ?
           entities[0].entity_type : undefined;
+
+        if (entitiesType === 'info') {
+          entitiesType = entities[0].info_type;
+        }
+        if (entitiesType === 'asset') {
+          entitiesType = entities[0].asset_type;
+        }
 
         this.cancel = undefined;
 
