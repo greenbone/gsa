@@ -111,7 +111,7 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      {permission_description(entity.name, entity.resource)}
+      {permission_description(entity.name, entity.resource, entity.subject)}
     </TableData>
     <TableData>
       {is_defined(entity.resource) && typeName(getEntityType(entity.resource))}
