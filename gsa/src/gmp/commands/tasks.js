@@ -170,7 +170,7 @@ class TaskCommand extends EntityCommand {
       max_checks,
       max_hosts,
       cve_scanner_id,
-      tag_id = '',
+      tag_id,
       add_tag,
     } = args;
 
