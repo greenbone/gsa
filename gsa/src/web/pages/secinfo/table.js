@@ -24,7 +24,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
+import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -39,8 +41,6 @@ import TableRow from '../../components/table/row.js';
 
 import SecinfoDetails from './details.js';
 import Row from './row.js';
-import {normalizeType} from 'gmp/utils/index.js';
-import {getEntityType} from 'gmp/utils/entitytype.js';
 
 const Header = ({
   actionsColumn,

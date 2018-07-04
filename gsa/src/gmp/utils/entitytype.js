@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {is_defined} from './identity';
 
 export const getEntityType = (model = {}) => {
   const {entity_type: entityType} = model;
@@ -30,6 +31,23 @@ export const getEntityType = (model = {}) => {
     return model.asset_type;
   }
   return entityType;
+};
+
+export const pluralizeType = type => type[type.length - 1] === 's' ||
+  type === 'info' || type === 'version' ? type : type + 's';
+
+const types = {
+  os: 'operatingsystem',
+  cert_bund_adv: 'certbund',
+  dfn_cert_adv: 'dfncert',
+  port_list: 'portlist',
+  report_format: 'reportformat',
+  config: 'scanconfig',
+};
+
+export const normalizeType = type => {
+  const ctype = types[type];
+  return is_defined(ctype) ? ctype : type;
 };
 
 // vim: set ts=2 sw=2 tw=80:

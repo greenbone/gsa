@@ -24,7 +24,7 @@ import Model from 'gmp/model';
 import Nvt from 'gmp/models/nvt';
 import Host from 'gmp/models/host';
 
-import {getEntityType} from '../entitytype';
+import {getEntityType, pluralizeType, normalizeType} from '../entitytype';
 
 describe('getEntityType function tests', () => {
 
@@ -57,5 +57,52 @@ describe('getEntityType function tests', () => {
   });
 
 });
+
+describe('pluralizeType function tests', () => {
+
+  test('should not pluralize info', () => {
+    expect(pluralizeType('info')).toEqual('info');
+  });
+
+  test('should not pluralize version', () => {
+    expect(pluralizeType('version')).toEqual('version');
+  });
+
+  test('should not pluralize an already pluralized term', () => {
+    expect(pluralizeType('foos')).toEqual('foos');
+    expect(pluralizeType('tasks')).toEqual('tasks');
+  });
+
+  test('should pluralize term', () => {
+    expect(pluralizeType('foo')).toEqual('foos');
+    expect(pluralizeType('task')).toEqual('tasks');
+  });
+
+});
+
+describe('normalizeType function tests', () => {
+
+  test('should normalize types', () => {
+    expect(normalizeType('os')).toEqual('operatingsystem');
+    expect(normalizeType('cert_bund_adv')).toEqual('certbund');
+    expect(normalizeType('dfn_cert_adv')).toEqual('dfncert');
+    expect(normalizeType('port_list')).toEqual('portlist');
+    expect(normalizeType('report_format')).toEqual('reportformat');
+    expect(normalizeType('config')).toEqual('scanconfig');
+  });
+
+  test('should pass through already normalize types', () => {
+    expect(normalizeType('task')).toEqual('task');
+    expect(normalizeType('target')).toEqual('target');
+    expect(normalizeType('reportformat')).toEqual('reportformat');
+    expect(normalizeType('scanconfig')).toEqual('scanconfig');
+  });
+
+  test('should pass through unkown types', () => {
+    expect(normalizeType('foo')).toEqual('foo');
+  });
+
+});
+
 
 // vim: set ts=2 sw=2 tw=80:
