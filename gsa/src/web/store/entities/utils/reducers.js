@@ -51,6 +51,17 @@ export const createReducer = entityType => {
           ...state,
           [filterString]: false,
         };
+      case types.ENTITY_LOADING_REQUEST:
+        return {
+          ...state,
+          [action.id]: true,
+        };
+      case types.ENTITY_LOADING_SUCCESS:
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          [action.id]: false,
+        };
       default:
         return state;
     }
@@ -69,6 +80,17 @@ export const createReducer = entityType => {
         return {
           ...state,
           [filterString]: action.error,
+        };
+      case types.ENTITY_LOADING_SUCCESS:
+        state = {
+          ...state,
+        };
+        delete state[action.id];
+        return state;
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          [action.id]: action.error,
         };
       default:
         return state;
@@ -94,6 +116,11 @@ export const createReducer = entityType => {
         };
         data.forEach(d => nextState[d.id] = d);
         return nextState;
+      case types.ENTITY_LOADING_SUCCESS:
+        return {
+          ...state,
+          [action.id]: action.data,
+        };
       default:
         return state;
     }
