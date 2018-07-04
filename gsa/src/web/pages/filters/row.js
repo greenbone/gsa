@@ -23,12 +23,14 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
+import {typeName} from 'gmp/utils/entitytype';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component, type_name} from '../../utils/render.js';
+import {render_component} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -106,7 +108,7 @@ const Row = ({
       {entity.toFilterString()}
     </TableData>
     <TableData>
-      {type_name(entity.filter_type)}
+      {typeName(entity.filter_type)}
     </TableData>
     {render_component(actions, {...props, entity})}
   </TableRow>

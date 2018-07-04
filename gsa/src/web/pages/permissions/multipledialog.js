@@ -24,11 +24,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {map} from 'gmp/utils/array';
+
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
-import {type_name} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -192,7 +194,7 @@ const MultiplePermissionDialog = ({
               title={_('on')}
               flex="column">
               <Divider>
-                <Text>{type_name(state.entity_type)}</Text>
+                <Text>{typeName(getEntityType(state))}</Text>
                 <i>{state.entity_name}</i>
                 <Select
                   name="include_related"
@@ -220,7 +222,7 @@ const MultiplePermissionDialog = ({
                   {state.related.map(rentity => (
                     <li key={rentity.id}>
                       <Divider>
-                        {type_name(rentity.entity_type)}
+                        {typeName(getEntityType(rentity))}
                         <i>{rentity.name}</i>
                       </Divider>
                     </li>

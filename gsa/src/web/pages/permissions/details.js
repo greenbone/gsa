@@ -24,10 +24,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+
+import {is_defined} from 'gmp/utils/identity';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
-import {permission_description, type_name} from '../../utils/render.js';
+import {permission_description} from '../../utils/render.js';
 
 import EntityLink from '../../entity/link.js';
 
@@ -82,7 +84,7 @@ const PermissionDetails = ({
               </TableData>
               <TableData>
                 <Divider>
-                  <span>{type_name(resource.entity_type)}</span>
+                  <span>{typeName(getEntityType(resource))}</span>
                   <EntityLink entity={resource} />
                 </Divider>
               </TableData>
@@ -96,7 +98,7 @@ const PermissionDetails = ({
               </TableData>
               <TableData>
                 <Divider>
-                  <span>{type_name(subject.entity_type)}</span>
+                  <span>{typeName(getEntityType(subject))}</span>
                   <EntityLink entity={subject} />
                 </Divider>
               </TableData>

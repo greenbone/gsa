@@ -25,9 +25,10 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils/identity';
+import {typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno, type_name} from '../../utils/render.js';
+import {render_yesno} from '../../utils/render.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -78,7 +79,7 @@ const TagDetails = ({
                 {_('Resoure Type')}
               </TableData>
               <TableData>
-                {type_name(resource_type)}
+                {typeName(resource_type)}
               </TableData>
             </TableRow>
           }
