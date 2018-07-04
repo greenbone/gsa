@@ -580,7 +580,7 @@ TaskDialog.propTypes = {
   schedule_periods: PropTypes.yesno,
   schedules: PropTypes.array,
   source_iface: PropTypes.string,
-  tag_id: PropTypes.string,
+  tag_id: PropTypes.id,
   tags: PropTypes.array,
   target_id: PropTypes.idOrZero,
   targets: PropTypes.array,
