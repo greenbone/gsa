@@ -3917,9 +3917,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK (auto_delete_data);
   CHECK (max_hosts);
   CHECK (alterable);
-  if (add_tag)
+  if (add_tag && strcmp (add_tag, "1") == 0)
     {
-      CHECK (add_tag);
       CHECK (tag_id);
     }
 
@@ -4068,7 +4067,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (gmp_success (entity))
     {
-      if (add_tag && strcmp (add_tag, "0"))
+      if (add_tag && strcmp (add_tag, "1") == 0)
         {
           const char *new_task_id = entity_attribute (entity, "id");
           gchar *tag_command, *tag_response;
