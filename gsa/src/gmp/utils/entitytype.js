@@ -24,10 +24,10 @@ import {is_defined} from './identity';
 
 export const getEntityType = (model = {}) => {
   const {entity_type: entityType} = model;
-  if (entityType === 'info') {
+  if (entityType === 'info' && is_defined(model.info_type)) {
     return model.info_type;
   }
-  if (entityType === 'asset') {
+  if (entityType === 'asset' && is_defined(model.asset_type)) {
     return model.asset_type;
   }
   return entityType;

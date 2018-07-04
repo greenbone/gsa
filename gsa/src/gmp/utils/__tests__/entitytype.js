@@ -56,6 +56,18 @@ describe('getEntityType function tests', () => {
     expect(getEntityType(model)).toEqual('host');
   });
 
+  test('should return info if not info_type is defined', () => {
+    const model = new Model({}, 'info');
+
+    expect(getEntityType(model)).toEqual('info');
+  });
+
+  test('should return asset if not asset_type is defined', () => {
+    const model = new Model({}, 'asset');
+
+    expect(getEntityType(model)).toEqual('asset');
+  });
+
 });
 
 describe('pluralizeType function tests', () => {
