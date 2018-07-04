@@ -875,7 +875,7 @@ init_validator ()
   openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "resource_ids:name",     "number");
-  openvas_validator_alias (validator, "resource_ids:value",    "id_optional");
+  openvas_validator_alias (validator, "resource_ids:value",    "info_id");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "result_uuid", "optional_id");
