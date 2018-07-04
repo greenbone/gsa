@@ -29,7 +29,7 @@ import logger from 'gmp/log';
 
 import {is_defined, is_array} from 'gmp/utils/identity';
 import {exclude_object_props} from 'gmp/utils/object';
-import {getEntityType} from 'gmp/utils/entitytype';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
@@ -38,7 +38,6 @@ import Filter from 'gmp/models/filter';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
-import {type_name} from '../utils/render.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
@@ -487,7 +486,7 @@ class EntitiesContainer extends React.Component {
 
     let entitiesType;
     if (is_defined(entities) && is_defined(entities[0])) {
-      entitiesType = entities[0].entity_type;
+      entitiesType = getEntityType(entities[0]);
     }
 
     let title;
@@ -555,7 +554,7 @@ class EntitiesContainer extends React.Component {
             fixed={true}
             resources={selected}
             resource_type={entitiesType}
-            resource_types={[[entitiesType, type_name(entitiesType)]]}
+            resource_types={[[entitiesType, typeName(entitiesType)]]}
             onClose={this.closeTagDialog}
             onSave={this.handleCreateTag}
           />

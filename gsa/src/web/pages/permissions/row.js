@@ -23,13 +23,14 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_component,
-  type_name,
   permission_description,
 } from '../../utils/render.js';
 
@@ -113,7 +114,7 @@ const Row = ({
       {permission_description(entity.name, entity.resource)}
     </TableData>
     <TableData>
-      {is_defined(entity.resource) && type_name(entity.resource.entity_type)}
+      {is_defined(entity.resource) && typeName(getEntityType(entity.resource))}
     </TableData>
     <TableData>
       {is_defined(entity.resource) &&
@@ -121,7 +122,7 @@ const Row = ({
       }
     </TableData>
     <TableData>
-      {is_defined(entity.subject) && type_name(entity.subject.entity_type)}
+      {is_defined(entity.subject) && typeName(getEntityType(entity.subject))}
     </TableData>
     <TableData>
       {is_defined(entity.subject) &&

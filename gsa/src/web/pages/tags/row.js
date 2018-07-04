@@ -27,11 +27,12 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
+import {typeName} from 'gmp/utils/entitytype';
+
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_component,
   render_yesno,
-  type_name,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -153,7 +154,7 @@ const Row = ({
         {render_yesno(entity.isActive())}
       </TableData>
       <TableData>
-        {type_name(resource_type)}
+        {typeName(resource_type)}
       </TableData>
       <TableData>
         {resource_count}
