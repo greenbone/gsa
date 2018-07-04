@@ -169,6 +169,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/promise.js
      ${GSA_SRC_DIR}/src/gmp/timezones.js
      ${GSA_SRC_DIR}/src/gmp/utils/array.js
+     ${GSA_SRC_DIR}/src/gmp/utils/entitytype.js
      ${GSA_SRC_DIR}/src/gmp/utils/event.js
      ${GSA_SRC_DIR}/src/gmp/utils/id.js
      ${GSA_SRC_DIR}/src/gmp/utils/identity.js

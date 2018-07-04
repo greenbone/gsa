@@ -28,11 +28,12 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../utils/proptypes.js';
-import {type_name} from '../utils/render';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -104,7 +105,7 @@ const EntityTags = ({
   const tags = entity.user_tags;
   const has_tags = is_defined(tags);
   const count = has_tags ? tags.length : 0;
-  const entityType = entity.entity_type;
+  const entityType = getEntityType(entity);
   return (
     <Layout
       flex="column"
@@ -162,7 +163,7 @@ const EntityTags = ({
                         <DeleteIcon
                           value={tag}
                           title={_('Remove Tag from {{type}}',
-                            {type: type_name(entityType)})}
+                            {type: typeName(entityType)})}
                           onClick={() => onTagRemoveClick(tag.id, entity)}
                         />
                         <EditIcon

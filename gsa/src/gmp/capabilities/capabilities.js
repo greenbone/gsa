@@ -25,7 +25,7 @@ import 'core-js/fn/symbol';
 
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
-import {pluralize_type} from '../utils/string';
+import {pluralizeType} from '../utils/entitytype';
 
 const types = {
   host: 'asset',
@@ -53,7 +53,7 @@ const types = {
   scanconfigs: 'config',
 };
 
-const check_type = type => {
+const convertType = type => {
   const ctype = types[type];
   if (is_defined(ctype)) {
     return ctype;
@@ -98,7 +98,7 @@ class Capabilities {
   }
 
   mayAccess(type) {
-    return this.mayOp('get_' + pluralize_type(check_type(type)));
+    return this.mayOp('get_' + pluralizeType(convertType(type)));
   }
 
   mayOp(value) {
@@ -106,19 +106,19 @@ class Capabilities {
   }
 
   mayClone(type) {
-    return this.mayOp('create_' + check_type(type));
+    return this.mayOp('create_' + convertType(type));
   }
 
   mayEdit(type) {
-    return this.mayOp('modify_' + check_type(type));
+    return this.mayOp('modify_' + convertType(type));
   }
 
   mayDelete(type) {
-    return this.mayOp('delete_' + check_type(type));
+    return this.mayOp('delete_' + convertType(type));
   }
 
   mayCreate(type) {
-    return this.mayOp('create_' + check_type(type));
+    return this.mayOp('create_' + convertType(type));
   }
 
   get length() {
