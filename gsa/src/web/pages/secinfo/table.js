@@ -39,6 +39,8 @@ import TableRow from '../../components/table/row.js';
 
 import SecinfoDetails from './details.js';
 import Row from './row.js';
+import {normalizeType} from 'gmp/utils/index.js';
+import {getEntityType} from 'gmp/utils/entitytype.js';
 
 const Header = ({
   actionsColumn,
@@ -106,16 +108,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const details_page = entity => {
-  switch (entity.info_type) {
-    case 'dfn_cert_adv':
-      return 'dfncert';
-    case 'cert_bund_adv':
-      return 'certbund';
-    default:
-      return entity.info_type;
-  }
-};
+const details_page = entity => normalizeType(getEntityType(entity));
 
 export default createEntitiesTable({
   body: false,

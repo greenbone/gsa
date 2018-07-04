@@ -25,13 +25,16 @@ import 'core-js/fn/set';
 
 import React from 'react';
 
-import logger from 'gmp/log.js';
-import {is_defined, is_array, exclude_object_props} from 'gmp/utils';
+import logger from 'gmp/log';
 
-import PromiseFactory from 'gmp/promise.js';
-import CancelToken from 'gmp/cancel.js';
+import {is_defined, is_array} from 'gmp/utils/identity';
+import {exclude_object_props} from 'gmp/utils/object';
+import {getEntityType} from 'gmp/utils/entitytype';
 
-import Filter from 'gmp/models/filter.js';
+import PromiseFactory from 'gmp/promise';
+import CancelToken from 'gmp/cancel';
+
+import Filter from 'gmp/models/filter';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
@@ -175,15 +178,8 @@ class EntitiesContainer extends React.Component {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
-        let entitiesType = entities.length > 0 ?
-          entities[0].entity_type : undefined;
-
-        if (entitiesType === 'info') {
-          entitiesType = entities[0].info_type;
-        }
-        if (entitiesType === 'asset') {
-          entitiesType = entities[0].asset_type;
-        }
+        const entitiesType = entities.length > 0 ?
+          getEntityType(entities[0]) : undefined;
 
         this.cancel = undefined;
 

@@ -24,8 +24,12 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten, first} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {first} from 'gmp/utils/array';
+import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose';
@@ -68,16 +72,6 @@ export const RESOURCE_TYPES = {
   user: _('User'),
 };
 
-const getType = resource => {
-  if (resource.entity_type === 'asset') {
-    return resource.asset_type;
-  }
-  if (resource.entity_type === 'info') {
-    return resource.info_type;
-  }
-  return resource.entity_type;
-};
-
 class TagComponent extends React.Component {
 
   constructor(...args) {
@@ -114,7 +108,7 @@ class TagComponent extends React.Component {
       value,
       active: 1,
       resource_ids: [entity.id],
-      resource_type: getType(entity),
+      resource_type: getEntityType(entity),
     }).then(onAdded, onAddError);
   }
 

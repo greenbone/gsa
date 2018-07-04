@@ -31,6 +31,7 @@ import withCapabilties from '../utils/withCapabilities.js';
 
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
+import {getEntityType} from 'gmp/utils/entitytype.js';
 
 const EntityLink = ({
   capabilities,
@@ -39,7 +40,7 @@ const EntityLink = ({
   ...props
 }) => {
   const {id, name, user_capabilities, deleted} = entity;
-  let type = entity.entity_type;
+  const type = getEntityType(entity);
 
   if (entity.isInTrash()) {
     return (
@@ -71,19 +72,9 @@ const EntityLink = ({
     );
   }
 
-  const other = {};
-
-  if (type === 'info') {
-    type = entity.info_type;
-  }
-  else if (type === 'asset') {
-    type = entity.asset_type;
-  }
-
   return (
     <DetailsLink
       {...props}
-      {...other}
       id={id}
       type={type}
     >
