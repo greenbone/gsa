@@ -37,12 +37,12 @@ export const pluralizeType = type => type[type.length - 1] === 's' ||
   type === 'info' || type === 'version' ? type : type + 's';
 
 const types = {
-  os: 'operatingsystem',
+  config: 'scanconfig',
   cert_bund_adv: 'certbund',
   dfn_cert_adv: 'dfncert',
+  os: 'operatingsystem',
   port_list: 'portlist',
   report_format: 'reportformat',
-  config: 'scanconfig',
 };
 
 export const normalizeType = type => {
