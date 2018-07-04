@@ -99,6 +99,7 @@ describe('normalizeType function tests', () => {
     expect(normalizeType('cert_bund_adv')).toEqual('certbund');
     expect(normalizeType('dfn_cert_adv')).toEqual('dfncert');
     expect(normalizeType('port_list')).toEqual('portlist');
+    expect(normalizeType('port_range')).toEqual('portrange');
     expect(normalizeType('report_format')).toEqual('reportformat');
     expect(normalizeType('config')).toEqual('scanconfig');
   });

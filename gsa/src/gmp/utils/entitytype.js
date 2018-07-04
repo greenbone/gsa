@@ -44,6 +44,7 @@ const types = {
   dfn_cert_adv: 'dfncert',
   os: 'operatingsystem',
   port_list: 'portlist',
+  port_range: 'portrange',
   report_format: 'reportformat',
 };
 
