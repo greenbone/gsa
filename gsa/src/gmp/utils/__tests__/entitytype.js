@@ -76,10 +76,6 @@ describe('pluralizeType function tests', () => {
     expect(pluralizeType('info')).toEqual('info');
   });
 
-  test('should not pluralize version', () => {
-    expect(pluralizeType('version')).toEqual('version');
-  });
-
   test('should not pluralize an already pluralized term', () => {
     expect(pluralizeType('foos')).toEqual('foos');
     expect(pluralizeType('tasks')).toEqual('tasks');

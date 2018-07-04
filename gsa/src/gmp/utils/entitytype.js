@@ -36,7 +36,7 @@ export const getEntityType = (model = {}) => {
 };
 
 export const pluralizeType = type => type[type.length - 1] === 's' ||
-  type === 'info' || type === 'version' ? type : type + 's';
+  type === 'info' ? type : type + 's';
 
 const types = {
   config: 'scanconfig',
