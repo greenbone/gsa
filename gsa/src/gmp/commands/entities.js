@@ -97,7 +97,7 @@ class EntitiesCommand extends HttpCommand {
 
   exportByIds(ids) {
     const params = {
-      cmd: 'process_bulk',
+      cmd: 'bulk_export',
       resource_type: this.name,
       bulk_select: 1,
       'bulk_export.x': 1,
@@ -110,7 +110,7 @@ class EntitiesCommand extends HttpCommand {
 
   exportByFilter(filter) {
     const params = {
-      cmd: 'process_bulk',
+      cmd: 'bulk_export',
       resource_type: this.name,
       bulk_select: 0,
       'bulk_export.x': 1,
