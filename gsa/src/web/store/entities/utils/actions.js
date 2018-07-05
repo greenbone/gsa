@@ -20,52 +20,96 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {pluralizeType} from 'gmp/utils/entitytype';
 
-export const createLoadingTypes = name => {
-  name = name.toUpperCase();
-  return {
-    REQUEST: `${name}_LOADING_REQUEST`,
-    SUCCESS: `${name}_LOADING_SUCCESS`,
-    ERROR: `${name}_LOADING_ERROR`,
-  };
+export const types = {
+  ENTITIES_LOADING_REQUEST: 'ENTITIES_LOADING_REQUEST',
+  ENTITIES_LOADING_SUCCESS: 'ENTITIES_LOADING_SUCCESS',
+  ENTITIES_LOADING_ERROR: 'ENTITIES_LOADING_ERROR',
+  ENTITY_LOADING_REQUEST: 'ENTITY_LOADING_REQUEST',
+  ENTITY_LOADING_SUCCESS: 'ENTITY_LOADING_SUCCESS',
+  ENTITY_LOADING_ERROR: 'ENTITY_LOADING_ERROR',
 };
 
-export const createActionCreators = ({REQUEST, SUCCESS, ERROR}) => ({
+export const createEntitiesActions = entityType => ({
   request: filter => ({
-    type: REQUEST,
+    type: types.ENTITIES_LOADING_REQUEST,
+    entityType,
     filter,
   }),
   success: (data, filter) => ({
-    type: SUCCESS,
+    type: types.ENTITIES_LOADING_SUCCESS,
+    entityType,
     filter,
     data,
   }),
   error: (error, filter) => ({
-    type: ERROR,
+    type: types.ENTITIES_LOADING_ERROR,
+    entityType,
     filter,
     error,
   }),
 });
 
-export const createLoadAllFunc = ({
+export const createEntityActions = entityType => ({
+  request: id => ({
+    type: types.ENTITY_LOADING_REQUEST,
+    entityType,
+    id,
+  }),
+  success: (id, data) => ({
+    type: types.ENTITY_LOADING_SUCCESS,
+    entityType,
+    data,
+    id,
+  }),
+  error: (id, error) => ({
+    type: types.ENTITY_LOADING_ERROR,
+    entityType,
+    error,
+    id,
+  }),
+});
+
+export const createLoadEntities = ({
   selector,
-  actionCreators,
-  name,
+  actions,
+  entityType,
 }) => ({gmp, filter, ...props}) => (dispatch, getState) => {
     const rootState = getState();
     const state = selector(rootState);
 
-    if (state.getIsLoading(filter)) {
+    if (state.isLoadingEntities(filter)) {
       // we are already loading data
       return Promise.resolve();
     }
 
-    dispatch(actionCreators.request(filter));
+    dispatch(actions.request(filter));
 
-    return gmp[name].getAll({filter}).then(
-      response => dispatch(actionCreators.success(response.data, filter)),
-      error => dispatch(actionCreators.error(error, filter)),
+    return gmp[pluralizeType(entityType)].getAll({filter}).then(
+      response => dispatch(actions.success(response.data, filter)),
+      error => dispatch(actions.error(error, filter)),
     );
   };
 
+export const createLoadEntity = ({
+  selector,
+  actions,
+  entityType,
+}) => ({gmp, id}) => (dispatch, getState) => {
+    const rootState = getState();
+    const state = selector(rootState);
+
+    if (state.isLoadingEntity(id)) {
+      // we are already loading data
+      return Promise.resolve();
+    }
+
+    dispatch(actions.request(id));
+
+    return gmp[entityType].get({id}).then(
+      response => dispatch(actions.success(id, response.data)),
+      error => dispatch(actions.error(id, error)),
+    );
+  };
 // vim: set ts=2 sw=2 tw=80:

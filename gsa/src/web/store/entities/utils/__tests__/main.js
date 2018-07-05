@@ -23,40 +23,43 @@
 import {is_function} from 'gmp/utils/identity';
 
 import {createAll} from '../main';
-import {createRootState} from 'web/store/entities/utils/testing';
+import {createState} from '../testing';
 
 describe('createAll function tests', () => {
 
   test('should create all functions and objects', () => {
     const {
-      loadAll,
+      entitiesActions,
+      entityActions,
+      loadEntities,
+      loadEntity,
       reducer,
-      actions,
-      types,
       selector,
     } = createAll('foo');
 
-    const rootState = createRootState({
-      foo: {
-        default: {
-          isLoading: true,
-        },
+    const id = 'a1';
+    const rootState = createState('foo', {
+      isLoading: {
+        default: true,
+        [id]: true,
       },
     });
 
-    expect(is_function(loadAll)).toBe(true);
+    expect(is_function(loadEntities)).toBe(true);
+    expect(is_function(loadEntity)).toBe(true);
     expect(is_function(reducer)).toBe(true);
     expect(is_function(selector)).toBe(true);
 
-    expect(is_function(actions.request)).toBe(true);
-    expect(is_function(actions.success)).toBe(true);
-    expect(is_function(actions.error)).toBe(true);
+    expect(is_function(entitiesActions.request)).toBe(true);
+    expect(is_function(entitiesActions.success)).toBe(true);
+    expect(is_function(entitiesActions.error)).toBe(true);
 
-    expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-    expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-    expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
+    expect(is_function(entityActions.request)).toBe(true);
+    expect(is_function(entityActions.success)).toBe(true);
+    expect(is_function(entityActions.error)).toBe(true);
 
-    expect(selector(rootState).getIsLoading()).toBe(true);
+    expect(selector(rootState).isLoadingEntities()).toBe(true);
+    expect(selector(rootState).isLoadingEntity(id)).toBe(true);
   });
 });
 
