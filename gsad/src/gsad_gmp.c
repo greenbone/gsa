@@ -1196,15 +1196,7 @@ get_one (gvm_connection_t *connection, const char *type,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a resource. "
-                           "Diagnostics: missing ID.", response_data);
-    }
+  CHECK_VARIABLE_INVALID (id, "Get")
 
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_%s>", type);
@@ -8865,17 +8857,7 @@ restore_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   target_id = params_value (params, "target_id");
 
-  if (target_id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while restoring a resource. "
-                           "The resource was not restored. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (target_id, "Restore")
 
   xml = g_string_new ("");
 
@@ -9158,17 +9140,8 @@ edit_tag (gvm_connection_t *connection, credentials_t * credentials,
   const char *tag_id;
 
   tag_id = params_value (params, "tag_id");
-  if (tag_id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a tag. "
-                           "The tag remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
+
+  CHECK_VARIABLE_INVALID (tag_id, "Edit Tag")
 
   if (gvm_connection_sendf (connection,
                             "<get_tags"
@@ -9504,28 +9477,8 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
   tag_id = params_value (params, "tag_id");
   enable = params_value (params, "enable");
 
-  if (tag_id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while modifying a tag. "
-                           "The tag was not modified. "
-                           "Diagnostics: Required parameter tag_id was NULL.",
-                           response_data);
-    }
-  if (enable == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while modifying a tag. "
-                           "The tag was not modified. "
-                           "Diagnostics: Required parameter enable was NULL.",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (tag_id, "Toggle Tag")
+  CHECK_VARIABLE_INVALID (enable, "Toggle Tag")
 
   /* Delete the resource and get all resources. */
 
@@ -11187,17 +11140,8 @@ save_config_family_gmp (gvm_connection_t *connection, credentials_t *
   config_id = params_value (params, "config_id");
   family = params_value (params, "family");
 
-  if ((config_id == NULL) || (family == NULL))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving getting config family. "
-                           "The config has not been saved. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (config_id, "Save Config Family")
+  CHECK_VARIABLE_INVALID (family, "Save Config Family")
 
   /* Set the NVT selection. */
 
@@ -11289,16 +11233,8 @@ get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
   family = params_value (params, "family");
   nvt = params_value (params, "oid");
 
-  if ((config_id == NULL) || (name == NULL))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting config family. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
+  CHECK_VARIABLE_INVALID (name, "Get Config")
+  CHECK_VARIABLE_INVALID (config_id, "Get Config")
 
   xml = g_string_new ("<get_config_nvt_response>");
   if (edit) g_string_append (xml, "<edit/>");
@@ -11873,74 +11809,73 @@ export_preference_file_gmp (gvm_connection_t *connection,
 
   xml = g_string_new ("<get_preferences_response>");
 
-  if (config_id == NULL || oid == NULL || preference_name == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
+  CHECK_VARIABLE_INVALID (config_id, "Export Preference File")
+  CHECK_VARIABLE_INVALID (oid, "Export Preference File")
+  CHECK_VARIABLE_INVALID (preference_name, "Export Preference File")
+
+  if (gvm_connection_sendf (connection,
+                            "<get_preferences"
+                            " config_id=\"%s\""
+                            " nvt_oid=\"%s\""
+                            " preference=\"%s\"/>",
+                            config_id,
+                            oid,
+                            preference_name)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a preference file. "
+                            "The file could not be delivered. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            response_data);
+    }
+
+  entity = NULL;
+  if (read_entity_c (connection, &entity))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a preference file. "
+                            "The file could not be delivered. "
+                            "Diagnostics: Failure to receive response from manager daemon.",
+                            response_data);
+    }
+
+  preference_entity = entity_child (entity, "preference");
+  if (preference_entity != NULL
+      && (value_entity = entity_child (preference_entity, "value")))
+    {
+      char *content = strdup (entity_text (value_entity));
+      cmd_response_data_set_content_type (response_data,
+                                          GSAD_CONTENT_TYPE_OCTET_STREAM);
+      cmd_response_data_set_content_disposition
+        (response_data,
+          g_strdup_printf ("attachment; filename=\"pref_file.bin\""));
+      cmd_response_data_set_content_length (response_data,
+                                            strlen (content));
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+      return content;
+    }
   else
     {
-      if (gvm_connection_sendf (connection,
-                                "<get_preferences"
-                                " config_id=\"%s\""
-                                " nvt_oid=\"%s\""
-                                " preference=\"%s\"/>",
-                                config_id,
-                                oid,
-                                preference_name)
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a preference file. "
-                               "The file could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               response_data);
-        }
-
-      entity = NULL;
-      if (read_entity_c (connection, &entity))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a preference file. "
-                               "The file could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-
-      preference_entity = entity_child (entity, "preference");
-      if (preference_entity != NULL
-          && (value_entity = entity_child (preference_entity, "value")))
-        {
-          char *content = strdup (entity_text (value_entity));
-          cmd_response_data_set_content_type (response_data,
-                                              GSAD_CONTENT_TYPE_OCTET_STREAM);
-          cmd_response_data_set_content_disposition
-            (response_data,
-             g_strdup_printf ("attachment; filename=\"pref_file.bin\""));
-          cmd_response_data_set_content_length (response_data,
-                                                strlen (content));
-          free_entity (entity);
-          g_string_free (xml, TRUE);
-          return content;
-        }
-      else
-        {
-          free_entity (entity);
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a preference file. "
-                               "The file could not be delivered. "
-                               "Diagnostics: Failure to receive file from manager daemon.",
-                               response_data);
-        }
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a preference file. "
+                            "The file could not be delivered. "
+                            "Diagnostics: Failure to receive file from manager daemon.",
+                            response_data);
     }
 
   g_string_append (xml, "</get_preferences_response>");
