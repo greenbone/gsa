@@ -1221,7 +1221,6 @@ gsad_message (credentials_t *credentials, const char *title,
                "<login>%s</login>"
                "<role>%s</role>"
                "<i18n>%s</i18n>"
-               "<charts>%i</charts>"
                "<client_address>%s</client_address>",
                GSAD_VERSION,
                vendor_version_get (),
@@ -1230,7 +1229,6 @@ gsad_message (credentials_t *credentials, const char *title,
                credentials->username,
                credentials->role,
                credentials->language,
-               credentials->charts,
                credentials->client_address);
       xml = g_strdup_printf ("%s%s"
                               "<capabilities>%s</capabilities>"

@@ -60,7 +60,6 @@ typedef struct
   char *client_address; ///< Client's address.
   GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
-  int charts;         ///< Whether to show charts for this user.
   int guest;          ///< Whether the user is a guest user.
   char *sid;          ///< Session ID of the user.
 } credentials_t;
@@ -87,7 +86,6 @@ struct user
   gchar *pw_warning;   ///< Password policy warning.
   char *address;       ///< Client's IP address.
   time_t time;         ///< Login time.
-  int charts;          ///< Whether to show charts for this user.
   GTree *last_filt_ids;///< Last used filter ids.
   int guest;           ///< Whether the user is a guest.
 };
@@ -111,8 +109,6 @@ int user_set_password (const gchar *token, const gchar *password);
 int user_set_severity (const gchar *token, const gchar *severity);
 
 int user_set_language (const gchar *token, const gchar *language);
-
-int user_set_charts (const gchar *token, const int charts);
 
 int user_logout_all_sessions (const gchar *username,
                               credentials_t *credentials);

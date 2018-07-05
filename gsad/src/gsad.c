@@ -2000,15 +2000,6 @@ exec_gmp_get (http_connection_t *con,
 
   /* Set page display settings */
 
-  /* Show / hide charts */
-  if (params_given (params, "charts"))
-    {
-      const char* charts;
-      charts = params_value (params, "charts");
-      credentials->charts = atoi (charts);
-      user_set_charts (credentials->token, credentials->charts);
-    }
-
   gettimeofday (&credentials->cmd_start, NULL);
 
   if (client_watch_interval)

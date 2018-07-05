@@ -98,7 +98,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   g_ptr_array_add (users, (gpointer) user);
   set_language_code (&user->language, language);
   user->time = time (NULL);
-  user->charts = 0;
   if (guest_username)
     user->guest = strcmp (username, guest_username) ? 0 : 1;
   else
@@ -367,36 +366,6 @@ user_set_language (const gchar *token, const gchar *language)
 }
 
 /**
- * @brief Set charts setting of user.
- *
- * @param[in]   token      User token.
- * @param[in]   charts    Whether to show charts.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_charts (const gchar *token, const int charts)
-{
-  int index, ret;
-  ret = 1;
-  g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          item->charts = charts;
-          ret = 0;
-          break;
-        }
-    }
-  g_mutex_unlock (mutex);
-  return ret;
-}
-
-
-/**
  * @brief Logs out all sessions of a given user, except the current one.
  *
  * @param[in]   username        User name.
@@ -533,7 +502,6 @@ credentials_new (user_t *user, const char *language, const char *client_address)
   credentials->severity = g_strdup (user->severity);
   credentials->capabilities = g_strdup (user->capabilities);
   credentials->token = g_strdup (user->token);
-  credentials->charts = user->charts;
   credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
                                              : NULL;
   credentials->language = g_strdup (language);
