@@ -48,6 +48,12 @@ class EntitiesSelector {
       undefined;
   }
 
+  getEntityError(id) {
+    return is_defined(this.state.errors) ?
+      this.state.errors[id] :
+      undefined;
+  }
+
   getEntities(filter) {
     const ids = this.state[filterIdentifier(filter)];
     if (is_defined(ids) && is_defined(this.state.byId)) {

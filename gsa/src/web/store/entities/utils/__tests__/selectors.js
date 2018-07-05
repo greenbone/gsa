@@ -442,4 +442,64 @@ describe('EntitiesSelector getEntity tests', () => {
   });
 });
 
+describe('EntitiesSelector getEntityError tests', () => {
+
+  test('should return undefined for undefined state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntityError(id)).toBeUndefined();
+  });
+
+  test('should return undefined for empty state', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntityError(id)).toBeUndefined();
+  });
+
+  test('should return undefined for empty errors', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      errors: {
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntityError(id)).toBeUndefined();
+  });
+
+  test('should return error', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      errors: {
+        [id]: 'An error',
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntityError(id)).toEqual('An error');
+  });
+
+  test('should return undefined for unkown id', () => {
+    const id = 'a1';
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {
+      errors: {
+        a2: 'An error',
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntityError(id)).toBeUndefined();
+  });
+
+});
+
 // vim: set ts=2 sw=2 tw=80:
