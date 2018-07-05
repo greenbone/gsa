@@ -546,4 +546,19 @@ export const testLoadEntity = (entityType, loadEntity) => {
   });
 };
 
+export const testAll = (name, {
+  entitiesActions,
+  entityActions,
+  loadEntities,
+  loadEntity,
+  reducer,
+}) => {
+  testEntitiesActions(name, entitiesActions);
+  testEntityActions(name, entityActions);
+  testLoadEntities(name, loadEntities);
+  testLoadEntity(name, loadEntity);
+  testReducerForEntities(name, reducer, entitiesActions);
+  testReducerForEntity(name, reducer, entityActions);
+};
+
 // vim: set ts=2 sw=2 tw=80:
