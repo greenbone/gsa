@@ -2374,7 +2374,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
                  const char *get, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
-  const char  *next_id;
   entity_t entity;
   gchar *cap_type, *default_next, *prev_action;
 
@@ -2396,16 +2395,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
 
   /* This is a hack for assets, because asset_id is the param name used for
    * both the asset being deleted and the asset on the next page. */
-  next_id = params_value (params, "next_id");
-  if (next_id)
-    {
-      param_t *param;
-      param = params_get (params, id_name);
-      g_free (param->value);
-      param->value = g_strdup (next_id);
-      param->value_size = strlen (param->value);
-    }
-
   g_free (id_name);
 
   /* Extra attributes */
@@ -8615,8 +8604,7 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *id, *type, *alterable,  *next_id;
-  gchar *next_id_name, *cap_type, *prev_action;
+  const char *id, *type, *alterable;
   entity_t entity;
 
   id = params_value (params, "id");
@@ -8683,56 +8671,14 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   /* Cleanup, and return next page. */
-
-  if (gmp_success (entity) == 0 || params_given (params, "next") == 0)
-    {
-      gchar *next;
-      next = g_strdup_printf ("get_%ss", type);
-      params_add (params, "next", next);
-      g_free (next);
-    }
-
-  if (gmp_success (entity))
-    {
-      next_id = entity_attribute (entity, "id");
-      if (next_id == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while cloning a resource. "
-                              "The resource remains the same. "
-                              "Diagnostics: Error getting new resource.",
-                              response_data);
-        }
-      next_id_name = g_strdup_printf ("%s_id", type);
-      params_add (params, next_id_name, next_id);
-      g_free (next_id_name);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      next_id_name = NULL;
-      next_id = NULL;
-    }
-
-  cap_type = capitalize (type);
-  prev_action = g_strdup_printf ("Clone %s", cap_type);
   html = response_from_entity (connection, credentials, params, entity,
-                              prev_action, response_data);
+                               "Clone", response_data);
 
   free_entity (entity);
-  g_free (cap_type);
-  g_free (prev_action);
   g_free (response);
 
   return html;
 }
-
-#undef CHECK
 
 /**
  * @brief Delete a target, get all targets, envelope the result.
@@ -9646,28 +9592,14 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
 {
   GString *xml;
   gchar *edit;
-  const char *target_id, *next, *filter, *first, *max;
+  const char *target_id, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
-  next = params_value (params, "next");
 
-  if (target_id == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a target. "
-                           "The target remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
-
-  if (next == NULL)
-    next = "get_target";
+  CHECK_VARIABLE_INVALID (target_id, "Edit Target")
 
   if (gvm_connection_sendf (connection,
                             "<get_targets"
@@ -9693,13 +9625,10 @@ edit_target (gvm_connection_t *connection, credentials_t * credentials,
 
   edit = g_markup_printf_escaped ("<edit_target>"
                                   "<target id=\"%s\"/>"
-                                  /* Page that follows. */
-                                  "<next>%s</next>"
                                   /* Passthroughs. */
                                   "<filters><term>%s</term></filters>"
                                   "<targets start=\"%s\" max=\"%s\"/>",
                                   target_id,
-                                  next,
                                   filter,
                                   first,
                                   max);
@@ -10684,7 +10613,7 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char *config_id, *next;
+  const char *config_id;
   char *ret;
 
   config_id = params_value (params, "config_id");
@@ -10719,13 +10648,9 @@ sync_config_gmp (gvm_connection_t *connection, credentials_t * credentials,
                response_data);
     }
 
-  next = params_value (params, "next");
-  if (next && !strcmp (next, "get_config"))
-    ret = get_config (connection, credentials, params, xml->str, 0,
+  // TODO return action result
+  ret = get_configs (connection, credentials, params, xml->str,
                       response_data);
-  else
-    ret = get_configs (connection, credentials, params, xml->str,
-                       response_data);
 
   g_string_free (xml, TRUE);
   return ret;
