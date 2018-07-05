@@ -23,27 +23,30 @@
 import {is_function} from 'gmp/utils/identity';
 
 import {createAll} from '../main';
-import {createRootState} from 'web/store/entities/utils/testing';
+import {createState} from '../testing';
 
 describe('createAll function tests', () => {
 
   test('should create all functions and objects', () => {
     const {
       entitiesActions,
+      entityActions,
       loadEntities,
+      loadEntity,
       reducer,
       selector,
     } = createAll('foo');
 
-    const rootState = createRootState({
-      foo: {
-        isLoading: {
-          default: true,
-        },
+    const id = 'a1';
+    const rootState = createState('foo', {
+      isLoading: {
+        default: true,
+        [id]: true,
       },
     });
 
     expect(is_function(loadEntities)).toBe(true);
+    expect(is_function(loadEntity)).toBe(true);
     expect(is_function(reducer)).toBe(true);
     expect(is_function(selector)).toBe(true);
 
@@ -51,7 +54,12 @@ describe('createAll function tests', () => {
     expect(is_function(entitiesActions.success)).toBe(true);
     expect(is_function(entitiesActions.error)).toBe(true);
 
+    expect(is_function(entityActions.request)).toBe(true);
+    expect(is_function(entityActions.success)).toBe(true);
+    expect(is_function(entityActions.error)).toBe(true);
+
     expect(selector(rootState).isLoadingEntities()).toBe(true);
+    expect(selector(rootState).isLoadingEntity(id)).toBe(true);
   });
 });
 

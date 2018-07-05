@@ -22,7 +22,9 @@
  */
 import {
   createEntitiesActions,
+  createEntityActions,
   createLoadEntities,
+  createLoadEntity,
 } from './actions';
 
 import {createReducer} from './reducers';
@@ -33,18 +35,26 @@ export const createAll = entityType => {
 
   const selector = createSelector(entityType);
   const entitiesActions = createEntitiesActions(entityType);
+  const entityActions = createEntityActions(entityType);
   const reducer = createReducer(entityType);
   const loadEntities = createLoadEntities({
     selector,
     actions: entitiesActions,
     entityType,
   });
+  const loadEntity = createLoadEntity({
+    selector,
+    actions: entityActions,
+    entityType,
+  });
 
   return {
-    selector,
     entitiesActions,
+    entityActions,
     loadEntities,
+    loadEntity,
     reducer,
+    selector,
   };
 };
 
