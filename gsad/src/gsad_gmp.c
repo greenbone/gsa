@@ -280,9 +280,6 @@ static char *get_report_section (gvm_connection_t *, credentials_t *,
 static char *get_reports (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_result_page (gvm_connection_t *, credentials_t *,
-                              params_t *, const char *, cmd_response_data_t*);
-
 static char *get_results (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
@@ -1053,74 +1050,6 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
 }
 
 /**
- * @brief Get an URL for the current page.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  cmd          Command for URL.
- *
- * @return URL.
- */
-static char *
-page_url (credentials_t *credentials, const gchar *cmd)
-{
-  GString *url;
-
-  assert (cmd);
-
-  url = g_string_new ("");
-
-  if (credentials->caller && strlen (credentials->caller))
-    {
-      gchar **split_question, *page, *params;
-
-      split_question = g_strsplit (credentials->caller, "?", 2);
-
-      page = *split_question;
-
-      if (page)
-        {
-          g_string_append_printf (url, "%s?cmd=%s", page, cmd);
-          params = split_question[1];
-        }
-      else
-        {
-          g_string_append_printf (url, "cmd=%s", cmd);
-          params = credentials->caller;
-        }
-      if (params)
-        {
-          gchar **split_amp, **point;
-
-          point = split_amp = g_strsplit (params, "&", 0);
-          while (*point)
-            {
-              gchar *param;
-
-              param = *point;
-
-              g_strstrip (param);
-
-              if (strstr (param, "cmd=") == param)
-                {
-                  point++;
-                  continue;
-                }
-
-              g_string_append_printf (url, "&%s", param);
-
-              point++;
-            }
-          g_strfreev (split_amp);
-        }
-      g_strfreev (split_question);
-    }
-  else
-    g_string_append_printf (url, "?cmd=%s", cmd);
-
-  return g_string_free (url, FALSE);
-}
-
-/**
  * @brief Capitalize a type or command name and replace underscores.
  *
  * @param[in]  input  The input string.
@@ -1310,242 +1239,6 @@ response_from_entity (gvm_connection_t *connection,
                        entity_text(status_details_entity),
                        entity_attribute (entity, "id"));
   return res;
-}
-
-/**
- * @brief Generate a page.
- *
- * @param[in]  connection     Connection to manager
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  response     Extra XML to insert inside envelope.
- * @param[in]  next         Command.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-generate_page (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, gchar *response, const gchar *next,
-               cmd_response_data_t* response_data)
-{
-  credentials->current_page = page_url (credentials, next);
-  if (g_utf8_validate (credentials->current_page, -1, NULL) == FALSE)
-    {
-      g_free (credentials->current_page);
-      g_warning ("%s - current_page is not valid UTF-8", __FUNCTION__);
-      credentials->current_page = NULL;
-    }
-
-  if (strcmp (next, "edit_role") == 0)
-    return edit_role (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "edit_task") == 0)
-    return edit_task (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_alerts") == 0)
-    return get_alerts (connection, credentials, params, response,
-                       response_data);
-
-  if (strcmp (next, "get_alert") == 0)
-    return get_alert (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "edit_port_list") == 0)
-    return edit_port_list (connection, credentials, params, response,
-                           response_data);
-
-  if (strcmp (next, "get_agents") == 0)
-    return get_agents (connection, credentials, params, response,
-                       response_data);
-
-  if (strcmp (next, "get_agent") == 0)
-    return get_agent (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_asset") == 0)
-    return get_asset (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_assets") == 0)
-    return get_assets (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_config") == 0)
-    return get_config (connection, credentials, params, response, 0,
-                       response_data);
-
-  if (strcmp (next, "get_configs") == 0)
-    return get_configs (connection, credentials, params, response,
-                        response_data);
-
-  if (strcmp (next, "get_filter") == 0)
-    return get_filter (connection, credentials, params, response,
-                       response_data);
-
-  if (strcmp (next, "get_filters") == 0)
-    return get_filters (connection, credentials, params, response,
-                        response_data);
-
-  if (strcmp (next, "get_group") == 0)
-    return get_group (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_groups") == 0)
-    return get_groups (connection, credentials, params, response,
-                       response_data);
-
-  if (strcmp (next, "get_credential") == 0)
-    return get_credential (connection, credentials, params, response,
-                           response_data);
-
-  if (strcmp (next, "get_credentials") == 0)
-    return get_credentials (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_note") == 0)
-    return get_note (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_notes") == 0)
-    return get_notes (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_nvts") == 0)
-    return get_nvts (connection, credentials, params, NULL, response, response_data);
-
-  if (strcmp (next, "get_override") == 0)
-    return get_override (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_overrides") == 0)
-    return get_overrides (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_permission") == 0)
-    return get_permission (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_permissions") == 0)
-    return get_permissions (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_port_list") == 0)
-    return get_port_list (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_port_lists") == 0)
-    return get_port_lists (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_tag") == 0)
-    return get_tag (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_tags") == 0)
-    return get_tags (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_target") == 0)
-    return get_target (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_targets") == 0)
-    return get_targets (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_task") == 0)
-    return get_task (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_tasks") == 0)
-    return get_tasks (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      char *result;
-      int error = 0;
-
-      result = get_report (connection, credentials, params, NULL,
-                           response, &error, response_data);
-
-      return error ? result : envelope_gmp (connection, credentials,
-                                            params, result,
-                                            response_data);
-    }
-
-  if (strcmp (next, "get_report_format") == 0)
-    return get_report_format (connection, credentials, params, response,
-                              response_data);
-
-  if (strcmp (next, "get_report_formats") == 0)
-    return get_report_formats (connection, credentials, params, response,
-                               response_data);
-
-  if (strcmp (next, "get_report_section") == 0)
-    return get_report_section (connection, credentials, params, response,
-                               response_data);
-
-  if (strcmp (next, "get_reports") == 0)
-    return get_reports (connection, credentials, params, response,
-                        response_data);
-
-  if (strcmp (next, "get_results") == 0)
-    return get_results (connection, credentials, params, response,
-                        response_data);
-
-  if (strcmp (next, "get_result") == 0)
-    return get_result_page (connection, credentials, params, response,
-                            response_data);
-
-  if (strcmp (next, "get_role") == 0)
-    return get_role (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_roles") == 0)
-    return get_roles (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_scanner") == 0)
-    return get_scanner (connection, credentials, params, response,
-                        response_data);
-
-  if (strcmp (next, "get_scanners") == 0)
-    return get_scanners (connection, credentials, params, response,
-                         response_data);
-
-  if (strcmp (next, "get_schedule") == 0)
-    return get_schedule (connection, credentials, params, response,
-                         response_data);
-
-  if (strcmp (next, "get_schedules") == 0)
-    return get_schedules (connection, credentials, params, response,
-                          response_data);
-
-  if (strcmp (next, "get_user") == 0)
-    return get_user (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_users") == 0)
-    return get_users (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_vulns") == 0)
-    return get_vulns (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "get_info") == 0)
-    return get_info (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "wizard") == 0)
-    return wizard (connection, credentials, params, response, response_data);
-
-  if (strcmp (next, "wizard_get") == 0)
-    return wizard_get (connection, credentials, params, response, response_data);
-
-  return NULL;
-}
-
-/**
- * @brief Generate next page.
- *
- * @param[in]  connection     Connection to manager
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         Request parameters.
- * @param[in]  response       Extra XML to insert inside enveloped XML.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-next_page (gvm_connection_t *connection, credentials_t *credentials,
-           params_t *params, gchar *response,
-           cmd_response_data_t* response_data)
-{
-  const char *next;
-
-  next = params_value (params, "next");
-  if (next == NULL)
-    return NULL;
-
-  return generate_page (connection, credentials, params, response, next,
-                        response_data);
 }
 
 /**
@@ -7064,29 +6757,8 @@ verify_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                              response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      html = next_page (connection, credentials, params, response,
-                        response_data);
-      if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while verifying a agent. "
-                               "It is unclear whether the agent was verified or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = get_agents (connection, credentials, params, response, response_data);
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                               "Verify Agent", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -14492,34 +14164,6 @@ get_result_gmp (gvm_connection_t *connection, credentials_t *credentials, params
 }
 
 /**
- * @brief Get result details page.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_result_page (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                 const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return get_result (connection, credentials, params,
-                     params_value (params, "result_id"),
-                     params_value (params, "task_id"),
-                     params_value (params, "name"),
-                     params_value (params, "apply_overrides"),
-                     NULL,
-                     params_value (params, "report_id"),
-                     params_value (params, "autofp"),
-                     extra_xml,
-                     response_data);
-
-}
-
-/**
  * @brief Get all notes, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -15626,7 +15270,7 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                     cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *scanner_id, *next;
+  const char *scanner_id;
   int ret;
   entity_t entity;
 
@@ -15675,33 +15319,8 @@ verify_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
                              response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      html = next_page (connection, credentials, params, response, response_data);
-      if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while verifying a scanner. "
-                               "It is unclear whether the scanner was verified or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      next = params_value (params, "next");
-      if (next && !strcmp (next, "get_scanner"))
-        html = get_scanner (connection, credentials, params, response, response_data);
-      else
-        html = get_scanners (connection, credentials, params, response, response_data);
-    }
-
+  html = response_from_entity (connection, credentials, params, entity,
+                               "Verify Scanner", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -17250,28 +16869,8 @@ verify_report_format_gmp (gvm_connection_t *connection, credentials_t * credenti
                              response_data);
     }
 
-  if (gmp_success (entity))
-    {
-      html = next_page (connection, credentials, params, response, response_data);
-      if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while verifying a report format. "
-                               "It is unclear whether the report format was verified or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = get_report_formats (connection, credentials, params, response, response_data);
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                               "Verify Report Format", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19400,14 +18999,15 @@ create_permission_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
       if (subject_id == NULL)
         {
-          gchar *msg;
-          msg = g_strdup_printf ("<gsad_msg status_text=\"Subject not found\""
-                                 "          operation=\"create_permission\">"
-                                 "Could not find a %s with name '%s'."
-                                 "</gsad_msg>",
-                                 subject_type,
-                                 subject_name ? subject_name : "");
-          return next_page (connection, credentials, params, msg, response_data);
+          cmd_response_data_set_status_code(response_data,
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
+          return gsad_message(credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while creating a "
+                              "permission. Could not find Subject."
+                              "The permission was not created. "
+                              "Diagnostics: Internal Error.",
+                              response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -19750,14 +19350,15 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
 
       if (subject_id == NULL)
         {
-          gchar *msg;
-          msg = g_strdup_printf ("<gsad_msg status_text=\"Subject not found\""
-                                 "          operation=\"create_permission\">"
-                                 "Could not find a %s with name '%s'."
-                                 "</gsad_msg>",
-                                 subject_type,
-                                 subject_name ? subject_name : "");
-          return next_page (connection, credentials, params, msg, response_data);
+          cmd_response_data_set_status_code(response_data,
+                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
+          return gsad_message(credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while creating a "
+                              "permission. Could not find Subject."
+                              "The permission was not created. "
+                              "Diagnostics: Internal Error.",
+                              response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -24520,21 +24121,8 @@ delete_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   /* Cleanup, and return transformed XML. */
 
-  if (params_given (params, "next") == 0)
-    params_add (params, "next", "get_asset");
-
-  html = next_page (connection, credentials, params, response,
-                    response_data);
-  if (html == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                          MHD_HTTP_BAD_REQUEST);
-      html = gsad_message (credentials,
-          "Internal error", __FUNCTION__, __LINE__,
-          "An internal error occurred while deleting an "
-          "asset. Diagnostics: Error in parameter next.",
-          response_data);
-    }
+  html = response_from_entity (connection, credentials, params, entity,
+                               "Delete Asset", response_data);
   g_free (response);
   free_entity (entity);
   return html;
