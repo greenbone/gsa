@@ -22,10 +22,12 @@
  */
 import {combineReducers} from 'redux';
 
-import {reducer as filters} from './filters';
+import {reducer as filter} from './filters';
+import {reducer as schedule} from './schedules';
 
 const entitiesReducer = combineReducers({
-  filters,
+  filter,
+  schedule,
 });
 
 export default entitiesReducer;
