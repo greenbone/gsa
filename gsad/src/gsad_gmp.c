@@ -9004,25 +9004,6 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Check a param.
- *
- * @param[in]  name  Param name.
- */
-#define CHECK(name)                                                                 \
-  if (name == NULL)                                                                 \
-    {                                                                               \
-      cmd_response_data_set_status_code (response_data,                             \
-                                         MHD_HTTP_BAD_REQUEST);                     \
-      return gsad_message (credentials,                                             \
-                           "Internal error", __FUNCTION__, __LINE__,                \
-                           "An internal error occurred while cloning a resource. "  \
-                           "The resource was not cloned. "                          \
-                           "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
-                           "' was NULL.",                                           \
-                           response_data);                    \
-    }
-
-/**
  * @brief Clone a resource, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -9045,8 +9026,8 @@ clone_gmp (gvm_connection_t *connection, credentials_t *credentials,
   type = params_value (params, "resource_type");
   alterable = params_value (params, "alterable");
 
-  CHECK (id);
-  CHECK (type);
+  CHECK_VARIABLE_INVALID (id, "Clone");
+  CHECK_VARIABLE_INVALID (type, "Clone");
 
   /* Clone the resource. */
 
