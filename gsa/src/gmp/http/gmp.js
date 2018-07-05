@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +30,6 @@ class GmpHttp extends Http {
   constructor(server, protocol, options) {
     const url = build_server_url(server, 'omp', protocol);
     super(url, {...options, transform: X2JsTransform});
-
-    this.params.xml = 1;
   }
 
   get token() {
