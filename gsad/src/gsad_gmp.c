@@ -436,8 +436,8 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
   entity_t entity;
 
   if (filt_id == NULL
-      || strcmp (filt_id, "0")
-      || strcmp (filt_id, "-2"))
+      || str_equal (filt_id, FILT_ID_NONE)
+      || str_equal (filt_id, FILT_ID_USER_SETTING))
     return 1;
 
   /* check if filter still exists */
