@@ -371,4 +371,48 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
   });
 };
 
+export const testEntityActions = (entityType, actions) => {
+  describe(`${entityType} entity actions tests`, () => {
+
+    test('should have action creators', () => {
+      expect(is_function(actions.request)).toBe(true);
+      expect(is_function(actions.success)).toBe(true);
+      expect(is_function(actions.error)).toBe(true);
+    });
+
+    test('should create a load request action', () => {
+      const id = 'a1';
+      const action = actions.request(id);
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType,
+        id,
+      });
+    });
+
+    test('should create a load success action', () => {
+      const id = 'a1';
+      const action = actions.success(id, {foo: 'bar'});
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_SUCCESS,
+        data: {foo: 'bar'},
+        entityType,
+        id,
+      });
+    });
+
+    test('should create a load error action', () => {
+      const id = 'a1';
+      const action = actions.error(id, 'An error');
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_ERROR,
+        error: 'An error',
+        entityType,
+        id,
+      });
+    });
+
+  });
+};
+
 // vim: set ts=2 sw=2 tw=80:
