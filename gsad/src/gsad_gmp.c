@@ -694,7 +694,7 @@ check_modify_config (gvm_connection_t *connection,
                            response_data);
     }
 
-  if (strcmp (status_text, "Config is in use") == 0)
+  if (str_equal (status_text, "Config is in use"))
     {
       const char* message = "The config is now in use by a task,"
                             " so only name and comment can be modified.";
@@ -709,7 +709,7 @@ check_modify_config (gvm_connection_t *connection,
       free_entity (entity);
       return response;
     }
-  else if (strcmp (status_text, "MODIFY_CONFIG name must be unique") == 0)
+  else if (str_equal (status_text, "MODIFY_CONFIG name must be unique"))
     {
       const char* message = "A config with the given name exists already.";
 
@@ -772,12 +772,11 @@ set_http_status_from_entity (entity_t entity,
   if (entity == NULL)
     cmd_response_data_set_status_code (response_data,
                                        MHD_HTTP_INTERNAL_SERVER_ERROR);
-  else if (strcmp (entity_attribute (entity, "status_text"),
-              "Permission denied")
-           == 0)
+  else if (str_equal (entity_attribute (entity, "status_text"),
+                      "Permission denied"))
     cmd_response_data_set_status_code (response_data,
                                        MHD_HTTP_FORBIDDEN);
-  else if (strcmp (entity_attribute (entity, "status"), "404") == 0)
+  else if (str_equal (entity_attribute (entity, "status"), "404"))
     cmd_response_data_set_status_code (response_data,
                                        MHD_HTTP_NOT_FOUND);
   else
@@ -1210,7 +1209,7 @@ get_one (gvm_connection_t *connection, const char *type,
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_%s>", type);
 
-  if (strcmp (type, "role") == 0
+  if (str_equal (type, "role")
       && command_enabled (credentials, "GET_PERMISSIONS")
       && params_value (params, "role_id"))
     {
@@ -1358,9 +1357,9 @@ get_one (gvm_connection_t *connection, const char *type,
 
   g_string_append (xml, "<permissions>");
 
-  if ((strcmp (type, "user") == 0)
-      || (strcmp (type, "group") == 0)
-      || (strcmp (type, "role") == 0))
+  if (str_equal (type, "user")
+      || str_equal (type, "group")
+      || str_equal (type, "role"))
     ret = gvm_connection_sendf (connection,
                                 "<get_permissions"
                                 " filter=\"subject_uuid=%s"
@@ -1506,24 +1505,24 @@ get_many (gvm_connection_t *connection, const char *type,
 
   built_filter = NULL;
   if (filt_id == NULL
-      || (strcmp (filt_id, "") == 0)
-      || (strcmp (filt_id, "--") == 0))
+      || str_equal (filt_id, "")
+      || str_equal (filt_id, "--"))
     {
-      if ((build_filter && (strcmp (build_filter, "1") == 0))
-          || ((filter == NULL || strcmp (filter, "") == 0)
-              && (filter_extra == NULL || strcmp (filter_extra, "") == 0)))
+      if ((build_filter && str_equal (build_filter, "1"))
+          || ((filter == NULL || str_equal (filter, ""))
+              && (filter_extra == NULL || str_equal (filter_extra, ""))))
         {
           if (build_filter && (strcmp (build_filter, "1") == 0))
             {
               gchar *task;
               const char *search_phrase, *task_id;
 
-              if (strcmp (type, "report") == 0
-                  || strcmp (type, "task") == 0)
+              if (str_equal (type, "report")
+                  || str_equal (type, "task"))
                 {
                   task = g_strdup_printf ("apply_overrides=%i min_qod=%s ",
                                           overrides
-                                          && strcmp (overrides, "0"),
+                                          && !str_equal (overrides, "0"),
                                           min_qod ? min_qod : "");
                 }
               else if (strcmp (type, "result") == 0)
@@ -1538,7 +1537,7 @@ get_many (gvm_connection_t *connection, const char *type,
                   task = g_strdup_printf ("apply_overrides=%i min_qod=%s"
                                           " autofp=%s levels=%s ",
                                           (overrides
-                                           && strcmp (overrides, "0")),
+                                           && !str_equal (overrides, "0")),
                                           min_qod ? min_qod : "",
                                           (autofp && autofp_value)
                                             ? autofp_value : "0",
@@ -1588,16 +1587,16 @@ get_many (gvm_connection_t *connection, const char *type,
           else if (strcmp (type, "info") == 0
                    && params_value (params, "info_type"))
             {
-              if (strcmp (params_value (params, "info_type"), "cve") == 0)
+              if (str_equal (params_value (params, "info_type"), "cve"))
                 filter = "sort-reverse=published rows=-2";
-              else if (strcmp (params_value (params, "info_type"), "cpe") == 0)
+              else if (str_equal (params_value (params, "info_type"), "cpe"))
                 filter = "sort-reverse=modified rows=-2";
               else
                 filter = "sort-reverse=created rows=-2";
             }
-          else if (strcmp (type, "user") == 0)
+          else if (str_equal (type, "user"))
             filter = "sort=roles rows=-2";
-          else if (strcmp (type, "report") == 0)
+          else if (str_equal (type, "report"))
             {
               const char *task_id;
               task_id = params_value (params, "task_id");
@@ -1608,37 +1607,37 @@ get_many (gvm_connection_t *connection, const char *type,
               else
                 filter = "apply_overrides=1 rows=-2 sort-reverse=date";
             }
-          else if (strcmp (type, "result") == 0)
+          else if (str_equal (type, "result"))
             {
               built_filter
                 = g_strdup_printf("apply_overrides=%d autofp=%s rows=-2"
                                   " sort-reverse=created",
                                   (overrides == NULL
-                                   || strcmp (overrides, "0")),
-                                  (autofp && strcmp (autofp, "0"))
+                                   || str_equal (overrides, "1")),
+                                  (autofp && str_equal (autofp, "1"))
                                     ? autofp_value
                                     : "0");
             }
-          else if (strcmp (type, "note") == 0 || strcmp (type, "override") == 0)
+          else if (str_equal (type, "note") || str_equal (type, "override"))
             {
               filter = "rows=-2 sort=nvt";
             }
-          else if (strcmp (type, "task"))
+          else if (!str_equal (type, "task"))
             filter = "rows=-2";
           else
             filter = "apply_overrides=1 rows=-2";
-          if (filt_id && strcmp (filt_id, ""))
+          if (filt_id && !str_equal (filt_id, ""))
             /* Request to use "filter" instead. */
             filt_id = FILT_ID_NONE;
           else
             filt_id = FILT_ID_USER_SETTING;
         }
-      else if ((strcmp (filter, "sort=nvt") == 0)
-               && ((strcmp (type, "note") == 0)
-                   || (strcmp (type, "override") == 0)))
+      else if (str_equal (filter, "sort=nvt")
+               && (str_equal (type, "note")
+                   || str_equal (type, "override")))
         filt_id = FILT_ID_USER_SETTING;
-      else if ((strcmp (filter, "apply_overrides=1") == 0)
-               && (strcmp (type, "task") == 0))
+      else if (str_equal (filter, "apply_overrides=1")
+               && str_equal (type, "task"))
         filt_id = FILT_ID_USER_SETTING;
     }
   else if (replace_task_id)
@@ -9921,7 +9920,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_VARIABLE_INVALID (alive_tests, "Save Target");
   CHECK_VARIABLE_INVALID (in_use, "Save Target");
 
-  if (strcmp (in_use, "0"))
+  if (str_equal (in_use, "1"))
     {
       entity_t entity;
       int ret;
@@ -10012,15 +10011,14 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
       && strcmp (target_ssh_credential, "0"))
     CHECK_VARIABLE_INVALID (port, "Save Target");
 
-  if (hosts == NULL && strcmp (target_source, "manual") == 0)
+  if (str_equal (target_source, "manual"))
     {
-      return message_invalid (connection, credentials, params, response_data,
-                              "Given hosts was invalid",
-                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                              "Save Target");
+      CHECK_VARIABLE_INVALID (hosts, "Save Target")
     }
-  if (strcmp (target_source, "import") == 0 && name == NULL)
+
+  if (str_equal (target_source, "import") && name == NULL)
     {
+      // TODO name can't be NULL here and "import" seems to be not used in GSA
       return message_invalid (connection, credentials, params, response_data,
                               "Given target_source was invalid",
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
@@ -10039,7 +10037,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
     else
       comment_element = g_strdup ("");
 
-    if (strcmp (target_ssh_credential, "--") == 0)
+    if (str_equal (target_ssh_credential, "--"))
       ssh_credentials_element = g_strdup ("");
     else
       ssh_credentials_element =
@@ -10049,21 +10047,21 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                          target_ssh_credential,
                          port);
 
-    if (strcmp (target_smb_credential, "--") == 0)
+    if (str_equal (target_smb_credential, "--"))
       smb_credentials_element = g_strdup ("");
     else
       smb_credentials_element =
         g_strdup_printf ("<smb_credential id=\"%s\"/>",
                          target_smb_credential);
 
-    if (strcmp (target_esxi_credential, "--") == 0)
+    if (str_equal (target_esxi_credential, "--"))
       esxi_credentials_element = g_strdup ("");
     else
       esxi_credentials_element =
         g_strdup_printf ("<esxi_credential id=\"%s\"/>",
                          target_esxi_credential);
 
-    if (strcmp (target_snmp_credential, "--") == 0)
+    if (str_equal (target_snmp_credential, "--"))
       snmp_credentials_element = g_strdup ("");
     else
       snmp_credentials_element =
@@ -10082,10 +10080,10 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
                        "<alive_tests>%s</alive_tests>",
                        target_id,
                        name,
-                       strcmp (target_source, "file") == 0
+                       str_equal (target_source, "file")
                          ? params_value (params, "file")
                          : hosts,
-                       strcmp (target_exclude_source, "file") == 0
+                       str_equal (target_exclude_source, "file")
                          ? params_value (params, "exclude_file")
                          : exclude_hosts,
                        reverse_lookup_only ? reverse_lookup_only : "0",
@@ -10255,7 +10253,7 @@ create_config_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
   CHECK_VARIABLE_INVALID (name, "New Config");
   CHECK_VARIABLE_INVALID (comment, "New Config");
   CHECK_VARIABLE_INVALID (base, "New Config");
-  if (!strcmp (base, "0"))
+  if (str_equal (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
       CHECK_VARIABLE_INVALID (scanner, "New Config");
@@ -23591,7 +23589,7 @@ bulk_export_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_VARIABLE_INVALID (type, "Bulk Export")
   CHECK_VARIABLE_INVALID (bulk_select, "Bulk Export")
 
-  if (bulk_select && strcmp(bulk_select, "1") == 0)
+  if (bulk_select && str_equal(bulk_select, "1"))
   {
     bulk_string = g_string_new("first=1 rows=-1 uuid=");
 
