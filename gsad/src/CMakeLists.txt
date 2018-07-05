@@ -84,36 +84,34 @@ include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
 
 find_package (Threads)
 
-## Libraries
-
-add_library (gsad_base STATIC gsad_base.c)
-target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
-                       ${LIBGVM_UTIL_LDFLAGS} ${GNUTLS_LDFLAGS})
-
-add_library (gsad_gmp STATIC gsad_gmp.c)
-target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
-                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
-
-add_library (gsad_i18n_ext STATIC gsad_i18n.c)
-target_link_libraries (gsad_gmp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
-                       ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS}
-                       ${LIBGVM_GMP_LDFLAGS} ${GNUTLS_LDFLAGS})
-
 ## Program
 
 add_executable (gsad
                 gsad.c
-                gsad_settings.c
-                gsad_user.c
+                gsad_base.c
                 gsad_cmd.c
+                gsad_gmp.c
                 gsad_http.c
                 gsad_http_handler.c
+                gsad_i18n.c
+                gsad_settings.c
+                gsad_user.c
                 utils.c
                 validator.c)
 
-target_link_libraries (gsad gsad_gmp gsad_base gsad_i18n_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGVM_GMP_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad ${LIBMICROHTTPD_LDFLAGS}
+                            ${GTHREAD_LDFLAGS}
+                            ${GLIB_LDFLAGS}
+                            ${LIBXML_LDFLAGS}
+                            ${LIBGCRYPT_LDFLAGS}
+                            ${GNUTLS_LDFLAGS}
+                            ${LIBGVM_BASE_LDFLAGS}
+                            ${LIBGVM_UTIL_LDFLAGS}
+                            ${LIBGVM_GMP_LDFLAGS}
+                            ${LIBGVM_GMP_LDFLAGS}
+                            ${CMAKE_THREAD_LIBS_INIT}
+                            ${LINKER_HARDENING_FLAGS}
+                       )
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (GSAD_VERSION)
