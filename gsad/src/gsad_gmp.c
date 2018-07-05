@@ -9516,8 +9516,6 @@ toggle_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  if (! gmp_success (entity))
-    set_http_status_from_entity (entity, response_data);
   html = response_from_entity (connection, credentials, params, entity,
                                "Toggle Tag", response_data);
 
