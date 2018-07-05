@@ -21,15 +21,27 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  testReducerForEntities,
   testEntitiesActions,
+  testEntityActions,
   testLoadEntities,
+  testLoadEntity,
+  testReducerForEntities,
+  testReducerForEntity,
 } from '../utils/testing';
 
-import {entitiesActions, reducer, loadEntities} from '../filters';
+import {
+  entitiesActions,
+  entityActions,
+  loadEntities,
+  loadEntity,
+  reducer,
+} from '../filters';
 
-testReducerForEntities('filter', reducer, entitiesActions);
 testEntitiesActions('filter', entitiesActions);
+testEntityActions('filter', entityActions);
 testLoadEntities('filter', loadEntities);
+testLoadEntity('filter', loadEntity);
+testReducerForEntities('filter', reducer, entitiesActions);
+testReducerForEntity('filter', reducer, entityActions);
 
 // vim: set ts=2 sw=2 tw=80:

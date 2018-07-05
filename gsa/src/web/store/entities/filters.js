@@ -24,16 +24,20 @@ import {createAll} from './utils/main';
 
 const {
   loadEntities,
+  loadEntity,
   reducer,
   selector,
   entitiesActions,
+  entityActions,
 } = createAll('filter');
 
 export {
   loadEntities,
+  loadEntity,
   reducer,
   selector,
   entitiesActions,
+  entityActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:
