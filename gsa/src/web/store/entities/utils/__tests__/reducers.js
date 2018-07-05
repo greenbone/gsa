@@ -46,6 +46,17 @@ describe('entities reducers test', () => {
     });
   });
 
+  test('should create empty state for corresponding entityType action', () => {
+    const reducer = createReducer('foo');
+
+    expect(reducer(undefined, {entityType: 'foo'})).toEqual({
+      byId: {},
+      isLoading: {},
+      errors: {},
+      default: [],
+    });
+  });
+
   test('should not override byId accidentially', () => {
     const actions = createEntitiesActions('foo');
     const reducer = createReducer('foo');
