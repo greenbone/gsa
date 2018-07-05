@@ -20,16 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {testAll} from '../utils/testing';
 
-import {reducer as filter} from './filters';
-import {reducer as schedule} from './schedules';
+import * as schedule from '../schedules';
 
-const entitiesReducer = combineReducers({
-  filter,
-  schedule,
-});
-
-export default entitiesReducer;
+testAll('schedule', schedule);
 
 // vim: set ts=2 sw=2 tw=80:

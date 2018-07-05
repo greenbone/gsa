@@ -20,16 +20,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {createAll} from './utils/main';
 
-import {reducer as filter} from './filters';
-import {reducer as schedule} from './schedules';
+const {
+  entitiesActions,
+  entityActions,
+  loadEntities,
+  loadEntity,
+  reducer,
+  selector,
+} = createAll('schedule');
 
-const entitiesReducer = combineReducers({
-  filter,
-  schedule,
-});
-
-export default entitiesReducer;
+export {
+  entitiesActions,
+  entityActions,
+  loadEntities,
+  loadEntity,
+  reducer,
+  selector,
+};
 
 // vim: set ts=2 sw=2 tw=80:
