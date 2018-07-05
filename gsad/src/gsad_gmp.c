@@ -58,6 +58,7 @@
 #include "gsad_http.h" /* for gsad_message, logout_xml */
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_i18n.h"
+#include "utils.h"
 
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
@@ -1049,44 +1050,6 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
   return 0;
 }
 
-/**
- * @brief Capitalize a type or command name and replace underscores.
- *
- * @param[in]  input  The input string.
- *
- * @return The newly allocated capitalized type or command name.
- */
-static gchar*
-capitalize (const char* input)
-{
-  gchar *output;
-  if (input == NULL)
-    return NULL;
-  else
-    {
-      int first_letter = 1;
-      int pos = 0;
-      output = g_strdup (input);
-
-      while (output[pos])
-        {
-          if (g_ascii_isalpha (output[pos]) && first_letter)
-            {
-              output[pos] = g_ascii_toupper (output[pos]);
-              first_letter = 0;
-            }
-          else if (output[pos] == '_')
-            {
-              output[pos] = ' ';
-              first_letter = 1;
-            }
-          pos++;
-        }
-      return output;
-    }
-}
-
-
 /* Generic page handlers. */
 
 /**

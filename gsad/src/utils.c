@@ -41,3 +41,42 @@ str_equal (const gchar *str1, const gchar *str2)
 {
   return strcmp(str1, str2) == 0;
 }
+
+/**
+ * @brief Capitalize a type or command name and replace underscores.
+ *
+ * @param[in]  input  The input string.
+ *
+ * @return The newly allocated capitalized type or command name.
+ */
+gchar*
+capitalize (const char* input)
+{
+  gchar *output;
+  if (input == NULL)
+    return NULL;
+  else
+    {
+      int first_letter = 1;
+      int pos = 0;
+      output = g_strdup (input);
+
+      while (output[pos])
+        {
+          if (g_ascii_isalpha (output[pos]) && first_letter)
+            {
+              output[pos] = g_ascii_toupper (output[pos]);
+              first_letter = 0;
+            }
+          else if (output[pos] == '_')
+            {
+              output[pos] = ' ';
+              first_letter = 1;
+            }
+          pos++;
+        }
+      return output;
+    }
+}
+
+

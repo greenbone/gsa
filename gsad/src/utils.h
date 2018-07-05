@@ -35,5 +35,7 @@
 
 gboolean str_equal (const gchar *, const gchar *);
 
-#endif /* not _GSAD_BASE_H */
+gchar* capitalize (const char *);
+
+#endif /* not _GSAD_UTILS_H */
 
