@@ -25,6 +25,7 @@ import 'core-js/fn/object/entries';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
+import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 import {is_defined} from 'gmp/utils/identity';
 import {render_select_items} from 'web/utils/render.js';
 
@@ -52,6 +53,24 @@ class TagsDialog extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
+  }
+
+  componentDidMount() {
+    const {
+      filter,
+      gmp,
+      resourceType,
+    } = this.props;
+
+    gmp[pluralizeType(normalizeType(resourceType))].getAll({filter})
+    .then(response => {
+      const numberOfFilteredEntities = response.data.length;
+      const noticeText = numberOfFilteredEntities >= 1000 ?
+        _('Please note that assigning a tag to a large number of resources ' +
+          ' may take several minutes.') :
+        '';
+        this.setState({noticeText});
+    });
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -146,6 +165,7 @@ class TagsDialog extends React.Component {
       comment,
       id,
       name,
+      noticeText = '',
       value,
     } = this.state;
 
@@ -192,6 +212,7 @@ class TagsDialog extends React.Component {
               <FormGroup title={_('Comment')} titleSize="4">
                 {is_defined(comment) ? comment : ''}
               </FormGroup>
+              {noticeText}
             </Layout>
           );
         }}
