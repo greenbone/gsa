@@ -502,7 +502,7 @@ export const testLoadEntity = (entityType, loadEntity) => {
       });
     });
 
-    test('should fail loading all entities with an error', () => {
+    test('should fail loading entity with an error', () => {
       const id = 'a1';
       const rootState = createState(entityType, {
         [id]: {
