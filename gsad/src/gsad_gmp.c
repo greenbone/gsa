@@ -321,15 +321,19 @@ int token_user_remove (const char *);
 
 static int gmp_success (entity_t entity);
 
-static gchar *action_result_page (gvm_connection_t *, credentials_t *,
-                                  params_t *, cmd_response_data_t *,
-                                  const char*, const char*, const char*,
-                                  const char*, const char*);
-
 static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
                                     params_t *, entity_t,  const char *,
                                     cmd_response_data_t *);
 
+static gchar *action_result (gvm_connection_t *,
+                             credentials_t *,
+                             params_t *,
+                             cmd_response_data_t *,
+                             const char *action,
+                             const char *status,
+                             const char *message,
+                             const char *details,
+                             const char *id);
 /* Helpers. */
 
 /**
@@ -697,11 +701,10 @@ check_modify_config (gvm_connection_t *connection,
 
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      response
-        = action_result_page (connection, credentials, params, response_data,
-                              "Save Config",
-                              entity_attribute (entity, "status"),
-                              message, NULL, NULL);
+      response = action_result (connection, credentials, params, response_data,
+                                "Save Config",
+                                entity_attribute (entity, "status"),
+                                message, NULL, NULL);
 
       free_entity (entity);
       return response;
@@ -712,10 +715,10 @@ check_modify_config (gvm_connection_t *connection,
 
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      response
-        = action_result_page (connection, credentials, params, response_data, "Save Config",
-                              entity_attribute (entity, "status"),
-                              message, NULL, NULL);
+      response = action_result (connection, credentials, params, response_data,
+                                "Save Config",
+                                entity_attribute (entity, "status"),
+                                message, NULL, NULL);
 
       free_entity (entity);
       return response;
@@ -1053,47 +1056,7 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
 /* Generic page handlers. */
 
 /**
- * @brief Generate a enveloped GMP XML containing a result.
- *
- * @param[in]  connection     Connection to manager
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params       HTTP request params
- * @param[out] response_data  Extra data return for the HTTP response.
- * @param[in]  action         Name of the action.
- * @param[in]  status         Status code.
- * @param[in]  message        Status message.
- * @param[in]  details        Status details.
- * @param[in]  unused         Not used anymore.
- *
- * @return Enveloped XML object.
- */
-static gchar *
-action_result_page (gvm_connection_t *connection,
-                    credentials_t *credentials, params_t *params,
-                    cmd_response_data_t *response_data,
-                    const char* action, const char* status,
-                    const char* message, const char* details,
-                    const char* unused)
-{
-  gchar *xml;
-  xml = g_markup_printf_escaped ("<action_result>"
-                                 "<action>%s</action>"
-                                 "<status>%s</status>"
-                                 "<message>%s</message>"
-                                 "<details>%s</details>"
-                                 "</action_result>",
-                                 action ? action : "",
-                                 status ? status : "",
-                                 message ? message : "",
-                                 details ? details : "");
-  return envelope_gmp (connection, credentials, params, xml,
-                       response_data);
-}
-
-/**
  * @brief Generate a enveloped GMP XML containing an action result.
- *
- * Should replace action_result_page function completely in future
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
@@ -1164,9 +1127,9 @@ message_invalid (gvm_connection_t *connection,
                  const char *status, const char *op_name)
 {
   gchar *ret;
-  ret = action_result_page (connection, credentials, params, response_data,
-                            op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            message, NULL, NULL);
+  ret = action_result (connection, credentials, params, response_data,
+                       op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                       message, NULL, NULL);
 
   cmd_response_data_set_status_code (response_data,
                                      MHD_HTTP_BAD_REQUEST);
@@ -19703,11 +19666,11 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   summary_response = g_strdup_printf("Successfully created %i permissions",
                                      successes);
 
-  html = action_result_page (connection, credentials, params, response_data,
-                              "Create Permissions",
-                              G_STRINGIFY (MHD_HTTP_CREATED),
-                              summary_response,
-                              NULL, NULL);
+  html = action_result (connection, credentials, params, response_data,
+                        "Create Permissions",
+                        G_STRINGIFY (MHD_HTTP_CREATED),
+                        summary_response,
+                        NULL, NULL);
   return html;
 }
 
