@@ -1310,18 +1310,32 @@ exec_gmp_post (http_connection_t *con,
 {
   int ret;
   user_t *user;
-  credentials_t *credentials;
-  gchar *res = NULL, *new_sid;
+  credentials_t *credentials = NULL;
+  gchar *res = NULL, *new_sid = NULL;
   const gchar *cmd, *caller, *language;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
-  cmd_response_data_t *response_data;
+  cmd_response_data_t *response_data = cmd_response_data_new ();
 
   params_mhd_validate (con_info->params);
 
   cmd = params_value (con_info->params, "cmd");
 
-  response_data = cmd_response_data_new ();
+  if (!cmd)
+    {
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
+
+      res = gsad_message (credentials,
+                          "Internal error",
+                          __FUNCTION__,
+                          __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Invalid command.",
+                          response_data);
+      return handler_create_response(con, res, response_data, new_sid);
+    }
+
 
   if (cmd && !strcmp (cmd, "login"))
     {
@@ -1472,20 +1486,6 @@ exec_gmp_post (http_connection_t *con,
     }
 
   /* Handle the usual commands. */
-
-  if (!cmd)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-
-      res = gsad_message (credentials,
-                          "Internal error",
-                          __FUNCTION__,
-                          __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: Empty command.",
-                          response_data);
-    }
 
   ELSE (bulk_delete)
   ELSE (bulk_export)
