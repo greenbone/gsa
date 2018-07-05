@@ -24061,6 +24061,57 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
   return html;
 }
 
+/**
+ * @brief Export multiple resources
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+bulk_export_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+  const gchar  *type, *filter, *bulk_select;
+  gchar *param_name;
+  GString *bulk_string;
+  params_t *selected_ids;
+  params_iterator_t iter;
+  param_t *param;
+
+  type = params_value (params, "resource_type");
+  filter = params_value (params, "filter");
+  bulk_select = params_value (params, "bulk_select");
+
+  CHECK_PARAM_INVALID (type, "Bulk export")
+  CHECK_PARAM_INVALID (bulk_select, "Bulkd export")
+
+  if (bulk_select && strcmp(bulk_select, "1") == 0)
+  {
+    bulk_string = g_string_new("first=1 rows=-1 uuid=");
+
+    selected_ids = params_values(params, "bulk_selected:");
+    if (selected_ids)
+    {
+      params_iterator_init(&iter, selected_ids);
+      while (params_iterator_next(&iter, &param_name, &param))
+       {
+         xml_string_append(bulk_string, " uuid=%s", param_name);
+       }
+    }
+  }
+  else
+  {
+    bulk_string = g_string_new(filter ?: "");
+  }
+
+  params_add(params, "filter", g_string_free(bulk_string, FALSE));
+
+  return export_many(connection, type, credentials, params, response_data);
+}
 
 /* Assets. */
 
