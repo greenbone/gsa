@@ -266,6 +266,7 @@ init_validator ()
   openvas_validator_add (validator,
                          "cmd",
                          "^((bulk_delete)"
+                         "|(bulk_export)"
                          "|(clone)"
                          "|(create_agent)"
                          "|(create_asset)"
@@ -1487,6 +1488,7 @@ exec_gmp_post (http_connection_t *con,
     }
 
   ELSE (bulk_delete)
+  ELSE (bulk_export)
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)

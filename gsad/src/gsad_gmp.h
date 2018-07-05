@@ -550,6 +550,8 @@ get_dashboard_settings_gmp (gvm_connection_t *,
 
 char * bulk_delete_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
+char * bulk_export_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                        cmd_response_data_t*);
 
 char * run_wizard_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
