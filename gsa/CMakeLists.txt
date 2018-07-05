@@ -765,6 +765,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
+     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js

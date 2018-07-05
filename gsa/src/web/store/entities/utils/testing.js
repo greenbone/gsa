@@ -502,7 +502,7 @@ export const testLoadEntity = (entityType, loadEntity) => {
       });
     });
 
-    test('should fail loading all entities with an error', () => {
+    test('should fail loading entity with an error', () => {
       const id = 'a1';
       const rootState = createState(entityType, {
         [id]: {
@@ -544,6 +544,21 @@ export const testLoadEntity = (entityType, loadEntity) => {
       });
     });
   });
+};
+
+export const testAll = (name, {
+  entitiesActions,
+  entityActions,
+  loadEntities,
+  loadEntity,
+  reducer,
+}) => {
+  testEntitiesActions(name, entitiesActions);
+  testEntityActions(name, entityActions);
+  testLoadEntities(name, loadEntities);
+  testLoadEntity(name, loadEntity);
+  testReducerForEntities(name, reducer, entitiesActions);
+  testReducerForEntity(name, reducer, entityActions);
 };
 
 // vim: set ts=2 sw=2 tw=80:
