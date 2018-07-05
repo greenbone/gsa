@@ -110,7 +110,7 @@ export const testEntitiesActions = (entityType, actions) => {
       expect(is_function(actions.error)).toBe(true);
     });
 
-    test('should create a load filters request action', () => {
+    test('should create a load request action', () => {
       const action = actions.request();
       expect(action).toEqual({
         type: types.ENTITIES_LOADING_REQUEST,
@@ -118,7 +118,7 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
-    test('should create a load specific filters request action', () => {
+    test('should create a load request action with filter', () => {
       const filter = Filter.fromString('type=abc');
       const action = actions.request(filter);
 
@@ -129,7 +129,7 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
-    test('should create a load filters success action', () => {
+    test('should create a load success action', () => {
       const action = actions.success(['foo', 'bar']);
       expect(action).toEqual({
         type: types.ENTITIES_LOADING_SUCCESS,
@@ -138,7 +138,7 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
-    test('should create a load specific filters success action', () => {
+    test('should create a load success action with filter', () => {
       const filter = Filter.fromString('type=abc');
       const action = actions.success(['foo', 'bar'], filter);
 
@@ -150,7 +150,7 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
-    test('should create a load filters error action', () => {
+    test('should create a load error action', () => {
       const action = actions.error('An error');
       expect(action).toEqual({
         type: types.ENTITIES_LOADING_ERROR,
@@ -159,7 +159,7 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
-    test('should create a load specific filters error action', () => {
+    test('should create a load error action with filter', () => {
       const filter = Filter.fromString('type=abc');
       const action = actions.error('An error', filter);
 
