@@ -415,4 +415,135 @@ export const testEntityActions = (entityType, actions) => {
   });
 };
 
+export const testLoadEntity = (entityType, loadEntity) => {
+
+  describe(`${entityType} loadEntity function tests`, () => {
+
+    test('should load entity successfully', () => {
+      const id = 'a1';
+      const rootState = createState(entityType, {
+        isLoading: {
+          [id]: false,
+        },
+      });
+      const getState = jest
+        .fn()
+        .mockReturnValue(rootState);
+
+      const dispatch = jest.fn();
+
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({
+          data: {foo: 'bar'},
+        }));
+
+      const gmp = {
+        [entityType]: {
+          get,
+        },
+      };
+
+      const props = {
+        id,
+        gmp,
+        other: 3,
+      };
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity(props)(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(get).toBeCalledWith({id});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        }]);
+        expect(dispatch.mock.calls[1]).toEqual([{
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType,
+          data: {foo: 'bar'},
+          id,
+        }]);
+      });
+    });
+
+    test('should not load entity if isLoading is true', () => {
+      const id = 'a1';
+      const rootState = createState(entityType, {
+        isLoading: {
+          [id]: true,
+        },
+      });
+
+      const getState = jest
+        .fn()
+        .mockReturnValue(rootState);
+
+      const dispatch = jest.fn();
+
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve([{id: 'foo'}]));
+
+      const gmp = {
+        [entityType]: {
+          get,
+        },
+      };
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(dispatch).not.toBeCalled();
+        expect(get).not.toBeCalled();
+      });
+    });
+
+    test('should fail loading all entities with an error', () => {
+      const id = 'a1';
+      const rootState = createState(entityType, {
+        [id]: {
+          isLoading: false,
+        },
+      });
+
+      const getState = jest
+        .fn()
+        .mockReturnValue(rootState);
+
+      const dispatch = jest.fn();
+
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.reject('An Error'));
+
+      const gmp = {
+        [entityType]: {
+          get,
+        },
+      };
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(get).toBeCalledWith({id});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        }]);
+        expect(dispatch.mock.calls[1]).toEqual([{
+          type: types.ENTITY_LOADING_ERROR,
+          entityType,
+          error: 'An Error',
+          id,
+        }]);
+      });
+    });
+  });
+};
+
 // vim: set ts=2 sw=2 tw=80:
