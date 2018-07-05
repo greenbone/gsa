@@ -141,8 +141,8 @@ class EntitiesCommand extends HttpCommand {
     // FIXME change gmp to allow deletion by filter
     let deleted;
     return this.get({filter}).then(entities => {
-      deleted = entities.getEntries();
-      return this.delete(entities, extra_params);
+      deleted = entities.data;
+      return this.delete(deleted, extra_params);
     }).then(response => response.setData(deleted));
   }
 
