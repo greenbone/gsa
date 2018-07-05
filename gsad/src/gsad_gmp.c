@@ -116,6 +116,21 @@
 #define FILT_ID_USER_SETTING "-2"
 
 /**
+ * @brief Check a param using the direct response method.
+ *
+ * @param[in]  name      Param name.
+ * @param[in]  op_name   Operation name.
+ */
+#define CHECK_PARAM_INVALID(name, op_name)                                     \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      return message_invalid (connection, credentials, params, response_data,  \
+                              "Given " G_STRINGIFY (name) " was invalid",      \
+                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
+                              op_name);                                        \
+    }
+
+/**
  * @brief Whether to use TLS for Manager connections.
  */
 int manager_use_tls = 0;
@@ -1036,21 +1051,6 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
 
   return 0;
 }
-
-/**
- * @brief Check a param using the direct response method.
- *
- * @param[in]  name      Param name.
- * @param[in]  op_name   Operation name.
- */
-#define CHECK_PARAM_INVALID(name, op_name)                                     \
-  if (name == NULL)                                                            \
-    {                                                                          \
-      return message_invalid (connection, credentials, params, response_data,  \
-                              "Given " G_STRINGIFY (name) " was invalid",      \
-                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
-                              op_name);                                        \
-    }
 
 /**
  * @brief Get an URL for the current page.
