@@ -3730,9 +3730,6 @@ import_report_gmp (gvm_connection_t *connection,
   return create_report_gmp (connection, credentials, params, response_data);
 }
 
-#define CHECK(name)                                                        \
-CHECK_VARIABLE_INVALID (name, "Create Task")
-
 /**
  * @brief Create a container task, serve next page.
  *
@@ -3865,7 +3862,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   alterable = params_value (params, "alterable");
   add_tag = params_value (params, "add_tag");
   tag_id = params_value (params, "tag_id");
-  CHECK (scanner_type);
+
+  CHECK_VARIABLE_INVALID (scanner_type, "Create Task");
   if (!strcmp (scanner_type, "1"))
     {
       hosts_ordering = "";
@@ -3882,24 +3880,27 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
       max_hosts = "";
     }
 
-  CHECK (name);
-  CHECK (comment);
-  CHECK (config_id);
-  CHECK (target_id);
-  CHECK (hosts_ordering);
-  CHECK (scanner_id);
-  CHECK (schedule_id);
+  CHECK_VARIABLE_INVALID (name, "Create Task");
+  CHECK_VARIABLE_INVALID (comment, "Create Task");
+  CHECK_VARIABLE_INVALID (config_id, "Create Task");
+  CHECK_VARIABLE_INVALID (target_id, "Create Task");
+  CHECK_VARIABLE_INVALID (hosts_ordering, "Create Task");
+  CHECK_VARIABLE_INVALID (scanner_id, "Create Task");
+  CHECK_VARIABLE_INVALID (schedule_id, "Create Task");
+
   if (params_given (params, "schedule_periods"))
     {
-      CHECK (schedule_periods);
+      CHECK_VARIABLE_INVALID (schedule_periods, "Create Task");
     }
   else
     schedule_periods = "0";
-  CHECK (in_assets);
+
+  CHECK_VARIABLE_INVALID (in_assets, "Create Task");
+
   if (!strcmp (in_assets, "1"))
     {
-      CHECK (apply_overrides);
-      CHECK (min_qod);
+      CHECK_VARIABLE_INVALID (apply_overrides, "Create Task");
+      CHECK_VARIABLE_INVALID (min_qod, "Create Task");
     }
   else
     {
@@ -3911,15 +3912,17 @@ create_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
           || !params_valid (params, "min_qod"))
         min_qod = "";
     }
-  CHECK (max_checks);
-  CHECK (source_iface);
-  CHECK (auto_delete);
-  CHECK (auto_delete_data);
-  CHECK (max_hosts);
-  CHECK (alterable);
+
+  CHECK_VARIABLE_INVALID (max_checks, "Create Task");
+  CHECK_VARIABLE_INVALID (source_iface, "Create Task");
+  CHECK_VARIABLE_INVALID (auto_delete, "Create Task");
+  CHECK_VARIABLE_INVALID (auto_delete_data, "Create Task");
+  CHECK_VARIABLE_INVALID (max_hosts, "Create Task");
+  CHECK_VARIABLE_INVALID (alterable, "Create Task");
+
   if (add_tag && strcmp (add_tag, "1") == 0)
     {
-      CHECK (tag_id);
+      CHECK_VARIABLE_INVALID (tag_id, "Create Task");
     }
 
   if (schedule_id == NULL || strcmp (schedule_id, "0") == 0)
@@ -4392,7 +4395,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_VARIABLE_INVALID (schedule_id, "Save Task");
   if (params_given (params, "schedule_periods"))
     {
-      CHECK (schedule_periods);
+      CHECK_VARIABLE_INVALID (schedule_periods, "Save Task");
     }
   else
     schedule_periods = "0";
