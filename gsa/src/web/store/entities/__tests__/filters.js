@@ -20,28 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  testEntitiesActions,
-  testEntityActions,
-  testLoadEntities,
-  testLoadEntity,
-  testReducerForEntities,
-  testReducerForEntity,
-} from '../utils/testing';
+import {testAll} from '../utils/testing';
 
-import {
-  entitiesActions,
-  entityActions,
-  loadEntities,
-  loadEntity,
-  reducer,
-} from '../filters';
+import * as filter from '../filters';
 
-testEntitiesActions('filter', entitiesActions);
-testEntityActions('filter', entityActions);
-testLoadEntities('filter', loadEntities);
-testLoadEntity('filter', loadEntity);
-testReducerForEntities('filter', reducer, entitiesActions);
-testReducerForEntity('filter', reducer, entityActions);
+testAll('filter', filter);
 
 // vim: set ts=2 sw=2 tw=80:
