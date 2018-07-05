@@ -24044,15 +24044,6 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
 
   /* Cleanup, and return transformed XML. */
-
-  if (params_given (params, "next") == 0)
-    {
-      gchar *next;
-      next = g_strdup_printf ("get_%ss", type);
-      params_add (params, "next", next);
-      g_free (next);
-    }
-
   html = response_from_entity (connection, credentials, params, entity,
                               "Bulk Delete", response_data);
   g_free (response);
