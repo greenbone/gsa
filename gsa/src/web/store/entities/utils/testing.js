@@ -305,4 +305,70 @@ export const testLoadEntities = (entityType, loadEntities) => {
   });
 };
 
+export const testReducerForEntity = (entityType, reducer, actions) => {
+  describe(`${entityType} entity reducer tests`, () => {
+
+    test('should be a reducer function', () => {
+      expect(is_function(reducer)).toBe(true);
+    });
+
+    test('should create initial state', () => {
+      expect(reducer(undefined, {})).toEqual({
+        byId: {},
+        errors: {},
+        isLoading: {},
+        default: [],
+      });
+    });
+
+    test('should reduce request action', () => {
+      const id = 'a1';
+      const action = actions.request(id);
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {},
+        isLoading: {
+          [id]: true,
+        },
+        default: [],
+      });
+    });
+
+    test('should reduce success action', () => {
+      const id = 'a1';
+      const action = actions.success(id, {data: 'foo'});
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {
+          [id]: {
+            data: 'foo',
+          },
+        },
+        errors: {},
+        isLoading: {
+          [id]: false,
+        },
+        default: [],
+      });
+    });
+
+    test('should reduce error action', () => {
+      const id = 'a1';
+      const action = actions.error(id, 'An error');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {
+          [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+        },
+        default: [],
+      });
+    });
+  });
+};
+
 // vim: set ts=2 sw=2 tw=80:
