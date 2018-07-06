@@ -27,6 +27,7 @@
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_settings.h"
 #include "gsad_gmp_auth.h"
+#include "utils.h"
 
 #include <assert.h> /* for asset */
 #include <string.h> /* for strcmp */
@@ -109,17 +110,23 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
 /**
  * @brief Find a user, given a token and cookie.
  *
- * If a user is returned, it's up to the caller to release the user.
+ * If a user is returned, the session of the user is renewed and it's up to the
+ * caller to release the user.
  *
  * @param[in]   cookie       Token in cookie.
  * @param[in]   token        Token request parameter.
  * @param[in]   address      Client's IP address.
  * @param[out]  user_return  User.
  *
- * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
- *         3 bad/missing cookie, 4 bad/missing token, 5 guest login failed,
- *         6 GMP down for guest login, 7 IP address mismatch, -1 error during
- *         guest login.
+ * @return 0 ok (user in user_return),
+ *         1 bad token,
+ *         2 expired token,
+ *         3 bad/missing cookie,
+ *         4 bad/missing token,
+ *         5 guest login failed,
+ *         6 GMP down for guest login,
+ *         7 IP address mismatch,
+ *        -1 error during guest login.
  */
 int
 user_find (const gchar *cookie, const gchar *token, const char *address,
@@ -199,47 +206,59 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
     }
 
   g_mutex_lock (mutex);
+
   ret = USER_OK;
+
   for (index = 0; index < users->len; index++)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
+      if (str_equal (item->token, token))
         {
-          if ((cookie == NULL) || strcmp (item->cookie, cookie))
+          /* Check if the session has expired. */
+          if (time (NULL) - item->time > (session_timeout * 60))
             {
-              /* Check if the session has expired. */
-              if (time (NULL) - item->time > (session_timeout * 60))
-                /* Probably the browser removed the cookie. */
-                ret = USER_EXPIRED_TOKEN;
-              else
-                ret = USER_BAD_MISSING_COOKIE;
+              ret = USER_EXPIRED_TOKEN;
               break;
             }
+
+          if ((cookie == NULL) || !str_equal (item->cookie, cookie))
+            {
+              ret = USER_BAD_MISSING_COOKIE;
+              break;
+            }
+
           user = item;
           break;
         }
     }
+
   if (user)
     {
       /* Verify that the user address matches the client's address. */
-      if (strcmp (address, user->address))
-        ret = USER_IP_ADDRESS_MISSMATCH;
-      else if (time (NULL) - user->time > (session_timeout * 60))
-        ret = USER_EXPIRED_TOKEN;
+      if (!str_equal (address, user->address))
+        {
+          ret = USER_IP_ADDRESS_MISSMATCH;
+        }
       else
         {
           *user_return = user;
+          // renew session time
           user->time = time (NULL);
-          /* FIXME mutex is not unlocked */
+
+          // mutex will be unlocked with user_release
           return USER_OK;
         }
     }
-  else if (ret == 0)
-    /* should it be really USER_EXPIRED_TOKEN?
-     * No user has been found therefore the token couldn't even expire */
-    ret = USER_EXPIRED_TOKEN;
+  else if (ret == USER_OK)
+    {
+      /* should it be really USER_EXPIRED_TOKEN?
+      * No user has been found therefore the token couldn't even expire */
+      ret = USER_EXPIRED_TOKEN;
+    }
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
