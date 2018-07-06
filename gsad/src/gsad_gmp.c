@@ -316,8 +316,6 @@ static char *wizard (gvm_connection_t *, credentials_t *, params_t *,
 static char *wizard_get (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-int token_user_remove (const char *);
-
 static int gmp_success (entity_t entity);
 
 static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
