@@ -527,7 +527,7 @@ handle_setup_credentials (http_connection_t *connection,
       credentials->caller = NULL;
     }
 
-  user_release (user);
+  user_free (user);
 
   return http_handler_next (connection, method, url, con_info, handler,
                             credentials);

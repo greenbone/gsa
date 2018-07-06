@@ -1439,7 +1439,7 @@ exec_gmp_post (http_connection_t *con,
 
   new_sid = g_strdup (user_get_cookie(user));
 
-  user_release (user);
+  user_free (user);
 
   /* Set the timezone. */
 

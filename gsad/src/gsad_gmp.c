@@ -24195,7 +24195,7 @@ login (http_connection_t *con,
           ret = handler_create_response (con, data, response_data,
                                          user_get_cookie(user));
 
-          user_release (user);
+          user_free (user);
 
           credentials_free (credentials);
 

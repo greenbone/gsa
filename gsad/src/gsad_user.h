@@ -74,8 +74,6 @@ int user_find (const gchar *cookie, const gchar *token, const char *address,
 
 void user_remove (user_t *user);
 
-void user_release (user_t *user);
-
 void user_free (user_t *user);
 
 user_t *
