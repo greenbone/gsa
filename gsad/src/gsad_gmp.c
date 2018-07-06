@@ -127,7 +127,6 @@
     {                                                                          \
       return message_invalid (connection, credentials, params, response_data,  \
                               "Given " G_STRINGIFY (name) " was invalid",      \
-                              G_STRINGIFY (GSAD_STATUS_INVALID_REQUEST),       \
                               op_name);                                        \
     }
 
@@ -330,7 +329,6 @@ static gchar *action_result (gvm_connection_t *,
                              params_t *,
                              cmd_response_data_t *,
                              const char *action,
-                             const char *status,
                              const char *message,
                              const char *details,
                              const char *id);
@@ -703,7 +701,6 @@ check_modify_config (gvm_connection_t *connection,
                                          MHD_HTTP_BAD_REQUEST);
       response = action_result (connection, credentials, params, response_data,
                                 "Save Config",
-                                entity_attribute (entity, "status"),
                                 message, NULL, NULL);
 
       free_entity (entity);
@@ -717,7 +714,6 @@ check_modify_config (gvm_connection_t *connection,
                                          MHD_HTTP_BAD_REQUEST);
       response = action_result (connection, credentials, params, response_data,
                                 "Save Config",
-                                entity_attribute (entity, "status"),
                                 message, NULL, NULL);
 
       free_entity (entity);
@@ -1062,7 +1058,6 @@ setting_get_value (gvm_connection_t *connection, const char *setting_id,
  * @param[in]  params         HTTP request params
  * @param[out] response_data  Extra data return for the HTTP response.
  * @param[in]  action         Name of the action.
- * @param[in]  status         Status code.
  * @param[in]  message        Status message.
  * @param[in]  details        Status details (optional).
  * @param[in]  id             ID of the handled entity (optional).
@@ -1075,7 +1070,6 @@ action_result (gvm_connection_t *connection,
                params_t *params,
                cmd_response_data_t *response_data,
                const char *action,
-               const char *status,
                const char *message,
                const char *details,
                const char *id)
@@ -1087,10 +1081,8 @@ action_result (gvm_connection_t *connection,
   xml_string_append(xml,
                     "<action_result>"
                     "<action>%s</action>"
-                    "<status>%s</status>"
                     "<message>%s</message>",
                     action ? action : "",
-                    status ? status : "",
                     message ? message : "");
 
   if (details)
@@ -1114,24 +1106,30 @@ action_result (gvm_connection_t *connection,
  * @param[in]  params         Request parameters.
  * @param[in]  response_data  Response data.
  * @param[in]  message        Message.
- * @param[in]  status         Status code.
  * @param[in]  op_name        Operation name.
  *
  * @return Enveloped XML object.
  */
 gchar *
 message_invalid (gvm_connection_t *connection,
-                 credentials_t *credentials, params_t *params,
-                 cmd_response_data_t *response_data, const char *message,
-                 const char *status, const char *op_name)
+                 credentials_t *credentials,
+                 params_t *params,
+                 cmd_response_data_t *response_data,
+                 const char *message,
+                 const char *op_name)
 {
-  gchar *ret;
-  ret = action_result (connection, credentials, params, response_data,
-                       op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                       message, NULL, NULL);
+  gchar *ret = action_result (connection,
+                              credentials,
+                              params,
+                              response_data,
+                              op_name,
+                              message,
+                              NULL,
+                              NULL);
 
   cmd_response_data_set_status_code (response_data,
-                                     MHD_HTTP_BAD_REQUEST);
+                                     GSAD_STATUS_INVALID_REQUEST);
+
   return ret;
 }
 
@@ -1159,7 +1157,7 @@ response_from_entity (gvm_connection_t *connection,
   status_details_entity = entity_child (entity, "status_details");
 
   res = action_result (connection, credentials, params, response_data,
-                       action, entity_attribute (entity, "status"),
+                       action,
                        entity_attribute (entity, "status_text"),
                        entity_text(status_details_entity),
                        entity_attribute (entity, "id"));
@@ -3203,7 +3201,6 @@ create_report_gmp (gvm_connection_t *connection,
       if (task_id)
         return message_invalid (connection, credentials, params, response_data,
                                 "Report required",
-                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                                 "Create Report");
 
       /* Create only the container task. */
@@ -5234,7 +5231,6 @@ create_credential_gmp (gvm_connection_t *connection,
   else
     return message_invalid (connection, credentials, params, response_data,
                             "Given autogenerate was invalid",
-                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Credential");
 
   CHECK_VARIABLE_INVALID (name, "Create Credential");
@@ -8265,7 +8261,6 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *html, *response;
   const char  *alert_id;
   entity_t entity;
-  entity_t status_details_entity;
 
   alert_id = params_value (params, "alert_id");
 
@@ -8309,13 +8304,10 @@ test_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
     }
 
 
-  status_details_entity = entity_child (entity, "status_details");
-
-  html = action_result (connection, credentials, params, response_data,
-                        "Test Alert", entity_attribute (entity, "status"),
-                        entity_attribute (entity, "status_text"),
-                        entity_text(status_details_entity),
-                        entity_attribute (entity, "id"));
+  html = response_from_entity (connection, credentials, params,
+                               entity,
+                               "Test Alert",
+                               response_data);
 
   free_entity (entity);
   g_free (response);
@@ -8414,11 +8406,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
   CHECK_VARIABLE_INVALID (target_source, "Create Target")
   if (strcmp (target_source, "manual") == 0)
     CHECK_VARIABLE_INVALID (hosts, "Create Target");
-  if (strcmp (target_source, "file") == 0 && file == NULL)
-    return message_invalid (connection, credentials, params, response_data,
-                            "Missing hosts file",
-                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            "Create Target");
+  if (strcmp (target_source, "file") == 0)
+    CHECK_VARIABLE_INVALID (file, "Create Target")
   /* require hosts_filter if target_source is "asset_hosts" */
   if (strcmp (target_source, "asset_hosts") == 0)
     CHECK_VARIABLE_INVALID (hosts_filter, "Create Target");
@@ -8430,11 +8419,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
           /* In case browser doesn't send empty field. */
           && params_given (params, "exclude_hosts"))
         CHECK_VARIABLE_INVALID (exclude_hosts, "Create Target");
-      if (strcmp (target_exclude_source, "file") == 0 && exclude_file == NULL)
-        return message_invalid (connection, credentials, params, response_data,
-                                "Missing exclude hosts file",
-                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                                "Create Target");
+      if (strcmp (target_exclude_source, "file") == 0)
+        CHECK_VARIABLE_INVALID (exclude_file, "Create Target");
     }
 
   CHECK_VARIABLE_INVALID (comment, "Create Target");
@@ -19515,7 +19501,6 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
 
   html = action_result (connection, credentials, params, response_data,
                         "Create Permissions",
-                        G_STRINGIFY (MHD_HTTP_CREATED),
                         summary_response,
                         NULL, NULL);
   return html;
