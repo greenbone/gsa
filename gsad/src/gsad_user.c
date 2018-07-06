@@ -66,6 +66,19 @@ struct user
   gboolean guest;       ///< Whether the user is a guest.
 };
 
+user_t *
+user_new()
+{
+  user_t *user = g_malloc (sizeof (user_t));
+  return user;
+}
+
+gboolean
+user_session_expired (user_t *user)
+{
+  return (time (NULL) - user->time) > (get_session_timeout () * 60);
+}
+
 gchar *
 user_get_username (user_t *user)
 {
@@ -82,6 +95,52 @@ gchar *
 user_get_cookie (user_t *user)
 {
   return user->cookie;
+}
+
+void
+user_renew_session (user_t *user)
+{
+  user->time = time (NULL);
+}
+
+user_t *
+get_user_by_token (const gchar *token)
+{
+  int index;
+  user_t * user = NULL;
+
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (str_equal (item->token, token))
+        {
+          user = item;
+          break;
+        }
+    }
+
+  return user;
+}
+
+user_t *
+get_user_by_username (const gchar *username)
+{
+  int index;
+  user_t * user = NULL;
+
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (str_equal (item->username, username))
+        {
+          user = item;
+          break;
+        }
+    }
+
+  return user;
 }
 
 /**
@@ -108,22 +167,19 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, const char *address)
 {
-  user_t *user = NULL;
-  int index;
   const gchar * guest_username = get_guest_username ();
 
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
+
+  user_t *user = get_user_by_username (username);
+
+  if (user && user_session_expired (user))
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, username) == 0)
-        {
-          if (time (NULL) - item->time > (get_session_timeout () * 60))
-            g_ptr_array_remove (users, (gpointer) item);
-        }
+      g_ptr_array_remove(users, (gpointer)user);
     }
-  user = g_malloc (sizeof (user_t));
+
+  user = user_new();
+  user_renew_session (user);
   user->cookie = gvm_uuid_make ();
   user->token = gvm_uuid_make ();
   user->username = g_strdup (username);
@@ -133,16 +189,21 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   user->severity = g_strdup (severity);
   user->capabilities = g_strdup (capabilities);
   user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
+
   user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
                                          NULL, g_free, g_free);
-  g_ptr_array_add (users, (gpointer) user);
+
   set_language_code (&user->language, language);
-  user->time = time (NULL);
+
   if (guest_username)
-    user->guest = strcmp (username, guest_username) ? 0 : 1;
+    user->guest = str_equal (username, guest_username) ? 1 : 0;
   else
     user->guest = 0;
+
   user->address = g_strdup (address);
+
+  g_ptr_array_add (users, (gpointer) user);
+
   return user;
 }
 
@@ -176,12 +237,11 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
   int index;
   const gchar * guest_username = get_guest_username ();
   const gchar * guest_password = get_guest_password ();
-  int session_timeout = get_session_timeout ();
 
   if (token == NULL)
     return USER_BAD_MISSING_TOKEN;
 
-  if (guest_username && token && (strcmp (token, "guest") == 0))
+  if (guest_username && token && str_equal (token, "guest"))
     {
       int ret;
       gchar *timezone, *role, *capabilities, *severity, *language;
@@ -197,7 +257,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
             {
               user_t *item;
               item = (user_t*) g_ptr_array_index (users, index);
-              if (item->guest && (strcmp (item->cookie, cookie) == 0))
+              if (item->guest && str_equal (item->cookie, cookie))
                 {
                   user = item;
                   break;
@@ -206,7 +266,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           if (user)
             {
               *user_return = user;
-              user->time = time (NULL);
+              user_renew_session (user);
               return USER_OK;
             }
           g_mutex_unlock (mutex);
@@ -248,34 +308,22 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 
   ret = USER_OK;
 
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (str_equal (item->token, token))
-        {
-          /* Check if the session has expired. */
-          if (time (NULL) - item->time > (session_timeout * 60))
-            {
-              ret = USER_EXPIRED_TOKEN;
-              break;
-            }
-
-          if ((cookie == NULL) || !str_equal (item->cookie, cookie))
-            {
-              ret = USER_BAD_MISSING_COOKIE;
-              break;
-            }
-
-          user = item;
-          break;
-        }
-    }
+  user = get_user_by_token (token);
 
   if (user)
     {
+      if (user_session_expired (user))
+        {
+          ret = USER_EXPIRED_TOKEN;
+        }
+
+      else if ((cookie == NULL) || !str_equal (user->cookie, cookie))
+        {
+          ret = USER_BAD_MISSING_COOKIE;
+        }
+
       /* Verify that the user address matches the client's address. */
-      if (!str_equal (address, user->address))
+      else if (!str_equal (address, user->address))
         {
           ret = USER_IP_ADDRESS_MISSMATCH;
         }
@@ -283,13 +331,13 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
         {
           *user_return = user;
           // renew session time
-          user->time = time (NULL);
+          user_renew_session (user);
 
           // mutex will be unlocked with user_release
           return USER_OK;
         }
     }
-  else if (ret == USER_OK)
+  else
     {
       /* should it be really USER_EXPIRED_TOKEN?
       * No user has been found therefore the token couldn't even expire */
@@ -312,22 +360,23 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 int
 user_set_timezone (const gchar *token, const gchar *timezone)
 {
-  int index, ret;
-  ret = 1;
+  int ret = 1;
+
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
+
+  user_t * user = get_user_by_token (token);
+
+  if (user)
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->timezone);
-          item->timezone = g_strdup (timezone);
-          ret = 0;
-          break;
-        }
+      g_free (user->timezone);
+
+      user->timezone = g_strdup (timezone);
+
+      ret = 0;
     }
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
@@ -342,24 +391,25 @@ user_set_timezone (const gchar *token, const gchar *timezone)
 int
 user_set_password (const gchar *token, const gchar *password)
 {
-  int index, ret;
-  ret = 1;
+  int ret = 1;
+
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
+
+  user_t *user = get_user_by_token (token);
+
+  if (user)
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->password);
-          g_free (item->pw_warning);
-          item->password = g_strdup (password);
-          item->pw_warning = NULL;
-          ret = 0;
-          break;
-        }
+      g_free (user->password);
+      g_free (user->pw_warning);
+
+      user->password = g_strdup (password);
+      user->pw_warning = NULL;
+
+      ret = 0;
     }
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
@@ -374,22 +424,23 @@ user_set_password (const gchar *token, const gchar *password)
 int
 user_set_severity (const gchar *token, const gchar *severity)
 {
-  int index, ret;
-  ret = 1;
+  int ret = 1;
+
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
+
+  user_t *user = get_user_by_token (token);
+
+  if (user)
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->severity);
-          item->severity = g_strdup (severity);
-          ret = 0;
-          break;
-        }
+      g_free (user->severity);
+
+      user->severity = g_strdup (severity);
+
+      ret = 0;
     }
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
@@ -404,22 +455,23 @@ user_set_severity (const gchar *token, const gchar *severity)
 int
 user_set_language (const gchar *token, const gchar *language)
 {
-  int index, ret;
-  ret = 1;
+  int ret = 1;
+
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
+
+  user_t *user = get_user_by_token (token);
+
+  if (user)
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          g_free (item->language);
-          set_language_code (&item->language, language);
-          ret = 0;
-          break;
-        }
+      g_free (user->language);
+
+      set_language_code (&user->language, language);
+
+      ret = 0;
     }
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
@@ -435,13 +487,16 @@ int
 user_logout_all_sessions (const gchar *username, credentials_t *credentials)
 {
   int index;
+
   g_mutex_lock (mutex);
+
   for (index = 0; index < users->len; index++)
     {
       user_t *item;
       item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->username, username) == 0
-          && strcmp (item->token, credentials->token))
+
+      if (str_equal (item->username, username)
+          && !str_equal (item->token, credentials->token))
         {
           g_debug ("%s: logging out user '%s', token '%s'",
                    __FUNCTION__, item->username, item->token);
@@ -449,6 +504,7 @@ user_logout_all_sessions (const gchar *username, credentials_t *credentials)
           index --;
         }
     }
+
   g_mutex_unlock (mutex);
 
   return 0;
@@ -491,34 +547,27 @@ int
 token_user (const gchar *token, user_t **user_return)
 {
   int ret;
-  user_t *user = NULL;
-  int index;
+
   g_mutex_lock (mutex);
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (strcmp (item->token, token) == 0)
-        {
-          user = item;
-          break;
-        }
-    }
+
+  user_t *user = get_user_by_token (token);
+
   if (user)
     {
-      if (time (NULL) - user->time > (get_session_timeout () * 60))
+      if (user_session_expired(user))
         ret = 2;
       else
         {
           *user_return = user;
-          ret = 0;
-          user->time = time (NULL);
-          return ret;
+          user_renew_session (user);
+          return 0;
         }
     }
   else
     ret = 1;
+
   g_mutex_unlock (mutex);
+
   return ret;
 }
 
@@ -536,8 +585,9 @@ token_user_remove (const char *token)
   user_t *user;
   if (token_user (token, &user))
     return -1;
-  g_ptr_array_remove (users, (gpointer) user);
-  g_mutex_unlock (mutex);
+
+  user_remove (user);
+
   return 0;
 }
 
