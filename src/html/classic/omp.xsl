@@ -1043,6 +1043,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </div>
     </xsl:when>
+    <xsl:when test="$filtered_count &gt; 0">
+      <div class="pager">
+        <div class="pagination pagination-left">
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+             class="icon icon-sm">
+            <img src="/img/first.svg" title="{gsa:i18n ('First', 'Pagination')}"/>
+          </a>
+          <xsl:choose>
+            <xsl:when test="$list/@max &gt; 0">
+              <xsl:variable name="last_with_content"
+                select="floor(($filtered_count - 1) div $list/@max) * $list/@max + 1"/>
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$last_with_content} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/previous.svg" title="{gsa:i18n ('Previous', 'Pagination')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/previous.svg" title="{gsa:i18n ('Previous', 'Pagination')}"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+        <div class="pagination pagination-text">
+          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('%1 - %2 of %3'), $list/@start, gsa:i18n('N/A'), $filtered_count)"/>
+        </div>
+        <div class="pagination pagination-right">
+          <img class="icon icon-sm" src="/img/next_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+          <img class="icon icon-sm" src="/img/last_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+        </div>
+      </div>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 
