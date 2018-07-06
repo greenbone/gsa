@@ -68,7 +68,7 @@ struct user
 user_t *
 user_new()
 {
-  user_t *user = g_malloc (sizeof (user_t));
+  user_t *user = g_malloc0 (sizeof (user_t));
   return user;
 }
 
