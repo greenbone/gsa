@@ -127,7 +127,7 @@
     {                                                                          \
       return message_invalid (connection, credentials, params, response_data,  \
                               "Given " G_STRINGIFY (name) " was invalid",      \
-                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
+                              G_STRINGIFY (GSAD_STATUS_INVALID_REQUEST),       \
                               op_name);                                        \
     }
 
