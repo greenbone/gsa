@@ -1420,7 +1420,8 @@ exec_gmp_post (http_connection_t *con,
   /* From here, the user is authenticated. */
 
 
-  language = user->language ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
+  language = user_get_language(user) ?: con_info->language ?:
+    DEFAULT_GSAD_LANGUAGE;
   credentials = credentials_new (user, language, client_address);
   credentials->params = con_info->params; // FIXME remove params from credentials
   gettimeofday (&credentials->cmd_start, NULL);
@@ -1433,9 +1434,10 @@ exec_gmp_post (http_connection_t *con,
       g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
       caller = NULL;
     }
+
   credentials->caller = g_strdup (caller ?: "");
 
-  new_sid = g_strdup (user->cookie);
+  new_sid = g_strdup (user_get_cookie(user));
 
   user_release (user);
 

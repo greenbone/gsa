@@ -230,7 +230,8 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
     }
 
   snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
-  return send_redirect_to_uri (connection, uri, user ? user->cookie : NULL);
+  return send_redirect_to_uri (connection, uri,
+                               user ? user_get_cookie(user) : NULL);
 }
 
 /**

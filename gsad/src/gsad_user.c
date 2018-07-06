@@ -46,6 +46,45 @@ GPtrArray *users = NULL;
 static GMutex *mutex = NULL;
 
 /**
+ * @brief User information structure, for sessions.
+ */
+struct user
+{
+  gchar *cookie;        ///< Cookie token.
+  gchar *token;         ///< Request session token.
+  gchar *username;      ///< Login name.
+  gchar *password;      ///< Password.
+  gchar *role;          ///< Role.
+  gchar *timezone;      ///< Timezone.
+  gchar *severity;      ///< Severity class.
+  gchar *capabilities;  ///< Capabilities.
+  gchar *language;      ///< User Interface Language, in short form like "en".
+  gchar *pw_warning;    ///< Password policy warning.
+  gchar *address;       ///< Client's IP address.
+  time_t time;          ///< Login time.
+  GTree *last_filt_ids; ///< Last used filter ids.
+  gboolean guest;       ///< Whether the user is a guest.
+};
+
+gchar *
+user_get_username (user_t *user)
+{
+  return user->username;
+}
+
+gchar *
+user_get_language (user_t *user)
+{
+  return user->language;
+}
+
+gchar *
+user_get_cookie (user_t *user)
+{
+  return user->cookie;
+}
+
+/**
  * @brief Add a user.
  *
  * Creates and initializes a user object with given parameters

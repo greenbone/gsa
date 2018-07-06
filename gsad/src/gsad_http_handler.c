@@ -477,7 +477,7 @@ handle_setup_user (http_connection_t *connection,
   if (ret)
     abort ();
 
-  g_debug ("Found user %s\n", user->username);
+  g_debug ("Found user %s\n", user_get_username(user));
 
   return http_handler_next (connection, method, url, con_info, handler, user);
 }
@@ -494,7 +494,7 @@ handle_setup_credentials (http_connection_t *connection,
   credentials_t *credentials;
   char client_address[INET6_ADDRSTRLEN];
 
-  language = g_strdup (user->language);
+  language = g_strdup (user_get_language(user));
 
   get_client_address (connection, client_address);
 
@@ -541,7 +541,7 @@ handle_logout (http_connection_t *connection,
 {
   user_t * user = (user_t *)data;
 
-  g_debug ("Logged out user %s\n", user->username);
+  g_debug ("Logged out user %s\n", user_get_username(user));
 
   user_remove (user);
 

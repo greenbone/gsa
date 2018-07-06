@@ -69,27 +69,6 @@ typedef struct
  */
 typedef struct user user_t;
 
-/**
- * @brief User information structure, for sessions.
- */
-struct user
-{
-  char *cookie;        ///< Cookie token.
-  char *token;         ///< Request session token.
-  gchar *username;     ///< Login name.
-  gchar *password;     ///< Password.
-  gchar *role;         ///< Role.
-  gchar *timezone;     ///< Timezone.
-  gchar *severity;     ///< Severity class.
-  gchar *capabilities; ///< Capabilities.
-  gchar *language;     ///< User Interface Language, in short form like "en".
-  gchar *pw_warning;   ///< Password policy warning.
-  char *address;       ///< Client's IP address.
-  time_t time;         ///< Login time.
-  GTree *last_filt_ids;///< Last used filter ids.
-  int guest;           ///< Whether the user is a guest.
-};
-
 int user_find (const gchar *cookie, const gchar *token, const char *address,
                user_t **user_return);
 
@@ -113,6 +92,11 @@ int user_set_language (const gchar *token, const gchar *language);
 int user_logout_all_sessions (const gchar *username,
                               credentials_t *credentials);
 
+gchar * user_get_username (user_t *user);
+
+gchar * user_get_language (user_t *user);
+
+gchar * user_get_cookie (user_t *user);
 
 int token_user (const gchar *token, user_t **user_return);
 
