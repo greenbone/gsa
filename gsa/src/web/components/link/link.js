@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {Link as RLink} from 'react-router';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, is_string} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -90,14 +90,15 @@ let Link = ({
   };
 
   if (is_defined(filter)) {
-    location.query.filter = filter;
+    location.query.filter = is_string(filter) ?
+      filter : filter.toFilterString();
   }
   return <RLink {...other} to={location}/>;
 };
 
 Link.propTypes = {
   anchor: PropTypes.string,
-  filter: PropTypes.string,
+  filter: PropTypes.filter,
   query: PropTypes.object,
   to: PropTypes.string.isRequired,
 };

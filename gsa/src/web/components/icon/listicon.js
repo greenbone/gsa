@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,10 +29,11 @@ import Link from '../link/link.js';
 
 import Icon from './icon.js';
 
-const ListIcon = ({page, ...props}) => {
+const ListIcon = ({page, filter, ...props}) => {
   return (
     <Link
-      to={page}>
+      to={page}
+      filter={filter}>
       <Icon
         {...props}
         img="list.svg"
@@ -42,6 +43,7 @@ const ListIcon = ({page, ...props}) => {
 };
 
 ListIcon.propTypes = {
+  filter: PropTypes.filter,
   page: PropTypes.string.isRequired,
 };
 
