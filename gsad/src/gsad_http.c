@@ -44,6 +44,7 @@
 #include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
 #include "gsad_base.h" /* for ctime_r_strip_newline */
+#include "utils.h" /* for str_equal */
 
 #undef G_LOG_DOMAIN
 /**
@@ -805,22 +806,22 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
 {
   if (sid)
     {
-      if (strcmp (sid, "0"))
+      if (str_equal (sid, "0"))
         {
-          if (attach_sid (response, sid) == MHD_NO)
+          if (remove_sid (response) == MHD_NO)
             {
               MHD_destroy_response (response);
-              g_warning ("%s: failed to attach SID, dropping request",
+              g_warning ("%s: failed to remove SID, dropping request",
                         __FUNCTION__);
               return MHD_NO;
             }
         }
       else
         {
-          if (remove_sid (response) == MHD_NO)
+          if (attach_sid (response, sid) == MHD_NO)
             {
               MHD_destroy_response (response);
-              g_warning ("%s: failed to remove SID, dropping request",
+              g_warning ("%s: failed to attach SID, dropping request",
                         __FUNCTION__);
               return MHD_NO;
             }
