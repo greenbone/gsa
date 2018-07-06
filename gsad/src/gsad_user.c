@@ -62,7 +62,6 @@ struct user
   gchar *pw_warning;    ///< Password policy warning.
   gchar *address;       ///< Client's IP address.
   time_t time;          ///< Login time.
-  GTree *last_filt_ids; ///< Last used filter ids.
   gboolean guest;       ///< Whether the user is a guest.
 };
 
@@ -189,9 +188,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   user->severity = g_strdup (severity);
   user->capabilities = g_strdup (capabilities);
   user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-
-  user->last_filt_ids = g_tree_new_full ((GCompareDataFunc) g_strcmp0,
-                                         NULL, g_free, g_free);
 
   set_language_code (&user->language, language);
 
@@ -613,7 +609,6 @@ credentials_new (user_t *user, const char *language, const char *client_address)
   credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
                                              : NULL;
   credentials->language = g_strdup (language);
-  credentials->last_filt_ids = user->last_filt_ids;
   credentials->client_address = g_strdup (client_address);
   credentials->guest = user->guest;
   credentials->sid = g_strdup (user->cookie);
@@ -640,7 +635,7 @@ credentials_free (credentials_t *creds)
   g_free (creds->pw_warning);
   g_free (creds->client_address);
   g_free (creds->sid);
-  /* params, chart_prefs and last_filt_ids are not duplicated. */
+  /* params and chart_prefs are not duplicated. */
   g_free (creds);
 }
 

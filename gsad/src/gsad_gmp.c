@@ -400,28 +400,6 @@ free_find_by_value (find_by_value_t *find)
 }
 
 /**
- * @brief Traverse a g_tree until the first value is found
- *
- * @param[in]  key current key in the iteraton
- * @param[in]  value current value in the iteration
- * @param[out] data data->value contains the value to search for. data->keys will
- *                  contain all found keys for the passed value
- *
- * @return FALSE to iterrate over all items in the tree
- */
-static gboolean
-find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
-{
-  if (strcmp (value, data->value) == 0)
-    {
-      g_debug ("%s found key %s for value %s\n",
-               __FUNCTION__, key, value);
-      data->keys = g_list_append (data->keys, key);
-    }
-  return FALSE;
-}
-
-/**
  * @brief Check whether a filter exists
  *
  * @param[in] connection  Connection to manager.
@@ -11838,7 +11816,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   const char *apply_overrides;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
-  const char *given_filt_id, *filt_id, *filter, *apply_filter, *report_section;
+  const char *filt_id, *filter, *apply_filter, *report_section;
   const char *build_filter, *filter_extra;
   const char *host_search_phrase, *host_levels;
   const char *host_first_result, *host_max_results;
@@ -12205,20 +12183,9 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
-  given_filt_id = params_value (params, "filt_id");
+  filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   filter_extra = params_value (params, "filter_extra");
-
-  if (params_given (params, "filt_id"))
-    {
-      g_tree_replace (credentials->last_filt_ids, g_strdup ("report_result"),
-                      g_strdup (given_filt_id));
-      filt_id = given_filt_id;
-    }
-  else if (filter == NULL || strcmp (filter, "") == 0)
-    filt_id = g_tree_lookup (credentials->last_filt_ids, "report_result");
-  else
-    filt_id = NULL;
 
   if (filter == NULL)
     filter = "";
@@ -21095,7 +21062,6 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
-  GList *list;
 
   filt_id = params_get (params, "filt_id");
   id = params_get (params, "filter_id");
@@ -21103,31 +21069,6 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
       && (strcmp (id->value, filt_id->value) == 0))
     // TODO: Add params_remove.
     filt_id->value = NULL;
-
-  /* remove to be deleted key from the user credentials */
-  if (id && id->value)
-    {
-      find_by_value_t find;
-
-      init_find_by_value (&find, id->value);
-
-      g_tree_foreach (credentials->last_filt_ids, (GTraverseFunc)find_by_value,
-                      &find);
-      if (find.keys != NULL)
-        {
-          list = g_list_first (find.keys);
-
-          while (list != NULL)
-            {
-              g_debug ("%s removing filter from last filter ids for %s\n",
-                      __FUNCTION__, (char *)list->data);
-              g_tree_remove (credentials->last_filt_ids, list->data);
-              list = g_list_next (find.keys);
-            }
-        }
-
-      free_find_by_value(&find);
-    }
 
   return delete_resource (connection, "filter", credentials, params, 0, "get_filters",
                           response_data);
