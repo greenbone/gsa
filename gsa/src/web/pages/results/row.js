@@ -56,15 +56,6 @@ const Row = ({
   const {host} = entity;
   const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
-  var hostname_elem;
-  if (host.hostname.length > 40)
-    hostname_elem = <span title={host.hostname}>
-                      ({shorten (host.hostname, 40)})
-                    </span>
-  else if (host.hostname.length > 0)
-    hostname_elem = <span>{host.hostname}</span>
-  else
-    hostname_elem = false
 
   return (
     <TableRow>
@@ -103,7 +94,11 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
-        {hostname_elem}
+        {host.hostname.length > 0
+          ? <span title={host.hostname}>
+              ({shorten (host.hostname, 40)})
+            </span>
+          : false}
       </TableData>
       <TableData>
         {entity.port}
