@@ -25,11 +25,17 @@ import 'core-js/fn/array/includes';
 import 'core-js/fn/array/find';
 
 import React from 'react';
+
 import glamorous from 'glamorous';
-import _ from 'gmp/locale.js';
+
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+import {is_empty} from 'gmp/utils/string';
+import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
+
 import {YES_VALUE} from 'gmp/parser';
-import {is_defined, map} from 'gmp/utils';
-import {pluralize_type, is_empty} from 'gmp/utils/string.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -45,25 +51,13 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const types = {
-  os: 'operatingsystem',
-  cert_bund_adv: 'certbund',
-  dfn_cert_adv: 'dfncert',
-  port_list: 'portlist',
-  report_format: 'reportformat',
-  config: 'scanconfig',
-};
-
-const convertType = type => {
-  const ctype = types[type];
-  if (is_defined(ctype)) {
-    return ctype;
-  }
-  return type;
-};
-
 const Divider = glamorous.div({
   margin: '0 5px',
+});
+
+const ScrollableContent = glamorous.div({
+  maxHeight: '200px',
+  overflow: 'auto',
 });
 
 class TagDialog extends React.Component {
@@ -97,7 +91,7 @@ class TagDialog extends React.Component {
       return;
     }
     const {gmp} = this.props;
-    const plType = pluralize_type(convertType(type));
+    const plType = pluralizeType(normalizeType(type));
     gmp[plType].getAll()
       .then(response => {
         const {data} = response;
@@ -145,7 +139,7 @@ class TagDialog extends React.Component {
       resourceType,
     } = this.state;
 
-    gmp[pluralize_type(convertType(resourceType))]
+    gmp[pluralizeType(normalizeType(resourceType))]
       .get({filter: 'uuid=' + id})
       .then(response => {
         const ids = is_defined(resourceIdsSelected) ? resourceIdsSelected : [];
@@ -282,14 +276,16 @@ class TagDialog extends React.Component {
               </FormGroup>
 
               <FormGroup title={_('Resources')}>
-                <MultiSelect
-                  name="resource_ids"
-                  items={render_select_items(this.state.resourceOptions)}
-                  value={this.state.resourceIdsSelected}
-                  disabled={!typeIsChosen || fixed ||
-                    resourceTypesOptions.length === 0}
-                  onChange={ids => this.handleIdChange(ids, onValueChange)}
-                />
+                <ScrollableContent>
+                  <MultiSelect
+                    name="resource_ids"
+                    items={render_select_items(this.state.resourceOptions)}
+                    value={this.state.resourceIdsSelected}
+                    disabled={!typeIsChosen || fixed ||
+                      resourceTypesOptions.length === 0}
+                    onChange={ids => this.handleIdChange(ids, onValueChange)}
+                  />
+                </ScrollableContent>
                 <Divider>
                   {_('or add by ID:')}
                 </Divider>

@@ -20,34 +20,78 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
-
 import {is_defined} from 'gmp/utils/identity';
+
+import {types} from './actions';
 
 export const filterIdentifier = filter => is_defined(filter) ?
   `filter:${filter.toFilterString()}` :
   'default';
 
-export const createReducer = types => {
+const initialState = {
+  default: [],
+  byId: {},
+  errors: {},
+  isLoading: {},
+};
 
-  const isLoading = (state = false, action) => {
+export const createReducer = entityType => {
+
+  const isLoading = (state = {}, action) => {
+    const filterString = filterIdentifier(action.filter);
     switch (action.type) {
-      case types.REQUEST:
-        return true;
-      case types.SUCCESS:
-      case types.ERROR:
-        return false;
+      case types.ENTITIES_LOADING_REQUEST:
+        return {
+          ...state,
+          [filterString]: true,
+        };
+      case types.ENTITIES_LOADING_SUCCESS:
+      case types.ENTITIES_LOADING_ERROR:
+        return {
+          ...state,
+          [filterString]: false,
+        };
+      case types.ENTITY_LOADING_REQUEST:
+        return {
+          ...state,
+          [action.id]: true,
+        };
+      case types.ENTITY_LOADING_SUCCESS:
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          [action.id]: false,
+        };
       default:
         return state;
     }
   };
 
-  const error = (state = null, action) => {
+  const errors = (state = {}, action) => {
+    const filterString = filterIdentifier(action.filter);
     switch (action.type) {
-      case types.SUCCESS:
-        return null;
-      case types.ERROR:
-        return action.error;
+      case types.ENTITIES_LOADING_SUCCESS:
+        state = {
+          ...state,
+        };
+        delete state[filterString];
+        return state;
+      case types.ENTITIES_LOADING_ERROR:
+        return {
+          ...state,
+          [filterString]: action.error,
+        };
+      case types.ENTITY_LOADING_SUCCESS:
+        state = {
+          ...state,
+        };
+        delete state[action.id];
+        return state;
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          [action.id]: action.error,
+        };
       default:
         return state;
     }
@@ -55,7 +99,7 @@ export const createReducer = types => {
 
   const entities = (state = [], action) => {
     switch (action.type) {
-      case types.SUCCESS:
+      case types.ENTITIES_LOADING_SUCCESS:
         const {data = []} = action;
         return data.map(entity => entity.id);
       default:
@@ -65,38 +109,36 @@ export const createReducer = types => {
 
   const byId = (state = {}, action) => {
     switch (action.type) {
-      case types.SUCCESS:
+      case types.ENTITIES_LOADING_SUCCESS:
         const {data = []} = action;
         const nextState = {
           ...state,
         };
         data.forEach(d => nextState[d.id] = d);
         return nextState;
+      case types.ENTITY_LOADING_SUCCESS:
+        return {
+          ...state,
+          [action.id]: action.data,
+        };
       default:
         return state;
     }
   };
 
-  const combinedReducer = combineReducers({
-    isLoading,
-    error,
-    entities,
-  });
-
-  return (state = {}, action) => {
-    switch (action.type) {
-      case types.REQUEST:
-      case types.SUCCESS:
-      case types.ERROR:
-        const filterString = filterIdentifier(action.filter);
-        return {
-          ...state,
-          byId: byId(state.byId, action),
-          [filterString]: combinedReducer(state[filterString], action),
-        };
-      default:
-        return state;
+  return (state = initialState, action) => {
+    if (action.entityType !== entityType) {
+      return state;
     }
+
+    const filterString = filterIdentifier(action.filter);
+    return {
+      ...state,
+      byId: byId(state.byId, action),
+      isLoading: isLoading(state.isLoading, action),
+      errors: errors(state.errors, action),
+      [filterString]: entities(state[filterString], action),
+    };
   };
 };
 

@@ -25,37 +25,19 @@ import {is_function} from 'gmp/utils/identity';
 import Filter from 'gmp/models/filter';
 
 import {
-  createLoadingTypes,
-  createActionCreators,
-  createLoadAllFunc,
+  types,
+  createEntitiesActions,
+  createLoadEntities,
+  createEntityActions,
+  createLoadEntity,
 } from '../actions';
 
 describe('entities actions tests', () => {
 
-  describe('createLoadingTypes tests', () => {
-
-    test('should create loading types', () => {
-      const types = createLoadingTypes('foo');
-
-      expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-      expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-      expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
-    });
-
-    test('should not care about case when creating loading types', () => {
-      const types = createLoadingTypes('fOO');
-
-      expect(types.REQUEST).toEqual('FOO_LOADING_REQUEST');
-      expect(types.SUCCESS).toEqual('FOO_LOADING_SUCCESS');
-      expect(types.ERROR).toEqual('FOO_LOADING_ERROR');
-    });
-  });
-
-  describe('createActionCreators tests', () => {
+  describe('createEntitiesActions tests', () => {
 
     test('should create action creators for loading', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
 
       expect(actions.request).toBeDefined();
       expect(is_function(actions.request)).toBe(true);
@@ -66,114 +48,162 @@ describe('entities actions tests', () => {
     });
 
     test('should create a load request action', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.request();
 
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
+        entityType: 'foo',
       });
     });
 
     test('should create a load request action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.request(filter);
 
       expect(action).toEqual({
-        type: types.REQUEST,
+        type: types.ENTITIES_LOADING_REQUEST,
+        entityType: 'foo',
         filter,
       });
     });
 
     test('should create a load success action', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.success(['foo', 'bar']);
 
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
+        entityType: 'foo',
         data: ['foo', 'bar'],
       });
     });
 
     test('should create a load success action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.success(['foo', 'bar'], filter);
 
       expect(action).toEqual({
-        type: types.SUCCESS,
+        type: types.ENTITIES_LOADING_SUCCESS,
+        entityType: 'foo',
         data: ['foo', 'bar'],
         filter,
       });
     });
 
     test('should create a load error action', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.error('An error');
 
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
+        entityType: 'foo',
         error: 'An error',
       });
     });
 
     test('should create a load error action with filter', () => {
       const filter = Filter.fromString('type=abc');
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
       const action = actions.error('An error', filter);
 
       expect(action).toEqual({
-        type: types.ERROR,
+        type: types.ENTITIES_LOADING_ERROR,
+        entityType: 'foo',
         error: 'An error',
         filter,
       });
     });
   });
 
-  describe('createLoadAllFunc tests', () => {
+  describe('createEntityActions tests', () => {
+
+    test('should create actions for loading', () => {
+      const actions = createEntityActions('foo');
+
+      expect(actions.request).toBeDefined();
+      expect(is_function(actions.request)).toBe(true);
+      expect(actions.success).toBeDefined();
+      expect(is_function(actions.success)).toBe(true);
+      expect(actions.error).toBeDefined();
+      expect(is_function(actions.error)).toBe(true);
+    });
+
+    test('should create a load request action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.request('id1');
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_REQUEST,
+        entityType: 'foo',
+        id: 'id1',
+      });
+    });
+
+    test('should create a load success action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.success('id1', {foo: 'bar'});
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_SUCCESS,
+        entityType: 'foo',
+        id: 'id1',
+        data: {foo: 'bar'},
+      });
+    });
+
+    test('should create a load error action', () => {
+      const actions = createEntityActions('foo');
+      const action = actions.error('id1', 'An error');
+
+      expect(action).toEqual({
+        type: types.ENTITY_LOADING_ERROR,
+        entityType: 'foo',
+        id: 'id1',
+        error: 'An error',
+      });
+    });
+  });
+
+  describe('createLoadEntities tests', () => {
 
     test('test isLoading true', () => {
-      const types = createLoadingTypes('FOO');
-      const actions = createActionCreators(types);
+      const actions = createEntitiesActions('foo');
 
       const getState = jest
         .fn()
         .mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const getIsLoading = jest
+      const isLoadingEntities = jest
         .fn()
         .mockReturnValue(true);
       const getAll = jest.fn();
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };
 
       const selector = jest.fn(() => ({
-        getIsLoading,
+        isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
-        name: 'foo',
+        actions,
+        entityType: 'foo',
       });
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc({gmp})(dispatch, getState).then(() => {
+      return loadEntities({gmp})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(getIsLoading).toBeCalled();
+        expect(isLoadingEntities).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(getAll).not.toBeCalled();
       });
@@ -197,22 +227,22 @@ describe('entities actions tests', () => {
           data: 'foo',
         }));
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };
-      const getIsLoading = jest
+      const isLoadingEntities = jest
         .fn()
         .mockReturnValue(false);
 
       const selector = jest.fn(() => ({
-        getIsLoading,
+        isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
-        name: 'foo',
+        actions,
+        entityType: 'foo',
       });
 
       const props = {
@@ -221,13 +251,13 @@ describe('entities actions tests', () => {
         other: 3,
       };
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc(props)(dispatch, getState).then(() => {
+      return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(getIsLoading).toBeCalledWith('myfilter');
+        expect(isLoadingEntities).toBeCalledWith('myfilter');
         expect(getAll).toBeCalledWith({filter: 'myfilter'});
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).toBeCalledWith('foo', 'myfilter');
@@ -254,22 +284,22 @@ describe('entities actions tests', () => {
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
       const gmp = {
-        foo: {
+        foos: {
           getAll,
         },
       };
-      const getIsLoading = jest
+      const isLoadingEntities = jest
         .fn()
         .mockReturnValue(false);
 
       const selector = jest.fn(() => ({
-        getIsLoading,
+        isLoadingEntities,
       }));
 
-      const loadAllFunc = createLoadAllFunc({
+      const loadEntities = createLoadEntities({
         selector,
-        actionCreators: actions,
-        name: 'foo',
+        actions,
+        entityType: 'foo',
       });
 
       const props = {
@@ -278,13 +308,13 @@ describe('entities actions tests', () => {
         other: 3,
       };
 
-      expect(loadAllFunc).toBeDefined();
-      expect(is_function(loadAllFunc)).toBe(true);
+      expect(loadEntities).toBeDefined();
+      expect(is_function(loadEntities)).toBe(true);
 
-      return loadAllFunc(props)(dispatch, getState).then(() => {
+      return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
-        expect(getIsLoading).toBeCalledWith('myfilter');
+        expect(isLoadingEntities).toBeCalledWith('myfilter');
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).not.toBeCalled();
         expect(actions.error).toBeCalledWith('AnError', 'myfilter');
@@ -295,6 +325,163 @@ describe('entities actions tests', () => {
       });
     });
   });
-});
 
+  describe('createLoadEntity tests', () => {
+
+    test('test isLoading true', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(true);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({id: 'foo'}));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(dispatch).not.toBeCalled();
+        expect(actions.success).not.toBeCalled();
+        expect(actions.error).not.toBeCalled();
+        expect(actions.request).not.toBeCalled();
+        expect(get).not.toBeCalled();
+      });
+    });
+
+    test('test loading success', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(false);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({data: {id, name: 'foo'}}));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(actions.request).toBeCalledWith(id);
+        expect(actions.success).toBeCalledWith(id, {id, name: 'foo'});
+        expect(actions.error).not.toBeCalled();
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_SUCCESS_ACTION'}]);
+        expect(get).toBeCalledWith({id});
+      });
+    });
+
+    test('test loading error', () => {
+      const id = 'a1';
+      const actions = {
+        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+      };
+
+      const getState = jest
+        .fn()
+        .mockReturnValue({foo: 'bar'});
+
+      const dispatch = jest.fn();
+      const isLoadingEntity = jest
+        .fn()
+        .mockReturnValue(false);
+      const get = jest
+        .fn()
+        .mockReturnValue(Promise.reject('An error'));
+      const gmp = {
+        foo: {
+          get,
+        },
+      };
+
+      const selector = jest.fn(() => ({
+        isLoadingEntity,
+      }));
+
+      const loadEntity = createLoadEntity({
+        selector,
+        actions,
+        entityType: 'foo',
+      });
+
+      expect(loadEntity).toBeDefined();
+      expect(is_function(loadEntity)).toBe(true);
+
+      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+        expect(getState).toBeCalled();
+        expect(selector).toBeCalledWith({foo: 'bar'});
+        expect(isLoadingEntity).toBeCalledWith(id);
+        expect(actions.request).toBeCalledWith(id);
+        expect(actions.success).not.toBeCalled();
+        expect(actions.error).toBeCalledWith(id, 'An error');
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
+        expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);
+        expect(get).toBeCalledWith({id});
+      });
+    });
+  });
+
+});
 // vim: set ts=2 sw=2 tw=80:

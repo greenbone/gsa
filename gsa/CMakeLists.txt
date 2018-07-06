@@ -169,6 +169,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/promise.js
      ${GSA_SRC_DIR}/src/gmp/timezones.js
      ${GSA_SRC_DIR}/src/gmp/utils/array.js
+     ${GSA_SRC_DIR}/src/gmp/utils/entitytype.js
      ${GSA_SRC_DIR}/src/gmp/utils/event.js
      ${GSA_SRC_DIR}/src/gmp/utils/id.js
      ${GSA_SRC_DIR}/src/gmp/utils/identity.js
@@ -764,6 +765,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
+     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js

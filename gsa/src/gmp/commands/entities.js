@@ -37,6 +37,9 @@ import HttpCommand from './http.js';
 
 const log = logger.getLogger('gmp.commands.entities');
 
+const BULK_SELECT_BY_IDS = 1;
+const BULK_SELECT_BY_FILTER = 0;
+
 class EntitiesCommand extends HttpCommand {
 
   constructor(http, name, clazz) {
@@ -97,10 +100,9 @@ class EntitiesCommand extends HttpCommand {
 
   exportByIds(ids) {
     const params = {
-      cmd: 'process_bulk',
+      cmd: 'bulk_export',
       resource_type: this.name,
-      bulk_select: 1,
-      'bulk_export.x': 1,
+      bulk_select: BULK_SELECT_BY_IDS,
     };
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
@@ -110,10 +112,9 @@ class EntitiesCommand extends HttpCommand {
 
   exportByFilter(filter) {
     const params = {
-      cmd: 'process_bulk',
+      cmd: 'bulk_export',
       resource_type: this.name,
-      bulk_select: 0,
-      'bulk_export.x': 1,
+      bulk_select: BULK_SELECT_BY_FILTER,
       filter,
     };
     return this.httpPost(params, {transform: DefaultTransform});
@@ -141,8 +142,8 @@ class EntitiesCommand extends HttpCommand {
     // FIXME change gmp to allow deletion by filter
     let deleted;
     return this.get({filter}).then(entities => {
-      deleted = entities.getEntries();
-      return this.delete(entities, extra_params);
+      deleted = entities.data;
+      return this.delete(deleted, extra_params);
     }).then(response => response.setData(deleted));
   }
 

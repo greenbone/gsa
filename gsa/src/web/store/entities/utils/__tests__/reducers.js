@@ -24,383 +24,739 @@ import {is_function} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {createLoadingTypes, createActionCreators} from '../actions';
+import {createEntitiesActions, createEntityActions} from '../actions';
 import {createReducer, filterIdentifier} from '../reducers';
 
 describe('entities reducers test', () => {
 
-  describe('createReducers tests', () => {
+  test('should create a reducer function', () => {
+    const reducer = createReducer('foo');
 
-    test('should create a reducer function', () => {
-      const types = createLoadingTypes('FOO');
-      const reducer = createReducer(types);
+    expect(is_function(reducer)).toBe(true);
+  });
 
-      expect(is_function(reducer)).toBe(true);
+  test('Should create initial state', () => {
+    const reducer = createReducer('foo');
+
+    expect(reducer(undefined, {})).toEqual({
+      byId: {},
+      isLoading: {},
+      errors: {},
+      default: [],
+    });
+  });
+
+  test('should create empty state for corresponding entityType action', () => {
+    const reducer = createReducer('foo');
+
+    expect(reducer(undefined, {entityType: 'foo'})).toEqual({
+      byId: {},
+      isLoading: {},
+      errors: {},
+      default: [],
+    });
+  });
+
+  test('should not override byId accidentially', () => {
+    const actions = createEntitiesActions('foo');
+    const reducer = createReducer('foo');
+    const filter = Filter.fromString('byId');
+    const filterId = filterIdentifier(filter);
+    const action = actions.success([{id: 'foo'}], filter);
+    const state = {
+      byId: {
+        bar: {
+          id: 'bar',
+        },
+      },
+      isLoading: {
+        default: true,
+      },
+      default: ['bar'],
+    };
+
+    expect(reducer(state, action)).toEqual({
+      byId: {
+        bar: {
+          id: 'bar',
+        },
+        foo: {
+          id: 'foo',
+        },
+      },
+      errors: {},
+      isLoading: {
+        default: true,
+        [filterId]: false,
+      },
+      default: ['bar'],
+      [filterId]: ['foo'],
+    });
+  });
+
+  test('should not override default accidentially', () => {
+    const actions = createEntitiesActions('foo');
+    const reducer = createReducer('foo');
+    const filter = Filter.fromString('default');
+    const filterId = filterIdentifier(filter);
+    const action = actions.success([{id: 'foo'}], filter);
+    const state = {
+      byId: {
+        bar: {
+          id: 'bar',
+        },
+      },
+      isLoading: {
+        default: true,
+      },
+      default: ['bar'],
+    };
+
+    expect(reducer(state, action)).toEqual({
+      byId: {
+        bar: {
+          id: 'bar',
+        },
+        foo: {
+          id: 'foo',
+        },
+      },
+      errors: {},
+      isLoading: {
+        default: true,
+        [filterId]: false,
+      },
+      default: ['bar'],
+      [filterId]: ['foo'],
+    });
+  });
+
+  describe('reducing entities loading request actions', () => {
+
+    test('should set isLoading with default filter', () => {
+      const actions = createEntitiesActions('foo');
+      const action = actions.request();
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        isLoading: {
+          default: true,
+        },
+        errors: {},
+        default: [],
+      });
     });
 
-    test('Should create initial state', () => {
-      const types = createLoadingTypes('FOO');
-      const reducer = createReducer(types);
+    test('should set isLoading for filter', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=foo');
+      const filterId = filterIdentifier(filter);
+      const action = actions.request(filter);
 
-      expect(reducer(undefined, {})).toEqual({});
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        isLoading: {
+          [filterId]: true,
+        },
+        errors: {},
+        default: [],
+        [filterId]: [],
+      });
     });
 
-    describe('reducing loading request actions', () => {
-
-      test('should set isLoading with default filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const action = actions.request();
-        const reducer = createReducer(types);
-
-        expect(reducer(undefined, action)).toEqual({
-          byId: {},
-          default: {
-            isLoading: true,
-            error: null,
-            entities: [],
-          },
-        });
-      });
-
-      test('should set isLoading for filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const filter = Filter.fromString('name=foo');
-        const action = actions.request(filter);
-
-        expect(reducer(undefined, action)).toEqual({
-          byId: {},
-          [filterIdentifier(filter)]: {
-            isLoading: true,
-            error: null,
-            entities: [],
-          },
-        });
-      });
-
-      test('should set isLoading and not override existing state', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const filter = Filter.fromString('name=foo');
-        const otherFilter = Filter.fromString('name=bar');
-        const action = actions.request(filter);
-        const state = {
-          [filterIdentifier(otherFilter)]: {
-            isLoading: false,
-            entities: [],
-            error: null,
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {},
-          [filterIdentifier(filter)]: {
-            isLoading: true,
-            error: null,
-            entities: [],
-          },
-          [filterIdentifier(otherFilter)]: {
-            isLoading: false,
-            entities: [],
-            error: null,
-          },
-        });
-      });
-
-      test('should set isLoading and not override other properties', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const filter = Filter.fromString('name=foo');
-        const action = actions.request(filter);
-        const state = {
-          [filterIdentifier(filter)]: {
-            isLoading: false,
-            entities: ['foo', 'bar'],
-            error: 'An error',
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {},
-          [filterIdentifier(filter)]: {
-            isLoading: true,
-            entities: ['foo', 'bar'],
-            error: 'An error',
-          },
-        });
-      });
-
-    });
-
-    describe('reducing filter loading success actions', () => {
-
-      test('should set isLoading with default filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
-
-        expect(reducer(undefined, action)).toEqual({
-          byId: {
-            foo: {
-              id: 'foo',
-            },
-            bar: {
-              id: 'bar',
-            },
-          },
-          default: {
-            isLoading: false,
-            error: null,
-            entities: ['foo', 'bar'],
-          },
-        });
-      });
-
-      test('should reset other properties with default filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
-        const state = {
-          default: {
-            isLoading: true,
-            error: 'An error',
-            entities: [],
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {
-            foo: {
-              id: 'foo',
-            },
-            bar: {
-              id: 'bar',
-            },
-          },
-          default: {
-            isLoading: false,
-            error: null,
-            entities: ['foo', 'bar'],
-          },
-        });
-      });
-
-      test('should not override other filters', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const filter = Filter.fromString('name=bar');
-        const otherFilter = Filter.fromString('name=foo');
-        const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter);
-        const state = {
-          [filterIdentifier(otherFilter)]: {
-            isLoading: true,
-            entities: ['lorem', 'ipsum'],
-            error: 'An error',
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {
-            foo: {
-              id: 'foo',
-            },
-            bar: {
-              id: 'bar',
-            },
-          },
-          [filterIdentifier(otherFilter)]: {
-            isLoading: true,
-            entities: ['lorem', 'ipsum'],
-            error: 'An error',
-          },
-          [filterIdentifier(filter)]: {
-            isLoading: false,
-            entities: ['foo', 'bar'],
-            error: null,
-          },
-        });
-      });
-
-    });
-
-    describe('reducing filter loading error actions', () => {
-
-      test('should set isLoading and error with default filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const action = actions.error('An error');
-
-        expect(reducer(undefined, action)).toEqual({
-          byId: {},
-          default: {
-            isLoading: false,
-            error: 'An error',
-            entities: [],
-          },
-        });
-      });
-
-      test('should reset isLoading and error with default filter', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const action = actions.error('An error');
-        const state = {
-          default: {
-            isLoading: true,
-            error: 'Another error',
-            entities: ['foo', 'bar'],
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {},
-          default: {
-            isLoading: false,
-            error: 'An error',
-            entities: ['foo', 'bar'],
-          },
-        });
-      });
-
-      test('should not override other filters', () => {
-        const types = createLoadingTypes('FOO');
-        const actions = createActionCreators(types);
-        const reducer = createReducer(types);
-        const filter = Filter.fromString('name=bar');
-        const otherFilter = Filter.fromString('name=foo');
-        const action = actions.error('An error', filter);
-        const state = {
-          byId: {
-            lorem: {
-              id: 'lorem',
-            },
-            ipsum: {
-              id: 'ipsum',
-            },
-          },
-          [filterIdentifier(otherFilter)]: {
-            isLoading: true,
-            entities: ['lorem', 'ipsum'],
-            error: 'Another error',
-          },
-        };
-
-        expect(reducer(state, action)).toEqual({
-          byId: {
-            lorem: {
-              id: 'lorem',
-            },
-            ipsum: {
-              id: 'ipsum',
-            },
-          },
-          [filterIdentifier(otherFilter)]: {
-            isLoading: true,
-            entities: ['lorem', 'ipsum'],
-            error: 'Another error',
-          },
-          [filterIdentifier(filter)]: {
-            isLoading: false,
-            entities: [],
-            error: 'An error',
-          },
-        });
-      });
-
-    });
-
-    test('should not override byId accidentially', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
-      const reducer = createReducer(types);
-      const filter = Filter.fromString('byId');
-      const action = actions.success([{id: 'foo'}], filter);
+    test('should set isLoading and not override existing state', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=foo');
+      const filterId = filterIdentifier(filter);
+      const otherFilter = Filter.fromString('name=bar');
+      const otherFilterId = filterIdentifier(otherFilter);
+      const action = actions.request(filter);
       const state = {
+        isLoading: {
+          [otherFilterId]: false,
+        },
+        [otherFilterId]: [],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {},
+        errors: {},
+        isLoading: {
+          [otherFilterId]: false,
+          [filterId]: true,
+        },
+        [otherFilterId]: [],
+        [filterId]: [],
+      });
+    });
+
+    test('should set isLoading and not override other properties', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=foo');
+      const filterId = filterIdentifier(filter);
+      const action = actions.request(filter);
+      const state = {
+        errors: {
+          [filterId]: 'An Error',
+        },
+        isLoading: {
+          [filterId]: false,
+        },
+        [filterId]: ['foo', 'bar'],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {},
+        errors: {
+          [filterId]: 'An Error',
+        },
+        isLoading: {
+          [filterId]: true,
+        },
+        [filterId]: ['foo', 'bar'],
+      });
+    });
+
+  });
+
+  describe('reducing entities loading success actions', () => {
+
+    test('should set isLoading with default filter', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
+
+      expect(reducer(undefined, action)).toEqual({
         byId: {
+          foo: {
+            id: 'foo',
+          },
           bar: {
             id: 'bar',
           },
         },
-        default: {
-          isLoading: true,
-          error: null,
-          entities: ['bar'],
+        errors: {},
+        isLoading: {
+          default: false,
+        },
+        default: ['foo', 'bar'],
+      });
+    });
+
+    test('should reset other properties with default filter', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const action = actions.success([{id: 'foo'}, {id: 'bar'}]);
+      const state = {
+        errors: {
+          default: 'An error',
+        },
+        isLoading: {
+          default: true,
+        },
+        default: [],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          foo: {
+            id: 'foo',
+          },
+          bar: {
+            id: 'bar',
+          },
+        },
+        errors: {},
+        isLoading: {
+          default: false,
+        },
+        default: ['foo', 'bar'],
+      });
+    });
+
+    test('should not override other filters', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=bar');
+      const filterId = filterIdentifier(filter);
+      const otherFilter = Filter.fromString('name=foo');
+      const otherFilterId = filterIdentifier(otherFilter);
+      const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter);
+      const state = {
+        errors: {
+          [otherFilterId]: 'An error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+        },
+        [otherFilterId]: ['lorem', 'ipsum'],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          foo: {
+            id: 'foo',
+          },
+          bar: {
+            id: 'bar',
+          },
+        },
+        errors: {
+          [otherFilterId]: 'An error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+          [filterId]: false,
+        },
+        [otherFilterId]: ['lorem', 'ipsum'],
+        [filterId]: ['foo', 'bar'],
+      });
+    });
+
+  });
+
+  describe('reducing entities loading error actions', () => {
+
+    test('should set isLoading and error with default filter', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const action = actions.error('An error');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        errors: {
+          default: 'An error',
+        },
+        isLoading: {
+          default: false,
+        },
+        default: [],
+      });
+    });
+
+    test('should reset isLoading and error with default filter', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const action = actions.error('An error');
+      const state = {
+        errors: {
+          default: 'Another error',
+        },
+        isLoading: {
+          default: true,
+        },
+        default: ['foo', 'bar'],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {},
+        errors: {
+          default: 'An error',
+        },
+        isLoading: {
+          default: false,
+        },
+        default: ['foo', 'bar'],
+      });
+    });
+
+    test('should not override other filters', () => {
+      const actions = createEntitiesActions('foo');
+      const reducer = createReducer('foo');
+      const filter = Filter.fromString('name=bar');
+      const filterId = filterIdentifier(filter);
+      const otherFilter = Filter.fromString('name=foo');
+      const otherFilterId = filterIdentifier(otherFilter);
+      const action = actions.error('An error', filter);
+      const state = {
+        byId: {
+          lorem: {
+            id: 'lorem',
+          },
+          ipsum: {
+            id: 'ipsum',
+          },
+        },
+        errors: {
+          [otherFilterId]: 'Another error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+        },
+        [otherFilterId]: ['lorem', 'ipsum'],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          lorem: {
+            id: 'lorem',
+          },
+          ipsum: {
+            id: 'ipsum',
+          },
+        },
+        errors: {
+          [otherFilterId]: 'Another error',
+          [filterId]: 'An error',
+        },
+        isLoading: {
+          [otherFilterId]: true,
+          [filterId]: false,
+        },
+        [otherFilterId]: ['lorem', 'ipsum'],
+        [filterId]: [],
+      });
+    });
+
+  });
+
+  describe('reducing entity loading requests', () => {
+
+    test('should set isLoading', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.request(id);
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        isLoading: {
+          [id]: true,
+        },
+        errors: {},
+        default: [],
+      });
+    });
+
+    test('should set isLoading and not override other state', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.request(id);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          [id]: {
+            foo: 'bar',
+          },
+          a3: {
+            lorem: 'ipsum',
+          },
+        },
+        isLoading: {
+          a2: true,
+          a3: false,
+        },
+        errors: {
+          a1: 'An error',
+          a2: 'Another error',
+        },
+        default: ['a2'],
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          [id]: {
+            foo: 'bar',
+          },
+          a3: {
+            lorem: 'ipsum',
+          },
+        },
+        isLoading: {
+          a2: true,
+          a3: false,
+          [id]: true,
+        },
+        errors: {
+          a1: 'An error',
+          a2: 'Another error',
+        },
+        default: ['a2'],
+      });
+    });
+
+  });
+
+  describe('reducing entity loading success', () => {
+
+    test('should reduce success action', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const data = {
+        id: 'bar',
+        foo: 'bar',
+      };
+      const action = actions.success(id, data);
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {
+          [id]: {
+            id: 'bar',
+            foo: 'bar',
+          },
+        },
+        default: [],
+        errors: {},
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should reset isLoading', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const data = {
+        id: 'bar',
+        foo: 'bar',
+      };
+      const action = actions.success(id, data);
+      const reducer = createReducer('foo');
+      const state = {
+        isLoading: {
+          [id]: true,
         },
       };
 
       expect(reducer(state, action)).toEqual({
         byId: {
-          bar: {
+          [id]: {
             id: 'bar',
-          },
-          foo: {
-            id: 'foo',
+            foo: 'bar',
           },
         },
-        default: {
-          isLoading: true,
-          error: null,
-          entities: ['bar'],
-        },
-        [filterIdentifier(filter)]: {
-          isLoading: false,
-          error: null,
-          entities: ['foo'],
+        default: [],
+        errors: {},
+        isLoading: {
+          [id]: false,
         },
       });
     });
 
-    test('should not override default accidentially', () => {
-      const types = createLoadingTypes('foo');
-      const actions = createActionCreators(types);
-      const reducer = createReducer(types);
-      const filter = Filter.fromString('default');
-      const action = actions.success([{id: 'foo'}], filter);
+    test('should reset error', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const data = {
+        id: 'bar',
+        foo: 'bar',
+      };
+      const action = actions.success(id, data);
+      const reducer = createReducer('foo');
       const state = {
-        byId: {
-          bar: {
-            id: 'bar',
-          },
-        },
-        default: {
-          isLoading: true,
-          error: null,
-          entities: ['bar'],
+        errors: {
+          [id]: 'An error',
         },
       };
 
       expect(reducer(state, action)).toEqual({
         byId: {
-          bar: {
+          [id]: {
             id: 'bar',
-          },
-          foo: {
-            id: 'foo',
+            foo: 'bar',
           },
         },
-        default: {
-          isLoading: true,
-          error: null,
-          entities: ['bar'],
+        default: [],
+        errors: {},
+        isLoading: {
+          [id]: false,
         },
-        [filterIdentifier(filter)]: {
-          isLoading: false,
-          error: null,
-          entities: ['foo'],
+      });
+    });
+
+    test('should override previous data', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const data = {
+        id: 'bar',
+        foo: 'bar',
+      };
+      const action = actions.success(id, data);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          [id]: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          [id]: {
+            id: 'bar',
+            foo: 'bar',
+          },
+        },
+        default: [],
+        errors: {},
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should not override other state', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const data = {
+        id: 'bar',
+        foo: 'bar',
+      };
+      const action = actions.success(id, data);
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'An error',
+        },
+        isLoading: {
+          bar: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          [id]: {
+            id: 'bar',
+            foo: 'bar',
+          },
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        default: [],
+        errors: {
+          baz: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+          bar: true,
         },
       });
     });
 
   });
+
+  describe('reducing entity loading error', () => {
+
+    test('should reduce error action', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.error(id, 'An error');
+      const reducer = createReducer('foo');
+
+      expect(reducer(undefined, action)).toEqual({
+        byId: {},
+        default: [],
+        errors: {
+          [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should reset isLoading', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.error(id, 'An error');
+      const reducer = createReducer('foo');
+      const state = {
+        isLoading: {
+          [id]: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {},
+        default: [],
+        errors: {
+          [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should override previous error', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.error(id, 'An error');
+      const reducer = createReducer('foo');
+      const state = {
+        errors: {
+          [id]: 'An old error',
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {},
+        default: [],
+        errors: {
+          [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+        },
+      });
+    });
+
+    test('should not override other state', () => {
+      const id = 'a1';
+      const actions = createEntityActions('foo');
+      const action = actions.error(id, 'An error');
+      const reducer = createReducer('foo');
+      const state = {
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        errors: {
+          baz: 'Another error',
+        },
+        isLoading: {
+          bar: true,
+        },
+      };
+
+      expect(reducer(state, action)).toEqual({
+        byId: {
+          baz: {
+            id: 'baz',
+            old: 'mydata',
+          },
+        },
+        default: [],
+        errors: {
+          baz: 'Another error',
+          [id]: 'An error',
+        },
+        isLoading: {
+          [id]: false,
+          bar: true,
+        },
+      });
+
+    });
+
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

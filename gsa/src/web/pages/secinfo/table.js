@@ -24,7 +24,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
+import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -106,16 +108,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const details_page = entity => {
-  switch (entity.info_type) {
-    case 'dfn_cert_adv':
-      return 'dfncert';
-    case 'cert_bund_adv':
-      return 'certbund';
-    default:
-      return entity.info_type;
-  }
-};
+const details_page = entity => normalizeType(getEntityType(entity));
 
 export default createEntitiesTable({
   body: false,

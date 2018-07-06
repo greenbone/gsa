@@ -23,22 +23,21 @@
 import {createAll} from './utils/main';
 
 const {
+  entitiesActions,
+  entityActions,
   loadEntities,
   loadEntity,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
-} = createAll('filter');
+} = createAll('schedule');
 
 export {
+  entitiesActions,
+  entityActions,
   loadEntities,
   loadEntity,
   reducer,
   selector,
-  entitiesActions,
-  entityActions,
 };
 
 // vim: set ts=2 sw=2 tw=80:
-

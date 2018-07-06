@@ -20,25 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {createAll} from './utils/main';
+import {testAll} from '../utils/testing';
 
-const {
-  loadEntities,
-  loadEntity,
-  reducer,
-  selector,
-  entitiesActions,
-  entityActions,
-} = createAll('filter');
+import * as schedule from '../schedules';
 
-export {
-  loadEntities,
-  loadEntity,
-  reducer,
-  selector,
-  entitiesActions,
-  entityActions,
-};
+testAll('schedule', schedule);
 
 // vim: set ts=2 sw=2 tw=80:
-

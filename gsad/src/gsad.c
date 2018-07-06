@@ -266,6 +266,7 @@ init_validator ()
   openvas_validator_add (validator,
                          "cmd",
                          "^((bulk_delete)"
+                         "|(bulk_export)"
                          "|(clone)"
                          "|(create_agent)"
                          "|(create_asset)"
@@ -875,7 +876,7 @@ init_validator ()
   openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "resource_ids:name",     "number");
-  openvas_validator_alias (validator, "resource_ids:value",    "id_optional");
+  openvas_validator_alias (validator, "resource_ids:value",    "info_id");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "result_uuid", "optional_id");
@@ -1487,6 +1488,7 @@ exec_gmp_post (http_connection_t *con,
     }
 
   ELSE (bulk_delete)
+  ELSE (bulk_export)
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)

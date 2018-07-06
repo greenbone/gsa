@@ -44,7 +44,7 @@ import PowerFilter from '../components/powerfilter/powerfilter.js';
 
 import Section from '../components/section/section.js';
 
-import {loadAll, selector} from 'web/store/entities/filters';
+import {loadEntities, selector} from 'web/store/entities/filters';
 
 const exclude_props = [
   'children',
@@ -322,7 +322,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
-  loadFilters: () => dispatch(loadAll({gmp, filter: filtersFilter})),
+  loadFilters: () => dispatch(loadEntities({gmp, filter: filtersFilter})),
 });
 
 export default compose(

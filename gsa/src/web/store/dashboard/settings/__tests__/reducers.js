@@ -285,9 +285,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     const action = receivedDashboardSettingsLoadingError(id, error);
 
     expect(dashboardSettings({}, action)).toEqual({
-      byId: {
-        [id]: {},
-      },
+      byId: {},
       isLoading: false,
       error,
       defaults: {},
@@ -303,9 +301,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     };
 
     expect(dashboardSettings(state, action)).toEqual({
-      byId: {
-        [id]: {},
-      },
+      byId: {},
       isLoading: false,
       error,
       defaults: {},
@@ -321,9 +317,7 @@ describe('dashboard settings reducers tests for loading success', () => {
     };
 
     expect(dashboardSettings(state, action)).toEqual({
-      byId: {
-        [id]: {},
-      },
+      byId: {},
       isLoading: false,
       error,
       defaults: {},

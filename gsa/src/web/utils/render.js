@@ -25,14 +25,14 @@ import 'core-js/fn/string/starts-with';
 import {format} from 'd3-format';
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
-import {is_defined, is_empty, map, shorten, split} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined, is_function, is_object} from 'gmp/utils/identity';
+import {is_empty, shorten, split} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import Wrapper from '../components/layout/wrapper.js';
-import {is_function, is_object} from 'gmp/utils/index.js';
-
-const log = logger.getLogger('web.render');
 
 export const N_A = _('N/A');
 
@@ -142,158 +142,101 @@ export const render_yesno = value => {
   }
 };
 
-export function type_name(type, plural = true) {
-  if (!plural && type.endsWith('s')) {
-    type = type.slice(0, -1);
-  }
+const getPermissionTypeName = type => {
   switch (type) {
-    case 'agent':
-      return _('Agent');
     case 'agents':
-      return _('Agents');
+      return _('Agent');
     case 'aggregates':
       return _('Aggregates');
-    case 'alert':
-      return _('Alert');
     case 'alerts':
       return _('Alerts');
     case 'allinfo':
       return _('All SecInfo');
-    case 'asset':
-      return _('Asset');
     case 'assets':
       return _('Assets');
-    case 'config':
-      return _('Scan Config');
     case 'configs':
       return _('Scan Configs');
-    case 'cpe':
-      return _('CPE');
-    case 'cve':
-      return _('CVE');
-    case 'credential':
-      return _('Credential');
+    case 'cpes':
+      return _('CPEs');
+    case 'cves':
+      return _('CVEs');
     case 'credentials':
       return _('Credentials');
-    case 'cert_bund_adv':
-      return _('CERT-Bund Advisory');
-    case 'dfn_cert_adv':
-      return _('DFN-CERT Advisory');
+    case 'cert_bund_advs':
+      return _('CERT-Bund Advisories');
+    case 'dfn_cert_advs':
+      return _('DFN-CERT Advisories');
     case 'feeds':
       return _('Feeds');
-    case 'filter':
-      return _('Filter');
     case 'filters':
       return _('Filters');
-    case 'group':
-      return _('Group');
     case 'groups':
       return _('Groups');
-    case 'host':
-      return _('Host');
+    case 'hosts':
+      return _('Hosts');
     case 'info':
       return _('SecInfo');
     case 'os':
-      return _('Operating System');
-    case 'ovaldef':
-      return _('OVAL Definition');
-    case 'note':
-      return _('Note');
+      return _('Operating Systems');
+    case 'ovaldefs':
+      return _('OVAL Definitions');
     case 'notes':
       return _('Notes');
-    case 'nvt':
-      return _('NVT');
     case 'nvts':
       return _('NVTs');
     case 'nvt_families':
       return _('NVT Families');
-    case 'override':
-      return _('Override');
     case 'overrides':
       return _('Overrides');
-    case 'permission':
-      return _('Permission');
     case 'permissions':
       return _('Permissions');
-    case 'port_list':
-      return _('Port List');
     case 'port_lists':
       return _('Port Lists');
-    case 'port_range':
-      return _('Port Range');
+    case 'port_ranges':
+      return _('Port Ranges');
     case 'preferences':
       return _('Preferences');
-    case 'report':
-      return _('Report');
     case 'reports':
       return _('Reports');
-    case 'report_format':
-      return _('Report Format');
     case 'report_formats':
       return _('Report Formats');
-    case 'result':
-      return _('Result');
     case 'results':
       return _('Results');
-    case 'role':
-      return _('Role');
     case 'roles':
       return _('Roles');
-    case 'scanner':
-      return _('Scanner');
     case 'scanners':
       return _('Scanners');
-    case 'schedule':
-      return _('Schedule');
     case 'schedules':
       return _('Schedules');
-    case 'setting':
-      return _('Setting');
     case 'settings':
       return _('Settings');
     case 'system_reports':
       return _('System Reports');
-    case 'tag':
-      return _('Tag');
     case 'tags':
       return _('Tags');
-    case 'target':
-      return _('Target');
     case 'targets':
       return _('Targets');
-    case 'task':
-      return _('Task');
     case 'tasks':
       return _('Tasks');
-    case 'user':
-      return _('User');
     case 'users':
       return _('Users');
-    case 'vuln':
-      return _('Vulnerability');
     case 'vulns':
       return _('Vulnerabilities');
-    case '':
-      return '';
     default:
-      log.debug('Unknown type', type);
       return type;
   }
 };
 
-export function permission_description(name, resource, subject) {
-  if (is_defined(subject) && !is_empty(subject.type)) {
-    return permission_description_resource_with_subject(name, resource,
-      subject);
-  }
-  return permission_description_resource(name, resource);
-}
+export const permission_description = (name, resource, subject) =>
+  is_defined(subject) ?
+    permission_description_resource_with_subject(name, resource, subject) :
+    permission_description_resource(name, resource);
 
 export function permission_description_resource(name, resource) {
-  if (is_defined(resource) && !is_empty(resource.type)) {
+  if (is_defined(resource)) {
     name = name.toLowerCase();
     const resource_type = {
-      type: type_name(resource.type, false),
+      type: typeName(getEntityType(resource)),
       name: resource.name,
     };
 
@@ -322,12 +265,12 @@ export function permission_description_resource(name, resource) {
 
 export function permission_description_resource_with_subject(name, resource,
   subject) {
-  if (is_defined(resource) && !is_empty(resource.type)) {
+  if (is_defined(resource)) {
     name = name.toLowerCase();
     const type = {
-      subject_type: type_name(subject.type, false),
+      subject_type: typeName(getEntityType(subject)),
       subject_name: subject.name,
-      resource_type: type_name(resource.type, false),
+      resource_type: typeName(getEntityType(resource)),
       resource_name: resource.name,
     };
 
@@ -336,8 +279,7 @@ export function permission_description_resource_with_subject(name, resource,
         'all resources of {{resource_type}} {{resource_name}}', type);
     }
 
-    const [command_type, command_name] = split(name, '_', 1);
-    type.resource_type = type_name(command_name, false);
+    const [command_type] = split(name, '_', 1);
     switch (command_type) {
       case 'create':
         return _('{{subject_type}} {{subject_name}} may create a new ' +
@@ -396,16 +338,20 @@ export function simple_permission_description(name) {
       break;
   }
 
-  const [type, res] = split(name, '_', 1);
-  switch (type) {
+  const [commandType, res] = split(name, '_', 1);
+  const entityType = commandType === 'get' ?
+    getPermissionTypeName(res) :
+    typeName(res);
+
+  switch (commandType) {
     case 'create':
-      return _('May create a new {{type}}', {type: type_name(res)});
+      return _('May create a new {{entityType}}', {entityType});
     case 'delete':
-      return _('May delete an existing {{type}}', {type: type_name(res)});
+      return _('May delete an existing {{entityType}}', {entityType});
     case 'get':
-      return _('Has read access to {{type}}', {type: type_name(res)});
+      return _('Has read access to {{entityType}}', {entityType});
     case 'modify':
-      return _('Has write access to {{type}}', {type: type_name(res)});
+      return _('Has write access to {{entityType}}', {entityType});
     case 'sync':
       if (res === 'cert') {
         return _('May sync the CERT feed');
@@ -416,11 +362,11 @@ export function simple_permission_description(name) {
       if (res === 'scap') {
         return _('May sync the SCAP feed');
       }
-      return _('May sync {{type}}', {type: res});
+      return _('May sync {{entityType}}', {entityType});
     case 'move':
-      return _('May move {{type}}', {type: type_name(res)});
+      return _('May move {{entityType}}', {entityType});
     case 'verify':
-      return _('May verify {{type}}', {type: type_name(res)});
+      return _('May verify {{entityType}}', {entityType});
     default:
       return name;
   }
@@ -429,7 +375,7 @@ export function simple_permission_description(name) {
 export function simple_permission_description_with_subject(name, subject) {
   name = name.toLowerCase();
   let type = {
-    subject_type: type_name(subject.type, false),
+    subject_type: typeName(getEntityType(subject)),
     subject_name: subject.name,
   };
 
@@ -476,9 +422,11 @@ export function simple_permission_description_with_subject(name, subject) {
 
   const [command_type, res] = split(name, '_', 1);
   type = {
-    subject_type: type_name(subject.type, false),
+    subject_type: typeName(getEntityType(subject)),
     subject_name: subject.name,
-    resource_type: type_name(res),
+    resource_type: command_type === 'get' ?
+      getPermissionTypeName(res) :
+      typeName(res),
   };
   switch (command_type) {
     case 'create':
