@@ -72,6 +72,23 @@ user_new()
   return user;
 }
 
+void
+user_free (user_t *user)
+{
+  g_free(user->cookie);
+  g_free(user->token);
+  g_free(user->username);
+  g_free(user->password);
+  g_free(user->role);
+  g_free(user->timezone);
+  g_free(user->severity);
+  g_free(user->capabilities);
+  g_free(user->language);
+  g_free(user->pw_warning);
+  g_free(user->address);
+  g_free(user);
+}
+
 gboolean
 user_session_expired (user_t *user)
 {

@@ -76,6 +76,8 @@ void user_remove (user_t *user);
 
 void user_release (user_t *user);
 
+void user_free (user_t *user);
+
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
