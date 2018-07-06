@@ -504,9 +504,6 @@ init_validator ()
                          "|(sync_cert)"
                          "|(sync_config)"
                          "|(toggle_tag)"
-                         "|(upload_config)"
-                         "|(upload_port_list)"
-                         "|(upload_report)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(verify_scanner)"
@@ -2247,9 +2244,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
-  ELSE (upload_config)
-  ELSE (upload_port_list)
-  ELSE (upload_report)
   ELSE (sync_config)
   ELSE (wizard)
   ELSE (wizard_get)

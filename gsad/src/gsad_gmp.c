@@ -3097,69 +3097,6 @@ new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
  */
 
 /**
- * @brief Returns page to upload a new report.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-upload_report (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, const char *extra_xml,
-               cmd_response_data_t* response_data)
-{
-  GString *xml;
-
-  xml = g_string_new ("<upload_report>");
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  if (command_enabled (credentials, "GET_TASKS"))
-    {
-      gchar *response;
-
-      if (simple_gmpf (connection, "getting Tasks", credentials, &response,
-                       response_data,
-                       "<get_tasks"
-                       /* All container tasks. */
-                       " filter=\"target= rows=-1 owner=any permission=any\"/>"))
-        {
-          g_string_free (xml, TRUE);
-          return response;
-        }
-
-      g_string_append (xml, response);
-    }
-
-  g_string_append (xml, "</upload_report>");
-
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Return the upload report page.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-upload_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                   params_t *params, cmd_response_data_t* response_data)
-{
-  return upload_report (connection, credentials, params, NULL, response_data);
-}
-
-/**
  * @brief Create a report, get all tasks, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -10040,49 +9977,6 @@ export_targets_gmp (gvm_connection_t *connection, credentials_t *
 {
   return export_many (connection, "target", credentials, params,
                       response_data);
-}
-
-/**
- * @brief Returns page to upload a new scan config.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-upload_config (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-               const char *extra_xml, cmd_response_data_t* response_data)
-{
-  GString *xml;
-
-  xml = g_string_new ("<upload_config>");
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-  g_string_append (xml, "</upload_config>");
-
-  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Return the upload scan config page.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-upload_config_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                   cmd_response_data_t* response_data)
-{
-  return upload_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
@@ -19849,49 +19743,6 @@ save_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 
 
 /* Port lists. */
-
-/**
- * @brief Returns page to upload a new port list.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-upload_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                  const char *extra_xml, cmd_response_data_t* response_data)
-{
-  GString *xml;
-
-  xml = g_string_new ("<upload_port_list>");
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-  g_string_append (xml, "</upload_port_list>");
-
-  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Return the upload port list page.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-upload_port_list_gmp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return upload_port_list (connection, credentials, params, NULL, response_data);
-}
 
 /**
  * @brief Create a port list, get all port lists, envelope the result.
