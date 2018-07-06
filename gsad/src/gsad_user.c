@@ -89,6 +89,28 @@ user_free (user_t *user)
   g_free(user);
 }
 
+user_t *
+user_copy (user_t *user)
+{
+  user_t *copy = user_new();
+
+  copy->cookie = g_strdup(user->cookie);
+  copy->token = g_strdup(user->token);
+  copy->username = g_strdup(user->username);
+  copy->password = g_strdup(user->password);
+  copy->role = g_strdup(user->role);
+  copy->timezone = g_strdup(user->timezone);
+  copy->severity = g_strdup(user->severity);
+  copy->capabilities = g_strdup(user->capabilities);
+  copy->language = g_strdup(user->language);
+  copy->pw_warning = g_strdup(user->pw_warning);
+  copy->address = g_strdup(user->address);
+  copy->time = user->time;
+  copy->guest = user->guest;
+
+  return copy;
+}
+
 gboolean
 user_session_expired (user_t *user)
 {
