@@ -568,63 +568,6 @@ user_remove (user_t *user)
   g_mutex_unlock (mutex);
 }
 
-/**
- * @brief Find a user, given a token.
- *
- * If a user is returned, it's up to the caller to release the user.
- *
- * @param[in]   token        Token request parameter.
- * @param[out]  user_return  User.
- *
- * @return 0 ok (user in user_return), 1 bad token, 2 expired token.
- */
-int
-token_user (const gchar *token, user_t **user_return)
-{
-  int ret;
-
-  g_mutex_lock (mutex);
-
-  user_t *user = get_user_by_token (token);
-
-  if (user)
-    {
-      if (user_session_expired(user))
-        ret = 2;
-      else
-        {
-          *user_return = user;
-          user_renew_session (user);
-          return 0;
-        }
-    }
-  else
-    ret = 1;
-
-  g_mutex_unlock (mutex);
-
-  return ret;
-}
-
-
-/**
- * @brief Remove a user from the session "database", releasing the user_t too.
- *
- * @param[in]  token  User's token.
- *
- * @return 0 success, -1 error.
- */
-int
-token_user_remove (const char *token)
-{
-  user_t *user;
-  if (token_user (token, &user))
-    return -1;
-
-  user_remove (user);
-
-  return 0;
-}
 
 credentials_t *
 credentials_new (user_t *user, const char *language, const char *client_address)
@@ -691,7 +634,15 @@ logout (credentials_t *credentials)
   if (credentials->token == NULL)
     return 0;
 
-  return token_user_remove (credentials->token);
+  user_t * user = get_user_by_token (credentials->token);
+
+  if (user)
+    {
+      user_remove (user);
+      return 0;
+    }
+
+  return -1;
 }
 
 void

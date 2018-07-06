@@ -100,10 +100,6 @@ gchar * user_get_language (user_t *user);
 
 gchar * user_get_cookie (user_t *user);
 
-int token_user (const gchar *token, user_t **user_return);
-
-int token_user_remove (const char *token);
-
 credentials_t * credentials_new (user_t *user, const char *language,
                                  const char *client_address);
 
