@@ -9896,15 +9896,6 @@ save_target_gmp (gvm_connection_t *connection, credentials_t * credentials,
       CHECK_VARIABLE_INVALID (hosts, "Save Target")
     }
 
-  if (str_equal (target_source, "import") && name == NULL)
-    {
-      // TODO name can't be NULL here and "import" seems to be not used in GSA
-      return message_invalid (connection, credentials, params, response_data,
-                              "Given target_source was invalid",
-                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                              "Save Target");
-    }
-
   {
     int ret;
     gchar *ssh_credentials_element, *smb_credentials_element;
