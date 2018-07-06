@@ -5734,6 +5734,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <!-- Bottom line with applied filter and pager. -->
       <xsl:if test="string-length (filters/term) &gt; 0">
+        <xsl:choose>
+          <xsl:when test="($filtered-count &gt; 0) and ($resources-summary/@start &gt; $filtered-count)">
+            <center>
+              <i>
+                <xsl:value-of select="gsa:i18n('To view items, try using the page buttons to go back to the first page or the last one with content.')"/>
+              </i>
+            </center>
+          </xsl:when>
+        </xsl:choose>
         <div class="footer">
           <div class="applied-filter">
             (<xsl:value-of select="gsa:i18n('Applied filter')"/>:
