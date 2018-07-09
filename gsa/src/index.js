@@ -20,7 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-import './web/app.js';
+import ReactDOM from 'react-dom';
+
+import App from './web/app.js';
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
 
 // vim: set ts=2 sw=2 tw=80:

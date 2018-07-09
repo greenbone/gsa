@@ -21,9 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import {Provider as StoreProvider} from 'react-redux';
 
@@ -96,11 +94,6 @@ class App extends React.Component {
 App.contextTypes = {
   router: PropTypes.object.isRequired,
 };
-
-ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-);
 
 export default App;
 
