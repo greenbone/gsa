@@ -218,8 +218,8 @@ export class Gmp {
       this.globals.autorefresh;
   }
 
-  addHttpInterceptor(interceptor) {
-    this.http.addInterceptor(interceptor);
+  addHttpErrorHandler(handler) {
+    return this.http.addErrorHandler(handler);
   }
 }
 

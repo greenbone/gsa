@@ -57,7 +57,7 @@ class Http {
     this.params = {};
     this.timeout = timeout;
 
-    this.interceptors = [];
+    this.errorHandlers = [];
 
     this.transform = transform;
 
@@ -205,8 +205,8 @@ class Http {
   handleResponseError(resolve, reject, xhr, options) {
     let promise = Promise.resolve(xhr);
 
-    for (const interceptor of this.interceptors) {
-      promise = promise.then(interceptor.responseError);
+    for (const interceptor of this.errorHandlers) {
+      promise = promise.then(interceptor);
     }
 
     promise.catch(request => {
@@ -253,9 +253,10 @@ class Http {
     return transform.rejection(rejection, options);
   }
 
-  addInterceptor(interceptor) {
-    this.interceptors.unshift(interceptor);
-    return this;
+  addErrorHandler(handler) {
+    this.errorHandlers.push(handler);
+    return () => this.errorHandlers = this.errorHandlers.filter(
+      h => h !== handler);
   }
 }
 
