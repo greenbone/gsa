@@ -34,11 +34,9 @@ import {filter_string} from '../models/filter/utils.js';
 import DefaultTransform from '../http/transform/default.js';
 
 import HttpCommand from './http.js';
+import {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp.js';
 
 const log = logger.getLogger('gmp.commands.entities');
-
-const BULK_SELECT_BY_IDS = 1;
-const BULK_SELECT_BY_FILTER = 0;
 
 class EntitiesCommand extends HttpCommand {
 
