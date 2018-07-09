@@ -755,6 +755,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/vulns/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/row.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/table.js
+     ${GSA_SRC_DIR}/src/web/routes.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/loader.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/reducers.js
@@ -771,6 +772,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/selectors.js
+     ${GSA_SRC_DIR}/src/web/unauthorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js
      ${GSA_SRC_DIR}/src/web/utils/compose.js
      ${GSA_SRC_DIR}/src/web/utils/cpe.js
