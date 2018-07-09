@@ -27,6 +27,8 @@ import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
+import {shorten} from 'gmp/utils/string';
+
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
 
@@ -54,6 +56,7 @@ const Row = ({
   const {host} = entity;
   const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
+
   return (
     <TableRow>
       {delta &&
@@ -83,7 +86,7 @@ const Row = ({
       <TableData flex align="center">
         {entity.qod.value} %
       </TableData>
-      <TableData flex align="center">
+      <TableData colSpan="2">
         <DetailsLink
           type="host"
           id={host.id}
@@ -91,6 +94,11 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
+        {host.hostname.length > 0
+          ? <span title={host.hostname}>
+              ({shorten (host.hostname, 40)})
+            </span>
+          : false}
       </TableData>
       <TableData>
         {entity.port}

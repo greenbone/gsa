@@ -47,7 +47,8 @@ const SORT_FIELDS = [
   ['solution_type', _('Solution type')],
   ['severity', _('Severity')],
   ['qod', _('QoD')],
-  ['host', _('Host')],
+  ['host', _('Host (IP)')],
+  ['hostname', _('Host (Name)')],
   ['location', _('Location')],
   ['created', _('Created')],
 ];
