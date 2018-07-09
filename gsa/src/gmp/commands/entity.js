@@ -27,7 +27,7 @@ import logger from '../log.js';
 
 import DefaultTransform from '../http/transform/default.js';
 
-import GmpCommand from './gmp.js';
+import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp.js';
 
 const log = logger.getLogger('gmp.commands.entities');
 
@@ -102,10 +102,9 @@ class EntityCommand extends GmpCommand {
 
   export({id}) {
     const params = {
-      cmd: 'process_bulk',
+      cmd: 'bulk_export',
       resource_type: this.name,
-      bulk_select: 1,
-      'bulk_export.x': 1,
+      bulk_select: BULK_SELECT_BY_IDS,
       ['bulk_selected:' + id]: 1,
     };
     return this.httpPost(params, {transform: DefaultTransform});
