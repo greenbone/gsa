@@ -130,7 +130,6 @@ class EntitiesCommand extends HttpCommand {
       ...extra_params,
       cmd: 'bulk_delete',
       resource_type: this.name,
-      no_redirect: '1',
     };
     for (const id of ids) {
       params['bulk_selected:' + id] = 1;
