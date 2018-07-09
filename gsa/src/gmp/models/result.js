@@ -77,12 +77,14 @@ class Result extends Model {
       copy.host = {
         name: host,
         id: host,
+        hostname: '',
       };
     }
     else {
       copy.host = {
         name: host.__text,
         id: is_defined(host.asset) ? host.asset._asset_id : host.__text,
+        hostname: is_defined(host.hostname) ? host.hostname : '',
       };
     }
 
