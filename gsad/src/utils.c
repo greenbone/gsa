@@ -34,6 +34,7 @@
  * @return TRUE if string are equal
  */
 
+#include <string.h>  // For strcmp
 #include "utils.h"
 
 gboolean
