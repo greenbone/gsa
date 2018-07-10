@@ -33,7 +33,6 @@ import {is_defined} from 'gmp/utils/identity';
 import CacheFactoryProvider from './components/provider/cachefactoryprovider';
 import GmpProvider from './components/provider/gmpprovider';
 
-import PropTypes from './utils/proptypes';
 import globalcss from './utils/globalcss';
 
 import configureStore from './store';
@@ -90,10 +89,6 @@ class App extends React.Component {
     );
   }
 }
-
-App.contextTypes = {
-  router: PropTypes.object.isRequired,
-};
 
 export default App;
 
