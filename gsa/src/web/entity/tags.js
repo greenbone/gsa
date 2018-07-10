@@ -90,7 +90,6 @@ SectionElements.propTypes = {
 
 const EntityTags = ({
   entity,
-  onTagDeleteClick,
   onTagDisableClick,
   onTagEditClick,
   onTagCreateClick,
@@ -186,9 +185,7 @@ const EntityTags = ({
 
 EntityTags.propTypes = {
   entity: PropTypes.model.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
   onTagDisableClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
