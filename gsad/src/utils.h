@@ -1,10 +1,12 @@
 /* Greenbone Security Assistant
+ * $Id$
+ * Description: Headers/structs for utility functions in GSAD
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,28 +22,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import Http from './http.js';
-import {build_server_url} from './utils.js';
 
-import X2JsTransform from './transform/x2js.js';
+/**
+ * @file utils.h
+ * @brief Headers/structs for utility functions in GSAD
+ */
 
-class GmpHttp extends Http {
+#ifndef _GSAD_UTILS_H
+#define _GSAD_UTILS_H
 
-  constructor(server, protocol, options) {
-    const url = build_server_url(server, 'omp', protocol);
-    super(url, {...options, transform: X2JsTransform});
-  }
+#include <glib.h> // for gboolean, gchar
 
-  get token() {
-    return this.params.token;
-  }
+gboolean str_equal (const gchar *, const gchar *);
 
-  set token(token) {
-    this.params.token = token;
-  }
+gchar* capitalize (const char *);
 
-}
+#endif /* not _GSAD_UTILS_H */
 
-export default GmpHttp;
-
-// vim: set ts=2 sw=2 tw=80:

@@ -51,8 +51,6 @@ char * clone_gmp (gvm_connection_t *, credentials_t *, params_t *,
 
 char * create_report_gmp (gvm_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
-char * upload_report_gmp (gvm_connection_t *, credentials_t *,
-                          params_t *, cmd_response_data_t*);
 char * import_report_gmp (gvm_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
 char * create_container_task_gmp (gvm_connection_t *,
@@ -286,8 +284,6 @@ char * get_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * get_configs_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
-char * upload_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                          cmd_response_data_t*);
 char * save_config_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * edit_config_family_gmp (gvm_connection_t *, credentials_t *,
@@ -386,8 +382,6 @@ char * create_port_list_gmp (gvm_connection_t *, credentials_t *,
                              params_t *, cmd_response_data_t*);
 char * create_port_range_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
-char * upload_port_list_gmp (gvm_connection_t *, credentials_t *,
-                             params_t *, cmd_response_data_t*);
 char * get_port_list_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * edit_port_list_gmp (gvm_connection_t *, credentials_t *, params_t *,
