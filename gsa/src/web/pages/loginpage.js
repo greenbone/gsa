@@ -37,6 +37,7 @@ import Layout from '../components/layout/layout.js';
 import PropTypes from '../utils/proptypes.js';
 import compose from '../utils/compose';
 import withGmp from '../utils/withGmp';
+import Theme from 'web/utils/theme';
 
 import FormGroup from '../components/form/formgroup.js';
 import PasswordField from '../components/form/passwordfield.js';
@@ -73,7 +74,7 @@ const LoginPanel = glamorous(Layout)(
 const Error = glamorous.p(
   'error',
   {
-    color: '#d83636',
+    color: Theme.warningRed,
     fontWeight: 'bold',
     textAlign: 'center',
     margin: '10px',

@@ -44,6 +44,7 @@ const Theme = {
   dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
   inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select
   mediumBlue: '#5897fb', // used by active/hovered items in Select
+  warningRed: '#d83636', // used for warning font color at login dialog
 
   /* source ? */
   darkGreen: '#519032',
