@@ -60,7 +60,6 @@ typedef struct
   char *client_address; ///< Client's address.
   GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
-  int charts;         ///< Whether to show charts for this user.
   int guest;          ///< Whether the user is a guest user.
   char *sid;          ///< Session ID of the user.
 } credentials_t;
@@ -70,34 +69,12 @@ typedef struct
  */
 typedef struct user user_t;
 
-/**
- * @brief User information structure, for sessions.
- */
-struct user
-{
-  char *cookie;        ///< Cookie token.
-  char *token;         ///< Request session token.
-  gchar *username;     ///< Login name.
-  gchar *password;     ///< Password.
-  gchar *role;         ///< Role.
-  gchar *timezone;     ///< Timezone.
-  gchar *severity;     ///< Severity class.
-  gchar *capabilities; ///< Capabilities.
-  gchar *language;     ///< User Interface Language, in short form like "en".
-  gchar *pw_warning;   ///< Password policy warning.
-  char *address;       ///< Client's IP address.
-  time_t time;         ///< Login time.
-  int charts;          ///< Whether to show charts for this user.
-  GTree *last_filt_ids;///< Last used filter ids.
-  int guest;           ///< Whether the user is a guest.
-};
-
 int user_find (const gchar *cookie, const gchar *token, const char *address,
                user_t **user_return);
 
 void user_remove (user_t *user);
 
-void user_release (user_t *user);
+void user_free (user_t *user);
 
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
@@ -112,15 +89,14 @@ int user_set_severity (const gchar *token, const gchar *severity);
 
 int user_set_language (const gchar *token, const gchar *language);
 
-int user_set_charts (const gchar *token, const int charts);
-
 int user_logout_all_sessions (const gchar *username,
                               credentials_t *credentials);
 
+gchar * user_get_username (user_t *user);
 
-int token_user (const gchar *token, user_t **user_return);
+gchar * user_get_language (user_t *user);
 
-int token_user_remove (const char *token);
+gchar * user_get_cookie (user_t *user);
 
 credentials_t * credentials_new (user_t *user, const char *language,
                                  const char *client_address);

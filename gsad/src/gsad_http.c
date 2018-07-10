@@ -44,6 +44,7 @@
 #include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
 #include "gsad_base.h" /* for ctime_r_strip_newline */
+#include "utils.h" /* for str_equal */
 
 #undef G_LOG_DOMAIN
 /**
@@ -230,7 +231,8 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
     }
 
   snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
-  return send_redirect_to_uri (connection, uri, user ? user->cookie : NULL);
+  return send_redirect_to_uri (connection, uri,
+                               user ? user_get_cookie(user) : NULL);
 }
 
 /**
@@ -804,22 +806,22 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
 {
   if (sid)
     {
-      if (strcmp (sid, "0"))
+      if (str_equal (sid, "0"))
         {
-          if (attach_sid (response, sid) == MHD_NO)
+          if (remove_sid (response) == MHD_NO)
             {
               MHD_destroy_response (response);
-              g_warning ("%s: failed to attach SID, dropping request",
+              g_warning ("%s: failed to remove SID, dropping request",
                         __FUNCTION__);
               return MHD_NO;
             }
         }
       else
         {
-          if (remove_sid (response) == MHD_NO)
+          if (attach_sid (response, sid) == MHD_NO)
             {
               MHD_destroy_response (response);
-              g_warning ("%s: failed to remove SID, dropping request",
+              g_warning ("%s: failed to attach SID, dropping request",
                         __FUNCTION__);
               return MHD_NO;
             }
@@ -1221,7 +1223,6 @@ gsad_message (credentials_t *credentials, const char *title,
                "<login>%s</login>"
                "<role>%s</role>"
                "<i18n>%s</i18n>"
-               "<charts>%i</charts>"
                "<client_address>%s</client_address>",
                GSAD_VERSION,
                vendor_version_get (),
@@ -1230,7 +1231,6 @@ gsad_message (credentials_t *credentials, const char *title,
                credentials->username,
                credentials->role,
                credentials->language,
-               credentials->charts,
                credentials->client_address);
       xml = g_strdup_printf ("%s%s"
                               "<capabilities>%s</capabilities>"

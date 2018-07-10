@@ -504,9 +504,6 @@ init_validator ()
                          "|(sync_cert)"
                          "|(sync_config)"
                          "|(toggle_tag)"
-                         "|(upload_config)"
-                         "|(upload_port_list)"
-                         "|(upload_report)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(verify_scanner)"
@@ -1310,18 +1307,32 @@ exec_gmp_post (http_connection_t *con,
 {
   int ret;
   user_t *user;
-  credentials_t *credentials;
-  gchar *res = NULL, *new_sid;
+  credentials_t *credentials = NULL;
+  gchar *res = NULL, *new_sid = NULL;
   const gchar *cmd, *caller, *language;
   authentication_reason_t auth_reason;
   gvm_connection_t connection;
-  cmd_response_data_t *response_data;
+  cmd_response_data_t *response_data = cmd_response_data_new ();
 
   params_mhd_validate (con_info->params);
 
   cmd = params_value (con_info->params, "cmd");
 
-  response_data = cmd_response_data_new ();
+  if (!cmd)
+    {
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
+
+      res = gsad_message (credentials,
+                          "Internal error",
+                          __FUNCTION__,
+                          __LINE__,
+                          "An internal error occurred inside GSA daemon. "
+                          "Diagnostics: Invalid command.",
+                          response_data);
+      return handler_create_response(con, res, response_data, new_sid);
+    }
+
 
   if (cmd && !strcmp (cmd, "login"))
     {
@@ -1409,7 +1420,8 @@ exec_gmp_post (http_connection_t *con,
   /* From here, the user is authenticated. */
 
 
-  language = user->language ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
+  language = user_get_language(user) ?: con_info->language ?:
+    DEFAULT_GSAD_LANGUAGE;
   credentials = credentials_new (user, language, client_address);
   credentials->params = con_info->params; // FIXME remove params from credentials
   gettimeofday (&credentials->cmd_start, NULL);
@@ -1422,11 +1434,12 @@ exec_gmp_post (http_connection_t *con,
       g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
       caller = NULL;
     }
+
   credentials->caller = g_strdup (caller ?: "");
 
-  new_sid = g_strdup (user->cookie);
+  new_sid = g_strdup (user_get_cookie(user));
 
-  user_release (user);
+  user_free (user);
 
   /* Set the timezone. */
 
@@ -1472,20 +1485,6 @@ exec_gmp_post (http_connection_t *con,
     }
 
   /* Handle the usual commands. */
-
-  if (!cmd)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-
-      res = gsad_message (credentials,
-                          "Internal error",
-                          __FUNCTION__,
-                          __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: Empty command.",
-                          response_data);
-    }
 
   ELSE (bulk_delete)
   ELSE (bulk_export)
@@ -2000,15 +1999,6 @@ exec_gmp_get (http_connection_t *con,
 
   /* Set page display settings */
 
-  /* Show / hide charts */
-  if (params_given (params, "charts"))
-    {
-      const char* charts;
-      charts = params_value (params, "charts");
-      credentials->charts = atoi (charts);
-      user_set_charts (credentials->token, credentials->charts);
-    }
-
   gettimeofday (&credentials->cmd_start, NULL);
 
   if (client_watch_interval)
@@ -2256,9 +2246,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
-  ELSE (upload_config)
-  ELSE (upload_port_list)
-  ELSE (upload_report)
   ELSE (sync_config)
   ELSE (wizard)
   ELSE (wizard_get)
