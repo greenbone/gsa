@@ -28,6 +28,9 @@ import {filter_string} from '../models/filter/utils.js';
 
 import HttpCommand from './http.js';
 
+export const BULK_SELECT_BY_IDS = 1;
+export const BULK_SELECT_BY_FILTER = 0;
+
 class GmpCommand extends HttpCommand {
 
   getParams(params, extra_params = {}) {
