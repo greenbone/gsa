@@ -140,17 +140,20 @@ export class Gmp {
   }
 
   logout() {
-    const url = this.buildUrl('logout');
-    const args = {token: this.token};
-    return this.http.request('get', {url, args})
-      .then(xhr => {
-        this.token = undefined;
-        return xhr;
-      })
-      .catch(err => {
-        this.token = undefined;
-        log.error('Error on logout', err);
-      });
+    if (!this.isLoggedIn()) {
+      const url = this.buildUrl('logout');
+      const args = {token: this.token};
+      return this.http.request('get', {url, args})
+        .then(xhr => {
+          this.token = undefined;
+          return xhr;
+        })
+        .catch(err => {
+          this.token = undefined;
+          log.error('Error on logout', err);
+        });
+    }
+    return Promise.resolve();
   }
 
   isLoggedIn() {
@@ -215,8 +218,8 @@ export class Gmp {
       this.globals.autorefresh;
   }
 
-  addHttpInterceptor(interceptor) {
-    this.http.addInterceptor(interceptor);
+  addHttpErrorHandler(handler) {
+    return this.http.addErrorHandler(handler);
   }
 }
 
