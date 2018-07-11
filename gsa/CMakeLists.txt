@@ -764,9 +764,16 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
-     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
+     ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
+     ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
+     ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
+     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
+     ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js
