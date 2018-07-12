@@ -168,9 +168,6 @@ class EntitiesContainer extends React.Component {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
-        const entitiesType = entities.length > 0 ?
-          getEntityType(entities[0]) : undefined;
-
         this.cancel = undefined;
 
         let refresh = false;
@@ -184,7 +181,6 @@ class EntitiesContainer extends React.Component {
         this.setState({
           entities,
           entities_counts,
-          entitiesType,
           filter,
           loaded_filter,
           loading: false,
@@ -444,18 +440,21 @@ class EntitiesContainer extends React.Component {
 
   getTagsByType() {
     const {gmp} = this.props;
-    const {entitiesType} = this.state;
-    const filter = 'resource_type=' + entitiesType;
-    gmp.tags.getAll({filter})
-      .then(response => {
-        const {data} = response;
-        this.setState({tags: data});
+    const {entities} = this.state;
+
+    if (entities.length > 0) {
+      const filter = 'resource_type=' + getEntityType(entities[0]);
+
+      gmp.tags.getAll({filter}).then(response => {
+        const {data: tags} = response;
+        this.setState({tags});
       });
+    }
   }
 
   render() {
     const {
-      entities,
+      entities = [],
       entities_counts,
       loaded_filter,
       loading,
@@ -476,8 +475,10 @@ class EntitiesContainer extends React.Component {
     } = this.props;
 
     let entitiesType;
-    if (is_defined(entities) && is_defined(entities[0])) {
+    let resourceTypes;
+    if (entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
+      resourceTypes = [[entitiesType, typeName(entitiesType)]];
     }
 
     let title;
@@ -545,7 +546,7 @@ class EntitiesContainer extends React.Component {
             fixed={true}
             resources={selected}
             resource_type={entitiesType}
-            resource_types={[[entitiesType, typeName(entitiesType)]]}
+            resource_types={resourceTypes}
             onClose={this.closeTagDialog}
             onSave={this.handleCreateTag}
           />
