@@ -116,13 +116,11 @@ const LinkConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
-  visible,
   onClose,
   onResumeClick,
 }) => {
   return (
     <Dialog
-      visible={visible}
       width={width}
       onClose={onClose}
       resizable={false}
@@ -146,7 +144,6 @@ const LinkConfirmationDialog = ({
 LinkConfirmationDialog.propTypes = {
   text: PropTypes.string,
   title: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired,
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onResumeClick: PropTypes.func.isRequired,
