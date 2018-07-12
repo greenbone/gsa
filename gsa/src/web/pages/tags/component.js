@@ -31,6 +31,8 @@ import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
 import {getEntityType, ENTITY_TYPES} from 'gmp/utils/entitytype';
 
+import {YES_VALUE} from 'gmp/parser';
+
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose';
 import withGmp from '../../utils/withGmp.js';
@@ -76,7 +78,7 @@ class TagComponent extends React.Component {
     return gmp.tag.create({
       name,
       value,
-      active: 1,
+      active: YES_VALUE,
       resource_ids: [entity.id],
       resource_type: getEntityType(entity),
     }).then(onAdded, onAddError);
@@ -170,24 +172,34 @@ class TagComponent extends React.Component {
   }
 
   openTagDialog(tag, options = {}) {
-    const resource_types = this.getResourceTypes();
     const {gmp} = this.props;
+    const resource_types = this.getResourceTypes();
+
     if (is_defined(tag)) {
       gmp.tag.get({id: tag.id}).then(response => {
-        const loadedTag = response.data;
+        const {
+          active,
+          comment,
+          id,
+          name,
+          resources,
+          resource_type,
+          value,
+        } = response.data;
+
         this.setState({
-          active: loadedTag.active,
-          comment: loadedTag.comment,
+          active,
+          comment,
           dialogVisible: true,
-          id: loadedTag.id,
-          name: loadedTag.name,
-          resource_ids: loadedTag.resources.map(res => res.id),
-          resource_type: is_defined(loadedTag.resource_type) ?
-            loadedTag.resource_type :
+          id,
+          name,
+          resource_ids: resources.map(res => res.id),
+          resource_type: is_defined(resource_type) ?
+            resource_type :
             first(resource_types, [])[0],
           resource_types,
-          title: _('Edit Tag {{name}}', {name: shorten(loadedTag.name)}),
-          value: loadedTag.value,
+          title: _('Edit Tag {{name}}', {name: shorten(name)}),
+          value,
           ...options,
         });
       });
@@ -218,6 +230,7 @@ class TagComponent extends React.Component {
 
   handleRemove(tag_id, entity) {
     const {gmp, onRemoved, onRemoveError} = this.props;
+
     return gmp.tag.get({id: tag_id})
       .then(response => response.data)
       .then(tag => gmp.tag.save({
