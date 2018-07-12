@@ -109,13 +109,12 @@ class TagsDialog extends React.Component {
       value = '',
     } = this.state;
 
-    let promise;
     if (selectionType === SelectionType.SELECTION_USER) {
       const resource_ids = [];
 
       resources.forEach(res => resource_ids.push(res.id));
 
-      promise = gmp.tag.save({
+      return gmp.tag.save({
         active,
         comment,
         id,
@@ -126,8 +125,9 @@ class TagsDialog extends React.Component {
         value,
       });
     }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = gmp.tag.save({
+
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      return gmp.tag.save({
         active,
         comment,
         filter,
@@ -138,19 +138,17 @@ class TagsDialog extends React.Component {
         value,
       });
     }
-    else {
-      promise = gmp.tag.save({
-        active,
-        comment,
-        filter: filter.all(),
-        id,
-        name,
-        resource_type: resourceType,
-        resources_action: 'add',
-        value,
-      });
-    }
-    return promise;
+
+    return gmp.tag.save({
+      active,
+      comment,
+      filter: filter.all(),
+      id,
+      name,
+      resource_type: resourceType,
+      resources_action: 'add',
+      value,
+    });
   }
 
   render() {
