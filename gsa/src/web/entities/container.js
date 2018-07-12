@@ -413,18 +413,17 @@ class EntitiesContainer extends React.Component {
   handleCreateTag(data) {
     const {gmp} = this.props;
     const {tags} = this.state;
-    let newTag;
+
     return gmp.tag.create(data).then(response => {
-      newTag = response.data;
-    })
-    .then(() => {
-      return gmp.tag.get(newTag);
+      return gmp.tag.get(response.data);
     })
     .then(response => {
-      tags.push(response.data);
       this.setState({
         newTag: response.data,
-        tags,
+        tags: [
+          ...tags,
+          response.data,
+        ],
       });
     });
   }
