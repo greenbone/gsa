@@ -92,8 +92,11 @@
 #include "gsad_http_handler.h" /* for init_http_handlers */
 #include "gsad_settings.h"
 #include "gsad_user.h"
-#include "validator.h"
+#include "gsad_credentials.h"
 #include "gsad_i18n.h"
+#include "gsad_session.h" /* for session_init */
+#include "utils.h" /* for str_equal */
+#include "validator.h"
 
 #ifdef GIT_REV_AVAILABLE
 #include "gitrevision.h"
@@ -1419,13 +1422,6 @@ exec_gmp_post (http_connection_t *con,
 
   /* From here, the user is authenticated. */
 
-
-  language = user_get_language(user) ?: con_info->language ?:
-    DEFAULT_GSAD_LANGUAGE;
-  credentials = credentials_new (user, language, client_address);
-  credentials->params = con_info->params; // FIXME remove params from credentials
-  gettimeofday (&credentials->cmd_start, NULL);
-
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
@@ -1435,17 +1431,21 @@ exec_gmp_post (http_connection_t *con,
       caller = NULL;
     }
 
-  credentials->caller = g_strdup (caller ?: "");
+  language = user_get_language(user) ?: con_info->language ?:
+    DEFAULT_GSAD_LANGUAGE;
+
+  credentials = credentials_new (user, language, caller);
+
+  credentials_start_cmd (credentials);
 
   new_sid = g_strdup (user_get_cookie(user));
 
-  user_free (user);
-
   /* Set the timezone. */
 
-  if (credentials->timezone)
+  const gchar *timezone = user_get_timezone (user);
+  if (timezone)
     {
-      if (setenv ("TZ", credentials->timezone, 1) == -1)
+      if (setenv ("TZ", timezone, 1) == -1)
         {
           g_critical ("%s: failed to set TZ\n", __FUNCTION__);
           exit (EXIT_FAILURE);
@@ -1579,34 +1579,10 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_group)
   else if (!strcmp (cmd, "save_my_settings"))
     {
-      char *timezone, *password, *severity, *language;
       res = save_my_settings_gmp (&connection,
                                   credentials, con_info->params,
                                   con_info->language,
-                                  &timezone, &password,
-                                  &severity, &language,
                                   response_data);
-      if (timezone)
-        /* credentials->timezone set in save_my_settings_gmp. */
-        user_set_timezone (credentials->token, timezone);
-      if (password)
-        {
-          /* credentials->password set in save_my_settings_gmp. */
-          user_set_password (credentials->token, password);
-
-          user_logout_all_sessions (credentials->username, credentials);
-        }
-      if (severity)
-        /* credentials->severity set in save_my_settings_gmp. */
-        user_set_severity (credentials->token, severity);
-      if (language)
-        /* credentials->language is set in save_my_settings_gmp. */
-        user_set_language (credentials->token, language);
-
-      g_free (timezone);
-      g_free (password);
-      g_free (severity);
-      g_free (language);
     }
   ELSE (save_note)
   ELSE (save_override)
@@ -1620,23 +1596,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_target)
   ELSE (save_task)
   ELSE (save_container_task)
-  else if (!strcmp (cmd, "save_user"))
-    {
-      char *password, *modified_user;
-      int logout;
-      res = save_user_gmp (&connection, credentials,
-                           con_info->params,
-                           &password, &modified_user, &logout,
-                           response_data);
-      if (modified_user && logout)
-        user_logout_all_sessions (modified_user, credentials);
-
-      if (password)
-        /* credentials->password set in save_user_gmp. */
-        user_set_password (credentials->token, password);
-
-      g_free (password);
-    }
+  ELSE (save_user)
   ELSE (start_task)
   ELSE (stop_task)
   ELSE (sync_feed)
@@ -1662,6 +1622,7 @@ exec_gmp_post (http_connection_t *con,
 
   ret = handler_create_response (con, res, response_data, new_sid);
 
+  user_free (user);
   credentials_free (credentials);
   gvm_connection_close (&connection);
   g_free (new_sid);
@@ -1947,13 +1908,14 @@ exec_gmp_get (http_connection_t *con,
     }
 
 
-  credentials->params = params; // FIXME remove params from credentials
-
   /* Set the timezone. */
 
-  if (credentials->timezone)
+  user_t * user = credentials_get_user (credentials);
+  const gchar *timezone = user_get_timezone (user);
+
+  if (timezone)
     {
-      if (setenv ("TZ", credentials->timezone, 1) == -1)
+      if (setenv ("TZ", timezone, 1) == -1)
         {
           g_critical ("%s: failed to set TZ\n", __FUNCTION__);
           exit (EXIT_FAILURE);
@@ -1999,7 +1961,7 @@ exec_gmp_get (http_connection_t *con,
 
   /* Set page display settings */
 
-  gettimeofday (&credentials->cmd_start, NULL);
+  credentials_start_cmd (credentials);
 
   if (client_watch_interval)
     {
@@ -2268,9 +2230,9 @@ exec_gmp_get (http_connection_t *con,
   response = MHD_create_response_from_buffer (res_len, (void *) res,
                                               MHD_RESPMEM_MUST_FREE);
   if (get_guest_password()
-      && strcmp (credentials->username, get_guest_username()) == 0
+      && str_equal (user_get_username (user), get_guest_username ())
       && cmd
-      && strcmp (cmd, "get_aggregate") == 0)
+      && str_equal (cmd, "get_aggregate"))
     {
       add_guest_chart_content_security_headers (response);
     }
@@ -2278,7 +2240,7 @@ exec_gmp_get (http_connection_t *con,
   if (watcher_data)
     {
       pthread_mutex_lock (&(watcher_data->mutex));
-      if (watcher_data->connection_closed == 0 
+      if (watcher_data->connection_closed == 0
           || watcher_data->gvm_connection->tls)
         {
           gvm_connection_close (watcher_data->gvm_connection);
@@ -2294,7 +2256,8 @@ exec_gmp_get (http_connection_t *con,
       gvm_connection_close (&connection);
     }
 
-  return handler_send_response (con, response, response_data, credentials->sid);
+  return handler_send_response(con, response, response_data,
+                               user_get_cookie(user));
 }
 
 /**
@@ -2533,8 +2496,8 @@ gsad_init ()
 {
   g_debug ("Initializing the Greenbone Security Assistant...\n");
 
-  /* Init Glib. */
-  init_users ();
+  /* Init user ssessions. */
+  session_init ();
 
   /* Check for required files. */
   if (gvm_file_check_is_dir (GSAD_DATA_DIR) < 1)

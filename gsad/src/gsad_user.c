@@ -27,6 +27,7 @@
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_settings.h"
 #include "gsad_gmp_auth.h"
+#include "gsad_session.h"
 #include "utils.h"
 
 #include <assert.h> /* for asset */
@@ -35,15 +36,7 @@
 #include <gvm/util/uuidutils.h> /* for gvm_uuid_make */
 
 
-/**
- * @brief User session data.
- */
-GPtrArray *users = NULL;
-
-/**
- * @brief Mutex to prevent concurrent access to user information.
- */
-static GMutex *mutex = NULL;
+#define BROWSER_LANGUAGE "Browser Language"
 
 /**
  * @brief User information structure, for sessions.
@@ -58,23 +51,68 @@ struct user
   gchar *timezone;      ///< Timezone.
   gchar *severity;      ///< Severity class.
   gchar *capabilities;  ///< Capabilities.
-  gchar *language;      ///< User Interface Language, in short form like "en".
+  gchar *language;      ///< User Interface Language.
   gchar *pw_warning;    ///< Password policy warning.
   gchar *address;       ///< Client's IP address.
   time_t time;          ///< Login time.
   gboolean guest;       ///< Whether the user is a guest.
 };
 
+void
+user_renew_session (user_t *user)
+{
+  user->time = time (NULL);
+}
+
 user_t *
-user_new()
+user_new ()
 {
   user_t *user = g_malloc0 (sizeof (user_t));
+  return user;
+}
+
+user_t *
+user_new_with_data (const gchar *username,
+                    const gchar *password,
+                    const gchar *timezone,
+                    const gchar *severity,
+                    const gchar *role,
+                    const gchar *capabilities,
+                    const gchar *language,
+                    const gchar *pw_warning,
+                    const gchar *address,
+                    const gboolean guest)
+{
+  user_t *user = user_new();
+
+  user->cookie = gvm_uuid_make ();
+  user->token = gvm_uuid_make ();
+
+  user->username = g_strdup (username);
+  user->password = g_strdup (password);
+  user->timezone = g_strdup (timezone);
+  user->severity = g_strdup (severity);
+  user->role = g_strdup (role);
+  user->capabilities = g_strdup (capabilities);
+  user->language = g_strdup (language);
+  user->pw_warning = g_strdup (pw_warning);
+  user->address = g_strdup (address);
+  user->guest = guest;
+
+  user_set_language (user, language);
+  user_renew_session (user);
+
   return user;
 }
 
 void
 user_free (user_t *user)
 {
+  if (!user)
+    {
+      return;
+    }
+
   g_free(user->cookie);
   g_free(user->token);
   g_free(user->username);
@@ -92,6 +130,11 @@ user_free (user_t *user)
 user_t *
 user_copy (user_t *user)
 {
+  if (!user)
+    {
+      return NULL;
+    }
+
   user_t *copy = user_new();
 
   copy->cookie = g_strdup(user->cookie);
@@ -117,76 +160,181 @@ user_session_expired (user_t *user)
   return (time (NULL) - user->time) > (get_session_timeout () * 60);
 }
 
-gchar *
+const gchar *
 user_get_username (user_t *user)
 {
   return user->username;
 }
 
-gchar *
+const gchar *
 user_get_language (user_t *user)
 {
   return user->language;
 }
 
-gchar *
+const gchar *
 user_get_cookie (user_t *user)
 {
   return user->cookie;
 }
 
+const gchar *
+user_get_token (user_t *user)
+{
+  return user->token;
+}
+
+const gchar *
+user_get_capabilities (user_t *user)
+{
+  return user->capabilities;
+}
+
+const gchar *
+user_get_password_warning (user_t *user)
+{
+  return user->pw_warning;
+}
+
+const gchar *
+user_get_timezone (user_t *user)
+{
+  return user->timezone;
+}
+
+const gchar *
+user_get_client_address (user_t *user)
+{
+  return user->address;
+}
+
+const gchar *
+user_get_severity (user_t *user)
+{
+  return user->severity;
+}
+
+const gchar *
+user_get_role (user_t *user)
+{
+  return user->role;
+}
+
+const gchar *
+user_get_password (user_t *user)
+{
+  return user->password;
+}
+
+gboolean
+user_get_guest (user_t *user)
+{
+  return user->guest;
+}
+
+/**
+ * @brief Set timezone of user.
+ *
+ * @param[in]   user      User.
+ * @param[in]   timezone  Timezone.
+ *
+ */
 void
-user_renew_session (user_t *user)
+user_set_timezone (user_t *user, const gchar *timezone)
 {
-  user->time = time (NULL);
+  g_free (user->timezone);
+
+  user->timezone = g_strdup (timezone);
 }
 
-user_t *
-get_user_by_token (const gchar *token)
+/**
+ * @brief Set password of user.
+ *
+ * @param[in]   user      User.
+ * @param[in]   password  Password.
+ *
+ */
+void
+user_set_password (user_t *user, const gchar *password)
 {
-  int index;
-  user_t * user = NULL;
+  g_free (user->password);
+  g_free (user->pw_warning);
 
-  g_mutex_lock (mutex);
-
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (str_equal (item->token, token))
-        {
-          user = user_copy(item);
-          break;
-        }
-    }
-
-  g_mutex_unlock (mutex);
-
-  return user;
+  user->password = g_strdup (password);
+  user->pw_warning = NULL;
 }
 
-user_t *
-get_user_by_username (const gchar *username)
+/**
+ * @brief Set severity class of user.
+ *
+ * @param[in]   user      User.
+ * @param[in]   severity  Severity class.
+ *
+ */
+void
+user_set_severity (user_t *user, const gchar *severity)
 {
-  int index;
-  user_t * user = NULL;
+  g_free (user->severity);
 
-  g_mutex_lock (mutex);
+  user->severity = g_strdup (severity);
+}
 
-  for (index = 0; index < users->len; index++)
+/**
+ * @brief Set language of user.
+ *
+ * @param[in]   user      User.
+ * @param[in]   language  Language.
+ *
+ */
+void
+user_set_language (user_t *user, const gchar *language)
+{
+  g_free (user->language);
+
+  if (language == NULL || str_equal (language, BROWSER_LANGUAGE))
     {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-      if (str_equal (item->username, username))
-        {
-          user = user_copy(item);
-          break;
-        }
+      user->language = NULL;
+    }
+  else
+    {
+      user->language = g_strdup (language);
+    }
+}
+
+/**
+ * @brief Set username of user.
+ *
+ * @param[in]   user      User.
+ * @param[in]   username  Username.
+ *
+ */
+void
+user_set_username (user_t *user, const gchar *username)
+{
+  g_free (user->username);
+  user->username = g_strdup (username);
+}
+
+/**
+ * @brief Logout a user
+ *
+ * @param[in]  user  User.
+ *
+ * @return 0 success, -1 error.
+ */
+int
+user_logout (user_t *user)
+{
+  user_t * fuser = session_get_user_by_id (user->token);
+
+  if (fuser)
+    {
+      session_remove_user (fuser->token);
+      user_free (fuser);
+      return 0;
     }
 
-  g_mutex_unlock (mutex);
-
-  return user;
+  return -1;
 }
 
 /**
@@ -215,39 +363,26 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
 {
   const gchar * guest_username = get_guest_username ();
 
-  user_t *user = get_user_by_username (username);
+  user_t *user = session_get_user_by_username (username);
 
   if (user && user_session_expired (user))
     {
-      user_remove (user);
+      session_remove_user (user->token);
+      user_free (user);
     }
 
-  user = user_new();
-  user_renew_session (user);
-  user->cookie = gvm_uuid_make ();
-  user->token = gvm_uuid_make ();
-  user->username = g_strdup (username);
-  user->password = g_strdup (password);
-  user->role = g_strdup (role);
-  user->timezone = g_strdup (timezone);
-  user->severity = g_strdup (severity);
-  user->capabilities = g_strdup (capabilities);
-  user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
-
-  set_language_code (&user->language, language);
+  gboolean guest = 0;
 
   if (guest_username)
-    user->guest = str_equal (username, guest_username) ? 1 : 0;
-  else
-    user->guest = 0;
+    {
+      guest = str_equal (username, guest_username) ? 1 : 0;
+    }
 
-  user->address = g_strdup (address);
+  user = user_new_with_data (username, password, timezone, severity, role,
+                             capabilities, language, pw_warning, address,
+                             guest);
 
-  g_mutex_lock (mutex);
-
-  g_ptr_array_add (users, (gpointer) user_copy(user));
-
-  g_mutex_unlock (mutex);
+  session_add_user (user->token, user);
 
   return user;
 }
@@ -261,7 +396,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  * @param[in]   cookie       Token in cookie.
  * @param[in]   token        Token request parameter.
  * @param[in]   address      Client's IP address.
- * @param[out]  user_return  User.
+ * @param[out]  user_return  Copy of the User or NULL in error cases.
  *
  * @return 0 ok (user in user_return),
  *         1 bad token,
@@ -278,85 +413,16 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
            user_t **user_return)
 {
   user_t *user = NULL;
-  int index;
-  const gchar * guest_username = get_guest_username ();
-  const gchar * guest_password = get_guest_password ();
-
   if (token == NULL)
     return USER_BAD_MISSING_TOKEN;
 
-  if (guest_username && token && str_equal (token, "guest"))
-    {
-      int ret;
-      gchar *timezone, *role, *capabilities, *severity, *language;
-      gchar *pw_warning;
-
-      if (cookie)
-        {
-          /* Look for an existing guest user from the same browser (that is,
-           * with the same cookie). */
-
-          g_mutex_lock (mutex);
-
-          for (index = 0; index < users->len; index++)
-            {
-              user_t *item;
-              item = (user_t*) g_ptr_array_index (users, index);
-              if (item->guest && str_equal (item->cookie, cookie))
-                {
-                  user = user_copy (item);
-                  break;
-                }
-            }
-
-          g_mutex_unlock (mutex);
-
-          if (user)
-            {
-              *user_return = user;
-              user_renew_session (user);
-              return USER_OK;
-            }
-        }
-
-      /* Log in as guest. */
-
-      ret = authenticate_gmp (guest_username,
-                              guest_password,
-                              &role,
-                              &timezone,
-                              &severity,
-                              &capabilities,
-                              &language,
-                              &pw_warning);
-      if (ret == 1)
-        return USER_GUEST_LOGIN_FAILED;
-      else if (ret == 2)
-        return USER_GMP_DOWN;
-      else if (ret == -1)
-        return USER_GUEST_LOGIN_ERROR;
-      else
-        {
-          user_t *user;
-          user = user_add (guest_username, guest_password, timezone, severity,
-                           role, capabilities, language, pw_warning, address);
-          *user_return = user;
-          g_free (timezone);
-          g_free (severity);
-          g_free (capabilities);
-          g_free (language);
-          g_free (role);
-          g_free (pw_warning);
-          return USER_OK;
-        }
-    }
-
-  user = get_user_by_token (token);
+  user = session_get_user_by_id (token);
 
   if (user)
     {
       if (user_session_expired (user))
         {
+          session_remove_user (user->token);
           user_free (user);
           return USER_EXPIRED_TOKEN;
         }
@@ -375,264 +441,16 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
         }
       else
         {
-          *user_return = user;
           // renew session time
           user_renew_session (user);
+          session_add_user (user->token, user);
 
-          // mutex will be unlocked with user_release
+          *user_return = user;
           return USER_OK;
         }
     }
 
-    /* should it be really USER_EXPIRED_TOKEN?
-    * No user has been found therefore the token couldn't even expire */
+  /* should it be really USER_EXPIRED_TOKEN?
+  * No user has been found therefore the token couldn't even expire */
   return USER_EXPIRED_TOKEN;
 }
-
-/**
- * @brief Set timezone of user.
- *
- * @param[in]   token     User token.
- * @param[in]   timezone  Timezone.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_timezone (const gchar *token, const gchar *timezone)
-{
-  int ret = 1;
-
-  user_t * user = get_user_by_token (token);
-
-  if (user)
-    {
-      g_free (user->timezone);
-
-      user->timezone = g_strdup (timezone);
-
-      ret = 0;
-    }
-
-  return ret;
-}
-
-/**
- * @brief Set password of user.
- *
- * @param[in]   token     User token.
- * @param[in]   password  Password.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_password (const gchar *token, const gchar *password)
-{
-  int ret = 1;
-
-  user_t *user = get_user_by_token (token);
-
-  if (user)
-    {
-      g_free (user->password);
-      g_free (user->pw_warning);
-
-      user->password = g_strdup (password);
-      user->pw_warning = NULL;
-
-      ret = 0;
-    }
-
-  return ret;
-}
-
-/**
- * @brief Set severity class of user.
- *
- * @param[in]   token     User token.
- * @param[in]   severity  Severity class.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_severity (const gchar *token, const gchar *severity)
-{
-  int ret = 1;
-
-  user_t *user = get_user_by_token (token);
-
-  if (user)
-    {
-      g_free (user->severity);
-
-      user->severity = g_strdup (severity);
-
-      ret = 0;
-    }
-
-  return ret;
-}
-
-/**
- * @brief Set language of user.
- *
- * @param[in]   token     User token.
- * @param[in]   language  Language.
- *
- * @return 0 ok, 1 failed to find user.
- */
-int
-user_set_language (const gchar *token, const gchar *language)
-{
-  int ret = 1;
-
-  user_t *user = get_user_by_token (token);
-
-  if (user)
-    {
-      g_free (user->language);
-
-      set_language_code (&user->language, language);
-
-      ret = 0;
-    }
-
-  return ret;
-}
-
-/**
- * @brief Logs out all sessions of a given user, except the current one.
- *
- * @param[in]   username        User name.
- * @param[in]   credentials     Current user's credentials.
- *
- * @return 0 ok, -1 error.
- */
-int
-user_logout_all_sessions (const gchar *username, credentials_t *credentials)
-{
-  int index;
-
-  g_mutex_lock (mutex);
-
-  for (index = 0; index < users->len; index++)
-    {
-      user_t *item;
-      item = (user_t*) g_ptr_array_index (users, index);
-
-      if (str_equal (item->username, username)
-          && !str_equal (item->token, credentials->token))
-        {
-          g_debug ("%s: logging out user '%s', token '%s'",
-                   __FUNCTION__, item->username, item->token);
-          g_ptr_array_remove (users, (gpointer) item);
-
-          user_free (item);
-
-          index --;
-        }
-    }
-
-  g_mutex_unlock (mutex);
-
-  return 0;
-}
-
-/**
- * @brief Remove a user from the session "database", freeing the user_t too.
- *
- * @param[in]  user  User.
- */
-void
-user_remove (user_t *user)
-{
-  g_mutex_lock (mutex);
-  g_ptr_array_remove (users, (gpointer) user);
-  g_mutex_unlock (mutex);
-
-  user_free(user);
-}
-
-credentials_t *
-credentials_new (user_t *user, const char *language, const char *client_address)
-{
-  credentials_t *credentials;
-
-  assert (user->username);
-  assert (user->password);
-  assert (user->role);
-  assert (user->timezone);
-  assert (user->capabilities);
-  assert (user->token);
-  credentials = g_malloc0 (sizeof (credentials_t));
-  credentials->username = g_strdup (user->username);
-  credentials->password = g_strdup (user->password);
-  credentials->role = g_strdup (user->role);
-  credentials->timezone = g_strdup (user->timezone);
-  credentials->severity = g_strdup (user->severity);
-  credentials->capabilities = g_strdup (user->capabilities);
-  credentials->token = g_strdup (user->token);
-  credentials->pw_warning = user->pw_warning ? g_strdup (user->pw_warning)
-                                             : NULL;
-  credentials->language = g_strdup (language);
-  credentials->client_address = g_strdup (client_address);
-  credentials->guest = user->guest;
-  credentials->sid = g_strdup (user->cookie);
-
-  return credentials;
-}
-
-void
-credentials_free (credentials_t *creds)
-{
-  if (!creds)
-    return;
-
-  g_free (creds->username);
-  g_free (creds->password);
-  g_free (creds->role);
-  g_free (creds->timezone);
-  g_free (creds->token);
-  g_free (creds->caller);
-  g_free (creds->current_page);
-  g_free (creds->capabilities);
-  g_free (creds->language);
-  g_free (creds->severity);
-  g_free (creds->pw_warning);
-  g_free (creds->client_address);
-  g_free (creds->sid);
-  /* params and chart_prefs are not duplicated. */
-  g_free (creds);
-}
-
-/**
- * @brief Removes the users token
- *
- * @param[in]  credentials  Use credentials.
- *
- * @return 0 success, -1 error.
- */
-int
-logout (credentials_t *credentials)
-{
-  if (credentials->token == NULL)
-    return 0;
-
-  user_t * user = get_user_by_token (credentials->token);
-
-  if (user)
-    {
-      user_remove (user);
-      return 0;
-    }
-
-  return -1;
-}
-
-void
-init_users ()
-{
-  mutex = g_malloc (sizeof (GMutex));
-  g_mutex_init (mutex);
-  users = g_ptr_array_new ();
-}
-

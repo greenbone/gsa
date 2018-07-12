@@ -33,6 +33,8 @@
 #include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
+#include "gsad_credentials.h" /* for credentials_t */
+#include "gsad_user.h" /* for user_t */
 
 #include <gvm/base/networking.h> /* for INET6_ADDRSTRLEN */
 #include <gvm/util/xmlutils.h>   /* for find_element_in_xml_file */
@@ -490,13 +492,19 @@ handle_setup_credentials (http_connection_t *connection,
 {
   user_t *user = (user_t *)data;
   const gchar * accept_language;
-  gchar *language;
   credentials_t *credentials;
   char client_address[INET6_ADDRSTRLEN];
 
-  language = g_strdup (user_get_language(user));
-
   get_client_address (connection, client_address);
+
+  gchar *caller = reconstruct_url (connection, url);
+  if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
+    {
+      g_free (caller);
+      caller = NULL;
+    }
+
+  gchar *language = g_strdup (user_get_language (user));
 
   if (!language)
     /* Accept-Language: de; q=1.0, en; q=0.5 */
@@ -513,21 +521,15 @@ handle_setup_credentials (http_connection_t *connection,
           return MHD_YES;
         }
       language = accept_language_to_env_fmt (accept_language);
-      credentials = credentials_new (user, language, client_address);
-      g_free (language);
+      credentials = credentials_new (user, language, caller);
     }
   else
-    credentials = credentials_new (user, language, client_address);
-
-  credentials->caller = reconstruct_url (connection, url);
-  if (credentials->caller
-      && g_utf8_validate (credentials->caller, -1, NULL) == FALSE)
     {
-      g_free (credentials->caller);
-      credentials->caller = NULL;
+      credentials = credentials_new (user, language, caller);
     }
 
   user_free (user);
+  g_free (language);
 
   return http_handler_next (connection, method, url, con_info, handler,
                             credentials);
@@ -541,9 +543,11 @@ handle_logout (http_connection_t *connection,
 {
   user_t * user = (user_t *)data;
 
+  user_logout (user);
+
   g_debug ("Logged out user %s\n", user_get_username(user));
 
-  user_remove (user);
+  user_free (user);
 
   return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
 }

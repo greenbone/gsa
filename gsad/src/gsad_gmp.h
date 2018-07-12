@@ -528,7 +528,7 @@ char * get_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
 char * get_users_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * save_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                      char **, char **, int *, cmd_response_data_t*);
+                      cmd_response_data_t*);
 char * get_vulns_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * save_auth_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -574,8 +574,7 @@ char * edit_my_settings_gmp (gvm_connection_t *, credentials_t *,
 char * get_my_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 char * save_my_settings_gmp (gvm_connection_t *, credentials_t *,
-                             params_t *, const char *, char **, char **,
-                             char **, char **, cmd_response_data_t*);
+                             params_t *, const gchar *, cmd_response_data_t*);
 
 char * get_info_gmp (gvm_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);

@@ -30,8 +30,9 @@
 #include <glib.h>
 
 #include "gsad_content_type.h" /* for content_type_t */
-#include "gsad_user.h"
+#include "gsad_user.h" /* for user_t */
 #include "gsad_cmd.h" /* for cmd_response_data_t */
+#include "gsad_credentials.h" /* for credentials_t */
 
 /**
  * @brief At least maximum length of rfc2822 format date.

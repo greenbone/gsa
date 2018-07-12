@@ -90,10 +90,12 @@ add_executable (gsad
                 gsad.c
                 gsad_base.c
                 gsad_cmd.c
+                gsad_credentials.c
                 gsad_gmp.c
                 gsad_http.c
                 gsad_http_handler.c
                 gsad_i18n.c
+                gsad_session.c
                 gsad_settings.c
                 gsad_user.c
                 utils.c
