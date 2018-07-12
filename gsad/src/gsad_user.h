@@ -41,70 +41,60 @@
 #define USER_GUEST_LOGIN_ERROR -1
 
 /**
- *  @brief Structure of credential related information.
- */
-typedef struct
-{
-  struct timeval cmd_start; ///< Seconds since command page handler started.
-  char *username;     ///< Name of user.
-  char *password;     ///< User's password.
-  char *role;         ///< User's role.
-  char *timezone;     ///< User's timezone.
-  char *token;        ///< Session token.
-  char *caller;       ///< Caller URL, for POST relogin.
-  char *current_page; ///< Current page URL, for refresh.
-  char *capabilities; ///< Capabilites of manager.
-  char *language;     ///< Accept-Language browser header.
-  char *severity;     ///< Severity class.
-  char *pw_warning;   ///< Password policy warning message
-  char *client_address; ///< Client's address.
-  GTree *last_filt_ids; ///< Last filter ids.
-  params_t *params;   ///< Request parameters.
-  int guest;          ///< Whether the user is a guest user.
-  char *sid;          ///< Session ID of the user.
-} credentials_t;
-
-/**
  * @brief User information type, for sessions.
  */
 typedef struct user user_t;
 
+void user_free (user_t *user);
+
+user_t *user_copy (user_t *user);
+
 int user_find (const gchar *cookie, const gchar *token, const char *address,
                user_t **user_return);
 
-void user_remove (user_t *user);
+user_t *user_add (const gchar *username, const gchar *password,
+                  const gchar *timezone, const gchar *severity,
+                  const gchar *role, const gchar *capabilities,
+                  const gchar *language, const gchar *pw_warning,
+                  const char *address);
 
-void user_free (user_t *user);
 
-user_t *
-user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *severity, const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning, const char *address);
+void user_set_timezone (user_t *user, const gchar *timezone);
 
-int user_set_timezone (const gchar *token, const gchar *timezone);
+void user_set_username (user_t *user, const gchar *username);
 
-int user_set_password (const gchar *token, const gchar *password);
+void user_set_password (user_t *user, const gchar *password);
 
-int user_set_severity (const gchar *token, const gchar *severity);
+void user_set_severity (user_t *user, const gchar *severity);
 
-int user_set_language (const gchar *token, const gchar *language);
+void user_set_language (user_t *user, const gchar *language);
 
-int user_logout_all_sessions (const gchar *username,
-                              credentials_t *credentials);
 
-gchar * user_get_username (user_t *user);
+const gchar *user_get_username (user_t *user);
 
-gchar * user_get_language (user_t *user);
+const gchar *user_get_password (user_t *user);
 
-gchar * user_get_cookie (user_t *user);
+const gchar *user_get_language (user_t *user);
 
-credentials_t * credentials_new (user_t *user, const char *language,
-                                 const char *client_address);
+const gchar *user_get_cookie (user_t *user);
 
-void credentials_free (credentials_t *creds);
+const gchar *user_get_token (user_t *user);
 
-int logout (credentials_t *);
+const gchar *user_get_timezone (user_t *user);
 
-void init_users ();
+gboolean user_get_guest (user_t *user);
+
+const gchar *user_get_client_address (user_t *user);
+
+const gchar *user_get_role (user_t *user);
+
+const gchar *user_get_severity (user_t *user);
+
+const gchar *user_get_password_warning (user_t *user);
+
+const gchar *user_get_capabilities (user_t *user);
+
+
+int user_logout (user_t *user);
 
 #endif /* _GSAD_USER_H_ */

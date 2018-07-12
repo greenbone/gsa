@@ -1,13 +1,12 @@
 /* Greenbone Security Assistant
- * $Id$
- * Description: Headers/structs used generally in GSA
+
+ * Description: GSAD user session handling
  *
  * Authors:
- * Matthew Mundell <matthew.mundell@greenbone.net>
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009, 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,26 +23,23 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-/**
- * @file gsad_base.h
- * @brief Headers/structs used generally in GSA.
- */
-
-#ifndef _GSAD_BASE_H
-#define _GSAD_BASE_H
+#ifndef _GSAD_SESSION_H
+#define _GSAD_SESSION_H
 
 #include <glib.h>
-#include <sys/time.h>
 
-#include "gsad_cmd.h" /* for cmd_response_data_t */
-#include "gsad_user.h" /* for credentials_t */
+#include "gsad_user.h"
 
-int gsad_base_init ();
-int gsad_base_cleanup ();
-int get_chroot_state ();
-void set_chroot_state (int);
-int get_http_only ();
-void set_http_only (int);
-char *ctime_r_strip_newline (time_t *, char *);
+void session_add_user (const gchar *id, user_t *user);
 
-#endif /* not _GSAD_BASE_H */
+void session_remove_user (const gchar *id);
+
+user_t *session_get_user_by_id (const gchar *id);
+
+user_t *session_get_user_by_username (const gchar *username);
+
+void session_remove_other_sessions (const gchar *id, user_t *user);
+
+void session_init ();
+
+#endif

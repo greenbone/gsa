@@ -58,6 +58,8 @@
 #include "gsad_http.h" /* for gsad_message, logout_xml */
 #include "gsad_base.h" /* for set_language_code */
 #include "gsad_i18n.h"
+#include "gsad_credentials.h"
+#include "gsad_session.h"
 #include "utils.h"
 
 #include <gvm/base/cvss.h>
@@ -342,7 +344,8 @@ int
 command_enabled (credentials_t *credentials, const gchar *name)
 {
   /* TODO Hack.  Fails if command named in summary of another command. */
-  return strstr (credentials->capabilities, name) ? 1 : 0;
+  user_t *user = credentials_get_user (credentials); // TODO pass user_t directly
+  return strstr (user_get_capabilities(user), name) ? 1 : 0;
 }
 
 /**
@@ -459,6 +462,12 @@ envelope_gmp (gvm_connection_t *connection,
 
   assert (credentials);
 
+  user_t *user = credentials_get_user (credentials);
+  const gchar *caller = credentials_get_caller (credentials);
+  const gchar *current_page = credentials_get_current_page (credentials);
+  const gchar *timezone = user_get_timezone (user);
+  const gchar *pw_warning = user_get_password_warning (user);
+
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
@@ -482,38 +491,33 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<backend_operation>%.2f</backend_operation>",
                                  GSAD_VERSION,
                                  vendor_version_get (),
-                                 credentials->token,
-                                 credentials->caller ? credentials->caller : "",
-                                 credentials->current_page
-                                   ? credentials->current_page
-                                   : (credentials->caller
-                                       ? credentials->caller
+                                 user_get_token(user),
+                                 caller ? caller : "",
+                                 current_page
+                                   ? current_page
+                                   : (caller
+                                       ? caller
                                        : ""),
                                  ctime_now,
-                                 credentials->timezone
-                                   ? credentials->timezone : "",
-                                 credentials->username,
-                                 credentials->role,
-                                 credentials->severity,
-                                 credentials->language,
-                                 credentials->guest,
-                                 credentials->client_address,
-                                 (double) ((tv.tv_sec
-                                            - credentials->cmd_start.tv_sec)
-                                           * 1000000L
-                                           + tv.tv_usec
-                                           - credentials->cmd_start.tv_usec)
-                                 / 1000000.0);
+                                 timezone ? timezone : "",
+                                 user_get_username (user),
+                                 user_get_role (user),
+                                 user_get_severity (user),
+                                 credentials_get_language (credentials),
+                                 user_get_guest (user),
+                                 user_get_client_address (user),
+                                 credentials_get_cmd_duration(credentials));
+
   g_string_append (string, res);
   g_free (res);
 
-  if (credentials->pw_warning)
+  if (pw_warning)
     {
       gchar *warning_elem;
       warning_elem = g_markup_printf_escaped ("<password_warning>"
                                               "%s"
                                               "</password_warning>",
-                                              credentials->pw_warning);
+                                              pw_warning);
       g_string_append (string, warning_elem);
       g_free (warning_elem);
     }
@@ -556,7 +560,7 @@ envelope_gmp (gvm_connection_t *connection,
                           "<capabilities>%s</capabilities>"
                           "%s"
                           "</envelope>",
-                          credentials->capabilities,
+                          user_get_capabilities (user),
                           xml);
   g_free (xml);
 
@@ -1975,7 +1979,8 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
       format_name = NULL;
     }
 
-  ret = gvm_export_file_name (fname_format, credentials->username,
+  user_t *user = credentials_get_user (credentials);
+  ret = gvm_export_file_name (fname_format, user_get_username (user),
                               type, uuid, creation_time, modification_time,
                               name, format_name);
   return ret;
@@ -3029,12 +3034,11 @@ new_task (gvm_connection_t *connection, credentials_t * credentials,
     g_string_append (xml, extra_xml);
   if (message)
     g_string_append_printf (xml, GSAD_MESSAGE_INVALID, message, "Create Task");
+
   g_string_append_printf (xml,
-                          "<user>%s</user>"
                           "<apply_overrides>%i</apply_overrides>"
                           "<alerts>%s</alerts>"
                           "</new_task>",
-                          credentials->username,
                           apply_overrides,
                           alerts ? alerts : "1");
 
@@ -3703,12 +3707,11 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  const char *task_id, *next, *sort_field, *sort_order;
+  const char *task_id, *sort_field, *sort_order;
   const char *overrides, *alerts;
   int apply_overrides;
 
   task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   overrides = params_value (params, "overrides");
@@ -3727,9 +3730,6 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
                            "Diagnostics: Required parameter was NULL.",
                            response_data);
     }
-
-  if (next == NULL)
-    next = "get_task";
 
   if (gvm_connection_sendf (connection,
                             "<commands>"
@@ -3778,18 +3778,13 @@ edit_task (gvm_connection_t *connection, credentials_t * credentials,
   g_string_append_printf (xml,
                           "<edit_task>"
                           "<task id=\"%s\"/>"
-                          "<user>%s</user>"
                           "<alerts>%s</alerts>"
-                          /* Page that follows. */
-                          "<next>%s</next>"
                           /* Passthroughs. */
                           "<sort_field>%s</sort_field>"
                           "<sort_order>%s</sort_order>"
                           "<apply_overrides>%i</apply_overrides>",
                           task_id,
-                          credentials->username,
                           alerts ? alerts : "1",
-                          next,
                           sort_field,
                           sort_order,
                           apply_overrides);
@@ -17105,13 +17100,13 @@ send_settings_filters (gvm_connection_t *connection, params_t *data,
  * @return Enveloped XML object.
  */
 char *
-save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      const char *accept_language, char **timezone,
-                      char **password, char **severity, char **language,
+save_my_settings_gmp (gvm_connection_t *connection,
+                      credentials_t * credentials,
+                      params_t *params,
+                      const gchar *accept_language,
                       cmd_response_data_t* response_data)
 {
-  const char *lang, *text, *old_passwd, *passwd, *status, *max;
+  const char *lang, *text, *old_passwd, *passwd, *max;
   const char *details_fname, *list_fname, *report_fname;
   gchar *lang_64, *text_64, *max_64, *fname_64;
   GString *xml;
@@ -17119,12 +17114,11 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   params_t *changed, *defaults, *filters;
   int modify_failed = 0;
   const char *changed_value;
+  gboolean user_changed = 0;
+
+  user_t *user = credentials_get_user (credentials);
 
   changed = params_values (params, "settings_changed:");
-  *timezone = NULL;
-  *password = NULL;
-  *severity = NULL;
-  *language = NULL;
 
   text = params_value (params, "text");
   old_passwd = params_value (params, "old_password");
@@ -17135,18 +17129,14 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
   list_fname = params_value (params, "list_fname");
   report_fname = params_value (params, "report_fname");
 
-  if ((text == NULL)
-      || (passwd == NULL)
-      || (old_passwd == NULL)
-      || (max == NULL)
-      || (lang == NULL)
-      || (details_fname == NULL)
-      || (list_fname == NULL)
-      || (report_fname == NULL))
-    return edit_my_settings (connection, credentials, params,
-                             GSAD_MESSAGE_INVALID_PARAM
-                               ("Save My Settings"),
-                             response_data);
+  CHECK_VARIABLE_INVALID (text, "Save Settings")
+  CHECK_VARIABLE_INVALID (text, "Save Settings")
+  CHECK_VARIABLE_INVALID (old_passwd, "Save Settings")
+  CHECK_VARIABLE_INVALID (max, "Save Settings")
+  CHECK_VARIABLE_INVALID (lang, "Save Settings")
+  CHECK_VARIABLE_INVALID (details_fname, "Save Settings")
+  CHECK_VARIABLE_INVALID (list_fname, "Save Settings")
+  CHECK_VARIABLE_INVALID (report_fname, "Save Settings")
 
   xml = g_string_new ("");
 
@@ -17161,7 +17151,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
       /* Send Password setting */
 
       auth_opts = gmp_authenticate_info_opts_defaults;
-      auth_opts.username = credentials->username;
+      auth_opts.username = user_get_username (user);
       auth_opts.password = old_passwd;
       switch (gmp_authenticate_info_ext_c (connection, auth_opts))
         {
@@ -17235,12 +17225,11 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         }
       xml_string_append (xml, "</save_setting>");
 
-      status = entity_attribute (entity, "status");
-      if (status && (strlen (status) > 0) && (status[0] == '2'))
+      if (gmp_success (entity) == 1)
         {
-          g_free (credentials->password);
-          credentials->password = g_strdup (passwd);
-          *password = g_strdup (passwd);
+          user_set_password (user, passwd);
+          session_remove_other_sessions (user_get_token (user), user);
+          user_changed = 1;
         }
       else
         {
@@ -17291,17 +17280,17 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         }
       xml_string_append (xml, "</save_setting>");
 
-      status = entity_attribute (entity, "status");
-      if (status && (strlen (status) > 0) && (status[0] == '2'))
+      if (gmp_success (entity) == 1)
         {
-          g_free (credentials->timezone);
-          credentials->timezone = g_strdup (strlen (text) ? text : "UTC");
-          *timezone = g_strdup (strlen (text) ? text : "UTC");
+          const gchar *timezone = strlen (text) ? text : "UTC";
+
+          user_set_timezone (user, timezone);
+          user_changed = 1;
 
           /* Set the timezone, so that the ENVELOPE/TIME
            * uses the right timezone. */
 
-          if (setenv ("TZ", credentials->timezone, 1) == -1)
+          if (setenv ("TZ", timezone, 1) == -1)
             {
               g_critical ("%s: failed to set TZ\n", __FUNCTION__);
               exit (EXIT_FAILURE);
@@ -17360,7 +17349,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! gmp_success (entity))
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -17568,22 +17557,10 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (gmp_success (entity))
+      if (gmp_success (entity) == 1)
         {
-          gchar *language_code;
-          set_language_code (&language_code, lang);
-          if (language_code)
-            {
-              g_free (credentials->language);
-              credentials->language = language_code;
-              *language = g_strdup (lang);
-            }
-          else
-            {
-              g_free (credentials->language);
-              credentials->language = accept_language_to_env_fmt (accept_language);
-              *language = NULL;
-            }
+          user_set_language (user, lang);
+          user_changed = 1;
         }
       else
         {
@@ -17674,14 +17651,12 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
         }
       xml_string_append (xml, "</save_setting>");
 
-      status = entity_attribute (entity, "status");
-      if (status && (strlen (status) > 0) && (status[0] == '2'))
+      if (gmp_success (entity) == 1)
         {
-          g_free (credentials->severity);
           if ((text != NULL) && (strlen (text) > 0))
             {
-              credentials->severity = g_strdup (text);
-              *severity = g_strdup (text);
+              user_set_severity (user, text);
+              user_changed = 1;
             }
         }
       else
@@ -17740,7 +17715,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! gmp_success (entity))
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -17795,7 +17770,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! gmp_success (entity))
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -17853,11 +17828,16 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *
                                response_data);
         }
       xml_string_append (xml, "</save_setting>");
-      if (! gmp_success (entity))
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
         }
+    }
+
+  if (user_changed)
+    {
+      session_add_user (user_get_token(user), user);
     }
 
   if (modify_failed)
@@ -20394,13 +20374,14 @@ edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *
     {
       gchar *response;
       entity_t entity;
+      user_t *user = credentials_get_user (credentials);
 
       response = NULL;
       entity = NULL;
       switch (gmpf (connection, credentials, &response, &entity, response_data,
                     "<get_groups"
                     " filter=\"rows=-1 owner=%s\"/>",
-                    credentials->username))
+                    user_get_username (user)))
         {
           case 0:
           case -1:
@@ -22162,17 +22143,13 @@ auth_settings_gmp (gvm_connection_t *connection, credentials_t *
  * @param[in]  connection       Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
  * @param[in]  params           Request parameters.
- * @param[out] password_return  Password.  Caller must free.
- * @param[out] modified_user    Name of user modified. Caller must free.
- * @param[out] logout_user      Whether the user should be logged out.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 char *
 save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
-               params_t *params, char **password_return, char **modified_user,
-               int *logout_user, cmd_response_data_t *response_data)
+               params_t *params, cmd_response_data_t *response_data)
 {
   int ret;
   gchar *html, *response, *buf;
@@ -22181,11 +22158,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
-  const char *status;
-
-  *password_return = NULL;
-  *modified_user = NULL;
-  *logout_user = 0;
 
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
@@ -22201,28 +22173,24 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   user_id = params_value (params, "user_id");
   comment = params_value (params, "comment");
 
-  CHECK_VARIABLE_INVALID (user_id, "Edit User");
-  CHECK_VARIABLE_INVALID (modify_password, "Edit User");
-  CHECK_VARIABLE_INVALID (hosts, "Edit User");
-  CHECK_VARIABLE_INVALID (hosts_allow, "Edit User");
+  CHECK_VARIABLE_INVALID (user_id, "Save User");
+  CHECK_VARIABLE_INVALID (modify_password, "Save User");
+  CHECK_VARIABLE_INVALID (hosts, "Save User");
+  CHECK_VARIABLE_INVALID (hosts_allow, "Save User");
   CHECK_VARIABLE_INVALID (ifaces, "Save User");
   CHECK_VARIABLE_INVALID (ifaces_allow, "Save User");
+  CHECK_VARIABLE_INVALID (login, "Save User");
+  CHECK_VARIABLE_INVALID (old_login, "Save User");
 
-  if (modify_password && strcmp (modify_password, "1"))
+  if (modify_password && str_equal (modify_password, "1"))
     {
-      CHECK_VARIABLE_INVALID (password, "Create User");
+      // require password if modify_password is 1 (== set new password)
+      CHECK_VARIABLE_INVALID (password, "Save User");
     }
 
   if (params_given (params, "comment"))
     {
       CHECK_VARIABLE_INVALID (comment, "Save User");
-    }
-
-  if (params_given (params, "login")
-      && !(params_given (params, "current_user")))
-    {
-      CHECK_VARIABLE_INVALID (login, "Save User");
-      CHECK_VARIABLE_INVALID (old_login, "Save User");
     }
 
   /* Modify the user. */
@@ -22327,27 +22295,30 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
              response_data,
              command->str);
   g_string_free (command, TRUE);
+
+  user_t *current_user = credentials_get_user(credentials);
+
   switch (ret)
     {
       case 0:
-        status = entity_attribute (entity, "status");
-        if (status && (strlen (status) > 0) && (status[0] == '2'))
+        if (gmp_success (entity) == 1)
           {
-            *modified_user
-              = g_strdup (old_login ? old_login : credentials->username);
+            user_t * user = session_get_user_by_username (old_login);
 
-            if (strcmp (modify_password, "0")
-                || (login && *modified_user && strcmp (*modified_user, login)))
-              *logout_user = 1;
-
-            if (strcmp (modify_password, "0")
-                && strcmp (modify_password, "2")
-                && strcmp (modify_password, "3")
-                && params_given (params, "current_user"))
+            if (!str_equal(modify_password, "0") ||
+              (user && !str_equal(old_login, login)))
               {
-                g_free (credentials->password);
-                credentials->password = g_strdup (password);
-                *password_return = g_strdup (password);
+                /* logout all other user sessions if new password was set,
+                   authentication type has changed or username has changed */
+                session_remove_other_sessions(user_get_token(user), user);
+              }
+
+            if (str_equal (modify_password, "1") &&
+             str_equal (old_login, user_get_username (current_user)))
+              {
+                /* update password and username of current user */
+                user_set_password (current_user, password);
+                user_set_username (current_user, login);
               }
           }
         break;
@@ -22383,15 +22354,18 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   if (gmp_success (entity)
-      && (!strcmp (modify_password, "2")
-          || !strcmp (modify_password, "3"))
-      && params_given (params, "current_user"))
+      && (str_equal (modify_password, "2")
+          || !str_equal (modify_password, "3"))
+      && str_equal (old_login, user_get_username (current_user)))
     {
       free_entity (entity);
       g_free (response);
-      html = logout_xml (credentials,
-                         "Authentication method changed. Please login with "
-                         "LDAP password.", response_data);
+
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
+      return gsad_message (credentials,
+                           "Authentication Required", __FUNCTION__, __LINE__,
+                           "Authentication method changed. Please login with ",
+                            response_data);
     }
   else
     html = response_from_entity (connection, credentials, params, entity,
@@ -24188,7 +24162,7 @@ login (http_connection_t *con,
                      login ?: "",
                      client_address);
 
-          credentials = credentials_new (user, language, client_address);
+          credentials = credentials_new (user, language, NULL);
 
           char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
 
@@ -24245,16 +24219,10 @@ manager_connect (credentials_t *credentials,
       return -1;
     }
 
-#if 0
-  g_debug ("in manager_connect: Trying to authenticate with %s/%s\n",
-           credentials->username,
-           credentials->password);
-#endif
-
-
+  user_t *user = credentials_get_user (credentials);
   auth_opts = gmp_authenticate_info_opts_defaults;
-  auth_opts.username = credentials->username;
-  auth_opts.password = credentials->password;
+  auth_opts.username = user_get_username(user);
+  auth_opts.password = user_get_password(user);
   if (gmp_authenticate_info_ext_c (connection, auth_opts))
     {
       g_debug ("authenticate failed!\n");

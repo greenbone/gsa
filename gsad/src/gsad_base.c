@@ -129,29 +129,6 @@ set_http_only (int state)
 }
 
 /**
- * @brief Set language code of user.
- *
- * Caller must handle locking.
- *
- * @param[in]   lang      Language slot. May be a language name or code
- * @param[in]   language  User Interface Language.
- */
-void
-set_language_code (gchar **lang, const gchar *language)
-{
-  if (language == NULL || strcmp (language, "Browser Language") == 0)
-    *lang = NULL;
-  else if (strcmp (language, "Chinese") == 0)
-    *lang = g_strdup ("zh_CN");
-  else if (strcmp (language, "English") == 0)
-    *lang = g_strdup ("en");
-  else if (strcmp (language, "German") == 0)
-    *lang = g_strdup ("de");
-  else
-    *lang = g_strdup (language);
-}
-
-/**
  * @brief Return string from ctime_r with newline replaces with terminator.
  *
  * @param[in]  time    Time.

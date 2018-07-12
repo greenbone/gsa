@@ -1162,11 +1162,11 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  *
  * @todo Make it accept formatted strings.
  *
- * @param[in]  credentials  User authentication information.
- * @param[in]  title     The title for the message.
- * @param[in]  function  The function in which the error occurred.
- * @param[in]  line      The line number at which the error occurred.
- * @param[in]  msg       The response message.
+ * @param[in]  credentials     User authentication information.
+ * @param[in]  title           The title for the message.
+ * @param[in]  function        The function in which the error occurred.
+ * @param[in]  line            The line number at which the error occurred.
+ * @param[in]  msg             The response message.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return An XML document as a newly allocated string.
@@ -1176,33 +1176,21 @@ gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
               cmd_response_data_t *response_data)
 {
-  gchar *xml, *message;
+  gchar *xml, *xmltitle;
 
   if (function)
     {
-      message = g_strdup_printf ("<gsad_response>"
-                                 "<title>%s: %s:%i (GSA %s)</title>"
-                                 "<message>%s</message>"
-                                 "<token>%s</token>"
-                                 "</gsad_response>",
-                                 title,
-                                 function,
-                                 line,
-                                 GSAD_VERSION,
-                                 msg,
-                                 credentials ? credentials->token : "");
+      xmltitle = g_strdup_printf ("<title>%s: %s:%i (GSA %s)</title>",
+                                  title,
+                                  function,
+                                  line,
+                                  GSAD_VERSION);
     }
   else
     {
-      message = g_strdup_printf ("<gsad_response>"
-                                 "<title>%s (GSA %s)</title>"
-                                 "<message>%s</message>"
-                                 "<token>%s</token>"
-                                 "</gsad_response>",
-                                 title,
-                                 GSAD_VERSION,
-                                 msg,
-                                 credentials ? credentials->token : "");
+      xmltitle = g_strdup_printf ("<title>%s (GSA %s)</title>",
+                                  title,
+                                  GSAD_VERSION);
     }
 
   if (credentials)
@@ -1210,6 +1198,7 @@ gsad_message (credentials_t *credentials, const char *title,
       gchar *pre;
       time_t now;
       char ctime_now[200];
+      user_t *user = credentials_get_user (credentials);
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
@@ -1226,25 +1215,39 @@ gsad_message (credentials_t *credentials, const char *title,
                "<client_address>%s</client_address>",
                GSAD_VERSION,
                vendor_version_get (),
-               credentials->token,
+               user_get_token (user),
                ctime_now,
-               credentials->username,
-               credentials->role,
-               credentials->language,
-               credentials->client_address);
-      xml = g_strdup_printf ("%s%s"
-                              "<capabilities>%s</capabilities>"
-                              "</envelope>",
-                              pre,
-                              message,
-                              credentials->capabilities);
+               user_get_username (user),
+               user_get_role (user),
+               credentials_get_language (credentials),
+               user_get_client_address (user));
+
+      xml = g_strdup_printf ("%s"
+                             "<gsad_response>"
+                             "%s"
+                             "<message>%s</message>"
+                             "</gsad_response>"
+                             "<capabilities>%s</capabilities>"
+                             "</envelope>",
+                             pre,
+                             xmltitle,
+                             msg,
+                             user_get_capabilities (user));
+
       g_free (pre);
     }
   else
     {
-      xml = g_strdup (message);
+      xml = g_strdup_printf ("<gsad_response>"
+                             "%s"
+                             "<message>%s</message>"
+                             "<token></token>"
+                             "</gsad_response>",
+                             xmltitle,
+                             msg);
     }
-  g_free (message);
+
+  g_free (xmltitle);
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_APP_XML);
@@ -1322,15 +1325,16 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
  */
 char *
 logout_xml (credentials_t *credentials,
-            const gchar *message, cmd_response_data_t *response_data)
+            const gchar *message,
+            cmd_response_data_t *response_data)
 {
   time_t now;
   char ctime_now[200];
 
-  logout(credentials);
+  user_logout (credentials_get_user (credentials));
 
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
-  return (login_xml (message, NULL, ctime_now, NULL, NULL, NULL));
+  return login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
 }
