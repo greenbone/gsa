@@ -27,9 +27,9 @@ import React from 'react';
 
 import logger from 'gmp/log';
 
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {is_defined} from 'gmp/utils/identity';
 import {exclude_object_props} from 'gmp/utils/object';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
 
 import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
@@ -82,16 +82,7 @@ class EntitiesContainer extends React.Component {
 
     const {gmpname, gmp, notify} = this.props;
 
-    let entities_command_name;
-
-    if (is_array(gmpname)) {
-      this.name = gmpname[0];
-      entities_command_name = gmpname[1];
-    }
-    else {
-      this.name = gmpname;
-      entities_command_name = gmpname + 's';
-    }
+    const entities_command_name = pluralizeType(gmpname);
 
     this.entities_command = gmp[entities_command_name];
 
@@ -572,10 +563,7 @@ EntitiesContainer.propTypes = {
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
-  gmpname: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]).isRequired,
+  gmpname: PropTypes.string.isRequired,
   notify: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,

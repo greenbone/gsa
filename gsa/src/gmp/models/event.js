@@ -367,7 +367,7 @@ class Event {
           // month are set in the rrule. Therefore ignore error and retry to get
           // a new date. Fail after 5 unsuccessful attemps
           retries++;
-          log.error(err);
+          log.warn('Error raised while calculating next date', err);
         }
       }
     }
