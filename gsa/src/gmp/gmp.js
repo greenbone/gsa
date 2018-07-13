@@ -140,6 +140,7 @@ class Gmp {
       return this.http.request('get', {url, args})
         .then(xhr => {
           this.token = undefined;
+          log.debug('Logged out successfully');
           return xhr;
         })
         .catch(err => {
