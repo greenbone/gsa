@@ -20,8 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+
+import Logger from './log';
 
 import {is_defined} from './utils/identity';
+
+const log = Logger.getLogger('gmp.cache');
 
 /**
  * Simple cache implementation
@@ -87,9 +92,9 @@ export class CacheFactory {
   }
 
   clearAll() {
-    for (const key in this._caches) {
-      const cache = this._caches[key];
+    for (const [name, cache] of Object.entries(this._caches)) {
       cache.clear();
+      log.debug('Cache', name, cache, 'cleared');
     }
   }
 
