@@ -20,15 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/entries';
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 import {render_select_items} from 'web/utils/render.js';
-
-import withGmp from 'web/utils/withGmp';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -44,101 +39,73 @@ import Layout from '../components/layout/layout.js';
 
 const ENTITIES_THRESHOLD = 1000;
 
-class TagsDialog extends React.Component {
-
-  constructor(args) {
-    super(...args);
-
-    this.state = {};
-  }
-
-  componentDidMount() {
-    const {
-      filter,
-      gmp,
-      resourceType,
-    } = this.props;
-
-    gmp[pluralizeType(normalizeType(resourceType))].get({filter})
-      .then(response => this.setState({entitiesCount: response.data.length}));
-  }
-
-  render() {
-    const {
-      comment = '',
-      tagId: id,
+const TagsDialog = ({
+  comment = '',
+  entitiesCount,
+  tagId: id,
+  name,
+  tags,
+  title = _('Add Tag'),
+  value = '',
+  onClose,
+  onNewTagClick,
+  onTagChanged,
+  onSave,
+}) => (
+  <SaveDialog
+    buttonTitle="Add Tag"
+    title={title}
+    width="650px"
+    values={{
+      comment,
+      id,
       name,
-      tags,
-      title = _('Add Tag'),
-      value = '',
-      onClose,
-      onNewTagClick,
-      onTagChanged,
-      onSave,
-    } = this.props;
-
-    const {
-      entitiesCount = 0,
-    } = this.state;
-
-    return (
-      <SaveDialog
-        buttonTitle="Add Tag"
-        title={title}
-        width="650px"
-        values={{
-          comment,
-          id,
-          name,
-          value,
-        }}
-        onClose={onClose}
-        onSave={onSave}
-      >
-        {() => (
-          <Layout flex="column">
-            <FormGroup title={_('Choose Tag')} titleSize="4">
-              <Divider>
-                <Select
-                  menuPosition="adjust"
-                  name="name"
-                  value={id}
-                  width="230"
-                  items={render_select_items(tags)}
-                  onChange={onTagChanged}
-                />
-                <NewIcon
-                  value={'tag'}
-                  title={_('Create a new Tag')}
-                  onClick={onNewTagClick}
-                />
-              </Divider>
-            </FormGroup>
-            <FormGroup title={_('Value')} titleSize="4">
-              {value}
-            </FormGroup>
-            <FormGroup title={_('Comment')} titleSize="4">
-              {comment}
-            </FormGroup>
-            {entitiesCount >= ENTITIES_THRESHOLD &&
-              <span>
-                {_('Please note that assigning a tag to a large number of ' +
-                  'resources may take several minutes.')}
-              </span>
-            }
-          </Layout>
-        )}
-      </SaveDialog>
-    );
-  }
-};
+      value,
+    }}
+    onClose={onClose}
+    onSave={onSave}
+  >
+    {() => (
+      <Layout flex="column">
+        <FormGroup title={_('Choose Tag')} titleSize="4">
+          <Divider>
+            <Select
+              menuPosition="adjust"
+              name="name"
+              value={id}
+              width="230"
+              items={render_select_items(tags)}
+              onChange={onTagChanged}
+            />
+            <NewIcon
+              value={'tag'}
+              title={_('Create a new Tag')}
+              onClick={onNewTagClick}
+            />
+          </Divider>
+        </FormGroup>
+        <FormGroup title={_('Value')} titleSize="4">
+          {value}
+        </FormGroup>
+        <FormGroup title={_('Comment')} titleSize="4">
+          {comment}
+        </FormGroup>
+        {entitiesCount >= ENTITIES_THRESHOLD &&
+          <span>
+            {_('Please note that assigning a tag to a large number of ' +
+              'resources may take several minutes.')}
+          </span>
+        }
+      </Layout>
+    )}
+  </SaveDialog>
+);
 
 TagsDialog.propTypes = {
   comment: PropTypes.string,
+  entitiesCount: PropTypes.number.isRequired,
   filter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
-  resourceType: PropTypes.string.isRequired,
   tagId: PropTypes.id.isRequired,
   tags: PropTypes.array,
   title: PropTypes.string,
@@ -149,6 +116,6 @@ TagsDialog.propTypes = {
   onTagChanged: PropTypes.func.isRequired,
 };
 
-export default withGmp(TagsDialog);
+export default TagsDialog;
 
 // vim: set ts=2 sw=2 tw=80:

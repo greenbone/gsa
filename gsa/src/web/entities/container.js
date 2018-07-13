@@ -30,7 +30,12 @@ import logger from 'gmp/log';
 import {map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 import {exclude_object_props} from 'gmp/utils/object';
-import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
+import {
+  getEntityType,
+  typeName,
+  pluralizeType,
+  normalizeType,
+} from 'gmp/utils/entitytype';
 
 import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
@@ -444,7 +449,6 @@ class EntitiesContainer extends React.Component {
   }
 
   handleAddMultiTag({
-    active,
     comment,
     id,
     name,
@@ -488,7 +492,11 @@ class EntitiesContainer extends React.Component {
 
   openTagsDialog() {
     this.getTagsByType();
-    this.setState({tagsDialogVisible: true});
+    this.getMultiTagEntitiesCount().then(count =>
+      this.setState({
+        tagsDialogVisible: true,
+        multiTagEntitiesCount: count,
+      }));
   }
 
   closeTagsDialog() {
@@ -509,6 +517,27 @@ class EntitiesContainer extends React.Component {
     }
   }
 
+  getMultiTagEntitiesCount() {
+    const {gmp} = this.props;
+    const {
+      entities,
+      loaded_filter: filter,
+      selection_type,
+      selected,
+    } = this.state;
+
+    if (selection_type === SelectionType.SELECTION_USER) {
+      return Promise.resolve(selected.size);
+    }
+
+    if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+      return Promise.resolve(entities.length);
+    }
+
+    const type = pluralizeType(normalizeType(getEntityType(entities[0])));
+    return gmp[type].getAll({filter}).then(response => response.data.length);
+  }
+
   render() {
     const {
       entities = [],
@@ -524,6 +553,7 @@ class EntitiesContainer extends React.Component {
       tagDialogVisible,
       tagsDialogVisible,
       updating,
+      multiTagEntitiesCount,
     } = this.state;
     const {
       onDownload,
@@ -588,12 +618,12 @@ class EntitiesContainer extends React.Component {
         {tagsDialogVisible &&
           <TagsDialog
             comment={tag.comment}
+            entitiesCount={multiTagEntitiesCount}
             filter={loaded_filter}
             name={tag.name}
             tagId={tag.id}
             tags={tags}
             title={title}
-            resourceType={entitiesType}
             value={tag.value}
             onClose={this.closeTagsDialog}
             onSave={this.handleAddMultiTag}
