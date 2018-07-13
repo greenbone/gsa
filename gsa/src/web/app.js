@@ -36,6 +36,9 @@ import GmpProvider from './components/provider/gmpprovider';
 import globalcss from './utils/globalcss';
 
 import configureStore from './store';
+
+import {clearStore} from './store/actions';
+
 import Routes from './routes';
 
 const {config = {}} = window;
@@ -60,21 +63,33 @@ class App extends React.Component {
     super(props);
 
     this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
-
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentDidMount() {
-    this.unsubscribe = subscribe(this.renderOnLanguageChange);
+    this.unsubscribeFromLanguageChange = subscribe(this.renderOnLanguageChange);
+    this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
   }
 
   componentWillUnmount() {
-    if (is_defined(this.unsubscribe)) {
-      this.unsubscribe();
+    if (is_defined(this.unsubscribeFromLanguageChange)) {
+      this.unsubscribeFromLanguageChange();
+    }
+
+    if (is_defined(this.unsubscribeFromLogout)) {
+      this.unsubscribeFromLogout();
     }
   }
 
   renderOnLanguageChange() {
     this.forceUpdate();
+  }
+
+  handleLogout() {
+    // cleanup store
+    clearStore(store.dispatch);
+    // cleanup cache
+    caches.clearAll();
   }
 
   render() {
