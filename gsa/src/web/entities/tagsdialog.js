@@ -93,7 +93,7 @@ const TagsDialog = ({
         {entitiesCount >= ENTITIES_THRESHOLD &&
           <span>
             {_('Please note that assigning a tag to a large number of ' +
-              'resources may take several minutes.')}
+               'items may take several minutes.')}
           </span>
         }
       </Layout>
