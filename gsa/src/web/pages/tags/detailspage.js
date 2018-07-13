@@ -204,7 +204,7 @@ const ResourceList = (entity = {}) => {
   const showNotification = resources.length > MAX_RESOURCES;
   const res = resources.slice(0, MAX_RESOURCES);
   return (
-    <Layout>
+    <Layout flex="column">
       {showNotification &&
         <Notification
           id={id}
