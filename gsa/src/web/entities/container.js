@@ -27,14 +27,22 @@ import React from 'react';
 
 import logger from 'gmp/log';
 
+import {map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 import {exclude_object_props} from 'gmp/utils/object';
-import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
+import {
+  getEntityType,
+  typeName,
+  pluralizeType,
+  normalizeType,
+} from 'gmp/utils/entitytype';
 
 import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
 
 import Filter from 'gmp/models/filter';
+
+import {YES_VALUE} from 'gmp/parser';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
@@ -106,6 +114,8 @@ class EntitiesContainer extends React.Component {
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
+    this.handleAddMultiTag = this.handleAddMultiTag.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.closeTagDialog = this.closeTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
@@ -168,9 +178,6 @@ class EntitiesContainer extends React.Component {
         const {data: entities, meta} = response;
         const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
 
-        const entitiesType = entities.length > 0 ?
-          getEntityType(entities[0]) : undefined;
-
         this.cancel = undefined;
 
         let refresh = false;
@@ -184,7 +191,6 @@ class EntitiesContainer extends React.Component {
         this.setState({
           entities,
           entities_counts,
-          entitiesType,
           filter,
           loaded_filter,
           loading: false,
@@ -417,25 +423,80 @@ class EntitiesContainer extends React.Component {
   handleCreateTag(data) {
     const {gmp} = this.props;
     const {tags} = this.state;
-    let newTag;
+
     return gmp.tag.create(data).then(response => {
-      newTag = response.data;
-    })
-    .then(() => {
-      return gmp.tag.get(newTag);
+      return gmp.tag.get(response.data);
     })
     .then(response => {
-      tags.push(response.data);
       this.setState({
-        newTag: response.data,
-        tags,
+        tag: response.data,
+        tags: [
+          ...tags,
+          response.data,
+        ],
       });
+    });
+  }
+
+  handleTagChange(id) {
+    const {gmp} = this.props;
+
+    gmp.tag.get({id}).then(response => {
+      this.setState({
+        tag: response.data,
+      });
+    });
+  }
+
+  handleAddMultiTag({
+    comment,
+    id,
+    name,
+    value = '',
+  }) {
+    const {gmp} = this.props;
+    const {
+      selection_type: selectionType,
+      selected,
+      loaded_filter,
+      entities = [],
+    } = this.state;
+
+    const entitiesType = getEntityType(entities[0]);
+
+    let resource_ids;
+    let filter;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      resource_ids = map(selected, res => res.id);
+      filter = undefined;
+    }
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      filter = loaded_filter;
+    }
+    else {
+      filter = loaded_filter.all();
+    }
+
+    return gmp.tag.save({
+      active: YES_VALUE,
+      comment,
+      filter,
+      id,
+      name,
+      resource_ids,
+      resource_type: entitiesType,
+      resources_action: 'add',
+      value,
     });
   }
 
   openTagsDialog() {
     this.getTagsByType();
-    this.setState({tagsDialogVisible: true});
+    this.getMultiTagEntitiesCount().then(count =>
+      this.setState({
+        tagsDialogVisible: true,
+        multiTagEntitiesCount: count,
+      }));
   }
 
   closeTagsDialog() {
@@ -444,30 +505,55 @@ class EntitiesContainer extends React.Component {
 
   getTagsByType() {
     const {gmp} = this.props;
-    const {entitiesType} = this.state;
-    const filter = 'resource_type=' + entitiesType;
-    gmp.tags.getAll({filter})
-      .then(response => {
-        const {data} = response;
-        this.setState({tags: data});
+    const {entities} = this.state;
+
+    if (entities.length > 0) {
+      const filter = 'resource_type=' + getEntityType(entities[0]);
+
+      gmp.tags.getAll({filter}).then(response => {
+        const {data: tags} = response;
+        this.setState({tags});
       });
+    }
+  }
+
+  getMultiTagEntitiesCount() {
+    const {gmp} = this.props;
+    const {
+      entities,
+      loaded_filter: filter,
+      selection_type,
+      selected,
+    } = this.state;
+
+    if (selection_type === SelectionType.SELECTION_USER) {
+      return Promise.resolve(selected.size);
+    }
+
+    if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+      return Promise.resolve(entities.length);
+    }
+
+    const type = pluralizeType(normalizeType(getEntityType(entities[0])));
+    return gmp[type].getAll({filter}).then(response => response.data.length);
   }
 
   render() {
     const {
-      entities,
+      entities = [],
       entities_counts,
       loaded_filter,
       loading,
-      newTag,
       selected,
       selection_type,
       sortBy,
       sortDir,
+      tag = {},
       tags,
       tagDialogVisible,
       tagsDialogVisible,
       updating,
+      multiTagEntitiesCount,
     } = this.state;
     const {
       onDownload,
@@ -476,8 +562,10 @@ class EntitiesContainer extends React.Component {
     } = this.props;
 
     let entitiesType;
-    if (is_defined(entities) && is_defined(entities[0])) {
+    let resourceTypes;
+    if (entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
+      resourceTypes = [[entitiesType, typeName(entitiesType)]];
     }
 
     let title;
@@ -529,15 +617,18 @@ class EntitiesContainer extends React.Component {
         />
         {tagsDialogVisible &&
           <TagsDialog
+            comment={tag.comment}
+            entitiesCount={multiTagEntitiesCount}
             filter={loaded_filter}
-            tag={newTag}
+            name={tag.name}
+            tagId={tag.id}
             tags={tags}
             title={title}
-            resources={selected}
-            resourceType={entitiesType}
-            selectionType={selection_type}
+            value={tag.value}
             onClose={this.closeTagsDialog}
+            onSave={this.handleAddMultiTag}
             onNewTagClick={this.openTagDialog}
+            onTagChanged={this.handleTagChange}
           />
         }
         {tagDialogVisible &&
@@ -545,7 +636,7 @@ class EntitiesContainer extends React.Component {
             fixed={true}
             resources={selected}
             resource_type={entitiesType}
-            resource_types={[[entitiesType, typeName(entitiesType)]]}
+            resource_types={resourceTypes}
             onClose={this.closeTagDialog}
             onSave={this.handleCreateTag}
           />
