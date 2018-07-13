@@ -72,7 +72,7 @@ import LoginCommand from './commands/login.js';
 
 const log = logger.getLogger('gmp');
 
-export class Gmp {
+class Gmp {
 
   constructor(options = {}) {
     const {
