@@ -26,7 +26,6 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
-import {is_defined} from 'gmp/utils/identity';
 import {render_select_items} from 'web/utils/render.js';
 
 import withGmp from 'web/utils/withGmp';
@@ -49,8 +48,6 @@ class TagsDialog extends React.Component {
     super(...args);
 
     this.state = {};
-
-    this.handleTagChange = this.handleTagChange.bind(this);
   }
 
   componentDidMount() {
@@ -71,41 +68,22 @@ class TagsDialog extends React.Component {
     });
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (is_defined(nextProps.tag) && nextProps.tag.id !== prevState.propId) {
-      return {
-        ...nextProps.tag,
-        propId: nextProps.tag.id,
-      };
-    }
-    return null;
-  }
-
-  handleTagChange(id) {
-    const {gmp} = this.props;
-
-    gmp.tag.get({id}).then(response => {
-      this.setState({
-        ...response.data,
-      });
-    });
-  }
-
   render() {
     const {
+      comment = '',
+      tagId: id,
+      name,
       tags,
       title = _('Add Tag'),
+      value = '',
       onClose,
       onNewTagClick,
+      onTagChanged,
       onSave,
     } = this.props;
 
     const {
-      comment,
-      id,
-      name,
       noticeText = '',
-      value,
     } = this.state;
 
     return (
@@ -132,7 +110,7 @@ class TagsDialog extends React.Component {
                   value={id}
                   width="230"
                   items={render_select_items(tags)}
-                  onChange={this.handleTagChange}
+                  onChange={onTagChanged}
                 />
                 <NewIcon
                   value={'tag'}
@@ -142,10 +120,10 @@ class TagsDialog extends React.Component {
               </Divider>
             </FormGroup>
             <FormGroup title={_('Value')} titleSize="4">
-              {is_defined(value) ? value : ''}
+              {value}
             </FormGroup>
             <FormGroup title={_('Comment')} titleSize="4">
-              {is_defined(comment) ? comment : ''}
+              {comment}
             </FormGroup>
             {noticeText}
           </Layout>
@@ -156,14 +134,19 @@ class TagsDialog extends React.Component {
 };
 
 TagsDialog.propTypes = {
+  comment: PropTypes.string,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  name: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
+  tagId: PropTypes.id.isRequired,
   tags: PropTypes.array,
   title: PropTypes.string,
+  value: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onNewTagClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  onTagChanged: PropTypes.func.isRequired,
 };
 
 export default withGmp(TagsDialog);

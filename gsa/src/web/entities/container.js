@@ -27,6 +27,7 @@ import React from 'react';
 
 import logger from 'gmp/log';
 
+import {map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 import {exclude_object_props} from 'gmp/utils/object';
 import {getEntityType, typeName, pluralizeType} from 'gmp/utils/entitytype';
@@ -35,6 +36,8 @@ import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
 
 import Filter from 'gmp/models/filter';
+
+import {YES_VALUE} from 'gmp/parser';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
@@ -107,6 +110,7 @@ class EntitiesContainer extends React.Component {
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
     this.handleAddMultiTag = this.handleAddMultiTag.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.closeTagDialog = this.closeTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
@@ -420,11 +424,21 @@ class EntitiesContainer extends React.Component {
     })
     .then(response => {
       this.setState({
-        newTag: response.data,
+        tag: response.data,
         tags: [
           ...tags,
           response.data,
         ],
+      });
+    });
+  }
+
+  handleTagChange(id) {
+    const {gmp} = this.props;
+
+    gmp.tag.get({id}).then(response => {
+      this.setState({
+        tag: response.data,
       });
     });
   }
@@ -436,10 +450,10 @@ class EntitiesContainer extends React.Component {
     name,
     value = '',
   }) {
-    const {gmp} = this.state;
+    const {gmp} = this.props;
     const {
       selection_type: selectionType,
-      selected = [],
+      selected,
       loaded_filter,
       entities = [],
     } = this.state;
@@ -449,7 +463,7 @@ class EntitiesContainer extends React.Component {
     let resource_ids;
     let filter;
     if (selectionType === SelectionType.SELECTION_USER) {
-      resource_ids = selected.map(res => res.id);
+      resource_ids = map(selected, res => res.id);
       filter = undefined;
     }
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -460,7 +474,7 @@ class EntitiesContainer extends React.Component {
     }
 
     return gmp.tag.save({
-      active,
+      active: YES_VALUE,
       comment,
       filter,
       id,
@@ -501,11 +515,11 @@ class EntitiesContainer extends React.Component {
       entities_counts,
       loaded_filter,
       loading,
-      newTag,
       selected,
       selection_type,
       sortBy,
       sortDir,
+      tag = {},
       tags,
       tagDialogVisible,
       tagsDialogVisible,
@@ -573,16 +587,18 @@ class EntitiesContainer extends React.Component {
         />
         {tagsDialogVisible &&
           <TagsDialog
+            comment={tag.comment}
             filter={loaded_filter}
-            tag={newTag}
+            name={tag.name}
+            tagId={tag.id}
             tags={tags}
             title={title}
-            resources={selected}
             resourceType={entitiesType}
-            selectionType={selection_type}
+            value={tag.value}
             onClose={this.closeTagsDialog}
-            onSave={this.handleAddMultiTage}
+            onSave={this.handleAddMultiTag}
             onNewTagClick={this.openTagDialog}
+            onTagChanged={this.handleTagChange}
           />
         }
         {tagDialogVisible &&
