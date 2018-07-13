@@ -28,7 +28,11 @@ import _ from 'gmp/locale.js';
 
 import glamorous from 'glamorous';
 
+import Filter from 'gmp/models/filter';
+
 import {is_defined} from 'gmp/utils';
+
+import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilties from '../../utils/withCapabilities.js';
@@ -65,6 +69,8 @@ import Tabs from '../../components/tab/tabs.js';
 
 import TagComponent from './component.js';
 import TagDetails from './details.js';
+
+const MAX_RESOURCES = 40;
 
 const TabTitleCount = glamorous.span({
   fontSize: '0.7em',
@@ -169,6 +175,59 @@ ToolBarIcons.propTypes = {
   onTagEnableClick: PropTypes.func.isRequired,
 };
 
+const Spacer = glamorous.div({
+  height: '12px',
+});
+
+const Notification = ({id, resourceType}) => {
+  const filter = Filter.fromString('tag_id=' + id);
+  return (
+    <Divider>
+      {_('Listing only the first {{num}} items. ', {num: MAX_RESOURCES})}
+      {_('To see all assigned resources click here:')}
+      <ListIcon
+        title={_('List Items')}
+        filter={filter}
+        page={pluralizeType(normalizeType(resourceType))}
+      />
+    </Divider>
+  );
+};
+
+Notification.propTypes = {
+  id: PropTypes.string.isRequired,
+  resourceType: PropTypes.string.isRequired,
+};
+
+const ResourceList = (entity = {}) => {
+  const {id, resources = [], resource_type} = entity.entity || {};
+  const showNotification = resources.length > MAX_RESOURCES;
+  const res = resources.slice(0, MAX_RESOURCES);
+  return (
+    <Layout>
+      {showNotification &&
+        <Notification
+          id={id}
+          resourceType={resource_type}
+        />
+      }
+      <Spacer/>
+      <ul>
+        {res.map(resource =>
+          (<li key={resource.id}>
+            <DetailsLink
+              id={resource.id}
+              type={resource_type}
+            >
+              {resource.name}
+            </DetailsLink>
+          </li>)
+        )}
+      </ul>
+    </Layout>
+  );
+};
+
 const Page = ({
   onChanged,
   onDownloaded,
@@ -231,8 +290,8 @@ const Page = ({
             entity,
             ...other
           }) => {
-            const {resources, resource_type} = entity;
-            const resourcesCount = resources.length;
+            const {resource_count} = entity;
+
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -249,8 +308,8 @@ const Page = ({
                     </Tab>
                     <Tab>
                       <TabTitle
-                        title={_('Assigned Resources')}
-                        count={resourcesCount}
+                        title={_('Assigned Items')}
+                        count={resource_count}
                       />
                     </Tab>
                     {is_defined(permissionsComponent) &&
@@ -269,15 +328,7 @@ const Page = ({
                       />
                     </TabPanel>
                     <TabPanel>
-                      {resources.map(resource =>
-                        (<DetailsLink
-                          key={resource.id}
-                          id={resource.id}
-                          type={resource_type}
-                        >
-                          {resource.name}
-                        </DetailsLink>)
-                      )}
+                      <ResourceList entity={entity}/>
                     </TabPanel>
                     {is_defined(permissionsComponent) &&
                       <TabPanel>
