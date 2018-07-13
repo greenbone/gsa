@@ -26,6 +26,7 @@ import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
 
 import entities from './entities/reducers';
+import {CLEAR_STORE} from 'web/store/actions';
 
 const rootReducer = combineReducers({
   dashboardData,
@@ -33,6 +34,13 @@ const rootReducer = combineReducers({
   entities,
 });
 
-export default rootReducer;
+const clearStoreReducer = (state = {}, action) => {
+  if (action.type === CLEAR_STORE) {
+    state = {};
+  }
+  return rootReducer(state, action);
+};
+
+export default clearStoreReducer;
 
 // vim: set ts=2 sw=2 tw=80:
