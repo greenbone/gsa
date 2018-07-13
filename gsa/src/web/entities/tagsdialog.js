@@ -62,7 +62,7 @@ class TagsDialog extends React.Component {
       resourceType,
     } = this.props;
 
-    gmp[pluralizeType(normalizeType(resourceType))].getAll({filter})
+    gmp[pluralizeType(normalizeType(resourceType))].get({filter})
     .then(response => {
       const numberOfFilteredEntities = response.data.length;
       const noticeText = numberOfFilteredEntities >= 1000 ?
