@@ -106,6 +106,7 @@ class EntitiesContainer extends React.Component {
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
+    this.handleAddMultiTag = this.handleAddMultiTag.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
     this.closeTagDialog = this.closeTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
@@ -428,6 +429,49 @@ class EntitiesContainer extends React.Component {
     });
   }
 
+  handleAddMultiTag({
+    active,
+    comment,
+    id,
+    name,
+    value = '',
+  }) {
+    const {gmp} = this.state;
+    const {
+      selection_type: selectionType,
+      selected = [],
+      loaded_filter,
+      entities = [],
+    } = this.state;
+
+    const entitiesType = getEntityType(entities[0]);
+
+    let resource_ids;
+    let filter;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      resource_ids = selected.map(res => res.id);
+      filter = undefined;
+    }
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      filter = loaded_filter;
+    }
+    else {
+      filter = loaded_filter.all();
+    }
+
+    return gmp.tag.save({
+      active,
+      comment,
+      filter,
+      id,
+      name,
+      resource_ids,
+      resource_type: entitiesType,
+      resources_action: 'add',
+      value,
+    });
+  }
+
   openTagsDialog() {
     this.getTagsByType();
     this.setState({tagsDialogVisible: true});
@@ -537,6 +581,7 @@ class EntitiesContainer extends React.Component {
             resourceType={entitiesType}
             selectionType={selection_type}
             onClose={this.closeTagsDialog}
+            onSave={this.handleAddMultiTage}
             onNewTagClick={this.openTagDialog}
           />
         }

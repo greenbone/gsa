@@ -32,7 +32,6 @@ import {render_select_items} from 'web/utils/render.js';
 import withGmp from 'web/utils/withGmp';
 
 import PropTypes from '../utils/proptypes.js';
-import SelectionType from '../utils/selectiontype.js';
 
 import SaveDialog from '../components/dialog/savedialog.js';
 
@@ -51,8 +50,7 @@ class TagsDialog extends React.Component {
 
     this.state = {};
 
-    this.handleChange = this.handleChange.bind(this);
-    this.save = this.save.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
   }
 
   componentDidMount() {
@@ -83,71 +81,13 @@ class TagsDialog extends React.Component {
     return null;
   }
 
-  handleChange(value, name) {
+  handleTagChange(id) {
     const {gmp} = this.props;
-    gmp.tag.get({id: value}).then(response => {
+
+    gmp.tag.get({id}).then(response => {
       this.setState({
         ...response.data,
       });
-    });
-  }
-
-  save() {
-    const {
-      filter,
-      gmp,
-      resources,
-      resourceType,
-      selectionType,
-    } = this.props;
-
-    const {
-      active,
-      comment,
-      id,
-      name,
-      value = '',
-    } = this.state;
-
-    if (selectionType === SelectionType.SELECTION_USER) {
-      const resource_ids = [];
-
-      resources.forEach(res => resource_ids.push(res.id));
-
-      return gmp.tag.save({
-        active,
-        comment,
-        id,
-        name,
-        resource_ids,
-        resource_type: resourceType,
-        resources_action: 'add',
-        value,
-      });
-    }
-
-    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      return gmp.tag.save({
-        active,
-        comment,
-        filter,
-        id,
-        name,
-        resource_type: resourceType,
-        resources_action: 'add',
-        value,
-      });
-    }
-
-    return gmp.tag.save({
-      active,
-      comment,
-      filter: filter.all(),
-      id,
-      name,
-      resource_type: resourceType,
-      resources_action: 'add',
-      value,
     });
   }
 
@@ -157,6 +97,7 @@ class TagsDialog extends React.Component {
       title = _('Add Tag'),
       onClose,
       onNewTagClick,
+      onSave,
     } = this.props;
 
     const {
@@ -179,62 +120,50 @@ class TagsDialog extends React.Component {
           value,
         }}
         onClose={onClose}
-        onSave={this.save}
+        onSave={onSave}
       >
-        {({
-          values: state,
-          onValueChange,
-        }) => {
-          return (
-            <Layout flex="column">
-              <FormGroup title={_('Choose Tag')} titleSize="4">
-                <Divider>
-                  <Select
-                    menuPosition="adjust"
-                    name="name"
-                    value={id}
-                    width="230"
-                    items={render_select_items(tags)}
-                    onChange={this.handleChange}
-                  />
-                  <NewIcon
-                    value={'tag'}
-                    title={_('Create a new Tag')}
-                    onClick={onNewTagClick}
-                  />
-                </Divider>
-              </FormGroup>
-              <FormGroup title={_('Value')} titleSize="4">
-                {is_defined(value) ? value : ''}
-              </FormGroup>
-              <FormGroup title={_('Comment')} titleSize="4">
-                {is_defined(comment) ? comment : ''}
-              </FormGroup>
-              {noticeText}
-            </Layout>
-          );
-        }}
+        {() => (
+          <Layout flex="column">
+            <FormGroup title={_('Choose Tag')} titleSize="4">
+              <Divider>
+                <Select
+                  menuPosition="adjust"
+                  name="name"
+                  value={id}
+                  width="230"
+                  items={render_select_items(tags)}
+                  onChange={this.handleTagChange}
+                />
+                <NewIcon
+                  value={'tag'}
+                  title={_('Create a new Tag')}
+                  onClick={onNewTagClick}
+                />
+              </Divider>
+            </FormGroup>
+            <FormGroup title={_('Value')} titleSize="4">
+              {is_defined(value) ? value : ''}
+            </FormGroup>
+            <FormGroup title={_('Comment')} titleSize="4">
+              {is_defined(comment) ? comment : ''}
+            </FormGroup>
+            {noticeText}
+          </Layout>
+        )}
       </SaveDialog>
     );
   }
 };
 
 TagsDialog.propTypes = {
-  active: PropTypes.yesno,
-  comment: PropTypes.string,
   filter: PropTypes.filter,
-  fixed: PropTypes.bool,
   gmp: PropTypes.gmp.isRequired,
-  name: PropTypes.string,
   resourceType: PropTypes.string.isRequired,
-  resources: PropTypes.object,
-  selectionType: PropTypes.string.isRequired,
   tags: PropTypes.array,
   title: PropTypes.string,
-  value: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onNewTagClick: PropTypes.func.isRequired,
-  onValueChange: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default withGmp(TagsDialog);
