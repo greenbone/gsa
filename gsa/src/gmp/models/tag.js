@@ -34,7 +34,8 @@ class Tag extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
     if (is_defined(elem.resources)) {
-      ret.resources = map(ret.resources.resource, res => new Model(res));
+      ret.resources = map(ret.resources.resource,
+        res => new Model(res, elem.resources.type));
       ret.resource_type = elem.resources.type;
       ret.resource_count = elem.resources.count.total;
     }
