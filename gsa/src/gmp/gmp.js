@@ -80,7 +80,6 @@ class Gmp {
       protocol,
       server,
       storage = localStorage,
-      caches,
       manualurl,
       protocoldocurl,
       ...httpoptions
@@ -90,7 +89,6 @@ class Gmp {
 
     this._commands = {};
 
-    this.caches = caches;
     this.storage = storage;
 
     this.server = is_defined(server) ? server : window.location.host;
@@ -130,10 +128,6 @@ class Gmp {
 
       this.username = username;
       this.globals = login;
-
-      if (is_defined(this.caches)) {
-        this.caches.clearAll();
-      }
 
       return this.token;
     });

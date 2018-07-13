@@ -42,7 +42,7 @@ const {config = {}} = window;
 
 const caches = new CacheFactory();
 
-const gmp = new Gmp({caches, ...config});
+const gmp = new Gmp(config);
 
 const store = configureStore();
 
