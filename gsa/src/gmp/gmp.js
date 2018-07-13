@@ -100,6 +100,8 @@ class Gmp {
 
     this._autorefresh = autorefresh;
 
+    this._logoutListeners = [];
+
     if (this.storage.token) {
       this.token = this.storage.token;
     }
@@ -137,7 +139,8 @@ class Gmp {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.token};
-      return this.http.request('get', {url, args})
+
+      const promise = this.http.request('get', {url, args})
         .then(xhr => {
           this.token = undefined;
           log.debug('Logged out successfully');
@@ -147,12 +150,26 @@ class Gmp {
           this.token = undefined;
           log.error('Error on logout', err);
         });
+
+      for (const listener of this._logoutListeners) {
+        listener();
+      }
+
+      return promise;
     }
+
     return Promise.resolve();
   }
 
   isLoggedIn() {
     return !is_empty(this.token);
+  }
+
+  subscribeToLogout(listener) {
+    this._logoutListeners.push(listener);
+
+    return () => this._logoutListeners = this._logoutListeners.filter(
+      l => l !== listener);
   }
 
   buildUrl(path, params, anchor) {
