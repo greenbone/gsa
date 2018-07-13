@@ -134,7 +134,7 @@ class Gmp {
   }
 
   logout() {
-    if (!this.isLoggedIn()) {
+    if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.token};
       return this.http.request('get', {url, args})
