@@ -42,6 +42,8 @@ import NewIcon from '../components/icon/newicon.js';
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
+const ENTITIES_THRESHOLD = 1000;
+
 class TagsDialog extends React.Component {
 
   constructor(args) {
@@ -58,14 +60,7 @@ class TagsDialog extends React.Component {
     } = this.props;
 
     gmp[pluralizeType(normalizeType(resourceType))].get({filter})
-    .then(response => {
-      const numberOfFilteredEntities = response.data.length;
-      const noticeText = numberOfFilteredEntities >= 1000 ?
-        _('Please note that assigning a tag to a large number of resources ' +
-          ' may take several minutes.') :
-        '';
-        this.setState({noticeText});
-    });
+      .then(response => this.setState({entitiesCount: response.data.length}));
   }
 
   render() {
@@ -83,7 +78,7 @@ class TagsDialog extends React.Component {
     } = this.props;
 
     const {
-      noticeText = '',
+      entitiesCount = 0,
     } = this.state;
 
     return (
@@ -125,7 +120,12 @@ class TagsDialog extends React.Component {
             <FormGroup title={_('Comment')} titleSize="4">
               {comment}
             </FormGroup>
-            {noticeText}
+            {entitiesCount >= ENTITIES_THRESHOLD &&
+              <span>
+                {_('Please note that assigning a tag to a large number of ' +
+                  'resources may take several minutes.')}
+              </span>
+            }
           </Layout>
         )}
       </SaveDialog>
