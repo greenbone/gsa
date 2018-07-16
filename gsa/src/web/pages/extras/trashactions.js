@@ -20,20 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import RestoreIcon from '../../components/icon/restoreicon.js';
-import TrashDeleteIcon from '../../components/icon/trashdeleteicon.js';
-import IconDivider from '../../components/layout/icondivider.js';
+import {is_defined} from 'gmp/utils/identity';
 
-import TableData from '../../components/table/data.js';
+import RestoreIcon from 'web/components/icon/restoreicon';
+import TrashDeleteIcon from 'web/components/icon/trashdeleteicon';
 
-import PropTypes from '../../utils/proptypes.js';
+import IconDivider from 'web/components/layout/icondivider';
 
+import TableData from 'web/components/table/data';
+
+import PropTypes from 'web/utils/proptypes';
 
 const check_by_type = {
   agent: entity => {

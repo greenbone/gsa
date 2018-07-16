@@ -26,24 +26,26 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../utils/proptypes.js';
+import {is_defined} from 'gmp/utils/identity';
+import {select_save_id} from 'gmp/utils/id';
+
+import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import ManualIcon from '../components/icon/manualicon.js';
-import NewIcon from '../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import Layout from '../components/layout/layout.js';
-import IconDivider from '../components/layout/icondivider.js';
+import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
-} from '../pages/permissions/multipledialog.js';
-import PermissionsTable from '../pages/permissions/table.js';
-import PermissionComponent from '../pages/permissions/component.js';
+} from 'web/pages/permissions/multipledialog';
+import PermissionsTable from 'web/pages/permissions/table';
+import PermissionComponent from 'web/pages/permissions/component';
 
 const SectionElementDivider = glamorous(IconDivider)({
   marginBottom: '3px',

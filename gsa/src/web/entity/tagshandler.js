@@ -24,14 +24,14 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
-import withGmp from '../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import TagComponent from '../pages/tags/component.js';
+import TagComponent from 'web/pages/tags/component';
 
 class TagsHandler extends React.Component {
 
