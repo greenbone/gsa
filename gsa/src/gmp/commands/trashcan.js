@@ -22,6 +22,7 @@
  */
 import {HttpCommand, register_command} from '../command';
 
+import {apiType} from '../utils/entitytype.js';
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
@@ -54,13 +55,13 @@ class Trashcan extends HttpCommand {
   }
 
   delete({id, entity_type}) {
+    entity_type = apiType(entity_type);
     const command = 'delete_trash_' + entity_type;
     const type_id = entity_type + '_id';
-    const data = {
+    return this.httpPost({
       cmd: [command],
       [type_id]: id,
-    };
-    return this.httpPost(data);
+    });
   }
 
   empty() {
