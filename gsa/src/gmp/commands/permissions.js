@@ -25,7 +25,7 @@ import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import Permission from '../models/permission.js';
+import Permission from '../models/permission';
 
 const log = logger.getLogger('gmp.commands.permissions');
 

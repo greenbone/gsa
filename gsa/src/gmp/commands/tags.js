@@ -22,11 +22,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import logger from '../log.js';
+import logger from '../log';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command';
 
-import Tag from '../models/tag.js';
+import Tag from '../models/tag';
 
 const log = logger.getLogger('gmp.commands.tags');
 
