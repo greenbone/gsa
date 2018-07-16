@@ -34,6 +34,7 @@ import {is_defined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../utils/proptypes.js';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EditIcon from '../components/icon/editicon.js';
 import ManualIcon from '../components/icon/manualicon.js';
@@ -58,33 +59,33 @@ const SectionElementDivider = glamorous(Divider)({
   marginBottom: '3px',
 });
 
-const SectionElements = ({
+const SectionElements = withCapabilities(({
+  capabilities,
   entity,
   onTagCreateClick,
-}) => {
-  return (
-    <Layout grow align="end">
-      <SectionElementDivider margin="10px">
-        <IconDivider>
+}) => (
+  <Layout grow align="end">
+    <SectionElementDivider margin="10px">
+      <IconDivider>
+        {capabilities.mayCreate('tag') &&
           <NewIcon
             title={_('New Tag')}
             value={entity}
             onClick={onTagCreateClick}
           />
-          <ManualIcon
-            page="gui_introduction"
-            anchor="tags"
-            title={_('Help: User Tags')}
-          />
-        </IconDivider>
-      </SectionElementDivider>
-    </Layout>
-  );
-};
+        }
+        <ManualIcon
+          page="gui_introduction"
+          anchor="tags"
+          title={_('Help: User Tags')}
+        />
+      </IconDivider>
+    </SectionElementDivider>
+  </Layout>
+));
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
 };
 
