@@ -20,26 +20,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../utils/proptypes.js';
-import withUserName from '../utils/withUserName.js';
+import {is_defined} from 'gmp/utils/identity';
 
-import Comment from '../components/comment/comment.js';
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
 
-import Layout from '../components/layout/layout.js';
+import Comment from 'web/components/comment/comment';
 
-import DetailsLink from '../components/link/detailslink.js';
+import Layout from 'web/components/layout/layout';
 
-import TableData from '../components/table/data.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import ObserverIcon from '../entity/icon/observericon.js';
+import TableData from 'web/components/table/data';
 
-import {RowDetailsToggle} from './row.js';
+import ObserverIcon from 'web/entity/icon/observericon';
+
+import {RowDetailsToggle} from './row';
 
 const EntityNameTableData = ({
   entity,
