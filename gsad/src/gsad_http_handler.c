@@ -782,10 +782,10 @@ init_http_handlers()
   url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
                         handle_static_file);
 
-  http_handler_t *omp_handler = http_handler_new (handle_setup_user);
-  http_handler_add (omp_handler, http_handler_new (handle_setup_credentials));
-  http_handler_add (omp_handler, http_handler_new (handle_gmp_get));
-  http_handler_t *omp_url_handler = url_handler_new ("^/omp$", omp_handler);
+  http_handler_t *gmp_handler = http_handler_new (handle_setup_user);
+  http_handler_add (gmp_handler, http_handler_new (handle_setup_credentials));
+  http_handler_add (gmp_handler, http_handler_new (handle_gmp_get));
+  http_handler_t *gmp_url_handler = url_handler_new ("^/gmp$", gmp_handler);
 
   http_handler_t *system_report_handler = http_handler_new (handle_setup_user);
   http_handler_add (system_report_handler,
@@ -800,7 +800,7 @@ init_http_handlers()
   http_handler_t *logout_url_handler = url_handler_new ("^/logout/?$",
                                                         logout_handler);
 
-  http_handler_add (url_handlers, omp_url_handler);
+  http_handler_add (url_handlers, gmp_url_handler);
   http_handler_add (url_handlers, system_report_url_handler);
   http_handler_add (url_handlers, logout_url_handler);
 
