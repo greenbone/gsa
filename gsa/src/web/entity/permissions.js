@@ -33,6 +33,7 @@ import {select_save_id} from 'gmp/utils/id';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -102,8 +103,7 @@ class EntityPermissions extends React.Component {
   }
 
   openMultiplePermissionDialog(permission) {
-    const {relatedResourcesLoaders = [], entity} = this.props;
-    const {gmp} = this.context;
+    const {gmp, relatedResourcesLoaders = [], entity} = this.props;
 
     this.setState({
       multiplePermissionDialogVisible: true,
@@ -153,8 +153,7 @@ class EntityPermissions extends React.Component {
   }
 
   handleMultipleSave(data) {
-    const {onChanged} = this.props;
-    const {gmp} = this.context;
+    const {gmp, onChanged} = this.props;
     return gmp.permissions.create(data).then(onChanged);
   }
 
@@ -233,6 +232,7 @@ class EntityPermissions extends React.Component {
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
@@ -242,9 +242,7 @@ EntityPermissions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-EntityPermissions.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
+EntityPermissions = withGmp(EntityPermissions);
 
 const Permissions = ({
   onChanged,
