@@ -23,31 +23,34 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
+import {is_defined} from 'gmp/utils/identity';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EditIcon from '../../components/icon/editicon.js';
+import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
-    displayName,
-    entity,
-    name,
-    title,
-    onClick,
-    ...props,
-  }, {capabilities}) => {
+  capabilities,
+  displayName,
+  entity,
+  name,
+  title,
+  onClick,
+  ...props
+}) => {
+  const {permissions} = entity;
 
   if (!is_defined(name)) {
-    name = entity.entity_type;
+    name = getEntityType(entity);
   }
 
   if (!is_defined(displayName)) {
-    displayName = _(capitalize_first_letter(name));
+    displayName = typeName(name);
   }
 
-  const {permissions} = entity;
   const may_edit = capabilities.mayEdit(name) && (!is_defined(permissions) ||
     permissions.mayEdit(name));
   const active = may_edit && entity.isWritable();
@@ -72,11 +75,13 @@ const EntityEditIcon = ({
       title={title}
       value={entity}
       active={active}
-      onClick={active ? onClick : undefined}/>
+      onClick={active ? onClick : undefined}
+    />
   );
 };
 
 EntityEditIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -84,10 +89,6 @@ EntityEditIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-EntityEditIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityEditIcon;
+export default withCapabilities(EntityEditIcon);
 
 // vim: set ts=2 sw=2 tw=80:

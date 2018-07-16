@@ -20,17 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {is_defined} from 'gmp/utils/identity';
 
-import CreateIcon from '../../components/icon/newicon.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import CreateIcon from 'web/components/icon/newicon';
 
 const EntityCreateIcon = ({
+  capabilities,
   display = false,
   displayName,
   entity,
@@ -38,11 +41,10 @@ const EntityCreateIcon = ({
   name,
   title,
   onClick,
-  ...props,
-}, {capabilities}) => {
-
+  ...props
+}) => {
   if (!is_defined(name)) {
-    name = entity.entity_type;
+    name = getEntityType(entity);
   }
 
   const active = mayCreate && capabilities.mayCreate(name);
@@ -51,7 +53,7 @@ const EntityCreateIcon = ({
   }
 
   if (!is_defined(displayName)) {
-    displayName = _(capitalize_first_letter(name));
+    displayName = typeName(name);
   }
 
   if (!is_defined(title)) {
@@ -76,6 +78,7 @@ const EntityCreateIcon = ({
 };
 
 EntityCreateIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   display: PropTypes.bool,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
@@ -85,10 +88,6 @@ EntityCreateIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-EntityCreateIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityCreateIcon;
+export default withCapabilities(EntityCreateIcon);
 
 // vim: set ts=2 sw=2 tw=80:
