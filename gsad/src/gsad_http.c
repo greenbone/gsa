@@ -1313,28 +1313,3 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
 
   return g_string_free (xml, FALSE);
 }
-
-/**
- * @brief Removes user token and returns logout xml.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  message      Login screen message.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Login XML.
- */
-char *
-logout_xml (credentials_t *credentials,
-            const gchar *message,
-            cmd_response_data_t *response_data)
-{
-  time_t now;
-  char ctime_now[200];
-
-  user_logout (credentials_get_user (credentials));
-
-  now = time (NULL);
-  ctime_r_strip_newline (&now, ctime_now);
-
-  return login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
-}
