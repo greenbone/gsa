@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -54,10 +54,10 @@ class TagsHandler extends React.Component {
   }
 
   openCreateTagDialog(entity, create) {
-    const resourceType = is_defined(this.props.resourceType) ?
-      this.props.resourceType : entity.entity_type;
-    const name = is_defined(this.props.name) ? this.props.name : resourceType;
-
+    const {
+      resourceType = getEntityType(entity),
+      name = resourceType,
+    } = this.props;
     create({
       fixed: true,
       resource_ids: [entity.id],

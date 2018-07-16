@@ -25,6 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
+import {getEntityType} from 'gmp/utils/entitytype';
 
 import RestoreIcon from 'web/components/icon/restoreicon';
 import TrashDeleteIcon from 'web/components/icon/trashdeleteicon';
@@ -44,7 +45,7 @@ const check_by_type = {
      is_defined(entity.filter) ? !entity.filter.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
   },
-  config: entity => {
+  scanconfig: entity => {
     const restorable =
       is_defined(entity.scanner) ? !entity.scanner.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
@@ -67,7 +68,7 @@ const check_by_type = {
   permission: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
-  port_list: entity => {
+  portlist: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   report_format: entity => {
@@ -121,14 +122,15 @@ const check_by_type = {
 };
 
 
-function get_restore_delete_props(
-    entity,
-    onEntityRestore,
-    onEntityDelete,
-  ) {
+const get_restore_delete_props = (
+  entity,
+  onEntityRestore,
+  onEntityDelete,
+) => {
   let restoreprops;
   let deleteprops;
-  const can_restore_and_delete = check_by_type[entity.entity_type];
+  const entityType = getEntityType(entity);
+  const can_restore_and_delete = check_by_type[entityType];
   const {restorable, deletable} = can_restore_and_delete(entity);
 
   if (restorable) {

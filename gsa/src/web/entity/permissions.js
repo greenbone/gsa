@@ -28,6 +28,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
+import {getEntityType} from 'gmp/utils/entitytype';
 import {is_defined} from 'gmp/utils/identity';
 import {select_save_id} from 'gmp/utils/id';
 
@@ -105,9 +106,11 @@ class EntityPermissions extends React.Component {
   openMultiplePermissionDialog(permission) {
     const {gmp, relatedResourcesLoaders = [], entity} = this.props;
 
+    const entityType = getEntityType(entity);
+
     this.setState({
       multiplePermissionDialogVisible: true,
-      entity_type: entity.entity_type,
+      entity_type: entityType,
       entity_name: entity.name,
       id: entity.id,
       include_related: relatedResourcesLoaders.length === 0 ?
