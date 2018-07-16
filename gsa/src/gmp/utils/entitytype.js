@@ -53,7 +53,7 @@ export const normalizeType = type => {
   return is_defined(ctype) ? ctype : type;
 };
 
-export const ENTITY_TYPES = {
+const ENTITY_TYPES = {
   agent: _('Agent'),
   alert: _('Alert'),
   allinfo: _('All SecInfo'),
