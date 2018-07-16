@@ -25,6 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
+import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -46,7 +47,7 @@ const EntityNameTableData = ({
   links = true,
   displayName,
   userName,
-  type = entity.entity_type,
+  type = getEntityType(entity),
   children,
   onToggleDetailsClick,
 }) => (
