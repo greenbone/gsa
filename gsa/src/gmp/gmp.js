@@ -72,7 +72,7 @@ import LoginCommand from './commands/login.js';
 
 const log = logger.getLogger('gmp');
 
-export class Gmp {
+class Gmp {
 
   constructor(options = {}) {
     const {
@@ -80,7 +80,6 @@ export class Gmp {
       protocol,
       server,
       storage = localStorage,
-      caches,
       manualurl,
       protocoldocurl,
       ...httpoptions
@@ -90,7 +89,6 @@ export class Gmp {
 
     this._commands = {};
 
-    this.caches = caches;
     this.storage = storage;
 
     this.server = is_defined(server) ? server : window.location.host;
@@ -101,6 +99,8 @@ export class Gmp {
     this._login = new LoginCommand(this.http);
 
     this._autorefresh = autorefresh;
+
+    this._logoutListeners = [];
 
     if (this.storage.token) {
       this.token = this.storage.token;
@@ -131,33 +131,45 @@ export class Gmp {
       this.username = username;
       this.globals = login;
 
-      if (is_defined(this.caches)) {
-        this.caches.clearAll();
-      }
-
       return this.token;
     });
   }
 
   logout() {
-    if (!this.isLoggedIn()) {
+    if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
       const args = {token: this.token};
-      return this.http.request('get', {url, args})
+
+      const promise = this.http.request('get', {url, args})
         .then(xhr => {
           this.token = undefined;
+          log.debug('Logged out successfully');
           return xhr;
         })
         .catch(err => {
           this.token = undefined;
           log.error('Error on logout', err);
         });
+
+      for (const listener of this._logoutListeners) {
+        listener();
+      }
+
+      return promise;
     }
+
     return Promise.resolve();
   }
 
   isLoggedIn() {
     return !is_empty(this.token);
+  }
+
+  subscribeToLogout(listener) {
+    this._logoutListeners.push(listener);
+
+    return () => this._logoutListeners = this._logoutListeners.filter(
+      l => l !== listener);
   }
 
   buildUrl(path, params, anchor) {

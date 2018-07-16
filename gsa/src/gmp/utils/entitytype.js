@@ -53,78 +53,47 @@ export const normalizeType = type => {
   return is_defined(ctype) ? ctype : type;
 };
 
+export const ENTITY_TYPES = {
+  agent: _('Agent'),
+  alert: _('Alert'),
+  allinfo: _('All SecInfo'),
+  asset: _('Asset'),
+  certbund: _('CERT-Bund Advisory'),
+  cpe: _('CPE'),
+  credential: _('Credential'),
+  cve: _('CVE'),
+  dfncert: _('DFN-CERT Advisory'),
+  filter: _('Filter'),
+  group: _('Group'),
+  host: _('Host'),
+  info: _('Info'),
+  operatingsystem: _('Operating System'),
+  ovaldef: _('OVAL Definition'),
+  override: _('Override'),
+  note: _('Note'),
+  nvt: _('NVT'),
+  permission: _('Permission'),
+  portlist: _('Port List'),
+  portrange: _('Port Range'),
+  report: _('Report'),
+  reportformat: _('Report Format'),
+  result: _('Result'),
+  role: _('Role'),
+  scanconfig: _('Scan Config'),
+  scanner: _('Scanner'),
+  schedule: _('Schedule'),
+  tag: _('Tag'),
+  target: _('Target'),
+  task: _('Task'),
+  user: _('User'),
+  vuln: _('Vulnerability'),
+};
+
+
 export const typeName = type => {
   type = normalizeType(type);
-  switch (type) {
-    case 'agent':
-      return _('Agent');
-    case 'alert':
-      return _('Alert');
-    case 'allinfo':
-      return _('All SecInfo');
-    case 'asset':
-      return _('Asset');
-    case 'cpe':
-      return _('CPE');
-    case 'cve':
-      return _('CVE');
-    case 'credential':
-      return _('Credential');
-    case 'certbund':
-      return _('CERT-Bund Advisory');
-    case 'dfncert':
-      return _('DFN-CERT Advisory');
-    case 'filter':
-      return _('Filter');
-    case 'group':
-      return _('Group');
-    case 'host':
-      return _('Host');
-    case 'info':
-      return _('SecInfo');
-    case 'operatingsystem':
-      return _('Operating System');
-    case 'ovaldef':
-      return _('OVAL Definition');
-    case 'note':
-      return _('Note');
-    case 'nvt':
-      return _('NVT');
-    case 'override':
-      return _('Override');
-    case 'permission':
-      return _('Permission');
-    case 'portlist':
-      return _('Port List');
-    case 'portrange':
-      return _('Port Range');
-    case 'report':
-      return _('Report');
-    case 'reportformat':
-      return _('Report Format');
-    case 'result':
-      return _('Result');
-    case 'role':
-      return _('Role');
-    case 'scanconfig':
-      return _('Scan Config');
-    case 'scanner':
-      return _('Scanner');
-    case 'schedule':
-      return _('Schedule');
-    case 'tag':
-      return _('Tag');
-    case 'target':
-      return _('Target');
-    case 'task':
-      return _('Task');
-    case 'user':
-      return _('User');
-    case 'vuln':
-      return _('Vulnerability');
-    default:
-      return type;
-  }
+  const name = ENTITY_TYPES[type];
+  return is_defined(name) ? name : type;
 };
 
 // vim: set ts=2 sw=2 tw=80:

@@ -65,11 +65,11 @@ class TagDialog extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {resource_ids} = this.props;
+    const {resource_ids = []} = this.props;
 
     this.state = {
       resourceIdText: '',
-      resourceIdsSelected: is_defined(resource_ids) ? resource_ids : [],
+      resourceIdsSelected: resource_ids,
       resourceOptions: [],
       resourceType: this.props.resource_type,
     };

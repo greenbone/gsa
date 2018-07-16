@@ -105,9 +105,6 @@ class Titlebar extends React.Component {
 
     gmp.logout().then(() => {
       router.push('/login?type=logout');
-    })
-    .catch(() => {
-      router.push('/login?type=logout');
     });
   }
 
