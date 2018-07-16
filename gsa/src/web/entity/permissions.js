@@ -30,6 +30,7 @@ import _ from 'gmp/locale.js';
 import {is_defined, select_save_id} from 'gmp/utils';
 
 import PropTypes from '../utils/proptypes.js';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ManualIcon from '../components/icon/manualicon.js';
 import NewIcon from '../components/icon/newicon.js';
@@ -48,29 +49,28 @@ const SectionElementDivider = glamorous(IconDivider)({
   marginBottom: '3px',
 });
 
-const SectionElements = ({
-  entity,
+const SectionElements = withCapabilities(({
+  capabilities,
   onPermissionCreateClick,
-}) => {
-  return (
-    <Layout grow align="end">
-      <SectionElementDivider>
+}) => (
+  <Layout grow align="end">
+    <SectionElementDivider>
+      {capabilities.mayCreate('permission') &&
         <NewIcon
           title={_('New Permission')}
           onClick={onPermissionCreateClick}
         />
-        <ManualIcon
-          page="gui_administration"
-          anchor="permissions"
-          title={_('Help: Permissions')}
-        />
-      </SectionElementDivider>
-    </Layout>
-  );
-};
+      }
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
+      />
+    </SectionElementDivider>
+  </Layout>
+));
 
 SectionElements.propTypes = {
-  entity: PropTypes.model.isRequired,
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
