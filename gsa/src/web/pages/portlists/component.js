@@ -227,9 +227,13 @@ class PortListComponent extends React.Component {
       isTmp: true,
     };
 
-    port_ranges.push(newRange);
     this.created_port_ranges.push(newRange);
-    this.setState({port_ranges});
+    this.setState({
+      port_ranges: [
+        ...port_ranges,
+        newRange,
+      ],
+    });
   }
 
   handleTmpDeletePortRange(port_range) {
