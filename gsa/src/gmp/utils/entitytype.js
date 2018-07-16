@@ -38,7 +38,7 @@ export const getEntityType = (model = {}) => {
 export const pluralizeType = type => type[type.length - 1] === 's' ||
   type === 'info' ? type : type + 's';
 
-const types = {
+const TYPES = {
   config: 'scanconfig',
   cert_bund_adv: 'certbund',
   dfn_cert_adv: 'dfncert',
@@ -49,7 +49,7 @@ const types = {
 };
 
 export const normalizeType = type => {
-  const ctype = types[type];
+  const ctype = TYPES[type];
   return is_defined(ctype) ? ctype : type;
 };
 
@@ -93,6 +93,28 @@ export const ENTITY_TYPES = {
 export const typeName = type => {
   type = normalizeType(type);
   const name = ENTITY_TYPES[type];
+  return is_defined(name) ? name : type;
+};
+
+const CMD_TYPES = {
+  scanconfig: 'config',
+  certbund: 'cert_bund_adv',
+  dfncert: 'dfn_cert_adv',
+  operatingsystem: 'os',
+  portlist: 'port_list',
+  portrange: 'port_range',
+  reportformat: 'report_format',
+};
+
+/**
+ * Convert a GSA entity type into a API type
+ *
+ * @param {String} type GSA entity type
+ *
+ * @returns {String} API type
+ */
+export const apiType = type => {
+  const name = CMD_TYPES[type];
   return is_defined(name) ? name : type;
 };
 
