@@ -158,13 +158,13 @@ const get_restore_delete_props = (
     };
   }
   return {restoreprops, deleteprops};
-}
+};
 
 const TrashActions = ({
-    entity,
-    onEntityDelete,
-    onEntityRestore,
-  }) => {
+  entity,
+  onEntityDelete,
+  onEntityRestore,
+}) => {
   const {restoreprops, deleteprops} =
     get_restore_delete_props(entity, onEntityRestore, onEntityDelete);
   return (
