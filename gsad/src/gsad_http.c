@@ -806,7 +806,7 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
 {
   if (sid)
     {
-      if (str_equal (sid, "0"))
+      if (str_equal (sid, REMOVE_SID))
         {
           if (remove_sid (response) == MHD_NO)
             {
