@@ -84,7 +84,7 @@ class OverrideComponent extends React.Component {
     if (is_defined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
-        if (is_defined(override.end_time)) {
+        if (is_defined(override.endTime)) {
           active = ACTIVE_YES_UNTIL_VALUE;
         }
         else {

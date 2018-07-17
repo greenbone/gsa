@@ -68,12 +68,10 @@ class Model {
     const copy = parse_properties(elem);
 
     if (is_defined(elem.end_time)) {
-      if (elem.end_time.length === 0) {
-        delete copy.end_time;
+      if (elem.end_time.length > 0) {
+        copy.endTime = parseDate(elem.end_time);
       }
-      else {
-        copy.end_time = parseDate(elem.end_time);
-      }
+      delete copy.end_time;
     }
 
     if (is_defined(elem.permissions)) {

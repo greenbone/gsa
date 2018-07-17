@@ -183,7 +183,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 {is_edit && note.isActive() &&
-                  is_defined(note.end_time) &&
+                  is_defined(note.endTime) &&
                   <Divider>
                     <Radio
                       name="active"
@@ -192,7 +192,7 @@ const NoteDialog = ({
                       value={ACTIVE_YES_UNTIL_VALUE}
                       onChange={onValueChange}
                     />
-                    <Text>{longDate(note.end_time)}</Text>
+                    <Text>{longDate(note.endTime)}</Text>
                   </Divider>
                 }
               </Divider>

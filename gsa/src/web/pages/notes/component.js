@@ -28,7 +28,6 @@ import _ from 'gmp/locale';
 import {
   is_array,
   is_defined,
-  is_empty,
   shorten,
 } from 'gmp/utils';
 
@@ -70,7 +69,7 @@ class NoteComponent extends React.Component {
     if (is_defined(note)) {
       let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
-        if (is_empty(note.end_time)) {
+        if (is_defined(note.endTime)) {
           active = ACTIVE_YES_ALWAYS_VALUE;
         }
         else {

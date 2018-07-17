@@ -220,7 +220,7 @@ const OverrideDialog = ({
                 onChange={onValueChange}
               />
               {is_edit && override.isActive() &&
-                is_defined(override.end_time) &&
+                is_defined(override.endTime) &&
                 <Layout flex box>
                   <Divider>
                     <Radio
@@ -230,7 +230,7 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <Text>{longDate(override.end_time)}</Text>
+                    <Text>{longDate(override.endTime)}</Text>
                   </Divider>
                 </Layout>
               }

@@ -164,9 +164,9 @@ const Details = ({
             </TableData>
             <TableData>
               {render_yesno(entity.isActive())}
-              {entity.isActive() && is_defined(entity.end_time) &&
+              {entity.isActive() && is_defined(entity.endTime) &&
                 ' ' + _('until {{- enddate}}',
-                  {enddate: longDate(entity.end_time)})
+                  {enddate: longDate(entity.endTime)})
               }
             </TableData>
           </TableRow>
