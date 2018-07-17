@@ -33,7 +33,6 @@ import {
   parse_text,
   parse_yesno,
   YES_VALUE,
-  parseDate,
 } from '../parser.js';
 
 import Nvt from './nvt.js';
@@ -78,13 +77,6 @@ class Note extends Model {
 
     if (is_empty(elem.port)) {
       delete ret.port;
-    }
-
-    if (is_defined(elem.end_time) && elem.end_time.length > 0) {
-      ret.end_time = parseDate(elem.end_time);
-    }
-    else {
-      delete ret.end_time;
     }
 
     return ret;
