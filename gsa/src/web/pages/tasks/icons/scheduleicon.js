@@ -38,8 +38,8 @@ const ScheduleIcon = ({
   links = true,
   schedule,
 }) => {
-  if (schedule.user_capabilities.areDefined() &&
-    schedule.user_capabilities.length === 0) {
+  if (schedule.userCapabilities.areDefined() &&
+    schedule.userCapabilities.length === 0) {
     return (
       <Icon
         size={size}

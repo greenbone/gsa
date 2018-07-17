@@ -39,7 +39,7 @@ const EntityLink = ({
   textOnly,
   ...props
 }) => {
-  const {id, name, user_capabilities, deleted} = entity;
+  const {id, name, userCapabilities, deleted} = entity;
   const type = getEntityType(entity);
 
   if (entity.isInTrash()) {
@@ -63,7 +63,7 @@ const EntityLink = ({
     );
   }
 
-  if ((user_capabilities.areDefined() && !user_capabilities.mayAccess(type)) ||
+  if ((userCapabilities.areDefined() && !userCapabilities.mayAccess(type)) ||
     !capabilities.mayAccess(type)) {
     return (
       <span>

@@ -79,11 +79,11 @@ class Model {
     if (is_defined(elem.permissions)) {
       // these are the permissions the current user has on the entity
       const caps = map(elem.permissions.permission, perm => perm.name);
-      copy.user_capabilities = new Capabilities(caps);
+      copy.userCapabilities = new Capabilities(caps);
       delete copy.permissions;
     }
     else {
-      copy.user_capabilities = new Capabilities();
+      copy.userCapabilities = new Capabilities();
     }
 
     if (is_defined(elem.user_tags)) {
