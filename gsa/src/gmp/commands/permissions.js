@@ -25,7 +25,9 @@ import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import Permission from '../models/permission.js';
+import Permission from '../models/permission';
+
+import {apiType} from '../utils/entitytype';
 
 const log = logger.getLogger('gmp.commands.permissions');
 
@@ -56,9 +58,9 @@ class PermissionCommand extends EntityCommand {
       permission_group_id: group_id,
       permission_role_id: role_id,
       permission_user_id: user_id,
-      optional_resource_type: resource_type,
+      optional_resource_type: apiType(resource_type),
       id_or_empty: resource_id,
-      subject_type,
+      subject_type: apiType(subject_type),
     };
     log.debug('Creating new permission', data);
     return this.action(data);
@@ -84,7 +86,7 @@ class PermissionCommand extends EntityCommand {
       role_id,
       user_id,
       resource_id,
-      optional_resource_type: resource_type,
+      optional_resource_type: apiType(resource_type),
       subject_type,
       id_or_empty: resource_id,
     };
@@ -119,7 +121,7 @@ class PermissionsCommand extends EntitiesCommand {
       permission_role_id: role_id,
       permission_user_id: user_id,
       resource_id: id,
-      resource_type: entity_type,
+      resource_type: apiType(entity_type),
       include_related,
       subject_type,
     };

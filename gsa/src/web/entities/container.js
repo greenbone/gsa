@@ -540,7 +540,7 @@ class EntitiesContainer extends React.Component {
 
   render() {
     const {
-      entities = [],
+      entities,
       entities_counts,
       loaded_filter,
       loading,
@@ -563,7 +563,7 @@ class EntitiesContainer extends React.Component {
 
     let entitiesType;
     let resourceTypes;
-    if (entities.length > 0) {
+    if (is_defined(entities) && entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
       resourceTypes = [[entitiesType, typeName(entitiesType)]];
     }

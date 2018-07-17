@@ -26,51 +26,55 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../utils/proptypes.js';
+import {getEntityType} from 'gmp/utils/entitytype';
+import {is_defined} from 'gmp/utils/identity';
+import {select_save_id} from 'gmp/utils/id';
 
-import ManualIcon from '../components/icon/manualicon.js';
-import NewIcon from '../components/icon/newicon.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import Layout from '../components/layout/layout.js';
-import IconDivider from '../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
+
+import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,
   INCLUDE_RELATED_RESOURCES,
-} from '../pages/permissions/multipledialog.js';
-import PermissionsTable from '../pages/permissions/table.js';
-import PermissionComponent from '../pages/permissions/component.js';
+} from 'web/pages/permissions/multipledialog';
+import PermissionsTable from 'web/pages/permissions/table';
+import PermissionComponent from 'web/pages/permissions/component';
 
 const SectionElementDivider = glamorous(IconDivider)({
   marginBottom: '3px',
 });
 
-const SectionElements = ({
-  entity,
+const SectionElements = withCapabilities(({
+  capabilities,
   onPermissionCreateClick,
-}) => {
-  return (
-    <Layout grow align="end">
-      <SectionElementDivider>
+}) => (
+  <Layout grow align="end">
+    <SectionElementDivider>
+      {capabilities.mayCreate('permission') &&
         <NewIcon
           title={_('New Permission')}
           onClick={onPermissionCreateClick}
         />
-        <ManualIcon
-          page="gui_administration"
-          anchor="permissions"
-          title={_('Help: Permissions')}
-        />
-      </SectionElementDivider>
-    </Layout>
-  );
-};
+      }
+      <ManualIcon
+        page="gui_administration"
+        anchor="permissions"
+        title={_('Help: Permissions')}
+      />
+    </SectionElementDivider>
+  </Layout>
+));
 
 SectionElements.propTypes = {
-  entity: PropTypes.model.isRequired,
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
@@ -100,12 +104,13 @@ class EntityPermissions extends React.Component {
   }
 
   openMultiplePermissionDialog(permission) {
-    const {relatedResourcesLoaders = [], entity} = this.props;
-    const {gmp} = this.context;
+    const {gmp, relatedResourcesLoaders = [], entity} = this.props;
+
+    const entityType = getEntityType(entity);
 
     this.setState({
       multiplePermissionDialogVisible: true,
-      entity_type: entity.entity_type,
+      entity_type: entityType,
       entity_name: entity.name,
       id: entity.id,
       include_related: relatedResourcesLoaders.length === 0 ?
@@ -151,8 +156,7 @@ class EntityPermissions extends React.Component {
   }
 
   handleMultipleSave(data) {
-    const {onChanged} = this.props;
-    const {gmp} = this.context;
+    const {gmp, onChanged} = this.props;
     return gmp.permissions.create(data).then(onChanged);
   }
 
@@ -231,6 +235,7 @@ class EntityPermissions extends React.Component {
 
 EntityPermissions.propTypes = {
   entity: PropTypes.model.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
@@ -240,9 +245,7 @@ EntityPermissions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-EntityPermissions.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
+EntityPermissions = withGmp(EntityPermissions);
 
 const Permissions = ({
   onChanged,

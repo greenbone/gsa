@@ -29,7 +29,7 @@ import _ from 'gmp/locale';
 import {is_defined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
-import {getEntityType, ENTITY_TYPES} from 'gmp/utils/entitytype';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -43,6 +43,36 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import TagDialog from './dialog.js';
+
+const TYPES = [
+  'agent',
+  'alert',
+  'host',
+  'operatingsystem',
+  'cpe',
+  'credential',
+  'cve',
+  'certbund',
+  'dfncert',
+  'filter',
+  'group',
+  'note',
+  'nvt',
+  'ovaldef',
+  'override',
+  'permission',
+  'portlist',
+  'report',
+  'reportformat',
+  'result',
+  'role',
+  'scanconfig',
+  'scanner',
+  'schedule',
+  'target',
+  'task',
+  'user',
+];
 
 class TagComponent extends React.Component {
 
@@ -86,89 +116,8 @@ class TagComponent extends React.Component {
 
   getResourceTypes() {
     const {capabilities} = this.props;
-    const resource_types = [];
-    if (capabilities.mayAccess('agents')) {
-      resource_types.push(['agent', ENTITY_TYPES.agent]);
-    }
-    if (capabilities.mayAccess('alerts')) {
-      resource_types.push(['alert', ENTITY_TYPES.alert]);
-    }
-    if (capabilities.mayAccess('assets')) {
-      resource_types.push(['host', ENTITY_TYPES.host]);
-    }
-    if (capabilities.mayAccess('assets')) {
-      resource_types.push(['os', ENTITY_TYPES.operatingsystem]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['cpe', ENTITY_TYPES.cpe]);
-    }
-    if (capabilities.mayAccess('credentials')) {
-      resource_types.push(['credential', ENTITY_TYPES.credential]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['cve', ENTITY_TYPES.cve]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['cert_bund_adv', ENTITY_TYPES.certbund]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['dfn_cert_adv', ENTITY_TYPES.dfncert]);
-    }
-    if (capabilities.mayAccess('filters')) {
-      resource_types.push(['filter', ENTITY_TYPES.filter]);
-    }
-    if (capabilities.mayAccess('groups')) {
-      resource_types.push(['group', ENTITY_TYPES.group]);
-    }
-    if (capabilities.mayAccess('notes')) {
-      resource_types.push(['note', ENTITY_TYPES.note]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['nvt', ENTITY_TYPES.nvt]);
-    }
-    if (capabilities.mayAccess('info')) {
-      resource_types.push(['ovaldef', ENTITY_TYPES.ovaldef]);
-    }
-    if (capabilities.mayAccess('overrides')) {
-      resource_types.push(['override', ENTITY_TYPES.override]);
-    }
-    if (capabilities.mayAccess('permissions')) {
-      resource_types.push(['permission', ENTITY_TYPES.permission]);
-    }
-    if (capabilities.mayAccess('port_lists')) {
-      resource_types.push(['port_list', ENTITY_TYPES.portlist]);
-    }
-    if (capabilities.mayAccess('reports')) {
-      resource_types.push(['report', ENTITY_TYPES.report]);
-    }
-    if (capabilities.mayAccess('report_formats')) {
-      resource_types.push(['report_format', ENTITY_TYPES.reportformat]);
-    }
-    if (capabilities.mayAccess('results')) {
-      resource_types.push(['result', ENTITY_TYPES.result]);
-    }
-    if (capabilities.mayAccess('roles')) {
-      resource_types.push(['role', ENTITY_TYPES.role]);
-    }
-    if (capabilities.mayAccess('configs')) {
-      resource_types.push(['config', ENTITY_TYPES.config]);
-    }
-    if (capabilities.mayAccess('scanners')) {
-      resource_types.push(['scanner', ENTITY_TYPES.scanner]);
-    }
-    if (capabilities.mayAccess('schedules')) {
-      resource_types.push(['schedule', ENTITY_TYPES.schedule]);
-    }
-    if (capabilities.mayAccess('targets')) {
-      resource_types.push(['target', ENTITY_TYPES.target]);
-    }
-    if (capabilities.mayAccess('tasks')) {
-      resource_types.push(['task', ENTITY_TYPES.task]);
-    }
-    if (capabilities.mayAccess('users')) {
-      resource_types.push(['user', ENTITY_TYPES.user]);
-    }
-    return resource_types;
+    return TYPES.map(type => capabilities.mayAccess(type) ?
+     [type, typeName(type)] : undefined).filter(is_defined);
   }
 
   openTagDialog(tag, options = {}) {
