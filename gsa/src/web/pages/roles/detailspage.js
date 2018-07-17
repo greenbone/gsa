@@ -30,7 +30,7 @@ import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {permission_description} from '../../utils/render.js';
+import {permissionDescription} from '../../utils/render.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {
@@ -193,7 +193,7 @@ const GeneralPermissions = ({
                   displayName={_('Permission')}
                 />
                 <TableData>
-                  {permission_description(perm.name, perm.resource)}
+                  {permissionDescription(perm.name, perm.resource)}
                 </TableData>
               </TableRow>
             ))}
