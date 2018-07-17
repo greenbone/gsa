@@ -18878,15 +18878,15 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
-  include_related = atoi (params_value (params, "include_related"));
   CHECK_VARIABLE_INVALID (params_value (params, "include_related"),
-                       "Create Permission");
-
+                          "Create Permission");
   CHECK_VARIABLE_INVALID (permission, "Create Permission");
   CHECK_VARIABLE_INVALID (comment, "Create Permission");
   CHECK_VARIABLE_INVALID (resource_id, "Create Permission");
   CHECK_VARIABLE_INVALID (subject_type, "Create Permission");
   CHECK_VARIABLE_INVALID (resource_type, "Create Permission");
+
+  include_related = atoi (params_value (params, "include_related"));
 
   if (params_given (params, "subject_name"))
     {
@@ -18959,11 +18959,11 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                               response_data);
         }
     }
-  else if (strcmp (subject_type, "user") == 0)
+  else if (str_equal (subject_type, "user"))
     subject_id = params_value (params, "permission_user_id");
-  else if (strcmp (subject_type, "group") == 0)
+  else if (str_equal (subject_type, "group"))
     subject_id = params_value (params, "permission_group_id");
-  else if (strcmp (subject_type, "role") == 0)
+  else if (str_equal (subject_type, "role"))
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
