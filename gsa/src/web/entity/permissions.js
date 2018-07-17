@@ -103,18 +103,16 @@ class EntityPermissions extends React.Component {
     }
   }
 
-  openMultiplePermissionDialog(permission) {
+  openMultiplePermissionDialog() {
     const {gmp, relatedResourcesLoaders = [], entity} = this.props;
 
     const entityType = getEntityType(entity);
 
     this.setState({
       multiplePermissionDialogVisible: true,
-      entity_type: entityType,
-      entity_name: entity.name,
+      entityType,
+      entityName: entity.name,
       id: entity.id,
-      include_related: relatedResourcesLoaders.length === 0 ?
-        CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
       title: _('Create Multiple Permissions'),
     });
 
@@ -125,6 +123,8 @@ class EntityPermissions extends React.Component {
 
         this.setState({
           related,
+          includeRelated: loaded.length === 0 ?
+            CURRENT_RESOURCE_ONLY : INCLUDE_RELATED_RESOURCES,
         });
       });
 
@@ -132,21 +132,21 @@ class EntityPermissions extends React.Component {
       const {data: groups} = response;
       this.setState({
         groups,
-        group_id: select_save_id(groups),
+        groupId: select_save_id(groups),
       });
     });
     gmp.roles.getAll().then(response => {
       const {data: roles} = response;
       this.setState({
         roles,
-        role_id: select_save_id(roles),
+        roleId: select_save_id(roles),
       });
     });
     gmp.users.getAll().then(response => {
       const {data: users} = response;
       this.setState({
         users,
-        user_id: select_save_id(users),
+        userId: select_save_id(users),
       });
     });
   }
@@ -169,16 +169,17 @@ class EntityPermissions extends React.Component {
 
     const {
       multiplePermissionDialogVisible,
-      entity_type,
-      entity_name,
-      group_id,
+      entityType,
+      entityName,
+      groupId,
       groups,
       id,
-      include_related,
-      role_id,
+      includeRelated,
+      related,
+      roleId,
       roles,
       title,
-      user_id,
+      userId,
       users,
     } = this.state;
 
@@ -189,8 +190,8 @@ class EntityPermissions extends React.Component {
       />
     );
 
-    const has_permissions = is_defined(permissions);
-    const count = has_permissions ? permissions.length : 0;
+    const hasPermissions = is_defined(permissions);
+    const count = hasPermissions ? permissions.length : 0;
 
     return (
       <Layout
@@ -213,16 +214,17 @@ class EntityPermissions extends React.Component {
         }
         {multiplePermissionDialogVisible &&
           <MultiplePermissionDialog
-            entity_type={entity_type}
-            entity_name={entity_name}
-            group_id={group_id}
+            entityType={entityType}
+            entityName={entityName}
+            groupId={groupId}
             groups={groups}
             id={id}
-            include_related={include_related}
-            role_id={role_id}
+            includeRelated={includeRelated}
+            related={related}
+            roleId={roleId}
             roles={roles}
             title={title}
-            user_id={user_id}
+            userId={userId}
             users={users}
             onClose={this.closeMultiplePermissionDialog}
             onSave={this.handleMultipleSave}

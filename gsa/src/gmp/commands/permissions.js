@@ -104,26 +104,26 @@ class PermissionsCommand extends EntitiesCommand {
   create({
     id,
     permission,
-    entity_type,
+    entityType,
     comment = '',
-    group_id,
-    role_id,
-    user_id,
-    subject_type,
-    include_related,
+    groupId,
+    roleId,
+    userId,
+    subjectType,
+    includeRelated,
     related = [],
   }) {
     const data = {
       cmd: 'create_permissions',
       comment,
       permission,
-      permission_group_id: group_id,
-      permission_role_id: role_id,
-      permission_user_id: user_id,
+      permission_group_id: groupId,
+      permission_role_id: roleId,
+      permission_user_id: userId,
       resource_id: id,
-      resource_type: apiType(entity_type),
-      include_related,
-      subject_type,
+      resource_type: apiType(entityType),
+      include_related: includeRelated,
+      subject_type: subjectType,
     };
 
     for (const resource in related) {
