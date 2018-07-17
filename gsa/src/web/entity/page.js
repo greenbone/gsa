@@ -113,13 +113,11 @@ class EntityPage extends React.Component {
       section_title = title + ': ' + entity.name;
     }
 
-    const tags = entity.user_tags;
-    const has_tags = is_defined(tags);
-    const tagsCount = has_tags ? tags.length : 0;
+    const {userTags} = entity;
     const tagsTitle = (
       <TabTitle
         title={_('User Tags')}
-        count={tagsCount}
+        count={userTags.length}
       />
     );
 

@@ -87,9 +87,13 @@ class Model {
     }
 
     if (is_defined(elem.user_tags)) {
-      copy.user_tags = map(elem.user_tags.tag, tag => {
+      copy.userTags = map(elem.user_tags.tag, tag => {
         return new Model(tag, 'tag');
       });
+      delete copy.user_tags;
+    }
+    else {
+      copy.userTags = [];
     }
 
     const yes_no_props = ['in_use', 'writable', 'orphan', 'active', 'trash'];

@@ -156,7 +156,7 @@ const Details = ({
   entity,
   ...props
 }) => {
-  const {notes, overrides, qod, host, user_tags} = entity;
+  const {notes, overrides, qod, host, userTags} = entity;
   const active_notes = notes.filter(active_filter);
   const active_overrides = overrides.filter(active_filter);
   return (
@@ -224,12 +224,12 @@ const Details = ({
         </InfoTable>
       </DetailsBlock>
 
-      {user_tags.length > 0 &&
+      {userTags.length > 0 &&
         <DetailsBlock
           title={_('Tags')}
         >
           <Divider>
-            {user_tags.map(tag => (
+            {userTags.map(tag => (
               <DetailsLink
                 key={tag.id}
                 id={tag.id}
