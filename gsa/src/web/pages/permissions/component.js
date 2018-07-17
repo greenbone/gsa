@@ -39,6 +39,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import PermissionDialog from './dialog.js';
+import {getEntityType} from 'gmp/utils/entitytype.js';
 
 class PermissionsComponent extends React.Component {
 
@@ -62,7 +63,7 @@ class PermissionsComponent extends React.Component {
 
     if (is_defined(permission)) {
       const subject_type = is_defined(permission.subject) ?
-        permission.subject.entity_type : undefined;
+        getEntityType(permission.subject) : undefined;
 
       state = {
         id: permission.id,
@@ -73,7 +74,7 @@ class PermissionsComponent extends React.Component {
         resource_id: is_defined(permission.resource) ?
           permission.resource.id : '',
         resource_type: is_defined(permission.resource) ?
-          permission.resource.entity_type : '',
+          getEntityType(permission.resource) : '',
         role_id: undefined,
         subject_type,
         title: _('Edit Permission {{name}}', {name: permission.name}),

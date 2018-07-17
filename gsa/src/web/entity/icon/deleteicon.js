@@ -23,28 +23,31 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined} from 'gmp/utils/identity';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
-import DeleteIcon from '../../components/icon/deleteicon.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import DeleteIcon from 'web/components/icon/deleteicon';
 
 const EntityDeleteIcon = ({
-    displayName,
-    entity,
-    name,
-    title,
-    onClick,
-    ...props,
-  }, {capabilities}) => {
-
+  capabilities,
+  displayName,
+  entity,
+  name,
+  title,
+  onClick,
+  ...props
+}) => {
   if (!is_defined(name)) {
-    name = entity.entity_type;
+    name = getEntityType(entity);
   }
 
   if (!is_defined(displayName)) {
-    displayName = _(capitalize_first_letter(name));
+    displayName = typeName(name);
   }
 
   const active = capabilities.mayDelete(name) && entity.isWritable() &&
@@ -78,6 +81,7 @@ const EntityDeleteIcon = ({
 };
 
 EntityDeleteIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -85,10 +89,6 @@ EntityDeleteIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-EntityDeleteIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityDeleteIcon;
+export default withCapabilities(EntityDeleteIcon);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -20,32 +20,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined} from 'gmp/utils/identity';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
-import CloneIcon from '../../components/icon/cloneicon.js';
+import PropTypes from 'web/utils/proptypes';
+
+import CloneIcon from 'web/components/icon/cloneicon';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityCloneIcon = ({
-    displayName,
-    entity,
-    mayClone = true,
-    name,
-    title,
-    onClick,
-    ...props,
-  }, {capabilities}) => {
+  capabilities,
+  displayName,
+  entity,
+  mayClone = true,
+  name,
+  title,
+  onClick,
+  ...props
+}) => {
 
   if (!is_defined(name)) {
-    name = entity.entity_type;
+    name = getEntityType(entity);
   }
 
   if (!is_defined(displayName)) {
-    displayName = _(capitalize_first_letter(name));
+    displayName = typeName(name);
   }
 
   const active = mayClone && capabilities.mayClone(name);
@@ -71,6 +74,7 @@ const EntityCloneIcon = ({
 };
 
 EntityCloneIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayClone: PropTypes.bool,
@@ -79,10 +83,6 @@ EntityCloneIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-EntityCloneIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityCloneIcon;
+export default withCapabilities(EntityCloneIcon);
 
 // vim: set ts=2 sw=2 tw=80:
