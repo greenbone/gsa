@@ -10194,6 +10194,32 @@ should not have received it.
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Delta report')"/></label>
+          <div class="col-10">
+            <div class="radio">
+              <label>
+                <input type="radio" name="method_data:delta_type" value="None" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('None', 'Delta Report')"/>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="method_data:delta_type" value="Previous"/>
+                <xsl:value-of select="gsa:i18n ('Previous completed report of the same task')"/>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="method_data:delta_type" value="Report"/>
+                <xsl:value-of select="gsa:i18n ('Report with ID')"/>
+              </label>
+              <xsl:text> </xsl:text>
+              <input name="method_data:delta_report_id"/>
+            </div>
+          </div>
+        </div>
+
         <!-- Method -->
 
         <div class="form-group">
@@ -11136,6 +11162,38 @@ should not have received it.
             </div>
           </div>
         </xsl:if>
+
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Delta report')"/></label>
+          <div class="col-10">
+            <div class="radio">
+              <xsl:call-template name="radio-button">
+                <xsl:with-param name="name" select="'method_data:delta_type'"/>
+                <xsl:with-param name="text" select="gsa:i18n ('None', 'Delta Report')"/>
+                <xsl:with-param name="value" select="'None'"/>
+                <xsl:with-param name="select-value" select="$method/data[name='delta_type']/text()"/>
+              </xsl:call-template>
+            </div>
+            <div class="radio">
+              <xsl:call-template name="radio-button">
+                <xsl:with-param name="name" select="'method_data:delta_type'"/>
+                <xsl:with-param name="text" select="gsa:i18n ('Previous completed report of the same task')"/>
+                <xsl:with-param name="value" select="'Previous'"/>
+                <xsl:with-param name="select-value" select="$method/data[name='delta_type']/text()"/>
+              </xsl:call-template>
+            </div>
+            <div class="radio">
+              <xsl:call-template name="radio-button">
+                <xsl:with-param name="name" select="'method_data:delta_type'"/>
+                <xsl:with-param name="text" select="gsa:i18n ('Report with ID')"/>
+                <xsl:with-param name="value" select="'Report'"/>
+                <xsl:with-param name="select-value" select="$method/data[name='delta_type']/text()"/>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
+              <input name="method_data:delta_report_id" value="{$method/data[name='delta_report_id']/text()}"/>
+            </div>
+          </div>
+        </div>
 
         <div class="form-group form-selection-item-event form-selection-item-event--secinfo"
           style="display: none" id="details_url_row">
@@ -12569,6 +12627,26 @@ should not have received it.
           </xsl:choose>
         </td>
       </tr>
+      <xsl:if test="method/data[name='delta_type']/text() != '' and method/data[name='delta_type']/text() != 'None'">
+        <tr>
+          <td valign="top"><xsl:value-of select="gsa:i18n ('Delta report')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="method/data[name='delta_type']/text() = 'Previous'">
+                <xsl:value-of select="gsa:i18n ('Previous completed report of the same task')"/>
+              </xsl:when>
+              <xsl:when test="method/data[name='delta_type']/text() = 'Report'">
+                <a href="/omp?cmd=get_report&amp;report_id={method/data[name='delta_report_id']/text()}&amp;token={/envelope/token}">
+                  <xsl:value-of select="method/data[name='delta_report_id']/text()"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="method/data[name='delta_type']/text()"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
       <tr>
         <td valign="top"><xsl:value-of select="gsa:i18n ('Method')"/>:</td>
         <td>
