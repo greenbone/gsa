@@ -82,10 +82,6 @@ class Note extends Model {
     return ret;
   }
 
-  isActive() {
-    return this.active === YES_VALUE;
-  }
-
   isExcerpt() {
     return this.text_excerpt === YES_VALUE;
   }
