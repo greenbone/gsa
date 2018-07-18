@@ -43,20 +43,20 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const cvss_props = {
-  cvss_access_vector: _('Access Vector'),
-  cvss_access_complexity: _('Access Complexity'),
-  cvss_authentication: _('Authentication'),
-  cvss_confidentiality_impact: _('Confidentiality Impact'),
-  cvss_integrity_impact: _('Integrity Impact'),
-  cvss_availability_impact: _('Availability Impact'),
+const CVSS_PROPS = {
+  cvssAccessVector: _('Access Vector'),
+  cvssAccessComplexity: _('Access Complexity'),
+  cvssAuthentication: _('Authentication'),
+  cvssConfidentialityImpact: _('Confidentiality Impact'),
+  cvssIntegrityImpact: _('Integrity Impact'),
+  cvssAvailabilityImpact: _('Availability Impact'),
 };
 
 const CveDetails = ({
   entity,
 }) => {
   const {
-    cvss_base_vector,
+    cvssBaseVector,
     cwe_id,
     description,
     references = [],
@@ -104,7 +104,7 @@ const CveDetails = ({
                 />
               </TableData>
             </TableRow>
-            {is_defined(cvss_base_vector) &&
+            {is_defined(cvssBaseVector) &&
               <TableRow>
                 <TableData>
                   {_('Base Vector')}
@@ -112,14 +112,14 @@ const CveDetails = ({
                 <TableData>
                   <Link
                     to="cvsscalculator"
-                    query={{cvssVector: cvss_base_vector}}
+                    query={{cvssVector: cvssBaseVector}}
                   >
-                    {cvss_base_vector}
+                    {cvssBaseVector}
                   </Link>
                 </TableData>
               </TableRow>
             }
-            {Object.entries(cvss_props)
+            {Object.entries(CVSS_PROPS)
               .filter(([name]) => is_defined(entity[name]))
               .map(([name, title]) => (
                 <TableRow key={name}>

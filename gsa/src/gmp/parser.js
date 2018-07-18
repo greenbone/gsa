@@ -160,25 +160,25 @@ export const setProperties = (properties, object = {}) => {
 };
 
 export const parseCvssBaseVector = ({
-  access_complexity,
-  access_vector,
+  accessComplexity,
+  accessVector,
   authentication,
-  availability_impact,
-  confidentiality_impact,
-  integrity_impact,
+  availabilityImpact,
+  confidentialityImpact,
+  integrityImpact,
 }) => {
-  if (!is_defined(access_vector) &&
-    !is_defined(access_complexity) &&
+  if (!is_defined(accessVector) &&
+    !is_defined(accessComplexity) &&
     !is_defined(authentication) &&
-    !is_defined(confidentiality_impact) &&
-    !is_defined(integrity_impact) &&
-    !is_defined(availability_impact)) {
+    !is_defined(confidentialityImpact) &&
+    !is_defined(integrityImpact) &&
+    !is_defined(availabilityImpact)) {
     return undefined;
   }
 
   let vector = 'AV:';
 
-  switch (access_vector) {
+  switch (accessVector) {
     case 'LOCAL':
       vector += 'L';
       break;
@@ -193,7 +193,7 @@ export const parseCvssBaseVector = ({
   }
 
   vector += '/AC:';
-  switch (access_complexity) {
+  switch (accessComplexity) {
     case 'LOW':
       vector += 'L';
       break;
@@ -223,7 +223,7 @@ export const parseCvssBaseVector = ({
   }
 
   vector += '/C:';
-  switch (confidentiality_impact) {
+  switch (confidentialityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -238,7 +238,7 @@ export const parseCvssBaseVector = ({
   }
 
   vector += '/I:';
-  switch (integrity_impact) {
+  switch (integrityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -253,7 +253,7 @@ export const parseCvssBaseVector = ({
   }
 
   vector += '/A:';
-  switch (availability_impact) {
+  switch (availabilityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -270,8 +270,8 @@ export const parseCvssBaseVector = ({
 
 };
 
-export const parseCvssBaseFromVector = cvss_vector => {
-  if (!is_defined(cvss_vector)) {
+export const parseCvssBaseFromVector = vector => {
+  if (!is_defined(vector)) {
     return {};
   }
 
@@ -282,7 +282,7 @@ export const parseCvssBaseFromVector = cvss_vector => {
   let i;
   let a;
 
-  const values = cvss_vector.split('/');
+  const values = vector.split('/');
 
   for (const currentvalue of values) {
     let [metric, value] = currentvalue.split(':');
@@ -363,12 +363,12 @@ export const parseCvssBaseFromVector = cvss_vector => {
   }
 
   return {
-    access_vector: av,
-    access_complexity: ac,
+    accessVector: av,
+    accessComplexity: ac,
     authentication: au,
-    confidentiality_impact: c,
-    integrity_impact: i,
-    availability_impact: a,
+    confidentialityImpact: c,
+    integrityImpact: i,
+    availabilityImpact: a,
   };
 };
 

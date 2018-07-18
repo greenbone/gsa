@@ -102,23 +102,23 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvss_base_vector = parseCvssBaseVector({
-      access_complexity: ret.complexity,
-      access_vector: ret.vector,
+    ret.cvssBaseVector = parseCvssBaseVector({
+      accessComplexity: ret.complexity,
+      accessVector: ret.vector,
       authentication: ret.authentication,
-      availability_impact: ret.confidentiality_impact,
-      confidentiality_impact: ret.confidentiality_impact,
-      integrity_impact: ret.integrity_impact,
+      availabilityImpact: ret.confidentiality_impact,
+      confidentialityImpact: ret.confidentiality_impact,
+      integrityImpact: ret.integrity_impact,
     });
 
     // use consistent names for cvss values
     rename_props(ret, {
-      vector: 'cvss_access_vector',
-      complexity: 'cvss_access_complexity',
-      authentication: 'cvss_authentication',
-      confidentiality_impact: 'cvss_confidentiality_impact',
-      integrity_impact: 'cvss_integrity_impact',
-      availability_impact: 'cvss_availability_impact',
+      vector: 'cvssAccessVector',
+      complexity: 'cvssAccessComplexity',
+      authentication: 'cvssAuthentication',
+      confidentiality_impact: 'cvssConfidentialityImpact',
+      integrity_impact: 'cvssIntegrityImpact',
+      availability_impact: 'cvssAvailabilityImpact',
     });
 
     if (is_empty(ret.products)) {
