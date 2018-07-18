@@ -89,7 +89,7 @@ export function parseFilter(element) {
   return new Filter(element.filters);
 }
 
-export function parse_counts(element, name, plural_name) {
+export function parseCounts(element, name, plural_name) {
   if (!is_defined(element)) {
     return {};
   }
@@ -125,7 +125,7 @@ export function parse_report_result_entities(response, name, modelclass) {
 };
 
 export function parse_collection_counts(response, name, plural_name) {
-  return new CollectionCounts(parse_counts(response, name, plural_name));
+  return new CollectionCounts(parseCounts(response, name, plural_name));
 }
 
 /**
