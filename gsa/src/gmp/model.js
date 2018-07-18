@@ -28,7 +28,7 @@ import {
   parseProperties,
   parseYesNo,
   parseDate,
-  set_properties,
+  setProperties,
   NO_VALUE,
   YES_VALUE,
 } from './parser.js';
@@ -53,7 +53,7 @@ class Model {
   }
 
   setProperties(properties) {
-    return set_properties(properties, this);
+    return setProperties(properties, this);
   }
 
   updateFromElement(elem) {

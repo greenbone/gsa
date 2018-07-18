@@ -144,7 +144,7 @@ export const parseProperties = (element, object = {}) => {
   return copy;
 };
 
-export const set_properties = (properties, object = {}) => {
+export const setProperties = (properties, object = {}) => {
   if (is_defined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
@@ -160,7 +160,7 @@ export const set_properties = (properties, object = {}) => {
 };
 
 export const new_properties = (properties, object = {}) =>
-  set_properties(parseProperties(properties, object));
+  setProperties(parseProperties(properties, object));
 
 export const parse_cvss_base_vector = ({
   access_complexity,

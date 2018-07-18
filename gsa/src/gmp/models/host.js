@@ -30,7 +30,7 @@ import {
   parseProperties,
   parseSeverity,
   parseYesNo,
-  set_properties,
+  setProperties,
 } from '../parser.js';
 
 import Asset from './asset.js';
@@ -54,7 +54,7 @@ class Identifier {
       props.os = new_properties(props.os);
     }
 
-    set_properties(props, this);
+    setProperties(props, this);
   }
 }
 

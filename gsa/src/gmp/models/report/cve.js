@@ -22,7 +22,7 @@
  */
 import {is_defined} from '../../utils/identity';
 
-import {set_properties, parseSeverity} from '../../parser.js';
+import {setProperties, parseSeverity} from '../../parser.js';
 
 import Nvt from '../nvt.js';
 
@@ -64,7 +64,7 @@ class ReportCve {
       count: 0,
     };
 
-    set_properties(copy, this);
+    setProperties(copy, this);
 
     return copy;
   }

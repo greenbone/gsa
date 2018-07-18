@@ -30,7 +30,7 @@ import {
   parseSeverity,
   parse_cvss_base_vector,
   parseDate,
-  set_properties,
+  setProperties,
 } from '../parser.js';
 
 import Info from './info.js';
@@ -69,7 +69,7 @@ class Cve extends Info {
 
     if (is_defined(ret.nvts)) {
       ret.nvts = map(ret.nvts.nvt, nvt => {
-        return set_properties({
+        return setProperties({
           ...nvt,
           id: nvt._oid,
           oid: nvt._oid,

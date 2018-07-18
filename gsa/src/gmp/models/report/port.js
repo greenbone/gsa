@@ -24,7 +24,7 @@ import 'core-js/fn/string/includes';
 
 import {is_defined} from '../../utils/identity';
 
-import {set_properties, parseInt, parseSeverity} from '../../parser.js';
+import {setProperties, parseInt, parseSeverity} from '../../parser.js';
 
 class ReportPort {
 
@@ -70,7 +70,7 @@ class ReportPort {
       count: 0,
     };
 
-    set_properties(copy, this);
+    setProperties(copy, this);
 
     this._severity = parseSeverity(elem.severity);
 
