@@ -98,7 +98,10 @@ let Link = ({
 
 Link.propTypes = {
   anchor: PropTypes.string,
-  filter: PropTypes.filter,
+  filter: PropTypes.oneOfType([
+    PropTypes.filter,
+    PropTypes.string,
+  ]),
   query: PropTypes.object,
   to: PropTypes.string.isRequired,
 };
