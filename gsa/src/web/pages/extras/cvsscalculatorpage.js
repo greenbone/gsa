@@ -30,7 +30,7 @@ import {is_defined, KeyCode} from 'gmp/utils';
 
 import {
   parseCvssBaseVector,
-  parse_cvss_base_from_vector,
+  parseCvssBaseFromVector,
 } from 'gmp/parser.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
@@ -145,7 +145,7 @@ class CvssCalculator extends React.Component {
 
   handleVectorChange() {
     const {user_vector} = this.state;
-    const cvss_values = parse_cvss_base_from_vector(user_vector);
+    const cvss_values = parseCvssBaseFromVector(user_vector);
     const {
       access_vector,
       access_complexity,

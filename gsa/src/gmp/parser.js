@@ -270,7 +270,7 @@ export const parseCvssBaseVector = ({
 
 };
 
-export const parse_cvss_base_from_vector = cvss_vector => {
+export const parseCvssBaseFromVector = cvss_vector => {
   if (!is_defined(cvss_vector)) {
     return {};
   }
