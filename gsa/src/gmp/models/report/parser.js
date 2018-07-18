@@ -37,7 +37,7 @@ import {parseSeverity, parseDate} from '../../parser.js';
 
 import {
   parse_collection_list,
-  parse_filter,
+  parseFilter,
   parse_report_result_entities,
 } from '../../collection/parser.js';
 
@@ -177,7 +177,7 @@ export const parse_tls_certificates = (report, filter) => {
   return {
     counts,
     entities: certs_per_port,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -224,7 +224,7 @@ export const parse_ports = (report, filter) => {
 
   return {
     entities: ports_array.sort((porta, portb) => porta.number > portb.number),
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
     counts,
   };
 };
@@ -275,7 +275,7 @@ export const parse_vulnerabilities = (report, filter) => {
 
   return {
     entities: vulns_array,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
     counts,
   };
 };
@@ -369,7 +369,7 @@ export const parse_apps = (report, filter) => {
   });
 
   return {
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
     entities: apps_array,
     counts,
   };
@@ -458,7 +458,7 @@ export const parse_operatingsystems = (report, filter) => {
   });
 
   return {
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
     entities: os_array,
     counts,
   };
@@ -491,7 +491,7 @@ export const parse_hosts = (report, filter) => {
   return {
     counts,
     entities: hosts_array,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -585,7 +585,7 @@ export const parse_errors = (report, filter) => {
   return {
     counts,
     entities: errors_array,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -652,7 +652,7 @@ export const parse_closed_cves = (report, filter) => {
   return {
     counts,
     entities: cves_array,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -704,7 +704,7 @@ export const parse_cves = (report, filter) => {
   return {
     counts,
     entities: cves_array,
-    filter: is_defined(filter) ? filter : parse_filter(report),
+    filter: is_defined(filter) ? filter : parseFilter(report),
   };
 };
 

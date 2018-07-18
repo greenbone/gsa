@@ -25,7 +25,7 @@ import {is_empty} from '../../utils/string';
 
 import {parseSeverity, parseDate} from '../../parser';
 
-import {parse_filter} from '../../collection/parser.js';
+import {parseFilter} from '../../collection/parser.js';
 
 import Model from '../../model.js';
 
@@ -53,7 +53,7 @@ class ReportReport extends Model {
 
     const {delta, severity, scan_start, scan_end, task, scan} = elem;
 
-    const filter = parse_filter(elem);
+    const filter = parseFilter(elem);
 
     copy.filter = filter;
 

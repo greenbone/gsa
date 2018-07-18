@@ -85,7 +85,7 @@ export function parseInfoCounts(response) {
   return new CollectionCounts(counts);
 }
 
-export function parse_filter(element) {
+export function parseFilter(element) {
   return new Filter(element.filters);
 }
 
@@ -172,7 +172,7 @@ export function parse_collection_list(response, name, modelclass,
     plural_name,
     entities_parse_func = parse_entities,
     collection_count_parse_func = parse_collection_counts,
-    filter_parse_func = parse_filter,
+    filter_parse_func = parseFilter,
   } = options;
   return {
     entities: entities_parse_func(response, name, modelclass),
