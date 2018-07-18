@@ -25,7 +25,6 @@ import {is_empty} from '../utils/string';
 import {for_each, map} from '../utils/array';
 
 import {
-  new_properties,
   parseInt,
   parseProperties,
   parseSeverity,
@@ -38,20 +37,23 @@ import Asset from './asset.js';
 const get_identifier = (identifiers, name) => identifiers.filter(
   identifier => identifier.name === name)[0];
 
+const newProperties = (properties, object = {}) =>
+  setProperties(parseProperties(properties, object));
+
 class Identifier {
 
   constructor(element) {
     const props = parseProperties(element);
 
     if (is_defined(props.source)) {
-      props.source = new_properties({
+      props.source = newProperties({
         ...props.source,
         source_type: props.source.type,
       });
     }
 
     if (is_defined(props.os)) {
-      props.os = new_properties(props.os);
+      props.os = newProperties(props.os);
     }
 
     setProperties(props, this);
@@ -95,7 +97,7 @@ class Host extends Asset {
       for_each(ret.host.detail, details => {
         ret.details[details.name] = {
           value: details.value,
-          source: new_properties(details.source),
+          source: newProperties(details.source),
         };
       });
 

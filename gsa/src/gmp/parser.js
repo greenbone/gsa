@@ -159,9 +159,6 @@ export const setProperties = (properties, object = {}) => {
   return object;
 };
 
-export const new_properties = (properties, object = {}) =>
-  setProperties(parseProperties(properties, object));
-
 export const parse_cvss_base_vector = ({
   access_complexity,
   access_vector,
