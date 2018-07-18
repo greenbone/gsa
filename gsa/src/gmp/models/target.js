@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parseYesNo, parse_csv} from '../parser.js';
+import {parse_int, parseYesNo, parseCsv} from '../parser.js';
 
 import PortList from './portlist.js';
 
@@ -62,8 +62,8 @@ class Target extends Model {
       }
     }
 
-    ret.hosts = parse_csv(elem.hosts);
-    ret.exclude_hosts = parse_csv(elem.exclude_hosts);
+    ret.hosts = parseCsv(elem.hosts);
+    ret.exclude_hosts = parseCsv(elem.exclude_hosts);
 
     ret.max_hosts = parse_int(elem.max_hosts);
 

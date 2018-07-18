@@ -88,7 +88,7 @@ export function parseYesNo(value) {
 }
 
 
-export function parse_csv(value) {
+export function parseCsv(value) {
   if (is_empty(value)) {
     return [];
   }

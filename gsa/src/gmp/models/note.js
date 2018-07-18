@@ -28,7 +28,7 @@ import {is_empty} from '../utils/string';
 import List from '../list.js';
 import Model from '../model.js';
 import {
-  parse_csv,
+  parseCsv,
   parse_severity,
   parse_text,
   parseYesNo,
@@ -73,7 +73,7 @@ class Note extends Model {
     ret.active = parseYesNo(elem.active);
     ret.text_excerpt = parseYesNo(elem.text_excerpt);
 
-    ret.hosts = parse_csv(elem.hosts);
+    ret.hosts = parseCsv(elem.hosts);
 
     if (is_empty(elem.port)) {
       delete ret.port;
