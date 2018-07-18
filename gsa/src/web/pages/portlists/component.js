@@ -21,23 +21,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
 import {parse_int} from 'gmp/parser';
-import {shorten} from 'gmp/utils';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import {shorten} from 'gmp/utils/string';
 
-import EntityComponent from '../../entity/component.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from 'web/entity/component';
 
-import ImportPortListDialog from './importdialog.js';
-import PortListsDialog from './dialog.js';
-import PortRangeDialog from './portrangedialog.js';
+import Wrapper from 'web/components/layout/wrapper';
+
+import ImportPortListDialog from './importdialog';
+import PortListsDialog from './dialog';
+import PortRangeDialog from './portrangedialog';
 
 class PortListComponent extends React.Component {
 
@@ -226,9 +227,13 @@ class PortListComponent extends React.Component {
       isTmp: true,
     };
 
-    port_ranges.push(newRange);
     this.created_port_ranges.push(newRange);
-    this.setState({port_ranges});
+    this.setState({
+      port_ranges: [
+        ...port_ranges,
+        newRange,
+      ],
+    });
   }
 
   handleTmpDeletePortRange(port_range) {

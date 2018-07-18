@@ -25,10 +25,10 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {is_defined, has_value} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const BadgeContainer = glamorous.div({
   position: 'relative',
@@ -92,7 +92,7 @@ class Badge extends React.Component {
   }
 
   calcMargin() {
-    if (is_defined(this.icon)) {
+    if (has_value(this.icon)) {
       const {width} = this.icon.getBoundingClientRect();
       this.setState({margin: width / 2});
     }

@@ -549,7 +549,13 @@ handle_logout (http_connection_t *connection,
 
   user_free (user);
 
-  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT);
+  return send_response (connection,
+                        "",
+                        MHD_HTTP_OK,
+                        REMOVE_SID,
+                        GSAD_CONTENT_TYPE_TEXT_HTML,
+                        NULL,
+                        0);
 }
 
 int
