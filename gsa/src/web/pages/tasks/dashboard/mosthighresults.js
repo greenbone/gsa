@@ -28,7 +28,7 @@ import {format as d3format} from 'd3-format';
 
 import _ from 'gmp/locale';
 
-import {parse_float, parse_severity} from 'gmp/parser';
+import {parse_float, parseSeverity} from 'gmp/parser';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -64,7 +64,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const {text, value: id} = group;
       const {name} = text;
       const high_per_host = parse_float(text.high_per_host);
-      const severity = parse_severity(text.severity);
+      const severity = parseSeverity(text.severity);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
       return {
         y: high_per_host,

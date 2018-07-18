@@ -33,7 +33,7 @@ import {
   map,
 } from '../../utils/array';
 
-import {parse_severity, parseDate} from '../../parser.js';
+import {parseSeverity, parseDate} from '../../parser.js';
 
 import {
   parse_collection_list,
@@ -198,7 +198,7 @@ export const parse_ports = (report, filter) => {
       let tport = temp_ports[id];
 
       if (is_defined(tport)) {
-        const severity = parse_severity(port.severity);
+        const severity = parseSeverity(port.severity);
 
         tport.setSeverity(severity);
       }
@@ -244,7 +244,7 @@ export const parse_vulnerabilities = (report, filter) => {
     const {_oid: oid} = nvt;
 
     if (is_defined(oid)) {
-      const severity = parse_severity(result.severity);
+      const severity = parseSeverity(result.severity);
 
       let vuln = temp_vulns[oid];
 
@@ -294,7 +294,7 @@ export const parse_apps = (report, filter) => {
 
   // if there are several results find the highest severity for the cpe
   for_each(results.result, result => {
-    const result_severity = parse_severity(result.severity);
+    const result_severity = parseSeverity(result.severity);
 
     if (is_defined(result.detection) && is_defined(result.detection.result) &&
       is_defined(result.detection.result.details)) {
@@ -384,7 +384,7 @@ export const parse_host_severities = (results = {}) => {
     const {__text: ip} = host;
 
     if (is_defined(ip)) {
-      const result_severity = parse_severity(result.severity);
+      const result_severity = parseSeverity(result.severity);
       const severity = severities[ip];
 
       if (is_defined(severity)) {
@@ -619,7 +619,7 @@ export const parse_closed_cves = (report, filter) => {
                 id: is_defined(host.asset) ? host.asset._asset_id : undefined,
               },
               source,
-              severity: parse_severity(extra),
+              severity: parseSeverity(extra),
             };
           }));
         }

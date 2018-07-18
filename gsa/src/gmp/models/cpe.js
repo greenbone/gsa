@@ -27,7 +27,7 @@ import {map} from '../utils/array';
 
 import Info from './info.js';
 
-import {parse_severity} from '../parser.js';
+import {parseSeverity} from '../parser.js';
 
 class Cpe extends Info {
 
@@ -36,13 +36,13 @@ class Cpe extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cpe');
 
-    ret.severity = parse_severity(ret.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
     if (is_defined(ret.cves) && is_defined(ret.cves.cve)) {
       ret.cves = map(ret.cves.cve.entry, cve => ({
         id: cve._id,
-        severity: parse_severity(cve.cvss.base_metrics.score.__text),
+        severity: parseSeverity(cve.cvss.base_metrics.score.__text),
       }));
     }
     else {

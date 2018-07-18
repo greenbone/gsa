@@ -28,7 +28,7 @@ import {
   new_properties,
   parse_int,
   parse_properties,
-  parse_severity,
+  parseSeverity,
   parseYesNo,
   set_properties,
 } from '../parser.js';
@@ -66,7 +66,7 @@ class Host extends Asset {
     let ret = super.parseProperties(elem);
 
     if (is_defined(ret.host) && is_defined(ret.host.severity)) {
-      ret.severity = parse_severity(ret.host.severity.value);
+      ret.severity = parseSeverity(ret.host.severity.value);
     }
 
     if (is_defined(ret.identifiers)) {

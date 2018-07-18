@@ -28,7 +28,7 @@ import List from '../list.js';
 import Model from '../model.js';
 import {
   parseCsv,
-  parse_severity,
+  parseSeverity,
   parse_text,
   parseYesNo,
   YES_VALUE,
@@ -67,9 +67,9 @@ class Override extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret.severity = parse_severity(ret.severity);
+    ret.severity = parseSeverity(ret.severity);
 
-    ret.new_severity = parse_severity(ret.new_severity);
+    ret.new_severity = parseSeverity(ret.new_severity);
 
     ret = {...ret, ...parse_text(ret.text)};
 

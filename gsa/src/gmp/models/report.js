@@ -22,7 +22,7 @@
  */
 import {is_defined} from '../utils/identity';
 
-import {parse_severity, parseDate} from '../parser';
+import {parseSeverity, parseDate} from '../parser';
 
 import Model from '../model';
 
@@ -57,7 +57,7 @@ class Report extends Model {
     copy.task = new Model(task, 'task');
 
     if (is_defined(severity)) {
-      copy.severity = parse_severity(severity);
+      copy.severity = parseSeverity(severity);
     }
 
     copy.report_type = type;

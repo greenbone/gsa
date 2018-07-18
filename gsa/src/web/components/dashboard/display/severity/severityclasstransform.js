@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_severity, parse_int} from 'gmp/parser';
+import {parseSeverity, parse_int} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -62,7 +62,7 @@ const transformSeverityData = (
   const severityClasses = groups.reduce((allSeverityClasses, group) => {
     let {value} = group;
 
-    value = parse_severity(value);
+    value = parseSeverity(value);
     if (!is_defined(value)) {
       value = NA_VALUE;
     }

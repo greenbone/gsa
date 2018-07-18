@@ -28,7 +28,7 @@ import {is_empty} from './utils/string';
 
 import date, {duration} from './models/date';
 
-export function parse_severity(value) {
+export function parseSeverity(value) {
   return is_empty(value) ? undefined : parse_float(value);
 }
 

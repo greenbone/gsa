@@ -26,7 +26,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_float, parse_severity} from '../parser.js';
+import {parse_float, parseSeverity} from '../parser.js';
 
 import Info from './info.js';
 
@@ -79,7 +79,7 @@ class Nvt extends Info {
     delete ret.bid;
     delete ret.bugtraq_id;
 
-    ret.severity = parse_severity(ret.cvss_base);
+    ret.severity = parseSeverity(ret.cvss_base);
     delete ret.cvss_base;
 
     if (is_defined(ret.preferences)) {

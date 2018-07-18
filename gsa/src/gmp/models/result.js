@@ -25,7 +25,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {for_each} from '../utils/array'
 
 import Model from '../model.js';
-import {parse_severity, parse_qod} from '../parser.js';
+import {parseSeverity, parse_qod} from '../parser.js';
 
 import Nvt from './nvt.js';
 
@@ -91,7 +91,7 @@ class Result extends Model {
     copy.nvt = new Nvt(nvt);
 
     if (is_defined(severity)) {
-      copy.severity = parse_severity(severity);
+      copy.severity = parseSeverity(severity);
     }
 
     copy.vulnerability = is_defined(name) ? name : nvt.oid;
@@ -127,7 +127,7 @@ class Result extends Model {
     }
 
     if (is_defined(original_severity)) {
-      copy.original_severity = parse_severity(original_severity);
+      copy.original_severity = parseSeverity(original_severity);
     }
 
     copy.qod = parse_qod(qod);

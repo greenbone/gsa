@@ -23,7 +23,7 @@
 import {is_defined} from '../utils/identity';
 import {for_each, map} from '../utils/array';
 
-import {parse_severity} from '../parser.js';
+import {parseSeverity} from '../parser.js';
 
 import Info from './info.js';
 
@@ -34,7 +34,7 @@ class DfnCertAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'dfn_cert_adv');
 
-    ret.severity = parse_severity(ret.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
     const {raw_data} = ret;

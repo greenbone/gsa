@@ -23,7 +23,7 @@
 import {is_defined} from '../utils/identity';
 import {for_each, map} from '../utils/array';
 
-import {parse_severity, parseDate} from '../parser';
+import {parseSeverity, parseDate} from '../parser';
 
 import Info from './info';
 
@@ -34,7 +34,7 @@ class CertBundAdv extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cert_bund_adv');
 
-    ret.severity = parse_severity(ret.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
     ret.categories = [];

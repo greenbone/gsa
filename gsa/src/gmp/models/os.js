@@ -22,7 +22,7 @@
  */
 
 import Asset from './asset.js';
-import {parse_severity} from '../parser.js';
+import {parseSeverity} from '../parser.js';
 
 class OperatingSystem extends Asset {
 
@@ -33,11 +33,11 @@ class OperatingSystem extends Asset {
 
     if (ret.os) {
       ret.average_severity = ret.os.average_severity ?
-        parse_severity(ret.os.average_severity.value) : undefined;
+        parseSeverity(ret.os.average_severity.value) : undefined;
       ret.latest_severity = ret.os.latest_severity ?
-        parse_severity(ret.os.latest_severity.value) : undefined;
+        parseSeverity(ret.os.latest_severity.value) : undefined;
       ret.highest_severity = ret.os.highest_severity ?
-        parse_severity(ret.os.highest_severity.value) : undefined;
+        parseSeverity(ret.os.highest_severity.value) : undefined;
 
       ret.title = ret.os.title;
       ret.hosts = {

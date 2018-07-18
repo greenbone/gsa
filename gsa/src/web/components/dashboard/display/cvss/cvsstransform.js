@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_int, parse_float, parse_severity} from 'gmp/parser';
+import {parse_int, parse_float, parseSeverity} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -81,7 +81,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
   groups.forEach(group => {
     let {value, count = 0} = group;
 
-    const severity = parse_severity(value);
+    const severity = parseSeverity(value);
 
     const cvss = is_defined(severity) ? Math.floor(severity) : NA_VALUE;
 

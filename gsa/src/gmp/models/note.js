@@ -29,7 +29,7 @@ import List from '../list.js';
 import Model from '../model.js';
 import {
   parseCsv,
-  parse_severity,
+  parseSeverity,
   parse_text,
   parseYesNo,
   YES_VALUE,
@@ -54,7 +54,7 @@ class Note extends Model {
 
     ret = {...ret, ...parse_text(ret.text)};
 
-    ret.severity = parse_severity(ret.severity);
+    ret.severity = parseSeverity(ret.severity);
 
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');

@@ -27,7 +27,7 @@ import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
-  parse_severity,
+  parseSeverity,
   parse_cvss_base_vector,
   parseDate,
   set_properties,
@@ -64,7 +64,7 @@ class Cve extends Info {
       delete ret.update_time;
     }
 
-    ret.severity = parse_severity(ret.cvss);
+    ret.severity = parseSeverity(ret.cvss);
     delete ret.cvss;
 
     if (is_defined(ret.nvts)) {

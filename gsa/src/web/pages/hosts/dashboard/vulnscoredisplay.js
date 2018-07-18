@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {parse_float, parse_severity} from 'gmp/parser';
+import {parse_float, parseSeverity} from 'gmp/parser';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -68,7 +68,7 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
       const {stats, text, value: id} = group;
       const {modified, name} = text;
       const {severity} = stats;
-      const averageSeverity = parse_severity(severity.mean);
+      const averageSeverity = parseSeverity(severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
       const modifiedDate = longDate(modified);
       const toolTip = (
