@@ -122,9 +122,8 @@ export function parseReportResultEntities(response, name, modelclass) {
   return parseEntities(response.results, name, modelclass);
 };
 
-export function parse_collection_counts(response, name, plural_name) {
-  return new CollectionCounts(parseCounts(response, name, plural_name));
-}
+const parseCollectionCounts = (response, name, plural_name) =>
+  new CollectionCounts(parseCounts(response, name, plural_name));
 
 /**
  * Parse a {@link CollectionList} from a response object
@@ -169,7 +168,7 @@ export function parse_collection_list(response, name, modelclass,
   const {
     plural_name,
     entities_parse_func = parseEntities,
-    collection_count_parse_func = parse_collection_counts,
+    collection_count_parse_func = parseCollectionCounts,
     filter_parse_func = parseFilter,
   } = options;
   return {
