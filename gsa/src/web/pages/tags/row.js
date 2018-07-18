@@ -160,7 +160,7 @@ const Row = ({
         {resource_count}
       </TableData>
       <TableData>
-        {shortDate(entity.modification_time)}
+        {shortDate(entity.modificationTime)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>

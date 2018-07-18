@@ -96,14 +96,14 @@ const render_certificate_info = info => {
 
   if (info.time_status === 'expired') {
     return _('Certificate currently in use expired at {{date}}',
-      {date: longDate(info.expiration_time)});
+      {date: longDate(info.expirationTime)});
   }
   if (info.time_status === 'inactive') {
     return _('Certificate currently in not valid until {{date}}',
-      {date: longDate(info.activation_time)});
+      {date: longDate(info.activationTime)});
   }
   return _('Certificate in use will expire at {{date}}',
-      {date: longDate(info.expiration_time)});
+      {date: longDate(info.expirationTime)});
 };
 
 const CertStatus = ({

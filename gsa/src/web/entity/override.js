@@ -80,7 +80,7 @@ const OverrideBox = ({
       text={override.text}
       end={override.endTime}
       toolbox={toolbox}
-      modified={override.modification_time}
+      modified={override.modificationTime}
     />
   );
 };

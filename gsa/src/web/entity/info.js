@@ -69,17 +69,17 @@ const EntityInfo = ({
   const {
     id,
     owner,
-    creation_time,
-    modification_time,
+    creationTime,
+    modificationTime,
   } = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Created:')}</div>
-      <div>{dateTimeWithTimeZone(creation_time)}</div>
+      <div>{dateTimeWithTimeZone(creationTime)}</div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(modification_time)}</div>
+      <div>{dateTimeWithTimeZone(modificationTime)}</div>
       <div>{_('Owner:')}</div>
       <OwnerInfo owner={owner}/>
     </InfoLayout>

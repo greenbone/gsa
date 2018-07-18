@@ -78,7 +78,7 @@ const Row = ({
           {na(entity.availability_impact)}
         </TableData>
         <TableData>
-          {longDate(entity.creation_time)}
+          {longDate(entity.creationTime)}
         </TableData>
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>

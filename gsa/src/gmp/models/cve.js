@@ -60,7 +60,8 @@ class Cve extends Info {
     const ret = super.parseProperties(elem, 'cve');
 
     if (is_defined(ret.update_time)) {
-      ret.update_time = parseDate(ret.update_time);
+      ret.updateTime = parseDate(ret.update_time);
+      delete ret.update_time;
     }
 
     ret.severity = parse_severity(ret.cvss);
@@ -134,8 +135,8 @@ class Cve extends Info {
         ret.cwe_id = entry.cwe._id;
       }
 
-      ret.published_time = parseDate(entry['published-datetime'].__text);
-      ret.last_modified_time = parseDate(
+      ret.publishedTime = parseDate(entry['published-datetime'].__text);
+      ret.lastModifiedTime = parseDate(
         entry['last-modified-datetime'].__text);
 
       ret.references = map(entry.references, ref => ({

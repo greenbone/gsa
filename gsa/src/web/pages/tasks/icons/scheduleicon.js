@@ -63,7 +63,7 @@ const ScheduleIcon = ({
   }
   else if (count > 1) {
     title = _('View Details of Schedule {{name}} (Next due: ' +
-      '{{next_time}}, {{periods}} more times )', {
+      '{{time}}, {{periods}} more times )', {
         name,
         time: nextDate,
         periods: count,

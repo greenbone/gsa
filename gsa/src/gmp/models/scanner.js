@@ -97,13 +97,15 @@ class Scanner extends Model {
 
       if (is_defined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
-        ret.ca_pub.info.activation_time = parseDate(
+        ret.ca_pub.info.activationTime = parseDate(
           ret.ca_pub.info.activation_time
         );
-        ret.ca_pub.info.expiration_time = parseDate(
+        ret.ca_pub.info.expirationTime = parseDate(
           ret.ca_pub.info.expiration_time
         );
-        delete ret.ca_pub_info;
+        delete ret.ca_pub.info.activation_time;
+        delete ret.ca_pub.info.expiration_time;
+        delete ret.ca_pub.info;
       }
     }
 

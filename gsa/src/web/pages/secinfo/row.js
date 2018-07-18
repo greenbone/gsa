@@ -65,10 +65,10 @@ const Row = ({
           {secinfo_type(entity.info_type)}
         </TableData>
         <TableData>
-          {longDate(entity.creation_time)}
+          {longDate(entity.creationTime)}
         </TableData>
         <TableData>
-          {longDate(entity.modification_time)}
+          {longDate(entity.modificationTime)}
         </TableData>
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>

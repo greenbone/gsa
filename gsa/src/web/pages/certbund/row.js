@@ -58,7 +58,7 @@ const Row = ({
         {na(entity.title)}
       </TableData>
       <TableData>
-        {longDate(entity.creation_time)}
+        {longDate(entity.creationTime)}
       </TableData>
       <TableData flex align="end">
         {entity.cve_refs}

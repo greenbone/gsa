@@ -127,10 +127,12 @@ export const parse_properties = (element, object = {}) => {
   }
 
   if (is_defined(element.creation_time)) {
-    copy.creation_time = parseDate(element.creation_time);
+    copy.creationTime = parseDate(element.creation_time);
+    delete copy.creation_time;
   }
   if (is_defined(element.modification_time)) {
-    copy.modification_time = parseDate(element.modification_time);
+    copy.modificationTime = parseDate(element.modification_time);
+    delete copy.modification_time;
   }
 
   if (is_defined(copy.type)) {

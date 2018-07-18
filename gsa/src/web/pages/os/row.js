@@ -117,7 +117,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
         </Link>
       </TableData>
       <TableData>
-        {longDate(entity.modification_time)}
+        {longDate(entity.modificationTime)}
       </TableData>
       {render_component(actions, {...props, entity})}
     </TableRow>
