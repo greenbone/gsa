@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {registerCommand} from '../command.js';
-import Model from '../model.js';
+import Model from '../model';
 
-import Credential from '../models/credential.js';
-import Task from '../models/task.js';
-import Settings from '../models/settings.js';
+import Credential from '../models/credential';
+import Task from '../models/task';
+import Settings from '../models/settings';
 
 import {for_each, map} from '../utils/array';
 

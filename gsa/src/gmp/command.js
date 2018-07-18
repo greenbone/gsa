@@ -22,7 +22,7 @@
  */
 const COMMANDS = {};
 
-export const registerCommand = (name, clazz, ...options) => {
+const registerCommand = (name, clazz, ...options) => {
   COMMANDS[name] = {clazz, options};
 };
 

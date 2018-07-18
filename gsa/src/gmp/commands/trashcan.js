@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {registerCommand} from '../command';
+import registerCommand from '../command';
 
 import {apiType} from '../utils/entitytype.js';
 import {is_defined} from '../utils/identity';
