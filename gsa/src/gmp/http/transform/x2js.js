@@ -26,7 +26,7 @@ import _ from '../../locale.js';
 
 import {is_defined} from '../../utils/identity';
 
-import {parse_envelope_meta} from '../../parser.js';
+import {parseEnvelopeMeta} from '../../parser.js';
 
 import Rejection from '../rejection.js';
 
@@ -38,7 +38,7 @@ export function xml2json(...args) {
 
 const transform_xml_data = response => {
   const {envelope} = xml2json(response.plainData('xml'));
-  const meta = parse_envelope_meta(envelope);
+  const meta = parseEnvelopeMeta(envelope);
   return response.set(envelope, meta);
 };
 

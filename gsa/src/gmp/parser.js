@@ -100,7 +100,7 @@ export const parseQod = qod => ({
   value: parseFloat(qod.value),
 });
 
-export function parse_envelope_meta(envelope) {
+export function parseEnvelopeMeta(envelope) {
   const meta = {};
 
   const props = [
