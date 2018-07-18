@@ -28,7 +28,7 @@ import {map} from '../utils/array';
 
 import {
   parseSeverity,
-  parse_cvss_base_vector,
+  parseCvssBaseVector,
   parseDate,
   setProperties,
 } from '../parser.js';
@@ -102,7 +102,7 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvss_base_vector = parse_cvss_base_vector({
+    ret.cvss_base_vector = parseCvssBaseVector({
       access_complexity: ret.complexity,
       access_vector: ret.vector,
       authentication: ret.authentication,

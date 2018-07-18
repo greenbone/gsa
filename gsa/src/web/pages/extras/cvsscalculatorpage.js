@@ -29,7 +29,7 @@ import _ from 'gmp/locale.js';
 import {is_defined, KeyCode} from 'gmp/utils';
 
 import {
-  parse_cvss_base_vector,
+  parseCvssBaseVector,
   parse_cvss_base_from_vector,
 } from 'gmp/parser.js';
 
@@ -107,7 +107,7 @@ class CvssCalculator extends React.Component {
       availability_impact,
     } = this.state;
 
-    const cvss_vector = parse_cvss_base_vector({
+    const cvss_vector = parseCvssBaseVector({
       access_complexity,
       access_vector,
       authentication,

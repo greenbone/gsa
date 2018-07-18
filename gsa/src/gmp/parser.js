@@ -159,7 +159,7 @@ export const setProperties = (properties, object = {}) => {
   return object;
 };
 
-export const parse_cvss_base_vector = ({
+export const parseCvssBaseVector = ({
   access_complexity,
   access_vector,
   authentication,
