@@ -68,7 +68,7 @@ import GmpHttp from './http/gmp.js';
 import {build_server_url, build_url_params} from './http/utils.js';
 import DefaultTransform from './http/transform/default';
 
-import {get_commands} from './command.js';
+import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
 const log = logger.getLogger('gmp');
@@ -109,7 +109,7 @@ class Gmp {
 
     this.globals = {manualurl, protocoldocurl};
 
-    const commands = get_commands();
+    const commands = getCommands();
     for (const name in commands) { // eslint-disable-line guard-for-in
       const cmd = commands[name];
       const instance = new cmd.clazz(this.http, ...cmd.options);

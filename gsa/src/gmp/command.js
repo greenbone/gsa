@@ -41,7 +41,7 @@ export const registerCommand = (name, clazz, ...options) => {
   COMMANDS[name] = {clazz, options};
 };
 
-export const get_commands = () => COMMANDS;
+export const getCommands = () => COMMANDS;
 
 export default registerCommand;
 
