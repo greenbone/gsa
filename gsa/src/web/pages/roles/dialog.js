@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
-import {permission_description} from '../../utils/render.js';
+import {permissionDescription} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -82,7 +82,7 @@ const Dialog = ({
 
   const permissionsOptions = map(all_permissions, permission => {
     const labelString = permission.name + ' (' +
-      permission_description(permission.name) + ')';
+      permissionDescription(permission.name) + ')';
     return {
       label: labelString,
       value: permission.name,
@@ -212,7 +212,7 @@ const Dialog = ({
                             </TableData>
                             <TableData>
                               {
-                                permission_description(permission.name,
+                                permissionDescription(permission.name,
                                   permission.resource)
                               }
                             </TableData>

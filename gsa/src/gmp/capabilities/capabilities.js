@@ -39,6 +39,8 @@ const types = {
   dfncerts: 'info',
   nvt: 'info',
   nvts: 'info',
+  operatingsystem: 'os',
+  operatingsystems: 'os',
   ovaldefs: 'info',
   ovaldef: 'info',
   certbund: 'info',

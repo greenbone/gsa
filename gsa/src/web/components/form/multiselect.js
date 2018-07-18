@@ -163,7 +163,7 @@ class MultiSelect extends React.Component {
       >
         <Layout>
           <DeleteButton
-            onClick={!disabled && (() => this.handleRemoveItem(value))}
+            onClick={disabled ? undefined : () => this.handleRemoveItem(value)}
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>

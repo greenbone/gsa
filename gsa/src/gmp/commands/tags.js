@@ -22,11 +22,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import logger from '../log.js';
+import logger from '../log';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command';
 
-import Tag from '../models/tag.js';
+import Tag from '../models/tag';
+
+import {apiType} from '../utils/entitytype';
 
 const log = logger.getLogger('gmp.commands.tags');
 
@@ -58,7 +60,7 @@ class TagCommand extends EntityCommand {
       active,
       comment,
       'resource_ids:': resource_ids,
-      resource_type,
+      resource_type: apiType(resource_type),
       resources_action,
     };
     log.debug('Creating new tag', data);
@@ -86,7 +88,7 @@ class TagCommand extends EntityCommand {
       active,
       filter,
       'resource_ids:': resource_ids.length > 0 ? resource_ids : undefined,
-      resource_type,
+      resource_type: apiType(resource_type),
       resources_action,
     };
     log.debug('Saving tag', data);

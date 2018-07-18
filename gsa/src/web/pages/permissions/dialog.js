@@ -26,11 +26,11 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_empty, is_defined} from 'gmp/utils';
+import {is_defined} from 'gmp/utils';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  permission_description,
+  permissionDescription,
   render_select_items,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -44,8 +44,9 @@ import TextField from '../../components/form/textfield.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
+import Model from 'gmp/model.js';
 
-const need_resource_id = [
+const NEED_RESOURCE_ID = [
   'Super',
   'delete_agent',
   'delete_alert',
@@ -129,48 +130,48 @@ const PermissionDialog = ({
   capabilities,
   comment = '',
   fixedResource = false,
-  group_id,
+  groupId,
   groups = [],
   id,
   name = 'Super',
   permission,
-  resource_id,
-  resource_type = '',
-  role_id,
+  resourceId,
+  resourceType = '',
+  roleId,
   roles = [],
-  subject_type,
+  subjectType,
   title = _('New Permission'),
-  user_id,
+  userId,
   users = [],
   visible,
   onClose,
   onSave,
 }) => {
 
-  const perm_opts = [];
+  const permItems = [{
+    value: 'Super',
+    label: _('Super (Has super access)'),
+  }];
 
   capabilities.forEach(cap => {
-    perm_opts.push(
-      <option
-        key={cap}
-        value={cap}>
-        {cap} ({permission_description(cap)})
-      </option>
-    );
+    permItems.push({
+      label: `${cap} ${permissionDescription(cap)}`,
+      value: cap,
+    });
   });
 
   const data = {
     comment,
-    group_id,
+    groupId,
     id,
     name,
     permission,
-    resource_id,
-    resource_type,
-    role_id,
-    subject_type,
+    resourceId,
+    resourceType,
+    roleId,
+    subjectType,
     title,
-    user_id,
+    userId,
   };
 
   return (
@@ -185,41 +186,35 @@ const PermissionDialog = ({
         values: state,
         onValueChange,
       }) => {
-        const show_resource_id = need_resource_id.includes(state.name);
+        const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
-        const resource = is_empty(state.resource_type) ? undefined : {
-          type: state.resource_type,
-          name: state.resource_id,
-        };
+        const resource = is_defined(state.resourceType) ? new Model({
+          name: state.resourceId,
+        }, state.resourceType) : undefined;
 
-        let subject_obj;
-        if (state.subject_type === 'user') {
-          subject_obj = users.find(user => user.id === state.user_id);
+        let subject;
+        if (state.subjectType === 'user') {
+          subject = users.find(user => user.id === state.userId);
         }
-        else if (state.subject_type === 'role') {
-          subject_obj = roles.find(role => role.id === state.role_id);
+        else if (state.subjectType === 'role') {
+          subject = roles.find(role => role.id === state.roleId);
         }
         else {
-          subject_obj = groups.find(group => group.id === state.group_id);
+          subject = groups.find(group => group.id === state.groupId);
         }
 
-        const subject = is_defined(subject_obj) ? {
-          type: state.subject_type,
-          name: subject_obj.name,
-        } : {};
-
-        let resource_id_title;
-        if (state.resource_type === 'user') {
-          resource_id_title = _('User ID');
+        let resourceIdTitle;
+        if (state.resourceType === 'user') {
+          resourceIdTitle = _('User ID');
         }
-        else if (state.resource_type === 'role') {
-          resource_id_title = _('Role ID');
+        else if (state.resourceType === 'role') {
+          resourceIdTitle = _('Role ID');
         }
-        else if (state.resource_type === 'group') {
-          resource_id_title = _('Group ID');
+        else if (state.resourceType === 'group') {
+          resourceIdTitle = _('Group ID');
         }
         else {
-          resource_id_title = _('Resource ID');
+          resourceIdTitle = _('Resource ID');
         }
 
         return (
@@ -229,13 +224,10 @@ const PermissionDialog = ({
               <Select
                 name="name"
                 value={state.name}
+                items={permItems}
                 width="300"
-                onChange={onValueChange}>
-                <option value="Super">
-                  {_('Super (Has super access)')}
-                </option>
-                {perm_opts}
-              </Select>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Comment')}>
@@ -256,16 +248,17 @@ const PermissionDialog = ({
                 {capabilities.mayAccess('users') &&
                   <Divider>
                     <Radio
-                      name="subject_type"
-                      checked={state.subject_type === 'user'}
+                      name="subjectType"
+                      checked={state.subjectType === 'user'}
                       title={_('User')}
                       value="user"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
-                      name="user_id"
+                      name="userId"
                       items={render_select_items(users)}
-                      value={state.user_id}
+                      value={state.userId}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -273,16 +266,16 @@ const PermissionDialog = ({
                 {capabilities.mayAccess('roles') &&
                   <Divider>
                     <Radio
-                      name="subject_type"
-                      checked={state.subject_type === 'role'}
+                      name="subjectType"
+                      checked={state.subjectType === 'role'}
                       title={_('Role')}
                       value="role"
                       onChange={onValueChange}>
                     </Radio>
                     <Select
-                      name="role_id"
+                      name="roleId"
                       items={render_select_items(roles)}
-                      value={state.role_id}
+                      value={state.roleId}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -290,16 +283,16 @@ const PermissionDialog = ({
                 {capabilities.mayAccess('groups') &&
                   <Divider>
                     <Radio
-                      name="subject_type"
-                      checked={state.subject_type === 'group'}
+                      name="subjectType"
+                      checked={state.subjectType === 'group'}
                       title={_('Group')}
                       value="group"
                       onChange={onValueChange}>
                     </Radio>
                     <Select
-                      name="group_id"
+                      name="groupId"
                       items={render_select_items(groups)}
-                      value={state.group_id}
+                      value={state.groupId}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -310,9 +303,10 @@ const PermissionDialog = ({
             {state.name === 'Super' &&
               <FormGroup title={_('Resource Type')}>
                 <Select
-                  name="resource_type"
-                  value={state.resource_type}
-                  onChange={onValueChange}>
+                  name="resourceType"
+                  value={state.resourceType}
+                  onChange={onValueChange}
+                >
                   <option value="">--</option>
                   <option value="user">{_('User')}</option>
                   <option value="role">{_('Role')}</option>
@@ -320,11 +314,11 @@ const PermissionDialog = ({
                 </Select>
               </FormGroup>
             }
-            {show_resource_id &&
-              <FormGroup title={resource_id_title}>
+            {showResourceId &&
+              <FormGroup title={resourceIdTitle}>
                 <TextField
-                  name="resource_id"
-                  value={state.resource_id}
+                  name="resourceId"
+                  value={state.resourceId}
                   disabled={fixedResource}
                   size="50"
                   maxLength="100"
@@ -333,8 +327,7 @@ const PermissionDialog = ({
               </FormGroup>
             }
             <FormGroup title={_('Description')}>
-              {permission_description(
-                state.name, resource, subject)}
+              {permissionDescription(state.name, resource, subject)}
             </FormGroup>
 
           </Layout>
@@ -348,20 +341,20 @@ PermissionDialog.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
-  group_id: PropTypes.id,
+  groupId: PropTypes.id,
   groups: PropTypes.array,
   id: PropTypes.string,
   name: PropTypes.string,
   permission: PropTypes.model,
-  resource_id: PropTypes.string,
-  resource_type: PropTypes.string,
-  role_id: PropTypes.id,
+  resourceId: PropTypes.string,
+  resourceType: PropTypes.string,
+  roleId: PropTypes.id,
   roles: PropTypes.array,
-  subject_type: PropTypes.oneOf([
+  subjectType: PropTypes.oneOf([
     'user', 'role', 'group',
   ]),
   title: PropTypes.string,
-  user_id: PropTypes.id,
+  userId: PropTypes.id,
   users: PropTypes.array,
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

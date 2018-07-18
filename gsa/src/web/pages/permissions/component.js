@@ -27,8 +27,6 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 import {is_defined, shorten, select_save_id} from 'gmp/utils';
 
-import Promise from 'gmp/promise.js';
-
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
 import withGmp from '../../utils/withGmp.js';
@@ -39,6 +37,7 @@ import Wrapper from '../../components/layout/wrapper.js';
 import EntityComponent from '../../entity/component.js';
 
 import PermissionDialog from './dialog.js';
+import {getEntityType} from 'gmp/utils/entitytype.js';
 
 class PermissionsComponent extends React.Component {
 
@@ -54,41 +53,38 @@ class PermissionsComponent extends React.Component {
   openPermissionDialog(permission, fixed = false) {
     const {gmp, capabilities} = this.props;
 
-    let users_promise;
-    let roles_promise;
-    let groups_promise;
     let state;
     let opts;
 
     if (is_defined(permission)) {
-      const subject_type = is_defined(permission.subject) ?
-        permission.subject.entity_type : undefined;
+      const subjectType = is_defined(permission.subject) ?
+        getEntityType(permission.subject) : undefined;
 
       state = {
         id: permission.id,
         name: permission.name,
         comment: permission.comment,
-        group_id: undefined,
+        groupId: undefined,
         permission,
-        resource_id: is_defined(permission.resource) ?
+        resourceId: is_defined(permission.resource) ?
           permission.resource.id : '',
-        resource_type: is_defined(permission.resource) ?
-          permission.resource.entity_type : '',
-        role_id: undefined,
-        subject_type,
+        resourceType: is_defined(permission.resource) ?
+          getEntityType(permission.resource) : '',
+        roleId: undefined,
+        subjectType,
         title: _('Edit Permission {{name}}', {name: permission.name}),
-        user_id: undefined,
+        userId: undefined,
       };
 
-      switch (subject_type) {
+      switch (subjectType) {
         case 'user':
-          state.user_id = permission.subject.id;
+          state.userId = permission.subject.id;
           break;
         case 'role':
-          state.role_id = permission.subject.id;
+          state.roleId = permission.subject.id;
           break;
         case 'group':
-          state.group_id = permission.subject.id;
+          state.groupId = permission.subject.id;
           break;
         default:
           break;
@@ -102,12 +98,12 @@ class PermissionsComponent extends React.Component {
         comment: undefined,
         id: undefined,
         name: undefined,
-        resource_type: undefined,
-        resource_id: undefined,
-        subject_type: undefined,
-        user_id: undefined,
-        group_id: undefined,
-        role_id: undefined,
+        resourceType: undefined,
+        resourceId: undefined,
+        subjectType: undefined,
+        userId: undefined,
+        groupId: undefined,
+        roleId: undefined,
         title: undefined,
       };
     }
@@ -115,68 +111,53 @@ class PermissionsComponent extends React.Component {
     state.fixedResource = fixed;
 
     if (capabilities.mayAccess('users')) {
-      users_promise = gmp.users.getAll();
-
-      if (!is_defined(state.subject_type)) {
-        state.subject_type = 'user';
+      if (!is_defined(state.subjectType)) {
+        state.subjectType = 'user';
       }
-    }
-    else {
-      users_promise = Promise.resolve();
+
+      gmp.users.getAll().then(response => {
+        const {data: users} = response;
+        this.setState({
+          userId: select_save_id(users, state.userId),
+          users,
+        });
+      });
     }
 
     if (capabilities.mayAccess('roles')) {
-      roles_promise = gmp.roles.getAll();
-
       if (!capabilities.mayAccess('users') &&
-        !is_defined(state.subject_type)) {
-        state.subject_type = 'role';
+        !is_defined(state.subjectType)) {
+        state.subjectType = 'role';
       }
-    }
-    else {
-      roles_promise = Promise.resolve();
+
+      gmp.roles.getAll().then(response => {
+        const {data: roles} = response;
+        this.setState({
+          roleId: select_save_id(roles, state.roleId),
+          roles,
+        });
+      });
     }
 
     if (capabilities.mayAccess('groups')) {
-      groups_promise = gmp.groups.getAll();
-
       if (!capabilities.mayAccess('users') &&
-        !capabilities.mayAccess('roles') && !is_defined(state.subject_type)) {
-        state.subject_type = 'group';
+        !capabilities.mayAccess('roles') && !is_defined(state.subjectType)) {
+        state.subjectType = 'group';
       }
-    }
-    else {
-      groups_promise = Promise.resolve();
+
+      gmp.groups.getAll().then(response => {
+        const {data: groups} = response;
+        this.setState({
+          groupId: select_save_id(groups, state.groupId),
+          groups,
+        });
+      });
     }
 
     this.setState({
       ...state,
       dialogVisible: true,
       ...opts,
-    });
-
-    users_promise.then(response => {
-      const {data: users} = response;
-      this.setState({
-        user_id: select_save_id(users, state.user_id),
-        users,
-      });
-    });
-
-    roles_promise.then(response => {
-      const {data: roles} = response;
-      this.setState({
-        role_id: select_save_id(roles, state.role_id),
-        roles,
-      });
-    });
-
-    groups_promise.then(response => {
-      const {data: groups} = response;
-      this.setState({
-        group_id: select_save_id(groups, state.group_id),
-        groups,
-      });
     });
   }
 
@@ -204,17 +185,17 @@ class PermissionsComponent extends React.Component {
       comment,
       fixedResource,
       id,
-      group_id,
+      groupId,
       groups,
       name,
       permission,
-      resource_id,
-      resource_type,
-      role_id,
+      resourceId,
+      resourceType,
+      roleId,
       roles,
-      subject_type,
+      subjectType,
       title,
-      user_id,
+      userId,
       users,
     } = this.state;
 
@@ -246,18 +227,18 @@ class PermissionsComponent extends React.Component {
               <PermissionDialog
                 comment={comment}
                 fixedResource={fixedResource}
-                group_id={group_id}
+                groupId={groupId}
                 groups={groups}
                 id={id}
                 name={name}
                 permission={permission}
-                resource_id={resource_id}
-                resource_type={resource_type}
-                role_id={role_id}
+                resourceId={resourceId}
+                resourceIype={resourceType}
+                roleId={roleId}
                 roles={roles}
-                subject_type={subject_type}
+                subjectType={subjectType}
                 title={title}
-                user_id={user_id}
+                userId={userId}
                 users={users}
                 onClose={this.closePermissionDialog}
                 onSave={save}

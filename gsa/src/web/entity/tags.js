@@ -33,58 +33,59 @@ import _ from 'gmp/locale';
 import {is_defined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EditIcon from '../components/icon/editicon.js';
-import ManualIcon from '../components/icon/manualicon.js';
-import Icon from '../components/icon/icon.js';
-import NewIcon from '../components/icon/newicon.js';
-import DeleteIcon from '../components/icon/deleteicon.js';
+import EditIcon from 'web/components/icon/editicon.js';
+import ManualIcon from 'web/components/icon/manualicon.js';
+import Icon from 'web/components/icon/icon.js';
+import NewIcon from 'web/components/icon/newicon.js';
+import DeleteIcon from 'web/components/icon/deleteicon.js';
 
-import Divider from '../components/layout/divider.js';
-import Layout from '../components/layout/layout.js';
-import IconDivider from '../components/layout/icondivider.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Table from '../components/table/stripedtable.js';
-import TableBody from '../components/table/body.js';
-import TableData from '../components/table/data.js';
-import TableHeader from '../components/table/header.js';
-import TableHead from '../components/table/head.js';
-import TableRow from '../components/table/row.js';
+import Table from 'web/components/table/stripedtable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
 const SectionElementDivider = glamorous(Divider)({
   marginBottom: '3px',
 });
 
-const SectionElements = ({
+const SectionElements = withCapabilities(({
+  capabilities,
   entity,
   onTagCreateClick,
-}) => {
-  return (
-    <Layout grow align="end">
-      <SectionElementDivider margin="10px">
-        <IconDivider>
+}) => (
+  <Layout grow align="end">
+    <SectionElementDivider margin="10px">
+      <IconDivider>
+        {capabilities.mayCreate('tag') &&
           <NewIcon
             title={_('New Tag')}
             value={entity}
             onClick={onTagCreateClick}
           />
-          <ManualIcon
-            page="gui_introduction"
-            anchor="tags"
-            title={_('Help: User Tags')}
-          />
-        </IconDivider>
-      </SectionElementDivider>
-    </Layout>
-  );
-};
+        }
+        <ManualIcon
+          page="gui_introduction"
+          anchor="tags"
+          title={_('Help: User Tags')}
+        />
+      </IconDivider>
+    </SectionElementDivider>
+  </Layout>
+));
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
 };
 

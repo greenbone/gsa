@@ -227,81 +227,81 @@ const getPermissionTypeName = type => {
   }
 };
 
-export const permission_description = (name, resource, subject) =>
+export const permissionDescription = (name, resource, subject) =>
   is_defined(subject) ?
-    permission_description_resource_with_subject(name, resource, subject) :
-    permission_description_resource(name, resource);
+    permissionDescriptionResourceWithSubject(name, resource, subject) :
+    permissionDescriptionResource(name, resource);
 
-export function permission_description_resource(name, resource) {
+export function permissionDescriptionResource(name, resource) {
   if (is_defined(resource)) {
     name = name.toLowerCase();
-    const resource_type = {
+    const resourceType = {
       type: typeName(getEntityType(resource)),
       name: resource.name,
     };
 
     if (name === 'super') {
       return _('Has super access to all resources of {{type}} {{name}}',
-        resource_type);
+        resourceType);
     }
 
     const [type] = split(name, '_', 1);
     switch (type) {
       case 'create':
-        return _('May create a new {{type}}', resource_type);
+        return _('May create a new {{type}}', resourceType);
       case 'delete':
-        return _('May delete {{type}} {{name}}', resource_type);
+        return _('May delete {{type}} {{name}}', resourceType);
       case 'get':
-        return _('Has read access to {{type}} {{name}}', resource_type);
+        return _('Has read access to {{type}} {{name}}', resourceType);
       case 'modify':
-        return _('Has write access to {{type}} {{name}}', resource_type);
+        return _('Has write access to {{type}} {{name}}', resourceType);
       default:
         break;
     }
   }
 
-  return simple_permission_description(name);
+  return simplePermissionDescription(name);
 }
 
-export function permission_description_resource_with_subject(name, resource,
+export function permissionDescriptionResourceWithSubject(name, resource,
   subject) {
   if (is_defined(resource)) {
     name = name.toLowerCase();
     const type = {
-      subject_type: typeName(getEntityType(subject)),
-      subject_name: subject.name,
-      resource_type: typeName(getEntityType(resource)),
-      resource_name: resource.name,
+      subjectType: typeName(getEntityType(subject)),
+      subjectName: subject.name,
+      resourceType: typeName(getEntityType(resource)),
+      resourceName: resource.name,
     };
 
     if (name === 'super') {
-      return _('{{subject_type}} {{subject_name}} has super access to ' +
-        'all resources of {{resource_type}} {{resource_name}}', type);
+      return _('{{subjectType}} {{subjectName}} has super access to ' +
+        'all resources of {{resourceType}} {{resourceName}}', type);
     }
 
-    const [command_type] = split(name, '_', 1);
-    switch (command_type) {
+    const [commandType] = split(name, '_', 1);
+    switch (commandType) {
       case 'create':
-        return _('{{subject_type}} {{subject_name}} may create a new ' +
-          '{{resource_type}}', type);
+        return _('{{subjectType}} {{subjectName}} may create a new ' +
+          '{{resourceType}}', type);
       case 'delete':
-        return _('{{subject_type}} {{subject_name}} may delete ' +
-          '{{resource_type}} {{resource_name}}', type);
+        return _('{{subjectType}} {{subjectName}} may delete ' +
+          '{{resourceType}} {{resourceName}}', type);
       case 'get':
-        return _('{{subject_type}} {{subject_name}} has read access to ' +
-          '{{resource_type}} {{resource_name}}', type);
+        return _('{{subjectType}} {{subjectName}} has read access to ' +
+          '{{resourceType}} {{resourceName}}', type);
       case 'modify':
-        return _('{{subject_type}} {{subject_name}} has write access to ' +
-          '{{resource_type}} {{resource_name}}', type);
+        return _('{{subjectType}} {{subjectName}} has write access to ' +
+          '{{resourceType}} {{resourceName}}', type);
       default:
         break;
     }
   }
 
-  return simple_permission_description_with_subject(name, subject);
+  return simplePermissionDescriptionWithSubject(name, subject);
 }
 
-export function simple_permission_description(name) {
+export function simplePermissionDescription(name) {
   name = name.toLowerCase();
   switch (name) {
     case 'super':
@@ -372,96 +372,96 @@ export function simple_permission_description(name) {
   }
 }
 
-export function simple_permission_description_with_subject(name, subject) {
+export function simplePermissionDescriptionWithSubject(name, subject) {
   name = name.toLowerCase();
   let type = {
-    subject_type: typeName(getEntityType(subject)),
-    subject_name: subject.name,
+    subjectType: typeName(getEntityType(subject)),
+    subjectName: subject.name,
   };
 
   switch (name) {
     case 'super':
-      return _('{{subject_type}} {{subject_name}} has super access', type);
+      return _('{{subjectType}} {{subjectName}} has super access', type);
     case 'authenticate':
-      return _('{{subject_type}} {{subject_name}} may login', type);
+      return _('{{subjectType}} {{subjectName}} may login', type);
     case 'commands':
-      return _('{{subject_type}} {{subject_name}} may run multiple OMP ' +
+      return _('{{subjectType}} {{subjectName}} may run multiple OMP ' +
         'commands in one', type);
     case 'everything':
-      return _('{{subject_type}} {{subject_name}} has all permissions', type);
+      return _('{{subjectType}} {{subjectName}} has all permissions', type);
     case 'empty_trashcan':
-      return _('{{subject_type}} {{subject_name}} may empty the ' +
+      return _('{{subjectType}} {{subjectName}} may empty the ' +
         'trashcan', type);
     case 'get_dependencies':
-      return _('{{subject_type}} {{subject_name}} may get the dependencies ' +
+      return _('{{subjectType}} {{subjectName}} may get the dependencies ' +
         'of NVTs', type);
     case 'get_version':
-      return _('{{subject_type}} {{subject_name}} may get version ' +
+      return _('{{subjectType}} {{subjectName}} may get version ' +
         'information', type);
     case 'help':
-      return _('{{subject_type}} {{subject_name}} may get the help text', type);
+      return _('{{subjectType}} {{subjectName}} may get the help text', type);
     case 'modify_auth':
-      return _('{{subject_type}} {{subject_name}} has write access to the ' +
+      return _('{{subjectType}} {{subjectName}} has write access to the ' +
         'authentication configuration', type);
     case 'restore':
-      return _('{{subject_type}} {{subject_name}} may restore items from ' +
+      return _('{{subjectType}} {{subjectName}} may restore items from ' +
         'the trashcan', type);
     case 'resume_task':
-      return _('{{subject_type}} {{subject_name}} may resume Task', type);
+      return _('{{subjectType}} {{subjectName}} may resume Task', type);
     case 'start_task':
-      return _('{{subject_type}} {{subject_name}} may start Task', type);
+      return _('{{subjectType}} {{subjectName}} may start Task', type);
     case 'stop_task':
-      return _('{{subject_type}} {{subject_name}} may stop Task', type);
+      return _('{{subjectType}} {{subjectName}} may stop Task', type);
     case 'run_wizard':
-      return _('{{subject_type}} {{subject_name}} may run Wizard', type);
+      return _('{{subjectType}} {{subjectName}} may run Wizard', type);
     case 'test_alert':
-      return _('{{subject_type}} {{subject_name}} may test Alert', type);
+      return _('{{subjectType}} {{subjectName}} may test Alert', type);
     default:
       break;
   }
 
-  const [command_type, res] = split(name, '_', 1);
+  const [commandType, res] = split(name, '_', 1);
   type = {
-    subject_type: typeName(getEntityType(subject)),
-    subject_name: subject.name,
-    resource_type: command_type === 'get' ?
+    subjectType: typeName(getEntityType(subject)),
+    subjectName: subject.name,
+    resourceType: commandType === 'get' ?
       getPermissionTypeName(res) :
       typeName(res),
   };
-  switch (command_type) {
+  switch (commandType) {
     case 'create':
-      return _('{{subject_type}} {{subject_name}} may create a new ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} may create a new ' +
+        '{{resourceType}}', type);
     case 'delete':
-      return _('{{subject_type}} {{subject_name}} may delete an existing ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} may delete an existing ' +
+        '{{resourceType}}', type);
     case 'get':
-      return _('{{subject_type}} {{subject_name}} has read access to ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} has read access to ' +
+        '{{resourceType}}', type);
     case 'modify':
-      return _('{{subject_type}} {{subject_name}} has write access to ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} has write access to ' +
+        '{{resourceType}}', type);
     case 'sync':
       if (res === 'cert') {
-        return _('{{subject_type}} {{subject_name}} may sync the CERT ' +
+        return _('{{subjectType}} {{subjectName}} may sync the CERT ' +
           'feed', type);
       }
       if (res === 'feed') {
-        return _('{{subject_type}} {{subject_name}} may sync the NVT ' +
+        return _('{{subjectType}} {{subjectName}} may sync the NVT ' +
           'feed', type);
       }
       if (res === 'scap') {
-        return _('{{subject_type}} {{subject_name}} may sync the SCAP ' +
+        return _('{{subjectType}} {{subjectName}} may sync the SCAP ' +
           'feed', type);
       }
-      return _('{{subject_type}} {{subject_name}} may sync ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} may sync ' +
+        '{{resourceType}}', type);
     case 'move':
-      return _('{{subject_type}} {{subject_name}} may move ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} may move ' +
+        '{{resourceType}}', type);
     case 'verify':
-      return _('{{subject_type}} {{subject_name}} may verify ' +
-        '{{resource_type}}', type);
+      return _('{{subjectType}} {{subjectName}} may verify ' +
+        '{{resourceType}}', type);
     default:
       return name;
   }

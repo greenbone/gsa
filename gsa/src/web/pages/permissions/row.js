@@ -31,7 +31,7 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_component,
-  permission_description,
+  permissionDescription,
 } from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
@@ -111,7 +111,7 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      {permission_description(entity.name, entity.resource, entity.subject)}
+      {permissionDescription(entity.name, entity.resource, entity.subject)}
     </TableData>
     <TableData>
       {is_defined(entity.resource) && typeName(getEntityType(entity.resource))}

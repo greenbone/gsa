@@ -20,28 +20,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {HttpCommand, register_command} from '../command';
 
-import {HttpCommand, register_command} from '../command.js';
+import {apiType} from '../utils/entitytype.js';
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Agent from '../models/agent.js';
-import Alert from '../models/alert.js';
-import Scanconfig from '../models/scanconfig.js';
-import Credential from '../models/credential.js';
-import Filter from '../models/filter.js';
-import Group from '../models/group.js';
-import Note from '../models/note.js';
-import Override from '../models/override.js';
-import Permission from '../models/permission.js';
-import PortList from '../models/portlist.js';
-import ReportFormat from '../models/reportformat.js';
-import Role from '../models/role.js';
-import Scanner from '../models/scanner.js';
-import Schedule from '../models/schedule.js';
-import Tag from '../models/tag.js';
-import Target from '../models/target.js';
-import Task from '../models/task.js';
+import Agent from '../models/agent';
+import Alert from '../models/alert';
+import Scanconfig from '../models/scanconfig';
+import Credential from '../models/credential';
+import Filter from '../models/filter';
+import Group from '../models/group';
+import Note from '../models/note';
+import Override from '../models/override';
+import Permission from '../models/permission';
+import PortList from '../models/portlist';
+import ReportFormat from '../models/reportformat';
+import Role from '../models/role';
+import Scanner from '../models/scanner';
+import Schedule from '../models/schedule';
+import Tag from '../models/tag';
+import Target from '../models/target';
+import Task from '../models/task';
 
 class Trashcan extends HttpCommand {
 
@@ -54,13 +55,13 @@ class Trashcan extends HttpCommand {
   }
 
   delete({id, entity_type}) {
+    entity_type = apiType(entity_type);
     const command = 'delete_trash_' + entity_type;
     const type_id = entity_type + '_id';
-    const data = {
+    return this.httpPost({
       cmd: [command],
       [type_id]: id,
-    };
-    return this.httpPost(data);
+    });
   }
 
   empty() {
