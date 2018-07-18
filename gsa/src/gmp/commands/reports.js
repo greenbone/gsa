@@ -21,18 +21,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import logger from '../log.js';
+import logger from '../log';
 
 import {is_defined} from '../utils/identity';
 
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
+import registerCommand from '../command';
 
-import Report from '../models/report.js';
+import Report from '../models/report';
 
-import {ALL_FILTER} from '../models/filter.js';
+import {ALL_FILTER} from '../models/filter';
 
-import DefaultTransform from '../http/transform/default.js';
+import DefaultTransform from '../http/transform/default';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reports');
 

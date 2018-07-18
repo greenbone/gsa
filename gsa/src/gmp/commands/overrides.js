@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
-
-import {NO_VALUE} from '../parser.js';
+import {NO_VALUE} from '../parser';
 
 import Override, {
   ANY,
@@ -34,7 +33,10 @@ import Override, {
   ACTIVE_YES_ALWAYS_VALUE,
   DEFAULT_DAYS,
   SEVERITY_FALSE_POSITIVE,
-} from '../models/override.js';
+} from '../models/override';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.overrides');
 

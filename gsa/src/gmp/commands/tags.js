@@ -21,14 +21,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import logger from '../log';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command';
+import registerCommand from '../command';
 
 import Tag from '../models/tag';
 
 import {apiType} from '../utils/entitytype';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.tags');
 

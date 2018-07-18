@@ -20,12 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
+import registerCommand from '../command';
 
-import Scanner from '../models/scanner.js';
+import Scanner from '../models/scanner';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanners');
 

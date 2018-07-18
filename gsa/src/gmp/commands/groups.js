@@ -20,13 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
+import logger from '../log';
 
-import logger from '../log.js';
 import {is_array} from '../utils/identity';
 
-import Group from '../models/group.js';
+import Group from '../models/group';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.groups');
 

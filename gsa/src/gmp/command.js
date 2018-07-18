@@ -20,17 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import EntitiesCommand from './commands/entities.js';
-import EntityCommand from './commands/entity.js';
-
-export {
-  EntitiesCommand,
-  EntityCommand,
-};
-
-/* TODO only export register_command and get_commands */
-
 const COMMANDS = {};
 
 export const registerCommand = (name, clazz, ...options) => {

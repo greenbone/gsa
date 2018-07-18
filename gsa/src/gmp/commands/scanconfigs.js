@@ -20,19 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
 import {for_each, map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 
-import Model from '../model.js';
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
-import {YES_VALUE, NO_VALUE} from '../parser.js';
+import Model from '../model';
+import registerCommand from '../command';
+import {YES_VALUE, NO_VALUE} from '../parser';
 
-import {parse_counts} from '../collection/parser.js';
+import {parse_counts} from '../collection/parser';
 
-import Nvt from '../models/nvt.js';
-import ScanConfig, {parse_count} from '../models/scanconfig.js';
+import Nvt from '../models/nvt';
+import ScanConfig, {parse_count} from '../models/scanconfig';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
 

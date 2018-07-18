@@ -22,16 +22,20 @@
  */
 import 'core-js/fn/set';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
+import registerCommand from '../command';
 
-import logger from '../log.js';
+import logger from '../log';
+
 import {is_array, is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Permission from '../models/permission.js';
-import Role from '../models/role.js';
+import Permission from '../models/permission';
+import Role from '../models/role';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.roles');
 

@@ -21,10 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
+import OperatingSystem from '../models/os';
 
-import OperatingSystem from '../models/os.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 class OperatingSystemCommand extends EntityCommand {
 

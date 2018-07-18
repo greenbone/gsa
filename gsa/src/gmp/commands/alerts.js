@@ -20,16 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
-import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
-import Model from '../model.js';
+import registerCommand from '../command';
+import Model from '../model';
 
-import Alert from '../models/alert.js';
-import Credential from '../models/credential.js';
+import Alert from '../models/alert';
+import Credential from '../models/credential';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.alerts');
 

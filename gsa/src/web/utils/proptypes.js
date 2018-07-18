@@ -24,20 +24,22 @@ import ReactPropTypes from 'prop-types';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {CacheFactory, Cache} from 'gmp/cache.js';
+import {CacheFactory, Cache} from 'gmp/cache';
 
 import {isDate, isDuration} from 'gmp/models/date';
 
-import Gmp from 'gmp/gmp.js';
-import Model from 'gmp/model.js';
-import {EntityCommand, EntitiesCommand} from 'gmp/command.js';
+import Gmp from 'gmp/gmp';
+import Model from 'gmp/model';
 
-import Capabilities from 'gmp/capabilities/capabilities.js';
+import EntityCommand from 'gmp/commands/entity';
+import EntitiesCommand from 'gmp/commands/entities';
 
-import CollectionCounts from 'gmp/collection/collectioncounts.js';
+import Capabilities from 'gmp/capabilities/capabilities';
 
-import Filter from 'gmp/models/filter.js';
-import Settings from 'gmp/models/settings.js';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import Filter from 'gmp/models/filter';
+import Settings from 'gmp/models/settings';
 
 import {
   SEVERITY_CLASS_BSI,

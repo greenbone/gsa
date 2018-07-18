@@ -20,19 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
 import {map} from '../utils/array';
 import {is_empty} from '../utils/string';
-import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
-import Model from '../model.js';
+import registerCommand from '../command';
+import Model from '../model';
 
-import ScanConfig from '../models/scanconfig.js';
-import Scanner from '../models/scanner.js';
-import Schedule from '../models/schedule.js';
-import Target from '../models/target.js';
-import Task from '../models/task.js';
+import ScanConfig from '../models/scanconfig';
+import Scanner from '../models/scanner';
+import Schedule from '../models/schedule';
+import Target from '../models/target';
+import Task from '../models/task';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.tasks');
 

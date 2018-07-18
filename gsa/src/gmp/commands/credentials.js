@@ -20,14 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
+import Credential from '../models/credential';
 
-import Credential from '../models/credential.js';
+import DefaultTransform from '../http/transform/default';
 
-import DefaultTransform from '../http/transform/default.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.credentials');
 

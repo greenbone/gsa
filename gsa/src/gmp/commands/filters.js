@@ -20,17 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import logger from '../log.js';
+import logger from '../log';
 
 import {is_defined} from '../utils/identity';
 
-import CollectionCounts from '../collection/collectioncounts.js';
-import {parse_collection_list} from '../collection/parser.js';
+import CollectionCounts from '../collection/collectioncounts';
+import {parse_collection_list} from '../collection/parser';
 
-import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
+import registerCommand from '../command';
 
-import Filter from '../models/filter.js';
+import Filter from '../models/filter';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.filters');
 
