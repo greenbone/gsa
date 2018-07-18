@@ -28,7 +28,7 @@ import {map} from '../utils/array';
 
 import {
   parse_int,
-  parse_progress,
+  parseProgress,
   parseYesNo,
   parseDuration,
   NO_VALUE,
@@ -197,7 +197,7 @@ class Task extends Model {
 
     elem.schedule_periods = parse_int(elem.schedule_periods);
 
-    elem.progress = parse_progress(elem.progress);
+    elem.progress = parseProgress(elem.progress);
 
     const prefs = {};
 

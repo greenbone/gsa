@@ -32,7 +32,7 @@ export function parseSeverity(value) {
   return is_empty(value) ? undefined : parse_float(value);
 }
 
-export function parse_progress(value) {
+export function parseProgress(value) {
   if (!is_defined(value)) {
     return 0;
   }
