@@ -25,7 +25,9 @@ import logger from '../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
-import Permission from '../models/permission.js';
+import Permission from '../models/permission';
+
+import {apiType} from '../utils/entitytype';
 
 const log = logger.getLogger('gmp.commands.permissions');
 
@@ -42,23 +44,23 @@ class PermissionCommand extends EntityCommand {
   create({
     name,
     comment = '',
-    group_id,
-    role_id,
-    user_id,
-    resource_id,
-    resource_type,
-    subject_type,
+    groupId,
+    roleId,
+    userId,
+    resourceId,
+    resourceType,
+    subjectType,
   }) {
     const data = {
       cmd: 'create_permission',
       comment,
       permission: name,
-      permission_group_id: group_id,
-      permission_role_id: role_id,
-      permission_user_id: user_id,
-      optional_resource_type: resource_type,
-      id_or_empty: resource_id,
-      subject_type,
+      permission_group_id: groupId,
+      permission_role_id: roleId,
+      permission_user_id: userId,
+      optional_resource_type: apiType(resourceType),
+      id_or_empty: resourceId,
+      subject_type: apiType(subjectType),
     };
     log.debug('Creating new permission', data);
     return this.action(data);
@@ -68,25 +70,25 @@ class PermissionCommand extends EntityCommand {
     id,
     name,
     comment = '',
-    group_id,
-    role_id,
-    user_id,
-    resource_id,
-    resource_type,
-    subject_type,
+    groupId,
+    roleId,
+    userId,
+    resourceId,
+    resourceType,
+    subjectType,
   }) {
     const data = {
       cmd: 'save_permission',
       id,
       comment,
       permission: name,
-      group_id,
-      role_id,
-      user_id,
-      resource_id,
-      optional_resource_type: resource_type,
-      subject_type,
-      id_or_empty: resource_id,
+      group_id: groupId,
+      role_id: roleId,
+      user_id: userId,
+      resource_id: resourceId,
+      optional_resource_type: apiType(resourceType),
+      subject_type: subjectType,
+      id_or_empty: resourceId,
     };
     log.debug('Saving permission', data);
     return this.action(data);
@@ -102,26 +104,26 @@ class PermissionsCommand extends EntitiesCommand {
   create({
     id,
     permission,
-    entity_type,
+    entityType,
     comment = '',
-    group_id,
-    role_id,
-    user_id,
-    subject_type,
-    include_related,
+    groupId,
+    roleId,
+    userId,
+    subjectType,
+    includeRelated,
     related = [],
   }) {
     const data = {
       cmd: 'create_permissions',
       comment,
       permission,
-      permission_group_id: group_id,
-      permission_role_id: role_id,
-      permission_user_id: user_id,
+      permission_group_id: groupId,
+      permission_role_id: roleId,
+      permission_user_id: userId,
       resource_id: id,
-      resource_type: entity_type,
-      include_related,
-      subject_type,
+      resource_type: apiType(entityType),
+      include_related: includeRelated,
+      subject_type: subjectType,
     };
 
     for (const resource in related) {

@@ -66,6 +66,7 @@ import './commands/wizard.js';
 
 import GmpHttp from './http/gmp.js';
 import {build_server_url, build_url_params} from './http/utils.js';
+import DefaultTransform from './http/transform/default';
 
 import {get_commands} from './command.js';
 import LoginCommand from './commands/login.js';
@@ -140,8 +141,11 @@ class Gmp {
       const url = this.buildUrl('logout');
       const args = {token: this.token};
 
-      const promise = this.http.request('get', {url, args})
-        .then(xhr => {
+      const promise = this.http.request('get', {
+        url,
+        args,
+        transform: DefaultTransform,
+      }).then(xhr => {
           this.token = undefined;
           log.debug('Logged out successfully');
           return xhr;

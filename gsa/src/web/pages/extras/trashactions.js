@@ -20,20 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import RestoreIcon from '../../components/icon/restoreicon.js';
-import TrashDeleteIcon from '../../components/icon/trashdeleteicon.js';
-import IconDivider from '../../components/layout/icondivider.js';
+import {is_defined} from 'gmp/utils/identity';
+import {getEntityType} from 'gmp/utils/entitytype';
 
-import TableData from '../../components/table/data.js';
+import RestoreIcon from 'web/components/icon/restoreicon';
+import TrashDeleteIcon from 'web/components/icon/trashdeleteicon';
 
-import PropTypes from '../../utils/proptypes.js';
+import IconDivider from 'web/components/layout/icondivider';
 
+import TableData from 'web/components/table/data';
+
+import PropTypes from 'web/utils/proptypes';
 
 const check_by_type = {
   agent: entity => {
@@ -44,7 +45,7 @@ const check_by_type = {
      is_defined(entity.filter) ? !entity.filter.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
   },
-  config: entity => {
+  scanconfig: entity => {
     const restorable =
       is_defined(entity.scanner) ? !entity.scanner.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
@@ -67,7 +68,7 @@ const check_by_type = {
   permission: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
-  port_list: entity => {
+  portlist: entity => {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   report_format: entity => {
@@ -121,14 +122,15 @@ const check_by_type = {
 };
 
 
-function get_restore_delete_props(
-    entity,
-    onEntityRestore,
-    onEntityDelete,
-  ) {
+const get_restore_delete_props = (
+  entity,
+  onEntityRestore,
+  onEntityDelete,
+) => {
   let restoreprops;
   let deleteprops;
-  const can_restore_and_delete = check_by_type[entity.entity_type];
+  const entityType = getEntityType(entity);
+  const can_restore_and_delete = check_by_type[entityType];
   const {restorable, deletable} = can_restore_and_delete(entity);
 
   if (restorable) {
@@ -156,13 +158,13 @@ function get_restore_delete_props(
     };
   }
   return {restoreprops, deleteprops};
-}
+};
 
 const TrashActions = ({
-    entity,
-    onEntityDelete,
-    onEntityRestore,
-  }) => {
+  entity,
+  onEntityDelete,
+  onEntityRestore,
+}) => {
   const {restoreprops, deleteprops} =
     get_restore_delete_props(entity, onEntityRestore, onEntityDelete);
   return (

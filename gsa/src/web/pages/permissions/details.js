@@ -29,7 +29,7 @@ import {is_defined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
-import {permission_description} from '../../utils/render.js';
+import {permissionDescription} from '../../utils/render.js';
 
 import EntityLink from '../../entity/link.js';
 
@@ -73,7 +73,7 @@ const PermissionDetails = ({
               {_('Description')}
             </TableData>
             <TableData>
-              {permission_description(name, resource)}
+              {permissionDescription(name, resource)}
             </TableData>
           </TableRow>
 

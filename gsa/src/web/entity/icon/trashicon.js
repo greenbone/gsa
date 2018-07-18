@@ -20,31 +20,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {is_defined} from 'gmp/utils/identity';
 
-import TrashIcon from '../../components/icon/trashicon.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import TrashIcon from 'web/components/icon/trashicon';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 const EntityTrashIcon = ({
-    displayName,
-    entity,
-    name,
-    title,
-    onClick,
-    ...props,
-  }, {capabilities}) => {
-
+  capabilities,
+  displayName,
+  entity,
+  name,
+  title,
+  onClick,
+  ...props
+}) => {
   if (!is_defined(name)) {
-    name = entity.entity_type;
+    name = getEntityType(entity);
   }
 
   if (!is_defined(displayName)) {
-    displayName = _(capitalize_first_letter(name));
+    displayName = typeName(name);
   }
 
   const active = capabilities.mayDelete(name) && entity.isWritable() &&
@@ -78,6 +80,7 @@ const EntityTrashIcon = ({
 };
 
 EntityTrashIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -85,10 +88,6 @@ EntityTrashIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-EntityTrashIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default EntityTrashIcon;
+export default withCapabilities(EntityTrashIcon);
 
 // vim: set ts=2 sw=2 tw=80:
