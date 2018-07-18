@@ -24,13 +24,11 @@
 import EntitiesCommand from './commands/entities.js';
 import EntityCommand from './commands/entity.js';
 import HttpCommand from './commands/http.js';
-import InfoEntitiesCommand from './commands/infoentities.js';
 
 export {
   EntitiesCommand,
   EntityCommand,
   HttpCommand,
-  InfoEntitiesCommand,
 };
 
 /* TODO only export register_command and get_commands */
