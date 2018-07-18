@@ -20,8 +20,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
+import {registerCommand} from '../command';
 
-import {HttpCommand, registerCommand} from '../command.js';
+import HttpCommand from './http';
 
 class AuthenticationCommand extends HttpCommand {
 
@@ -58,4 +59,4 @@ class AuthenticationCommand extends HttpCommand {
   }
 }
 
-registerCommand('auth', AuthenticationCommand)
+registerCommand('auth', AuthenticationCommand);

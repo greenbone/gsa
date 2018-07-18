@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {HttpCommand, registerCommand} from '../command';
+import {registerCommand} from '../command';
 
 import {apiType} from '../utils/entitytype.js';
 import {is_defined} from '../utils/identity';
@@ -43,6 +43,8 @@ import Schedule from '../models/schedule';
 import Tag from '../models/tag';
 import Target from '../models/target';
 import Task from '../models/task';
+
+import HttpCommand from './http';
 
 class Trashcan extends HttpCommand {
 

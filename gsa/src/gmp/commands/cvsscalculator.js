@@ -21,8 +21,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {HttpCommand, registerCommand} from '../command.js';
-import {parseSeverity} from 'gmp/parser.js';
+import {registerCommand} from '../command';
+import {parseSeverity} from 'gmp/parser';
+
+import HttpCommand from './http';
 
 class CvssCalculator extends HttpCommand {
 

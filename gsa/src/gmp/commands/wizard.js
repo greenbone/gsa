@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {HttpCommand, registerCommand} from '../command.js';
+import {registerCommand} from '../command.js';
 import Model from '../model.js';
 
 import Credential from '../models/credential.js';
@@ -29,6 +29,8 @@ import Task from '../models/task.js';
 import Settings from '../models/settings.js';
 
 import {for_each, map} from '../utils/array';
+
+import HttpCommand from './http';
 
 function convert_data(prefix, data, fields) {
   const converted = {};
