@@ -20,21 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import logger from '../log.js';
+import logger from '../log';
 
 import {is_array, is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Filter from '../models/filter.js';
+import Filter from '../models/filter';
 
-import CollectionCounts from './collectioncounts.js';
+import CollectionCounts from './collectioncounts';
 
 const log = logger.getLogger('gmp.collection.parser');
 
-export function parse_info_entities(response, name, modelclass, filter_func) {
+export function parseInfoEntities(response, name, modelclass, filter_func) {
   if (!is_array(response.info)) {
     return [];
   }
@@ -43,7 +42,7 @@ export function parse_info_entities(response, name, modelclass, filter_func) {
     .map(info => new modelclass(info));
 }
 
-export function parse_info_counts(response) {
+export function parseInfoCounts(response) {
   // this is really ugly and more of a kind of a hack
   //  we depend on the order of the array to be able to parse the counts
   //  this should be fixed in gmp xml by using a different elements for counts
