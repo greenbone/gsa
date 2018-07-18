@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {parse_float, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
   ANY,
@@ -374,7 +374,7 @@ const OverrideDialog = ({
                 <Radio
                   name="custom_severity"
                   checked={state.custom_severity === NO_VALUE}
-                  convert={parse_yesno}
+                  convert={parseYesNo}
                   value={NO_VALUE}
                   onChange={onValueChange}
                 />
@@ -390,7 +390,7 @@ const OverrideDialog = ({
                   name="custom_severity"
                   title={_('Other')}
                   checked={state.custom_severity === YES_VALUE}
-                  convert={parse_yesno}
+                  convert={parseYesNo}
                   value={YES_VALUE}
                   onChange={onValueChange}
                 />

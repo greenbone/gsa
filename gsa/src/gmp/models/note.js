@@ -31,7 +31,7 @@ import {
   parse_csv,
   parse_severity,
   parse_text,
-  parse_yesno,
+  parseYesNo,
   YES_VALUE,
 } from '../parser.js';
 
@@ -70,8 +70,8 @@ class Note extends Model {
       delete ret.result;
     }
 
-    ret.active = parse_yesno(elem.active);
-    ret.text_excerpt = parse_yesno(elem.text_excerpt);
+    ret.active = parseYesNo(elem.active);
+    ret.text_excerpt = parseYesNo(elem.text_excerpt);
 
     ret.hosts = parse_csv(elem.hosts);
 

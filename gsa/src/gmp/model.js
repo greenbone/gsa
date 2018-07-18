@@ -26,7 +26,7 @@ import {map} from './utils/array';
 
 import {
   parse_properties,
-  parse_yesno,
+  parseYesNo,
   parseDate,
   set_properties,
   NO_VALUE,
@@ -99,7 +99,7 @@ class Model {
     for (const name of yes_no_props) {
       const prop = elem[name];
       if (is_defined(prop)) {
-        copy[name] = parse_yesno(prop);
+        copy[name] = parseYesNo(prop);
       }
     }
 

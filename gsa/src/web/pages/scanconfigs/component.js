@@ -34,7 +34,7 @@ import {
   shorten,
 } from 'gmp/utils';
 
-import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
@@ -209,7 +209,7 @@ class ScanConfigComponent extends React.Component {
         const config_family = scanconfig.families[name];
 
         if (is_defined(config_family)) {
-          trend[name] = parse_yesno(config_family.trend);
+          trend[name] = parseYesNo(config_family.trend);
           select[name] = config_family.nvts.count === family.max ? YES_VALUE :
             NO_VALUE;
         }

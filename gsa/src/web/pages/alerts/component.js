@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined, select_save_id, first, shorten} from 'gmp/utils';
-import {parse_yesno, NO_VALUE} from 'gmp/parser.js';
+import {parseYesNo, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -348,7 +348,7 @@ class AlertComponent extends React.Component {
           method_data_tp_sms_credential: select_save_id(credentials,
             tp_sms_credential_id),
           method_data_tp_sms_hostname: value(method.data.tp_sms_hostname, ''),
-          method_data_tp_sms_tls_workaround: parse_yesno(
+          method_data_tp_sms_tls_workaround: parseYesNo(
             value(method.data.tp_sms_hostname, NO_VALUE)),
 
           method_data_verinice_server_report_format: select_verinice_report_id(

@@ -29,7 +29,7 @@ import {map} from '../utils/array';
 import {
   parse_int,
   parse_progress,
-  parse_yesno,
+  parseYesNo,
   parseDuration,
   NO_VALUE,
   YES_VALUE,
@@ -141,7 +141,7 @@ class Task extends Model {
       elem.report_count.finished = parse_int(report_count.finished);
     }
 
-    elem.alterable = parse_yesno(elem.alterable);
+    elem.alterable = parseYesNo(elem.alterable);
     elem.result_count = parse_int(elem.result_count);
 
     const reports = [

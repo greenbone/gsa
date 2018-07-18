@@ -26,7 +26,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parse_yesno, parseDate} from '../parser.js';
+import {parse_int, parseYesNo, parseDate} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -142,7 +142,7 @@ class Scanner extends Model {
           name: param.name,
           description: param.description,
           param_type: param.type,
-          mandatory: parse_yesno(param.mandatory),
+          mandatory: parseYesNo(param.mandatory),
           default: param.default,
         }));
       }

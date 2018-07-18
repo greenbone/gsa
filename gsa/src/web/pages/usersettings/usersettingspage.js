@@ -27,7 +27,7 @@ import React from 'react';
 import glamorous, {Col} from 'glamorous';
 
 import _, {set_language} from 'gmp/locale.js';
-import {parse_yesno, YES_VALUE} from 'gmp/parser.js';
+import {parseYesNo, YES_VALUE} from 'gmp/parser.js';
 import {is_defined, is_empty} from 'gmp/utils';
 
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -436,7 +436,7 @@ class UserSettings extends React.Component {
         initial_data.severityclass = set_severity_class;
       }
       else if (item === 'Dynamic Severity') {
-        const value = parse_yesno(all_possible_settings[item]) === YES_VALUE ?
+        const value = parseYesNo(all_possible_settings[item]) === YES_VALUE ?
           _('Yes') : _('No');
         severity_settings.push({
           'Dynamic Severity': value,
@@ -773,7 +773,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Auto Cache Rebuild') {
         const autocache_value = all_possible_settings[item];
-        const value = parse_yesno(autocache_value) === YES_VALUE ?
+        const value = parseYesNo(autocache_value) === YES_VALUE ?
           _('Yes') : _('No');
         misc_settings.push({'Auto Cache Rebuild': value});
         initial_data.autocacherebuild = autocache_value;

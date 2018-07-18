@@ -29,7 +29,7 @@ import {
   parse_int,
   parse_properties,
   parse_severity,
-  parse_yesno,
+  parseYesNo,
   set_properties,
 } from '../parser.js';
 
@@ -105,7 +105,7 @@ class Host extends Asset {
             ip: host.ip,
             id: is_empty(host._id) ? undefined : host._id,
             distance: parse_int(host._distance),
-            same_source: parse_yesno(host._same_source), // host/hop was found in the same scan
+            same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
           }))
         );
       }

@@ -83,7 +83,7 @@ export function parse_float(value) {
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export function parse_yesno(value) {
+export function parseYesNo(value) {
   return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 }
 
