@@ -38,7 +38,7 @@ import {parseSeverity, parseDate} from '../../parser.js';
 import {
   parse_collection_list,
   parseFilter,
-  parse_report_result_entities,
+  parseReportResultEntities,
 } from '../../collection/parser.js';
 
 import CollectionCounts from '../../collection/collectioncounts.js';
@@ -519,7 +519,7 @@ export const parse_results = (report, filter) => {
   }
 
   return parse_collection_list(report, 'result', Result, {
-    entities_parse_func: parse_report_result_entities,
+    entities_parse_func: parseReportResultEntities,
     collection_count_parse_func: parse_report_report_counts,
   });
 };

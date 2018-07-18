@@ -113,15 +113,13 @@ export function parseCounts(element, name, plural_name) {
   return {};
 }
 
-const parse_elements = (response, name) => response[name];
+const parseElements = (response, name) => response[name];
 
-export function parse_entities(response, name, modelclass = Model) {
-  return map(parse_elements(response, name),
-    element => new modelclass(element));
-}
+const parseEntities = (response, name, modelclass = Model) =>
+  map(parseElements(response, name), element => new modelclass(element));
 
-export function parse_report_result_entities(response, name, modelclass) {
-  return parse_entities(response.results, name, modelclass);
+export function parseReportResultEntities(response, name, modelclass) {
+  return parseEntities(response.results, name, modelclass);
 };
 
 export function parse_collection_counts(response, name, plural_name) {
@@ -170,7 +168,7 @@ export function parse_collection_list(response, name, modelclass,
     options = {}) {
   const {
     plural_name,
-    entities_parse_func = parse_entities,
+    entities_parse_func = parseEntities,
     collection_count_parse_func = parse_collection_counts,
     filter_parse_func = parseFilter,
   } = options;
