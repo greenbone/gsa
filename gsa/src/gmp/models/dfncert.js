@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from '../utils/identity';
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 
 import {parseSeverity} from '../parser.js';
 
@@ -46,7 +46,7 @@ class DfnCertAdv extends Info {
       const {entry} = raw_data;
 
       if (is_defined(entry.link)) {
-        for_each(entry.link, link => {
+        forEach(entry.link, link => {
           if (link._rel === 'alternate') {
             ret.advisory_link = link._href;
           }

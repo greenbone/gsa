@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 
 import Model from '../model';
@@ -191,7 +191,7 @@ class ScanConfigCommand extends EntityCommand {
       settings.config = new Model(config_resp.config, 'config');
 
       const nvts = {};
-      for_each(config_resp.get_nvts_response.nvt, nvt => {
+      forEach(config_resp.get_nvts_response.nvt, nvt => {
         const oid = nvt._oid;
         nvts[oid] = true;
       });

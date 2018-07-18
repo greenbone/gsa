@@ -21,12 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
+
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined, for_each, exclude_object_props} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {forEach} from 'gmp/utils/array';
+import {exclude_object_props} from 'gmp/utils/object';
 
 import FootNote from '../components/footnote/footnote.js';
 
@@ -104,10 +107,10 @@ class EntitiesTable extends React.Component {
     }
 
     if (allToggled) {
-      for_each(entities, entity => details[entity.id] = true);
+      forEach(entities, entity => details[entity.id] = true);
     }
     else {
-      for_each(entities, entity => details[entity.id] = false);
+      forEach(entities, entity => details[entity.id] = false);
     }
     this.setState({details, allToggled});
   }
@@ -168,7 +171,7 @@ class EntitiesTable extends React.Component {
 
     const rows = [];
     if (is_defined(RowComponent)) {
-      for_each(entities, entity => {
+      forEach(entities, entity => {
         rows.push(
           <RowComponent
             {...other}

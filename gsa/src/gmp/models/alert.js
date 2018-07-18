@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import {is_defined, is_object} from '../utils/identity';
 import {is_empty} from '../utils/string';
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 
 import {parseYesNo, YES_VALUE} from '../parser.js';
 
@@ -93,7 +93,7 @@ class Alert extends Model {
       if (is_object(ret[type])) {
         const data = {};
 
-        for_each(ret[type].data, value => {
+        forEach(ret[type].data, value => {
           data[value.name] = create_values(value);
         });
 

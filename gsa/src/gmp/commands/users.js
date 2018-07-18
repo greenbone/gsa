@@ -25,7 +25,7 @@ import logger from '../log';
 
 import registerCommand from '../command';
 
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 
 import Capabilities from '../capabilities/capabilities';
@@ -59,10 +59,10 @@ class UserCommand extends EntityCommand {
 
       if (is_defined(data.auth_settings) &&
        is_defined(data.auth_settings.describe_auth_response)) {
-        for_each(data.auth_settings.describe_auth_response.group, group => {
+        forEach(data.auth_settings.describe_auth_response.group, group => {
           const values = {};
 
-          for_each(group.auth_conf_setting, setting => {
+          forEach(group.auth_conf_setting, setting => {
             values[setting.key] = setting.value;
             if (is_defined(setting.certificate_info)) {
               values.certificate_info = setting.certificate_info;
@@ -84,7 +84,7 @@ class UserCommand extends EntityCommand {
     ).then(response => {
       const settings = new Settings();
       const {data} = response;
-      for_each(data.get_my_settings.get_settings_response.setting, setting => {
+      forEach(data.get_my_settings.get_settings_response.setting, setting => {
         settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,

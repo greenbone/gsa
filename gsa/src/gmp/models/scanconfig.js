@@ -23,7 +23,7 @@
 
 import {is_defined} from '../utils/identity';
 import {
-  for_each,
+  forEach,
   map,
 } from '../utils/array';
 import {is_empty} from '../utils/string';
@@ -111,7 +111,7 @@ class ScanConfig extends Model {
     const scanner_preferences = [];
 
     if (is_defined(elem.preferences)) {
-      for_each(elem.preferences.preference, preference => {
+      forEach(elem.preferences.preference, preference => {
         const pref = {...preference};
         if (is_empty(pref.nvt.name)) {
           delete pref.nvt;

@@ -21,18 +21,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {
-  for_each,
-  is_defined,
-  is_empty,
-  select_save_id,
-  shorten,
-} from 'gmp/utils';
+import {forEach} from 'gmp/utils/array';
+import {is_defined} from 'gmp/utils/identity';
+import {is_empty, shorten} from 'gmp/utils/string';
+import {select_save_id} from 'gmp/utils/id';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
@@ -204,7 +200,7 @@ class ScanConfigComponent extends React.Component {
       const trend = {};
       const select = {};
 
-      for_each(families, family => {
+      forEach(families, family => {
         const {name} = family;
         const config_family = scanconfig.families[name];
 
@@ -221,7 +217,7 @@ class ScanConfigComponent extends React.Component {
 
       const scanner_preference_values = {};
 
-      for_each(scanconfig.preferences.scanner, preference => {
+      forEach(scanconfig.preferences.scanner, preference => {
         scanner_preference_values[preference.name] = preference.value;
       });
 
@@ -253,12 +249,12 @@ class ScanConfigComponent extends React.Component {
       const selected = {};
 
       if (select[name]) {
-        for_each(nvts, nvt => {
+        forEach(nvts, nvt => {
           selected[nvt.oid] = YES_VALUE;
         });
       }
       else {
-        for_each(nvts, nvt => {
+        forEach(nvts, nvt => {
           selected[nvt.oid] = nvt.selected;
         });
       }
@@ -288,7 +284,7 @@ class ScanConfigComponent extends React.Component {
       const {data} = response;
       const preference_values = {};
 
-      for_each(data.nvt.preferences, pref => {
+      forEach(data.nvt.preferences, pref => {
         let {value, type} = pref;
 
         if (type === 'password' || type === 'file') {

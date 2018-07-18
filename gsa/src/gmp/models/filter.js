@@ -25,7 +25,7 @@ import 'core-js/fn/array/find-index';
 import 'core-js/fn/array/includes';
 
 import {is_defined, is_string} from '../utils/identity';
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 
 import Model from '../model.js';
 
@@ -71,7 +71,7 @@ class Filter extends Model {
     ret.filter_type = ret._type;
 
     if (is_defined(ret.keywords)) {
-      for_each(ret.keywords.keyword, keyword => {
+      forEach(ret.keywords.keyword, keyword => {
 
         const {relation, value, column: key} = keyword;
 

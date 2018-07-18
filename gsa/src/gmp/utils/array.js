@@ -27,7 +27,7 @@ import 'core-js/fn/symbol';
 
 import {has_value, is_defined, is_array} from './identity';
 
-export function for_each(array, func) {
+export const forEach = (array, func) => {
   if (!has_value(array) || !is_defined(func)) {
     return;
   }
@@ -41,7 +41,7 @@ export function for_each(array, func) {
     array = [array];
   }
   array.forEach(func);
-}
+};
 
 export function map(array, func, empty = []) {
   if (!has_value(array) || !is_defined(func)) {

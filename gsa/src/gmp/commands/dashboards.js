@@ -23,7 +23,7 @@
 import uuid from 'uuid/v4';
 
 import {is_array} from '../utils/identity';
-import {for_each} from '../utils/array';
+import {forEach} from '../utils/array';
 
 import logger from '../log';
 
@@ -102,7 +102,7 @@ class DashboardsCommand extends HttpCommand {
 
       const allSettings = {};
 
-      for_each(prefs, pref => {
+      forEach(prefs, pref => {
         const {_id: id, value, name} = pref;
 
         let settings;

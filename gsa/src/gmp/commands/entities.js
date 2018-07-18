@@ -24,7 +24,7 @@
 import logger from '../log.js';
 
 import {is_defined, is_string} from '../utils/identity';
-import {map, for_each} from '../utils/array';
+import {map, forEach} from '../utils/array';
 
 import {parseCollectionList} from '../collection/parser.js';
 
@@ -164,7 +164,7 @@ class EntitiesCommand extends HttpCommand {
       if (is_defined(text)) {
         newGroup.text = {};
 
-        for_each(text, t => {
+        forEach(text, t => {
           const name = t._column;
           const value = t.__text;
           newGroup.text[name] = value;
@@ -173,7 +173,7 @@ class EntitiesCommand extends HttpCommand {
       if (is_defined(stats)) {
         newGroup.stats = {};
 
-        for_each(stats, s => {
+        forEach(stats, s => {
           const name = s._column;
           const nStat = {...s};
           delete nStat._column;

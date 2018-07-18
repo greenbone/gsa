@@ -22,7 +22,7 @@
  */
 
 import {is_defined, is_string} from '../utils/identity';
-import {for_each} from '../utils/array'
+import {forEach} from '../utils/array'
 
 import Model from '../model.js';
 import {parseSeverity, parseQod} from '../parser.js';
@@ -108,7 +108,7 @@ class Result extends Model {
       const details = {};
 
       if (is_defined(detection.result.details)) {
-        for_each(detection.result.details.detail, detail => {
+        forEach(detection.result.details.detail, detail => {
           details[detail.name] = detail.value;
         });
       }

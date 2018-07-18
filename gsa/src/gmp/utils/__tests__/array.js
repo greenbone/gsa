@@ -22,9 +22,8 @@
  */
 import {
   arrays_equal,
-  is_empty,
   map,
-  for_each,
+  forEach,
   filter,
   first,
 } from '../array';
@@ -132,26 +131,26 @@ describe('map function tests', () => {
 
 describe('for_each function tests', () => {
   test('should return undefined for undefined array', () => {
-    const array = for_each(undefined, item => item);
+    const array = forEach(undefined, item => item);
 
     expect(array).toBeUndefined();
   });
 
   test('should return undefined for null array', () => {
-    const array = for_each(null, item => item);
+    const array = forEach(null, item => item);
 
     expect(array).toBeUndefined();
   });
 
   test('should return undefined if no function is set', () => {
-    const array = for_each([1, 2, 3]);
+    const array = forEach([1, 2, 3]);
 
     expect(array).toBeUndefined();
   });
 
   test('should iterate over array', () => {
     const callback = jest.fn();
-    for_each([1, 2, 3], callback);
+    forEach([1, 2, 3], callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(3);
@@ -162,7 +161,7 @@ describe('for_each function tests', () => {
 
   test('should iterate over single item', () => {
     const callback = jest.fn();
-    for_each(2, callback);
+    forEach(2, callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);
@@ -171,7 +170,7 @@ describe('for_each function tests', () => {
 
   test('should iterate over Set', () => {
     const callback = jest.fn();
-    for_each(new Set([1, 2, 3]), callback);
+    forEach(new Set([1, 2, 3]), callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(3);

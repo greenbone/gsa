@@ -29,7 +29,7 @@ import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 import {
   filter as filter_func,
-  for_each,
+  forEach,
   map,
 } from '../../utils/array';
 
@@ -83,11 +83,11 @@ export const parse_tls_certificates = (report, filter) => {
 
   let certs_array = [];
 
-  for_each(hosts, host => {
+  forEach(hosts, host => {
     const host_certs = {};
     let hostname;
 
-    for_each(host.detail, detail => {
+    forEach(host.detail, detail => {
       const {name = '', value = ''} = detail;
 
       if (name.startsWith('SSLInfo')) {
@@ -191,7 +191,7 @@ export const parse_ports = (report, filter) => {
 
   const {count: full_count} = ports;
 
-  for_each(ports.port, port => {
+  forEach(ports.port, port => {
     const {__text: id} = port;
 
     if (is_defined(id) && !id.startsWith('general')) {
@@ -239,7 +239,7 @@ export const parse_vulnerabilities = (report, filter) => {
 
   const {count: full_count} = vulns;
 
-  for_each(results.result, result => {
+  forEach(results.result, result => {
     const {nvt = {}, host} = result;
     const {_oid: oid} = nvt;
 
@@ -293,7 +293,7 @@ export const parse_apps = (report, filter) => {
   const severities = {};
 
   // if there are several results find the highest severity for the cpe
-  for_each(results.result, result => {
+  forEach(results.result, result => {
     const result_severity = parseSeverity(result.severity);
 
     if (is_defined(result.detection) && is_defined(result.detection.result) &&
@@ -320,10 +320,10 @@ export const parse_apps = (report, filter) => {
   });
 
   // Collect Apps and their hosts
-  for_each(hosts, host => {
+  forEach(hosts, host => {
     const {detail: details} = host;
 
-    for_each(details, detail => {
+    forEach(details, detail => {
       const {name = ''} = detail;
 
       if (name === 'App') {
@@ -379,7 +379,7 @@ export const parse_host_severities = (results = {}) => {
   const severities = {};
 
   // if the there are several results find the highest severity for the ip
-  for_each(results.result, result => {
+  forEach(results.result, result => {
     const {host} = result;
     const {__text: ip} = host;
 
@@ -412,14 +412,14 @@ export const parse_operatingsystems = (report, filter) => {
 
   const severities = parse_host_severities(results);
 
-  for_each(hosts, host => {
+  forEach(hosts, host => {
     const {detail: details, ip} = host;
 
     let best_os_cpe;
     let best_os_txt;
 
     if (is_defined(ip)) {
-      for_each(details, detail => {
+      forEach(details, detail => {
         const {name, value} = detail;
         if (name === 'best_os_cpe') {
           best_os_cpe = value;
@@ -535,11 +535,11 @@ export const parse_errors = (report, filter) => {
 
   const hostnames_by_ip = {};
 
-  for_each(hosts, host => {
+  forEach(hosts, host => {
     const {ip} = host;
 
     if (is_defined(ip)) {
-      for_each(host.detail, detail => {
+      forEach(host.detail, detail => {
         const {name, value} = detail;
         if (name === 'hostname') {
           // collect hostname
@@ -602,11 +602,11 @@ export const parse_closed_cves = (report, filter) => {
 
   let cves_array = [];
 
-  for_each(hosts, host => {
+  forEach(hosts, host => {
     let host_cves = [];
     let hostname;
 
-    for_each(host.detail, detail => {
+    forEach(host.detail, detail => {
       const {name, value = '', extra, source} = detail;
 
       if (is_defined(name)) {

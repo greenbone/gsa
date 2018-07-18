@@ -22,7 +22,7 @@
  */
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 
 import {
   parseInt,
@@ -94,7 +94,7 @@ class Host extends Asset {
     ret.details = {};
 
     if (is_defined(ret.host)) {
-      for_each(ret.host.detail, details => {
+      forEach(ret.host.detail, details => {
         ret.details[details.name] = {
           value: details.value,
           source: newProperties(details.source),

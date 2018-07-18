@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from '../utils/identity';
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
 
 import {parseSeverity, parseDate} from '../parser';
 
@@ -62,7 +62,7 @@ class CertBundAdv extends Info {
 
       if (is_defined(advisory.Description) &&
         is_defined(advisory.Description.Element)) {
-        for_each(advisory.Description.Element, element => {
+        forEach(advisory.Description.Element, element => {
           if (is_defined(element.TextBlock)) {
             ret.description.push(element.TextBlock);
           }
