@@ -29,7 +29,7 @@ import Model from '../model.js';
 import {
   parseCsv,
   parseSeverity,
-  parse_text,
+  parseText,
   parseYesNo,
   YES_VALUE,
 } from '../parser.js';
@@ -71,7 +71,7 @@ class Override extends Model {
 
     ret.new_severity = parseSeverity(ret.new_severity);
 
-    ret = {...ret, ...parse_text(ret.text)};
+    ret = {...ret, ...parseText(ret.text)};
 
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');

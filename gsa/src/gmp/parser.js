@@ -42,7 +42,7 @@ export function parseProgress(value) {
   return parse_float(value);
 }
 
-export function parse_text(text) {
+export function parseText(text) {
   if (is_defined(text.__text)) {
     return {
       text: text.__text,
