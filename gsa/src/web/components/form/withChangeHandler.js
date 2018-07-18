@@ -26,7 +26,7 @@ import React from 'react';
 
 import {is_defined, debounce} from 'gmp/utils';
 
-import {parse_int} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -51,7 +51,7 @@ const withChangeHandler = (options = {}) => Component => {
 
       this.handleChange = this.handleChange.bind(this);
 
-      const debounce_value = parse_int(this.props.debounce);
+      const debounce_value = parseInt(this.props.debounce);
 
       if (is_defined(debounce_value) && debounce_value > 0) {
         this.notifyChange = debounce(this.notifyChange, debounce_value);

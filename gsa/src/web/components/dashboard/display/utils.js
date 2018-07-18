@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import {
   ERROR,
@@ -44,12 +44,12 @@ export const totalCount = (groups = []) => {
   if (groups.length === 0) {
     return 0;
   }
-  return groups.map(group => parse_int(group.count))
+  return groups.map(group => parseInt(group.count))
     .reduce((prev, cur) => prev + cur);
 };
 
 export const percent = (count, sum) =>
-  (parse_int(count) / sum * 100).toFixed(1);
+  (parseInt(count) / sum * 100).toFixed(1);
 
 export const randomColor = () => {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16);

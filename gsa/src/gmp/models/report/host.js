@@ -23,10 +23,10 @@
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import {set_properties, parse_int, parseDate} from 'gmp/parser';
+import {set_properties, parseInt, parseDate} from 'gmp/parser';
 
 const parse_count = value => {
-  const parsed = parse_int(value);
+  const parsed = parseInt(value);
 
   if (is_defined(parsed)) {
     return parsed;

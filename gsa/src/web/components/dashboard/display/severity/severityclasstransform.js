@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parseSeverity, parse_int} from 'gmp/parser';
+import {parseSeverity, parseInt} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -71,7 +71,7 @@ const transformSeverityData = (
     const severityClass = allSeverityClasses[riskFactor] || {};
 
     let {count = 0} = severityClass;
-    count += parse_int(group.count);
+    count += parseInt(group.count);
 
     allSeverityClasses[riskFactor] = {
       count,

@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_int, parse_float, parseSeverity} from 'gmp/parser';
+import {parseInt, parse_float, parseSeverity} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -85,7 +85,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
 
     const cvss = is_defined(severity) ? Math.floor(severity) : NA_VALUE;
 
-    count = parse_int(count);
+    count = parseInt(count);
 
     const currentCount = cvssData[cvss] || 0;
 

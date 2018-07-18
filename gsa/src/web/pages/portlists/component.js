@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import {shorten} from 'gmp/utils/string';
 
@@ -200,8 +200,8 @@ class PortListComponent extends React.Component {
     // check if new port range overlaps with existing and temporarily existing
     // ones, only relevant if protocol_type is the same
     for (const range of port_ranges) {
-      const start = parse_int(range.start);
-      const end = parse_int(range.end);
+      const start = parseInt(range.start);
+      const end = parseInt(range.end);
       if (range.protocol_type === port_type &&
         (
           port_range_start === start ||

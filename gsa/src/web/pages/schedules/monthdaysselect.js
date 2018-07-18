@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import Divider from 'web/components/layout/divider';
 
@@ -54,7 +54,7 @@ class MonthDaysSelect extends React.Component {
       return;
     }
 
-    const day = parse_int(valname);
+    const day = parseInt(valname);
 
     let newValue;
     if (val && !value.includes(day)) {

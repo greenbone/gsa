@@ -26,7 +26,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parseYesNo, parseDate} from '../parser.js';
+import {parseInt, parseYesNo, parseDate} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -45,7 +45,7 @@ export const PARAM_TYPE_SELECTION = 'osp_selection';
 export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
 export function scanner_type_name(scanner_type) {
-  scanner_type = parse_int(scanner_type);
+  scanner_type = parseInt(scanner_type);
   if (scanner_type === OSP_SCANNER_TYPE) {
     return _('OSP Scanner');
   }
@@ -81,7 +81,7 @@ class Scanner extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.scanner_type = parse_int(elem.type);
+    ret.scanner_type = parseInt(elem.type);
 
     ret.credential = is_defined(ret.credential) &&
       !is_empty(ret.credential._id) ? new Credential(ret.credential) :

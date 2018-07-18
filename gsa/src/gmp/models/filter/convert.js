@@ -24,13 +24,13 @@
 import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 
-import {parse_int} from '../../parser.js';
+import {parseInt} from '../../parser.js';
 
 const convert_boolean_int = (keyword, value, relation) => {
   return {
     keyword,
     value:
-    parse_int(value) >= 1 ? 1 : 0,
+    parseInt(value) >= 1 ? 1 : 0,
     relation,
   };
 };
@@ -38,7 +38,7 @@ const convert_boolean_int = (keyword, value, relation) => {
 function convert_int(keyword, value, relation) {
   return {
     keyword,
-    value: parse_int(value),
+    value: parseInt(value),
     relation,
   };
 }

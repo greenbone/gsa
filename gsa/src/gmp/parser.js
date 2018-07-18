@@ -56,12 +56,12 @@ export function parseText(text) {
   };
 }
 
-export function parse_int(value) {
+export function parseInt(value) {
   if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
     return undefined;
   }
 
-  const val = parseInt(value, 10);
+  const val = global.parseInt(value, 10);
 
   if (isNaN(val)) {
     return undefined;
@@ -394,7 +394,7 @@ export const parseDate = value => is_defined(value) ?
  */
 export const parseDuration = value => {
   if (is_string(value)) {
-    value = parse_int(value);
+    value = parseInt(value);
   }
   if (!is_defined(value)) {
     return undefined;

@@ -26,7 +26,7 @@ import {for_each, map} from '../utils/array';
 
 import {
   new_properties,
-  parse_int,
+  parseInt,
   parse_properties,
   parseSeverity,
   parseYesNo,
@@ -104,7 +104,7 @@ class Host extends Asset {
           map(route.host, host => ({
             ip: host.ip,
             id: is_empty(host._id) ? undefined : host._id,
-            distance: parse_int(host._distance),
+            distance: parseInt(host._distance),
             same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
           }))
         );

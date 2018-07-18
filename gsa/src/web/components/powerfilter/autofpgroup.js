@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {parse_int} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -57,7 +57,7 @@ const AutoFpGroup = ({
             value={1}
             disabled={autofp === 0}
             checked={autofp === 1}
-            convert={parse_int}
+            convert={parseInt}
             onChange={onChange}/>
           <Radio
             name="autofp"
@@ -65,7 +65,7 @@ const AutoFpGroup = ({
             value="2"
             disabled={autofp === 0}
             checked={autofp === 2}
-            convert={parse_int}
+            convert={parseInt}
             onChange={onChange}/>
         </Divider>
       </Divider>

@@ -25,7 +25,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {parse_int} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -71,7 +71,7 @@ const PortRangeDialog = ({
                 value={state.port_range_start}
                 grow="1"
                 size="30"
-                convert={parse_int}
+                convert={parseInt}
                 onChange={onValueChange}
                 maxLength="80"
               />
@@ -84,7 +84,7 @@ const PortRangeDialog = ({
                 grow="1"
                 size="30"
                 maxLength="80"
-                convert={parse_int}
+                convert={parseInt}
                 onChange={onValueChange}
               />
             </FormGroup>

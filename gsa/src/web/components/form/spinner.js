@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {debounce, is_defined, KeyCode} from 'gmp/utils';
 
-import {parse_float, parse_int} from 'gmp/parser.js';
+import {parse_float, parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -163,7 +163,7 @@ class SpinnerComponent extends React.Component {
     this.handleUpMouse = this.handleUpMouse.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
-    const debounce_value = parse_int(this.props.debounce);
+    const debounce_value = parseInt(this.props.debounce);
 
     if (is_defined(debounce_value) && debounce_value > 0) {
       this.notifyChange = debounce(this.notifyChange, debounce_value);

@@ -26,7 +26,7 @@ import logger from './log.js';
 
 import {is_defined, is_function} from './utils/identity';
 
-import {parse_int, parse_float} from './parser.js';
+import {parseInt, parse_float} from './parser.js';
 
 const log = logger.getLogger('gmp.sort');
 
@@ -74,7 +74,7 @@ const ip_to_number = original => {
     let ret = 0;
     for (const item of split) {
       ret = ret << 8; // eslint-disable-line no-bitwise
-      const number = parse_int(item);
+      const number = parseInt(item);
 
       if (!is_defined(number)) { // wasn't a number. it's not an ip
         return original;

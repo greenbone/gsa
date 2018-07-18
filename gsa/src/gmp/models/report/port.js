@@ -24,7 +24,7 @@ import 'core-js/fn/string/includes';
 
 import {is_defined} from '../../utils/identity';
 
-import {set_properties, parse_int, parseSeverity} from '../../parser.js';
+import {set_properties, parseInt, parseSeverity} from '../../parser.js';
 
 class ReportPort {
 
@@ -55,7 +55,7 @@ class ReportPort {
     if (name.includes('/')) {
       const [number, protocol] = name.split('/');
 
-      copy.number = parse_int(number);
+      copy.number = parseInt(number);
 
       if (!is_defined(copy.number)) {
         // port number wasn't a number (e.g. general)

@@ -26,7 +26,7 @@ import _ from 'gmp/locale.js';
 
 import {is_defined} from 'gmp/utils';
 
-import {parse_int} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser.js';
 
 import {
   EVENT_TYPE_UPDATED_SECINFO,
@@ -42,7 +42,7 @@ const Condition = ({
   event,
 }) => {
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_AT_LEAST) {
-    const count = parse_int(condition.data.count.value);
+    const count = parseInt(condition.data.count.value);
     let type;
 
     // FIXME this is not translateable
@@ -61,7 +61,7 @@ const Condition = ({
   }
 
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_CHANGED) {
-    const count = parse_int(condition.data.count.value);
+    const count = parseInt(condition.data.count.value);
 
     // FIXME this is not translateable
     return _('Filter matches at least {{count}} more {{result}} ' +

@@ -25,7 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {parse_int, parseDate} from 'gmp/parser';
+import {parseInt, parseDate} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -55,8 +55,8 @@ const transformModified = (data = {}) => {
     return {
       x: modified,
       label: shortDate(modified),
-      y: parse_int(count),
-      y2: parse_int(c_count),
+      y: parseInt(count),
+      y2: parseInt(c_count),
     };
   });
 
