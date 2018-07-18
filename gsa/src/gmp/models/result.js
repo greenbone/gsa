@@ -25,7 +25,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {for_each} from '../utils/array'
 
 import Model from '../model.js';
-import {parseSeverity, parse_qod} from '../parser.js';
+import {parseSeverity, parseQod} from '../parser.js';
 
 import Nvt from './nvt.js';
 
@@ -130,7 +130,7 @@ class Result extends Model {
       copy.original_severity = parseSeverity(original_severity);
     }
 
-    copy.qod = parse_qod(qod);
+    copy.qod = parseQod(qod);
 
     copy.notes = parse_notes(notes);
     copy.overrides = parse_overrides(overrides);

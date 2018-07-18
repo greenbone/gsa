@@ -95,7 +95,7 @@ export function parseCsv(value) {
   return value.split(',').map(val => val.trim());
 }
 
-export const parse_qod = qod => ({
+export const parseQod = qod => ({
   type: qod.type,
   value: parseFloat(qod.value),
 });
