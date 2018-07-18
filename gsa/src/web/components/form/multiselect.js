@@ -20,7 +20,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import 'core-js/fn/string/includes';
 
 import React from 'react';
@@ -29,7 +28,8 @@ import glamorous from 'glamorous';
 
 import Downshift from 'downshift';
 
-import {arrays_equal, is_array, is_defined, is_empty} from 'gmp/utils';
+import {arraysEqual} from 'gmp/utils/array';
+import {is_defined, is_array} from 'gmp/utils/identity';
 
 import ArrowIcon from '../icon/arrowicon.js';
 
@@ -146,7 +146,7 @@ class MultiSelect extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {value} = nextProps;
 
-    if (is_defined(value) && !arrays_equal(value, this.state.selectedItems)) {
+    if (is_defined(value) && !arraysEqual(value, this.state.selectedItems)) {
       this.setState({selectedItems: value});
     }
   }
@@ -226,10 +226,7 @@ class MultiSelect extends React.Component {
                 innerRef={ref => this.box = ref}
               >
                 <Layout grow="1" wrap>
-                  {!is_empty(selectedItems) && selectedItems.map(
-                      item => this.renderItem(item, items)
-                    )
-                  }
+                  {selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
                 <Layout align={['center', 'center']}>
                   <ArrowIcon

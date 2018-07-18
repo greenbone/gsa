@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  arrays_equal,
+  arraysEqual,
   map,
   forEach,
   filter,
@@ -33,19 +33,19 @@ describe('array_equals function test', () => {
   test('should return true if arrays are equal', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 3];
-    expect(arrays_equal(array1, array2)).toBe(true);
+    expect(arraysEqual(array1, array2)).toBe(true);
   });
 
   test('should return false if arrays are different', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 4];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should return false if param is not an array', () => {
     const array1 = [2, 3, 4];
     const array2 = 'This is a string';
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should not deep compare Objects', () => {
@@ -53,25 +53,25 @@ describe('array_equals function test', () => {
     const obj2 = {a: 1};
     const array1 = [obj1];
     const array2 = [obj2];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should return true for same Objects', () => {
     const obj1 = {a: 1};
     const array1 = [obj1];
     const array2 = [obj1];
-    expect(arrays_equal(array1, array2)).toBe(true);
+    expect(arraysEqual(array1, array2)).toBe(true);
   });
 
   test('should return false if lengths of arrays differ', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 3, 4];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('array should equals with itself', () => {
     const array1 = [1, 2, 3];
-    expect(arrays_equal(array1, array1)).toBe(true);
+    expect(arraysEqual(array1, array1)).toBe(true);
   });
 });
 

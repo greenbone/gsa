@@ -98,7 +98,7 @@ export function first(array, non = {}) {
   return done ? non : value; // done is true for empty iterables
 }
 
-export function arrays_equal(arr1, arr2) {
+export const arraysEqual = (arr1, arr2) => {
   if (Object.is(arr1, arr2)) {
     return true;
   }
@@ -117,6 +117,6 @@ export function arrays_equal(arr1, arr2) {
     }
   }
   return true;
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:
