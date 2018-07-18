@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 
 import PromiseFactory from '../promise.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import ReportFormat from '../models/reportformat.js';
 
@@ -117,7 +117,7 @@ class ReportFormatsCommand extends EntitiesCommand {
   }
 }
 
-register_command('reportformat', ReportFormatCommand);
-register_command('reportformats', ReportFormatsCommand);
+registerCommand('reportformat', ReportFormatCommand);
+registerCommand('reportformats', ReportFormatsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

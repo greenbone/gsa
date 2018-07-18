@@ -25,7 +25,7 @@ import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 import Model from '../model.js';
 
 import Alert from '../models/alert.js';
@@ -215,7 +215,7 @@ class AlertsCommand extends EntitiesCommand {
   }
 }
 
-register_command('alert', AlertCommand);
-register_command('alerts', AlertsCommand);
+registerCommand('alert', AlertCommand);
+registerCommand('alerts', AlertsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,7 +24,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Note from '../models/note.js';
 import {
@@ -131,7 +131,7 @@ class NotesCommand extends EntitiesCommand {
   }
 };
 
-register_command('note', NoteCommand);
-register_command('notes', NotesCommand);
+registerCommand('note', NoteCommand);
+registerCommand('notes', NotesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

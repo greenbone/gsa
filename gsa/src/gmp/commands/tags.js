@@ -24,7 +24,7 @@
 
 import logger from '../log';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command';
 
 import Tag from '../models/tag';
 
@@ -127,7 +127,7 @@ class TagsCommand extends EntitiesCommand {
   }
 }
 
-register_command('tag', TagCommand);
-register_command('tags', TagsCommand);
+registerCommand('tag', TagCommand);
+registerCommand('tags', TagsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

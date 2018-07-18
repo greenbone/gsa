@@ -28,7 +28,7 @@ import {is_defined} from '../utils/identity';
 import CollectionCounts from '../collection/collectioncounts.js';
 import {parse_collection_list} from '../collection/parser.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 
 import Filter from '../models/filter.js';
 
@@ -122,7 +122,7 @@ class FiltersCommand extends EntitiesCommand {
 
 export default FiltersCommand;
 
-register_command('filter', FilterCommand);
-register_command('filters', FiltersCommand);
+registerCommand('filter', FilterCommand);
+registerCommand('filters', FiltersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

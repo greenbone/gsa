@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Permission from '../models/permission';
 
@@ -139,7 +139,7 @@ class PermissionsCommand extends EntitiesCommand {
   }
 }
 
-register_command('permission', PermissionCommand);
-register_command('permissions', PermissionsCommand);
+registerCommand('permission', PermissionCommand);
+registerCommand('permissions', PermissionsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 
 import Scanner from '../models/scanner.js';
 
@@ -109,7 +109,7 @@ class ScannerCommand extends EntityCommand {
   }
 }
 
-register_command('scanner', ScannerCommand);
-register_command('scanners', ScannersCommand);
+registerCommand('scanner', ScannerCommand);
+registerCommand('scanners', ScannersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

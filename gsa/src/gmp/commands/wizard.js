@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {HttpCommand, register_command} from '../command.js';
+import {HttpCommand, registerCommand} from '../command.js';
 import Model from '../model.js';
 
 import Credential from '../models/credential.js';
@@ -193,6 +193,6 @@ class WizardCommand extends HttpCommand {
 
 export default WizardCommand;
 
-register_command('wizard', WizardCommand);
+registerCommand('wizard', WizardCommand);
 
 // vim: set ts=2 sw=2 tw=80:

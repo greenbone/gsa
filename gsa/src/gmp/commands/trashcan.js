@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {HttpCommand, register_command} from '../command';
+import {HttpCommand, registerCommand} from '../command';
 
 import {apiType} from '../utils/entitytype.js';
 import {is_defined} from '../utils/identity';
@@ -151,6 +151,6 @@ class Trashcan extends HttpCommand {
   }
 }
 
-register_command('trashcan', Trashcan);
+registerCommand('trashcan', Trashcan);
 
 // vim: set ts=2 sw=2 tw=80:

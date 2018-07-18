@@ -24,7 +24,7 @@
 
 import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 
 import Host from '../models/host.js';
 
@@ -123,7 +123,7 @@ class HostsCommand extends EntitiesCommand {
   }
 }
 
-register_command('host', HostCommand);
-register_command('hosts', HostsCommand);
+registerCommand('host', HostCommand);
+registerCommand('hosts', HostsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

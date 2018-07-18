@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import PortList from '../models/portlist.js';
 
@@ -104,7 +104,7 @@ class PortListsCommand extends EntitiesCommand {
   }
 }
 
-register_command('portlist', PortListCommand);
-register_command('portlists', PortListsCommand);
+registerCommand('portlist', PortListCommand);
+registerCommand('portlists', PortListsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

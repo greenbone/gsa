@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Vulnerability from '../models/vulnerability.js';
 
@@ -60,7 +60,7 @@ class VulnerabilitiesCommand extends EntitiesCommand {
   }
 }
 
-register_command('vuln', VulnerabilityCommand);
-register_command('vulns', VulnerabilitiesCommand);
+registerCommand('vuln', VulnerabilityCommand);
+registerCommand('vulns', VulnerabilitiesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

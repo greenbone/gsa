@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import CertBundAdv from '../models/certbund.js';
 
@@ -63,7 +63,7 @@ class CertBundsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('certbund', CertBundCommand);
-register_command('certbunds', CertBundsCommand);
+registerCommand('certbund', CertBundCommand);
+registerCommand('certbunds', CertBundsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

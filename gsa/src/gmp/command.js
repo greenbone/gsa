@@ -37,12 +37,12 @@ export {
 
 const COMMANDS = {};
 
-export const register_command = (name, clazz, ...options) => {
+export const registerCommand = (name, clazz, ...options) => {
   COMMANDS[name] = {clazz, options};
 };
 
 export const get_commands = () => COMMANDS;
 
-export default register_command;
+export default registerCommand;
 
 // vim: set ts=2 sw=2 tw=80:

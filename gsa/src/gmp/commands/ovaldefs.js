@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Ovaldef from '../models/ovaldef.js';
 
@@ -71,7 +71,7 @@ class OvaldefsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('ovaldef', OvaldefCommand);
-register_command('ovaldefs', OvaldefsCommand);
+registerCommand('ovaldef', OvaldefCommand);
+registerCommand('ovaldefs', OvaldefsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

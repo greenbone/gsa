@@ -26,7 +26,7 @@ import logger from '../log.js';
 
 import {is_defined} from '../utils/identity';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 
 import Report from '../models/report.js';
 
@@ -135,7 +135,7 @@ class ReportCommand extends EntityCommand {
   }
 }
 
-register_command('report', ReportCommand);
-register_command('reports', ReportsCommand);
+registerCommand('report', ReportCommand);
+registerCommand('reports', ReportsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

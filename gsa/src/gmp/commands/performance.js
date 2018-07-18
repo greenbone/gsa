@@ -27,7 +27,7 @@ import {
 
 import HttpCommand from './http.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 class PerformanceCommand extends HttpCommand {
 
@@ -53,6 +53,6 @@ class PerformanceCommand extends HttpCommand {
   }
 }
 
-register_command('performance', PerformanceCommand);
+registerCommand('performance', PerformanceCommand);
 
 // vim: set ts=2 sw=2 tw=80:

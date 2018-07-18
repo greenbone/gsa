@@ -26,7 +26,7 @@ import {for_each, map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 
 import Model from '../model.js';
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 import {YES_VALUE, NO_VALUE} from '../parser.js';
 
 import {parse_counts} from '../collection/parser.js';
@@ -280,7 +280,7 @@ class ScanConfigsCommand extends EntitiesCommand {
   }
 }
 
-register_command('scanconfig', ScanConfigCommand);
-register_command('scanconfigs', ScanConfigsCommand);
+registerCommand('scanconfig', ScanConfigCommand);
+registerCommand('scanconfigs', ScanConfigsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

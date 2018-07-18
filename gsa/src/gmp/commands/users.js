@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import {for_each, map} from '../utils/array';
 import {is_defined} from '../utils/identity';
@@ -273,7 +273,7 @@ class UsersCommand extends EntitiesCommand {
   }
 }
 
-register_command('user', UserCommand);
-register_command('users', UsersCommand);
+registerCommand('user', UserCommand);
+registerCommand('users', UsersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

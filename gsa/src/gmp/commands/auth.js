@@ -21,7 +21,7 @@
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-import {HttpCommand, register_command} from '../command.js';
+import {HttpCommand, registerCommand} from '../command.js';
 
 class AuthenticationCommand extends HttpCommand {
 
@@ -58,4 +58,4 @@ class AuthenticationCommand extends HttpCommand {
   }
 }
 
-register_command('auth', AuthenticationCommand)
+registerCommand('auth', AuthenticationCommand)

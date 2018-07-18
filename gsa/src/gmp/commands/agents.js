@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Agent from '../models/agent.js';
 
@@ -91,7 +91,7 @@ class AgentsCommand extends EntitiesCommand {
   }
 }
 
-register_command('agent', AgentCommand);
-register_command('agents', AgentsCommand);
+registerCommand('agent', AgentCommand);
+registerCommand('agents', AgentsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

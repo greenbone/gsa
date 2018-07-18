@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import SecInfo from '../models/secinfo.js';
 
@@ -71,7 +71,7 @@ class SecInfosCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('secinfo', SecInfoCommand);
-register_command('secinfos', SecInfosCommand);
+registerCommand('secinfo', SecInfoCommand);
+registerCommand('secinfos', SecInfosCommand);
 
 // vim: set ts=2 sw=2 tw=80:

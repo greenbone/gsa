@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Nvt from '../models/nvt.js';
 
@@ -88,7 +88,7 @@ class NvtsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('nvt', NvtCommand);
-register_command('nvts', NvtsCommand);
+registerCommand('nvt', NvtCommand);
+registerCommand('nvts', NvtsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

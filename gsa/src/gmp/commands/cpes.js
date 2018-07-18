@@ -27,7 +27,7 @@ import {is_defined} from '../utils';
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Cpe from '../models/cpe.js';
 
@@ -63,7 +63,7 @@ class CpesCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('cpe', CpeCommand);
-register_command('cpes', CpesCommand);
+registerCommand('cpe', CpeCommand);
+registerCommand('cpes', CpesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

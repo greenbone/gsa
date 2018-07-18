@@ -25,7 +25,7 @@ import logger from '../log.js';
 
 import {is_string} from '../utils/identity';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Target from '../models/target.js';
 
@@ -142,7 +142,7 @@ class TargetsCommand extends EntitiesCommand {
   }
 }
 
-register_command('target', TargetCommand);
-register_command('targets', TargetsCommand);
+registerCommand('target', TargetCommand);
+registerCommand('targets', TargetsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

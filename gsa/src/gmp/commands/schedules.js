@@ -23,7 +23,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import Schedule from '../models/schedule.js';
 
@@ -89,7 +89,7 @@ class SchedulesCommand extends EntitiesCommand {
   }
 }
 
-register_command('schedule', ScheduleCommand);
-register_command('schedules', SchedulesCommand);
+registerCommand('schedule', ScheduleCommand);
+registerCommand('schedules', SchedulesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

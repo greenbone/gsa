@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import logger from '../log.js';
 import {is_array} from '../utils/identity';
@@ -88,7 +88,7 @@ class GroupsCommand extends EntitiesCommand {
   }
 }
 
-register_command('group', GroupCommand);
-register_command('groups', GroupsCommand);
+registerCommand('group', GroupCommand);
+registerCommand('groups', GroupsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

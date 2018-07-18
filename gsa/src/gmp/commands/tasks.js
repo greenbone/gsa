@@ -25,7 +25,7 @@ import {map} from '../utils/array';
 import {is_empty} from '../utils/string';
 import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 import Model from '../model.js';
 
 import ScanConfig from '../models/scanconfig.js';
@@ -339,7 +339,7 @@ class TasksCommand extends EntitiesCommand {
   }
 }
 
-register_command('task', TaskCommand);
-register_command('tasks', TasksCommand);
+registerCommand('task', TaskCommand);
+registerCommand('tasks', TasksCommand);
 
 // vim: set ts=2 sw=2 tw=80:

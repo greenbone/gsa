@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {HttpCommand, register_command} from '../command.js';
+import {HttpCommand, registerCommand} from '../command.js';
 
 import {parseDate} from '../parser.js';
 
@@ -76,6 +76,6 @@ class FeedStatus extends HttpCommand {
   }
 }
 
-register_command('feedstatus', FeedStatus);
+registerCommand('feedstatus', FeedStatus);
 
 // vim: set ts=2 sw=2 tw=80:

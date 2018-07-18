@@ -24,7 +24,7 @@
 
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import {NO_VALUE} from '../parser.js';
 
@@ -140,7 +140,7 @@ class OverridesCommand extends EntitiesCommand {
   }
 };
 
-register_command('override', OverrideCommand);
-register_command('overrides', OverridesCommand);
+registerCommand('override', OverrideCommand);
+registerCommand('overrides', OverridesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/set';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, registerCommand} from '../command.js';
 
 import logger from '../log.js';
 import {is_array, is_defined} from '../utils/identity';
@@ -135,7 +135,7 @@ class RolesCommand extends EntitiesCommand {
   }
 }
 
-register_command('role', RoleCommand);
-register_command('roles', RolesCommand);
+registerCommand('role', RoleCommand);
+registerCommand('roles', RolesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

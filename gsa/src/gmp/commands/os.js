@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, registerCommand} from '../command.js';
 
 import OperatingSystem from '../models/os.js';
 
@@ -84,7 +84,7 @@ class OperatingSystemsCommand extends EntitiesCommand {
   }
 }
 
-register_command('operatingsystem', OperatingSystemCommand);
-register_command('operatingsystems', OperatingSystemsCommand);
+registerCommand('operatingsystem', OperatingSystemCommand);
+registerCommand('operatingsystems', OperatingSystemsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
