@@ -118,7 +118,7 @@ export function parseEnvelopeMeta(envelope) {
   return meta;
 }
 
-export const parse_properties = (element, object = {}) => {
+export const parseProperties = (element, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
   if (is_string(element._id) && element._id.length > 0) {
@@ -160,7 +160,7 @@ export const set_properties = (properties, object = {}) => {
 };
 
 export const new_properties = (properties, object = {}) =>
-  set_properties(parse_properties(properties, object));
+  set_properties(parseProperties(properties, object));
 
 export const parse_cvss_base_vector = ({
   access_complexity,

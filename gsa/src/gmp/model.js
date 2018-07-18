@@ -25,7 +25,7 @@ import {is_empty} from './utils/string';
 import {map} from './utils/array';
 
 import {
-  parse_properties,
+  parseProperties,
   parseYesNo,
   parseDate,
   set_properties,
@@ -65,7 +65,7 @@ class Model {
   }
 
   parseProperties(elem) {
-    const copy = parse_properties(elem);
+    const copy = parseProperties(elem);
 
     if (is_defined(elem.end_time)) {
       if (elem.end_time.length > 0) {

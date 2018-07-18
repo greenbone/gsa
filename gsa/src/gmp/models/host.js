@@ -27,7 +27,7 @@ import {for_each, map} from '../utils/array';
 import {
   new_properties,
   parseInt,
-  parse_properties,
+  parseProperties,
   parseSeverity,
   parseYesNo,
   set_properties,
@@ -41,7 +41,7 @@ const get_identifier = (identifiers, name) => identifiers.filter(
 class Identifier {
 
   constructor(element) {
-    const props = parse_properties(element);
+    const props = parseProperties(element);
 
     if (is_defined(props.source)) {
       props.source = new_properties({
