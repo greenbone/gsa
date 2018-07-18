@@ -25,7 +25,7 @@ import logger from '../log';
 import {is_defined} from '../utils/identity';
 
 import CollectionCounts from '../collection/collectioncounts';
-import {parse_collection_list} from '../collection/parser';
+import {parseCollectionList} from '../collection/parser';
 
 import registerCommand from '../command';
 
@@ -114,7 +114,7 @@ class FiltersCommand extends EntitiesCommand {
 
   getCollectionListFromRoot(root, meta) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, {
+    return parseCollectionList(response, this.name, this.clazz, {
       meta,
       filter_parse_func: parse_filter,
       collection_count_parse_func: parse_collection_counts,

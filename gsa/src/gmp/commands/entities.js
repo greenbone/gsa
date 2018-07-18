@@ -26,7 +26,7 @@ import logger from '../log.js';
 import {is_defined, is_string} from '../utils/identity';
 import {map, for_each} from '../utils/array';
 
-import {parse_collection_list} from '../collection/parser.js';
+import {parseCollectionList} from '../collection/parser.js';
 
 import Filter, {ALL_FILTER} from '../models/filter.js';
 import {filter_string} from '../models/filter/utils.js';
@@ -62,7 +62,7 @@ class EntitiesCommand extends HttpCommand {
 
   getCollectionListFromRoot(root) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz);
+    return parseCollectionList(response, this.name, this.clazz);
   }
 
   getEntitiesResponse(root) {

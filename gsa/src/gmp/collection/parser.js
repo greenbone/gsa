@@ -162,8 +162,8 @@ const parseCollectionCounts = (response, name, plural_name) =>
  * @return {Object}  A new object containing the parsed entities, filter and
  *                   counts.
  */
-export function parse_collection_list(response, name, modelclass,
-    options = {}) {
+export const parseCollectionList = (response, name, modelclass,
+    options = {}) => {
   const {
     plural_name,
     entities_parse_func = parseEntities,
@@ -175,6 +175,6 @@ export function parse_collection_list(response, name, modelclass,
     filter: filter_parse_func(response),
     counts: collection_count_parse_func(response, name, plural_name),
   };
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:

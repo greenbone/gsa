@@ -22,7 +22,7 @@
  */
 
 import {
-  parse_collection_list,
+  parseCollectionList,
   parseInfoEntities,
   parseInfoCounts,
 } from '../collection/parser';
@@ -51,7 +51,7 @@ class InfoEntitiesCommand extends EntitiesCommand {
 
   getCollectionListFromRoot(root, meta) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, {
+    return parseCollectionList(response, this.name, this.clazz, {
       meta,
       entities_parse_func: this.parseInfoEntities,
       collection_count_parse_func: parseInfoCounts,
