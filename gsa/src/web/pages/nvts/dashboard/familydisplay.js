@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 
-import {parse_float, parseSeverity} from 'gmp/parser';
+import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
@@ -51,7 +51,7 @@ import {NvtsFamilyLoader} from './loaders';
 const transformFamilyData = (data = {}, {severityClass}) => {
   const {groups = []} = data;
   const totalNvts = groups.reduce((prev, current) =>
-    prev + parse_float(current.count), 0);
+    prev + parseFloat(current.count), 0);
 
   const tdata = groups
     .map(family => {
@@ -67,7 +67,7 @@ const transformFamilyData = (data = {}, {severityClass}) => {
         });
 
       return {
-        value: parse_float(count),
+        value: parseFloat(count),
         color: riskFactorColorScale(riskFactor),
         label: value,
         toolTip,

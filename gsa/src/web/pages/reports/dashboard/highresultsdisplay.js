@@ -25,7 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {parseInt, parse_float, parseDate} from 'gmp/parser';
+import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -53,7 +53,7 @@ const transformHighResults = (data = {}) => {
       label: longDate(reportDate),
       x: reportDate,
       y: parseInt(group.stats.high.max),
-      y2: parse_float(group.stats.high_per_host.max),
+      y2: parseFloat(group.stats.high_per_host.max),
     };
   });
 };

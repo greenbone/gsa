@@ -26,7 +26,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_float, parseSeverity} from '../parser.js';
+import {parseFloat, parseSeverity} from '../parser.js';
 
 import Info from './info.js';
 
@@ -139,7 +139,7 @@ class Nvt extends Info {
         delete ret.qod.value;
       }
       else {
-        ret.qod.value = parse_float(elem.qod.value);
+        ret.qod.value = parseFloat(elem.qod.value);
       }
 
       if (is_empty(elem.qod.type)) {
@@ -151,14 +151,14 @@ class Nvt extends Info {
       delete ret.default_timeout;
     }
     else {
-      ret.default_timeout = parse_float(elem.default_timeout);
+      ret.default_timeout = parseFloat(elem.default_timeout);
     }
 
     if (is_empty(elem.timeout)) {
       delete ret.timeout;
     }
     else {
-      ret.timeout = parse_float(elem.timeout);
+      ret.timeout = parseFloat(elem.timeout);
     }
 
     return ret;

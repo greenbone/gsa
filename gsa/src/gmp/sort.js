@@ -26,7 +26,7 @@ import logger from './log.js';
 
 import {is_defined, is_function} from './utils/identity';
 
-import {parseInt, parse_float} from './parser.js';
+import {parseInt, parseFloat} from './parser.js';
 
 const log = logger.getLogger('gmp.sort');
 
@@ -109,7 +109,7 @@ export const make_compare_plain = make_compare(value => value);
 
 export const make_compare_string = make_compare(value => '' + value);
 
-export const make_compare_number = make_compare(parse_float);
+export const make_compare_number = make_compare(parseFloat);
 
 export const make_compare_date = make_compare_plain;
 

@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -57,10 +57,10 @@ const transformQodData = (data = {}) => {
     const perc = percent(count, sum);
 
     return {
-      value: parse_float(count),
+      value: parseFloat(count),
       label: value + ' %',
       toolTip: `${value}%: ${perc}% (${count})`,
-      color: qodColorScale(parse_float(value)),
+      color: qodColorScale(parseFloat(value)),
       filterValue: value,
     };
   });

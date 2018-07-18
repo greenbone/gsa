@@ -29,7 +29,7 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -101,7 +101,7 @@ const transformHostsData = (data = {}) => {
       const binWithAllMembers = groups.filter(group =>
         group.value >= min && group.value <= max);
       const sumOfBinMembers = binWithAllMembers.reduce((prev, current) =>
-        prev + parse_float(current.count), 0);
+        prev + parseFloat(current.count), 0);
       const yValue = sumOfBinMembers;
       const perc = percent(yValue, totalVulns);
 

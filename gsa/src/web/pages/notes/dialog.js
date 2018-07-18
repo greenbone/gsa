@@ -30,7 +30,7 @@ import {longDate} from 'gmp/locale/date';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 
 import {
   ANY,
@@ -294,7 +294,7 @@ const NoteDialog = ({
                       title={' > ' +
                         severityFormat(severity - 0.1)}
                       checked={true}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     /> :
@@ -302,7 +302,7 @@ const NoteDialog = ({
                       name="severity"
                       title={translatedResultSeverityRiskFactor(severity)}
                       checked={state.severity === severity}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     />
@@ -315,7 +315,7 @@ const NoteDialog = ({
                     name="severity"
                     title={_('> 0.0')}
                     checked={state.severity === 0.1}
-                    convert={parse_float}
+                    convert={parseFloat}
                     value="0.1"
                     onChange={onValueChange}
                   />
@@ -324,7 +324,7 @@ const NoteDialog = ({
                     value="0.0"
                     title={_('Log')}
                     checked={state.severity === 0.0}
-                    convert={parse_float}
+                    convert={parseFloat}
                     onChange={onValueChange}
                   />
                 </Layout>

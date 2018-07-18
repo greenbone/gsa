@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_float, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
   ANY,
@@ -332,7 +332,7 @@ const OverrideDialog = ({
                       title={' > ' +
                         severityFormat(severity - 0.1)}
                       checked={true}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     /> :
@@ -340,7 +340,7 @@ const OverrideDialog = ({
                       name="severity"
                       title={translatedResultSeverityRiskFactor(severity)}
                       checked={state.severity === severity}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     />
@@ -353,7 +353,7 @@ const OverrideDialog = ({
                     name="severity"
                     title={_('> 0.0')}
                     checked={state.severity === 0.1}
-                    convert={parse_float}
+                    convert={parseFloat}
                     value="0.1"
                     onChange={onValueChange}
                   />
@@ -362,7 +362,7 @@ const OverrideDialog = ({
                     value="0.0"
                     title={_('Log')}
                     checked={state.severity === 0.0}
-                    convert={parse_float}
+                    convert={parseFloat}
                     onChange={onValueChange}
                   />
                 </Layout>
@@ -381,7 +381,7 @@ const OverrideDialog = ({
                 <Select
                   name="new_severity_from_list"
                   disabled={state.custom_severity === YES_VALUE}
-                  convert={parse_float}
+                  convert={parseFloat}
                   items={severity_from_list_items}
                   value={state.new_severity_from_list}
                   onChange={onValueChange}
@@ -397,7 +397,7 @@ const OverrideDialog = ({
                 <TextField
                   name="new_severity"
                   disabled={state.custom_severity === NO_VALUE}
-                  convert={parse_float}
+                  convert={parseFloat}
                   value={state.new_severity}
                   onChange={onValueChange}
                 />

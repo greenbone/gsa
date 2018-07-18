@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
@@ -49,7 +49,7 @@ const transformWordCountData = (data = {}) => {
     .map(group => {
       const {count, value} = group;
       return {
-        value: parse_float(count),
+        value: parseFloat(count),
         label: value,
         color: randomColor(),
         filterValue: value,

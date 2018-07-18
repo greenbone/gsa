@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parseInt, parse_float, parseSeverity} from 'gmp/parser';
+import {parseInt, parseFloat, parseSeverity} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -100,7 +100,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
       const count = cvssData[key];
       const perc = percent(count, sum);
 
-      const value = parse_float(key);
+      const value = parseFloat(key);
 
       const riskFactor = resultSeverityRiskFactor(value, severityClass);
       const label = translateRiskFactor(riskFactor);

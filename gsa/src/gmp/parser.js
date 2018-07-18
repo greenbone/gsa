@@ -29,7 +29,7 @@ import {is_empty} from './utils/string';
 import date, {duration} from './models/date';
 
 export function parseSeverity(value) {
-  return is_empty(value) ? undefined : parse_float(value);
+  return is_empty(value) ? undefined : parseFloat(value);
 }
 
 export function parseProgress(value) {
@@ -39,7 +39,7 @@ export function parseProgress(value) {
   if (is_defined(value.__text)) {
     value = value.__text;
   }
-  return parse_float(value);
+  return parseFloat(value);
 }
 
 export function parseText(text) {
@@ -70,8 +70,8 @@ export function parseInt(value) {
   return val;
 }
 
-export function parse_float(value) {
-  const val = parseFloat(value);
+export function parseFloat(value) {
+  const val = global.parseFloat(value);
 
   if (isNaN(val)) {
     return undefined;
@@ -97,7 +97,7 @@ export function parseCsv(value) {
 
 export const parse_qod = qod => ({
   type: qod.type,
-  value: parse_float(qod.value),
+  value: parseFloat(qod.value),
 });
 
 export function parse_envelope_meta(envelope) {
