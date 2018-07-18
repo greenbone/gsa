@@ -28,7 +28,7 @@ import X2JsTransform from './transform/x2js.js';
 class GmpHttp extends Http {
 
   constructor(server, protocol, options) {
-    const url = build_server_url(server, 'omp', protocol);
+    const url = build_server_url(server, 'gmp', protocol);
     super(url, {...options, transform: X2JsTransform});
   }
 
