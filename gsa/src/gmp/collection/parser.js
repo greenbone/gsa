@@ -118,9 +118,8 @@ const parseElements = (response, name) => response[name];
 const parseEntities = (response, name, modelclass = Model) =>
   map(parseElements(response, name), element => new modelclass(element));
 
-export function parseReportResultEntities(response, name, modelclass) {
-  return parseEntities(response.results, name, modelclass);
-};
+export const parseReportResultEntities = (response, name, modelclass) =>
+  parseEntities(response.results, name, modelclass);
 
 const parseCollectionCounts = (response, name, plural_name) =>
   new CollectionCounts(parseCounts(response, name, plural_name));
