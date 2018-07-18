@@ -38,8 +38,8 @@ const ScheduleIcon = ({
   links = true,
   schedule,
 }) => {
-  if (schedule.user_capabilities.areDefined() &&
-    schedule.user_capabilities.length === 0) {
+  if (schedule.userCapabilities.areDefined() &&
+    schedule.userCapabilities.length === 0) {
     return (
       <Icon
         size={size}
@@ -63,7 +63,7 @@ const ScheduleIcon = ({
   }
   else if (count > 1) {
     title = _('View Details of Schedule {{name}} (Next due: ' +
-      '{{next_time}}, {{periods}} more times )', {
+      '{{time}}, {{periods}} more times )', {
         name,
         time: nextDate,
         periods: count,

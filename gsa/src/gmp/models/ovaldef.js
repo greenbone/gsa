@@ -26,7 +26,7 @@ import {map} from '../utils/array';
 import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 
-import {parse_severity, parse_yesno, YES_VALUE, parseDate} from '../parser';
+import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 
 import Info from './info.js';
 
@@ -79,7 +79,7 @@ class Ovaldef extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'ovaldef');
 
-    ret.severity = parse_severity(ret.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
     const {raw_data} = ret;
@@ -149,7 +149,7 @@ class Ovaldef extends Info {
 
     delete ret.raw_data;
 
-    ret.deprecated = parse_yesno(ret.deprecated);
+    ret.deprecated = parseYesNo(ret.deprecated);
 
     return ret;
   }

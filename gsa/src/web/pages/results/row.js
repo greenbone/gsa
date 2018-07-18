@@ -104,7 +104,7 @@ const Row = ({
         {entity.port}
       </TableData>
       <TableData>
-        {longDate(entity.modification_time)}
+        {longDate(entity.modificationTime)}
       </TableData>
       {render_component(actions, {...other, entity})}
     </TableRow>

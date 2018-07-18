@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../../utils/proptypes';
@@ -55,7 +55,7 @@ const transformClassData = (data = {}) => {
     const {count, value} = group;
     const perc = percent(count, sum);
     return {
-      value: parse_float(count),
+      value: parseFloat(count),
       label: OVAL_CLASS_TYPES[value],
       toolTip: `${OVAL_CLASS_TYPES[value]}: ${perc}% (${count})`,
       color: ovalClassColorScale(value),

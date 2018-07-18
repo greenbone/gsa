@@ -24,7 +24,7 @@ import {is_defined, is_object} from '../utils/identity';
 import {map} from '../utils/array';
 import {is_empty} from '../utils/string';
 
-import {parseDate, parse_yesno, YES_VALUE} from '../parser';
+import {parseDate, parseYesNo, YES_VALUE} from '../parser';
 
 import Model from '../model.js';
 
@@ -93,9 +93,9 @@ class ReportFormat extends Model {
       ret.alerts = [];
     }
 
-    ret.active = parse_yesno(elem.active);
+    ret.active = parseYesNo(elem.active);
 
-    ret.predefined = parse_yesno(elem.predefined);
+    ret.predefined = parseYesNo(elem.predefined);
 
     return ret;
   }

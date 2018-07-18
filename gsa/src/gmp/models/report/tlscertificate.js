@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import {is_defined} from '../../utils/identity';
 
-import {parse_int} from '../../parser.js';
+import {parseInt} from '../../parser.js';
 
 class TLSCertificate {
 
@@ -34,7 +34,7 @@ class TLSCertificate {
   }
 
   addPort(port) {
-    let c_port = parse_int(port);
+    let c_port = parseInt(port);
     if (!is_defined(c_port)) {
       // port wasn't a number
       c_port = port;

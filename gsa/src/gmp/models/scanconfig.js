@@ -28,7 +28,7 @@ import {
 } from '../utils/array';
 import {is_empty} from '../utils/string';
 
-import {parse_int} from '../parser.js';
+import {parseInt} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -40,7 +40,7 @@ export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
 export const parse_count = count => {
-  return !is_empty(count) && count !== '-1' ? parse_int(count) : undefined;
+  return !is_empty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
 class ScanConfig extends Model {
@@ -134,7 +134,7 @@ class ScanConfig extends Model {
       nvt: nvt_preferences,
     };
 
-    ret.scan_config_type = parse_int(elem.type);
+    ret.scan_config_type = parseInt(elem.type);
 
     if (is_defined(elem.scanner)) {
       const scanner = {

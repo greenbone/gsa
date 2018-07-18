@@ -31,7 +31,7 @@ import {filter, map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 import {select_save_id} from 'gmp/utils/id';
 
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -96,14 +96,14 @@ const render_certificate_info = info => {
 
   if (info.time_status === 'expired') {
     return _('Certificate currently in use expired at {{date}}',
-      {date: longDate(info.expiration_time)});
+      {date: longDate(info.expirationTime)});
   }
   if (info.time_status === 'inactive') {
     return _('Certificate currently in not valid until {{date}}',
-      {date: longDate(info.activation_time)});
+      {date: longDate(info.activationTime)});
   }
   return _('Certificate in use will expire at {{date}}',
-      {date: longDate(info.expiration_time)});
+      {date: longDate(info.expirationTime)});
 };
 
 const CertStatus = ({
@@ -138,7 +138,7 @@ class ScannerDialog extends React.Component {
     const {credentials, credential_id, onScannerTypeChange} = this.props;
 
     if (onScannerTypeChange) {
-      value = parse_int(value);
+      value = parseInt(value);
       const scan_credentials = filter_credentials(credentials, value);
 
       onScannerTypeChange(value, name);

@@ -24,7 +24,7 @@
 import React from 'react';
 
 import {is_defined} from 'gmp/utils';
-import {parse_float} from 'gmp/parser.js';
+import {parseFloat} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -49,7 +49,7 @@ const SeverityBar = ({severity}) => {
   let title;
 
   if (is_defined(severity)) {
-    cvss = parse_float(severity);
+    cvss = parseFloat(severity);
     threat = resultSeverityRiskFactor(cvss);
     title = translateRiskFactor(threat);
   }

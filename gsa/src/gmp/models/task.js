@@ -27,9 +27,9 @@ import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
-  parse_int,
-  parse_progress,
-  parse_yesno,
+  parseInt,
+  parseProgress,
+  parseYesNo,
   parseDuration,
   NO_VALUE,
   YES_VALUE,
@@ -137,12 +137,12 @@ class Task extends Model {
 
     if (is_defined(report_count)) {
       elem.report_count = {...report_count};
-      elem.report_count.total = parse_int(report_count.__text);
-      elem.report_count.finished = parse_int(report_count.finished);
+      elem.report_count.total = parseInt(report_count.__text);
+      elem.report_count.finished = parseInt(report_count.finished);
     }
 
-    elem.alterable = parse_yesno(elem.alterable);
-    elem.result_count = parse_int(elem.result_count);
+    elem.alterable = parseYesNo(elem.alterable);
+    elem.result_count = parseInt(elem.result_count);
 
     const reports = [
       'first_report',
@@ -195,9 +195,9 @@ class Task extends Model {
       delete elem.schedule;
     }
 
-    elem.schedule_periods = parse_int(elem.schedule_periods);
+    elem.schedule_periods = parseInt(elem.schedule_periods);
 
-    elem.progress = parse_progress(elem.progress);
+    elem.progress = parseProgress(elem.progress);
 
     const prefs = {};
 
@@ -211,7 +211,7 @@ class Task extends Model {
             elem.apply_overrides = parse_yes(pref.value);
             break;
           case 'assets_min_qod':
-            elem.min_qod = parse_int(pref.value);
+            elem.min_qod = parseInt(pref.value);
             break;
           case 'auto_delete':
             elem.auto_delete = pref.value === AUTO_DELETE_KEEP ?
@@ -219,11 +219,11 @@ class Task extends Model {
             break;
           case 'auto_delete_data':
             elem.auto_delete_data = pref.value === '0' ?
-              AUTO_DELETE_DEFAULT_VALUE : parse_int(pref.value);
+              AUTO_DELETE_DEFAULT_VALUE : parseInt(pref.value);
             break;
           case 'max_hosts':
           case 'max_checks':
-            elem[pref.scanner_name] = parse_int(pref.value);
+            elem[pref.scanner_name] = parseInt(pref.value);
             break;
           case 'source_iface':
             elem.source_iface = pref.value;

@@ -144,8 +144,8 @@ const Row = ({
         <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData>
-        {is_defined(entity.modification_time) &&
-          longDate(entity.modification_time)
+        {is_defined(entity.modificationTime) &&
+          longDate(entity.modificationTime)
         }
       </TableData>
       {render_component(actions, {...props, entity})}

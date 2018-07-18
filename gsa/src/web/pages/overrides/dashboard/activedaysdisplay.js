@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -68,7 +68,7 @@ const transformActiveDaysData = (data = {}) => {
     const {value} = groups[groups.length - 1];
 
     const count = mostActiveDaysBin.reduce((prev, current) =>
-      prev + parse_float(current.count), 0);
+      prev + parseFloat(current.count), 0);
     const reducedMostActiveDaysBin = {
       value,
       count,

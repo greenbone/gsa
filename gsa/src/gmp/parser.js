@@ -28,21 +28,21 @@ import {is_empty} from './utils/string';
 
 import date, {duration} from './models/date';
 
-export function parse_severity(value) {
-  return is_empty(value) ? undefined : parse_float(value);
+export function parseSeverity(value) {
+  return is_empty(value) ? undefined : parseFloat(value);
 }
 
-export function parse_progress(value) {
+export function parseProgress(value) {
   if (!is_defined(value)) {
     return 0;
   }
   if (is_defined(value.__text)) {
     value = value.__text;
   }
-  return parse_float(value);
+  return parseFloat(value);
 }
 
-export function parse_text(text) {
+export function parseText(text) {
   if (is_defined(text.__text)) {
     return {
       text: text.__text,
@@ -56,12 +56,12 @@ export function parse_text(text) {
   };
 }
 
-export function parse_int(value) {
+export function parseInt(value) {
   if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
     return undefined;
   }
 
-  const val = parseInt(value, 10);
+  const val = global.parseInt(value, 10);
 
   if (isNaN(val)) {
     return undefined;
@@ -70,8 +70,8 @@ export function parse_int(value) {
   return val;
 }
 
-export function parse_float(value) {
-  const val = parseFloat(value);
+export function parseFloat(value) {
+  const val = global.parseFloat(value);
 
   if (isNaN(val)) {
     return undefined;
@@ -83,24 +83,24 @@ export function parse_float(value) {
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export function parse_yesno(value) {
+export function parseYesNo(value) {
   return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 }
 
 
-export function parse_csv(value) {
+export function parseCsv(value) {
   if (is_empty(value)) {
     return [];
   }
   return value.split(',').map(val => val.trim());
 }
 
-export const parse_qod = qod => ({
+export const parseQod = qod => ({
   type: qod.type,
-  value: parse_float(qod.value),
+  value: parseFloat(qod.value),
 });
 
-export function parse_envelope_meta(envelope) {
+export function parseEnvelopeMeta(envelope) {
   const meta = {};
 
   const props = [
@@ -118,7 +118,7 @@ export function parse_envelope_meta(envelope) {
   return meta;
 }
 
-export const parse_properties = (element, object = {}) => {
+export const parseProperties = (element, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
   if (is_string(element._id) && element._id.length > 0) {
@@ -127,10 +127,12 @@ export const parse_properties = (element, object = {}) => {
   }
 
   if (is_defined(element.creation_time)) {
-    copy.creation_time = parseDate(element.creation_time);
+    copy.creationTime = parseDate(element.creation_time);
+    delete copy.creation_time;
   }
   if (is_defined(element.modification_time)) {
-    copy.modification_time = parseDate(element.modification_time);
+    copy.modificationTime = parseDate(element.modification_time);
+    delete copy.modification_time;
   }
 
   if (is_defined(copy.type)) {
@@ -142,7 +144,7 @@ export const parse_properties = (element, object = {}) => {
   return copy;
 };
 
-export const set_properties = (properties, object = {}) => {
+export const setProperties = (properties, object = {}) => {
   if (is_defined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
@@ -157,29 +159,26 @@ export const set_properties = (properties, object = {}) => {
   return object;
 };
 
-export const new_properties = (properties, object = {}) =>
-  set_properties(parse_properties(properties, object));
-
-export const parse_cvss_base_vector = ({
-  access_complexity,
-  access_vector,
+export const parseCvssBaseVector = ({
+  accessComplexity,
+  accessVector,
   authentication,
-  availability_impact,
-  confidentiality_impact,
-  integrity_impact,
+  availabilityImpact,
+  confidentialityImpact,
+  integrityImpact,
 }) => {
-  if (!is_defined(access_vector) &&
-    !is_defined(access_complexity) &&
+  if (!is_defined(accessVector) &&
+    !is_defined(accessComplexity) &&
     !is_defined(authentication) &&
-    !is_defined(confidentiality_impact) &&
-    !is_defined(integrity_impact) &&
-    !is_defined(availability_impact)) {
+    !is_defined(confidentialityImpact) &&
+    !is_defined(integrityImpact) &&
+    !is_defined(availabilityImpact)) {
     return undefined;
   }
 
   let vector = 'AV:';
 
-  switch (access_vector) {
+  switch (accessVector) {
     case 'LOCAL':
       vector += 'L';
       break;
@@ -194,7 +193,7 @@ export const parse_cvss_base_vector = ({
   }
 
   vector += '/AC:';
-  switch (access_complexity) {
+  switch (accessComplexity) {
     case 'LOW':
       vector += 'L';
       break;
@@ -224,7 +223,7 @@ export const parse_cvss_base_vector = ({
   }
 
   vector += '/C:';
-  switch (confidentiality_impact) {
+  switch (confidentialityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -239,7 +238,7 @@ export const parse_cvss_base_vector = ({
   }
 
   vector += '/I:';
-  switch (integrity_impact) {
+  switch (integrityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -254,7 +253,7 @@ export const parse_cvss_base_vector = ({
   }
 
   vector += '/A:';
-  switch (availability_impact) {
+  switch (availabilityImpact) {
     case 'NONE':
       vector += 'N';
       break;
@@ -271,8 +270,8 @@ export const parse_cvss_base_vector = ({
 
 };
 
-export const parse_cvss_base_from_vector = cvss_vector => {
-  if (!is_defined(cvss_vector)) {
+export const parseCvssBaseFromVector = vector => {
+  if (!is_defined(vector)) {
     return {};
   }
 
@@ -283,7 +282,7 @@ export const parse_cvss_base_from_vector = cvss_vector => {
   let i;
   let a;
 
-  const values = cvss_vector.split('/');
+  const values = vector.split('/');
 
   for (const currentvalue of values) {
     let [metric, value] = currentvalue.split(':');
@@ -364,12 +363,12 @@ export const parse_cvss_base_from_vector = cvss_vector => {
   }
 
   return {
-    access_vector: av,
-    access_complexity: ac,
+    accessVector: av,
+    accessComplexity: ac,
     authentication: au,
-    confidentiality_impact: c,
-    integrity_impact: i,
-    availability_impact: a,
+    confidentialityImpact: c,
+    integrityImpact: i,
+    availabilityImpact: a,
   };
 };
 
@@ -392,7 +391,7 @@ export const parseDate = value => is_defined(value) ?
  */
 export const parseDuration = value => {
   if (is_string(value)) {
-    value = parse_int(value);
+    value = parseInt(value);
   }
   if (!is_defined(value)) {
     return undefined;

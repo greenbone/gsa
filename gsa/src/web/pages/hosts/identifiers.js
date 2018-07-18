@@ -262,7 +262,7 @@ class Identifiers extends React.Component {
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  {longDate(identifier.creation_time)}
+                  {longDate(identifier.creationTime)}
                 </TableData>
                 <TableData>
                   <Source

@@ -26,7 +26,7 @@ import {is_defined, is_string} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parse_yesno, parseDate} from '../parser.js';
+import {parseInt, parseYesNo, parseDate} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -45,7 +45,7 @@ export const PARAM_TYPE_SELECTION = 'osp_selection';
 export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
 export function scanner_type_name(scanner_type) {
-  scanner_type = parse_int(scanner_type);
+  scanner_type = parseInt(scanner_type);
   if (scanner_type === OSP_SCANNER_TYPE) {
     return _('OSP Scanner');
   }
@@ -81,7 +81,7 @@ class Scanner extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.scanner_type = parse_int(elem.type);
+    ret.scanner_type = parseInt(elem.type);
 
     ret.credential = is_defined(ret.credential) &&
       !is_empty(ret.credential._id) ? new Credential(ret.credential) :
@@ -97,13 +97,15 @@ class Scanner extends Model {
 
       if (is_defined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
-        ret.ca_pub.info.activation_time = parseDate(
+        ret.ca_pub.info.activationTime = parseDate(
           ret.ca_pub.info.activation_time
         );
-        ret.ca_pub.info.expiration_time = parseDate(
+        ret.ca_pub.info.expirationTime = parseDate(
           ret.ca_pub.info.expiration_time
         );
-        delete ret.ca_pub_info;
+        delete ret.ca_pub.info.activation_time;
+        delete ret.ca_pub.info.expiration_time;
+        delete ret.ca_pub.info;
       }
     }
 
@@ -140,7 +142,7 @@ class Scanner extends Model {
           name: param.name,
           description: param.description,
           param_type: param.type,
-          mandatory: parse_yesno(param.mandatory),
+          mandatory: parseYesNo(param.mandatory),
           default: param.default,
         }));
       }

@@ -21,41 +21,41 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  parse_int,
+  parseInt,
 } from '../parser.js';
 
 describe('parse_int tests', () => {
   test('int number string is parsed as int', () => {
-    expect(parse_int('5')).toBe(5);
+    expect(parseInt('5')).toBe(5);
   });
 
   test('float number string is parsed as int', () => {
-    expect(parse_int('5.0')).toBe(5);
+    expect(parseInt('5.0')).toBe(5);
   });
 
   test('float string should be cut', () => {
-    expect(parse_int('5.9999')).toBe(5);
-    expect(parse_int('5.1')).toBe(5);
+    expect(parseInt('5.9999')).toBe(5);
+    expect(parseInt('5.1')).toBe(5);
   });
 
   test('float number should be cut', () => {
-    expect(parse_int(5.9999)).toBe(5);
-    expect(parse_int(5.1)).toBe(5);
+    expect(parseInt(5.9999)).toBe(5);
+    expect(parseInt(5.1)).toBe(5);
   });
 
   test('empty string should be parsed as undefined', () => {
-    expect(parse_int('')).toBeUndefined();
-    expect(parse_int(' ')).toBeUndefined();
+    expect(parseInt('')).toBeUndefined();
+    expect(parseInt(' ')).toBeUndefined();
   });
 
   test('string without a number should be parsed as undefined', () => {
-    expect(parse_int('abc')).toBeUndefined();
-    expect(parse_int('5a')).toBeUndefined();
+    expect(parseInt('abc')).toBeUndefined();
+    expect(parseInt('5a')).toBeUndefined();
   });
 
   test('pase infintiy as undefined', () => {
-    expect(parse_int(Infinity)).toBeUndefined();
-    expect(parse_int('Infinity')).toBeUndefined();
+    expect(parseInt(Infinity)).toBeUndefined();
+    expect(parseInt('Infinity')).toBeUndefined();
   });
 });
 

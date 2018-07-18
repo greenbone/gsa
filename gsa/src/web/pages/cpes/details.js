@@ -46,7 +46,7 @@ const CpeDetails = ({
     title,
     nvd_id,
     deprecated_by,
-    update_time,
+    updateTime,
     status,
     severity,
   } = entity;
@@ -94,13 +94,13 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(update_time) &&
+          {is_defined(updateTime) &&
             <TableRow>
               <TableData>
                 {_('Last updated')}
               </TableData>
               <TableData>
-                {longDate(update_time)}
+                {longDate(updateTime)}
               </TableData>
             </TableRow>
           }

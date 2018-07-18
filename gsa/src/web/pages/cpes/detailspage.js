@@ -97,17 +97,17 @@ ToolBarIcons.propTypes = {
 const EntityInfo = ({
   entity,
 }) => {
-  const {id, modification_time, creation_time, update_time} = entity;
+  const {id, modificationTime, creationTime, updateTime} = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(modification_time)}</div>
+      <div>{dateTimeWithTimeZone(modificationTime)}</div>
       <div>{_('Created:')}</div>
-      <div>{dateTimeWithTimeZone(creation_time)}</div>
+      <div>{dateTimeWithTimeZone(creationTime)}</div>
       <div>{_('Last updated:')}</div>
-      <div>{dateTimeWithTimeZone(update_time)}</div>
+      <div>{dateTimeWithTimeZone(updateTime)}</div>
     </InfoLayout>
   );
 };

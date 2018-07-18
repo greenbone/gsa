@@ -22,7 +22,7 @@
  */
 import {shortDate} from 'gmp/locale/date';
 
-import {parse_int, parseDate} from 'gmp/parser';
+import {parseInt, parseDate} from 'gmp/parser';
 
 const transformCreated = (data = {}) => {
   const {groups = []} = data;
@@ -32,8 +32,8 @@ const transformCreated = (data = {}) => {
     return {
       x: createdDate,
       label: shortDate(createdDate),
-      y: parse_int(count),
-      y2: parse_int(c_count),
+      y: parseInt(count),
+      y2: parseInt(c_count),
     };
   });
 };

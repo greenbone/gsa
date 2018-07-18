@@ -30,7 +30,6 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
@@ -102,9 +101,8 @@ const EntityTags = ({
       onTagCreateClick={onTagCreateClick}
     />
   );
-  const tags = entity.user_tags;
-  const has_tags = is_defined(tags);
-  const count = has_tags ? tags.length : 0;
+  const {userTags} = entity;
+  const count = userTags.length;
   const entityType = getEntityType(entity);
   return (
     <Layout
@@ -112,10 +110,10 @@ const EntityTags = ({
       title={_('User Tags ({{count}})', {count})}
     >
       {extra}
-      {tags.length === 0 &&
+      {count === 0 &&
         _('No user tags available')
       }
-      {tags.length > 0 &&
+      {count > 0 &&
         <Table>
           <TableHeader>
             <TableRow>
@@ -134,8 +132,7 @@ const EntityTags = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              tags.map(tag => {
+            {userTags.map(tag => {
                 return (
                   <TableRow
                     key={tag.id}>

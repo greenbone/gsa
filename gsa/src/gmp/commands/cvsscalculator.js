@@ -22,6 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {HttpCommand, register_command} from '../command.js';
+import {parseSeverity} from 'gmp/parser.js';
 
 class CvssCalculator extends HttpCommand {
 
@@ -33,8 +34,9 @@ class CvssCalculator extends HttpCommand {
     return this.httpGet({
       cvss_vector,
     }).then(response => {
-      const envelope = response.data;
-      return response.setData(envelope.cvss_calculator);
+      const {data: envelope} = response;
+      const score = parseSeverity(envelope.cvss_calculator.cvss_score);
+      return response.setData(score);
     });
   }
 }

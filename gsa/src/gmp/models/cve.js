@@ -27,10 +27,10 @@ import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
-  parse_severity,
-  parse_cvss_base_vector,
+  parseSeverity,
+  parseCvssBaseVector,
   parseDate,
-  set_properties,
+  setProperties,
 } from '../parser.js';
 
 import Info from './info.js';
@@ -60,15 +60,16 @@ class Cve extends Info {
     const ret = super.parseProperties(elem, 'cve');
 
     if (is_defined(ret.update_time)) {
-      ret.update_time = parseDate(ret.update_time);
+      ret.updateTime = parseDate(ret.update_time);
+      delete ret.update_time;
     }
 
-    ret.severity = parse_severity(ret.cvss);
+    ret.severity = parseSeverity(ret.cvss);
     delete ret.cvss;
 
     if (is_defined(ret.nvts)) {
       ret.nvts = map(ret.nvts.nvt, nvt => {
-        return set_properties({
+        return setProperties({
           ...nvt,
           id: nvt._oid,
           oid: nvt._oid,
@@ -101,23 +102,23 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvss_base_vector = parse_cvss_base_vector({
-      access_complexity: ret.complexity,
-      access_vector: ret.vector,
+    ret.cvssBaseVector = parseCvssBaseVector({
+      accessComplexity: ret.complexity,
+      accessVector: ret.vector,
       authentication: ret.authentication,
-      availability_impact: ret.confidentiality_impact,
-      confidentiality_impact: ret.confidentiality_impact,
-      integrity_impact: ret.integrity_impact,
+      availabilityImpact: ret.confidentiality_impact,
+      confidentialityImpact: ret.confidentiality_impact,
+      integrityImpact: ret.integrity_impact,
     });
 
     // use consistent names for cvss values
     rename_props(ret, {
-      vector: 'cvss_access_vector',
-      complexity: 'cvss_access_complexity',
-      authentication: 'cvss_authentication',
-      confidentiality_impact: 'cvss_confidentiality_impact',
-      integrity_impact: 'cvss_integrity_impact',
-      availability_impact: 'cvss_availability_impact',
+      vector: 'cvssAccessVector',
+      complexity: 'cvssAccessComplexity',
+      authentication: 'cvssAuthentication',
+      confidentiality_impact: 'cvssConfidentialityImpact',
+      integrity_impact: 'cvssIntegrityImpact',
+      availability_impact: 'cvssAvailabilityImpact',
     });
 
     if (is_empty(ret.products)) {
@@ -134,8 +135,8 @@ class Cve extends Info {
         ret.cwe_id = entry.cwe._id;
       }
 
-      ret.published_time = parseDate(entry['published-datetime'].__text);
-      ret.last_modified_time = parseDate(
+      ret.publishedTime = parseDate(entry['published-datetime'].__text);
+      ret.lastModifiedTime = parseDate(
         entry['last-modified-datetime'].__text);
 
       ret.references = map(entry.references, ref => ({

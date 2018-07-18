@@ -25,7 +25,7 @@ import Model from '../model';
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import {parse_yesno, NO_VALUE, parseDate} from '../parser';
+import {parseYesNo, NO_VALUE, parseDate} from '../parser';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
@@ -87,17 +87,19 @@ class Credential extends Model {
     const ret = super.parseProperties(elem);
 
     if (is_defined(ret.certificate_info)) {
-      ret.certificate_info.activation_time = parseDate(
+      ret.certificate_info.activationTime = parseDate(
         ret.certificate_info.activation_time
       );
-      ret.certificate_info.expiration_time = parseDate(
+      ret.certificate_info.expirationTime = parseDate(
         ret.certificate_info.expiration_time
       );
+      delete ret.certificate_info.activation_time;
+      delete ret.certificate_info.expiration_time;
     }
 
     ret.credential_type = elem.type;
 
-    ret.allow_insecure = parse_yesno(elem.allow_insecure);
+    ret.allow_insecure = parseYesNo(elem.allow_insecure);
 
     if (is_defined(elem.targets)) {
       ret.targets = map(elem.targets.target,

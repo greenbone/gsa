@@ -186,17 +186,17 @@ Details.propTypes = {
 const EntityInfo = ({
   entity,
 }) => {
-  const {id, published_time, last_modified_time, update_time} = entity;
+  const {id, publishedTime, lastModifiedTime, updateTime} = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Published:')}</div>
-      <div>{dateTimeWithTimeZone(published_time)}</div>
+      <div>{dateTimeWithTimeZone(publishedTime)}</div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(update_time)}</div>
+      <div>{dateTimeWithTimeZone(updateTime)}</div>
       <div>{_('Last updated:')}</div>
-      <div>{dateTimeWithTimeZone(last_modified_time)}</div>
+      <div>{dateTimeWithTimeZone(lastModifiedTime)}</div>
     </InfoLayout>
   );
 };

@@ -23,7 +23,7 @@
 import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 
-import {parse_progress} from '../../parser.js';
+import {parseProgress} from '../../parser.js';
 
 import Model from '../../model.js';
 
@@ -46,7 +46,7 @@ class ReportTask extends Model {
       delete copy.target;
     }
 
-    copy.progress = parse_progress(elem.progress);
+    copy.progress = parseProgress(elem.progress);
 
     return copy;
   }

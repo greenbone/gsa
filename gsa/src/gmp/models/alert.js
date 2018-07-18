@@ -26,7 +26,7 @@ import {is_defined, is_object} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {for_each, map} from '../utils/array';
 
-import {parse_yesno, YES_VALUE} from '../parser.js';
+import {parseYesNo, YES_VALUE} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -122,7 +122,7 @@ class Alert extends Model {
       ret.tasks = [];
     }
 
-    ret.active = parse_yesno(elem.active);
+    ret.active = parseYesNo(elem.active);
 
     return ret;
   }

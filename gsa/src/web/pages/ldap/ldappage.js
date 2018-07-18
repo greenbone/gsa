@@ -124,7 +124,7 @@ class LdapAuthentication extends React.Component {
                 {_('Activation')}
               </TableData>
               <TableData>
-                {certificate_info.activation_time}
+                {certificate_info.activationTime}
               </TableData>
             </TableRow>
             <TableRow>
@@ -132,7 +132,7 @@ class LdapAuthentication extends React.Component {
                 {_('Expiration')}
               </TableData>
               <TableData>
-                {certificate_info.expiration_time}
+                {certificate_info.expirationTime}
               </TableData>
             </TableRow>
             <TableRow>

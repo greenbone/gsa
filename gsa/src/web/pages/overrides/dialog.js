@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_float, parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {
   ANY,
@@ -220,7 +220,7 @@ const OverrideDialog = ({
                 onChange={onValueChange}
               />
               {is_edit && override.isActive() &&
-                is_defined(override.end_time) &&
+                is_defined(override.endTime) &&
                 <Layout flex box>
                   <Divider>
                     <Radio
@@ -230,7 +230,7 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <Text>{longDate(override.end_time)}</Text>
+                    <Text>{longDate(override.endTime)}</Text>
                   </Divider>
                 </Layout>
               }
@@ -332,7 +332,7 @@ const OverrideDialog = ({
                       title={' > ' +
                         severityFormat(severity - 0.1)}
                       checked={true}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     /> :
@@ -340,7 +340,7 @@ const OverrideDialog = ({
                       name="severity"
                       title={translatedResultSeverityRiskFactor(severity)}
                       checked={state.severity === severity}
-                      convert={parse_float}
+                      convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
                     />
@@ -353,7 +353,7 @@ const OverrideDialog = ({
                     name="severity"
                     title={_('> 0.0')}
                     checked={state.severity === 0.1}
-                    convert={parse_float}
+                    convert={parseFloat}
                     value="0.1"
                     onChange={onValueChange}
                   />
@@ -362,7 +362,7 @@ const OverrideDialog = ({
                     value="0.0"
                     title={_('Log')}
                     checked={state.severity === 0.0}
-                    convert={parse_float}
+                    convert={parseFloat}
                     onChange={onValueChange}
                   />
                 </Layout>
@@ -374,14 +374,14 @@ const OverrideDialog = ({
                 <Radio
                   name="custom_severity"
                   checked={state.custom_severity === NO_VALUE}
-                  convert={parse_yesno}
+                  convert={parseYesNo}
                   value={NO_VALUE}
                   onChange={onValueChange}
                 />
                 <Select
                   name="new_severity_from_list"
                   disabled={state.custom_severity === YES_VALUE}
-                  convert={parse_float}
+                  convert={parseFloat}
                   items={severity_from_list_items}
                   value={state.new_severity_from_list}
                   onChange={onValueChange}
@@ -390,14 +390,14 @@ const OverrideDialog = ({
                   name="custom_severity"
                   title={_('Other')}
                   checked={state.custom_severity === YES_VALUE}
-                  convert={parse_yesno}
+                  convert={parseYesNo}
                   value={YES_VALUE}
                   onChange={onValueChange}
                 />
                 <TextField
                   name="new_severity"
                   disabled={state.custom_severity === NO_VALUE}
-                  convert={parse_float}
+                  convert={parseFloat}
                   value={state.new_severity}
                   onChange={onValueChange}
                 />

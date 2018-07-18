@@ -25,12 +25,11 @@ import {is_empty} from '../utils/string';
 import {for_each, map} from '../utils/array';
 
 import {
-  new_properties,
-  parse_int,
-  parse_properties,
-  parse_severity,
-  parse_yesno,
-  set_properties,
+  parseInt,
+  parseProperties,
+  parseSeverity,
+  parseYesNo,
+  setProperties,
 } from '../parser.js';
 
 import Asset from './asset.js';
@@ -38,23 +37,26 @@ import Asset from './asset.js';
 const get_identifier = (identifiers, name) => identifiers.filter(
   identifier => identifier.name === name)[0];
 
+const newProperties = (properties, object = {}) =>
+  setProperties(parseProperties(properties, object));
+
 class Identifier {
 
   constructor(element) {
-    const props = parse_properties(element);
+    const props = parseProperties(element);
 
     if (is_defined(props.source)) {
-      props.source = new_properties({
+      props.source = newProperties({
         ...props.source,
         source_type: props.source.type,
       });
     }
 
     if (is_defined(props.os)) {
-      props.os = new_properties(props.os);
+      props.os = newProperties(props.os);
     }
 
-    set_properties(props, this);
+    setProperties(props, this);
   }
 }
 
@@ -66,7 +68,7 @@ class Host extends Asset {
     let ret = super.parseProperties(elem);
 
     if (is_defined(ret.host) && is_defined(ret.host.severity)) {
-      ret.severity = parse_severity(ret.host.severity.value);
+      ret.severity = parseSeverity(ret.host.severity.value);
     }
 
     if (is_defined(ret.identifiers)) {
@@ -95,7 +97,7 @@ class Host extends Asset {
       for_each(ret.host.detail, details => {
         ret.details[details.name] = {
           value: details.value,
-          source: new_properties(details.source),
+          source: newProperties(details.source),
         };
       });
 
@@ -104,8 +106,8 @@ class Host extends Asset {
           map(route.host, host => ({
             ip: host.ip,
             id: is_empty(host._id) ? undefined : host._id,
-            distance: parse_int(host._distance),
-            same_source: parse_yesno(host._same_source), // host/hop was found in the same scan
+            distance: parseInt(host._distance),
+            same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
           }))
         );
       }

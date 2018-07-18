@@ -23,7 +23,7 @@
 
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_severity} from 'gmp/parser.js';
+import {parseSeverity} from 'gmp/parser.js';
 
 import Asset from 'gmp/models/asset.js';
 
@@ -68,7 +68,7 @@ class App extends Asset {
       total: 0,
     };
 
-    copy.severity = parse_severity(elem.severity);
+    copy.severity = parseSeverity(elem.severity);
 
     return copy;
   }

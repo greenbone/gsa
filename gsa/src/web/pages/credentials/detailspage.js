@@ -160,7 +160,7 @@ const Details = ({
                 <TableData>
                   <Divider>
                     <span>
-                      {longDate(cert.activation_time)}
+                      {longDate(cert.activationTime)}
                     </span>
                     {cert.time_status === CERTIFICATE_STATUS_INACTIVE &&
                       <span>{_('inactive')}</span>
@@ -176,7 +176,7 @@ const Details = ({
                 <TableData>
                   <Divider>
                     <span>
-                      {longDate(cert.expiration_time)}
+                      {longDate(cert.expirationTime)}
                     </span>
                     {cert.time_status === CERTIFICATE_STATUS_EXPIRED &&
                       <span>{_('expired')}</span>

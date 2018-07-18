@@ -26,7 +26,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {is_defined} from 'gmp/utils';
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import Layout from '../layout/layout';
 import PropTypes from '../../utils/proptypes.js';
@@ -58,18 +58,18 @@ const Title = glamorous.label({
   paddingLeft: '10px',
   paddingRight: '10px',
 }, ({titleOffset, titleSize}) => ({
-  width: COLUMNS[parse_int(titleSize) - 1],
-  marginLeft: COLUMNS[parse_int(titleOffset) - 1],
+  width: COLUMNS[parseInt(titleSize) - 1],
+  marginLeft: COLUMNS[parseInt(titleOffset) - 1],
 }));
 
 const FormGroupContent = glamorous(Layout)(
   ({size}) => is_defined(size) ? {
-    width: COLUMNS[parse_int(size) - 1],
+    width: COLUMNS[parseInt(size) - 1],
     paddingLeft: '10px',
     paddingRight: '10px',
   } : null,
   ({offset}) => is_defined(offset) ? {
-    marginLeft: COLUMNS[parse_int(offset) - 1],
+    marginLeft: COLUMNS[parseInt(offset) - 1],
   } : null,
 );
 

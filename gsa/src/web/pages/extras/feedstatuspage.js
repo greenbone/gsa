@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {parse_int} from 'gmp/parser';
+import {parseInt} from 'gmp/parser';
 
 import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus.js';
 
@@ -66,7 +66,7 @@ const renderCheck = feed => {
 };
 
 const renderFeedStatus = feed => {
-    const age = parse_int(feed.age.asDays());
+    const age = parseInt(feed.age.asDays());
 
     if (age >= 10) {
       return _('Too old ({{age}} days)', {age});

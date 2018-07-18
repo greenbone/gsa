@@ -23,7 +23,7 @@
 import {is_defined} from '../../utils/identity';
 import {is_empty} from '../../utils/string';
 
-import {parse_severity, parseDate} from '../../parser';
+import {parseSeverity, parseDate} from '../../parser';
 
 import {parse_filter} from '../../collection/parser.js';
 
@@ -63,8 +63,8 @@ class ReportReport extends Model {
 
     if (is_defined(severity)) {
       copy.severity = {
-        filtered: parse_severity(severity.filtered),
-        full: parse_severity(severity.full),
+        filtered: parseSeverity(severity.filtered),
+        full: parseSeverity(severity.full),
       };
     }
 

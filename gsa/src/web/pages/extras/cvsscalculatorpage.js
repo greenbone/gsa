@@ -29,8 +29,8 @@ import _ from 'gmp/locale.js';
 import {is_defined, KeyCode} from 'gmp/utils';
 
 import {
-  parse_cvss_base_vector,
-  parse_cvss_base_from_vector,
+  parseCvssBaseVector,
+  parseCvssBaseFromVector,
 } from 'gmp/parser.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
@@ -68,15 +68,15 @@ class CvssCalculator extends React.Component {
     super(...args);
 
     this.state = {
-      access_vector: 'LOCAL',
-      access_complexity: 'LOW',
-      confidentiality_impact: 'NONE',
+      accessVector: 'LOCAL',
+      accessComplexity: 'LOW',
+      confidentialityImpact: 'NONE',
       authentication: 'NONE',
-      integrity_impact: 'NONE',
-      availability_impact: 'NONE',
-      cvss_vector: '',
-      user_cvss_vector: '',
-      cvss_score: 0,
+      integrityImpact: 'NONE',
+      availabilityImpact: 'NONE',
+      cvssVector: '',
+      userVector: '',
+      cvssScore: 0,
     };
 
     this.calculateScore = this.calculateScore.bind(this);
@@ -92,46 +92,46 @@ class CvssCalculator extends React.Component {
     if (is_defined(location) && is_defined(location.query) &&
       is_defined(location.query.cvssVector)) {
       const {cvssVector} = location.query;
-      this.setState({cvss_vector: cvssVector, user_vector: cvssVector});
+      this.setState({cvssVector, userVector: cvssVector});
       this.calculateScore(cvssVector);
     }
   }
 
   calculateVector(newVector) {
     const {
-      access_vector,
-      access_complexity,
-      confidentiality_impact,
+      accessVector,
+      accessComplexity,
+      confidentialityImpact,
       authentication,
-      integrity_impact,
-      availability_impact,
+      integrityImpact,
+      availabilityImpact,
     } = this.state;
 
-    const cvss_vector = parse_cvss_base_vector({
-      access_complexity,
-      access_vector,
+    const cvssVector = parseCvssBaseVector({
+      accessComplexity,
+      accessVector,
       authentication,
-      availability_impact,
-      confidentiality_impact,
-      integrity_impact,
+      availabilityImpact,
+      confidentialityImpact,
+      integrityImpact,
       ...newVector,
     });
 
     this.setState({
       ...newVector,
-      cvss_vector,
-      user_vector: cvss_vector,
+      cvssVector,
+      userVector: cvssVector,
     });
-    this.calculateScore(cvss_vector);
+
+    this.calculateScore(cvssVector);
   }
 
-  calculateScore(cvss_vector) {
+  calculateScore(cvssVector) {
     const {gmp} = this.props;
 
-    gmp.cvsscalculator.calculateScoreFromVector(cvss_vector).then(response => {
-      const {data} = response;
-      const {cvss_score} = data;
-      this.setState({cvss_score});
+    gmp.cvsscalculator.calculateScoreFromVector(cvssVector).then(response => {
+      const {data: cvssScore} = response;
+      this.setState({cvssScore});
     });
   }
 
@@ -144,25 +144,25 @@ class CvssCalculator extends React.Component {
   }
 
   handleVectorChange() {
-    const {user_vector} = this.state;
-    const cvss_values = parse_cvss_base_from_vector(user_vector);
+    const {userVector} = this.state;
+    const cvssValues = parseCvssBaseFromVector(userVector);
     const {
-      access_vector,
-      access_complexity,
-      confidentiality_impact,
+      accessVector,
+      accessComplexity,
+      confidentialityImpact,
       authentication,
-      integrity_impact,
-      availability_impact,
-    } = cvss_values;
+      integrityImpact,
+      availabilityImpact,
+    } = cvssValues;
 
-    if (is_defined(access_vector) && is_defined(access_complexity) &&
-      is_defined(confidentiality_impact) && is_defined(authentication) &&
-      is_defined(integrity_impact) && is_defined(availability_impact)) {
+    if (is_defined(accessVector) && is_defined(accessComplexity) &&
+      is_defined(confidentialityImpact) && is_defined(authentication) &&
+      is_defined(integrityImpact) && is_defined(availabilityImpact)) {
 
       /* only override cvss values and vector if user vector has valid input */
 
-      this.setState({...cvss_values, cvss_vector: user_vector});
-      this.calculateScore(user_vector);
+      this.setState({...cvssValues, cvssVector: userVector});
+      this.calculateScore(userVector);
     }
   }
 
@@ -175,15 +175,15 @@ class CvssCalculator extends React.Component {
 
   render() {
     const {
-      access_complexity,
-      access_vector,
+      accessComplexity,
+      accessVector,
       authentication,
-      availability_impact,
-      confidentiality_impact,
-      user_vector,
-      cvss_score,
-      cvss_vector,
-      integrity_impact,
+      availabilityImpact,
+      confidentialityImpact,
+      userVector,
+      cvssScore,
+      cvssVector,
+      integrityImpact,
     } = this.state;
     return (
       <Layout flex="column">
@@ -196,8 +196,8 @@ class CvssCalculator extends React.Component {
         <h3>{_('From Metrics')}:</h3>
         <FormGroup title={_('Access Vector')}>
           <Select
-            name="access_vector"
-            value={access_vector}
+            name="accessVector"
+            value={accessVector}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
@@ -208,8 +208,8 @@ class CvssCalculator extends React.Component {
         </FormGroup>
         <FormGroup title={_('Access Complexity')}>
           <Select
-            name="access_complexity"
-            value={access_complexity}
+            name="accessComplexity"
+            value={accessComplexity}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
@@ -232,8 +232,8 @@ class CvssCalculator extends React.Component {
         </FormGroup>
         <FormGroup title={_('Confidentiality')}>
           <Select
-            name="confidentiality_impact"
-            value={confidentiality_impact}
+            name="confidentialityImpact"
+            value={confidentialityImpact}
             onChange={this.handleMetricsChange}
             >
             <option value="NONE">{_('None')}</option>
@@ -243,8 +243,8 @@ class CvssCalculator extends React.Component {
         </FormGroup>
         <FormGroup title={_('Integrity')}>
           <Select
-            name="integrity_impact"
-            value={integrity_impact}
+            name="integrityImpact"
+            value={integrityImpact}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
@@ -255,8 +255,8 @@ class CvssCalculator extends React.Component {
         </FormGroup>
         <FormGroup title={_('Availability')}>
           <Select
-            name="availability_impact"
-            value={availability_impact}
+            name="availabilityImpact"
+            value={availabilityImpact}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
             >
@@ -269,8 +269,8 @@ class CvssCalculator extends React.Component {
         <h3>{_('From Vector')}:</h3>
         <FormGroup title={_('Vector')}>
           <StyledTextField
-            name="user_vector"
-            value={user_vector}
+            name="userVector"
+            value={userVector}
             onChange={this.handleInputChange}
             onBlur={this.handleVectorChange}
             onKeyDown={this.handleKeyDown}
@@ -279,10 +279,10 @@ class CvssCalculator extends React.Component {
 
         <h3>{_('Results')}:</h3>
         <FormGroup title={_('CVSS Base Vector')}>
-          <span>{cvss_vector}</span>
+          <span>{cvssVector}</span>
         </FormGroup>
         <FormGroup title={_('Severity')}>
-          <SeverityBar severity={cvss_score}/>
+          <SeverityBar severity={cvssScore}/>
         </FormGroup>
       </Layout>
     );

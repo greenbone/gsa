@@ -70,10 +70,10 @@ const Row = ({
           {na(entity.class)}
         </TableData>
         <TableData>
-          {longDate(entity.creation_time)}
+          {longDate(entity.creationTime)}
         </TableData>
         <TableData>
-          {longDate(entity.modification_time)}
+          {longDate(entity.modificationTime)}
         </TableData>
         <TableData>
           {entity.cve_refs}

@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {debounce, is_defined, KeyCode} from 'gmp/utils';
 
-import {parse_float, parse_int} from 'gmp/parser.js';
+import {parseFloat, parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -126,7 +126,7 @@ class SpinnerComponent extends React.Component {
 
     let {step} = this.props;
     if (is_defined(step)) {
-      step = parse_float(step);
+      step = parseFloat(step);
     }
     else {
       step = type === 'float' ? 0.1 : 1;
@@ -147,7 +147,7 @@ class SpinnerComponent extends React.Component {
 
     this.state = {
       value_set: value, // external value for the outside world
-      value: parse_float(value), // internal value shown in the spinner
+      value: parseFloat(value), // internal value shown in the spinner
       up_active: false,
       down_active: false,
       step,
@@ -163,7 +163,7 @@ class SpinnerComponent extends React.Component {
     this.handleUpMouse = this.handleUpMouse.bind(this);
     this.handleChange = this.handleChange.bind(this);
 
-    const debounce_value = parse_int(this.props.debounce);
+    const debounce_value = parseInt(this.props.debounce);
 
     if (is_defined(debounce_value) && debounce_value > 0) {
       this.notifyChange = debounce(this.notifyChange, debounce_value);
@@ -171,7 +171,7 @@ class SpinnerComponent extends React.Component {
   }
 
   componentWillReceiveProps(new_props) {
-    const new_value = parse_float(new_props.value);
+    const new_value = parseFloat(new_props.value);
 
     if (new_value !== this.state.value_set) {
       // parent component has set a different value then before
@@ -239,7 +239,7 @@ class SpinnerComponent extends React.Component {
       return;
     }
 
-    const value = parse_float(event.target.value);
+    const value = parseFloat(event.target.value);
 
     this.setState({value});
   }
@@ -285,7 +285,7 @@ class SpinnerComponent extends React.Component {
       return;
     }
 
-    const base = is_defined(min) ? parse_float(min) : 0;
+    const base = is_defined(min) ? parseFloat(min) : 0;
 
     let above_min = value - base;
 
@@ -296,7 +296,7 @@ class SpinnerComponent extends React.Component {
     value = base + above_min;
 
     // Fix precision from bad JS floating point math
-    value = parse_float(value.toFixed(this.getPrecision()));
+    value = parseFloat(value.toFixed(this.getPrecision()));
 
     this.setValue(value);
   }
@@ -309,9 +309,9 @@ class SpinnerComponent extends React.Component {
       return;
     }
 
-    value = parse_float(value);
-    min = parse_float(min);
-    max = parse_float(max);
+    value = parseFloat(value);
+    min = parseFloat(min);
+    max = parseFloat(max);
 
     if (isNaN(value)) {
       value = this.value; // reset to last valid value;

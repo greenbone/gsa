@@ -32,7 +32,7 @@ import {
   NOTE_INACTIVE_VALUE,
 } from 'gmp/models/note';
 
-import {parse_float} from 'gmp/parser';
+import {parseFloat} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
 
@@ -69,7 +69,7 @@ const transformActiveDaysData = (data = {}) => {
     const {value} = groups[groups.length - 1];
 
     const count = mostActiveDaysBin.reduce((prev, current) =>
-      prev + parse_float(current.count), 0);
+      prev + parseFloat(current.count), 0);
     const reducedMostActiveDaysBin = {
       value,
       count,

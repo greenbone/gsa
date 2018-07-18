@@ -26,7 +26,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils/identity';
-import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -244,7 +244,7 @@ const UserSettingsDialog = ({
             <FormGroup title={_('Dynamic Severity')} titleSize="3">
               <Checkbox
                 name="dynamicseverity"
-                checked={parse_yesno(dynamicseverity) === YES_VALUE}
+                checked={parseYesNo(dynamicseverity) === YES_VALUE}
                 checkedValue={YES_VALUE}
                 unCheckedValue={NO_VALUE}
                 onChange={onValueChange}/>
@@ -681,7 +681,7 @@ const UserSettingsDialog = ({
             <FormGroup title={_('Auto Cache Rebuild')} titleSize="3">
               <Checkbox
                 name="autocacherebuild"
-                checked={parse_yesno(autocacherebuild) === YES_VALUE}
+                checked={parseYesNo(autocacherebuild) === YES_VALUE}
                 checkedValue={YES_VALUE}
                 unCheckedValue={NO_VALUE}
                 onChange={onValueChange}/>

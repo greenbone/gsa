@@ -60,25 +60,25 @@ const Row = ({
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
-          {na(entity.vector)}
+          {na(entity.cvssBaseVector)}
         </TableData>
         <TableData>
-          {na(entity.complexity)}
+          {na(entity.cvssComplexity)}
         </TableData>
         <TableData>
-          {na(entity.authentication)}
+          {na(entity.cvssAuthentication)}
         </TableData>
         <TableData>
-          {na(entity.confidentiality_impact)}
+          {na(entity.cvssConfidentialityImpact)}
         </TableData>
         <TableData>
-          {na(entity.integrity_impact)}
+          {na(entity.cvssIntegrityImpact)}
         </TableData>
         <TableData>
-          {na(entity.availability_impact)}
+          {na(entity.cvssAvailabilityImpact)}
         </TableData>
         <TableData>
-          {longDate(entity.creation_time)}
+          {longDate(entity.creationTime)}
         </TableData>
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>

@@ -23,10 +23,10 @@
 import {is_array, is_defined} from 'gmp/utils/identity';
 import {is_empty} from 'gmp/utils/string';
 
-import {set_properties, parse_int, parseDate} from 'gmp/parser';
+import {setProperties, parseInt, parseDate} from 'gmp/parser';
 
 const parse_count = value => {
-  const parsed = parse_int(value);
+  const parsed = parseInt(value);
 
   if (is_defined(parsed)) {
     return parsed;
@@ -57,7 +57,7 @@ class Host {
       delete copy.asset;
     }
     else {
-      copy.asset = set_properties(asset);
+      copy.asset = setProperties(asset);
       copy.asset.id = asset._asset_id;
     }
 
@@ -114,7 +114,7 @@ class Host {
 
     copy.id = elem.ip; // use ip as id. we need an id for react key prop
 
-    set_properties(copy, this);
+    setProperties(copy, this);
 
     return this;
   }

@@ -25,10 +25,10 @@ import {is_empty} from './utils/string';
 import {map} from './utils/array';
 
 import {
-  parse_properties,
-  parse_yesno,
+  parseProperties,
+  parseYesNo,
   parseDate,
-  set_properties,
+  setProperties,
   NO_VALUE,
   YES_VALUE,
 } from './parser.js';
@@ -53,7 +53,7 @@ class Model {
   }
 
   setProperties(properties) {
-    return set_properties(properties, this);
+    return setProperties(properties, this);
   }
 
   updateFromElement(elem) {
@@ -65,31 +65,33 @@ class Model {
   }
 
   parseProperties(elem) {
-    const copy = parse_properties(elem);
+    const copy = parseProperties(elem);
 
     if (is_defined(elem.end_time)) {
-      if (elem.end_time.length === 0) {
-        delete copy.end_time;
+      if (elem.end_time.length > 0) {
+        copy.endTime = parseDate(elem.end_time);
       }
-      else {
-        copy.end_time = parseDate(elem.end_time);
-      }
+      delete copy.end_time;
     }
 
     if (is_defined(elem.permissions)) {
       // these are the permissions the current user has on the entity
       const caps = map(elem.permissions.permission, perm => perm.name);
-      copy.user_capabilities = new Capabilities(caps);
+      copy.userCapabilities = new Capabilities(caps);
       delete copy.permissions;
     }
     else {
-      copy.user_capabilities = new Capabilities();
+      copy.userCapabilities = new Capabilities();
     }
 
     if (is_defined(elem.user_tags)) {
-      copy.user_tags = map(elem.user_tags.tag, tag => {
+      copy.userTags = map(elem.user_tags.tag, tag => {
         return new Model(tag, 'tag');
       });
+      delete copy.user_tags;
+    }
+    else {
+      copy.userTags = [];
     }
 
     const yes_no_props = ['in_use', 'writable', 'orphan', 'active', 'trash'];
@@ -97,7 +99,7 @@ class Model {
     for (const name of yes_no_props) {
       const prop = elem[name];
       if (is_defined(prop)) {
-        copy[name] = parse_yesno(prop);
+        copy[name] = parseYesNo(prop);
       }
     }
 

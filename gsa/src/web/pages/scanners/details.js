@@ -59,8 +59,8 @@ const CertInfo = ({
   info,
 }) => {
   const {
-    activation_time,
-    expiration_time,
+    activationTime,
+    expirationTime,
     issuer,
     md5_fingerprint,
   } = info;
@@ -72,7 +72,7 @@ const CertInfo = ({
             {_('Activation')}
           </TableData>
           <TableData>
-            {dateTimeWithTimeZone(activation_time)}
+            {dateTimeWithTimeZone(activationTime)}
           </TableData>
         </TableRow>
 
@@ -81,7 +81,7 @@ const CertInfo = ({
             {_('Expiration')}
           </TableData>
           <TableData>
-            {dateTimeWithTimeZone(expiration_time)}
+            {dateTimeWithTimeZone(expirationTime)}
           </TableData>
         </TableRow>
 

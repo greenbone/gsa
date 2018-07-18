@@ -26,7 +26,7 @@ import Model from '../model.js';
 import {is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import {parse_int} from '../parser.js';
+import {parseInt} from '../parser.js';
 
 class PortRange extends Model {
   static entity_type = 'port_range';
@@ -55,9 +55,9 @@ class PortList extends Model {
     const {port_count} = elem;
     if (is_defined(port_count)) {
       ret.port_count = {
-        all: is_defined(port_count.all) ? parse_int(port_count.all) : 0,
-        tcp: is_defined(port_count.tcp) ? parse_int(port_count.tcp) : 0,
-        udp: is_defined(port_count.udp) ? parse_int(port_count.udp) : 0,
+        all: is_defined(port_count.all) ? parseInt(port_count.all) : 0,
+        tcp: is_defined(port_count.tcp) ? parseInt(port_count.tcp) : 0,
+        udp: is_defined(port_count.udp) ? parseInt(port_count.udp) : 0,
       };
     }
     else {

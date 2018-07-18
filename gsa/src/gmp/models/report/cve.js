@@ -22,7 +22,7 @@
  */
 import {is_defined} from '../../utils/identity';
 
-import {set_properties, parse_severity} from '../../parser.js';
+import {setProperties, parseSeverity} from '../../parser.js';
 
 import Nvt from '../nvt.js';
 
@@ -44,7 +44,7 @@ class ReportCve {
   addResult(result) {
     this.occurrences += 1;
 
-    const severity = parse_severity(result.severity);
+    const severity = parseSeverity(result.severity);
 
     if (!is_defined(this.severity) || severity > this.severity) {
       this.severity = severity;
@@ -64,7 +64,7 @@ class ReportCve {
       count: 0,
     };
 
-    set_properties(copy, this);
+    setProperties(copy, this);
 
     return copy;
   }

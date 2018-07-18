@@ -23,7 +23,7 @@
 
 import {is_defined} from '../utils/identity';
 
-import {parse_int} from '../parser.js';
+import {parseInt} from '../parser.js';
 
 class CollectionCounts {
 
@@ -37,11 +37,11 @@ class CollectionCounts {
    * @param {number} rows     - Count of max. requested items
    */
   constructor({first = 0, all = 0, filtered = 0, length = 0, rows = 0} = {}) {
-    this.first = parse_int(first);
-    this.all = parse_int(all);
-    this.filtered = parse_int(filtered);
-    this.length = parse_int(length);
-    this.rows = parse_int(rows);
+    this.first = parseInt(first);
+    this.all = parseInt(all);
+    this.filtered = parseInt(filtered);
+    this.length = parseInt(length);
+    this.rows = parseInt(rows);
     this.last = this.first > 0 && this.length > 0 ?
       this.first + this.length - 1 : 0;
   }

@@ -27,7 +27,7 @@ import {is_defined} from '../utils/identity';
 import {is_empty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parse_int, parse_yesno, parse_csv} from '../parser.js';
+import {parseInt, parseYesNo, parseCsv} from '../parser.js';
 
 import PortList from './portlist.js';
 
@@ -62,13 +62,13 @@ class Target extends Model {
       }
     }
 
-    ret.hosts = parse_csv(elem.hosts);
-    ret.exclude_hosts = parse_csv(elem.exclude_hosts);
+    ret.hosts = parseCsv(elem.hosts);
+    ret.exclude_hosts = parseCsv(elem.exclude_hosts);
 
-    ret.max_hosts = parse_int(elem.max_hosts);
+    ret.max_hosts = parseInt(elem.max_hosts);
 
-    ret.reverse_lookup_only = parse_yesno(elem.reverse_lookup_only);
-    ret.reverse_lookup_unify = parse_yesno(elem.reverse_lookup_unify);
+    ret.reverse_lookup_only = parseYesNo(elem.reverse_lookup_only);
+    ret.reverse_lookup_unify = parseYesNo(elem.reverse_lookup_unify);
 
     if (is_defined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));

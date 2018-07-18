@@ -54,10 +54,10 @@ const NoteBox = ({
     <EntityBox
       title={_('Note')}
       text={note.text}
-      end={note.end_time}
+      end={note.endTime}
       toolbox={toolbox}
-      modified={note.modification_time}>
-    </EntityBox>
+      modified={note.modificationTime}
+    />
   );
 };
 

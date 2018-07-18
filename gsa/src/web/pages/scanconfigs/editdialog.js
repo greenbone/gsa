@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined, map} from 'gmp/utils';
-import {parse_yesno, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -333,7 +333,7 @@ class NvtFamily extends React.Component {
             flex
             name={name}
             checked={trend === YES_VALUE}
-            convert={parse_yesno}
+            convert={parseYesNo}
             value={YES_VALUE}
             onChange={onTrendChange}
           />
@@ -342,7 +342,7 @@ class NvtFamily extends React.Component {
             flex
             name={name}
             checked={trend === NO_VALUE}
-            convert={parse_yesno}
+            convert={parseYesNo}
             value={NO_VALUE}
             onChange={onTrendChange}
           />

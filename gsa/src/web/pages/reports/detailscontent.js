@@ -310,7 +310,7 @@ const PageContent = ({
     report,
   } = entity;
 
-  const userTagsCount = report.user_tags.length;
+  const userTagsCount = report.userTags.length;
 
   const {
     applications,

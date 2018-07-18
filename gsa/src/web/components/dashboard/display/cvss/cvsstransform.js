@@ -22,7 +22,7 @@
  */
 import {is_defined} from 'gmp/utils/identity';
 
-import {parse_int, parse_float, parse_severity} from 'gmp/parser';
+import {parseInt, parseFloat, parseSeverity} from 'gmp/parser';
 
 import {
   NA_VALUE,
@@ -81,11 +81,11 @@ const transformCvssData = (data = {}, {severityClass}) => {
   groups.forEach(group => {
     let {value, count = 0} = group;
 
-    const severity = parse_severity(value);
+    const severity = parseSeverity(value);
 
     const cvss = is_defined(severity) ? Math.floor(severity) : NA_VALUE;
 
-    count = parse_int(count);
+    count = parseInt(count);
 
     const currentCount = cvssData[cvss] || 0;
 
@@ -100,7 +100,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
       const count = cvssData[key];
       const perc = percent(count, sum);
 
-      const value = parse_float(key);
+      const value = parseFloat(key);
 
       const riskFactor = resultSeverityRiskFactor(value, severityClass);
       const label = translateRiskFactor(riskFactor);

@@ -27,11 +27,10 @@ import {is_empty} from '../utils/string';
 import List from '../list.js';
 import Model from '../model.js';
 import {
-  parse_csv,
-  parse_severity,
-  parse_text,
-  parse_yesno,
-  parseDate,
+  parseCsv,
+  parseSeverity,
+  parseText,
+  parseYesNo,
   YES_VALUE,
 } from '../parser.js';
 
@@ -68,11 +67,11 @@ class Override extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret.severity = parse_severity(ret.severity);
+    ret.severity = parseSeverity(ret.severity);
 
-    ret.new_severity = parse_severity(ret.new_severity);
+    ret.new_severity = parseSeverity(ret.new_severity);
 
-    ret = {...ret, ...parse_text(ret.text)};
+    ret = {...ret, ...parseText(ret.text)};
 
     if (is_model_element(ret.task)) {
       ret.task = new Model(ret.task, 'task');
@@ -88,27 +87,16 @@ class Override extends Model {
       delete ret.result;
     }
 
-    ret.active = parse_yesno(elem.active);
-    ret.text_excerpt = parse_yesno(elem.text_excerpt);
+    ret.active = parseYesNo(elem.active);
+    ret.text_excerpt = parseYesNo(elem.text_excerpt);
 
-    ret.hosts = parse_csv(ret.hosts);
+    ret.hosts = parseCsv(ret.hosts);
 
     if (is_empty(elem.port)) {
       delete ret.port;
     }
 
-    if (is_defined(elem.end_time) && elem.end_time.length > 0) {
-      ret.end_time = parseDate(elem.end_time);
-    }
-    else {
-      delete ret.end_time;
-    }
-
     return ret;
-  }
-
-  isActive() {
-    return this.active === YES_VALUE;
   }
 
   isExcerpt() {

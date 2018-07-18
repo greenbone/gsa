@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {parse_csv} from '../parser.js';
+import {parseCsv} from '../parser.js';
 
 import Model from '../model.js';
 
@@ -31,7 +31,7 @@ class Role extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.users = parse_csv(elem.users);
+    ret.users = parseCsv(elem.users);
 
     return ret;
   }

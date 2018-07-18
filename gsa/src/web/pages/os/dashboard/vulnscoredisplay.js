@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {parse_float, parse_severity} from 'gmp/parser';
+import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -62,13 +62,13 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
     .filter(group => {
       const {stats = {}} = group;
       const {average_severity_score = 0} = stats;
-      return parse_float(average_severity_score.max) > 0;
+      return parseFloat(average_severity_score.max) > 0;
     })
     .map(group => {
       const {stats, text, value: id} = group;
       const {hosts, modified, name} = text;
       const {average_severity, average_severity_score} = stats;
-      const averageSeverity = parse_severity(average_severity.mean);
+      const averageSeverity = parseSeverity(average_severity.mean);
       const riskFactor = resultSeverityRiskFactor(averageSeverity);
       const modifiedDate = longDate(modified);
       const toolTip = (
@@ -77,15 +77,15 @@ const transformVulnScoreData = (data = {}, {severityClass}) => {
           {average_severity_score.max}<br/>
           {_('{{hosts}} Host(s) with average severity {{avgSev}}',
             {
-              hosts: parse_float(hosts),
-              avgSev: parse_float(averageSeverity),
+              hosts: parseFloat(hosts),
+              avgSev: parseFloat(averageSeverity),
             })}<br/>
           <b>{_('Updated: ')}</b>{modifiedDate}
         </ToolTip>
       );
 
       return {
-        y: parse_float(average_severity_score.max),
+        y: parseFloat(average_severity_score.max),
         x: name,
         label: name,
         color: riskFactorColorScale(riskFactor),

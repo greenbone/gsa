@@ -78,9 +78,9 @@ const OverrideBox = ({
       title={_('Override from {{- severity}} to {{- new_severity}}',
         {severity, new_severity})}
       text={override.text}
-      end={override.end_time}
+      end={override.endTime}
       toolbox={toolbox}
-      modified={override.modification_time}
+      modified={override.modificationTime}
     />
   );
 };

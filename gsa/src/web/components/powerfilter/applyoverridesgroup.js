@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 import {is_defined} from 'gmp/utils';
-import {parse_int} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -48,7 +48,7 @@ const ApplyOverridesGroup = ({
         name={name}
         yesValue={1}
         noValue={0}
-        convert={parse_int}
+        convert={parseInt}
         onChange={onChange}/>
     </FormGroup>
   );
