@@ -23,33 +23,20 @@
  */
 export const {isArray} = global.Array;
 
-export function isDefined(value) {
-  return value !== undefined;
-}
+export const isDefined = value => value !== undefined;
 
-export function hasValue(value) {
-  return value !== null && isDefined(value);
-}
+export const hasValue = value => value !== null && isDefined(value);
 
-export function isObject(value) {
-  return value !== null && typeof value === 'object';
-}
+export const isObject = value => value !== null && typeof value === 'object';
 
-export function isString(value) {
-  return typeof value === 'string';
-}
+export const isString = value => typeof value === 'string';
 
-export function isNumber(value) {
-  return typeof value === 'number';
-}
+export const isNumber = value => typeof value === 'number';
 
-export function isFunction(value) {
-  return typeof value === 'function';
-}
+export const isFunction = value => typeof value === 'function';
 
-export function isJsDate(value) {
-  return Object.prototype.toString.call(value) === '[object Date]';
-}
+export const isJsDate = value =>
+  Object.prototype.toString.call(value) === '[object Date]';
 
 export const isModelElement = elem => isDefined(elem) &&
   isString(elem._id) && elem._id.length > 0;
