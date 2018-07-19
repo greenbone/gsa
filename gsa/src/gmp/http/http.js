@@ -24,7 +24,7 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, is_array} from '../utils/identity';
+import {is_defined, has_value, isArray} from '../utils/identity';
 
 import Promise from '../promise.js';
 
@@ -79,7 +79,7 @@ class Http {
     for (const key in data) {
       if (data.hasOwnProperty(key)) { // don't add undefined and null values to form
         const value = data[key];
-        if (is_array(value)) {
+        if (isArray(value)) {
           for (const val of value) {
             formdata_append(formdata, key, val);
           }

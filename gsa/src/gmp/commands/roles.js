@@ -26,7 +26,7 @@ import registerCommand from '../command';
 
 import logger from '../log';
 
-import {is_array, is_defined} from '../utils/identity';
+import {isArray, is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model from '../model';
@@ -54,7 +54,7 @@ class RoleCommand extends EntityCommand {
       cmd: 'create_role',
       name,
       comment,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
     return this.action(data);
@@ -71,7 +71,7 @@ class RoleCommand extends EntityCommand {
       id,
       name,
       comment,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
     return this.action(data);

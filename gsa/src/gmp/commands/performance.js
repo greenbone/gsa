@@ -22,7 +22,7 @@
  */
 import {
   is_defined,
-  is_array,
+  isArray,
 } from '../utils/identity';
 
 import HttpCommand from './http.js';
@@ -48,7 +48,7 @@ class PerformanceCommand extends HttpCommand {
         throw new Error('Invalid response data for system reports');
       }
 
-      return response.setData(is_array(reports) ? reports : [reports]);
+      return response.setData(isArray(reports) ? reports : [reports]);
     });
   }
 }

@@ -22,7 +22,7 @@
  */
 import _ from 'gmp/locale';
 
-import {is_defined, is_array} from '../utils/identity';
+import {is_defined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -201,7 +201,7 @@ class Task extends Model {
 
     const prefs = {};
 
-    if (elem.preferences && is_array(elem.preferences.preference)) {
+    if (elem.preferences && isArray(elem.preferences.preference)) {
       for (const pref of elem.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':

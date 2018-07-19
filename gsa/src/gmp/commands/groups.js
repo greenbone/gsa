@@ -24,7 +24,7 @@ import registerCommand from '../command';
 
 import logger from '../log';
 
-import {is_array} from '../utils/identity';
+import {isArray} from '../utils/identity';
 
 import Group from '../models/group';
 
@@ -50,7 +50,7 @@ class GroupCommand extends EntityCommand {
       name,
       comment,
       grant_full,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
     return this.action(data);
@@ -69,7 +69,7 @@ class GroupCommand extends EntityCommand {
       name,
       comment,
       grant_full,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
     return this.action(data);

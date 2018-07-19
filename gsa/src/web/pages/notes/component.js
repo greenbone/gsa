@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {is_defined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import {
@@ -82,7 +82,7 @@ class NoteComponent extends React.Component {
         id: note.id,
         active,
         hosts: is_defined(hosts) && hosts.length > 0 ? MANUAL : ANY,
-        hosts_manual: is_array(hosts) ? hosts.join(', ') : undefined,
+        hosts_manual: isArray(hosts) ? hosts.join(', ') : undefined,
         port: is_defined(port) ? MANUAL : ANY,
         port_manual: port,
         oid: is_defined(nvt) ? nvt.oid : undefined,

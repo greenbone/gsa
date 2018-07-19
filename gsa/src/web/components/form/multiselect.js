@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 import Downshift from 'downshift';
 
 import {arraysEqual} from 'gmp/utils/array';
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {is_defined, isArray} from 'gmp/utils/identity';
 
 import ArrowIcon from '../icon/arrowicon.js';
 
@@ -86,7 +86,7 @@ class MultiSelect extends React.Component {
 
     this.state = {
       search: '',
-      selectedItems: is_array(value) ? value : [],
+      selectedItems: isArray(value) ? value : [],
     };
 
     this.handleRemoveItem = this.handleRemoveItem.bind(this);

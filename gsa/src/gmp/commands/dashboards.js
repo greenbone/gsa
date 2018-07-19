@@ -22,7 +22,7 @@
  */
 import uuid from 'uuid/v4';
 
-import {is_array} from '../utils/identity';
+import {isArray} from '../utils/identity';
 import {forEach} from '../utils/array';
 
 import logger from '../log';
@@ -81,7 +81,7 @@ const dashboardSettings2SettingsV1 = ({rows}) => ({
 });
 
 const convertSaveSettings = (settings = {}) => {
-  if (is_array(settings.rows)) {
+  if (isArray(settings.rows)) {
     // we like have settings which can be stored as version 1 settings
     return dashboardSettings2SettingsV1(settings);
   }

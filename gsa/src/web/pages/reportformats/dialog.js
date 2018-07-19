@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, is_array, has_value} from 'gmp/utils/identity';
+import {is_defined, isArray, has_value} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -138,7 +138,7 @@ const Param = ({
       <Select
         name={name}
         items={typeOptions}
-        value={is_array(field_value) ? field_value : [field_value]}
+        value={isArray(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
       />
     );

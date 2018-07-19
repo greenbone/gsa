@@ -25,7 +25,7 @@ import {
   has_value,
   isObject,
   isString,
-  is_array,
+  isArray,
   isNumber,
   isFunction,
   isJsDate,
@@ -133,32 +133,32 @@ describe('is_string function test', () => {
 describe('is_array function test', () => {
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return true for an array', () => {
     const x = [];
-    expect(is_array(x)).toBe(true);
+    expect(isArray(x)).toBe(true);
   });
 });
 

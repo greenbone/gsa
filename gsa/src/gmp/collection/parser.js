@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_array, is_defined} from '../utils/identity';
+import {isArray, is_defined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model from '../model';
@@ -34,7 +34,7 @@ import CollectionCounts from './collectioncounts';
 const log = logger.getLogger('gmp.collection.parser');
 
 export function parseInfoEntities(response, name, modelclass, filter_func) {
-  if (!is_array(response.info)) {
+  if (!isArray(response.info)) {
     return [];
   }
   return response.info
@@ -51,7 +51,7 @@ export function parseInfoCounts(response) {
   const infos = response.info;
   // its getting even uglier... if no entities are returned we get a single info
   // element for start and max counts.
-  let es = is_array(infos) ? infos[infos.length - 1] : infos;
+  let es = isArray(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;
 
   if (!is_defined(es)) {

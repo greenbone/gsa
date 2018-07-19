@@ -31,7 +31,7 @@ import logger from 'gmp/log';
 import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
-import {is_array, is_defined} from 'gmp/utils/identity';
+import {isArray, is_defined} from 'gmp/utils/identity';
 import {includesId, selectSaveId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
@@ -75,7 +75,7 @@ const sort_scan_configs = scan_configs => {
 
   forEach(scan_configs, config => {
     const type = config.scan_config_type;
-    if (!is_array(sorted_scan_configs[type])) {
+    if (!isArray(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
     sorted_scan_configs[type].push(config);

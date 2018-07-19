@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {is_defined, isArray} from 'gmp/utils/identity';
 
 import {createRow, createItem} from 'web/components/sortable/grid';
 
@@ -124,7 +124,7 @@ export const resetSettings = ({gmp}) => id =>
 };
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
-  if (is_array(rows) && rows.length > 0 &&
+  if (isArray(rows) && rows.length > 0 &&
     is_defined(maxItemsPerRow) && is_defined(maxRows)) {
     const lastRow = rows[rows.length - 1];
     return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
@@ -135,7 +135,7 @@ export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
 export const addDisplayToSettings = (settings, displayId) => {
   const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
-  const lastRow = is_array(currentRows) && currentRows.length > 0 ?
+  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
     currentRows[currentRows.length - 1] : {items: []};
 
   let rows;
