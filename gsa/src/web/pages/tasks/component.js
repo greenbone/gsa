@@ -32,7 +32,7 @@ import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
-import {includes_id, select_save_id} from 'gmp/utils/id';
+import {includesId, select_save_id} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
@@ -318,7 +318,7 @@ class TaskComponent extends React.Component {
 
         schedule_id = select_save_id(schedules, schedule_id, UNSET_VALUE);
 
-        alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
+        alert_id = includesId(alerts, alert_id) ? alert_id : undefined;
 
         const alert_ids = is_defined(alert_id) ? [alert_id] : [];
 

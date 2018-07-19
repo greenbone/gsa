@@ -27,7 +27,7 @@ import {is_defined, is_string} from './identity';
 export const hasId = model => is_defined(model) && is_string(model.id) &&
   model.id.length > 0;
 
-export function includes_id(list, id) {
+export function includesId(list, id) {
   for (const value of list) {
     if (value.id === id) {
       return true;
@@ -37,7 +37,7 @@ export function includes_id(list, id) {
 }
 
 export function select_save_id(list, id, empty_default) {
-  if (!is_defined(id) || !includes_id(list, id)) {
+  if (!is_defined(id) || !includesId(list, id)) {
     if (!is_defined(empty_default)) {
       return first(list).id;
     }

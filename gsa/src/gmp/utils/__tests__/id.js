@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  includes_id,
+  includesId,
   select_save_id,
   hasId,
 } from '../id';
@@ -30,21 +30,21 @@ describe('includes_id function tests', () => {
   test('should return true for found id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, 1)).toBe(true);
-    expect(includes_id(list, 2)).toBe(true);
-    expect(includes_id(list, 3)).toBe(true);
+    expect(includesId(list, 1)).toBe(true);
+    expect(includesId(list, 2)).toBe(true);
+    expect(includesId(list, 3)).toBe(true);
   });
 
   test('should return false for unknown id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, 4)).toBe(false);
+    expect(includesId(list, 4)).toBe(false);
   });
 
   test('should return false for different type of id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, '2')).toBe(false);
+    expect(includesId(list, '2')).toBe(false);
   });
 });
 
