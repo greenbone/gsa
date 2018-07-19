@@ -23,7 +23,7 @@
 import {
   includes_id,
   select_save_id,
-  has_id,
+  hasId,
 } from '../id';
 
 describe('includes_id function tests', () => {
@@ -74,32 +74,32 @@ describe('select_save_id function tests', () => {
 
 describe('has_id tests', () => {
   test('should return false if model is undefined', () => {
-    expect(has_id(undefined)).toBe(false);
+    expect(hasId(undefined)).toBe(false);
   });
 
   test('should return false if id is undefined', () => {
-    expect(has_id({})).toBe(false);
-    expect(has_id({id: undefined})).toBe(false);
+    expect(hasId({})).toBe(false);
+    expect(hasId({id: undefined})).toBe(false);
   });
 
   test('should return false if model is no id property', () => {
-    expect(has_id('')).toBe(false);
-    expect(has_id('A')).toBe(false);
-    expect(has_id(1)).toBe(false);
+    expect(hasId('')).toBe(false);
+    expect(hasId('A')).toBe(false);
+    expect(hasId(1)).toBe(false);
   });
 
   test('should return false if id is not a string', () => {
-    expect(has_id({id: 1})).toBe(false);
+    expect(hasId({id: 1})).toBe(false);
   });
 
   test('should return false if id is an empty string', () => {
-    expect(has_id({id: ''})).toBe(false);
+    expect(hasId({id: ''})).toBe(false);
   });
 
   test('should return true if id is defined', () => {
-    expect(has_id({id: '1'})).toBe(true);
-    expect(has_id({id: '0'})).toBe(true);
-    expect(has_id({id: 'A'})).toBe(true);
+    expect(hasId({id: '1'})).toBe(true);
+    expect(hasId({id: '0'})).toBe(true);
+    expect(hasId({id: 'A'})).toBe(true);
   });
 });
 

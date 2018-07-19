@@ -28,7 +28,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import {is_defined, shorten} from 'gmp/utils';
-import {has_id} from 'gmp/utils/id.js';
+import {hasId} from 'gmp/utils/id.js';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
 
@@ -120,12 +120,12 @@ class OverrideComponent extends React.Component {
         override,
         port: is_defined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
-        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
-        result_name: has_id(result) ? result.name : undefined,
-        result_uuid: has_id(result) ? result.id : undefined,
+        result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
+        result_name: hasId(result) ? result.name : undefined,
+        result_uuid: hasId(result) ? result.id : undefined,
         severity: override.severity,
-        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
-        task_uuid: has_id(task) ? task.id : undefined,
+        task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: hasId(task) ? task.id : undefined,
         text: override.text,
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),

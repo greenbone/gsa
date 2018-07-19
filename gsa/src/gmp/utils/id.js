@@ -24,7 +24,7 @@
 import {first} from './array';
 import {is_defined, is_string} from './identity';
 
-export const has_id = model => is_defined(model) && is_string(model.id) &&
+export const hasId = model => is_defined(model) && is_string(model.id) &&
   model.id.length > 0;
 
 export function includes_id(list, id) {

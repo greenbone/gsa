@@ -23,17 +23,20 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten, has_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
 
 import {
   SLAVE_SCANNER_TYPE,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -84,7 +87,7 @@ class ScannerComponent extends React.Component {
             scanner.ca_pub.certificate : undefined,
           comment: scanner.comment,
           credentials,
-          credential_id: has_id(scanner.credential) ?
+          credential_id: hasId(scanner.credential) ?
             scanner.credential.id : undefined,
           host: scanner.host,
           id: scanner.id,

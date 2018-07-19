@@ -51,7 +51,7 @@ import Wrapper from '../../components/layout/wrapper';
 import EntityComponent from '../../entity/component';
 
 import NoteDialog from './dialog';
-import {has_id} from 'gmp/utils/id';
+import {hasId} from 'gmp/utils/id';
 
 class NoteComponent extends React.Component {
 
@@ -90,10 +90,10 @@ class NoteComponent extends React.Component {
         oid: is_defined(nvt) ? nvt.oid : undefined,
         note,
         nvt_name: is_defined(nvt) ? nvt.name : undefined,
-        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
-        task_uuid: has_id(task) ? task.id : undefined,
-        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
-        result_uuid: has_id(result) ? result.id : undefined,
+        task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: hasId(task) ? task.id : undefined,
+        result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
+        result_uuid: hasId(result) ? result.id : undefined,
         severity: note.severity,
         text: note.text,
         title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
