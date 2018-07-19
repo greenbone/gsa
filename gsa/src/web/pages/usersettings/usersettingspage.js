@@ -1,77 +1,160 @@
 /* Greenbone Security Assistant
-*
-* Authors:
-* Steffen Waterkamp <steffen.waterkamp@greenbone.net>
-* Björn Ricks <bjoern.ricks@greenbone.net>
-*
-* Copyright:
-* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+ *
+ * Authors:
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2018 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 import 'core-js/fn/object/entries';
 
 import React from 'react';
-import glamorous, {Col} from 'glamorous';
-
-import _, {set_language} from 'gmp/locale';
-
-import {parseYesNo, YES_VALUE} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
+import {connect} from 'react-redux';
+import _ from 'gmp/locale';
+import {YES_VALUE, parseYesNo} from 'gmp/parser';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import EditIcon from '../../components/icon/editicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import EditIcon from 'web/components/icon/editicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Loading from '../../components/loading/loading.js';
+import Loading from 'web/components/loading/loading';
 
-import Table from '../../components/table/simpletable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import Section from 'web/components/section/section';
 
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
-import Languages, {BROWSER_LANGUAGE} from '../../utils/languages';
+import {
+  loadEntities as loadAlerts,
+  loadEntity as loadAlert,
+  selector as alertsSelector,
+} from 'web/store/entities/alerts';
+import {
+  loadEntities as loadCredentials,
+  selector as credentialsSelector,
+} from 'web/store/entities/credentials';
+import {
+  loadEntities as loadFilters,
+  selector as filtersSelector,
+} from 'web/store/entities/filters';
+import {
+  loadEntities as loadPortLists,
+  selector as portListsSelector,
+} from 'web/store/entities/portlists';
+import {
+  loadEntities as loadReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
+import {
+  loadEntities as loadScanConfigs,
+  selector as scanConfigsSelector,
+} from 'web/store/entities/scanconfigs';
+import {
+  loadEntities as loadScanners,
+  selector as scannersSelector,
+} from 'web/store/entities/scanners';
+import {
+  loadEntities as loadSchedules,
+  selector as schedulesSelector,
+} from 'web/store/entities/schedules';
+import {
+  loadEntities as loadTargets,
+  selector as targetsSelector,
+} from 'web/store/entities/targets';
+
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
+import compose from 'web/utils/compose';
+import Languages from 'web/utils/languages';
+import PropTypes from 'web/utils/proptypes';
 import {
   SEVERITY_CLASS_NIST,
   SEVERITY_CLASS_BSI,
   SEVERITY_CLASS_PCI_DSS,
-} from '../../utils/severity';
+} from 'web/utils/severity';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import withCapabilities from '../../utils/withCapabilities.js';
-import withGmp from '../../utils/withGmp.js';
+import {loadFunc} from 'web/store/usersettings/actions';
+import {
+  getIsLoading,
+  getData,
+  getUserSettings,
+} from 'web/store/usersettings/selectors';
+import {loadTimezone} from 'web/store/usersettings/timezone/actions';
+import {getTimezone} from 'web/store/usersettings/timezone/selectors';
 
-import SettingsDialog from './dialog.js';
+import SettingsDialog from './dialog';
 
-const CA_CERT_ID = '9ac801ea-39f8-11e6-bbaa-28d24461215b';
-
-const SEVERITY_CLASSES = [
+const FIRST_COL_WIDTH = '250px';
+export const SEVERITY_CLASSES = [
   {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
   {id: SEVERITY_CLASS_BSI, name: 'BSI Schwachstellenampel (Germany)'},
   {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
 ];
 
-const Heading = glamorous.h4({marginBottom: '5px'});
+const getLangNameByCode = code => {
+  const language = Languages[code];
+  return isDefined(language) ? language.name : null;
+};
+
+const SettingTableRow = ({
+  setting,
+  title,
+  type,
+}) => {
+  const {
+    comment,
+    id,
+    name,
+  } = setting;
+  return (
+    <TableRow title={comment}>
+      <TableData>
+        {title}
+      </TableData>
+      <TableData>
+        <Layout>
+          {isDefined(id) &&
+            <DetailsLink
+              id={id}
+              type={type}
+            >
+              {name}
+            </DetailsLink>
+          }
+        </Layout>
+      </TableData>
+    </TableRow>
+  );
+};
+
+SettingTableRow.propTypes = {
+  setting: PropTypes.object,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+};
 
 const ToolBarIcons = ({onEditSettingsClick}) => (
   <Layout flex>
@@ -100,981 +183,560 @@ class UserSettings extends React.Component {
     super(...args);
 
     this.state = {
-      loading: true,
-      dialogvisible: false,
-      general_settings: [],
-      severity_settings: [],
-      defaults_settings: {},
-      filter_settings: [],
-      misc_settings: [],
-      initial_data: {},
-      option_lists: {
-        severitiesList: SEVERITY_CLASSES,
-        languagesList: Object.entries(Languages).map(
-          ([code, language]) => [code, language.name, language.native_name]),
-      },
+      dialogVisible: false,
     };
-    this.set_filters = [];
-    this.set_settings = [];
-    this.scanconfigs = [];
-    this.capabilities = this.props.capabilities;
-    this.createRow = this.createRow.bind(this);
-    this.readSettings = this.readSettings.bind(this);
-    this.getLanguageNameByCode = this.getLanguageNameByCode.bind(this);
-    this.getFilterNameById = this.getFilterNameById.bind(this);
-    this.getValueBySettingId = this.getValueBySettingId.bind(this);
 
-    this.openSettingsDialog = this.openSettingsDialog.bind(this);
+    this.openDialog = this.openDialog.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.handleCloseDialog = this.handleCloseDialog.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
-    this.load();
+    this.props.loadSettings();
+    this.props.loadTimezone();
+    this.loadEntities();
   }
 
-  load() {
-    this.readSettings()
-    .then(response => this.createSettinggroupTables(response))
-    .then(() => this.setState({loading: false}));
+  loadEntities() {
+    this.props.loadAlerts();
+    this.props.loadCredentials();
+    this.props.loadFilters();
+    this.props.loadPortLists();
+    this.props.loadReportFormats();
+    this.props.loadScanConfigs();
+    this.props.loadScanners();
+    this.props.loadSchedules();
+    this.props.loadTargets();
   }
 
-  readSettings() {
-    const {gmp} = this.props;
-    const {option_lists} = this.state;
-    const all_settings = Promise.all([
-      gmp.user.currentSettings().then(response => response.data.getEntries()),
-      gmp.filters.getAll().then(response => response.data),
-      gmp.scanconfigs.getAll().then(response => {
-        const config_list = response.data;
-        option_lists.scanconfigsList = config_list;
-        this.setState({option_lists});
-        return config_list;
-      }),
-      gmp.alerts.getAll()
-      .then(response => {
-        option_lists.alertsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.credentials.getAll()
-      .then(response => {
-        option_lists.credentialsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.portlists.getAll()
-      .then(response => {
-        option_lists.portlistsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.reportformats.getAll()
-      .then(response => {
-        option_lists.reportformatsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.scanners.getAll()
-      .then(response => {
-        option_lists.scannersList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.reportformats.getAll()
-      .then(response => {
-        option_lists.reportformatsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.schedules.getAll()
-      .then(response => {
-        option_lists.schedulesList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.targets.getAll()
-      .then(response => {
-        option_lists.targetsList = response.data;
-        this.setState({option_lists});
-      }),
-      gmp.filters.getAll()
-      .then(response => {
-        const filtersList = response.data;
-        const filtersListAgent = filtersList.filter(
-          item => {
-            return item.filter_type === 'agent';
-          });
-        const filtersListAlert = filtersList.filter(
-          item => {
-            return item.filter_type === 'alert';
-          });
-        const filtersListAsset = filtersList.filter(
-          item => {
-            return item.filter_type === 'asset';
-          });
-        const filtersListConfig = filtersList.filter(
-          item => {
-            return item.filter_type === 'config';
-          });
-        const filtersListCredential = filtersList.filter(
-          item => {
-            return item.filter_type === 'credential';
-          });
-        const filtersListFilter = filtersList.filter(
-          item => {
-            return item.filter_type === 'filter';
-          });
-        const filtersListNote = filtersList.filter(
-          item => {
-            return item.filter_type === 'note';
-          });
-        const filtersListOverride = filtersList.filter(
-          item => {
-            return item.filter_type === 'override';
-          });
-        const filtersListPermission = filtersList.filter(
-          item => {
-            return item.filter_type === 'permission';
-          });
-        const filtersListPortlist = filtersList.filter(
-          item => {
-            return item.filter_type === 'port_list';
-          });
-        const filtersListReport = filtersList.filter(
-          item => {
-            return item.filter_type === 'report';
-          });
-        const filtersListReportformat = filtersList.filter(
-          item => {
-            return item.filter_type === 'report_format';
-          });
-        const filtersListResult = filtersList.filter(
-          item => {
-            return item.filter_type === 'result';
-          });
-        const filtersListRole = filtersList.filter(
-          item => {
-            return item.filter_type === 'role';
-          });
-        const filtersListSchedule = filtersList.filter(
-          item => {
-            return item.filter_type === 'schedule';
-          });
-        const filtersListTag = filtersList.filter(
-          item => {
-            return item.filter_type === 'tag';
-          });
-        const filtersListTarget = filtersList.filter(
-          item => {
-            return item.filter_type === 'target';
-          });
-        const filtersListTask = filtersList.filter(
-          item => {
-            return item.filter_type === 'task';
-          });
-        const filtersListSecinfo = filtersList.filter(
-          item => {
-            return item.filter_type === 'info';
-          });
-        option_lists.filtersList = {};
-        option_lists.filtersList.agent = filtersListAgent;
-        option_lists.filtersList.alert = filtersListAlert;
-        option_lists.filtersList.asset = filtersListAsset;
-        option_lists.filtersList.config = filtersListConfig;
-        option_lists.filtersList.credential = filtersListCredential;
-        option_lists.filtersList.filter = filtersListFilter;
-        option_lists.filtersList.note = filtersListNote;
-        option_lists.filtersList.override = filtersListOverride;
-        option_lists.filtersList.permission = filtersListPermission;
-        option_lists.filtersList.portlist = filtersListPortlist;
-        option_lists.filtersList.report = filtersListReport;
-        option_lists.filtersList.reportformat = filtersListReportformat;
-        option_lists.filtersList.result = filtersListResult;
-        option_lists.filtersList.role = filtersListRole;
-        option_lists.filtersList.schedule = filtersListSchedule;
-        option_lists.filtersList.tag = filtersListTag;
-        option_lists.filtersList.target = filtersListTarget;
-        option_lists.filtersList.task = filtersListTask;
-        option_lists.filtersList.secinfo = filtersListSecinfo;
-        this.setState({option_lists});
-      }),
-    ]);
-    return all_settings;
+  openDialog() {
+    this.setState({dialogVisible: true});
   }
 
-  createSettinggroupTables(settings) {
-    if (settings === undefined) {
-      return;
-    }
-    const {gmp} = this.props;
-    const general_settings = [];
-    const severity_settings = [];
-    const defaults_settings = {};
-    const filter_settings = {};
-    const misc_settings = [];
-    const initial_data = {};
-    const promises = [];
-    const all_possible_settings = {
-      'Timezone': '', // eslint-disable-line quote-props
-      'Password': '********', // eslint-disable-line quote-props
-      'User Interface Language': '',
-      'Rows Per Page': '',
-      'Max Rows Per Page (immutable)': '',
-      'Details Export File Name': '',
-      'List Export File Name': '',
-      'Report Export File Name': '',
-      'Severity Class': '',
-      'Dynamic Severity': '',
-      'Default Severity': '',
-      'Default Alert': '',
-      'Default OpenVAS Scan Config': '',
-      'Default OSP Scan Config': '',
-      'Default SSH Credential': '',
-      'Default SMB Credential': '',
-      'Default ESXi Credential': '',
-      'Default SNMP Credential': '',
-      'Default Port List': '',
-      'Default OpenVAS Scanner': '',
-      'Default OSP Scanner': '',
-      'Default Report Format': '',
-      'Default Schedule': '',
-      'Default Target': '',
-      'Agents Filter': '',
-      'Alerts Filter': '',
-      'Assets Filter': '',
-      'Configs Filter': '',
-      'Credentials Filter': '',
-      'Filters Filter': '',
-      'Notes Filter': '',
-      'Overrides Filter': '',
-      'Permissions Filter': '',
-      'Port Lists Filter': '',
-      'Reports Filter': '',
-      'Report Formats Filter': '',
-      'Results Filter': '',
-      'Roles Filter': '',
-      'Schedules Filter': '',
-      'Tags Filter': '',
-      'Targets Filter': '',
-      'Tasks Filter': '',
-      'CPE Filter': '',
-      'CVE Filter': '',
-      'NVT Filter': '',
-      'OVAL Filter': '',
-      'CERT-Bund Filter': '',
-      'DFN-CERT Filter': '',
-      'All SecInfo Filter': '',
-      'Default CA Cert (immutable)': '',
-      'Auto Cache Rebuild': '',
-    };
-
-    // get settings, filters and scanconfigs from the Promise.all result in
-    // readSettings()
-    this.set_settings = settings[0];// eslint-disable-line prefer-destructuring
-    this.set_filters = settings[1]; // eslint-disable-line prefer-destructuring
-    this.scanconfigs = settings[2]; // eslint-disable-line prefer-destructuring
-
-    for (const [key, item] of this.set_settings) {
-        all_possible_settings[key] = item.value;
-    }
-    for (const item in all_possible_settings) {
-      if (item === 'Timezone') {
-        const set_timezone = gmp.globals.timezone;
-        general_settings.push({Timezone: set_timezone});
-        initial_data.timezone = set_timezone;
-      }
-      else if (item === 'Password') {
-        general_settings.push({Password: all_possible_settings[item]});
-        initial_data.oldpassword = '';
-        initial_data.newpassword = '';
-      }
-      else if (item === 'User Interface Language') {
-        const code = all_possible_settings[item];
-        const current_language = this.getLanguageNameByCode(code);
-        general_settings.push({
-          'User Interface Language': current_language,
-        });
-        initial_data.userinterfacelanguage = code;
-      }
-      else if (item === 'Rows Per Page') {
-        const set_rows_per_page = all_possible_settings[item];
-        general_settings.push({
-          'Rows Per Page': set_rows_per_page,
-        });
-        initial_data.rowsperpage = set_rows_per_page;
-      }
-      else if (item === 'Max Rows Per Page') {
-        general_settings.push({
-          'Max Rows Per Page (immutable)': all_possible_settings[item],
-        });
-      }
-      else if (item === 'Details Export File Name') {
-        const set_details_export_file_name = all_possible_settings[item];
-        general_settings.push({
-          'Details Export File Name': set_details_export_file_name,
-        });
-        initial_data.detailsexportfilename = set_details_export_file_name;
-      }
-      else if (item === 'List Export File Name') {
-        const set_list_export_file_name = all_possible_settings[item];
-        general_settings.push({
-          'List Export File Name': set_list_export_file_name,
-        });
-        initial_data.listexportfilename = set_list_export_file_name;
-      }
-      else if (item === 'Report Export File Name') {
-        const set_report_export_file_name = all_possible_settings[item];
-        general_settings.push({
-          'Report Export File Name': set_report_export_file_name,
-        });
-        initial_data.reportexportfilename = set_report_export_file_name;
-      }
-      else if (item === 'Severity Class') {
-        const set_severity_class = all_possible_settings[item];
-        let class_name;
-        const set_class = SEVERITY_CLASSES.find(
-          clazz => {
-            return clazz.id === set_severity_class;
-          });
-        if (isDefined(set_class)) {
-          class_name = set_class.name;
-        }
-        severity_settings.push({
-          'Severity Class': class_name,
-        });
-        initial_data.severityclass = set_severity_class;
-      }
-      else if (item === 'Dynamic Severity') {
-        const value = parseYesNo(all_possible_settings[item]) === YES_VALUE ?
-          _('Yes') : _('No');
-        severity_settings.push({
-          'Dynamic Severity': value,
-        });
-        initial_data.dynamicseverity = all_possible_settings[item];
-      }
-      else if (item === 'Default Severity') {
-        const set_default_severity = all_possible_settings[item];
-        severity_settings.push({
-          'Default Severity': set_default_severity,
-        });
-        initial_data.defaultseverity = set_default_severity;
-      }
-      else if (item === 'Default Alert') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.alert.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultalert = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default OpenVAS Scan Config') {
-        const id = all_possible_settings[item];
-        const value = this.getConfigNameById(id);
-        defaults_settings[item] = value;
-        initial_data.defaultopenvasscanconfig = id;
-      }
-      else if (item === 'Default OSP Scan Config') {
-        const id = all_possible_settings[item];
-        const value = this.getConfigNameById(id);
-        defaults_settings[item] = value;
-        initial_data.defaultospscanconfig = id;
-      }
-      else if (item === 'Default SSH Credential') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          gmp.credential.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultsshcredential = id;
-            this.setState({defaults_settings});
-          });
-        }
-      }
-      else if (item === 'Default SMB Credential') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.credential.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultsmbcredential = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default ESXi Credential') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.credential.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultesxicredential = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default SNMP Credential') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.credential.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultsnmpcredential = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default Port List') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.portlist.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultportlist = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default OpenVAS Scanner') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.scanner.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultopenvasscanner = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default OSP Scanner') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.scanner.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultospscanner = name;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default Report Format') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.reportformat.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultreportformat = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default Schedule') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.schedule.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaultschedule = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-      else if (item === 'Default Target') {
-        const id = all_possible_settings[item];
-        if (isEmpty(id)) {
-          defaults_settings[item] = '';
-        }
-        else {
-          promises.push(gmp.target.get({id}).then(response => {
-            const {name} = response.data;
-            defaults_settings[item] = name;
-            initial_data.defaulttarget = id;
-            this.setState({defaults_settings});
-          }));
-        }
-      }
-
-      else if (item === 'Agents Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.agentsfilter = id;
-      }
-      else if (item === 'Alerts Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.alertsfilter = id;
-      }
-      else if (item === 'Assets Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.assetsfilter = id;
-      }
-      else if (item === 'Configs Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.configsfilter = id;
-      }
-      else if (item === 'Credentials Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.credentialsfilter = id;
-      }
-      else if (item === 'Filters Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.filtersfilter = id;
-      }
-      else if (item === 'Notes Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.notesfilter = id;
-      }
-      else if (item === 'Overrides Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.overridesfilter = id;
-      }
-      else if (item === 'Permissions Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.permissionsfilter = id;
-      }
-      else if (item === 'Port Lists Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.portlistsfilter = id;
-      }
-      else if (item === 'Reports Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.reportsfilter = id;
-      }
-      else if (item === 'Report Formats Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.reportformatsfilter = id;
-      }
-      else if (item === 'Results Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.resultsfilter = id;
-      }
-      else if (item === 'Roles Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.rolesfilter = id;
-      }
-      else if (item === 'Schedules Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.schedulesfilter = id;
-      }
-      else if (item === 'Tags Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.tagsfilter = id;
-      }
-      else if (item === 'Targets Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.targetsfilter = id;
-      }
-      else if (item === 'Tasks Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.tasksfilter = id;
-      }
-      else if (item === 'CPE Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.cpefilter = id;
-      }
-      else if (item === 'CVE Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.cvefilter = id;
-      }
-      else if (item === 'NVT Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.nvtfilter = id;
-      }
-      else if (item === 'OVAL Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.ovalfilter = id;
-      }
-      else if (item === 'CERT-Bund Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.certbundfilter = id;
-      }
-      else if (item === 'DFN-CERT Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.dfncertfilter = id;
-      }
-      else if (item === 'All SecInfo Filter') {
-        const id = all_possible_settings[item];
-        const filter_name = this.getFilterNameById(id);
-        filter_settings[item] = filter_name;
-        initial_data.secinfofilter = id;
-      }
-      else if (item === 'Default CA Cert (immutable)') {
-        const cacert = this.getValueBySettingId(CA_CERT_ID);
-        misc_settings.push({'Default CA Cert (immutable)': cacert});
-      }
-      else if (item === 'Auto Cache Rebuild') {
-        const autocache_value = all_possible_settings[item];
-        const value = parseYesNo(autocache_value) === YES_VALUE ?
-          _('Yes') : _('No');
-        misc_settings.push({'Auto Cache Rebuild': value});
-        initial_data.autocacherebuild = autocache_value;
-      }
-    }
-    this.setState({
-      general_settings: general_settings,
-      severity_settings: severity_settings,
-      defaults_settings: defaults_settings,
-      filter_settings: filter_settings,
-      misc_settings: misc_settings,
-      initial_data: initial_data,
-    });
-    return Promise.all(promises);
+  closeDialog() {
+    this.setState({dialogVisible: false});
   }
 
-  createRow(setting) {
-    const [name, value] = Object.entries(setting)[0]; // eslint-disable-line prefer-destructuring
-    return (
-      <TableRow key={name}>
-        <TableData>
-          {name}
-        </TableData>
-        <TableData>
-          {value}
-        </TableData>
-      </TableRow>
+  getSeverityClassNameById(id) {
+    const specifiedClass = SEVERITY_CLASSES.find(
+      clas => {
+        return clas.id === id;
+      }
     );
-  }
-
-  getConfigNameById(id) {
-    const config = this.scanconfigs.find(
-      item => {
-        return item.id === id;
-      });
-    if (isDefined(config)) {
-      return config.name;
-    }
-  }
-
-  getFilterNameById(id) {
-    const filter = this.set_filters.find(
-      item => {
-        return item.id === id;
-      });
-    if (isDefined(filter)) {
-      return filter.name;
-    }
-  }
-
-  getLanguageNameByCode(code) {
-    const language = Languages[code];
-    return isDefined(language) ? language.name : undefined;
-  }
-
-  getValueBySettingId(id) {
-    const cacert = this.set_settings.find(
-      item => {
-        return item[1].id === id;
-      });
-    if (isDefined(cacert)) {
-      return cacert[1].value;
-    }
+    return isDefined(specifiedClass) ? specifiedClass.name : undefined;
   }
 
   handleSaveSettings(data) {
     const {gmp} = this.props;
     return gmp.user.saveSettings(data)
       .then(() => {
-        this.load();
-        const {userinterfacelanguage: lang} = data;
-
-        if (lang === BROWSER_LANGUAGE) {
-          set_language();
-        }
-        else {
-          set_language(lang);
-        }
+        this.props.loadSettings();
+        this.props.loadTimezone();
       });
   }
 
-  openSettingsDialog() {
-    this.setState({
-      dialogvisible: true,
-    });
-  }
-
-  handleCloseDialog() {
-    this.setState({dialogvisible: false});
+  handleValueChange(value, name) {
+    this.setState({[name]: value});
   }
 
   render() {
     const {
-      general_settings,
-      severity_settings,
-      defaults_settings,
-      filter_settings,
-      misc_settings,
-      dialogvisible,
-      initial_data,
-      option_lists,
-      loading,
+      dialogVisible,
     } = this.state;
+    const {
+      capabilities,
+      filters,
+      alerts,
+      credentials,
+      scanconfigs,
+      scanners,
+      portlists,
+      reportformats,
+      schedules,
+      targets,
+      isLoading = true,
+      timezone,
+      userInterfaceLanguage,
+      rowsPerPage,
+      maxRowsPerPage,
+      detailsExportFileName,
+      listExportFileName,
+      reportExportFileName,
+      severityClass,
+      dynamicSeverity,
+      defaultSeverity,
+      defaultAlert = {},
+      defaultEsxiCredential = {},
+      defaultOspScanConfig = {},
+      defaultOspScanner = {},
+      defaultOpenvasScanConfig = {},
+      defaultOpenvasScanner = {},
+      defaultPortList = {},
+      defaultReportFormat = {},
+      defaultSmbCredential = {},
+      defaultSnmpCredential = {},
+      defaultSshCredential = {},
+      defaultSchedule = {},
+      defaultTarget = {},
+      agentsFilter = {},
+      alertsFilter = {},
+      assetsFilter = {},
+      configsFilter = {},
+      credentialsFilter = {},
+      filtersFilter = {},
+      notesFilter = {},
+      overridesFilter = {},
+      permissionsFilter = {},
+      portListsFilter = {},
+      reportsFilter = {},
+      reportFormatsFilter = {},
+      resultsFilter = {},
+      rolesFilter = {},
+      schedulesFilter = {},
+      tagsFilter = {},
+      targetsFilter = {},
+      tasksFilter = {},
+      cpeFilter = {},
+      cveFilter = {},
+      nvtFilter = {},
+      ovalFilter = {},
+      certBundFilter = {},
+      dfnCertFilter = {},
+      secInfoFilter = {},
+      autoCacheRebuild = {},
+    } = this.props;
 
-    const {capabilities} = this.props;
-
-    if (loading) {
-      return <Loading loading={true}/>;
+    if (isLoading) {
+      return <Loading/>;
     };
-
-    const general_rows = general_settings.map(this.createRow);
-    const severity_rows = severity_settings.map(this.createRow);
-    const misc_rows = misc_settings.map(this.createRow);
-
-    const defaults = [
-      ['Default Alert', 'alert', initial_data.defaultalert],
-      ['Default ESXi Credential', 'credential',
-        initial_data.defaultesxicredential],
-      ['Default OSP Scan Config', 'config', initial_data.defaultospscanconfig],
-      ['Default OSP Scanner', 'scanner', initial_data.defaultospscanner],
-      ['Default OpenVAS Scan Config', 'config',
-        initial_data.defaultopenvasscanconfig],
-      ['Default OpenVAS Scanner', 'scanner',
-        initial_data.defaultopenvasscanner],
-      ['Default Port List', 'port_list', initial_data.defaultportlist],
-      ['Default Report Format', 'report_format',
-        initial_data.defaultreportformat],
-      ['Default SMB Credential', 'credential',
-        initial_data.defaultsmbcredential],
-      ['Default SNMP Credential', 'credential',
-        initial_data.defaultsnmpcredential],
-      ['Default SSH Credential', 'credential',
-        initial_data.defaultsshcredential],
-      ['Default Schedule', 'schedule', initial_data.defaultschedule],
-      ['Default Target', 'target', initial_data.defaulttarget],
-    ];
-
-    const filters = [
-      ['Agents Filter', initial_data.agentsfilter],
-      ['Alerts Filter', initial_data.alertsfilter],
-      ['Assets Filter', initial_data.assetsfilter],
-      ['Configs Filter', initial_data.configsfilter],
-      ['Credentials Filter', initial_data.credentialsfilter],
-      ['Filters Filter', initial_data.filtersfilter],
-      ['Notes Filter', initial_data.notesfilter],
-      ['Overrides Filter', initial_data.overridesfilter],
-      ['Permissions Filter', initial_data.permissionsfilter],
-      ['Port Lists Filter', initial_data.portlistsfilter],
-      ['Reports Filter', initial_data.reportsfilter],
-      ['Report Formats Filter', initial_data.reportformatsfilter],
-      ['Results Filter', initial_data.resultsfilter],
-      ['Roles Filter', initial_data.rolesfilter],
-      ['Schedules Filter', initial_data.schedulesfilter],
-      ['Tags Filter', initial_data.tagsfilter],
-      ['Targets Filter', initial_data.targetsfilter],
-      ['Tasks Filter', initial_data.tasksfilter],
-      ['CPE Filter', initial_data.cpefilter],
-      ['CVE Filter', initial_data.cvefilter],
-      ['NVT Filter', initial_data.nvtfilter],
-      ['OVAL Filter', initial_data.ovalfilter],
-      ['CERT-Bund Filter', initial_data.certbundfilter],
-      ['DFN-CERT Filter', initial_data.dfncertfilter],
-      ['SecInfo Filter', initial_data.secinfofilter],
-    ];
-
     return (
       <Layout flex="column">
         <ToolBarIcons
-          onEditSettingsClick={this.openSettingsDialog}
+          onEditSettingsClick={this.openDialog}
         />
         <Section
           img="my_setting.svg"
           title={_('My Settings')}
         />
 
-        <Heading>{_('General Settings')}</Heading>
-        <Table>
-          <colgroup>
-            <Col width="220px"/>
-            <Col width="500px"/>
-          </colgroup>
-          <TableBody>
-            {general_rows}
-          </TableBody>
-        </Table>
+        <Section title={_('General Settings')} foldable>
+          <Table>
+            <colgroup width={FIRST_COL_WIDTH}/>
+            <TableBody>
+              <TableRow>
+                <TableData>
+                  {_('Timezone')}
+                </TableData>
+                <TableData>
+                  {timezone.value}
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('Password')}
+                </TableData>
+                <TableData>
+                  ********
+                </TableData>
+              </TableRow>
+              <TableRow title={userInterfaceLanguage.comment}>
+                <TableData>
+                  {_('User Interface Language')}
+                </TableData>
+                <TableData>
+                  {getLangNameByCode(userInterfaceLanguage.value)}
+                </TableData>
+              </TableRow>
+              <TableRow title={rowsPerPage.comment}>
+                <TableData>
+                  {_('Rows Per Page')}
+                </TableData>
+                <TableData>
+                  {rowsPerPage.value}
+                </TableData>
+              </TableRow>
+              <TableRow title={detailsExportFileName.comment}>
+                <TableData>
+                  {_('Details Export File Name')}
+                </TableData>
+                <TableData>
+                  {detailsExportFileName.value}
+                </TableData>
+              </TableRow>
+              <TableRow title={listExportFileName.comment}>
+                <TableData>
+                  {_('List Export File Name')}
+                </TableData>
+                <TableData>
+                  {listExportFileName.value}
+                </TableData>
+              </TableRow>
+              <TableRow title={reportExportFileName.comment}>
+                <TableData>
+                  {_('Report Export File Name')}
+                </TableData>
+                <TableData>
+                  {reportExportFileName.value}
+                </TableData>
+              </TableRow>
+              <TableRow title={maxRowsPerPage.comment}>
+                <TableData>
+                  {_('Max Rows Per Page (immutable)')}
+                </TableData>
+                <TableData>
+                  {maxRowsPerPage.value}
+                </TableData>
+              </TableRow>
+              <TableRow title={autoCacheRebuild.comment}>
+                <TableData>
+                  {_('Auto Cache Rebuild')}
+                </TableData>
+                <TableData>
+                  {isDefined(autoCacheRebuild.value) ?
+                    parseYesNo(autoCacheRebuild.value) === YES_VALUE ?
+                      _('Yes') : _('No') :
+                    ''
+                  }
+                </TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Section>
 
-        <Heading>{_('Severity Settings')}</Heading>
-        <Table>
-          <colgroup>
-            <Col width="220px"/>
-            <Col width="500px"/>
-          </colgroup>
-          <TableBody>
-            {severity_rows}
-          </TableBody>
-        </Table>
+        <Section title={_('Severity Settings')} foldable>
+          <Table>
+            <colgroup width={FIRST_COL_WIDTH}/>
+            <TableBody>
+              <TableRow title={severityClass.comment}>
+                <TableData>
+                  {_('Severity Class')}
+                </TableData>
+                <TableData>
+                  {this.getSeverityClassNameById(severityClass.value)}
+                </TableData>
+              </TableRow>
+              <TableRow title={dynamicSeverity.comment}>
+                <TableData>
+                  {_('Dynamic Severity')}
+                </TableData>
+                <TableData>
+                  {isDefined(dynamicSeverity.value) ?
+                    parseYesNo(dynamicSeverity.value) === YES_VALUE ?
+                      _('Yes') : _('No') :
+                    ''
+                  }
+                </TableData>
+              </TableRow>
+              <TableRow title={defaultSeverity.comment}>
+                <TableData>
+                  {_('Default Severity')}
+                </TableData>
+                <TableData>
+                  {defaultSeverity.value}
+                </TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </Section>
 
-        <Heading>{_('Defaults Settings')}</Heading>
-        <Table>
-          <colgroup>
-            <Col width="220px"/>
-            <Col width="500px"/>
-          </colgroup>
-          <TableBody>
-            {defaults.map(item => {
-              const [name, perm, id] = item;
-
-              if (capabilities.mayAccess(perm)) {
-                if (isDefined(id)) {
-                  return (
-                    <TableRow key={name}>
-                      <TableData>
-                        {name}
-                      </TableData>
-                      <TableData>
-                        <DetailsLink
-                          id={id}
-                          type={perm}
-                        >
-                          {defaults_settings[name]}
-                        </DetailsLink>
-                      </TableData>
-                    </TableRow>
-                  );
-                }
+        <Section title={_('Defaults Settings')} foldable>
+          <Table>
+            <colgroup width={FIRST_COL_WIDTH}/>
+            <TableBody>
+              {capabilities.mayAccess('alert') &&
+                <SettingTableRow
+                  setting={defaultAlert}
+                  title={_('Default Alert')}
+                  type="alert"
+                />
               }
-              return (
-                <TableRow key={name}>
-                  <TableData>
-                    {name}
-                  </TableData>
-                  <TableData/>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+              {capabilities.mayAccess('credential') &&
+                <SettingTableRow
+                  setting={defaultEsxiCredential}
+                  title={_('Default ESXi Credential')}
+                  type="credential"
+                />
+              }
+              {capabilities.mayAccess('scanconfig') &&
+                <SettingTableRow
+                  setting={defaultOspScanConfig}
+                  title={_('Default OSP Scan Config')}
+                  type="scanconfig"
+                />
+              }
+              {capabilities.mayAccess('scanner') &&
+                <SettingTableRow
+                  setting={defaultOspScanner}
+                  title={_('Default OSP Scanner')}
+                  type="scanner"
+                />
+              }
+              {capabilities.mayAccess('scanconfig') &&
+                <SettingTableRow
+                  setting={defaultOpenvasScanConfig}
+                  title={_('Default OpenVAS Scan Config')}
+                  type="scanconfig"
+                />
+              }
+              {capabilities.mayAccess('scanner') &&
+                <SettingTableRow
+                  setting={defaultOpenvasScanner}
+                  title={_('Default OpenVAS Scanner')}
+                  type="scanner"
+                />
+              }
+              {capabilities.mayAccess('portlist') &&
+                <SettingTableRow
+                  setting={defaultPortList}
+                  title={_('Default Port List')}
+                  type="portlist"
+                />
+              }
+              {capabilities.mayAccess('reportformat') &&
+                <SettingTableRow
+                  setting={defaultReportFormat}
+                  title={_('Default Report Format')}
+                  type="reportformat"
+                />
+              }
+              {capabilities.mayAccess('credential') &&
+                <SettingTableRow
+                  setting={defaultSmbCredential}
+                  title={_('Default SMB Credential')}
+                  type="credential"
+                />
+              }
+              {capabilities.mayAccess('credential') &&
+                <SettingTableRow
+                  setting={defaultSnmpCredential}
+                  title={_('Default SNMP Credential')}
+                  type="credential"
+                />
+              }
+              {capabilities.mayAccess('credential') &&
+                <SettingTableRow
+                  setting={defaultSshCredential}
+                  title={_('Default SSH Credential')}
+                  type="credential"
+                />
+              }
+              {capabilities.mayAccess('schedule') &&
+                <SettingTableRow
+                  setting={defaultSchedule}
+                  title={_('Default Schedule')}
+                  type="schedule"
+                />
+              }
+              {capabilities.mayAccess('target') &&
+                <SettingTableRow
+                  setting={defaultTarget}
+                  title={_('Default Target')}
+                  type="target"
+                />
+              }
+            </TableBody>
+          </Table>
+        </Section>
 
         {capabilities.mayAccess('filter') &&
-          <div>
-            <Heading>{_('Filter Settings')}</Heading>
+          <Section title={_('Filter Settings')} foldable>
             <Table>
-              <colgroup>
-                <Col width="220px"/>
-                <Col width="500px"/>
-              </colgroup>
+              <colgroup width={FIRST_COL_WIDTH}/>
               <TableBody>
-                {filters.map(item => {
-                  const [name, id] = item;
-
-                  if (isDefined(id)) {
-                    return (
-                      <TableRow key={name}>
-                        <TableData>
-                          {name}
-                        </TableData>
-                        <TableData>
-                          <DetailsLink
-                            id={id}
-                            type="filter"
-                          >
-                            {filter_settings[name]}
-                          </DetailsLink>
-                        </TableData>
-                      </TableRow>
-                    );
-                  }
-                  return (
-                    <TableRow key={name}>
-                      <TableData>
-                        {name}
-                      </TableData>
-                      <TableData/>
-                    </TableRow>
-                  );
-                })}
+                <SettingTableRow
+                  setting={agentsFilter}
+                  title={_('Agents Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={alertsFilter}
+                  title={_('Alerts Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={assetsFilter}
+                  title={_('Assets Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={configsFilter}
+                  title={_('Configs Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={credentialsFilter}
+                  title={_('Credentials Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={filtersFilter}
+                  title={_('Filters Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={notesFilter}
+                  title={_('Notes Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={overridesFilter}
+                  title={_('Overrides Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={permissionsFilter}
+                  title={_('Permissions Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={portListsFilter}
+                  title={_('Port Lists Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={reportsFilter}
+                  title={_('Reports Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={reportFormatsFilter}
+                  title={_('Report Formats Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={resultsFilter}
+                  title={_('Results Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={rolesFilter}
+                  title={_('Roles Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={schedulesFilter}
+                  title={_('Schedules Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={tagsFilter}
+                  title={_('Tags Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={targetsFilter}
+                  title={_('Targets Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={tasksFilter}
+                  title={_('Tasks Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={cpeFilter}
+                  title={_('CPE Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={cveFilter}
+                  title={_('CVE Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={nvtFilter}
+                  title={_('NVT Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={ovalFilter}
+                  title={_('OVAL Definitions Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={certBundFilter}
+                  title={_('CERT-Bund Advisories Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={dfnCertFilter}
+                  title={_('DFN-CERT Advisories Filter')}
+                  type="filter"
+                />
+                <SettingTableRow
+                  setting={secInfoFilter}
+                  title={_('SecInfo Filter')}
+                  type="filter"
+                />
               </TableBody>
             </Table>
-          </div>
+          </Section>
         }
-
-        <Heading>{_('Miscellaneous Settings')}</Heading>
-        <Table>
-          <colgroup>
-            <Col width="220px"/>
-            <Col width="500px"/>
-          </colgroup>
-          <TableBody>
-            {misc_rows}
-          </TableBody>
-        </Table>
-
-        {dialogvisible &&
+        {dialogVisible && !isLoading &&
           <SettingsDialog
-            onClose={this.handleCloseDialog}
+            alerts={alerts}
+            filters={filters}
+            credentials={credentials}
+            scanConfigs={scanconfigs}
+            scanners={scanners}
+            portLists={portlists}
+            reportFormats={reportformats}
+            schedules={schedules}
+            targets={targets}
+            timezone={timezone.value}
+            userInterfaceLanguage={userInterfaceLanguage.value}
+            rowsPerPage={rowsPerPage.value}
+            maxRowsPerPage={maxRowsPerPage.value}
+            detailsExportFileName={detailsExportFileName.value}
+            listExportFileName={listExportFileName.value}
+            reportExportFileName={reportExportFileName.value}
+            autoCacheRebuild={autoCacheRebuild.value}
+            severityClass={severityClass.value === '' ?
+              undefined : severityClass.value}
+            dynamicSeverity={dynamicSeverity.value}
+            defaultSeverity={defaultSeverity.value}
+            defaultAlert={defaultAlert.id}
+            defaultEsxiCredential={defaultEsxiCredential.id}
+            defaultOspScanConfig={defaultOspScanConfig.id}
+            defaultOspScanner={defaultOspScanner.id}
+            defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
+            defaultOpenvasScanner={defaultOpenvasScanner.id}
+            defaultPortList={defaultPortList.id}
+            defaultReportFormat={defaultReportFormat.id}
+            defaultSmbCredential={defaultSmbCredential.id}
+            defaultSnmpCredential={defaultSnmpCredential.id}
+            defaultSshCredential={defaultSshCredential.id}
+            defaultSchedule={defaultSchedule.id}
+            defaultTarget={defaultTarget.id}
+            agentsFilter={agentsFilter.id}
+            alertsFilter={alertsFilter.id}
+            assetsFilter={assetsFilter.id}
+            configsFilter={configsFilter.id}
+            credentialsFilter={credentialsFilter.id}
+            filtersFilter={filtersFilter.id}
+            notesFilter={notesFilter.id}
+            overridesFilter={overridesFilter.id}
+            permissionsFilter={permissionsFilter.id}
+            portListsFilter={portListsFilter.id}
+            reportsFilter={reportsFilter.id}
+            reportFormatsFilter={reportFormatsFilter.id}
+            resultsFilter={resultsFilter.id}
+            rolesFilter={rolesFilter.id}
+            schedulesFilter={schedulesFilter.id}
+            tagsFilter={tagsFilter.id}
+            targetsFilter={targetsFilter.id}
+            tasksFilter={tasksFilter.id}
+            cpeFilter={cpeFilter.id}
+            cveFilter={cveFilter.id}
+            nvtFilter={nvtFilter.id}
+            ovalFilter={ovalFilter.id}
+            certBundFilter={certBundFilter.id}
+            dfnCertFilter={dfnCertFilter.id}
+            secInfoFilter={secInfoFilter.id}
+            onClose={this.closeDialog}
             onSave={this.handleSaveSettings}
-            data={initial_data}
-            optionLists={option_lists}
+            onValueChange={this.handleValueChange}
           />
         }
       </Layout>
@@ -1083,13 +745,410 @@ class UserSettings extends React.Component {
 }
 
 UserSettings.propTypes = {
+  agentsFilter: PropTypes.object,
+  alerts: PropTypes.array,
+  alertsFilter: PropTypes.object,
+  assetsFilter: PropTypes.object,
+  autoCacheRebuild: PropTypes.object,
   capabilities: PropTypes.capabilities.isRequired,
+  certBundFilter: PropTypes.object,
+  configsFilter: PropTypes.object,
+  cpeFilter: PropTypes.object,
+  credentials: PropTypes.array,
+  credentialsFilter: PropTypes.object,
+  cveFilter: PropTypes.object,
+  defaultAlert: PropTypes.object,
+  defaultEsxiCredential: PropTypes.object,
+  defaultOpenvasScanConfig: PropTypes.object,
+  defaultOpenvasScanner: PropTypes.object,
+  defaultOspScanConfig: PropTypes.object,
+  defaultOspScanner: PropTypes.object,
+  defaultPortList: PropTypes.object,
+  defaultReportFormat: PropTypes.object,
+  defaultSchedule: PropTypes.object,
+  defaultSeverity: PropTypes.object,
+  defaultSmbCredential: PropTypes.object,
+  defaultSnmpCredential: PropTypes.object,
+  defaultSshCredential: PropTypes.object,
+  defaultTarget: PropTypes.object,
+  detailsExportFileName: PropTypes.object,
+  dfnCertFilter: PropTypes.object,
+  dynamicSeverity: PropTypes.object,
+  filters: PropTypes.array,
+  filtersFilter: PropTypes.object,
   gmp: PropTypes.gmp.isRequired,
+  isLoading: PropTypes.bool,
+  listExportFileName: PropTypes.object,
+  loadAlerts: PropTypes.func,
+  loadCredentials: PropTypes.func,
+  loadFilters: PropTypes.func,
+  loadPortLists: PropTypes.func,
+  loadReportFormats: PropTypes.func,
+  loadScanConfigs: PropTypes.func,
+  loadScanners: PropTypes.func,
+  loadSchedules: PropTypes.func,
+  loadSettings: PropTypes.func,
+  loadTargets: PropTypes.func,
+  loadTimezone: PropTypes.func,
+  maxRowsPerPage: PropTypes.object,
+  notesFilter: PropTypes.object,
+  nvtFilter: PropTypes.object,
+  ovalFilter: PropTypes.object,
+  overridesFilter: PropTypes.object,
+  permissionsFilter: PropTypes.object,
+  portListsFilter: PropTypes.object,
+  portlists: PropTypes.array,
+  reportExportFileName: PropTypes.object,
+  reportFormatsFilter: PropTypes.object,
+  reportformats: PropTypes.array,
+  reportsFilter: PropTypes.object,
+  resultsFilter: PropTypes.object,
+  rolesFilter: PropTypes.object,
+  rowsPerPage: PropTypes.object,
+  scanconfigs: PropTypes.array,
+  scanners: PropTypes.array,
+  schedules: PropTypes.array,
+  schedulesFilter: PropTypes.object,
+  secInfoFilter: PropTypes.object,
+  severityClass: PropTypes.object,
+  tagsFilter: PropTypes.object,
+  targets: PropTypes.array,
+  targetsFilter: PropTypes.object,
+  tasksFilter: PropTypes.object,
+  timezone: PropTypes.object,
+  userInterfaceLanguage: PropTypes.object,
 };
+
+const mapStateToProps = rootState => {
+  const state = getUserSettings(rootState);
+
+  let userInterfaceLanguage;
+  let rowsPerPage;
+  let detailsExportFileName;
+  let listExportFileName;
+  let reportExportFileName;
+  let maxRowsPerPage;
+  let autoCacheRebuild;
+
+  let severityClass;
+  let defaultSeverity;
+  let dynamicSeverity;
+
+  let defaultAlertId;
+  let defaultEsxiCredentialId;
+  let defaultOspScanConfigId;
+  let defaultOspScannerId;
+  let defaultOpenvasScanConfigId;
+  let defaultOpenvasScannerId;
+  let defaultPortListId;
+  let defaultReportFormatId;
+  let defaultSmbCredentialId;
+  let defaultSnmpCredentialId;
+  let defaultSshCredentialId;
+  let defaultScheduleId;
+  let defaultTargetId;
+
+  let agentsFilterId;
+  let alertsFilterId;
+  let assetsFilterId;
+  let configsFilterId;
+  let credentialsFilterId;
+  let filtersFilterId;
+  let notesFilterId;
+  let overridesFilterId;
+  let permissionsFilterId;
+  let portListsFilterId;
+  let reportsFilterId;
+  let reportFormatsFilterId;
+  let resultsFilterId;
+  let rolesFilterId;
+  let schedulesFilterId;
+  let tagsFilterId;
+  let targetsFilterId;
+  let tasksFilterId;
+  let cpeFilterId;
+  let cveFilterId;
+  let certBundFilterId;
+  let dfnCertFilterId;
+  let nvtFilterId;
+  let ovalFilterId;
+  let secInfoFilterId;
+
+  // get IDs of settings values
+  if (isDefined(state) && hasValue(getData(state))) {
+
+    userInterfaceLanguage =
+      isDefined(getData(state).userinterfacelanguage) ?
+      getData(state).userinterfacelanguage : undefined;
+    rowsPerPage =
+      isDefined(getData(state).rowsperpage) ?
+      getData(state).rowsperpage : undefined;
+    detailsExportFileName =
+      isDefined(getData(state).detailsexportfilename) ?
+      getData(state).detailsexportfilename : undefined;
+    listExportFileName =
+      isDefined(getData(state).listexportfilename) ?
+      getData(state).listexportfilename : undefined;
+    reportExportFileName =
+      isDefined(getData(state).reportexportfilename) ?
+      getData(state).reportexportfilename : undefined;
+    maxRowsPerPage =
+      isDefined(getData(state).maxrowsperpage) ?
+      getData(state).maxrowsperpage : undefined;
+    autoCacheRebuild =
+      isDefined(getData(state).autocacherebuild) ?
+      getData(state).autocacherebuild : undefined;
+
+    severityClass =
+      isDefined(getData(state).severityclass) ?
+      getData(state).severityclass : undefined;
+    defaultSeverity =
+      isDefined(getData(state).defaultseverity) ?
+      getData(state).defaultseverity : undefined;
+    dynamicSeverity =
+      isDefined(getData(state).dynamicseverity) ?
+      getData(state).dynamicseverity : undefined;
+
+    defaultAlertId = isDefined(getData(state).defaultalert) ?
+      getData(state).defaultalert.value : undefined;
+    defaultEsxiCredentialId = isDefined(getData(state).defaultesxicredential) ?
+      getData(state).defaultesxicredential.value : undefined;
+    defaultOspScanConfigId = isDefined(getData(state).defaultospscanconfig) ?
+      getData(state).defaultospscanconfig.value : undefined;
+    defaultOspScannerId = isDefined(getData(state).defaultospscanner) ?
+      getData(state).defaultospscanner.value : undefined;
+    defaultOpenvasScanConfigId =
+      isDefined(getData(state).defaultopenvasscanconfig) ?
+      getData(state).defaultopenvasscanconfig.value : undefined;
+    defaultOpenvasScannerId = isDefined(getData(state).defaultopenvasscanner) ?
+      getData(state).defaultopenvasscanner.value : undefined;
+    defaultPortListId = isDefined(getData(state).defaultportlist) ?
+      getData(state).defaultportlist.value : undefined;
+    defaultReportFormatId = isDefined(getData(state).defaultreportformat) ?
+      getData(state).defaultreportformat.value : undefined;
+    defaultSmbCredentialId = isDefined(getData(state).defaultsmbcredential) ?
+      getData(state).defaultsmbcredential.value : undefined;
+    defaultSnmpCredentialId = isDefined(getData(state).defaultsnmpcredential) ?
+      getData(state).defaultsnmpcredential.value : undefined;
+    defaultSshCredentialId = isDefined(getData(state).defaultsshcredential) ?
+      getData(state).defaultsshcredential.value : undefined;
+    defaultScheduleId = isDefined(getData(state).defaultschedule) ?
+      getData(state).defaultschedule.value : undefined;
+    defaultTargetId = isDefined(getData(state).defaulttarget) ?
+      getData(state).defaulttarget.value : undefined;
+
+    agentsFilterId = isDefined(getData(state).agentsfilter) ?
+      getData(state).agentsfilter.value : undefined;
+    alertsFilterId = isDefined(getData(state).alertsfilter) ?
+      getData(state).alertsfilter.value : undefined;
+    assetsFilterId = isDefined(getData(state).assetsfilter) ?
+      getData(state).assetsfilter.value : undefined;
+    configsFilterId = isDefined(getData(state).configsfilter) ?
+      getData(state).configsfilter.value : undefined;
+    credentialsFilterId = isDefined(getData(state).credentialsfilter) ?
+      getData(state).credentialsfilter.value : undefined;
+    filtersFilterId = isDefined(getData(state).filtersfilter) ?
+      getData(state).filtersfilter.value : undefined;
+    notesFilterId = isDefined(getData(state).notesfilter) ?
+      getData(state).notesfilter.value : undefined;
+    overridesFilterId = isDefined(getData(state).overridesfilter) ?
+      getData(state).overridesfilter.value : undefined;
+    permissionsFilterId = isDefined(getData(state).permissionsfilter) ?
+      getData(state).permissionsfilter.value : undefined;
+    portListsFilterId = isDefined(getData(state).portlistsfilter) ?
+      getData(state).portlistsfilter.value : undefined;
+    reportsFilterId = isDefined(getData(state).reportsfilter) ?
+      getData(state).reportsfilter.value : undefined;
+    reportFormatsFilterId = isDefined(getData(state).reportformatsfilter) ?
+      getData(state).reportformatsfilter.value : undefined;
+    resultsFilterId = isDefined(getData(state).resultsfilter) ?
+      getData(state).resultsfilter.value : undefined;
+    rolesFilterId = isDefined(getData(state).rolesfilter) ?
+      getData(state).rolesfilter.value : undefined;
+    schedulesFilterId = isDefined(getData(state).schedulesfilter) ?
+      getData(state).schedulesfilter.value : undefined;
+    tagsFilterId = isDefined(getData(state).tagsfilter) ?
+      getData(state).tagsfilter.value : undefined;
+    targetsFilterId = isDefined(getData(state).targetsfilter) ?
+      getData(state).targetsfilter.value : undefined;
+    tasksFilterId = isDefined(getData(state).tasksfilter) ?
+      getData(state).tasksfilter.value : undefined;
+    cpeFilterId = isDefined(getData(state).cpefilter) ?
+      getData(state).cpefilter.value : undefined;
+    cveFilterId = isDefined(getData(state).cvefilter) ?
+      getData(state).cvefilter.value : undefined;
+    certBundFilterId = isDefined(getData(state).certbundfilter) ?
+      getData(state).certbundfilter.value : undefined;
+    dfnCertFilterId = isDefined(getData(state).dfncertfilter) ?
+      getData(state).dfncertfilter.value : undefined;
+    nvtFilterId = isDefined(getData(state).nvtfilter) ?
+      getData(state).nvtfilter.value : undefined;
+    ovalFilterId = isDefined(getData(state).ovalfilter) ?
+      getData(state).ovalfilter.value : undefined;
+    secInfoFilterId = isDefined(getData(state).allsecinfofilter) ?
+      getData(state).allsecinfofilter.value : undefined;
+
+  }
+  // select entities with these IDs
+  const defaultAlert =
+    alertsSelector(rootState).getEntity(defaultAlertId);
+  const defaultEsxiCredential =
+    credentialsSelector(rootState).getEntity(defaultEsxiCredentialId);
+  const defaultOspScanConfig =
+    scanConfigsSelector(rootState).getEntity(defaultOspScanConfigId);
+  const defaultOspScanner =
+    scannersSelector(rootState).getEntity(defaultOspScannerId);
+  const defaultOpenvasScanConfig =
+    scanConfigsSelector(rootState).getEntity(defaultOpenvasScanConfigId);
+  const defaultOpenvasScanner =
+    scannersSelector(rootState).getEntity(defaultOpenvasScannerId);
+  const defaultPortList =
+    portListsSelector(rootState).getEntity(defaultPortListId);
+  const defaultReportFormat =
+    reportFormatsSelector(rootState).getEntity(defaultReportFormatId);
+  const defaultSmbCredential =
+    credentialsSelector(rootState).getEntity(defaultSmbCredentialId);
+  const defaultSnmpCredential =
+    credentialsSelector(rootState).getEntity(defaultSnmpCredentialId);
+  const defaultSshCredential =
+    credentialsSelector(rootState).getEntity(defaultSshCredentialId);
+  const defaultSchedule =
+    schedulesSelector(rootState).getEntity(defaultScheduleId);
+  const defaultTarget =
+    targetsSelector(rootState).getEntity(defaultTargetId);
+  const agentsFilter =
+    filtersSelector(rootState).getEntity(agentsFilterId);
+  const alertsFilter =
+    filtersSelector(rootState).getEntity(alertsFilterId);
+  const assetsFilter =
+    filtersSelector(rootState).getEntity(assetsFilterId);
+  const configsFilter =
+    filtersSelector(rootState).getEntity(configsFilterId);
+  const credentialsFilter =
+    filtersSelector(rootState).getEntity(credentialsFilterId);
+  const filtersFilter =
+    filtersSelector(rootState).getEntity(filtersFilterId);
+  const notesFilter =
+    filtersSelector(rootState).getEntity(notesFilterId);
+  const overridesFilter =
+    filtersSelector(rootState).getEntity(overridesFilterId);
+  const permissionsFilter =
+    filtersSelector(rootState).getEntity(permissionsFilterId);
+  const portListsFilter =
+    filtersSelector(rootState).getEntity(portListsFilterId);
+  const reportsFilter =
+    filtersSelector(rootState).getEntity(reportsFilterId);
+  const reportFormatsFilter =
+    filtersSelector(rootState).getEntity(reportFormatsFilterId);
+  const resultsFilter =
+    filtersSelector(rootState).getEntity(resultsFilterId);
+  const rolesFilter =
+    filtersSelector(rootState).getEntity(rolesFilterId);
+  const schedulesFilter =
+    filtersSelector(rootState).getEntity(schedulesFilterId);
+  const tagsFilter =
+    filtersSelector(rootState).getEntity(tagsFilterId);
+  const targetsFilter =
+    filtersSelector(rootState).getEntity(targetsFilterId);
+  const tasksFilter =
+    filtersSelector(rootState).getEntity(tasksFilterId);
+  const cpeFilter =
+    filtersSelector(rootState).getEntity(cpeFilterId);
+  const cveFilter =
+    filtersSelector(rootState).getEntity(cveFilterId);
+  const certBundFilter =
+    filtersSelector(rootState).getEntity(certBundFilterId);
+  const dfnCertFilter =
+    filtersSelector(rootState).getEntity(dfnCertFilterId);
+  const nvtFilter =
+    filtersSelector(rootState).getEntity(nvtFilterId);
+  const ovalFilter =
+    filtersSelector(rootState).getEntity(ovalFilterId);
+  const secInfoFilter =
+    filtersSelector(rootState).getEntity(secInfoFilterId);
+
+  return {
+    alerts: alertsSelector(rootState).getEntities(),
+    credentials: credentialsSelector(rootState).getEntities(),
+    filters: filtersSelector(rootState).getEntities(),
+    portlists: portListsSelector(rootState).getEntities(),
+    reportformats: reportFormatsSelector(rootState).getEntities(),
+    scanconfigs: scanConfigsSelector(rootState).getEntities(),
+    scanners: scannersSelector(rootState).getEntities(),
+    schedules: schedulesSelector(rootState).getEntities(),
+    targets: targetsSelector(rootState).getEntities(),
+    timezone: getTimezone(rootState),
+    userInterfaceLanguage,
+    rowsPerPage,
+    detailsExportFileName,
+    listExportFileName,
+    reportExportFileName,
+    maxRowsPerPage,
+    severityClass,
+    defaultSeverity,
+    dynamicSeverity,
+    isLoading: getIsLoading(state),
+    defaultAlert,
+    defaultEsxiCredential,
+    defaultOspScanConfig,
+    defaultOspScanner,
+    defaultOpenvasScanConfig,
+    defaultOpenvasScanner,
+    defaultPortList,
+    defaultReportFormat,
+    defaultSmbCredential,
+    defaultSnmpCredential,
+    defaultSshCredential,
+    defaultSchedule,
+    defaultTarget,
+    agentsFilter,
+    alertsFilter,
+    assetsFilter,
+    configsFilter,
+    credentialsFilter,
+    filtersFilter,
+    notesFilter,
+    overridesFilter,
+    permissionsFilter,
+    portListsFilter,
+    reportsFilter,
+    reportFormatsFilter,
+    resultsFilter,
+    rolesFilter,
+    schedulesFilter,
+    tagsFilter,
+    targetsFilter,
+    tasksFilter,
+    cpeFilter,
+    cveFilter,
+    certBundFilter,
+    dfnCertFilter,
+    nvtFilter,
+    ovalFilter,
+    secInfoFilter,
+    autoCacheRebuild,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadAlerts: () => dispatch(loadAlerts({gmp})),
+  loadCredentials: () => dispatch(loadCredentials({gmp})),
+  loadFilters: () => dispatch(loadFilters({gmp})),
+  loadPortLists: () => dispatch(loadPortLists({gmp})),
+  loadReportFormats: () => dispatch(loadReportFormats({gmp})),
+  loadScanConfigs: () => dispatch(loadScanConfigs({gmp})),
+  loadScanners: () => dispatch(loadScanners({gmp})),
+  loadSchedules: () => dispatch(loadSchedules({gmp})),
+  loadSettings: () => dispatch(loadFunc({gmp})),
+  loadTargets: () => dispatch(loadTargets({gmp})),
+  loadTimezone: () => dispatch(loadTimezone({gmp})),
+  loadAlert: id => dispatch(loadAlert({gmp, id})),
+});
 
 export default compose(
   withGmp,
   withCapabilities,
+  connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
 
 // vim: set ts=2 sw=2 tw=80:
