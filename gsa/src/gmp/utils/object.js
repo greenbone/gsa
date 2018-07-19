@@ -33,7 +33,7 @@ export function exclude(object, func) {
     }, {});
 }
 
-export const exclude_object_props = (object, exclude_array) =>
+export const excludeObjectProps = (object, exclude_array) =>
   exclude(object, key => exclude_array.includes(key));
 
 // vim: set ts=2 sw=2 tw=80:

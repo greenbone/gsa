@@ -29,7 +29,7 @@ import logger from 'gmp/log';
 
 import {map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 import {
   getEntityType,
   typeName,
@@ -579,7 +579,7 @@ class EntitiesContainer extends React.Component {
       title = 'Add Tag to All Filtered';
     }
     const Component = this.props.component;
-    const other = exclude_object_props(this.props, exclude_props);
+    const other = excludeObjectProps(this.props, exclude_props);
 
     return (
       <Wrapper>

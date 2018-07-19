@@ -29,7 +29,7 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 import {forEach} from 'gmp/utils/array';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import FootNote from '../components/footnote/footnote.js';
 
@@ -161,7 +161,7 @@ class EntitiesTable extends React.Component {
       return null;
     }
 
-    const other = exclude_object_props(this.props, exclude_props);
+    const other = excludeObjectProps(this.props, exclude_props);
 
     const filterstring = is_defined(filter) ? filter.toFilterString() : '';
 

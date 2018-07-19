@@ -26,7 +26,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
 import compose from 'web/utils/compose';
@@ -165,7 +165,7 @@ class EntitiesPage extends React.Component {
       return null;
     }
 
-    const other = exclude_object_props(props, exclude_props);
+    const other = excludeObjectProps(props, exclude_props);
 
     return (
       <TableComponent
@@ -228,7 +228,7 @@ class EntitiesPage extends React.Component {
     if (React.isValidElement(toolBarIcons)) {
       return toolBarIcons;
     }
-    other = exclude_object_props(other, exclude_props);
+    other = excludeObjectProps(other, exclude_props);
     return React.createElement(toolBarIcons, other);
   }
 

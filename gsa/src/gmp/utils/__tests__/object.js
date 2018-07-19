@@ -22,7 +22,7 @@
  */
 import {
   exclude,
-  exclude_object_props,
+  excludeObjectProps,
 } from '../object';
 
 describe('exclude function test', () => {
@@ -45,7 +45,7 @@ describe('exclude_object_props function test', () => {
       bar: 2,
       abc: 3,
     };
-    const result = exclude_object_props(obj, ['foo', 'bar']);
+    const result = excludeObjectProps(obj, ['foo', 'bar']);
 
     expect(result.foo).toBeUndefined();
     expect(result.bar).toBeUndefined();

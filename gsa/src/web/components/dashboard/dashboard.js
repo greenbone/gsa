@@ -34,7 +34,7 @@ import Logger from 'gmp/log';
 
 import {is_defined, has_value} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import {
   loadSettings,
@@ -199,7 +199,7 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const other = exclude_object_props(props, ownPropNames);
+    const other = excludeObjectProps(props, ownPropNames);
     return (
       <Grid
         items={is_defined(items) ? items : []}

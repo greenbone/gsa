@@ -30,7 +30,7 @@ import equal from 'fast-deep-equal';
 import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../../../utils/proptypes';
 import Theme from '../../../utils/theme';
@@ -123,7 +123,7 @@ class DataDisplay extends React.Component {
   static getTransformedData(props) {
     const {data, dataTransform, ...other} = props;
 
-    const tprops = exclude_object_props(other, ownProps);
+    const tprops = excludeObjectProps(other, ownProps);
 
     return is_defined(dataTransform) ?
       dataTransform(data, tprops) : data;
@@ -278,7 +278,7 @@ class DataDisplay extends React.Component {
 
     isLoading = isLoading && !is_defined(originalData);
 
-    const otherProps = exclude_object_props(props, ownProps);
+    const otherProps = excludeObjectProps(props, ownProps);
     const showDataMenus = is_defined(dataRow) && is_defined(dataTitles);
 
     showFilterString = showFilterString && is_defined(filter);
