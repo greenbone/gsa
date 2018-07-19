@@ -26,7 +26,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, map, shorten} from 'gmp/utils';
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes';
 

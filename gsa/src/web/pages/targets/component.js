@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {first, is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {first} from 'gmp/utils/array';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';

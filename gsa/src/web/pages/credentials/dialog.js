@@ -26,9 +26,13 @@ import React from 'react';
 
 import 'core-js/fn/array/includes';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-import {is_defined, map} from 'gmp/utils';
+
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -39,7 +43,7 @@ import {
   SNMP_PRIVACY_ALOGRITHM_NONE,
   SNMP_PRIVACY_ALGORITHM_AES,
   SNMP_PRIVACY_ALGORITHM_DES,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';

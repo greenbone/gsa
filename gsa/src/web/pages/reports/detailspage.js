@@ -24,14 +24,16 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
+import _ from 'gmp/locale';
 
-import CancelToken from 'gmp/cancel.js';
+import logger from 'gmp/log';
 
-import {first, is_defined} from 'gmp/utils';
+import CancelToken from 'gmp/cancel';
 
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
+import {first} from 'gmp/utils/array';
+import {is_defined} from 'gmp/utils/identity';
+
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from '../../utils/proptypes.js';
 import {create_pem_certificate} from '../../utils/cert.js';

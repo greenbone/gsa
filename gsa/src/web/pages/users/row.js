@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';

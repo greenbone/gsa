@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import Layout from '../../components/layout/layout.js';
 

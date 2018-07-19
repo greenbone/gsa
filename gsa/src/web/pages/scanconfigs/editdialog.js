@@ -24,9 +24,12 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';

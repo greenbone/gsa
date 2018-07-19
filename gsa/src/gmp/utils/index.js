@@ -24,7 +24,6 @@
 
 export * from './identity';
 export * from './id';
-export * from './array';
 export * from './event';
 export * from './string';
 export * from './object';

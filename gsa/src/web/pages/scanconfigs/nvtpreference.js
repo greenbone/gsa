@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_empty, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_empty} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
 
