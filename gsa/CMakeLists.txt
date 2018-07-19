@@ -742,7 +742,11 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/users/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/users/row.js
      ${GSA_SRC_DIR}/src/web/pages/users/table.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/defaultpart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/dialog.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/filterpart.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/generalpart.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/severitypart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
