@@ -122,7 +122,7 @@ export const na = value => {
   return isEmpty(value) ? N_A : value;
 };
 
-export const render_yesno = value => {
+export const renderYesNo = value => {
   switch (value) {
     case true:
     case 1:

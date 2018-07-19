@@ -32,7 +32,7 @@ import {typeName} from 'gmp/utils/entitytype';
 import PropTypes from '../../utils/proptypes.js';
 import {
   renderComponent,
-  render_yesno,
+  renderYesNo,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -151,7 +151,7 @@ const Row = ({
         {entity.value}
       </TableData>
       <TableData>
-        {render_yesno(entity.isActive())}
+        {renderYesNo(entity.isActive())}
       </TableData>
       <TableData>
         {typeName(resource_type)}

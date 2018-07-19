@@ -28,7 +28,7 @@ import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
-import {renderComponent, render_yesno} from '../../utils/render.js';
+import {renderComponent, renderYesNo} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -137,14 +137,14 @@ const Row = ({
     </TableData>
     <TableData flex="column">
       <span>
-        {render_yesno(entity.trust.value)}
+        {renderYesNo(entity.trust.value)}
       </span>
       {entity.trust.time &&
         <span>({shortDate(entity.trust.time)})</span>
       }
     </TableData>
     <TableData>
-      {render_yesno(entity.isActive())}
+      {renderYesNo(entity.isActive())}
     </TableData>
     {renderComponent(actions, {...props, entity})}
   </TableRow>

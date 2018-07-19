@@ -29,7 +29,7 @@ import {shortDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -85,7 +85,7 @@ const ReportFormatDetails = ({
             <TableData>
               <Divider>
                 <span>
-                  {render_yesno(trust.value)}
+                  {renderYesNo(trust.value)}
                 </span>
                 {isDefined(trust.time) &&
                   <span>({shortDate(trust.time)})</span>
@@ -99,7 +99,7 @@ const ReportFormatDetails = ({
               {_('Active')}
             </TableData>
             <TableData>
-              {render_yesno(entity.isActive())}
+              {renderYesNo(entity.isActive())}
             </TableData>
           </TableRow>
 
@@ -108,7 +108,7 @@ const ReportFormatDetails = ({
               {_('Predefined')}
             </TableData>
             <TableData>
-              {render_yesno(entity.isPredefined())}
+              {renderYesNo(entity.isPredefined())}
             </TableData>
           </TableRow>
 

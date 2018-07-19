@@ -43,7 +43,7 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
-import {render_yesno} from 'web/utils/render';
+import {renderYesNo} from 'web/utils/render';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -248,7 +248,7 @@ class TaskDetails extends React.Component {
                   {_('Add to Assets')}
                 </TableData>
                 <TableData>
-                  {render_yesno(in_assets)}
+                  {renderYesNo(in_assets)}
                 </TableData>
               </TableRow>
 
@@ -258,7 +258,7 @@ class TaskDetails extends React.Component {
                     {_('Apply to Overrides')}
                   </TableData>
                   <TableData>
-                    {render_yesno(apply_overrides)}
+                    {renderYesNo(apply_overrides)}
                   </TableData>
                 </TableRow>
               }

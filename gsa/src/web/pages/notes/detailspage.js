@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
@@ -163,7 +163,7 @@ const Details = ({
               {_('Active')}
             </TableData>
             <TableData>
-              {render_yesno(entity.isActive())}
+              {renderYesNo(entity.isActive())}
               {entity.isActive() && isDefined(entity.endTime) &&
                 ' ' + _('until {{- enddate}}',
                   {enddate: longDate(entity.endTime)})
