@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -56,7 +56,6 @@ import TaskStatus from './status.js';
 import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
-import {isString} from 'gmp/utils/index.js';
 
 const render_report = (report, links) => {
   if (!isDefined(report)) {

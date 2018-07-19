@@ -21,16 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/index.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import {YES_VALUE} from 'gmp/parser.js';
+import {YES_VALUE} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP} from 'gmp/models/task.js';
+import {AUTO_DELETE_KEEP} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 
