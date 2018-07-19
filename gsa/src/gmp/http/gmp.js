@@ -21,14 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import Http from './http.js';
-import {build_server_url} from './utils.js';
+import {buildServerUrl} from './utils.js';
 
 import X2JsTransform from './transform/x2js.js';
 
 class GmpHttp extends Http {
 
   constructor(server, protocol, options) {
-    const url = build_server_url(server, 'gmp', protocol);
+    const url = buildServerUrl(server, 'gmp', protocol);
     super(url, {...options, transform: X2JsTransform});
   }
 

@@ -33,7 +33,7 @@ import Response from './response.js';
 
 import DefaultTransform from './transform/default.js';
 
-import {build_url_params} from './utils.js';
+import {buildUrlParams} from './utils.js';
 
 const log = logger.getLogger('gmp.http');
 
@@ -109,7 +109,7 @@ class Http {
     method = method.toUpperCase();
 
     if (args) {
-      url += '?' + build_url_params({...this.params, ...args});
+      url += '?' + buildUrlParams({...this.params, ...args});
     }
 
     if (method === 'GET' && isDefined(cache) && cache.has(url) && !force) {

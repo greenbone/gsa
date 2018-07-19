@@ -26,7 +26,7 @@ import 'core-js/fn/string/starts-with';
 
 import {isDefined} from '../utils/identity';
 
-export function build_url_params(params) {
+export function buildUrlParams(params) {
   let argcount = 0;
   let uri = '';
 
@@ -42,7 +42,7 @@ export function build_url_params(params) {
   return uri;
 }
 
-export function build_server_url(server, path = '', protocol) {
+export function buildServerUrl(server, path = '', protocol) {
   if (isDefined(protocol)) {
     if (!protocol.endsWith(':')) {
       protocol += ':';
