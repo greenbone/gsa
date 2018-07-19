@@ -31,7 +31,10 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_entities_counts, render_options} from '../../utils/render.js';
+import {
+  render_entities_counts,
+  render_select_items,
+} from '../../utils/render.js';
 
 import EntityInfo from '../../entity/info.js';
 
@@ -152,10 +155,9 @@ const ToolBarIcons = ({
         <Select
           name="report_format_id"
           value={report_format_id}
+          items={render_select_items(report_formats)}
           onChange={onReportFormatChange}
-        >
-          {render_options(report_formats)}
-        </Select>
+        />
         <Icon
           img="download.svg"
           title={_('Download filtered Report')}

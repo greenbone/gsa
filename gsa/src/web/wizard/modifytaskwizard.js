@@ -45,7 +45,7 @@ import Img from '../components/img/img.js';
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
-import {render_options} from '../utils/render.js';
+import {render_select_items} from '../utils/render.js';
 
 import {Wizardess, WizardContent} from './taskwizard';
 
@@ -63,8 +63,6 @@ const ModifyTaskWizard = ({
     onClose,
     onSave,
   }, {capabilities}) => {
-  const task_opts = render_options(tasks);
-
   const data = {
     alert_email,
     start_date,
@@ -128,9 +126,9 @@ const ModifyTaskWizard = ({
                 <Select
                   name="task_id"
                   value={state.task_id}
-                  onChange={onValueChange}>
-                  {task_opts}
-                </Select>
+                  items={render_select_items(tasks)}
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup

@@ -39,7 +39,7 @@ export const N_A = _('N/A');
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
-export function render_options(list, default_opt_value,
+export function renderOptions(list, default_opt_value,
   default_opt = UNSET_LABEL) {
   const options = map(list, entry => {
     return (

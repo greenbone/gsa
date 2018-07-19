@@ -26,29 +26,27 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {render_select_items} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
 
 const StartTaskMethodPart = ({
-    prefix,
-    tasks,
-    startTaskTask,
-    onChange,
-  }) => {
-  return (
-    <FormGroup title={_('Start Task')}>
-      <Select
-        name={prefix + 'start_task_task'}
-        value={startTaskTask}
-        onChange={onChange}>
-        {render_options(tasks)}
-      </Select>
-    </FormGroup>
-  );
-};
+  prefix,
+  tasks,
+  startTaskTask,
+  onChange,
+}) => (
+  <FormGroup title={_('Start Task')}>
+    <Select
+      name={prefix + 'start_task_task'}
+      value={startTaskTask}
+      items={render_select_items(tasks)}
+      onChange={onChange}
+    />
+  </FormGroup>
+);
 
 StartTaskMethodPart.propTypes = {
   prefix: PropTypes.string,

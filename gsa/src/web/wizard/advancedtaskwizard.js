@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../utils/proptypes.js';
-import {render_options} from '../utils/render.js';
+import {render_select_items} from '../utils/render.js';
 
 import SaveDialog from '../components/dialog/savedialog.js';
 
@@ -86,12 +86,12 @@ const AdvancedTaskWizard = ({
     onSave,
   }, {capabilities}) => {
 
-  const config_opts = render_options(scan_configs);
-  const ssh_credential_opts = render_options(
+  const configItems = render_select_items(scan_configs);
+  const sshCredentialItems = render_select_items(
     credentials.filter(ssh_credential_filter), '');
-  const smb_credential_opts = render_options(
+  const smbCredentialItems = render_select_items(
     credentials.filter(smb_credential_filter), '');
-  const esxi_credential_opts = render_options(
+  const esxiCredentialItems = render_select_items(
     credentials.filter(esxi_credential_filter), '');
 
   const data = {
@@ -200,9 +200,9 @@ const AdvancedTaskWizard = ({
                 <Select
                   name="config_id"
                   value={state.config_id}
-                  onChange={onValueChange}>
-                  {config_opts}
-                </Select>
+                  items={configItems}
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Target Host(s)')} titleSize="3">
@@ -285,12 +285,12 @@ const AdvancedTaskWizard = ({
                   <Select
                     value={state.ssh_credential}
                     name="ssh_credential"
-                    onChange={onValueChange}>
-                    {ssh_credential_opts}
-                  </Select>
-                  <Text>
+                    items={sshCredentialItems}
+                    onChange={onValueChange}
+                  />
+                  <span>
                     {_(' on port ')}
-                  </Text>
+                  </span>
                   <Spinner
                     min="0"
                     max="65535"
@@ -304,18 +304,18 @@ const AdvancedTaskWizard = ({
                 <Select
                   value={state.smb_credential}
                   name="smb_credential"
-                  onChange={onValueChange}>
-                  {smb_credential_opts}
-                </Select>
+                  items={smbCredentialItems}
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('ESXi Credential')} titleSize="3">
                 <Select
                   value={state.esxi_credential}
                   name="esxi_credential"
-                  onChange={onValueChange}>
-                  {esxi_credential_opts}
-                </Select>
+                  items={esxiCredentialItems}
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               {capabilities.mayCreate('alert') &&
