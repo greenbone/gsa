@@ -26,7 +26,7 @@ import 'core-js/fn/string/starts-with';
 
 import {isDefined} from '../utils/identity';
 
-export function buildUrlParams(params) {
+export const buildUrlParams = params => {
   let argcount = 0;
   let uri = '';
 
@@ -40,9 +40,9 @@ export function buildUrlParams(params) {
     }
   }
   return uri;
-}
+};
 
-export function buildServerUrl(server, path = '', protocol) {
+export const buildServerUrl = (server, path = '', protocol) => {
   if (isDefined(protocol)) {
     if (!protocol.endsWith(':')) {
       protocol += ':';
@@ -52,6 +52,6 @@ export function buildServerUrl(server, path = '', protocol) {
     protocol = window.location.protocol;
   }
   return protocol + '//' + server + '/' + path;
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:
