@@ -25,11 +25,9 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {
-  is_array,
-  is_defined,
-  shorten,
-} from 'gmp/utils';
+
+import {is_defined, is_array} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import {
   ACTIVE_NO_VALUE,

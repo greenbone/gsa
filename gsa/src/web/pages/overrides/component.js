@@ -27,10 +27,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined, shorten} from 'gmp/utils';
-import {hasId} from 'gmp/utils/id.js';
+import {is_defined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   ANY,

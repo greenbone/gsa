@@ -24,6 +24,5 @@
 
 export * from './identity';
 export * from './event';
-export * from './string';
 
 // vim: set ts=2 sw=2 tw=80:
