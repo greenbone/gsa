@@ -32,7 +32,7 @@ import {map} from 'gmp/utils/array';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -559,7 +559,7 @@ const EditDialog = ({
               <FormGroup title={_('Scanner')}>
                 <Select
                   name="scanner_id"
-                  items={render_select_items(scanners)}
+                  items={renderSelectItems(scanners)}
                   value={state.scanner_id}
                   onChange={onValueChange}
                 />

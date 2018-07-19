@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {render_select_items} from '../render.js';
+import {renderSelectItems} from '../render.js';
 
 describe('render_select_items test', () => {
   test('should convert entities list', () => {
@@ -35,7 +35,7 @@ describe('render_select_items test', () => {
       },
     ];
 
-    const items = render_select_items(entities);
+    const items = renderSelectItems(entities);
 
     expect(items.length).toBe(2);
     expect(items[0]).toEqual({label: 'A Task', value: '1'});
@@ -54,7 +54,7 @@ describe('render_select_items test', () => {
       },
     ];
 
-    const items = render_select_items(entities, '3');
+    const items = renderSelectItems(entities, '3');
 
     expect(items.length).toBe(3);
     expect(items[0]).toEqual({label: '--', value: '3'});
@@ -74,7 +74,7 @@ describe('render_select_items test', () => {
       },
     ];
 
-    const items = render_select_items(entities, '3', '?');
+    const items = renderSelectItems(entities, '3', '?');
 
     expect(items.length).toBe(3);
     expect(items[0]).toEqual({label: '?', value: '3'});

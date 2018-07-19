@@ -30,7 +30,7 @@ import logger from 'gmp/log';
 import {first} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withGmp from '../../utils/withGmp.js';
 
 import Select from '../../components/form/select.js';
@@ -124,7 +124,7 @@ class AlertActions extends React.Component {
             <Select
               name="alert_id"
               value={alert_id}
-              items={render_select_items(alerts)}
+              items={renderSelectItems(alerts)}
               onChange={this.handleAlertChange}
             />
             <Icon

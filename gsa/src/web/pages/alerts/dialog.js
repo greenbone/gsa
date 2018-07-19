@@ -52,7 +52,7 @@ import {
 } from 'gmp/models/alert';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -508,7 +508,7 @@ class AlertDialog extends React.Component {
                   <Select
                     value={values.filter_id}
                     name="filter_id"
-                    items={render_select_items(values.result_filters, 0)}
+                    items={renderSelectItems(values.result_filters, 0)}
                     onChange={onValueChange}
                   />
                 </FormGroup>

@@ -53,7 +53,7 @@ import Layout from '../../components/layout/layout';
 import PropTypes from '../../utils/proptypes';
 import {
   render_nvt_name,
-  render_select_items,
+  renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
 import {
@@ -351,7 +351,7 @@ const NoteDialog = ({
                   <Select
                     name="task_uuid"
                     value={state.task_uuid}
-                    items={render_select_items(tasks)}
+                    items={renderSelectItems(tasks)}
                     disabled={state.task_id !== '0'}
                     onChange={onValueChange}
                   />

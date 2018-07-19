@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -54,7 +54,7 @@ const EmailMethodPart = ({
     onChange,
   }, {capabilities}) => {
 
-  const reportFormatItems = render_select_items(
+  const reportFormatItems = renderSelectItems(
     reportFormats.filter(format =>
       (isTaskEvent && format.content_type.startsWith('text/')) || !isTaskEvent)
   );
@@ -141,7 +141,7 @@ const EmailMethodPart = ({
                     <Select
                       name={prefix + 'notice_attach_format'}
                       value={noticeAttachFormat}
-                      items={render_select_items(reportFormats)}
+                      items={renderSelectItems(reportFormats)}
                       onChange={onChange}
                     />
                   }

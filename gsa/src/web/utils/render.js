@@ -65,7 +65,7 @@ export function renderOptions(list, default_opt_value,
  *
  * @returns {Array} An array to be used as items for a Select component or undefined
  */
-export const render_select_items = (
+export const renderSelectItems = (
   list,
   default_item_value,
   default_item_label = UNSET_LABEL,

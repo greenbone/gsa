@@ -34,7 +34,7 @@ import {
 
 
 import PropTypes from 'web/utils/proptypes';
-import {render_select_items} from 'web/utils/render';
+import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from '../components/dialog/savedialog.js';
@@ -85,12 +85,12 @@ const AdvancedTaskWizard = ({
   onClose,
   onSave,
 }) => {
-  const configItems = render_select_items(scan_configs);
-  const sshCredentialItems = render_select_items(
+  const configItems = renderSelectItems(scan_configs);
+  const sshCredentialItems = renderSelectItems(
     credentials.filter(ssh_credential_filter), '');
-  const smbCredentialItems = render_select_items(
+  const smbCredentialItems = renderSelectItems(
     credentials.filter(smb_credential_filter), '');
-  const esxiCredentialItems = render_select_items(
+  const esxiCredentialItems = renderSelectItems(
     credentials.filter(esxi_credential_filter), '');
 
   const data = {

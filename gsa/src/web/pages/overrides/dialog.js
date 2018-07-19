@@ -52,7 +52,7 @@ import Layout from '../../components/layout/layout.js';
 import PropTypes from '../../utils/proptypes.js';
 import {
   render_nvt_name,
-  render_select_items,
+  renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
 import {
@@ -424,7 +424,7 @@ const OverrideDialog = ({
                   <Select
                     name="task_uuid"
                     disabled={state.task_id !== TASK_SELECTED}
-                    items={render_select_items(tasks)}
+                    items={renderSelectItems(tasks)}
                     value={state.task_uuid}
                     onChange={onValueChange}
                   />

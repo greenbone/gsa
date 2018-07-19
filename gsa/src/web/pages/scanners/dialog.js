@@ -34,7 +34,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -297,7 +297,7 @@ class ScannerDialog extends React.Component {
                 <Divider>
                   <Select
                     name="credential_id"
-                    items={render_select_items(scanner_credentials)}
+                    items={renderSelectItems(scanner_credentials)}
                     value={credential_id}
                     onChange={onCredentialChange}/>
                   <Layout flex box>

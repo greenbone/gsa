@@ -36,7 +36,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -76,7 +76,7 @@ const SmbMethodPart = ({
         <Divider>
           <Select
             name={prefix + 'smb_credential'}
-            items={render_select_items(credentials)}
+            items={renderSelectItems(credentials)}
             value={smbCredential}
             onChange={onCredentialChange}
           />
@@ -114,7 +114,7 @@ const SmbMethodPart = ({
       <FormGroup title={_('Report Format')}>
         <Select
           name={prefix + 'smb_report_format'}
-          items={render_select_items(reportFormats)}
+          items={renderSelectItems(reportFormats)}
           value={smbReportFormat}
           onChange={onChange}
         />

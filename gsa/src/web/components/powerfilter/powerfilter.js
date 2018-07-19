@@ -32,7 +32,7 @@ import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import Select from '../form/select.js';
 import TextField from '../form/textfield.js';
@@ -217,7 +217,7 @@ class PowerFilter extends React.Component {
     const namedfilterid = isDefined(filter) && isDefined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
-    const filter_items = render_select_items(filters, DEFAULT_FILTER_ID);
+    const filter_items = renderSelectItems(filters, DEFAULT_FILTER_ID);
 
     const can_create = capabilities.mayCreate('filter') &&
       filtername.trim().length > 0;

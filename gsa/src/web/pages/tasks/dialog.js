@@ -55,7 +55,7 @@ import {
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities';
-import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -136,7 +136,7 @@ class ScannerSelect extends React.Component {
           name="scanner_id"
           value={scannerId}
           disabled={!changeTask}
-          items={render_select_items(scanners)}
+          items={renderSelectItems(scanners)}
           onChange={this.handleScannerChange}
         />
       </FormGroup>
@@ -207,22 +207,22 @@ const TaskDialog = ({
   const scanner = get_scanner(scanners, scanner_id);
   const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
 
-  const tag_items = render_select_items(tags);
+  const tag_items = renderSelectItems(tags);
 
-  const target_items = render_select_items(targets);
+  const target_items = renderSelectItems(targets);
 
-  const schedule_items = render_select_items(schedules, UNSET_VALUE);
+  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
 
-  const osp_scan_config_items = render_select_items(
+  const osp_scan_config_items = renderSelectItems(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  const openvas_scan_config_items = render_select_items(
+  const openvas_scan_config_items = renderSelectItems(
     scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
       // Skip the "empty" config
       return config.id !== EMPTY_SCAN_CONFIG_ID;
     }));
 
-  const alert_items = render_select_items(alerts);
+  const alert_items = renderSelectItems(alerts);
 
   const change_task = task ? task.isChangeable() : true;
 

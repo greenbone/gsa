@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -127,7 +127,7 @@ const Dialog = ({
                     <Select
                       value={state.scanner_id}
                       name="scanner_id"
-                      items={render_select_items(scanners)}
+                      items={renderSelectItems(scanners)}
                       onChange={onValueChange}
                     />
                   </Divider>

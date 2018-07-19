@@ -23,7 +23,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {render_select_items} from 'web/utils/render.js';
+import {renderSelectItems} from 'web/utils/render.js';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -74,7 +74,7 @@ const TagsDialog = ({
               name="name"
               value={id}
               width="230"
-              items={render_select_items(tags)}
+              items={renderSelectItems(tags)}
               onChange={onTagChanged}
             />
             <NewIcon

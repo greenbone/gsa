@@ -29,7 +29,7 @@ import {NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
-import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -329,7 +329,7 @@ const TargetDialog = ({
                   <Select
                     name="port_list_id"
                     disabled={state.in_use}
-                    items={render_select_items(port_lists)}
+                    items={renderSelectItems(port_lists)}
                     value={state.port_list_id}
                     onChange={onPortListChange}
                   />
@@ -367,7 +367,7 @@ const TargetDialog = ({
                     box
                     name="ssh_credential_id"
                     disabled={state.in_use}
-                    items={render_select_items(ssh_credentials, UNSET_VALUE)}
+                    items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
                     value={state.ssh_credential_id}
                     onChange={onSshCredentialChange}
                   />
@@ -400,7 +400,7 @@ const TargetDialog = ({
                   <Select
                     name="smb_credential_id"
                     disabled={state.in_use}
-                    items={render_select_items(up_credentials, UNSET_VALUE)}
+                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
                     value={state.smb_credential_id}
                     onChange={onSmbCredentialChange}
                   />
@@ -423,7 +423,7 @@ const TargetDialog = ({
                   <Select
                     disabled={state.in_use}
                     name="esxi_credential_id"
-                    items={render_select_items(up_credentials, UNSET_VALUE)}
+                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
                     value={state.esxi_credential_id}
                     onChange={onEsxiCredentialChange}
                   />
@@ -446,7 +446,7 @@ const TargetDialog = ({
                   <Select
                     disabled={state.in_use}
                     name="snmp_credential_id"
-                    items={render_select_items(snmp_credentials, UNSET_VALUE)}
+                    items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
                     value={state.snmp_credential_id}
                     onChange={onSnmpCredentialChange}
                   />

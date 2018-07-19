@@ -42,7 +42,7 @@ import Datepicker from '../components/form/datepicker.js';
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
-import {render_select_items} from 'web/utils/render';
+import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import {WizardContent} from './taskwizard';
@@ -121,7 +121,7 @@ const ModifyTaskWizard = ({
               <Select
                 name="task_id"
                 value={state.task_id}
-                items={render_select_items(tasks)}
+                items={renderSelectItems(tasks)}
                 onChange={onValueChange}
               />
             </FormGroup>

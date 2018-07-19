@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import {YES_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -79,7 +79,7 @@ const ImportDialog = ({
               <Select
                 name="task_id"
                 value={values.task_id}
-                items={render_select_items(tasks)}
+                items={renderSelectItems(tasks)}
                 onChange={onTaskChange}
               />
               {newContainerTask &&

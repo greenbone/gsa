@@ -26,7 +26,7 @@ import _ from 'gmp/locale.js';
 
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential.js';
 
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import withPrefix from '../../utils/withPrefix.js';
@@ -73,7 +73,7 @@ const TippingPointMethodPart = ({
       <FormGroup title={_('Credential')}>
         <Divider>
           <Select
-            items={render_select_items(credentials)}
+            items={renderSelectItems(credentials)}
             name={prefix + 'tp_sms_credential'}
             value={tpSmsCredential}
             onChange={onCredentialChange}

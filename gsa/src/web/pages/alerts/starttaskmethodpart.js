@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -42,7 +42,7 @@ const StartTaskMethodPart = ({
     <Select
       name={prefix + 'start_task_task'}
       value={startTaskTask}
-      items={render_select_items(tasks)}
+      items={renderSelectItems(tasks)}
       onChange={onChange}
     />
   </FormGroup>

@@ -38,7 +38,7 @@ import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 import {YES_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withGmp from '../../utils/withGmp.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -279,7 +279,7 @@ class TagDialog extends React.Component {
                 <ScrollableContent>
                   <MultiSelect
                     name="resource_ids"
-                    items={render_select_items(this.state.resourceOptions)}
+                    items={renderSelectItems(this.state.resourceOptions)}
                     value={this.state.resourceIdsSelected}
                     disabled={!typeIsChosen || fixed ||
                       resourceTypesOptions.length === 0}

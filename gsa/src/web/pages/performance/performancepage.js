@@ -33,7 +33,7 @@ import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Select from '../../components/form/select.js';
@@ -328,7 +328,7 @@ class PerformancePage extends React.Component {
             <Select
               name="slave_id"
               value={slave_id}
-              items={render_select_items(scanners, 0)}
+              items={renderSelectItems(scanners, 0)}
               onChange={this.handleValueChange}
             />
           </FormGroup>
