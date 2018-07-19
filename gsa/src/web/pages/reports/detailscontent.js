@@ -31,10 +31,7 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {
-  render_entities_counts,
-  renderSelectItems,
-} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import EntityInfo from '../../entity/info.js';
 
@@ -102,7 +99,9 @@ const TabTitleCounts = glamorous.span({
 const TabTitle = ({title, counts}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
-    <TabTitleCounts>(<i>{render_entities_counts(counts)}</i>)</TabTitleCounts>
+    <TabTitleCounts>
+      (<i>{_('{{filtered}} of {{all}}', counts)}</i>)
+    </TabTitleCounts>
   </Layout>
 );
 

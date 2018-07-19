@@ -466,21 +466,6 @@ export function simplePermissionDescriptionWithSubject(name, subject) {
   }
 }
 
-export const render_entities_counts = counts => {
-  return _('{{filtered}} of {{all}}', counts);
-};
-
-export const render_section_title = (counts, title) => {
-  if (!isDefined(counts)) {
-    return title;
-  }
-
-  return _('{{title}} {{filtered}} of {{all}}', {
-    title,
-    ...counts,
-  });
-};
-
 export const setRef = (...refs) => ref => {
   for (const rf of refs) {
     if (isFunction(rf)) {

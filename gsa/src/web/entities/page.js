@@ -25,13 +25,14 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
+import _ from 'gmp/locale';
+
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
-import {render_section_title} from '../utils/render.js';
 
 import Toolbar from '../components/bar/toolbar.js';
 
@@ -61,6 +62,18 @@ const exclude_props = [
   'toolBarIcons',
 ];
 
+const renderSectionTitle = (counts, title) => {
+  if (!isDefined(counts)) {
+    return title;
+  }
+
+  return _('{{title}} {{filtered}} of {{all}}', {
+    title,
+    ...counts,
+  });
+};
+
+
 class EntitiesPage extends React.Component {
 
   constructor(...args) {
@@ -82,7 +95,7 @@ class EntitiesPage extends React.Component {
   getSectionTitle() {
     const {entitiesCounts, title} = this.props;
 
-    return render_section_title(entitiesCounts, title);
+    return renderSectionTitle(entitiesCounts, title);
   }
 
   handleFilterEditClick() {
