@@ -23,14 +23,13 @@
  */
 import 'core-js/fn/object/keys';
 
-export function exclude(object, func) {
-  return Object.keys(object)
+export const exclude = (object, func) =>
+  Object.keys(object)
     .filter(key => !func(key))
     .reduce((obj, key) => {
       obj[key] = object[key];
       return obj;
     }, {});
-}
 
 export const excludeObjectProps = (object, exclude_array) =>
   exclude(object, key => exclude_array.includes(key));
