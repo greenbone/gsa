@@ -65,8 +65,8 @@ class UserComponent extends React.Component {
 
         this.setState({
           dialogVisible: true,
-          access_hosts: user.hosts.addresses,
-          access_ifaces: user.ifaces.addresses,
+          access_hosts: user.hosts.addresses.join(', '),
+          access_ifaces: user.ifaces.addresses.join(', '),
           comment: user.comment,
           group_ids: group_ids,
           hosts_allow: user.hosts.allow,

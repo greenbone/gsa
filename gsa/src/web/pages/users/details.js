@@ -23,7 +23,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {isEmpty} from 'gmp/utils/string';
 
 import {
   AUTH_METHOD_LDAP,
@@ -56,16 +55,20 @@ export const convert_auth_method = auth_method => {
 
 export const convert_allow = ({addresses, allow}) => {
   if (allow === ACCESS_ALLOW_ALL) {
-    if (isEmpty(addresses)) {
+    if (addresses.length === 0) {
       return _('Allow all');
     }
-    return _('Allow all and deny from {{addresses}}', {addresses});
+    return _('Allow all and deny from {{addresses}}', {
+      addresses: addresses.join(', '),
+    });
   }
   if (allow === ACCESS_DENY_ALL) {
-    if (isEmpty(addresses)) {
+    if (addresses.length === 0) {
       return _('Deny all');
     }
-    return _('Deny all and allow from {{addresses}}', {addresses});
+    return _('Deny all and allow from {{addresses}}', {
+      addresses: addresses.join(', '),
+    });
   }
   return '';
 };
