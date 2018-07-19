@@ -20,20 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import logger from '../log.js';
+import logger from '../log';
 
-import _ from '../locale.js';
+import _ from '../locale';
+
+import Promise from '../promise';
 
 import {isDefined, hasValue, isArray} from '../utils/identity';
 
-import Promise from '../promise.js';
+import Rejection from './rejection';
+import Response from './response';
 
-import Rejection from './rejection.js';
-import Response from './response.js';
+import DefaultTransform from './transform/default';
 
-import DefaultTransform from './transform/default.js';
-
-import {buildUrlParams} from './utils.js';
+import {buildUrlParams} from './utils';
 
 const log = logger.getLogger('gmp.http');
 

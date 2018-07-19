@@ -22,11 +22,11 @@
 */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
-import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus.js';
+import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import Icon from '../../components/icon/icon.js';

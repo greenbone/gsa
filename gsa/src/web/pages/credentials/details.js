@@ -20,16 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALOGRITHM_NONE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import PropTypes from '../../utils/proptypes.js';
 

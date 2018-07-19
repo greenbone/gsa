@@ -25,7 +25,7 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';

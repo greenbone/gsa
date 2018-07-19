@@ -20,16 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import IconDivider from '../../components/layout/icondivider.js';
 

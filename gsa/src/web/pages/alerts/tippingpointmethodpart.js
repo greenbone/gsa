@@ -22,9 +22,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential.js';
+import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {renderSelectItems} from '../../utils/render.js';
 

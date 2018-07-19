@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import _ from '../locale';
 
-import _ from '../locale.js';
 import {isDefined} from '../utils/identity';
 
-import Info from './info.js';
+import Info from './info';
 
 export const secinfo_type = (type, unknown = _('N/A')) => {
   if (!isDefined(type)) {

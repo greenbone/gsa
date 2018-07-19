@@ -21,17 +21,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import {
   ALL_CREDENTIAL_TYPES,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';

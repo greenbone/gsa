@@ -110,7 +110,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/http/utils.js
      ${GSA_SRC_DIR}/src/gmp/index.js
      ${GSA_SRC_DIR}/src/gmp/list.js
-     ${GSA_SRC_DIR}/src/gmp/locale.js
+     ${GSA_SRC_DIR}/src/gmp/locale/index.js
      ${GSA_SRC_DIR}/src/gmp/log.js
      ${GSA_SRC_DIR}/src/gmp/model.js
      ${GSA_SRC_DIR}/src/gmp/models/actionresult.js

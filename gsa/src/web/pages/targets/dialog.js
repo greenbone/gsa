@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {NO_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {NO_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
