@@ -23,7 +23,6 @@
  */
 
 export * from './identity';
-export * from './id';
 export * from './event';
 export * from './string';
 export * from './object';
