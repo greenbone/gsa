@@ -51,7 +51,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  render_nvt_name,
+  renderNvtName,
   renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
@@ -172,14 +172,14 @@ const OverrideDialog = ({
           <Layout flex="column">
             {fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(oid, nvt_name)}</Text>
+                <Text>{renderNvtName(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
-                  title={render_nvt_name(oid, nvt_name)}
+                  title={renderNvtName(oid, nvt_name)}
                   checked={state.oid === oid}
                   value={oid}
                   onChange={onValueChange}

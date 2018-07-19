@@ -52,7 +52,7 @@ import Layout from '../../components/layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 import {
-  render_nvt_name,
+  renderNvtName,
   renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
@@ -135,13 +135,13 @@ const NoteDialog = ({
           <Layout flex="column">
             {state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(oid, nvt_name)}</Text>
+                <Text>{renderNvtName(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
-                  title={render_nvt_name(oid, nvt_name)}
+                  title={renderNvtName(oid, nvt_name)}
                   name="oid"
                   checked={state.oid === oid}
                   value={oid}

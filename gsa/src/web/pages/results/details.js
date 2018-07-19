@@ -36,7 +36,7 @@ import {TAG_NA} from 'gmp/models/nvt';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_nvt_name} from '../../utils/render.js';
+import {renderNvtName} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
 
@@ -168,7 +168,7 @@ const ResultDetails = ({
                           id={oid}
                           textOnly={!links}
                         >
-                          {render_nvt_name(oid, nvt.name)}
+                          {renderNvtName(oid, nvt.name)}
                           {' OID: ' + oid}
                         </DetailsLink>
                       )}

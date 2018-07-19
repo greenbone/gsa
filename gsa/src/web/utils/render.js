@@ -87,7 +87,7 @@ export const renderSelectItems = (
 
 export const severityFormat = format('0.1f');
 
-export function render_nvt_name(oid, name, length = 70) {
+export function renderNvtName(oid, name, length = 70) {
   if (!isDefined(name)) {
     return '';
   }
