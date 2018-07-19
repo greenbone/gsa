@@ -25,7 +25,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_children} from '../../utils/render.js';
+import {renderChildren} from '../../utils/render.js';
 
 class CacheFactoryProvider extends React.Component {
 
@@ -39,7 +39,7 @@ class CacheFactoryProvider extends React.Component {
 
   render() {
     const {children} = this.props;
-    return render_children(children);
+    return renderChildren(children);
   }
 }
 

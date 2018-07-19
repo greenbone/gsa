@@ -23,6 +23,7 @@
 import 'core-js/fn/string/starts-with';
 
 import {format} from 'd3-format';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -31,8 +32,6 @@ import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-
-import Wrapper from '../components/layout/wrapper.js';
 
 export const N_A = _('N/A');
 
@@ -110,10 +109,10 @@ export function renderComponent(Component, props = {}) {
   return null;
 }
 
-export function render_children(children) {
+export function renderChildren(children) {
   if (React.Children.count(children) > 1) {
     return (
-      <Wrapper>{children}</Wrapper>
+      <React.Fragment>{children}</React.Fragment>
     );
   }
   return children;
