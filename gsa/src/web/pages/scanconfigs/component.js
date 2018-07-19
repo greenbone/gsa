@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import {forEach} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
-import {is_empty, shorten} from 'gmp/utils/string';
+import {isEmpty, shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
@@ -307,7 +307,7 @@ class ScanConfigComponent extends React.Component {
         nvt: data.nvt,
         nvt_name: data.nvt.name,
         preference_values,
-        timeout: is_empty(data.nvt.timeout) ? '0' : '1',
+        timeout: isEmpty(data.nvt.timeout) ? '0' : '1',
       };
 
       return state;

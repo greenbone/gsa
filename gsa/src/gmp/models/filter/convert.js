@@ -22,7 +22,7 @@
  */
 
 import {is_defined} from '../../utils/identity';
-import {is_empty} from '../../utils/string';
+import {isEmpty} from '../../utils/string';
 
 import {parseInt} from '../../parser.js';
 
@@ -83,7 +83,7 @@ const convert = (keyword, value, relation) => {
     return converter(keyword, value, relation);
   }
 
-  if (is_empty(keyword)) {
+  if (isEmpty(keyword)) {
     return {value, relation};
   }
 

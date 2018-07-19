@@ -22,7 +22,7 @@
  */
 import {is_defined, is_object} from '../utils/identity';
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import {parseDate, parseYesNo, YES_VALUE} from '../parser';
 
@@ -72,7 +72,7 @@ class ReportFormat extends Model {
     if (is_defined(ret.trust)) {
       ret.trust = {
         value: ret.trust.__text,
-        time: is_empty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
+        time: isEmpty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
       };
     }
     else {

@@ -31,7 +31,7 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
@@ -99,7 +99,7 @@ export class NvtsFamilyDisplay extends React.Component {
 
     let familyFilter;
 
-    if (!is_empty(filterValue)) {
+    if (!isEmpty(filterValue)) {
       const familyTerm = FilterTerm.fromString(`family="${filterValue}"`);
 
       if (is_defined(filter) && filter.hasTerm(familyTerm)) {

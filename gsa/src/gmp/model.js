@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from './utils/identity';
-import {is_empty} from './utils/string';
+import {isEmpty} from './utils/string';
 import {map} from './utils/array';
 
 import {
@@ -103,11 +103,11 @@ class Model {
       }
     }
 
-    if (is_defined(elem.owner) && is_empty(elem.owner.name)) {
+    if (is_defined(elem.owner) && isEmpty(elem.owner.name)) {
       delete copy.owner;
     }
 
-    if (is_empty(elem.comment)) {
+    if (isEmpty(elem.comment)) {
       delete copy.comment;
     }
 

@@ -22,7 +22,7 @@
  */
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Model from '../model.js';
@@ -48,7 +48,7 @@ class User extends Model {
 
     delete ret.role;
 
-    if (is_empty(elem.groups)) {
+    if (isEmpty(elem.groups)) {
       ret.groups = [];
     }
     else {

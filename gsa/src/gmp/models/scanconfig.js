@@ -26,7 +26,7 @@ import {
   forEach,
   map,
 } from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import {parseInt} from '../parser.js';
 
@@ -40,7 +40,7 @@ export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
 export const parse_count = count => {
-  return !is_empty(count) && count !== '-1' ? parseInt(count) : undefined;
+  return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
 class ScanConfig extends Model {
@@ -113,7 +113,7 @@ class ScanConfig extends Model {
     if (is_defined(elem.preferences)) {
       forEach(elem.preferences.preference, preference => {
         const pref = {...preference};
-        if (is_empty(pref.nvt.name)) {
+        if (isEmpty(pref.nvt.name)) {
           delete pref.nvt;
 
           scanner_preferences.push(pref);

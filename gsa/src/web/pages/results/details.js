@@ -26,9 +26,12 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_empty, is_defined} from 'gmp/utils';
-import {TAG_NA} from 'gmp/models/nvt.js';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+
+import {TAG_NA} from 'gmp/models/nvt';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -92,7 +95,7 @@ const ResultDetails = ({
 
       <DetailsBlock
         title={_('Vulnerability Detection Result')}>
-        {!is_empty(result.description) && result.description.length > 1 ?
+        {!isEmpty(result.description) && result.description.length > 1 ?
           (
             <Pre>
               {result.description}
@@ -174,7 +177,7 @@ const ResultDetails = ({
                   }
                 </TableData>
               </TableRow>
-              {!is_empty(result.scan_nvt_version) &&
+              {!isEmpty(result.scan_nvt_version) &&
                 <TableRow>
                   <TableData>
                     {_('Version used: ')}

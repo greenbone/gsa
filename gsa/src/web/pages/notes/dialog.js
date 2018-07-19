@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 
 import {parseFloat} from 'gmp/parser';
 
@@ -282,7 +282,7 @@ const NoteDialog = ({
               <Radio
                 name="severity"
                 title={_('Any')}
-                checked={is_empty(state.severity)}
+                checked={isEmpty(state.severity)}
                 value=""
                 onChange={onValueChange}
               />

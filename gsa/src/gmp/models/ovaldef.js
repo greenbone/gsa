@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import {map} from '../utils/array';
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 
@@ -44,7 +44,7 @@ class Criteria {
 
     this.criterions = map(criterions, criterion => ({
       applicability_check: criterion._applicability_check,
-      comment: is_empty(criterion._comment) ? undefined : criterion._comment,
+      comment: isEmpty(criterion._comment) ? undefined : criterion._comment,
       negate: is_defined(criterion._negate) ?
         criterion._negate.toLowerCase() === 'true' : false,
       test_ref: criterion._test_ref,
@@ -52,7 +52,7 @@ class Criteria {
 
     this.extend_definitions = map(extend_definitions, extend_definition => ({
       applicability_check: extend_definition._applicability_check,
-      comment: is_empty(extend_definition._comment) ? undefined :
+      comment: isEmpty(extend_definition._comment) ? undefined :
         extend_definition._comment,
       negate: is_defined(extend_definition._negate) ?
         extend_definition._negate.toLowerCase() === 'true' : false,

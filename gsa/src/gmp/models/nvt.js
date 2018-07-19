@@ -23,7 +23,7 @@
 import 'core-js/fn/string/starts-with';
 
 import {is_defined, is_string} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {parseFloat, parseSeverity} from '../parser.js';
@@ -135,26 +135,26 @@ class Nvt extends Info {
     delete ret.xref;
 
     if (is_defined(elem.qod)) {
-      if (is_empty(elem.qod.value)) {
+      if (isEmpty(elem.qod.value)) {
         delete ret.qod.value;
       }
       else {
         ret.qod.value = parseFloat(elem.qod.value);
       }
 
-      if (is_empty(elem.qod.type)) {
+      if (isEmpty(elem.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (is_empty(elem.default_timeout)) {
+    if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
     }
     else {
       ret.default_timeout = parseFloat(elem.default_timeout);
     }
 
-    if (is_empty(elem.timeout)) {
+    if (isEmpty(elem.timeout)) {
       delete ret.timeout;
     }
     else {

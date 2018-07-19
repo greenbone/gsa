@@ -30,7 +30,7 @@ import uuid from 'uuid/v4';
 import Logger from 'gmp/log';
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import date, {duration as createDuration} from './date';
 
@@ -294,11 +294,11 @@ class Event {
       setEventRecurrence(event, eventRecur);
     }
 
-    if (!is_empty(summary)) {
+    if (!isEmpty(summary)) {
       event.summary = summary;
     }
 
-    if (!is_empty(description)) {
+    if (!isEmpty(description)) {
       event.description = description;
     }
 

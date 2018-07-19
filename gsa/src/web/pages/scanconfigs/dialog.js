@@ -24,8 +24,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_empty} from 'gmp/utils';
+import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -50,7 +49,7 @@ const Dialog = ({
     comment = '',
     name = _('Unnamed'),
     scanner_id,
-    scanners,
+    scanners = [],
     title = _('New Scan Config'),
     visible = true,
     onClose,
@@ -117,7 +116,7 @@ const Dialog = ({
                   title={_('Full and fast')}
                   onChange={onValueChange}
                 />
-                {!is_empty(scanners) &&
+                {scanners.length > 0 &&
                   <Divider>
                     <Radio
                       name="base"

@@ -26,7 +26,7 @@ import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
 import {is_defined} from '../../utils/identity';
-import {is_empty} from '../../utils/string';
+import {isEmpty} from '../../utils/string';
 import {
   filter as filter_func,
   forEach,
@@ -561,7 +561,7 @@ export const parse_errors = (report, filter) => {
       host: {
         ip,
         name: hostname,
-        id: is_defined(asset) && !is_empty(asset._asset_id) ?
+        id: is_defined(asset) && !isEmpty(asset._asset_id) ?
           asset._asset_id : undefined,
       },
       nvt: {
@@ -666,7 +666,7 @@ export const parse_cves = (report, filter) => {
   const cves = {};
 
   const results_with_cve = filter_func(results.result,
-    result => result.nvt.cve !== 'NOCVE' && !is_empty(result.nvt.cve));
+    result => result.nvt.cve !== 'NOCVE' && !isEmpty(result.nvt.cve));
 
   results_with_cve.forEach(result => {
     const {host = {}, nvt = {}} = result;

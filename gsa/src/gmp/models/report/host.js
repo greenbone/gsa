@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_array, is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 
 import {setProperties, parseInt, parseDate} from 'gmp/parser';
 
@@ -53,7 +53,7 @@ class Host {
 
     const {asset = {}, port_count = {}, result_count} = elem;
 
-    if (is_empty(asset._asset_id)) {
+    if (isEmpty(asset._asset_id)) {
       delete copy.asset;
     }
     else {

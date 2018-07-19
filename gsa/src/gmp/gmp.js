@@ -22,7 +22,7 @@
  */
 
 import {is_defined} from './utils/identity';
-import {is_empty} from './utils/string';
+import {isEmpty} from './utils/string';
 
 import logger from './log.js';
 
@@ -166,7 +166,7 @@ class Gmp {
   }
 
   isLoggedIn() {
-    return !is_empty(this.token);
+    return !isEmpty(this.token);
   }
 
   subscribeToLogout(listener) {

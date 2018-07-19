@@ -24,12 +24,12 @@ import 'core-js/fn/object/entries';
 import 'core-js/fn/string/starts-with';
 
 import {is_defined, is_string} from './utils/identity';
-import {is_empty} from './utils/string';
+import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
 
 export function parseSeverity(value) {
-  return is_empty(value) ? undefined : parseFloat(value);
+  return isEmpty(value) ? undefined : parseFloat(value);
 }
 
 export function parseProgress(value) {
@@ -89,7 +89,7 @@ export function parseYesNo(value) {
 
 
 export function parseCsv(value) {
-  if (is_empty(value)) {
+  if (isEmpty(value)) {
     return [];
   }
   return value.split(',').map(val => val.trim());

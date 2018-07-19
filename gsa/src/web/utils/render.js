@@ -28,7 +28,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {is_defined, is_function, is_object} from 'gmp/utils/identity';
-import {is_empty, shorten, split} from 'gmp/utils/string';
+import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
@@ -120,7 +120,7 @@ export function render_children(children) {
 }
 
 export const na = value => {
-  return is_empty(value) ? N_A : value;
+  return isEmpty(value) ? N_A : value;
 };
 
 export const render_yesno = value => {

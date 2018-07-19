@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import {is_defined, is_empty} from 'gmp/utils';
+import {is_defined} from 'gmp/utils/identity';
 
 import glamorous, {Col, Div} from 'glamorous';
 
@@ -51,7 +51,7 @@ const Action = glamorous.a({
 });
 
 const filter_identifiers = (identifiers, latest = true) => {
-  if (!latest || is_empty(identifiers)) {
+  if (!latest || !is_defined(identifiers) || identifiers.length === 0) {
     return identifiers;
   }
   const last_id = identifiers[0].source.id;

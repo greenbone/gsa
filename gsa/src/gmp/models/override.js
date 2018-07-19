@@ -22,7 +22,7 @@
  */
 import {is_defined, is_model_element} from '../utils/identity';
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -92,7 +92,7 @@ class Override extends Model {
 
     ret.hosts = parseCsv(ret.hosts);
 
-    if (is_empty(elem.port)) {
+    if (isEmpty(elem.port)) {
       delete ret.port;
     }
 

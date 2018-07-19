@@ -23,7 +23,7 @@
 import _ from 'gmp/locale';
 
 import {is_defined, is_array} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
@@ -168,7 +168,7 @@ class Task extends Model {
       const model = Model;
 
       const data = elem[name];
-      if (is_defined(data) && !is_empty(data._id)) {
+      if (is_defined(data) && !isEmpty(data._id)) {
         elem[name] = new model(data, name);
       }
       else {
@@ -181,14 +181,14 @@ class Task extends Model {
       delete elem.alert;
     }
 
-    if (is_defined(elem.scanner) && !is_empty(elem.scanner._id)) {
+    if (is_defined(elem.scanner) && !isEmpty(elem.scanner._id)) {
       elem.scanner = new Scanner(elem.scanner);
     }
     else {
       delete elem.scanner;
     }
 
-    if (is_defined(elem.schedule) && !is_empty(elem.schedule._id)) {
+    if (is_defined(elem.schedule) && !isEmpty(elem.schedule._id)) {
       elem.schedule = new Schedule(elem.schedule);
     }
     else {

@@ -24,7 +24,7 @@ import {
   split,
   capitalizeFirstLetter,
   shorten,
-  is_empty,
+  isEmpty,
 } from '../string';
 
 describe('split function tests', () => {
@@ -72,15 +72,15 @@ describe('shorten function tests', () => {
 
 describe('is_empty function test', () => {
   test('should return true for undefined', () => {
-    expect(is_empty()).toBe(true);
+    expect(isEmpty()).toBe(true);
   });
 
   test('should return true for an empty string', () => {
-    expect(is_empty('')).toBe(true);
+    expect(isEmpty('')).toBe(true);
   });
 
   test('should return false for a string', () => {
-    expect(is_empty('abc')).toBe(false);
+    expect(isEmpty('abc')).toBe(false);
   });
 });
 // vim: set ts=2 sw=2 tw=80:

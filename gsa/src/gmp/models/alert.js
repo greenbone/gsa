@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 
 import {is_defined, is_object} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {forEach, map} from '../utils/array';
 
 import {parseYesNo, YES_VALUE} from '../parser.js';
@@ -63,7 +63,7 @@ export const DELTA_TYPE_PREVIOUS = 'Previous';
 export const DELTA_TYPE_REPORT = 'Report';
 
 const create_values = data => {
-  const value = is_empty(data.__text) ? undefined : data.__text;
+  const value = isEmpty(data.__text) ? undefined : data.__text;
   const values = {value};
   const {__text, name, ...other} = data;
 

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from '../../utils/identity';
-import {is_empty} from '../../utils/string';
+import {isEmpty} from '../../utils/string';
 
 import {parseSeverity, parseDate} from '../../parser';
 
@@ -103,7 +103,7 @@ class ReportReport extends Model {
     if (is_defined(scan) && is_defined(scan.task) &&
       is_defined(scan.task.slave)) {
 
-      if (is_empty(scan.task.slave._id)) {
+      if (isEmpty(scan.task.slave._id)) {
         delete copy.scan.task.slave;
       }
       else {

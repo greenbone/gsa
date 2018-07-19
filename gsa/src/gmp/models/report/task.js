@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from '../../utils/identity';
-import {is_empty} from '../../utils/string';
+import {isEmpty} from '../../utils/string';
 
 import {parseProgress} from '../../parser.js';
 
@@ -39,7 +39,7 @@ class ReportTask extends Model {
     const copy = super.parseProperties(elem);
 
     const {target} = elem;
-    if (is_defined(target) && !is_empty(target._id)) {
+    if (is_defined(target) && !isEmpty(target._id)) {
       copy.target = new Model(target, 'target');
     }
     else {

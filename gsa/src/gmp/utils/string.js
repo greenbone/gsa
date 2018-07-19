@@ -65,6 +65,6 @@ export function split(string, separator, limit) {
   return splits;
 }
 
-export const is_empty = string => !is_defined(string) || string.length === 0;
+export const isEmpty = string => !is_defined(string) || string.length === 0;
 
 // vim: set ts=2 sw=2 tw=80:

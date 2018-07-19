@@ -24,7 +24,7 @@
 import Model from '../model.js';
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {parseInt, parseYesNo, parseCsv} from '../parser.js';
@@ -45,7 +45,7 @@ class Target extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(elem.port_list) && !is_empty(elem.port_list._id)) {
+    if (is_defined(elem.port_list) && !isEmpty(elem.port_list._id)) {
       ret.port_list = new PortList(ret.port_list);
     }
     else {
@@ -54,7 +54,7 @@ class Target extends Model {
 
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
-      if (is_defined(cred) && !is_empty(cred._id)) {
+      if (is_defined(cred) && !isEmpty(cred._id)) {
         ret[name] = new Model(cred, 'credential');
       }
       else {

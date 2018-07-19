@@ -22,7 +22,7 @@
  */
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Info from './info.js';
@@ -49,7 +49,7 @@ class Cpe extends Info {
       ret.cves = [];
     }
 
-    if (is_empty(ret.status)) {
+    if (isEmpty(ret.status)) {
       delete ret.status;
     }
 

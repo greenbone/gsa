@@ -29,7 +29,7 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat} from 'gmp/parser';
 import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -75,7 +75,7 @@ export class OverridesWordCloudDisplay extends React.Component {
 
     let wordFilter;
 
-    if (!is_empty(filterValue)) {
+    if (!isEmpty(filterValue)) {
       const wordTerm = FilterTerm.fromString(`text~"${filterValue}"`);
 
       if (is_defined(filter) && filter.hasTerm(wordTerm)) {

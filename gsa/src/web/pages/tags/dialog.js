@@ -32,7 +32,7 @@ import _ from 'gmp/locale';
 
 import {is_defined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
@@ -97,13 +97,13 @@ class TagDialog extends React.Component {
         const {data} = response;
         let id = this.state.resourceIdText;
         const idPresent = data.includes(res => res.id === id);
-        if (!idPresent && !is_empty(id)) {
+        if (!idPresent && !isEmpty(id)) {
           data.push({
             name: '----',
             id: id,
           });
         }
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           id = undefined;
         }
         this.setState({
@@ -147,7 +147,7 @@ class TagDialog extends React.Component {
 
           let {resourceOptions} = this.state;
           const idPresent = resourceOptions.filter(res => res.id === id);
-          if (idPresent.length === 0 && !is_empty(id)) {
+          if (idPresent.length === 0 && !isEmpty(id)) {
             // if the options already contain '----', remove the old element
             resourceOptions = resourceOptions.filter(
               res => res.name !== '----');

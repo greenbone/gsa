@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {forEach, map} from '../utils/array';
 
 import {
@@ -105,7 +105,7 @@ class Host extends Asset {
         ret.routes = map(ret.host.routes.route, route =>
           map(route.host, host => ({
             ip: host.ip,
-            id: is_empty(host._id) ? undefined : host._id,
+            id: isEmpty(host._id) ? undefined : host._id,
             distance: parseInt(host._distance),
             same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
           }))

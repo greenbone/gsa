@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 
 import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
@@ -37,7 +37,7 @@ import Info from './info.js';
 
 const delete_empty = (obj, props) => {
   for (const prop of props) {
-    if (is_empty(obj[prop])) {
+    if (isEmpty(obj[prop])) {
       delete obj[prop];
     }
   }
@@ -121,7 +121,7 @@ class Cve extends Info {
       availability_impact: 'cvssAvailabilityImpact',
     });
 
-    if (is_empty(ret.products)) {
+    if (isEmpty(ret.products)) {
       ret.products = [];
     }
     else {
@@ -151,7 +151,7 @@ class Cve extends Info {
         ret.source = entry.cvss.base_metrics.source.__text;
       }
 
-      if (is_defined(entry.summary) && !is_empty(entry.summary.__text)) {
+      if (is_defined(entry.summary) && !isEmpty(entry.summary.__text)) {
         // really don't know why entry.summary and ret.description can differ
         // but xslt did use the summary and and e.g. the description of
         // CVE-2017-2988 was empty but summary not

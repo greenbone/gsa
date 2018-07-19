@@ -23,7 +23,7 @@
 import logger from '../log';
 
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import registerCommand from '../command';
 import Model from '../model';
@@ -110,19 +110,19 @@ class TaskCommand extends EntityCommand {
         scanner => new Scanner(scanner));
       settings.tags = map(new_task.get_tags_response.tag,
         tag => new Model(tag, 'tag'));
-      settings.alert_id = is_empty(new_task.alert_id) ?
+      settings.alert_id = isEmpty(new_task.alert_id) ?
         undefined : new_task.alert_id;
-      settings.config_id = is_empty(new_task.config_id) ?
+      settings.config_id = isEmpty(new_task.config_id) ?
         undefined : new_task.config_id;
-      settings.osp_config_id = is_empty(new_task.osp_config_id) ?
+      settings.osp_config_id = isEmpty(new_task.osp_config_id) ?
         undefined : new_task.osp_config_id;
-      settings.osp_scanner_id = is_empty(new_task.osp_scanner_id) ?
+      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id) ?
         undefined : new_task.osp_scanner_id;
-      settings.scanner_id = is_empty(new_task.scanner_id) ?
+      settings.scanner_id = isEmpty(new_task.scanner_id) ?
         undefined : new_task.scanner_id;
-      settings.schedule_id = is_empty(new_task.schedule_id) ?
+      settings.schedule_id = isEmpty(new_task.schedule_id) ?
         undefined : new_task.schedule_id;
-      settings.target_id = is_empty(new_task.target_id) ?
+      settings.target_id = isEmpty(new_task.target_id) ?
         undefined : new_task.target_id;
       return response.setData(settings);
     });
