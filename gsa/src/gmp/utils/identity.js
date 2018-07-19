@@ -39,7 +39,7 @@ export function is_string(value) {
   return typeof value === 'string';
 }
 
-export function is_number(value) {
+export function isNumber(value) {
   return typeof value === 'number';
 }
 
