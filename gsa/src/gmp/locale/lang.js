@@ -58,7 +58,7 @@ i18next
     /* keep quiet if translations have not be found.
      * errors can be debugged here */
 
-    notifyListeners(get_language());
+    notifyListeners(getLanguage());
   });
 
 /**
@@ -79,7 +79,7 @@ export const subscribe = listener => {
  *
  * @returns {String} Language code of the current used language
  */
-export const get_language = () => i18next.language;
+export const getLanguage = () => i18next.language;
 
 /**
  * Change the current used language
@@ -88,12 +88,12 @@ export const get_language = () => i18next.language;
  *                      to start automatic detection.
  * @returns undefined
  */
-export const set_language = lang => i18next.changeLanguage(lang, err => {
+export const setLanguage = lang => i18next.changeLanguage(lang, err => {
   if (isDefined(err)) {
     log.error('Could not set language to', lang, err);
   }
   else {
-    log.debug('Language changed to', get_language());
+    log.debug('Language changed to', getLanguage());
 
     if (isDefined(lang)) {
       // store set language
