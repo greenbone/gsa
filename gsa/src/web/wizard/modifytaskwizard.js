@@ -39,15 +39,14 @@ import TextField from '../components/form/textfield.js';
 import TimeZoneSelect from '../components/form/timezoneselect.js';
 import Datepicker from '../components/form/datepicker.js';
 
-import Img from '../components/img/img.js';
-
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
 import {render_select_items} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import {Wizardess, WizardContent} from './taskwizard';
+import {WizardContent} from './taskwizard';
+import Wizardess from './wizardess';
 
 const ModifyTaskWizard = ({
   alert_email,
@@ -88,9 +87,7 @@ const ModifyTaskWizard = ({
       }) => (
         <Layout flex align={['start', 'start']}>
           <Layout basis="40%">
-            <Wizardess>
-              <Img src="enchantress.svg"/>
-            </Wizardess>
+            <Wizardess/>
             <WizardContent>
               <div>
                 {_('I will modify an existing task for you. The difference ' +

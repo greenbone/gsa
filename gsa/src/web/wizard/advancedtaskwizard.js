@@ -49,11 +49,10 @@ import Radio from '../components/form/radio.js';
 import Datepicker from '../components/form/datepicker.js';
 import TimeZoneSelect from '../components/form/timezoneselect.js';
 
-import Img from '../components/img/img.js';
-
 import Layout from '../components/layout/layout.js';
 
-import {Wizardess, WizardContent} from './taskwizard';
+import {WizardContent} from './taskwizard';
+import Wizardess from './wizardess';
 
 const IMMEDIATELY_START_VALUE = '2';
 const SCHEDULE_START_VALUE = '1';
@@ -128,9 +127,7 @@ const AdvancedTaskWizard = ({
       }) => (
         <Layout flex align={['start', 'start']}>
           <Layout basis="40%">
-            <Wizardess>
-              <Img src="enchantress.svg"/>
-            </Wizardess>
+            <Wizardess/>
             <WizardContent>
               <p>
                 {_('I can help you by creating a new scan task and ' +

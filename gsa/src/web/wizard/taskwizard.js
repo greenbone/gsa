@@ -35,15 +35,9 @@ import TextField from '../components/form/textfield.js';
 
 import NewIcon from '../components/icon/newicon.js';
 
-import Img from '../components/img/img.js';
-
 import Layout from '../components/layout/layout.js';
 
-export const Wizardess = glamorous.div({
-  '& > img': {
-    height: '300px',
-  },
-});
+import Wizardess from './wizardess.js';
 
 export const WizardContent = glamorous.div({
   '& > p img': {
@@ -71,9 +65,7 @@ const TaskWizard = ({
       onValueChange,
     }) => (
       <Layout>
-        <Wizardess>
-          <Img src="enchantress.svg"/>
-        </Wizardess>
+        <Wizardess/>
         <WizardContent>
           <p>
             <b>{_('Quick start: Immediately scan an IP address')}</b>
