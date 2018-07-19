@@ -21,19 +21,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/assign';
 import 'core-js/fn/object/keys';
 
-export function exclude(object, func) {
-  return Object.keys(object)
+export const exclude = (object, func) =>
+  Object.keys(object)
     .filter(key => !func(key))
     .reduce((obj, key) => {
       obj[key] = object[key];
       return obj;
     }, {});
-}
 
-export const exclude_object_props = (object, exclude_array) =>
+export const excludeObjectProps = (object, exclude_array) =>
   exclude(object, key => exclude_array.includes(key));
 
 // vim: set ts=2 sw=2 tw=80:

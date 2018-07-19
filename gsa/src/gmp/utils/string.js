@@ -21,14 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from './identity';
+import {isDefined} from './identity';
 
-export function capitalize_first_letter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+export const capitalizeFirstLetter = string =>
+  string.charAt(0).toUpperCase() + string.slice(1);
 
-export function shorten(text, length = 60) {
-  if (!is_defined(text)) {
+export const shorten = (text, length = 60) => {
+  if (!isDefined(text)) {
     return '';
   }
 
@@ -37,7 +36,7 @@ export function shorten(text, length = 60) {
   }
 
   return text.substr(0, length) + '...';
-}
+};
 
 /**
  * Split a string into several terms
@@ -50,8 +49,8 @@ export function shorten(text, length = 60) {
  *
  * @returns {Array} Split String as an array
  */
-export function split(string, separator, limit) {
-  if (is_defined(limit) && limit <= 0) {
+export const split = (string, separator, limit) => {
+  if (isDefined(limit) && limit <= 0) {
     return [string];
   }
 
@@ -63,8 +62,8 @@ export function split(string, separator, limit) {
   }
 
   return splits;
-}
+};
 
-export const is_empty = string => !is_defined(string) || string.length === 0;
+export const isEmpty = string => !isDefined(string) || string.length === 0;
 
 // vim: set ts=2 sw=2 tw=80:

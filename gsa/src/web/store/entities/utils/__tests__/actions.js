@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_function} from 'gmp/utils/identity';
+import {isFunction} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
@@ -40,11 +40,11 @@ describe('entities actions tests', () => {
       const actions = createEntitiesActions('foo');
 
       expect(actions.request).toBeDefined();
-      expect(is_function(actions.request)).toBe(true);
+      expect(isFunction(actions.request)).toBe(true);
       expect(actions.success).toBeDefined();
-      expect(is_function(actions.success)).toBe(true);
+      expect(isFunction(actions.success)).toBe(true);
       expect(actions.error).toBeDefined();
-      expect(is_function(actions.error)).toBe(true);
+      expect(isFunction(actions.error)).toBe(true);
     });
 
     test('should create a load request action', () => {
@@ -124,11 +124,11 @@ describe('entities actions tests', () => {
       const actions = createEntityActions('foo');
 
       expect(actions.request).toBeDefined();
-      expect(is_function(actions.request)).toBe(true);
+      expect(isFunction(actions.request)).toBe(true);
       expect(actions.success).toBeDefined();
-      expect(is_function(actions.success)).toBe(true);
+      expect(isFunction(actions.success)).toBe(true);
       expect(actions.error).toBeDefined();
-      expect(is_function(actions.error)).toBe(true);
+      expect(isFunction(actions.error)).toBe(true);
     });
 
     test('should create a load request action', () => {
@@ -198,7 +198,7 @@ describe('entities actions tests', () => {
       });
 
       expect(loadEntities).toBeDefined();
-      expect(is_function(loadEntities)).toBe(true);
+      expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities({gmp})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -252,7 +252,7 @@ describe('entities actions tests', () => {
       };
 
       expect(loadEntities).toBeDefined();
-      expect(is_function(loadEntities)).toBe(true);
+      expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -309,7 +309,7 @@ describe('entities actions tests', () => {
       };
 
       expect(loadEntities).toBeDefined();
-      expect(is_function(loadEntities)).toBe(true);
+      expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -364,7 +364,7 @@ describe('entities actions tests', () => {
       });
 
       expect(loadEntity).toBeDefined();
-      expect(is_function(loadEntity)).toBe(true);
+      expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity({gmp, id})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -414,7 +414,7 @@ describe('entities actions tests', () => {
       });
 
       expect(loadEntity).toBeDefined();
-      expect(is_function(loadEntity)).toBe(true);
+      expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity({gmp, id})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -466,7 +466,7 @@ describe('entities actions tests', () => {
       });
 
       expect(loadEntity).toBeDefined();
-      expect(is_function(loadEntity)).toBe(true);
+      expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity({gmp, id})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();

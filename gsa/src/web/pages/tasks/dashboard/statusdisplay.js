@@ -31,7 +31,7 @@ import _ from 'gmp/locale';
 import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {TASK_STATUS} from 'gmp/models/task';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 
@@ -117,15 +117,15 @@ export class TasksStatusDisplay extends React.Component {
     const {onFilterChanged, filter} = this.props;
     const {filterValue} = data;
 
-    if (is_defined(filterValue) && is_defined(onFilterChanged)) {
+    if (isDefined(filterValue) && isDefined(onFilterChanged)) {
       const statusTerm = FilterTerm.fromString(`status="${filterValue}"`);
 
-      if (is_defined(filter) && filter.hasTerm(statusTerm)) {
+      if (isDefined(filter) && filter.hasTerm(statusTerm)) {
         return;
       }
 
       const statusFilter = Filter.fromTerm(statusTerm);
-      const newFilter = is_defined(filter) ? filter.copy().and(statusFilter) :
+      const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
         statusFilter;
 
       onFilterChanged(newFilter);
@@ -157,9 +157,9 @@ export class TasksStatusDisplay extends React.Component {
                 width={width}
                 height={height}
                 data={tdata}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
-                onLegendItemClick={is_defined(onFilterChanged) ?
+                onLegendItemClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

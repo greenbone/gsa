@@ -23,7 +23,8 @@
 
 import glamorous from 'glamorous';
 
-import {is_defined, map} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 const convert_align = align => {
   switch (align) {
@@ -35,7 +36,7 @@ const convert_align = align => {
   }
 };
 
-const set_default_flex = defaults => is_defined(defaults.flex) ?
+const set_default_flex = defaults => isDefined(defaults.flex) ?
   defaults.flex : 'row';
 
 const withLayout = (defaults = {}) => Component => {
@@ -66,7 +67,7 @@ const withLayout = (defaults = {}) => Component => {
         grow = 1;
       }
 
-      if (is_defined(align)) {
+      if (isDefined(align)) {
         align = map(align, al => convert_align(al));
       }
       else { // use sane defaults for alignment

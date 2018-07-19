@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from './utils/identity';
-import {is_empty} from './utils/string';
+import {isDefined} from './utils/identity';
+import {isEmpty} from './utils/string';
 
 import logger from './log.js';
 
@@ -68,7 +68,7 @@ import GmpHttp from './http/gmp.js';
 import {build_server_url, build_url_params} from './http/utils.js';
 import DefaultTransform from './http/transform/default';
 
-import {get_commands} from './command.js';
+import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
 const log = logger.getLogger('gmp');
@@ -92,8 +92,8 @@ class Gmp {
 
     this.storage = storage;
 
-    this.server = is_defined(server) ? server : window.location.host;
-    this.protocol = is_defined(protocol) ? protocol : window.location.protocol;
+    this.server = isDefined(server) ? server : window.location.host;
+    this.protocol = isDefined(protocol) ? protocol : window.location.protocol;
 
     this.http = new GmpHttp(this.server, this.protocol, httpoptions);
 
@@ -109,7 +109,7 @@ class Gmp {
 
     this.globals = {manualurl, protocoldocurl};
 
-    const commands = get_commands();
+    const commands = getCommands();
     for (const name in commands) { // eslint-disable-line guard-for-in
       const cmd = commands[name];
       const instance = new cmd.clazz(this.http, ...cmd.options);
@@ -166,7 +166,7 @@ class Gmp {
   }
 
   isLoggedIn() {
-    return !is_empty(this.token);
+    return !isEmpty(this.token);
   }
 
   subscribeToLogout(listener) {
@@ -179,11 +179,11 @@ class Gmp {
   buildUrl(path, params, anchor) {
     let url = build_server_url(this.server, path, this.protocol);
 
-    if (is_defined(params)) {
+    if (isDefined(params)) {
       url += '?' + build_url_params(params);
     }
 
-    if (is_defined(anchor)) {
+    if (isDefined(anchor)) {
       url += '#' + anchor;
     }
     return url;
@@ -194,7 +194,7 @@ class Gmp {
   }
 
   set token(token) {
-    if (is_defined(token)) {
+    if (isDefined(token)) {
       this.storage.token = token;
     }
     else {
@@ -212,14 +212,14 @@ class Gmp {
   }
 
   get globals() {
-    if (is_defined(this.storage.globals)) {
+    if (isDefined(this.storage.globals)) {
       return JSON.parse(this.storage.globals);
     }
     return {};
   }
 
   set globals(values) {
-    if (is_defined(values)) {
+    if (isDefined(values)) {
       const {globals} = this;
       this.storage.globals = JSON.stringify({...globals, ...values});
     }
@@ -229,7 +229,7 @@ class Gmp {
   }
 
   get autorefresh() {
-    return is_defined(this._autorefresh) ?
+    return isDefined(this._autorefresh) ?
       this._autorefresh :
       this.globals.autorefresh;
   }

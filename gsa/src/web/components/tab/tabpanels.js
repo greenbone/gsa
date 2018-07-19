@@ -22,7 +22,8 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from '../../utils/proptypes.js';
 
 const TabPanels = ({
@@ -30,7 +31,7 @@ const TabPanels = ({
   children,
 }) => {
   const child = React.Children.toArray(children)[active];
-  return is_defined(child) ? child : null;
+  return isDefined(child) ? child : null;
 };
 
 TabPanels.propTypes = {

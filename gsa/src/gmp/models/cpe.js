@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Info from './info.js';
@@ -39,7 +39,7 @@ class Cpe extends Info {
     ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
-    if (is_defined(ret.cves) && is_defined(ret.cves.cve)) {
+    if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
       ret.cves = map(ret.cves.cve.entry, cve => ({
         id: cve._id,
         severity: parseSeverity(cve.cvss.base_metrics.score.__text),
@@ -49,7 +49,7 @@ class Cpe extends Info {
       ret.cves = [];
     }
 
-    if (is_empty(ret.status)) {
+    if (isEmpty(ret.status)) {
       delete ret.status;
     }
 

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
@@ -55,7 +55,7 @@ const dashboardData = (state = {}, action) => {
 };
 
 const dashboardDataForFilter = (state = {}, action) => {
-  const filterString = is_defined(action.filter) ?
+  const filterString = isDefined(action.filter) ?
     action.filter.toFilterString() : 'default';
 
   return {
@@ -65,7 +65,7 @@ const dashboardDataForFilter = (state = {}, action) => {
 };
 
 const dashboardDataById = (state = {}, action) => {
-  if (!is_defined(action.id)) {
+  if (!isDefined(action.id)) {
     return state;
   }
 

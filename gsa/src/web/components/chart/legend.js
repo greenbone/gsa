@@ -26,7 +26,7 @@ import glamorous, {Div} from 'glamorous';
 
 import {Line as VxLine} from '@vx/shape';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -52,7 +52,7 @@ export const Item = glamorous.div('legend-item', {
   alignItems: 'center',
   margin: '5px 0',
 },
-({onClick}) => is_defined(onClick) ? {
+({onClick}) => isDefined(onClick) ? {
   cursor: 'pointer',
 } : undefined);
 
@@ -121,7 +121,7 @@ const Legend = ({
         content={d.toolTip}
       >
         {({targetRef, hide, show}) =>
-          is_defined(children) ?
+          isDefined(children) ?
             children({
               d,
               toolTipProps: {
@@ -135,7 +135,7 @@ const Legend = ({
               innerRef={targetRef}
               onMouseEnter={show}
               onMouseLeave={hide}
-              onClick={is_defined(onItemClick) ?
+              onClick={isDefined(onItemClick) ?
                 () => onItemClick(d) : undefined}
             >
               <Rect color={d.color}/>

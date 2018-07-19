@@ -29,14 +29,14 @@ import uuid from 'uuid/v4';
 
 import Logger from 'gmp/log';
 
-import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 
 import date, {duration as createDuration} from './date';
 
 const log = Logger.getLogger('gmp.models.event');
 
-const convertIcalDate = (idate, timezone) => is_defined(timezone) ?
+const convertIcalDate = (idate, timezone) => isDefined(timezone) ?
   date.unix(idate.toUnixTime()).tz(timezone) :
   date.unix(idate.toUnixTime());
 
@@ -88,7 +88,7 @@ const ABR_TO_WEEKDAY = {
 };
 
 const getWeekDaysFromRRule = rrule => {
-    if (!is_defined(rrule)) {
+    if (!isDefined(rrule)) {
       return undefined;
     }
 
@@ -97,7 +97,7 @@ const getWeekDaysFromRRule = rrule => {
 };
 
 const getMonthDaysFromRRule = rrule => {
-  if (!is_defined(rrule)) {
+  if (!isDefined(rrule)) {
     return undefined;
   }
 
@@ -137,7 +137,7 @@ export class WeekDays {
       const wday = ABR_TO_WEEKDAY[pday];
       const val = pval.length === 0 ? true : pval;
 
-      if (is_defined(wday)) {
+      if (isDefined(wday)) {
         weekdays._setWeekDay(wday, val);
       }
     }
@@ -168,7 +168,7 @@ export class WeekDays {
 
   getSelectedWeekDay() {
     const ret = this.entries().find(([, value]) => value);
-    return is_defined(ret) ? ret[0] : undefined;
+    return isDefined(ret) ? ret[0] : undefined;
   }
 
   get(weekday) {
@@ -263,7 +263,7 @@ class Event {
     event.uid = uuid();
     event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
 
-    if (is_defined(duration)) {
+    if (isDefined(duration)) {
       const eventDuration = new ical.Duration();
 
       eventDuration.days = duration.days();
@@ -275,13 +275,13 @@ class Event {
       setEventDuration(event, eventDuration);
     }
 
-    if (is_defined(freq)) {
+    if (isDefined(freq)) {
       const eventRecur = new ical.Recur();
 
       eventRecur.freq = freq;
       eventRecur.interval = interval;
 
-      const icalweekdays = is_defined(weekdays) ? weekdays.toByDate() : [];
+      const icalweekdays = isDefined(weekdays) ? weekdays.toByDate() : [];
 
       if (icalweekdays.length > 0) {
         eventRecur.setComponent('byday', icalweekdays);
@@ -294,11 +294,11 @@ class Event {
       setEventRecurrence(event, eventRecur);
     }
 
-    if (!is_empty(summary)) {
+    if (!isEmpty(summary)) {
       event.summary = summary;
     }
 
-    if (!is_empty(description)) {
+    if (!isEmpty(description)) {
       event.description = description;
     }
 

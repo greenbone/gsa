@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 
 import {color as d3color} from 'd3-color';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import {setRef} from '../../utils/render';
@@ -300,7 +300,7 @@ class Donut3DChart extends React.Component {
 
   separateLabels() {
 
-    if (!is_defined(this.svg)) {
+    if (!isDefined(this.svg)) {
       return;
     }
 
@@ -441,7 +441,7 @@ class Donut3DChart extends React.Component {
                             <Group
                               onMouseEnter={show}
                               onMouseLeave={hide}
-                              onClick={is_defined(onDataClick) ?
+                              onClick={isDefined(onDataClick) ?
                                 () => onDataClick(arcData) : undefined}
                             >
                               <PieInnerPath

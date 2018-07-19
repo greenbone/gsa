@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -45,7 +45,7 @@ class CreatedDisplay extends React.Component {
   handleRangeSelect(start, end) {
     const {filter, onFilterChanged} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -53,9 +53,9 @@ class CreatedDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = is_defined(filter) ? filter.copy() : new Filter();
+    let newFilter = isDefined(filter) ? filter.copy() : new Filter();
 
-    if (is_defined(startDate)) {
+    if (isDefined(startDate)) {
 
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
@@ -70,7 +70,7 @@ class CreatedDisplay extends React.Component {
       }
     }
 
-    if (is_defined(endDate)) {
+    if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
         `created<${endDate.format(dateFormat)}`);
 
@@ -111,7 +111,7 @@ class CreatedDisplay extends React.Component {
             xAxisLabel={xAxisLabel}
             yLine={yLine}
             y2Line={y2Line}
-            onRangeSelected={is_defined(onFilterChanged) ?
+            onRangeSelected={isDefined(onFilterChanged) ?
               this.handleRangeSelect : undefined}
           />
         )}

@@ -21,10 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import Vulnerability from '../models/vulnerability';
 
-import Vulnerability from '../models/vulnerability.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 class VulnerabilityCommand extends EntityCommand {
 
@@ -60,7 +62,7 @@ class VulnerabilitiesCommand extends EntitiesCommand {
   }
 }
 
-register_command('vuln', VulnerabilityCommand);
-register_command('vulns', VulnerabilitiesCommand);
+registerCommand('vuln', VulnerabilityCommand);
+registerCommand('vulns', VulnerabilitiesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

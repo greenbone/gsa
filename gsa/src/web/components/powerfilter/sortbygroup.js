@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {map, is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -46,7 +48,7 @@ class SortByGroup extends React.Component {
   render() {
     let {by, order, filter, onSortByChange, onSortOrderChange} = this.props;
 
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       by = filter.getSortBy();
       order = filter.getSortOrder();
     }

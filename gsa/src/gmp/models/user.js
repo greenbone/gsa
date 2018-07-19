@@ -21,11 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Model from '../model.js';
+import {parseCsv} from 'gmp/parser';
 
 export const AUTH_METHOD_PASSWORD = 'password';
 export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
@@ -48,7 +49,7 @@ class User extends Model {
 
     delete ret.role;
 
-    if (is_empty(elem.groups)) {
+    if (isEmpty(elem.groups)) {
       ret.groups = [];
     }
     else {
@@ -57,24 +58,28 @@ class User extends Model {
       });
     }
 
-    if (is_defined(elem.hosts)) {
+    if (isDefined(elem.hosts)) {
       ret.hosts = {
-        addresses: elem.hosts.__text,
+        addresses: parseCsv(elem.hosts.__text),
         allow: elem.hosts._allow,
       };
     }
     else {
-      ret.hosts = {};
+      ret.hosts = {
+        addresses: [],
+      };
     }
 
-    if (is_defined(elem.ifaces)) {
+    if (isDefined(elem.ifaces)) {
       ret.ifaces = {
-        addresses: elem.ifaces.__text,
+        addresses: parseCsv(elem.ifaces.__text),
         allow: elem.ifaces._allow,
       };
     }
     else {
-      ret.ifaces = {};
+      ret.ifaces = {
+        addresses: [],
+      };
     }
 
     const {source} = elem.sources;

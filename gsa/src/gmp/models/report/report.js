@@ -20,12 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../../utils/identity';
-import {is_empty} from '../../utils/string';
+import {isDefined} from '../../utils/identity';
+import {isEmpty} from '../../utils/string';
 
 import {parseSeverity, parseDate} from '../../parser';
 
-import {parse_filter} from '../../collection/parser.js';
+import {parseFilter} from '../../collection/parser.js';
 
 import Model from '../../model.js';
 
@@ -53,7 +53,7 @@ class ReportReport extends Model {
 
     const {delta, severity, scan_start, scan_end, task, scan} = elem;
 
-    const filter = parse_filter(elem);
+    const filter = parseFilter(elem);
 
     copy.filter = filter;
 
@@ -61,7 +61,7 @@ class ReportReport extends Model {
 
     delete copy.filters;
 
-    if (is_defined(severity)) {
+    if (isDefined(severity)) {
       copy.severity = {
         filtered: parseSeverity(severity.filtered),
         full: parseSeverity(severity.full),
@@ -96,14 +96,14 @@ class ReportReport extends Model {
 
     copy.scan_start = parseDate(scan_start);
 
-    if (is_defined(scan_end)) {
+    if (isDefined(scan_end)) {
       copy.scan_end = parseDate(scan_end);
     }
 
-    if (is_defined(scan) && is_defined(scan.task) &&
-      is_defined(scan.task.slave)) {
+    if (isDefined(scan) && isDefined(scan.task) &&
+      isDefined(scan.task.slave)) {
 
-      if (is_empty(scan.task.slave._id)) {
+      if (isEmpty(scan.task.slave._id)) {
         delete copy.scan.task.slave;
       }
       else {
@@ -113,7 +113,7 @@ class ReportReport extends Model {
       }
     }
 
-    if (is_defined(delta) && is_defined(delta.report)) {
+    if (isDefined(delta) && isDefined(delta.report)) {
       copy.delta_report = {
         id: delta.report._id,
         scan_run_status: delta.report.scan_run_status,

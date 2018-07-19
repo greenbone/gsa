@@ -21,14 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import Promise from 'gmp/promise.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target.js';
+import {isDefined} from 'gmp/utils/identity';
+
+import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
 import PropTypes from '../../utils/proptypes.js';
 import withComponentDefaults from '../../utils/withComponentDefaults.js';
@@ -229,12 +228,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <Tab>
                         {tagsTitle}
                       </Tab>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <Tab>
                         {permissionsTitle}
                       </Tab>
@@ -249,12 +248,12 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <TabPanel>
                         {tagsComponent}
                       </TabPanel>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <TabPanel>
                         {permissionsComponent}
                       </TabPanel>
@@ -282,7 +281,7 @@ const TargetPermissions = withComponentDefaults({
       const resources = [];
       for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
         const cred = entity[name];
-        if (is_defined(cred)) {
+        if (isDefined(cred)) {
           resources.push(cred);
         }
       }

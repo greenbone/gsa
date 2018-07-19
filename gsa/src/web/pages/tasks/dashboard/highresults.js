@@ -30,7 +30,7 @@ import _ from 'gmp/locale';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -69,7 +69,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
-      const displaySeverity = is_defined(severity) ?
+      const displaySeverity = isDefined(severity) ?
         severityFormat(severity) : _NA;
       const displayHighHost = format(high_per_host);
       return {

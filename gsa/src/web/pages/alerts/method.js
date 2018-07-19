@@ -24,9 +24,9 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   EMAIL_NOTICE_ATTACH,
@@ -74,7 +74,7 @@ const Method = ({
           <div>{_('SCP')}</div>
           <Table>
             <TableBody>
-              {is_defined(data.scp_host) && is_defined(data.scp_host.value) &&
+              {isDefined(data.scp_host) && isDefined(data.scp_host.value) &&
                 <TableRow>
                   <TableData>
                     {_('Host')}
@@ -85,7 +85,7 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(credential) && is_defined(credential.id) &&
+              {isDefined(credential) && isDefined(credential.id) &&
                 <TableRow>
                   <TableData>
                     {_('Credential')}
@@ -101,7 +101,7 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(credential) && is_defined(credential.login) &&
+              {isDefined(credential) && isDefined(credential.login) &&
                 <TableRow>
                   <TableData>
                     {_('Login')}
@@ -112,8 +112,8 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(data.scp_known_hosts) &&
-                is_defined(data.scp_known_hosts.value) &&
+              {isDefined(data.scp_known_hosts) &&
+                isDefined(data.scp_known_hosts.value) &&
                 <TableRow>
                   <TableData>
                     {_('Known Hosts')}
@@ -124,8 +124,8 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(data.scp_path) &&
-                is_defined(data.scp_path.value) &&
+              {isDefined(data.scp_path) &&
+                isDefined(data.scp_path.value) &&
                 <TableRow>
                   <TableData>
                     {_('Path')}
@@ -141,7 +141,7 @@ const Method = ({
       );
     }
 
-    if (is_defined(credential) && is_defined(credential)) {
+    if (isDefined(credential) && isDefined(credential)) {
       url += credential.login;
     }
     else {
@@ -150,10 +150,10 @@ const Method = ({
 
     url += '@';
 
-    if (is_defined(data.scp_host)) {
+    if (isDefined(data.scp_host)) {
       url += data.scp_host.value;
     }
-    if (is_defined(data.scp_path)) {
+    if (isDefined(data.scp_path)) {
       url += ':' + data.scp_path.value;
     }
     return _('SCP to {{url}}', {url});
@@ -186,8 +186,8 @@ const Method = ({
                 </TableData>
               </TableRow>
 
-              {is_defined(data.snmp_community) &&
-                is_defined(data.snmp_community.value) &&
+              {isDefined(data.snmp_community) &&
+                isDefined(data.snmp_community.value) &&
                 <TableRow>
                   <TableData>
                     {_('Community')}
@@ -198,8 +198,8 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(data.snmp_agent) &&
-                is_defined(data.snmp_agent.value) &&
+              {isDefined(data.snmp_agent) &&
+                isDefined(data.snmp_agent.value) &&
                 <TableRow>
                   <TableData>
                     {_('Message {{name}}')}
@@ -217,7 +217,7 @@ const Method = ({
     return _('SNMP to {{agent}}', {agent: data.snmp_agent.value});
   }
 
-  if (method.type === METHOD_TYPE_EMAIL && is_defined(method.data.to_address)) {
+  if (method.type === METHOD_TYPE_EMAIL && isDefined(method.data.to_address)) {
     const {data} = method;
     // TODO improve email content info. the info depends on the event type :-/
     if (details) {
@@ -244,8 +244,8 @@ const Method = ({
                 </TableData>
               </TableRow>
 
-              {details && is_defined(data.notice) &&
-                is_defined(data.notice.value) &&
+              {details && isDefined(data.notice) &&
+                isDefined(data.notice.value) &&
                 <TableRow>
                   <TableData>
                     {_('Content')}
@@ -261,8 +261,8 @@ const Method = ({
                 </TableRow>
               }
 
-              {details && is_defined(data.subject) &&
-                is_defined(data.subject.value) &&
+              {details && isDefined(data.subject) &&
+                isDefined(data.subject.value) &&
                 <TableRow>
                   <TableData>
                     {_('Subject')}
@@ -273,8 +273,8 @@ const Method = ({
                 </TableRow>
               }
 
-              {details && is_defined(data.message) &&
-                is_defined(data.message.value) &&
+              {details && isDefined(data.message) &&
+                isDefined(data.message.value) &&
                 <TableRow>
                   <TableData>
                     {_('Message')}
@@ -303,7 +303,7 @@ const Method = ({
   if (method.type === METHOD_TYPE_HTTP_GET) {
     const {data = {}} = method;
 
-    if (is_defined(data.URL) && is_defined(data.URL.value)) {
+    if (isDefined(data.URL) && isDefined(data.URL.value)) {
       return _('HTTP GET request to URL {{url}}', {url: data.URL.value});
     }
 
@@ -318,8 +318,8 @@ const Method = ({
           <div>{_('Sourcefire Connector')}</div>
           <Table>
             <TableBody>
-              {is_defined(data.defense_center_ip) &&
-                is_defined(data.defense_center_ip.value) &&
+              {isDefined(data.defense_center_ip) &&
+                isDefined(data.defense_center_ip.value) &&
                 <TableRow>
                   <TableData>
                     {_('Defense Center IP')}
@@ -329,8 +329,8 @@ const Method = ({
                   </TableData>
                 </TableRow>
               }
-              {is_defined(data.defense_center_port) &&
-                is_defined(data.defense_center_port.value) &&
+              {isDefined(data.defense_center_port) &&
+                isDefined(data.defense_center_port.value) &&
                 <TableRow>
                   <TableData>
                     {_('Defense Center Port')}
@@ -362,8 +362,8 @@ const Method = ({
           <Table>
             <TableBody>
 
-              {is_defined(data.verinice_server_url) &&
-                is_defined(data.verinice_server_url.value) &&
+              {isDefined(data.verinice_server_url) &&
+                isDefined(data.verinice_server_url.value) &&
                 <TableRow>
                   <TableData>
                     {_('URL')}
@@ -374,7 +374,7 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(credential) && is_defined(credential.id) &&
+              {isDefined(credential) && isDefined(credential.id) &&
                 <TableRow>
                   <TableData>
                     {_('Credential')}
@@ -390,7 +390,7 @@ const Method = ({
                 </TableRow>
               }
 
-              {is_defined(credential) && is_defined(credential.login) &&
+              {isDefined(credential) && isDefined(credential.login) &&
                 <TableRow>
                   <TableData>
                     {_('Userame')}

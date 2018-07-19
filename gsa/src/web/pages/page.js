@@ -25,9 +25,11 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import logger from 'gmp/log.js';
-import Capabilities from 'gmp/capabilities/capabilities.js';
-import {is_defined} from 'gmp/utils';
+import logger from 'gmp/log';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import Capabilities from 'gmp/capabilities/capabilities';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -75,7 +77,7 @@ class Page extends React.Component {
     const {children} = this.props;
     const {capabilities} = this.state;
 
-    if (!is_defined(capabilities)) {
+    if (!isDefined(capabilities)) {
       // only show content after caps have been loaded
       // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
       return null;

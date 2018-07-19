@@ -21,13 +21,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import 'core-js/fn/object/entries';
+
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils';
-import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
+
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   CONDITION_TYPE_ALWAYS,
@@ -46,10 +49,10 @@ import {
   DELTA_TYPE_NONE,
   DELTA_TYPE_PREVIOUS,
   DELTA_TYPE_REPORT,
-} from 'gmp/models/alert.js';
+} from 'gmp/models/alert';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -254,7 +257,7 @@ class AlertDialog extends React.Component {
         }
         onValueChange(result_filters, 'condition_data_filters');
 
-        filter_id = select_save_id(result_filters);
+        filter_id = selectSaveId(result_filters);
 
       }
       else {
@@ -271,7 +274,7 @@ class AlertDialog extends React.Component {
         }
         onValueChange(secinfo_filters, 'condition_data_filters');
 
-        filter_id = select_save_id(secinfo_filters);
+        filter_id = selectSaveId(secinfo_filters);
 
         onValueChange('0', 'filter_id'); // reset filter_id
       }
@@ -365,7 +368,7 @@ class AlertDialog extends React.Component {
     };
 
     for (const [key, value] of Object.entries(props)) {
-      if (is_defined(value)) {
+      if (isDefined(value)) {
         data[key] = value;
       }
     }
@@ -505,7 +508,7 @@ class AlertDialog extends React.Component {
                   <Select
                     value={values.filter_id}
                     name="filter_id"
-                    items={render_select_items(values.result_filters, 0)}
+                    items={renderSelectItems(values.result_filters, 0)}
                     onChange={onValueChange}
                   />
                 </FormGroup>

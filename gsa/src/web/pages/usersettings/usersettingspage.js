@@ -26,9 +26,12 @@ import 'core-js/fn/object/entries';
 import React from 'react';
 import glamorous, {Col} from 'glamorous';
 
-import _, {set_language} from 'gmp/locale.js';
-import {parseYesNo, YES_VALUE} from 'gmp/parser.js';
-import {is_defined, is_empty} from 'gmp/utils';
+import _, {set_language} from 'gmp/locale';
+
+import {parseYesNo, YES_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import ManualIcon from '../../components/icon/manualicon.js';
 import EditIcon from '../../components/icon/editicon.js';
@@ -427,7 +430,7 @@ class UserSettings extends React.Component {
           clazz => {
             return clazz.id === set_severity_class;
           });
-        if (is_defined(set_class)) {
+        if (isDefined(set_class)) {
           class_name = set_class.name;
         }
         severity_settings.push({
@@ -452,7 +455,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Alert') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -478,7 +481,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default SSH Credential') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -492,7 +495,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default SMB Credential') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -506,7 +509,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default ESXi Credential') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -520,7 +523,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default SNMP Credential') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -534,7 +537,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Port List') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -548,7 +551,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default OpenVAS Scanner') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -562,7 +565,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default OSP Scanner') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -576,7 +579,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Report Format') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -590,7 +593,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Schedule') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -604,7 +607,7 @@ class UserSettings extends React.Component {
       }
       else if (item === 'Default Target') {
         const id = all_possible_settings[item];
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           defaults_settings[item] = '';
         }
         else {
@@ -809,7 +812,7 @@ class UserSettings extends React.Component {
       item => {
         return item.id === id;
       });
-    if (is_defined(config)) {
+    if (isDefined(config)) {
       return config.name;
     }
   }
@@ -819,14 +822,14 @@ class UserSettings extends React.Component {
       item => {
         return item.id === id;
       });
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       return filter.name;
     }
   }
 
   getLanguageNameByCode(code) {
     const language = Languages[code];
-    return is_defined(language) ? language.name : undefined;
+    return isDefined(language) ? language.name : undefined;
   }
 
   getValueBySettingId(id) {
@@ -834,7 +837,7 @@ class UserSettings extends React.Component {
       item => {
         return item[1].id === id;
       });
-    if (is_defined(cacert)) {
+    if (isDefined(cacert)) {
       return cacert[1].value;
     }
   }
@@ -982,7 +985,7 @@ class UserSettings extends React.Component {
               const [name, perm, id] = item;
 
               if (capabilities.mayAccess(perm)) {
-                if (is_defined(id)) {
+                if (isDefined(id)) {
                   return (
                     <TableRow key={name}>
                       <TableData>
@@ -1024,7 +1027,7 @@ class UserSettings extends React.Component {
                 {filters.map(item => {
                   const [name, id] = item;
 
-                  if (is_defined(id)) {
+                  if (isDefined(id)) {
                     return (
                       <TableRow key={name}>
                         <TableData>

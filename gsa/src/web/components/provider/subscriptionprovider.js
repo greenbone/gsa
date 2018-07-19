@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import Logger from 'gmp/log';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -43,7 +43,7 @@ class SubscriptionProvider extends React.Component {
   getSubscribers(name) {
     let subscribers = this.subscriptions[name];
 
-    if (!is_defined(subscribers)) {
+    if (!isDefined(subscribers)) {
       subscribers = [];
       this.setSubscribers(name, subscribers);
     }

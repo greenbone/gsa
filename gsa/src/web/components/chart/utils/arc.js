@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import path from './path';
 
@@ -61,15 +61,15 @@ class Arc {
     this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
-    const outerRadiusY = is_defined(this._outerRadiusY) ?
+    const outerRadiusY = isDefined(this._outerRadiusY) ?
       this._outerRadiusY : outerRadiusX;
 
     const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = is_defined(this._innerRadiusY) ?
+    const innerRadiusY = isDefined(this._innerRadiusY) ?
       this._innerRadiusY : innerRadiusX;
 
     const rx = (innerRadiusX + outerRadiusX) / 2;
-    const ry = is_defined(innerRadiusY) && is_defined(outerRadiusY) ?
+    const ry = isDefined(innerRadiusY) && isDefined(outerRadiusY) ?
       (innerRadiusY + outerRadiusY) / 2 : rx;
 
     const a = (startAngle + endAngle) / 2;
@@ -97,11 +97,11 @@ class Arc {
     this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
-    const outerRadiusY = is_defined(this._outerRadiusY) ?
+    const outerRadiusY = isDefined(this._outerRadiusY) ?
       this._outerRadiusY : outerRadiusX;
 
     const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = is_defined(this._innerRadiusY) ?
+    const innerRadiusY = isDefined(this._innerRadiusY) ?
       this._innerRadiusY : innerRadiusX;
 
     const sx = outerRadiusX * Math.cos(startAngle);
@@ -125,7 +125,7 @@ class Arc {
   };
 
   _checkRadius() {
-    if (!is_defined(this._outerRadiusX)) {
+    if (!isDefined(this._outerRadiusX)) {
       throw new Error('outerRadiusX must be set');
     }
   }

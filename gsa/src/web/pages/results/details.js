@@ -26,14 +26,17 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_empty, is_defined} from 'gmp/utils';
-import {TAG_NA} from 'gmp/models/nvt.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+
+import {TAG_NA} from 'gmp/models/nvt';
 
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_nvt_name} from '../../utils/render.js';
+import {renderNvtName} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
 
@@ -70,9 +73,9 @@ const ResultDetails = ({
 
   const detection_title = result.severity > 0 || result.nvt.severity > 0 ?
     _('Vulnerability Detection Method') : _('Log Method');
-  const is_oval = is_defined(oid) && oid.startsWith('oval:');
-  const has_detection = is_defined(result.detection) &&
-    is_defined(result.detection.result);
+  const is_oval = isDefined(oid) && oid.startsWith('oval:');
+  const has_detection = isDefined(result.detection) &&
+    isDefined(result.detection.result);
 
   const detection_details = has_detection ? result.detection.result.details :
     undefined;
@@ -92,7 +95,7 @@ const ResultDetails = ({
 
       <DetailsBlock
         title={_('Vulnerability Detection Result')}>
-        {!is_empty(result.description) && result.description.length > 1 ?
+        {!isEmpty(result.description) && result.description.length > 1 ?
           (
             <Pre>
               {result.description}
@@ -102,7 +105,7 @@ const ResultDetails = ({
         }
       </DetailsBlock>
 
-      {is_defined(tags.impact) && tags.impact !== TAG_NA &&
+      {isDefined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
           title={_('Impact')}>
           <P>
@@ -116,7 +119,7 @@ const ResultDetails = ({
         solutionType={tags.solution_type}
       />
 
-      {is_defined(tags.affected) && tags.affected !== TAG_NA &&
+      {isDefined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
           title={_('Affected Software/OS')}>
           <P>
@@ -125,7 +128,7 @@ const ResultDetails = ({
         </DetailsBlock>
       }
 
-      {is_defined(tags.insight) && tags.insight !== TAG_NA &&
+      {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
           title={_('Vulnerability Insight')}>
           <P>
@@ -158,23 +161,23 @@ const ResultDetails = ({
                       {oid}
                     </DetailsLink>
                   )}
-                  {is_defined(oid) &&
+                  {isDefined(oid) &&
                       oid.startsWith('1.3.6.1.4.1.25623.1.0.') && (
                         <DetailsLink
                           type="nvt"
                           id={oid}
                           textOnly={!links}
                         >
-                          {render_nvt_name(oid, nvt.name)}
+                          {renderNvtName(oid, nvt.name)}
                           {' OID: ' + oid}
                         </DetailsLink>
                       )}
-                  {!is_defined(oid) &&
+                  {!isDefined(oid) &&
                     _('No details available for this method.')
                   }
                 </TableData>
               </TableRow>
-              {!is_empty(result.scan_nvt_version) &&
+              {!isEmpty(result.scan_nvt_version) &&
                 <TableRow>
                   <TableData>
                     {_('Version used: ')}

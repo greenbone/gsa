@@ -36,7 +36,7 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -70,7 +70,7 @@ const ScpMethodPart = ({
           <Select
             name={prefix + 'scp_credential'}
             value={scpCredential}
-            items={render_select_items(credentials)}
+            items={renderSelectItems(credentials)}
             onChange={onCredentialChange}
           />
           <Layout>
@@ -117,7 +117,7 @@ const ScpMethodPart = ({
         <Select
           name={prefix + 'scp_report_format'}
           value={scpReportFormat}
-          items={render_select_items(reportFormats)}
+          items={renderSelectItems(reportFormats)}
           onChange={onChange}
         />
       </FormGroup>

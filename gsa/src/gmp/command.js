@@ -20,29 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import EntitiesCommand from './commands/entities.js';
-import EntityCommand from './commands/entity.js';
-import HttpCommand from './commands/http.js';
-import InfoEntitiesCommand from './commands/infoentities.js';
-
-export {
-  EntitiesCommand,
-  EntityCommand,
-  HttpCommand,
-  InfoEntitiesCommand,
-};
-
-/* TODO only export register_command and get_commands */
-
 const COMMANDS = {};
 
-export const register_command = (name, clazz, ...options) => {
+const registerCommand = (name, clazz, ...options) => {
   COMMANDS[name] = {clazz, options};
 };
 
-export const get_commands = () => COMMANDS;
+export const getCommands = () => COMMANDS;
 
-export default register_command;
+export default registerCommand;
 
 // vim: set ts=2 sw=2 tw=80:

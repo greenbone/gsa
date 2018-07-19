@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -95,8 +97,8 @@ class Page extends React.Component {
     const {filter} = next;
     const {selectedDeltaReport} = this.state;
 
-    if (is_defined(selectedDeltaReport) &&
-      (!is_defined(filter) ||
+    if (isDefined(selectedDeltaReport) &&
+      (!isDefined(filter) ||
         filter.get('task_id') !== selectedDeltaReport.task.id)) {
       // filter has changed. reset delta report selection
       this.setState({selectedDeltaReport: undefined});
@@ -116,7 +118,7 @@ class Page extends React.Component {
     this.loadTasks().then(
       tasks => this.setState({
         tasks,
-        task_id: select_save_id(tasks),
+        task_id: selectSaveId(tasks),
         importDialogVisible: true,
       }));
   }
@@ -154,7 +156,7 @@ class Page extends React.Component {
   handleReportDeltaSelect(report) {
     const {selectedDeltaReport} = this.state;
 
-    if (is_defined(selectedDeltaReport)) {
+    if (isDefined(selectedDeltaReport)) {
       const {router} = this.props;
       router.push('/report/delta/' + selectedDeltaReport.id + '/' +
         report.id);

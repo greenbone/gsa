@@ -22,12 +22,13 @@
  */
 import {
   split,
-  capitalize_first_letter,
+  capitalizeFirstLetter,
   shorten,
-  is_empty,
+  isEmpty,
 } from '../string';
 
 describe('split function tests', () => {
+
   test('should split a string', () => {
     expect(split('abc_def_hij', '_')).toEqual(['abc', 'def', 'hij']);
     expect(split('abc.def.hij', '.')).toEqual(['abc', 'def', 'hij']);
@@ -48,15 +49,17 @@ describe('split function tests', () => {
   });
 });
 
-describe('capatalize_first_letter function tests', () => {
+describe('capatalizeFirstLetter function tests', () => {
+
   test('should capitalize first letter', () => {
-    expect(capitalize_first_letter('foo')).toEqual('Foo');
-    expect(capitalize_first_letter('Foo')).toEqual('Foo');
-    expect(capitalize_first_letter('bAR')).toEqual('BAR');
+    expect(capitalizeFirstLetter('foo')).toEqual('Foo');
+    expect(capitalizeFirstLetter('Foo')).toEqual('Foo');
+    expect(capitalizeFirstLetter('bAR')).toEqual('BAR');
   });
 });
 
 describe('shorten function tests', () => {
+
   test('should shorten string', () => {
     expect(shorten('foo bar', 4)).toEqual('foo ...');
   });
@@ -70,17 +73,18 @@ describe('shorten function tests', () => {
   });
 });
 
-describe('is_empty function test', () => {
+describe('isEmpty function test', () => {
+
   test('should return true for undefined', () => {
-    expect(is_empty()).toBe(true);
+    expect(isEmpty()).toBe(true);
   });
 
   test('should return true for an empty string', () => {
-    expect(is_empty('')).toBe(true);
+    expect(isEmpty('')).toBe(true);
   });
 
   test('should return false for a string', () => {
-    expect(is_empty('abc')).toBe(false);
+    expect(isEmpty('abc')).toBe(false);
   });
 });
 // vim: set ts=2 sw=2 tw=80:

@@ -26,7 +26,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 
 import compose from '../../utils/compose.js';
@@ -90,7 +90,7 @@ export class DashboardControls extends React.Component {
       onNewDisplay,
     } = this.props;
 
-    if (is_defined(onNewDisplay)) {
+    if (isDefined(onNewDisplay)) {
       onNewDisplay(dashboardId, displayId);
     }
   }
@@ -100,7 +100,7 @@ export class DashboardControls extends React.Component {
     const {canAdd, displayIds = []} = this.props;
 
     const displays = displayIds.map(name =>
-      getDisplay(name)).filter(is_defined);
+      getDisplay(name)).filter(isDefined);
     const displayItems = displays.map(display => ({
       label: display.title,
       value: display.id,

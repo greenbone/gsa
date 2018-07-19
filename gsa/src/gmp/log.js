@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_string} from './utils/identity';
+import {isDefined, isString} from './utils/identity';
 
 const GREENBONE_GREEN = '#99CE48';
 
@@ -45,10 +45,10 @@ export class Logger {
   }
 
   setLevel(level) {
-    level = is_string(level) ? level.toLowerCase() : undefined;
+    level = isString(level) ? level.toLowerCase() : undefined;
     let loglevel = LogLevels[level];
 
-    if (is_defined(loglevel)) {
+    if (isDefined(loglevel)) {
       this.level = level;
     }
     else {
@@ -71,21 +71,21 @@ const DEFAULT_LOG_LEVEL = 'error';
 class DefaultLogger {
 
   constructor() {
-    this.level = is_defined(window.config) &&
-      is_string(window.config.loglevel) ? window.config.loglevel :
+    this.level = isDefined(window.config) &&
+      isString(window.config.loglevel) ? window.config.loglevel :
       DEFAULT_LOG_LEVEL;
     this.loggers = {};
   }
 
   setDefaultLevel(level) {
-    this.level = is_string(level) ? level.toLowerCase() : DEFAULT_LOG_LEVEL;
+    this.level = isString(level) ? level.toLowerCase() : DEFAULT_LOG_LEVEL;
   }
 
   getLogger(name) {
-    name = is_string(name) ? name : 'unknown';
+    name = isString(name) ? name : 'unknown';
     let logger = this.loggers[name];
 
-    if (!is_defined(logger)) {
+    if (!isDefined(logger)) {
       logger = new Logger(name, this.level);
       this.loggers[name] = logger;
     }

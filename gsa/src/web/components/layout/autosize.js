@@ -25,7 +25,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {debounce} from 'gmp/utils/event';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -103,7 +103,7 @@ class AutoSize extends React.Component {
     const {width, height} = this.state;
 
     // only call children if height and width are defined
-    const shouldCallChildren = is_defined(height) && is_defined(width);
+    const shouldCallChildren = isDefined(height) && isDefined(width);
     return (
       <Container
         innerRef={this.containerRef}

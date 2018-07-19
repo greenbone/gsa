@@ -24,7 +24,7 @@ import React from 'react';
 
 import {pie as d3pie} from 'd3-shape';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -54,15 +54,15 @@ const Pie = ({
   const arcPath = arc();
   arcPath.outerRadiusX(outerRadiusX);
 
-  if (is_defined(innerRadiusX)) {
+  if (isDefined(innerRadiusX)) {
     arcPath.innerRadiusX(innerRadiusX);
   }
 
-  if (is_defined(innerRadiusY)) {
+  if (isDefined(innerRadiusY)) {
     arcPath.innerRadiusY(innerRadiusY);
   }
 
-  if (is_defined(outerRadiusY)) {
+  if (isDefined(outerRadiusY)) {
     arcPath.outerRadiusY(outerRadiusY);
   }
 
@@ -76,21 +76,21 @@ const Pie = ({
 
   const pie = d3pie();
 
-  if (is_defined(pieSort)) {
+  if (isDefined(pieSort)) {
     pie.sort(pieSort);
   }
 
-  if (is_defined(pieValue)) {
+  if (isDefined(pieValue)) {
     pie.value(pieValue);
   }
 
-  if (is_defined(padAngle)) {
+  if (isDefined(padAngle)) {
     pie.padAngle(padAngle);
   }
 
   const arcs = pie(data);
 
-  if (is_defined(arcsSort)) {
+  if (isDefined(arcsSort)) {
     arcs.sort(arcsSort);
   }
   return (

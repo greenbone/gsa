@@ -22,14 +22,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import {Div} from 'glamorous';
 
 import {css} from 'glamor';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -99,19 +98,19 @@ export const withFolding = (Component, defaults = {}) => {
         break;
     }
 
-    if (is_defined(height)) {
+    if (isDefined(height)) {
       styleProps.maxHeight = height;
     }
-    if (is_defined(animation)) {
+    if (isDefined(animation)) {
       styleProps.animation = animation;
     }
-    if (!is_defined(styleProps.overflow)) {
+    if (!isDefined(styleProps.overflow)) {
       styleProps.overflow = 'hidden';
     }
-    if (!is_defined(styleProps.transition)) {
+    if (!isDefined(styleProps.transition)) {
       styleProps.transition = '0.4s';
     }
-    if (is_defined(display)) {
+    if (isDefined(display)) {
       styleProps.display = display;
     }
 

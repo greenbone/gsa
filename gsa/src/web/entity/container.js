@@ -21,15 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import logger from 'gmp/log.js';
+import logger from 'gmp/log';
 
-import Promise from 'gmp/promise.js';
-import CancelToken from 'gmp/cancel.js';
+import CancelToken from 'gmp/cancel';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
@@ -44,43 +42,43 @@ import TagsHandler from './tagshandler.js';
 const log = logger.getLogger('web.entity.container');
 
 export const loader = (type, filter_func, name = type) =>
-  function(id, cancel_token) {
-  const {gmp} = this.props;
+  function (id, cancel_token) {
+    const {gmp} = this.props;
 
-  log.debug('Loading', name, 'for entity', id);
+    log.debug('Loading', name, 'for entity', id);
 
-  return gmp[type].getAll({
-    filter: filter_func(id),
-  }, {cancel_token}).then(response => {
+    return gmp[type].getAll({
+      filter: filter_func(id),
+    }, {cancel_token}).then(response => {
 
-    log.debug('Loaded', name, response);
+      log.debug('Loaded', name, response);
 
-    const {meta} = response;
+      const {meta} = response;
 
-    this.setState({
-      [name]: {
-        counts: meta.counts,
-        entities: response.data,
-      },
+      this.setState({
+        [name]: {
+          counts: meta.counts,
+          entities: response.data,
+        },
+      });
+
+      if (meta.fromcache && meta.dirty) {
+        log.debug('Forcing reload of', name, meta.dirty);
+        return true;
+      }
+
+      return false;
+    }).catch(err => {
+      if (isDefined(err.isCancel) && err.isCancel()) {
+        return;
+      }
+      // call handleError before setting state. setting state may hide the root
+      // error
+      const rej = this.handleError(err);
+      this.setState({[name]: undefined});
+      return rej;
     });
-
-    if (meta.fromcache && meta.dirty) {
-      log.debug('Forcing reload of', name, meta.dirty);
-      return true;
-    }
-
-    return false;
-  }).catch(err => {
-    if (is_defined(err.isCancel) && err.isCancel()) {
-      return;
-    }
-    // call handleError before setting state. setting state may hide the root
-    // error
-    const rej = this.handleError(err);
-    this.setState({[name]: undefined});
-    return rej;
-  });
-};
+  };
 
 // load permissions assigned to the entity as resource
 export const permissions_resource_loader = loader('permissions',
@@ -90,7 +88,7 @@ export const permissions_resource_loader = loader('permissions',
 // permissions with empty resources
 export const permissions_subject_loader = loader('permissions',
   id => 'subject_uuid=' + id + ' and not resource_uuid=""' +
-  ' or resource_uuid=' + id);
+    ' or resource_uuid=' + id);
 
 class EntityContainer extends React.Component {
 
@@ -134,7 +132,7 @@ class EntityContainer extends React.Component {
 
     const all_loaders = [this.loadEntity];
 
-    if (is_defined(loaders)) {
+    if (isDefined(loaders)) {
       all_loaders.push(...this.props.loaders);
     }
 
@@ -181,13 +179,13 @@ class EntityContainer extends React.Component {
       }
       return false;
     })
-    .catch(err => {
-      if (is_defined(err.isCancel) && err.isCancel()) {
-        return;
-      }
-      this.handleError(err);
-      return Promise.reject(err);
-    });
+      .catch(err => {
+        if (isDefined(err.isCancel) && err.isCancel()) {
+          return;
+        }
+        this.handleError(err);
+        return Promise.reject(err);
+      });
   }
 
   handleChanged() {
@@ -200,7 +198,7 @@ class EntityContainer extends React.Component {
   }
 
   cancelLastRequest() {
-    if (is_defined(this.cancel)) {
+    if (isDefined(this.cancel)) {
       this.cancel();
     }
   }
@@ -221,7 +219,7 @@ class EntityContainer extends React.Component {
   }
 
   clearTimer() {
-    if (is_defined(this.timer)) {
+    if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
       window.clearTimeout(this.timer);
     }
@@ -254,29 +252,29 @@ class EntityContainer extends React.Component {
         onChanged={this.handleChanged}
         onError={this.handleError}
       >{({
-          add,
-          create,
-          delete: delete_func,
-          disable,
-          edit,
-          enable,
-          remove,
-        }) => children({
-            resourceType,
-            entityCommand: this.entity_command,
-            onChanged: this.handleChanged,
-            onSuccess: this.handleChanged,
-            onError: this.handleError,
-            onDownloaded: onDownload,
-            onTagAddClick: add,
-            onTagCreateClick: create,
-            onTagDeleteClick: delete_func,
-            onTagDisableClick: disable,
-            onTagEditClick: edit,
-            onTagEnableClick: enable,
-            onTagRemoveClick: remove,
-            ...this.state,
-          })
+        add,
+        create,
+        delete: delete_func,
+        disable,
+        edit,
+        enable,
+        remove,
+      }) => children({
+        resourceType,
+        entityCommand: this.entity_command,
+        onChanged: this.handleChanged,
+        onSuccess: this.handleChanged,
+        onError: this.handleError,
+        onDownloaded: onDownload,
+        onTagAddClick: add,
+        onTagCreateClick: create,
+        onTagDeleteClick: delete_func,
+        onTagDisableClick: disable,
+        onTagEditClick: edit,
+        onTagEnableClick: enable,
+        onTagRemoveClick: remove,
+        ...this.state,
+      })
         }
       </TagsHandler>
     );

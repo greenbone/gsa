@@ -20,16 +20,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import {isDefined} from '../utils/identity';
 
-import {is_defined} from '../utils/identity';
+import PromiseFactory from '../promise';
 
-import PromiseFactory from '../promise.js';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import ReportFormat from '../models/reportformat';
 
-import ReportFormat from '../models/reportformat.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reportformats');
 
@@ -91,8 +93,8 @@ class ReportFormatCommand extends EntityCommand {
     }).then(this.transformRequest, rej => {
       const {root} = rej;
 
-      if (is_defined(root) && is_defined(root.get_report_formats) &&
-        is_defined(root.get_report_formats.verify_report_format_response)) {
+      if (isDefined(root) && isDefined(root.get_report_formats) &&
+        isDefined(root.get_report_formats.verify_report_format_response)) {
         const response = root.get_report_formats.verify_report_format_response;
         rej.setMessage(response._status_text);
       }
@@ -117,7 +119,7 @@ class ReportFormatsCommand extends EntitiesCommand {
   }
 }
 
-register_command('reportformat', ReportFormatCommand);
-register_command('reportformats', ReportFormatsCommand);
+registerCommand('reportformat', ReportFormatCommand);
+registerCommand('reportformats', ReportFormatsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

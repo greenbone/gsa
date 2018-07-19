@@ -23,17 +23,20 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten, has_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
 
 import {
   SLAVE_SCANNER_TYPE,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -73,18 +76,18 @@ class ScannerComponent extends React.Component {
     const credPromise = gmp.credentials.getAll().then(response => {
       return response.data;
     });
-    if (is_defined(scanner)) {
+    if (isDefined(scanner)) {
       Promise.all([credPromise, gmp.scanner.get(scanner)])
       .then(([credentials, response]) => {
         scanner = response.data;
 
         const title = _('Edit Scanner {{name}}', {name: shorten(scanner.name)});
         this.setState({
-          ca_pub: is_defined(scanner.ca_pub) ?
+          ca_pub: isDefined(scanner.ca_pub) ?
             scanner.ca_pub.certificate : undefined,
           comment: scanner.comment,
           credentials,
-          credential_id: has_id(scanner.credential) ?
+          credential_id: hasId(scanner.credential) ?
             scanner.credential.id : undefined,
           host: scanner.host,
           id: scanner.id,
@@ -93,7 +96,7 @@ class ScannerComponent extends React.Component {
           scanner,
           title,
           type: scanner.scanner_type,
-          which_cert: is_defined(scanner.ca_pub) ? 'existing' : 'default',
+          which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
         });
       });
     }
@@ -140,13 +143,13 @@ class ScannerComponent extends React.Component {
     const {gmp, onVerified, onVerifyError} = this.props;
 
     return gmp.scanner.verify(scanner).then(onVerified, response => {
-      const message = is_defined(response.root) &&
-        is_defined(response.root.get_scanner) &&
-        is_defined(response.root.get_scanner.verify_scanner_response) ?
+      const message = isDefined(response.root) &&
+        isDefined(response.root.get_scanner) &&
+        isDefined(response.root.get_scanner.verify_scanner_response) ?
         response.root.get_scanner.verify_scanner_response._status_text :
         _('Unkown Error');
 
-      if (is_defined(onVerifyError)) {
+      if (isDefined(onVerifyError)) {
         onVerifyError(new Error(message));
       }
     });

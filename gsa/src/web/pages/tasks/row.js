@@ -26,10 +26,10 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 import withUserName from '../../utils/withUserName.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
@@ -56,10 +56,9 @@ import TaskStatus from './status.js';
 import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
-import {is_string} from 'gmp/utils/index.js';
 
 const render_report = (report, links) => {
-  if (!is_defined(report)) {
+  if (!isDefined(report)) {
     return null;
   }
   const date = longDate(report.timestamp);
@@ -117,15 +116,15 @@ const Row = ({
   const {scanner, observers} = entity;
 
   const obs = [];
-  if (is_defined(observers)) {
-    if (is_string(observers)) {
+  if (isDefined(observers)) {
+    if (isString(observers)) {
       obs.push(_('User {{name}}', {name: observers}));
     }
     else {
-      if (is_defined(observers.role)) {
+      if (isDefined(observers.role)) {
         obs.push(_('Role {{name}}', {name: observers.role.name}));
       }
-      if (is_defined(observers.group)) {
+      if (isDefined(observers.group)) {
         obs.push(_('Group {{name}}', {name: observers.role.name}));
       }
     }
@@ -146,7 +145,7 @@ const Row = ({
                 img="alterable.svg"
                 title={_('Task is alterable')}/>
             }
-            {is_defined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
+            {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
               <Icon
                 size="small"
                 img="sensor.svg"
@@ -158,7 +157,7 @@ const Row = ({
               entity={entity}
               userName={userName}
             />
-            {is_defined(observers) && observers.length > 0 &&
+            {isDefined(observers) && observers.length > 0 &&
               <Icon
                 size="small"
                 img="provide_view.svg"
@@ -181,7 +180,7 @@ const Row = ({
         {render_report(entity.last_report, links)}
       </TableData>
       <TableData flex align="center">
-        {!entity.isContainer() && is_defined(entity.last_report) &&
+        {!entity.isContainer() && isDefined(entity.last_report) &&
           <SeverityBar severity={entity.last_report.severity}/>
         }
       </TableData>
@@ -190,7 +189,7 @@ const Row = ({
           <Trend name={entity.trend} />
         }
       </TableData>
-      {render_component(actions, {
+      {renderComponent(actions, {
         links,
         ...props,
         entity,

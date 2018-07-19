@@ -27,8 +27,8 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import {parseFloat} from 'gmp/parser';
 
@@ -52,8 +52,8 @@ import Layout from '../../components/layout/layout';
 
 import PropTypes from '../../utils/proptypes';
 import {
-  render_nvt_name,
-  render_select_items,
+  renderNvtName,
+  renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
 import {
@@ -95,7 +95,7 @@ const NoteDialog = ({
   onClose,
   onSave,
 }) => {
-  const is_edit = is_defined(note);
+  const is_edit = isDefined(note);
 
   const data = {
     severity,
@@ -105,7 +105,7 @@ const NoteDialog = ({
     hosts,
     hosts_manual,
     id,
-    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
+    oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     port,
     port_manual,
     result_id,
@@ -135,13 +135,13 @@ const NoteDialog = ({
           <Layout flex="column">
             {state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(oid, nvt_name)}</Text>
+                <Text>{renderNvtName(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
-                  title={render_nvt_name(oid, nvt_name)}
+                  title={renderNvtName(oid, nvt_name)}
                   name="oid"
                   checked={state.oid === oid}
                   value={oid}
@@ -183,7 +183,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 {is_edit && note.isActive() &&
-                  is_defined(note.endTime) &&
+                  isDefined(note.endTime) &&
                   <Divider>
                     <Radio
                       name="active"
@@ -282,11 +282,11 @@ const NoteDialog = ({
               <Radio
                 name="severity"
                 title={_('Any')}
-                checked={is_empty(state.severity)}
+                checked={isEmpty(state.severity)}
                 value=""
                 onChange={onValueChange}
               />
-              {is_defined(severity) &&
+              {isDefined(severity) &&
                 <Layout flex>
                   {severity > LOG_VALUE ?
                     <Radio
@@ -309,7 +309,7 @@ const NoteDialog = ({
                   }
                 </Layout>
               }
-              {!is_defined(severity) &&
+              {!isDefined(severity) &&
                 <Layout flex>
                   <Radio
                     name="severity"
@@ -351,7 +351,7 @@ const NoteDialog = ({
                   <Select
                     name="task_uuid"
                     value={state.task_uuid}
-                    items={render_select_items(tasks)}
+                    items={renderSelectItems(tasks)}
                     disabled={state.task_id !== '0'}
                     onChange={onValueChange}
                   />

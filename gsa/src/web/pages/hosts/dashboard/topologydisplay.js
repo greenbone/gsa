@@ -28,7 +28,7 @@ import {withRouter} from 'react-router';
 
 import _ from 'gmp/locale';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -43,7 +43,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 import {HostsTopologyLoader} from './loaders';
 
 const transformTopologyData = (data = []) => {
-  if (!has_value(data)) {
+  if (!hasValue(data)) {
     return {};
   }
 
@@ -64,7 +64,7 @@ const transformTopologyData = (data = []) => {
       links: [],
     };
 
-    if (is_defined(traceroute)) {
+    if (isDefined(traceroute)) {
       const splitTraceroute = traceroute.value.split(',');
 
       for (let i = splitTraceroute.length - 1; i > 0; i--) {
@@ -94,7 +94,7 @@ const transformTopologyData = (data = []) => {
 
         const sourceHost = hostsObject[source];
 
-        if (is_defined(sourceHost)) {
+        if (isDefined(sourceHost)) {
           sourceHost.links.push(newLink);
         }
         else {
@@ -107,7 +107,7 @@ const transformTopologyData = (data = []) => {
 
         const targetHost = hostsObject[target];
 
-        if (is_defined(targetHost)) {
+        if (isDefined(targetHost)) {
           targetHost.links.push(newLink);
         }
         else {

@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_empty, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isEmpty} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -113,7 +115,7 @@ class NvtPreference extends React.Component {
         <Layout flex>
           <Checkbox
             title={
-              is_empty(preference.value) ?
+              isEmpty(preference.value) ?
                 _('Upload file') :
                 _('Replace existing file')
             }

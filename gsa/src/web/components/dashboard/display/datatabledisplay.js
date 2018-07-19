@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -42,7 +42,7 @@ const DataTableDisplay = ({
     dataTitles={dataTitles}
   >
     {({data}) => (
-      is_defined(children) ?
+      isDefined(children) ?
         children({
           data,
           dataRow,

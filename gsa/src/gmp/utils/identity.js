@@ -21,37 +21,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-export const is_array = Array.isArray;
+export const {isArray} = global.Array;
 
-export function is_defined(value) {
-  return value !== undefined;
-}
+export const isDefined = value => value !== undefined;
 
-export function has_value(value) {
-  return value !== null && is_defined(value);
-}
+export const hasValue = value => value !== null && isDefined(value);
 
-export function is_object(value) {
-  return value !== null && typeof value === 'object';
-}
+export const isObject = value => value !== null && typeof value === 'object';
 
-export function is_string(value) {
-  return typeof value === 'string';
-}
+export const isString = value => typeof value === 'string';
 
-export function is_number(value) {
-  return typeof value === 'number';
-}
+export const isNumber = value => typeof value === 'number';
 
-export function is_function(value) {
-  return typeof value === 'function';
-}
+export const isFunction = value => typeof value === 'function';
 
-export function is_jsdate(value) {
-  return Object.prototype.toString.call(value) === '[object Date]';
-}
+export const isJsDate = value =>
+  Object.prototype.toString.call(value) === '[object Date]';
 
-export const is_model_element = elem => is_defined(elem) &&
-  is_string(elem._id) && elem._id.length > 0;
+export const isModelElement = elem => isDefined(elem) &&
+  isString(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

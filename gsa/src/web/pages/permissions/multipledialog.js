@@ -30,7 +30,7 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import {render_select_items} from 'web/utils/render';
+import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -152,7 +152,7 @@ const MultiplePermissionDialog = withCapabilities(({
                     <Select
                       name="userId"
                       value={state.userId}
-                      items={render_select_items(users)}
+                      items={renderSelectItems(users)}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -170,7 +170,7 @@ const MultiplePermissionDialog = withCapabilities(({
                     <Select
                       name="roleId"
                       value={state.roleId}
-                      items={render_select_items(roles)}
+                      items={renderSelectItems(roles)}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -188,7 +188,7 @@ const MultiplePermissionDialog = withCapabilities(({
                     <Select
                       name="groupId"
                       value={state.groupId}
-                      items={render_select_items(groups)}
+                      items={renderSelectItems(groups)}
                       onChange={onValueChange}
                     />
                   </Divider>

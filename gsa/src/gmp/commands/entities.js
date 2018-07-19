@@ -23,10 +23,10 @@
  */
 import logger from '../log.js';
 
-import {is_defined, is_string} from '../utils/identity';
-import {map, for_each} from '../utils/array';
+import {isDefined, isString} from '../utils/identity';
+import {map, forEach} from '../utils/array';
 
-import {parse_collection_list} from '../collection/parser.js';
+import {parseCollectionList} from '../collection/parser.js';
 
 import Filter, {ALL_FILTER} from '../models/filter.js';
 import {filter_string} from '../models/filter/utils.js';
@@ -51,8 +51,8 @@ class EntitiesCommand extends HttpCommand {
     const {filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
-    if (is_defined(filter)) {
-      if (is_defined(filter.id)) {
+    if (isDefined(filter)) {
+      if (isDefined(filter.id)) {
         rparams.filt_id = filter.id;
       }
       rparams.filter = filter_string(filter);
@@ -62,7 +62,7 @@ class EntitiesCommand extends HttpCommand {
 
   getCollectionListFromRoot(root) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz);
+    return parseCollectionList(response, this.name, this.clazz);
   }
 
   getEntitiesResponse(root) {
@@ -80,10 +80,10 @@ class EntitiesCommand extends HttpCommand {
 
   getAll(params = {}, options) {
     const {filter} = params;
-    if (!is_defined(filter)) {
+    if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
     }
-    else if (is_string(filter)) {
+    else if (isString(filter)) {
       params.filter = Filter.fromString(filter).all();
     }
     else {
@@ -161,19 +161,19 @@ class EntitiesCommand extends HttpCommand {
         ...group,
       };
 
-      if (is_defined(text)) {
+      if (isDefined(text)) {
         newGroup.text = {};
 
-        for_each(text, t => {
+        forEach(text, t => {
           const name = t._column;
           const value = t.__text;
           newGroup.text[name] = value;
         });
       }
-      if (is_defined(stats)) {
+      if (isDefined(stats)) {
         newGroup.stats = {};
 
-        for_each(stats, s => {
+        forEach(stats, s => {
           const name = s._column;
           const nStat = {...s};
           delete nStat._column;
@@ -213,15 +213,15 @@ class EntitiesCommand extends HttpCommand {
       requestParams[`sort_stats:${i}`] = stat;
     });
 
-    if (is_defined(aggregateMode)) {
+    if (isDefined(aggregateMode)) {
       requestParams.aggregate_mode = aggregateMode;
     }
 
-    if (is_defined(maxGroups)) {
+    if (isDefined(maxGroups)) {
       requestParams.max_groups = maxGroups;
     }
 
-    if (is_defined(subgroupColumn)) {
+    if (isDefined(subgroupColumn)) {
       requestParams.subgroup_column = subgroupColumn;
     }
 

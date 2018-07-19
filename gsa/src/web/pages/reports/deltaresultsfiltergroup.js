@@ -24,8 +24,9 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -67,7 +68,7 @@ class DeltaStatesFilterGroup extends React.Component {
 
     let delta_states = filter.get('delta_states');
 
-    if (!is_defined(delta_states)) {
+    if (!isDefined(delta_states)) {
       delta_states = '';
     }
     return (

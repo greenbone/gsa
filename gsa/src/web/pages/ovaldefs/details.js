@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -57,7 +56,7 @@ const OvaldefDetails = ({
 
       <InfoTable>
         <TableBody>
-          {is_defined(title) &&
+          {isDefined(title) &&
             <TableRow>
               <TableData>
                 {_('Title')}
@@ -68,7 +67,7 @@ const OvaldefDetails = ({
             </TableRow>
           }
 
-          {is_defined(version) &&
+          {isDefined(version) &&
             <TableRow>
               <TableData>
                 {_('Version')}
@@ -79,7 +78,7 @@ const OvaldefDetails = ({
             </TableRow>
           }
 
-          {is_defined(entity.class) &&
+          {isDefined(entity.class) &&
             <TableRow>
               <TableData>
                 {_('Definition Class')}
@@ -90,7 +89,7 @@ const OvaldefDetails = ({
             </TableRow>
           }
 
-          {is_defined(cve_refs) &&
+          {isDefined(cve_refs) &&
             <TableRow>
               <TableData>
                 {_('Referenced CVEs')}
@@ -112,7 +111,7 @@ const OvaldefDetails = ({
             </TableData>
           </TableRow>
 
-          {is_defined(entity.isDeprecated) && entity.isDeprecated() &&
+          {isDefined(entity.isDeprecated) && entity.isDeprecated() &&
             <TableRow>
               <TableData>
                 {_('Deprecated')}
@@ -123,7 +122,7 @@ const OvaldefDetails = ({
             </TableRow>
           }
 
-          {is_defined(file) &&
+          {isDefined(file) &&
             <TableRow>
               <TableData>
                 {_('File')}
@@ -137,11 +136,11 @@ const OvaldefDetails = ({
         </TableBody>
       </InfoTable>
 
-      {is_defined(metadata) &&
+      {isDefined(metadata) &&
         <div>
           <h2>{_('Description')}</h2>
           <p>
-            {is_defined(metadata.description) ?
+            {isDefined(metadata.description) ?
                 metadata.description :
                 _('None')}
           </p>

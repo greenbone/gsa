@@ -20,17 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import {isDefined} from '../utils/identity';
 
-import {is_defined} from '../utils/identity';
+import CollectionCounts from '../collection/collectioncounts';
+import {parseCollectionList} from '../collection/parser';
 
-import CollectionCounts from '../collection/collectioncounts.js';
-import {parse_collection_list} from '../collection/parser.js';
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import Filter from '../models/filter';
 
-import Filter from '../models/filter.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.filters');
 
@@ -75,14 +77,14 @@ class FilterCommand extends EntityCommand {
 // FIXME parsing counts is horrible
 
 const parse_filter = element => {
-  const filter = is_defined(element) && is_defined(element.filters) ?
+  const filter = isDefined(element) && isDefined(element.filters) ?
     element.filters[0] : undefined;
   return new Filter(filter);
 };
 
 const parse_counts = element => {
-  if (is_defined(element) && is_defined(element.filters) &&
-    is_defined(element.filter_count)) {
+  if (isDefined(element) && isDefined(element.filters) &&
+    isDefined(element.filter_count)) {
     const es = element.filters[1]; // eslint-disable-line prefer-destructuring
     const ec = element.filter_count;
     return {
@@ -112,7 +114,7 @@ class FiltersCommand extends EntitiesCommand {
 
   getCollectionListFromRoot(root, meta) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, {
+    return parseCollectionList(response, this.name, this.clazz, {
       meta,
       filter_parse_func: parse_filter,
       collection_count_parse_func: parse_collection_counts,
@@ -122,7 +124,7 @@ class FiltersCommand extends EntitiesCommand {
 
 export default FiltersCommand;
 
-register_command('filter', FilterCommand);
-register_command('filters', FiltersCommand);
+registerCommand('filter', FilterCommand);
+registerCommand('filters', FiltersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

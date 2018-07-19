@@ -24,7 +24,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -71,7 +71,7 @@ const ToggleButton = ({
     {...props}
     checked={checked}
     disabled={disabled}
-    onClick={!disabled && is_defined(onToggle) ?
+    onClick={!disabled && isDefined(onToggle) ?
       () => onToggle(!checked, name) : undefined}
   />
 );

@@ -30,9 +30,9 @@ import logger from 'gmp/log';
 
 import {NO_VALUE} from 'gmp/parser';
 
-import {first, for_each, map} from 'gmp/utils/array';
-import {is_array, is_defined} from 'gmp/utils/identity';
-import {includes_id, select_save_id} from 'gmp/utils/id';
+import {first, forEach, map} from 'gmp/utils/array';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {includesId, selectSaveId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
@@ -73,9 +73,9 @@ const sort_scan_configs = scan_configs => {
     [OSP_SCAN_CONFIG_TYPE]: [],
   };
 
-  for_each(scan_configs, config => {
+  forEach(scan_configs, config => {
     const type = config.scan_config_type;
-    if (!is_array(sorted_scan_configs[type])) {
+    if (!isArray(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
     sorted_scan_configs[type].push(config);
@@ -129,7 +129,7 @@ class TaskComponent extends React.Component {
   }
 
   handleSaveContainerTask(data) {
-    if (is_defined(data.id)) {
+    if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = this.props;
       return this.cmd.saveContainer(data).then(onContainerSaved,
         onContainerSaveError);
@@ -214,7 +214,7 @@ class TaskComponent extends React.Component {
   }
 
   openTaskDialog(task) {
-    if (is_defined(task) && task.isContainer()) {
+    if (isDefined(task) && task.isContainer()) {
       this.openContainerTaskDialog(task);
     }
     else {
@@ -229,7 +229,7 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities, gmp} = this.props;
 
-    if (is_defined(task)) {
+    if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
         const {targets, scan_configs, alerts, scanners, schedules} = settings;
@@ -239,12 +239,12 @@ class TaskComponent extends React.Component {
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
         const schedule_id = capabilities.mayAccess('schedules') &&
-          is_defined(task.schedule) ?
+          isDefined(task.schedule) ?
             task.schedule.id : UNSET_VALUE;
 
         const data = {};
         if (task.isChangeable()) {
-          data.config_id = is_defined(task.config) ? task.config.id : undefined;
+          data.config_id = isDefined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
           data.target_id = task.target.id;
         }
@@ -312,15 +312,15 @@ class TaskComponent extends React.Component {
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        scanner_id = select_save_id(scanners, scanner_id);
+        scanner_id = selectSaveId(scanners, scanner_id);
 
-        target_id = select_save_id(targets, target_id);
+        target_id = selectSaveId(targets, target_id);
 
-        schedule_id = select_save_id(schedules, schedule_id, UNSET_VALUE);
+        schedule_id = selectSaveId(schedules, schedule_id, UNSET_VALUE);
 
-        alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
+        alert_id = includesId(alerts, alert_id) ? alert_id : undefined;
 
-        const alert_ids = is_defined(alert_id) ? [alert_id] : [];
+        const alert_ids = isDefined(alert_id) ? [alert_id] : [];
 
         this.setState({
           taskDialogVisible: true,
@@ -398,17 +398,17 @@ class TaskComponent extends React.Component {
       const settings = response.data;
       let config_id = settings.get('Default OpenVAS Scan Config').value;
 
-      if (!is_defined(config_id) || config_id.length === 0) {
+      if (!isDefined(config_id) || config_id.length === 0) {
         config_id = FULL_AND_FAST_SCAN_CONFIG_ID;
       }
 
       const {credentials} = settings;
 
-      const ssh_credential = select_save_id(credentials,
+      const ssh_credential = selectSaveId(credentials,
         settings.get('Default SSH Credential').value, '');
-      const smb_credential = select_save_id(credentials,
+      const smb_credential = selectSaveId(credentials,
         settings.get('Default SMB Credential').value, '');
-      const esxi_credential = select_save_id(credentials,
+      const esxi_credential = selectSaveId(credentials,
         settings.get('Default ESXi Credential').value, '');
 
       const now = date().tz(settings.timezone);
@@ -450,7 +450,7 @@ class TaskComponent extends React.Component {
         modifyTaskWizardVisible: true,
         tasks: settings.tasks,
         reschedule: NO_VALUE,
-        task_id: select_save_id(settings.tasks),
+        task_id: selectSaveId(settings.tasks),
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),

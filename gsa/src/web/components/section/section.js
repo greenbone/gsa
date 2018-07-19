@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -57,7 +56,7 @@ const Section = ({
   onFoldToggle,
   onFoldStepEnd,
 }) => {
-  if (!is_defined(header)) {
+  if (!isDefined(header)) {
     header = (
       <SectionHeader
         img={img}

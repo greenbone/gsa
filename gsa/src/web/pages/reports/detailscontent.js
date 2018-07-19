@@ -28,10 +28,13 @@ import glamorous, {Span} from 'glamorous';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_entities_counts, render_options} from '../../utils/render.js';
+import {
+  render_entities_counts,
+  renderSelectItems,
+} from '../../utils/render.js';
 
 import EntityInfo from '../../entity/info.js';
 
@@ -152,10 +155,9 @@ const ToolBarIcons = ({
         <Select
           name="report_format_id"
           value={report_format_id}
+          items={renderSelectItems(report_formats)}
           onChange={onReportFormatChange}
-        >
-          {render_options(report_formats)}
-        </Select>
+        />
         <Icon
           img="download.svg"
           title={_('Download filtered Report')}
@@ -300,7 +302,7 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  if (!is_defined(entity)) {
+  if (!isDefined(entity)) {
     return (
       <Loading loading={loading}/>
     );
@@ -329,7 +331,7 @@ const PageContent = ({
 
   const delta = report.isDeltaReport();
 
-  const status = is_defined(task.isContainer) && task.isContainer() ?
+  const status = isDefined(task.isContainer) && task.isContainer() ?
     _('Container') : scan_run_status;
 
   const header_title = (

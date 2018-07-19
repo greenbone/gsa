@@ -24,12 +24,15 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -313,7 +316,7 @@ class NvtFamily extends React.Component {
       max: family.max,
     };
 
-    if (is_defined(config_family)) {
+    if (isDefined(config_family)) {
       counts.count = config_family.nvts.count;
       counts.max = config_family.nvts.max;
     }
@@ -556,7 +559,7 @@ const EditDialog = ({
               <FormGroup title={_('Scanner')}>
                 <Select
                   name="scanner_id"
-                  items={render_select_items(scanners)}
+                  items={renderSelectItems(scanners)}
                   value={state.scanner_id}
                   onChange={onValueChange}
                 />

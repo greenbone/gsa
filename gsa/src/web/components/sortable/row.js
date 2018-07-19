@@ -26,7 +26,7 @@ import glamorous from 'glamorous';
 
 import {Droppable} from 'react-beautiful-dnd';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -52,7 +52,7 @@ class Row extends React.Component {
   handleResize(diffY) {
     const {onResize} = this.props;
 
-    if (is_defined(onResize)) {
+    if (isDefined(onResize)) {
       const box = this.row.getBoundingClientRect();
       const height = box.height + diffY;
 

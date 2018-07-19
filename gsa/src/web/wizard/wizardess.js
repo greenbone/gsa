@@ -21,12 +21,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
-export * from './identity';
-export * from './id';
-export * from './array';
-export * from './event';
-export * from './string';
-export * from './object';
+import glamorous from 'glamorous';
+
+import Img from '../components/img/img.js';
+
+const WizImg = glamorous(Img)({
+  height: '300px',
+});
+
+const Wizardess = () => (
+  <WizImg
+    src="enchantress.svg"
+  />
+);
+
+export default Wizardess;
 
 // vim: set ts=2 sw=2 tw=80:

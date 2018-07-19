@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -58,9 +58,9 @@ const FilterCountChangedConditionPart = ({
       <Select
         value={filterId}
         name={prefix + 'filter_id'}
-        onChange={onChange}>
-        {render_options(filters)}
-      </Select>
+        items={renderSelectItems(filters)}
+        onChange={onChange}
+      />
       <Layout>
         {_('matches at least')}
       </Layout>

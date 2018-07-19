@@ -20,12 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
-import {parseInt} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -38,7 +39,7 @@ const ApplyOverridesGroup = ({
     overrides,
     onChange,
   }) => {
-  if (is_defined(filter)) {
+  if (isDefined(filter)) {
     overrides = filter.get('apply_overrides');
   }
   return (

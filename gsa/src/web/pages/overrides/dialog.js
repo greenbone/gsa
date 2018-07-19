@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
@@ -51,8 +51,8 @@ import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  render_nvt_name,
-  render_select_items,
+  renderNvtName,
+  renderSelectItems,
   severityFormat,
 } from '../../utils/render.js';
 import {
@@ -108,7 +108,7 @@ const OverrideDialog = ({
   onClose,
   onSave,
 }) => {
-  const is_edit = is_defined(override);
+  const is_edit = isDefined(override);
 
   const data = {
     active,
@@ -118,13 +118,13 @@ const OverrideDialog = ({
     hosts_manual,
     new_severity,
     new_severity_from_list,
-    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
+    oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     override,
     port,
     port_manual,
     result_id,
     result_uuid,
-    severity: is_defined(severity) ? severity : '',
+    severity: isDefined(severity) ? severity : '',
     task_id,
     task_name,
     tasks,
@@ -172,14 +172,14 @@ const OverrideDialog = ({
           <Layout flex="column">
             {fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{render_nvt_name(oid, nvt_name)}</Text>
+                <Text>{renderNvtName(oid, nvt_name)}</Text>
               </FormGroup>
             }
             {is_edit && !fixed &&
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
-                  title={render_nvt_name(oid, nvt_name)}
+                  title={renderNvtName(oid, nvt_name)}
                   checked={state.oid === oid}
                   value={oid}
                   onChange={onValueChange}
@@ -220,7 +220,7 @@ const OverrideDialog = ({
                 onChange={onValueChange}
               />
               {is_edit && override.isActive() &&
-                is_defined(override.endTime) &&
+                isDefined(override.endTime) &&
                 <Layout flex box>
                   <Divider>
                     <Radio
@@ -324,7 +324,7 @@ const OverrideDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {is_defined(severity) &&
+              {isDefined(severity) &&
                 <Layout flex>
                   {severity > 0 ?
                     <Radio
@@ -347,7 +347,7 @@ const OverrideDialog = ({
                   }
                 </Layout>
               }
-              {!is_defined(severity) &&
+              {!isDefined(severity) &&
                 <Layout flex box>
                   <Radio
                     name="severity"
@@ -424,7 +424,7 @@ const OverrideDialog = ({
                   <Select
                     name="task_uuid"
                     disabled={state.task_id !== TASK_SELECTED}
-                    items={render_select_items(tasks)}
+                    items={renderSelectItems(tasks)}
                     value={state.task_uuid}
                     onChange={onValueChange}
                   />
@@ -444,7 +444,7 @@ const OverrideDialog = ({
                 <Radio
                   name="result_id"
                   title={
-                    is_defined(result_name) ?
+                    isDefined(result_name) ?
                       _('Only selected result ({{- name}})',
                         {name: result_name}) : _('UUID')
                   }

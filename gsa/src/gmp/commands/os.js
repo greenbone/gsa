@@ -21,10 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import OperatingSystem from '../models/os';
 
-import OperatingSystem from '../models/os.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 class OperatingSystemCommand extends EntityCommand {
 
@@ -84,7 +86,7 @@ class OperatingSystemsCommand extends EntitiesCommand {
   }
 }
 
-register_command('operatingsystem', OperatingSystemCommand);
-register_command('operatingsystems', OperatingSystemsCommand);
+registerCommand('operatingsystem', OperatingSystemCommand);
+registerCommand('operatingsystems', OperatingSystemsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

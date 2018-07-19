@@ -29,8 +29,8 @@ import equal from 'fast-deep-equal';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {isDefined} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../../../utils/proptypes';
 import Theme from '../../../utils/theme';
@@ -123,18 +123,18 @@ class DataDisplay extends React.Component {
   static getTransformedData(props) {
     const {data, dataTransform, ...other} = props;
 
-    const tprops = exclude_object_props(other, ownProps);
+    const tprops = excludeObjectProps(other, ownProps);
 
-    return is_defined(dataTransform) ?
+    return isDefined(dataTransform) ?
       dataTransform(data, tprops) : data;
   }
 
   hasFilterChanged(nextProps) {
-    if (is_defined(this.props.filter)) {
+    if (isDefined(this.props.filter)) {
       return this.props.filter.equals(nextProps.filter);
     }
 
-    return is_defined(nextProps.filter);
+    return isDefined(nextProps.filter);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -184,14 +184,14 @@ class DataDisplay extends React.Component {
   }
 
   cleanupDownloadSvg() {
-    if (is_defined(this.downloadSvgUrl)) {
+    if (isDefined(this.downloadSvgUrl)) {
       URL.revokeObjectURL(this.downloadSvgUrl);
       this.downloadSvgUrl = undefined;
     }
   }
 
   cleanupDownloadCsv() {
-    if (is_defined(this.downloadCsvUrl)) {
+    if (isDefined(this.downloadCsvUrl)) {
       URL.revokeObjectURL(this.downloadCsvUrl);
       this.downloadCsvUrl = undefined;
     }
@@ -276,12 +276,12 @@ class DataDisplay extends React.Component {
     height = height - DISPLAY_HEADER_HEIGHT;
     width = width - DISPLAY_BORDER_WIDTH;
 
-    isLoading = isLoading && !is_defined(originalData);
+    isLoading = isLoading && !isDefined(originalData);
 
-    const otherProps = exclude_object_props(props, ownProps);
-    const showDataMenus = is_defined(dataRow) && is_defined(dataTitles);
+    const otherProps = excludeObjectProps(props, ownProps);
+    const showDataMenus = isDefined(dataRow) && isDefined(dataTitles);
 
-    showFilterString = showFilterString && is_defined(filter);
+    showFilterString = showFilterString && isDefined(filter);
     if (showFilterString) {
       height = height - 20; // padding top + bottom + font size
     }

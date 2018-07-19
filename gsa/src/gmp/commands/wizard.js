@@ -20,15 +20,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {HttpCommand, register_command} from '../command.js';
-import Model from '../model.js';
+import Model from '../model';
 
-import Credential from '../models/credential.js';
-import Task from '../models/task.js';
-import Settings from '../models/settings.js';
+import Credential from '../models/credential';
+import Task from '../models/task';
+import Settings from '../models/settings';
 
-import {for_each, map} from '../utils/array';
+import {forEach, map} from '../utils/array';
+
+import HttpCommand from './http';
 
 function convert_data(prefix, data, fields) {
   const converted = {};
@@ -72,7 +74,7 @@ class WizardCommand extends HttpCommand {
 
       settings.client_address = data.client_address;
 
-      for_each(data.wizard.run_wizard_response.response.get_settings_response
+      forEach(data.wizard.run_wizard_response.response.get_settings_response
         .setting, setting => {
           settings.set(setting.name, {
             id: setting._id,
@@ -96,7 +98,7 @@ class WizardCommand extends HttpCommand {
 
       const settings = new Settings();
 
-      for_each(resp.get_settings_response.setting, setting => {
+      forEach(resp.get_settings_response.setting, setting => {
           settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
@@ -131,7 +133,7 @@ class WizardCommand extends HttpCommand {
 
       const settings = new Settings();
 
-      for_each(resp.get_settings_response.setting, setting => {
+      forEach(resp.get_settings_response.setting, setting => {
           settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
@@ -193,6 +195,6 @@ class WizardCommand extends HttpCommand {
 
 export default WizardCommand;
 
-register_command('wizard', WizardCommand);
+registerCommand('wizard', WizardCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -22,12 +22,12 @@
  */
 
 import {
-  parse_collection_list,
-  parse_info_entities,
-  parse_info_counts,
-} from '../collection/parser.js';
+  parseCollectionList,
+  parseInfoEntities,
+  parseInfoCounts,
+} from '../collection/parser';
 
-import EntitiesCommand from './entities.js';
+import EntitiesCommand from './entities';
 
 class InfoEntitiesCommand extends EntitiesCommand {
 
@@ -45,16 +45,16 @@ class InfoEntitiesCommand extends EntitiesCommand {
   }
 
   parseInfoEntities(response, name, modelclass) {
-    return parse_info_entities(response, name, modelclass,
+    return parseInfoEntities(response, name, modelclass,
       this.entities_filter_func);
   }
 
   getCollectionListFromRoot(root, meta) {
     const response = this.getEntitiesResponse(root);
-    return parse_collection_list(response, this.name, this.clazz, {
+    return parseCollectionList(response, this.name, this.clazz, {
       meta,
       entities_parse_func: this.parseInfoEntities,
-      collection_count_parse_func: parse_info_counts,
+      collection_count_parse_func: parseInfoCounts,
     });
   }
 }

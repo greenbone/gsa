@@ -30,15 +30,15 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-import {is_empty} from 'gmp/utils/string';
+import {isEmpty} from 'gmp/utils/string';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withGmp from '../../utils/withGmp.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -81,13 +81,13 @@ class TagDialog extends React.Component {
       resourceType,
     } = this.state;
 
-    if (is_defined(resourceType)) {
+    if (isDefined(resourceType)) {
       this.loadResourcesByType(resourceType);
     }
   }
 
   loadResourcesByType(type) {
-    if (!is_defined(type)) {
+    if (!isDefined(type)) {
       return;
     }
     const {gmp} = this.props;
@@ -97,13 +97,13 @@ class TagDialog extends React.Component {
         const {data} = response;
         let id = this.state.resourceIdText;
         const idPresent = data.includes(res => res.id === id);
-        if (!idPresent && !is_empty(id)) {
+        if (!idPresent && !isEmpty(id)) {
           data.push({
             name: '----',
             id: id,
           });
         }
-        if (is_empty(id)) {
+        if (isEmpty(id)) {
           id = undefined;
         }
         this.setState({
@@ -142,12 +142,12 @@ class TagDialog extends React.Component {
     gmp[pluralizeType(normalizeType(resourceType))]
       .get({filter: 'uuid=' + id})
       .then(response => {
-        const ids = is_defined(resourceIdsSelected) ? resourceIdsSelected : [];
+        const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
         if (response.data.length === 0) {
 
           let {resourceOptions} = this.state;
           const idPresent = resourceOptions.filter(res => res.id === id);
-          if (idPresent.length === 0 && !is_empty(id)) {
+          if (idPresent.length === 0 && !isEmpty(id)) {
             // if the options already contain '----', remove the old element
             resourceOptions = resourceOptions.filter(
               res => res.name !== '----');
@@ -213,7 +213,7 @@ class TagDialog extends React.Component {
       value,
     };
 
-    const typeIsChosen = is_defined(this.state.resourceType);
+    const typeIsChosen = isDefined(this.state.resourceType);
 
     const controlledData = {
       resource_ids: this.state.resourceIdsSelected,
@@ -279,7 +279,7 @@ class TagDialog extends React.Component {
                 <ScrollableContent>
                   <MultiSelect
                     name="resource_ids"
-                    items={render_select_items(this.state.resourceOptions)}
+                    items={renderSelectItems(this.state.resourceOptions)}
                     value={this.state.resourceIdsSelected}
                     disabled={!typeIsChosen || fixed ||
                       resourceTypesOptions.length === 0}

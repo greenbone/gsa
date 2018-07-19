@@ -25,13 +25,14 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
   permissionDescription,
-  render_select_items,
+  renderSelectItems,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -188,7 +189,7 @@ const PermissionDialog = ({
       }) => {
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
-        const resource = is_defined(state.resourceType) ? new Model({
+        const resource = isDefined(state.resourceType) ? new Model({
           name: state.resourceId,
         }, state.resourceType) : undefined;
 
@@ -257,7 +258,7 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="userId"
-                      items={render_select_items(users)}
+                      items={renderSelectItems(users)}
                       value={state.userId}
                       onChange={onValueChange}
                     />
@@ -274,7 +275,7 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="roleId"
-                      items={render_select_items(roles)}
+                      items={renderSelectItems(roles)}
                       value={state.roleId}
                       onChange={onValueChange}
                     />
@@ -291,7 +292,7 @@ const PermissionDialog = ({
                     </Radio>
                     <Select
                       name="groupId"
-                      items={render_select_items(groups)}
+                      items={renderSelectItems(groups)}
                       value={state.groupId}
                       onChange={onValueChange}
                     />

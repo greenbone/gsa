@@ -25,13 +25,13 @@ import ReactDOM from 'react-dom';
 
 import Logger from 'gmp/log';
 
-import {has_value} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 const log = Logger.getLogger('web.components.portal');
 
 let portal = document.getElementById('portals');
 
-if (!has_value(portal)) {
+if (!hasValue(portal)) {
   const [body] = document.getElementsByTagName('body');
 
   portal = document.createElement('div');

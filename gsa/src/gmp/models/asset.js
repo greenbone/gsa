@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import Model from '../model.js';
 
@@ -33,8 +33,8 @@ class Asset extends Model {
   constructor(elem, asset_type) {
     super(elem);
 
-    if (!is_defined(this.asset_type)) { // only overwrite if not already set
-      this.asset_type = is_defined(asset_type) ? asset_type :
+    if (!isDefined(this.asset_type)) { // only overwrite if not already set
+      this.asset_type = isDefined(asset_type) ? asset_type :
         this.constructor.asset_type;
     }
   }

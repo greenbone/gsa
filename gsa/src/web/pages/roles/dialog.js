@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
 import {permissionDescription} from '../../utils/render.js';
@@ -70,9 +72,9 @@ const Dialog = ({
     onSave,
   }) => {
 
-  const is_edit = is_defined(role);
-  const has_groups = is_defined(all_groups) && all_groups.length > 0;
-  const has_permissions = is_defined(all_permissions) &&
+  const is_edit = isDefined(role);
+  const has_groups = isDefined(all_groups) && all_groups.length > 0;
+  const has_permissions = isDefined(all_permissions) &&
     all_permissions.length > 0;
 
   const groupOptions = map(all_groups, group => ({

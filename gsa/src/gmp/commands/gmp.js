@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import ActionResult from '../models/actionresult';
 
@@ -37,7 +37,7 @@ class GmpCommand extends HttpCommand {
     const {filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       rparams.filter = filter_string(filter);
     }
 

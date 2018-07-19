@@ -72,4 +72,5 @@ storiesOf('Sortable/Resizer', module)
   .add('default', () => (
     <ResizeContainer />
   ));
+
 // vim: set ts=2 sw=2 tw=80:

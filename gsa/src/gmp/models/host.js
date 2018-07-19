@@ -20,9 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
-import {is_empty} from '../utils/string';
-import {for_each, map} from '../utils/array';
+import {isDefined} from '../utils/identity';
+import {isEmpty} from '../utils/string';
+import {forEach, map} from '../utils/array';
 
 import {
   parseInt,
@@ -45,14 +45,14 @@ class Identifier {
   constructor(element) {
     const props = parseProperties(element);
 
-    if (is_defined(props.source)) {
+    if (isDefined(props.source)) {
       props.source = newProperties({
         ...props.source,
         source_type: props.source.type,
       });
     }
 
-    if (is_defined(props.os)) {
+    if (isDefined(props.os)) {
       props.os = newProperties(props.os);
     }
 
@@ -67,11 +67,11 @@ class Host extends Asset {
   parseProperties(elem) {
     let ret = super.parseProperties(elem);
 
-    if (is_defined(ret.host) && is_defined(ret.host.severity)) {
+    if (isDefined(ret.host) && isDefined(ret.host.severity)) {
       ret.severity = parseSeverity(ret.host.severity.value);
     }
 
-    if (is_defined(ret.identifiers)) {
+    if (isDefined(ret.identifiers)) {
       ret.identifiers = map(ret.identifiers.identifier, identifier => {
         return new Identifier(identifier);
       });
@@ -82,30 +82,30 @@ class Host extends Asset {
 
     let hostname = get_identifier(ret.identifiers, 'hostname');
 
-    if (!is_defined(hostname)) {
+    if (!isDefined(hostname)) {
       hostname = get_identifier(ret.identifiers, 'DNS-via-TargetDefinition');
     }
 
     const ip = get_identifier(ret.identifiers, 'ip');
 
-    ret.hostname = is_defined(hostname) ? hostname.value : undefined;
-    ret.ip = is_defined(ip) ? ip.value : undefined;
+    ret.hostname = isDefined(hostname) ? hostname.value : undefined;
+    ret.ip = isDefined(ip) ? ip.value : undefined;
 
     ret.details = {};
 
-    if (is_defined(ret.host)) {
-      for_each(ret.host.detail, details => {
+    if (isDefined(ret.host)) {
+      forEach(ret.host.detail, details => {
         ret.details[details.name] = {
           value: details.value,
           source: newProperties(details.source),
         };
       });
 
-      if (is_defined(ret.host.routes)) {
+      if (isDefined(ret.host.routes)) {
         ret.routes = map(ret.host.routes.route, route =>
           map(route.host, host => ({
             ip: host.ip,
-            id: is_empty(host._id) ? undefined : host._id,
+            id: isEmpty(host._id) ? undefined : host._id,
             distance: parseInt(host._distance),
             same_source: parseYesNo(host._same_source), // host/hop was found in the same scan
           }))

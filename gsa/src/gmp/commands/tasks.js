@@ -20,19 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
-import logger from '../log.js';
+import {isEmpty} from '../utils/string';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-import Model from '../model.js';
+import registerCommand from '../command';
+import Model from '../model';
 
-import ScanConfig from '../models/scanconfig.js';
-import Scanner from '../models/scanner.js';
-import Schedule from '../models/schedule.js';
-import Target from '../models/target.js';
-import Task from '../models/task.js';
+import ScanConfig from '../models/scanconfig';
+import Scanner from '../models/scanner';
+import Schedule from '../models/schedule';
+import Target from '../models/target';
+import Task from '../models/task';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.tasks');
 
@@ -107,19 +110,19 @@ class TaskCommand extends EntityCommand {
         scanner => new Scanner(scanner));
       settings.tags = map(new_task.get_tags_response.tag,
         tag => new Model(tag, 'tag'));
-      settings.alert_id = is_empty(new_task.alert_id) ?
+      settings.alert_id = isEmpty(new_task.alert_id) ?
         undefined : new_task.alert_id;
-      settings.config_id = is_empty(new_task.config_id) ?
+      settings.config_id = isEmpty(new_task.config_id) ?
         undefined : new_task.config_id;
-      settings.osp_config_id = is_empty(new_task.osp_config_id) ?
+      settings.osp_config_id = isEmpty(new_task.osp_config_id) ?
         undefined : new_task.osp_config_id;
-      settings.osp_scanner_id = is_empty(new_task.osp_scanner_id) ?
+      settings.osp_scanner_id = isEmpty(new_task.osp_scanner_id) ?
         undefined : new_task.osp_scanner_id;
-      settings.scanner_id = is_empty(new_task.scanner_id) ?
+      settings.scanner_id = isEmpty(new_task.scanner_id) ?
         undefined : new_task.scanner_id;
-      settings.schedule_id = is_empty(new_task.schedule_id) ?
+      settings.schedule_id = isEmpty(new_task.schedule_id) ?
         undefined : new_task.schedule_id;
-      settings.target_id = is_empty(new_task.target_id) ?
+      settings.target_id = isEmpty(new_task.target_id) ?
         undefined : new_task.target_id;
       return response.setData(settings);
     });
@@ -339,7 +342,7 @@ class TasksCommand extends EntitiesCommand {
   }
 }
 
-register_command('task', TaskCommand);
-register_command('tasks', TasksCommand);
+registerCommand('task', TaskCommand);
+registerCommand('tasks', TasksCommand);
 
 // vim: set ts=2 sw=2 tw=80:

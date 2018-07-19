@@ -21,18 +21,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import {isDefined} from '../utils/identity';
 
-import {is_defined} from '../utils/identity';
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import Report from '../models/report';
 
-import Report from '../models/report.js';
+import {ALL_FILTER} from '../models/filter';
 
-import {ALL_FILTER} from '../models/filter.js';
+import DefaultTransform from '../http/transform/default';
 
-import DefaultTransform from '../http/transform/default.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.reports');
 
@@ -90,7 +92,7 @@ class ReportCommand extends EntityCommand {
       delta_report_id,
       report_id: id,
       report_format_id,
-      filter: is_defined(filter) ? filter.all() : ALL_FILTER,
+      filter: isDefined(filter) ? filter.all() : ALL_FILTER,
     }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 
@@ -135,7 +137,7 @@ class ReportCommand extends EntityCommand {
   }
 }
 
-register_command('report', ReportCommand);
-register_command('reports', ReportsCommand);
+registerCommand('report', ReportCommand);
+registerCommand('reports', ReportsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

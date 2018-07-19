@@ -24,7 +24,7 @@ import React from 'react';
 
 import logger from 'gmp/log.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Dashboard from 'web/components/dashboard/dashboard';
 
@@ -95,7 +95,7 @@ class ScansDashboard extends React.Component {
   }
 
   clearTimer() {
-    if (is_defined(this.timer)) {
+    if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
       window.clearTimeout(this.timer);
     }

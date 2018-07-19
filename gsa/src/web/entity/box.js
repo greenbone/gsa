@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -70,13 +70,13 @@ const EntityBox = ({
       align="space-between">
       <Layout flex align={['space-between', 'start']}>
         <h3>{title}</h3>
-        {is_defined(toolbox) && toolbox}
+        {isDefined(toolbox) && toolbox}
       </Layout>
       <Pre>{text}</Pre>
       {children}
       <InfoTable>
         <TableBody>
-          {is_defined(end) &&
+          {isDefined(end) &&
             <TableRow>
               <TableData>
                 {_('Active until')}

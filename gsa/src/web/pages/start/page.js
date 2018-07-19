@@ -30,7 +30,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -238,7 +238,7 @@ class StartPage extends React.Component {
   }
 
   handleAddNewDisplay(dashboardId, displayId) {
-    if (!is_defined(displayId) || !is_defined(dashboardId)) {
+    if (!isDefined(displayId) || !isDefined(dashboardId)) {
       return;
     }
 
@@ -316,7 +316,7 @@ class StartPage extends React.Component {
       dashboards = [],
     } = this.props;
 
-    dashboards = dashboards.filter(id => is_defined(byId[id]));
+    dashboards = dashboards.filter(id => isDefined(byId[id]));
 
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
@@ -439,7 +439,7 @@ const mapStateToProps = rootState => {
   const {rows} = settings || {};
   let {byId, defaults, dashboards} = settings || {};
 
-  if (is_defined(rows)) {
+  if (isDefined(rows)) {
     byId = {
       [OVERVIEW_DASHBOARD_ID]: {
         ...DEFAULTS.byId[OVERVIEW_DASHBOARD_ID],
@@ -462,7 +462,7 @@ const mapStateToProps = rootState => {
     },
   };
 
-  if (is_defined(dashboards)) {
+  if (isDefined(dashboards)) {
     props.dashboards = dashboards;
   }
 

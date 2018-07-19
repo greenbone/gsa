@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/promise';
 
-import {is_object} from './utils/identity';
+import {isObject} from './utils/identity';
 
 export class PromiseFactory {
 
@@ -35,7 +35,7 @@ export class PromiseFactory {
   }
 
   create(func) {
-    if (is_object(this.promise)) {
+    if (isObject(this.promise)) {
       return this.promise(func);
     }
     return new this.promise(func);

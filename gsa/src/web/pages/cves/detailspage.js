@@ -21,13 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -260,12 +259,12 @@ const CvePage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <Tab>
                           {tagsTitle}
                         </Tab>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <Tab>
                           {permissionsTitle}
                         </Tab>
@@ -280,12 +279,12 @@ const CvePage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <TabPanel>
                           {tagsComponent}
                         </TabPanel>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <TabPanel>
                           {permissionsComponent}
                         </TabPanel>

@@ -27,7 +27,7 @@ import React from 'react';
 
 import Downshift from 'downshift';
 
-import {is_defined, is_array} from 'gmp/utils';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 import PropTypes, {mayRequire} from '../../utils/proptypes.js';
 
@@ -52,7 +52,7 @@ const SelectValueValidator = (props, prop_name, component_name) => {
   const {items} = props;
   const item = find_item(items, value);
 
-  if (is_array(items) && is_defined(value) && !is_defined(item)) {
+  if (isArray(items) && isDefined(value) && !isDefined(item)) {
     if (items.length === 0) {
       return new Error('Invalid prop ' + prop_name + ' `' + value + '` for ' +
         component_name + ' component. items prop is empty.');
@@ -65,12 +65,12 @@ const SelectValueValidator = (props, prop_name, component_name) => {
 
 const selectValue = mayRequire(SelectValueValidator);
 
-const find_item = (items, value) => is_defined(items) ?
+const find_item = (items, value) => isDefined(items) ?
   items.find(i => i.value === value) : undefined;
 
 const find_label = (items, value) => {
   const item = find_item(items, value);
-  if (is_defined(item)) {
+  if (isDefined(item)) {
     return item.label;
   }
   return value;
@@ -95,7 +95,7 @@ class Select extends React.Component {
   handleChange(value) {
     const {name, onChange} = this.props;
 
-    if (is_defined(onChange)) {
+    if (isDefined(onChange)) {
       onChange(value, name);
     }
   }
@@ -128,13 +128,13 @@ class Select extends React.Component {
       search,
     } = this.state;
 
-    if (!is_defined(items)) {
+    if (!isDefined(items)) {
       items = option_items(children);
     }
 
-    disabled = disabled || !is_defined(items) || items.length === 0;
+    disabled = disabled || !isDefined(items) || items.length === 0;
 
-    const displayedItems = is_defined(items) ?
+    const displayedItems = isDefined(items) ?
       items.filter(case_insensitive_filter(search)) : [];
 
     return (
@@ -169,7 +169,7 @@ class Select extends React.Component {
                   onClick: isOpen ? undefined : event => {
                     event.preventDefault(); // don't call default handler from downshift
                     openMenu(() =>
-                      is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
+                      isDefined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                   },
                 })}
                 isOpen={isOpen}

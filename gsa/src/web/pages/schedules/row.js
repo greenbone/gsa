@@ -26,10 +26,10 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -116,7 +116,7 @@ const Row = ({
         {dateTimeWithTimeZone(startDate)}
       </TableData>
       <TableData>
-        {is_defined(nextDate) ? dateTimeWithTimeZone(nextDate) : '-'}
+        {isDefined(nextDate) ? dateTimeWithTimeZone(nextDate) : '-'}
       </TableData>
       <TableData>
         {renderRecurrence(recurrence)}
@@ -124,7 +124,7 @@ const Row = ({
       <TableData>
         {renderDuration(duration)}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

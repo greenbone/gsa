@@ -24,14 +24,16 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
+import _ from 'gmp/locale';
 
-import CancelToken from 'gmp/cancel.js';
+import logger from 'gmp/log';
 
-import {first, is_defined} from 'gmp/utils';
+import CancelToken from 'gmp/cancel';
 
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
+import {first} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from '../../utils/proptypes.js';
 import {create_pem_certificate} from '../../utils/cert.js';
@@ -118,12 +120,12 @@ class ReportDetails extends React.Component {
     let next_filter;
     let old_filter;
 
-    if (is_defined(next.location) && is_defined(next.location.query)) {
+    if (isDefined(next.location) && isDefined(next.location.query)) {
       next_filter = next.location.query.filter;
     }
 
-    if (is_defined(this.props.location) &&
-      is_defined(this.props.location.query)) {
+    if (isDefined(this.props.location) &&
+      isDefined(this.props.location.query)) {
       old_filter = this.props.location.query.filter;
     }
 
@@ -141,7 +143,7 @@ class ReportDetails extends React.Component {
   }
 
   cancelLastRequest() {
-    if (is_defined(this.cancel)) {
+    if (isDefined(this.cancel)) {
       this.cancel();
     }
   }
@@ -179,7 +181,7 @@ class ReportDetails extends React.Component {
     const options = {
       cache,
       force,
-      filter: is_defined(filter) ? filter.all() : undefined,
+      filter: isDefined(filter) ? filter.all() : undefined,
       cancel_token: token,
       extra_params: {
         ignore_pagination: '1',
@@ -187,7 +189,7 @@ class ReportDetails extends React.Component {
     };
 
     let promise;
-    if (is_defined(delta_id)) {
+    if (isDefined(delta_id)) {
       promise = gmp.report.getDelta({id}, {id: delta_id}, options);
     }
     else {
@@ -201,7 +203,7 @@ class ReportDetails extends React.Component {
       const {report} = entity;
       const {filter: loaded_filter} = report;
 
-      if (is_defined(filter)) {
+      if (isDefined(filter)) {
         filter = filter.mergeExtraKeywords(loaded_filter);
       }
       else {
@@ -227,7 +229,7 @@ class ReportDetails extends React.Component {
       }
     })
     .catch(err => {
-      if (is_defined(err.isCancel) && err.isCancel()) {
+      if (isDefined(err.isCancel) && err.isCancel()) {
         return;
       }
 
@@ -286,7 +288,7 @@ class ReportDetails extends React.Component {
   }
 
   clearTimer() {
-    if (is_defined(this.timer)) {
+    if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
       window.clearTimeout(this.timer);
     }
@@ -368,7 +370,7 @@ class ReportDetails extends React.Component {
     const report_format = report_formats.find(
       format => report_format_id === format.id);
 
-    const extension = is_defined(report_format) ? report_format.extension :
+    const extension = isDefined(report_format) ? report_format.extension :
       'unknown'; // unknown should never happen but we should be save here
 
     gmp.report.download(entity, {
@@ -474,7 +476,7 @@ class ReportDetails extends React.Component {
         {showFilterDialog &&
           <FilterDialog
             filter={filter}
-            delta={is_defined(report) && report.isDeltaReport()}
+            delta={isDefined(report) && report.isDeltaReport()}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
           />

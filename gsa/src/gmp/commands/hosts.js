@@ -21,12 +21,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import Host from '../models/host';
 
-import Host from '../models/host.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.hosts');
 
@@ -123,7 +125,7 @@ class HostsCommand extends EntitiesCommand {
   }
 }
 
-register_command('host', HostCommand);
-register_command('hosts', HostsCommand);
+registerCommand('host', HostCommand);
+registerCommand('hosts', HostsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -22,8 +22,8 @@
  */
 import uuid from 'uuid/v4';
 
-import {is_array} from '../utils/identity';
-import {for_each} from '../utils/array';
+import {isArray} from '../utils/identity';
+import {forEach} from '../utils/array';
 
 import logger from '../log';
 
@@ -81,7 +81,7 @@ const dashboardSettings2SettingsV1 = ({rows}) => ({
 });
 
 const convertSaveSettings = (settings = {}) => {
-  if (is_array(settings.rows)) {
+  if (isArray(settings.rows)) {
     // we like have settings which can be stored as version 1 settings
     return dashboardSettings2SettingsV1(settings);
   }
@@ -102,7 +102,7 @@ class DashboardsCommand extends HttpCommand {
 
       const allSettings = {};
 
-      for_each(prefs, pref => {
+      forEach(prefs, pref => {
         const {_id: id, value, name} = pref;
 
         let settings;

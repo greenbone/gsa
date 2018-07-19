@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, is_array} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 import {createRow, createItem} from 'web/components/sortable/grid';
 
@@ -124,8 +124,8 @@ export const resetSettings = ({gmp}) => id =>
 };
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
-  if (is_array(rows) && rows.length > 0 &&
-    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
+  if (isArray(rows) && rows.length > 0 &&
+    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
     const lastRow = rows[rows.length - 1];
     return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
   }
@@ -135,11 +135,11 @@ export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
 export const addDisplayToSettings = (settings, displayId) => {
   const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
-  const lastRow = is_array(currentRows) && currentRows.length > 0 ?
+  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
     currentRows[currentRows.length - 1] : {items: []};
 
   let rows;
-  if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
+  if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
     const newRow = createRow([createItem({name: displayId})]);
     rows = [...currentRows, newRow];
@@ -164,7 +164,7 @@ export const addDisplayToSettings = (settings, displayId) => {
 
 export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   (dispatch, getState) => {
-  if (!is_defined(displayId) || !is_defined(dashboardId)) {
+  if (!isDefined(displayId) || !isDefined(dashboardId)) {
     return;
   }
 

@@ -24,14 +24,14 @@ import 'core-js/fn/object/entries';
 import 'core-js/fn/string/ends-with';
 import 'core-js/fn/string/starts-with';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 export function build_url_params(params) {
   let argcount = 0;
   let uri = '';
 
   for (const [key, value] of Object.entries(params)) {
-    if (is_defined(value)) {
+    if (isDefined(value)) {
       if (argcount++) {
         uri += '&';
       }
@@ -43,7 +43,7 @@ export function build_url_params(params) {
 }
 
 export function build_server_url(server, path = '', protocol) {
-  if (is_defined(protocol)) {
+  if (isDefined(protocol)) {
     if (!protocol.endsWith(':')) {
       protocol += ':';
     }

@@ -20,14 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component, render_yesno} from '../../utils/render.js';
+import {renderComponent, render_yesno} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -104,7 +104,7 @@ Actions.propTypes = {
 };
 
 const render_filter = (filter, caps, links = true) => {
-  if (!is_defined(filter)) {
+  if (!isDefined(filter)) {
     return null;
   }
 
@@ -154,7 +154,7 @@ const Row = ({
       <TableData>
         {render_yesno(entity.active)}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

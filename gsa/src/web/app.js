@@ -28,7 +28,7 @@ import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp';
 import CacheFactory from 'gmp/cache';
 import {subscribe} from 'gmp/locale/lang';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import CacheFactoryProvider from './components/provider/cachefactoryprovider';
 import GmpProvider from './components/provider/gmpprovider';
@@ -72,11 +72,11 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    if (is_defined(this.unsubscribeFromLanguageChange)) {
+    if (isDefined(this.unsubscribeFromLanguageChange)) {
       this.unsubscribeFromLanguageChange();
     }
 
-    if (is_defined(this.unsubscribeFromLogout)) {
+    if (isDefined(this.unsubscribeFromLogout)) {
       this.unsubscribeFromLogout();
     }
   }

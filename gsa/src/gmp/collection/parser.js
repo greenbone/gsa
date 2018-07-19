@@ -20,22 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
-
-import {is_array, is_defined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Filter from '../models/filter.js';
+import Filter from '../models/filter';
 
-import CollectionCounts from './collectioncounts.js';
+import CollectionCounts from './collectioncounts';
 
 const log = logger.getLogger('gmp.collection.parser');
 
-export function parse_info_entities(response, name, modelclass, filter_func) {
-  if (!is_array(response.info)) {
+export function parseInfoEntities(response, name, modelclass, filter_func) {
+  if (!isArray(response.info)) {
     return [];
   }
   return response.info
@@ -43,7 +42,7 @@ export function parse_info_entities(response, name, modelclass, filter_func) {
     .map(info => new modelclass(info));
 }
 
-export function parse_info_counts(response) {
+export function parseInfoCounts(response) {
   // this is really ugly and more of a kind of a hack
   //  we depend on the order of the array to be able to parse the counts
   //  this should be fixed in gmp xml by using a different elements for counts
@@ -52,10 +51,10 @@ export function parse_info_counts(response) {
   const infos = response.info;
   // its getting even uglier... if no entities are returned we get a single info
   // element for start and max counts.
-  let es = is_array(infos) ? infos[infos.length - 1] : infos;
+  let es = isArray(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;
 
-  if (!is_defined(es)) {
+  if (!isDefined(es)) {
     // houston we have a problem ...
     log.error('No info found in response. Can not get correct counts.',
       response);
@@ -65,7 +64,7 @@ export function parse_info_counts(response) {
     };
   }
 
-  if (!is_defined(ec)) {
+  if (!isDefined(ec)) {
     // houston we have another problem ...
     log.error('No info_count found in response. Can not get correct counts.',
       response);
@@ -86,23 +85,23 @@ export function parse_info_counts(response) {
   return new CollectionCounts(counts);
 }
 
-export function parse_filter(element) {
+export function parseFilter(element) {
   return new Filter(element.filters);
 }
 
-export function parse_counts(element, name, plural_name) {
-  if (!is_defined(element)) {
+export function parseCounts(element, name, plural_name) {
+  if (!isDefined(element)) {
     return {};
   }
 
-  if (!is_defined(plural_name)) {
+  if (!isDefined(plural_name)) {
     plural_name = name + 's';
   }
 
   const es = element[plural_name];
   const ec = element[name + '_count'];
 
-  if (is_defined(es) && is_defined(ec)) {
+  if (isDefined(es) && isDefined(ec)) {
     return {
       first: es._start,
       rows: es._max,
@@ -114,20 +113,16 @@ export function parse_counts(element, name, plural_name) {
   return {};
 }
 
-const parse_elements = (response, name) => response[name];
+const parseElements = (response, name) => response[name];
 
-export function parse_entities(response, name, modelclass = Model) {
-  return map(parse_elements(response, name),
-    element => new modelclass(element));
-}
+const parseEntities = (response, name, modelclass = Model) =>
+  map(parseElements(response, name), element => new modelclass(element));
 
-export function parse_report_result_entities(response, name, modelclass) {
-  return parse_entities(response.results, name, modelclass);
-};
+export const parseReportResultEntities = (response, name, modelclass) =>
+  parseEntities(response.results, name, modelclass);
 
-export function parse_collection_counts(response, name, plural_name) {
-  return new CollectionCounts(parse_counts(response, name, plural_name));
-}
+const parseCollectionCounts = (response, name, plural_name) =>
+  new CollectionCounts(parseCounts(response, name, plural_name));
 
 /**
  * Parse a {@link CollectionList} from a response object
@@ -167,19 +162,19 @@ export function parse_collection_counts(response, name, plural_name) {
  * @return {Object}  A new object containing the parsed entities, filter and
  *                   counts.
  */
-export function parse_collection_list(response, name, modelclass,
-    options = {}) {
+export const parseCollectionList = (response, name, modelclass,
+    options = {}) => {
   const {
     plural_name,
-    entities_parse_func = parse_entities,
-    collection_count_parse_func = parse_collection_counts,
-    filter_parse_func = parse_filter,
+    entities_parse_func = parseEntities,
+    collection_count_parse_func = parseCollectionCounts,
+    filter_parse_func = parseFilter,
   } = options;
   return {
     entities: entities_parse_func(response, name, modelclass),
     filter: filter_parse_func(response),
     counts: collection_count_parse_func(response, name, plural_name),
   };
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:

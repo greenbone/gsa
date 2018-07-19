@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -32,7 +32,7 @@ import FormGroup from '../form/formgroup.js';
 import Spinner from '../form/spinner.js';
 
 const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
-  if (is_defined(filter)) {
+  if (isDefined(filter)) {
     rows = filter.get('rows');
   }
 

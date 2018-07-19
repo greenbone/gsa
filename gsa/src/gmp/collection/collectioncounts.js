@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import {parseInt} from '../parser.js';
 
@@ -64,11 +64,11 @@ class CollectionCounts {
 
   clone({first, all, filtered, length, rows}) {
     return new CollectionCounts({
-      first: is_defined(first) ? first : this.first,
-      all: is_defined(all) ? all : this.all,
-      filtered: is_defined(filtered) ? filtered : this.filtered,
-      length: is_defined(length) ? length : this.length,
-      rows: is_defined(rows) ? rows : this.rows,
+      first: isDefined(first) ? first : this.first,
+      all: isDefined(all) ? all : this.all,
+      filtered: isDefined(filtered) ? filtered : this.filtered,
+      length: isDefined(length) ? length : this.length,
+      rows: isDefined(rows) ? rows : this.rows,
     });
   }
 }

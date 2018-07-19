@@ -20,12 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import Schedule from '../models/schedule';
 
-import Schedule from '../models/schedule.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.schedules');
 
@@ -89,7 +91,7 @@ class SchedulesCommand extends EntitiesCommand {
   }
 }
 
-register_command('schedule', ScheduleCommand);
-register_command('schedules', SchedulesCommand);
+registerCommand('schedule', ScheduleCommand);
+registerCommand('schedules', SchedulesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

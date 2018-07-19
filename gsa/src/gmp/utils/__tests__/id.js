@@ -21,85 +21,88 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  includes_id,
-  select_save_id,
-  has_id,
+  includesId,
+  selectSaveId,
+  hasId,
 } from '../id';
 
-describe('includes_id function tests', () => {
+describe('includesId function tests', () => {
+
   test('should return true for found id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, 1)).toBe(true);
-    expect(includes_id(list, 2)).toBe(true);
-    expect(includes_id(list, 3)).toBe(true);
+    expect(includesId(list, 1)).toBe(true);
+    expect(includesId(list, 2)).toBe(true);
+    expect(includesId(list, 3)).toBe(true);
   });
 
   test('should return false for unknown id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, 4)).toBe(false);
+    expect(includesId(list, 4)).toBe(false);
   });
 
   test('should return false for different type of id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(includes_id(list, '2')).toBe(false);
+    expect(includesId(list, '2')).toBe(false);
   });
 });
 
-describe('select_save_id function tests', () => {
+describe('selectSaveId function tests', () => {
+
   test('should return id if id is in list', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(select_save_id(list, 1)).toEqual(1);
-    expect(select_save_id(list, 2)).toEqual(2);
-    expect(select_save_id(list, 3)).toEqual(3);
+    expect(selectSaveId(list, 1)).toEqual(1);
+    expect(selectSaveId(list, 2)).toEqual(2);
+    expect(selectSaveId(list, 3)).toEqual(3);
   });
 
   test('should return first id if id is not in list', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(select_save_id(list, 4)).toBe(1);
-    expect(select_save_id(list, '2')).toBe(1);
+    expect(selectSaveId(list, 4)).toBe(1);
+    expect(selectSaveId(list, '2')).toBe(1);
   });
 
   test('should return default if id is not in list', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
-    expect(select_save_id(list, 4, 42)).toBe(42);
-    expect(select_save_id(list, '2', 42)).toBe(42);
+    expect(selectSaveId(list, 4, 42)).toBe(42);
+    expect(selectSaveId(list, '2', 42)).toBe(42);
   });
 });
 
-describe('has_id tests', () => {
+describe('hasId tests', () => {
+
   test('should return false if model is undefined', () => {
-    expect(has_id(undefined)).toBe(false);
+    expect(hasId(undefined)).toBe(false);
   });
 
   test('should return false if id is undefined', () => {
-    expect(has_id({})).toBe(false);
-    expect(has_id({id: undefined})).toBe(false);
+    expect(hasId({})).toBe(false);
+    expect(hasId({id: undefined})).toBe(false);
   });
 
   test('should return false if model is no id property', () => {
-    expect(has_id('')).toBe(false);
-    expect(has_id('A')).toBe(false);
-    expect(has_id(1)).toBe(false);
+    expect(hasId('')).toBe(false);
+    expect(hasId('A')).toBe(false);
+    expect(hasId(1)).toBe(false);
   });
 
   test('should return false if id is not a string', () => {
-    expect(has_id({id: 1})).toBe(false);
+    expect(hasId({id: 1})).toBe(false);
   });
 
   test('should return false if id is an empty string', () => {
-    expect(has_id({id: ''})).toBe(false);
+    expect(hasId({id: ''})).toBe(false);
   });
 
   test('should return true if id is defined', () => {
-    expect(has_id({id: '1'})).toBe(true);
-    expect(has_id({id: '0'})).toBe(true);
-    expect(has_id({id: 'A'})).toBe(true);
+    expect(hasId({id: '1'})).toBe(true);
+    expect(hasId({id: '0'})).toBe(true);
+    expect(hasId({id: 'A'})).toBe(true);
   });
 });
 

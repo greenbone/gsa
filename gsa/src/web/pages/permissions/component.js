@@ -24,8 +24,11 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {selectSaveId} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
@@ -56,8 +59,8 @@ class PermissionsComponent extends React.Component {
     let state;
     let opts;
 
-    if (is_defined(permission)) {
-      const subjectType = is_defined(permission.subject) ?
+    if (isDefined(permission)) {
+      const subjectType = isDefined(permission.subject) ?
         getEntityType(permission.subject) : undefined;
 
       state = {
@@ -66,9 +69,9 @@ class PermissionsComponent extends React.Component {
         comment: permission.comment,
         groupId: undefined,
         permission,
-        resourceId: is_defined(permission.resource) ?
+        resourceId: isDefined(permission.resource) ?
           permission.resource.id : '',
-        resourceType: is_defined(permission.resource) ?
+        resourceType: isDefined(permission.resource) ?
           getEntityType(permission.resource) : '',
         roleId: undefined,
         subjectType,
@@ -111,14 +114,14 @@ class PermissionsComponent extends React.Component {
     state.fixedResource = fixed;
 
     if (capabilities.mayAccess('users')) {
-      if (!is_defined(state.subjectType)) {
+      if (!isDefined(state.subjectType)) {
         state.subjectType = 'user';
       }
 
       gmp.users.getAll().then(response => {
         const {data: users} = response;
         this.setState({
-          userId: select_save_id(users, state.userId),
+          userId: selectSaveId(users, state.userId),
           users,
         });
       });
@@ -126,14 +129,14 @@ class PermissionsComponent extends React.Component {
 
     if (capabilities.mayAccess('roles')) {
       if (!capabilities.mayAccess('users') &&
-        !is_defined(state.subjectType)) {
+        !isDefined(state.subjectType)) {
         state.subjectType = 'role';
       }
 
       gmp.roles.getAll().then(response => {
         const {data: roles} = response;
         this.setState({
-          roleId: select_save_id(roles, state.roleId),
+          roleId: selectSaveId(roles, state.roleId),
           roles,
         });
       });
@@ -141,14 +144,14 @@ class PermissionsComponent extends React.Component {
 
     if (capabilities.mayAccess('groups')) {
       if (!capabilities.mayAccess('users') &&
-        !capabilities.mayAccess('roles') && !is_defined(state.subjectType)) {
+        !capabilities.mayAccess('roles') && !isDefined(state.subjectType)) {
         state.subjectType = 'group';
       }
 
       gmp.groups.getAll().then(response => {
         const {data: groups} = response;
         this.setState({
-          groupId: select_save_id(groups, state.groupId),
+          groupId: selectSaveId(groups, state.groupId),
           groups,
         });
       });

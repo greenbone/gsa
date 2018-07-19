@@ -23,8 +23,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -59,14 +60,14 @@ class UserComponent extends React.Component {
       .then(resp => this.setState({roles: resp.data}));
 
     gmp.user.currentAuthSettings().then(response => {
-      if (is_defined(user)) {
+      if (isDefined(user)) {
         const group_ids = user.groups.map(group => group.id);
         const role_ids = user.roles.map(role => role.id);
 
         this.setState({
           dialogVisible: true,
-          access_hosts: user.hosts.addresses,
-          access_ifaces: user.ifaces.addresses,
+          access_hosts: user.hosts.addresses.join(', '),
+          access_ifaces: user.ifaces.addresses.join(', '),
           comment: user.comment,
           group_ids: group_ids,
           hosts_allow: user.hosts.allow,

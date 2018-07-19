@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -74,9 +74,9 @@ const SendMethodPart = ({
         <Select
           name={prefix + 'send_report_format'}
           value={sendReportFormat}
-          onChange={onChange}>
-          {render_options(reportFormats)}
-        </Select>
+          items={renderSelectItems(reportFormats)}
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );

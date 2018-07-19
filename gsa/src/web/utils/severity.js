@@ -22,7 +22,7 @@
  */
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 export const _LOG = _('Log');
 export const _LOW = _('Low');
@@ -56,18 +56,18 @@ export const ERROR_VALUE = -3;
 export const severityRiskFactor = (value, type) => {
   const {low, medium, high} = getSeverityLevels(type);
 
-  if (value >= LOG_VALUE && is_defined(low) && value < low) {
+  if (value >= LOG_VALUE && isDefined(low) && value < low) {
     return LOG;
   }
-  if (value >= low && is_defined(medium) && value < medium) {
+  if (value >= low && isDefined(medium) && value < medium) {
     return LOW;
   }
 
-  if (value >= medium && is_defined(high) && value < high) {
+  if (value >= medium && isDefined(high) && value < high) {
     return MEDIUM;
   }
 
-  if (is_defined(high) && value >= high) {
+  if (isDefined(high) && value >= high) {
     return HIGH;
   }
 

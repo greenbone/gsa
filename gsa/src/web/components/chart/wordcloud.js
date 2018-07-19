@@ -27,7 +27,7 @@ import {scaleLinear} from 'd3-scale';
 
 import d3cloud from 'd3-cloud';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
@@ -153,7 +153,7 @@ class WordCloudChart extends React.Component {
           {words.map(word => (
             <Group
               key={word.text}
-              onClick={is_defined(onDataClick) ?
+              onClick={isDefined(onDataClick) ?
                 () => onDataClick(word.filterValue) : undefined}
             >
               <text

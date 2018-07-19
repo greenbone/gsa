@@ -23,7 +23,7 @@
 import 'core-js/fn/set';
 import 'core-js/fn/symbol';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 import {pluralizeType} from '../utils/entitytype';
 
@@ -57,7 +57,7 @@ const types = {
 
 const convertType = type => {
   const ctype = types[type];
-  if (is_defined(ctype)) {
+  if (isDefined(ctype)) {
     return ctype;
   }
   return type;
@@ -66,7 +66,7 @@ const convertType = type => {
 class Capabilities {
 
   constructor(cap_names) {
-    this._has_caps = is_defined(cap_names);
+    this._has_caps = isDefined(cap_names);
 
     let caps;
 
@@ -84,7 +84,7 @@ class Capabilities {
   get(name) {
     name = name.toLowerCase();
     const capability = this._capabilities.get(name);
-    return is_defined(capability) ? capability : {};
+    return isDefined(capability) ? capability : {};
   }
 
   areDefined() {

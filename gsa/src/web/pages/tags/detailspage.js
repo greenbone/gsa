@@ -21,16 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import glamorous from 'glamorous';
 
 import Filter from 'gmp/models/filter';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
@@ -312,7 +311,7 @@ const Page = ({
                         count={resource_count}
                       />
                     </Tab>
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <Tab>
                         {permissionsTitle}
                       </Tab>
@@ -330,7 +329,7 @@ const Page = ({
                     <TabPanel>
                       <ResourceList entity={entity}/>
                     </TabPanel>
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <TabPanel>
                         {permissionsComponent}
                       </TabPanel>

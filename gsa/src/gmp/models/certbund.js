@@ -20,8 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
-import {for_each, map} from '../utils/array';
+import {isDefined} from '../utils/identity';
+import {forEach, map} from '../utils/array';
 
 import {parseSeverity, parseDate} from '../parser';
 
@@ -42,7 +42,7 @@ class CertBundAdv extends Info {
     ret.cves = [];
     ret.additional_information = [];
 
-    if (is_defined(ret.raw_data) && is_defined(ret.raw_data.Advisory)) {
+    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.Advisory)) {
       const {raw_data} = ret;
       const {Advisory: advisory} = raw_data;
 
@@ -56,17 +56,17 @@ class CertBundAdv extends Info {
       ret.reference_url = advisory.Reference_URL;
       ret.categories = advisory.CategoryTree;
 
-      if (!is_defined(ret.version) && is_defined(advisory.Ref_Num)) {
+      if (!isDefined(ret.version) && isDefined(advisory.Ref_Num)) {
         ret.version = advisory.Ref_Num._update;
       }
 
-      if (is_defined(advisory.Description) &&
-        is_defined(advisory.Description.Element)) {
-        for_each(advisory.Description.Element, element => {
-          if (is_defined(element.TextBlock)) {
+      if (isDefined(advisory.Description) &&
+        isDefined(advisory.Description.Element)) {
+        forEach(advisory.Description.Element, element => {
+          if (isDefined(element.TextBlock)) {
             ret.description.push(element.TextBlock);
           }
-          else if (is_defined(element.Infos)) {
+          else if (isDefined(element.Infos)) {
             ret.additional_information = ret.additional_information.concat(
               map(element.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
@@ -77,7 +77,7 @@ class CertBundAdv extends Info {
         });
       }
 
-      if (is_defined(advisory.RevisionHistory)) {
+      if (isDefined(advisory.RevisionHistory)) {
         ret.revision_history = map(advisory.RevisionHistory.Revision, rev => ({
           revision: rev.Number,
           description: rev.Description,
@@ -85,7 +85,7 @@ class CertBundAdv extends Info {
         }));
       }
 
-      if (is_defined(advisory.CVEList && is_defined(advisory.CVEList.CVE))) {
+      if (isDefined(advisory.CVEList && isDefined(advisory.CVEList.CVE))) {
         ret.cves = map(advisory.CVEList.CVE, cve => cve);
       }
     }

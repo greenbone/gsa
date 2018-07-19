@@ -22,8 +22,8 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {is_defined, is_string} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined, isString} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {parseFloat, parseSeverity} from '../parser.js';
@@ -47,7 +47,7 @@ const parse_tags = tags => {
 };
 
 const parse_ids = (ids, no) => {
-  if (is_string(ids) && ids.length > 0 && ids !== no) {
+  if (isString(ids) && ids.length > 0 && ids !== no) {
     return ids.split(',').map(id => id.trim());
   }
   return [];
@@ -82,7 +82,7 @@ class Nvt extends Info {
     ret.severity = parseSeverity(ret.cvss_base);
     delete ret.cvss_base;
 
-    if (is_defined(ret.preferences)) {
+    if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
         delete pref.nvt;
@@ -93,7 +93,7 @@ class Nvt extends Info {
       ret.preferences = [];
     }
 
-    if (is_defined(ret.cert)) {
+    if (isDefined(ret.cert)) {
       ret.certs = map(ret.cert.cert_ref, ref => {
         return {
           id: ref._id,
@@ -107,7 +107,7 @@ class Nvt extends Info {
       ret.certs = [];
     }
 
-    if (is_defined(ret.cert_refs)) {
+    if (isDefined(ret.cert_refs)) {
       ret.certs.concat(
         map(ret.cert_refs.cert_ref, ref => {
           return {
@@ -134,27 +134,27 @@ class Nvt extends Info {
 
     delete ret.xref;
 
-    if (is_defined(elem.qod)) {
-      if (is_empty(elem.qod.value)) {
+    if (isDefined(elem.qod)) {
+      if (isEmpty(elem.qod.value)) {
         delete ret.qod.value;
       }
       else {
         ret.qod.value = parseFloat(elem.qod.value);
       }
 
-      if (is_empty(elem.qod.type)) {
+      if (isEmpty(elem.qod.type)) {
         delete ret.qod.type;
       }
     }
 
-    if (is_empty(elem.default_timeout)) {
+    if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
     }
     else {
       ret.default_timeout = parseFloat(elem.default_timeout);
     }
 
-    if (is_empty(elem.timeout)) {
+    if (isEmpty(elem.timeout)) {
       delete ret.timeout;
     }
     else {

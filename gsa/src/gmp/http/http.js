@@ -24,7 +24,7 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, is_array} from '../utils/identity';
+import {isDefined, hasValue, isArray} from '../utils/identity';
 
 import Promise from '../promise.js';
 
@@ -40,7 +40,7 @@ const log = logger.getLogger('gmp.http');
 export const DEFAULT_TIMEOUT = 300000; // 5 min
 
 function formdata_append(formdata, key, value) {
-  if (has_value(value)) {
+  if (hasValue(value)) {
     formdata.append(key, value);
   }
 }
@@ -66,7 +66,7 @@ class Http {
 
   _cacheData(data, options) {
     const {cache, url, method} = options;
-    if (is_defined(cache) && is_defined(url) && method === 'GET') {
+    if (isDefined(cache) && isDefined(url) && method === 'GET') {
       log.debug('Storing data for url', url, 'in cache', cache);
       cache.set(url, data);
     }
@@ -79,7 +79,7 @@ class Http {
     for (const key in data) {
       if (data.hasOwnProperty(key)) { // don't add undefined and null values to form
         const value = data[key];
-        if (is_array(value)) {
+        if (isArray(value)) {
           for (const val of value) {
             formdata_append(formdata, key, val);
           }
@@ -112,7 +112,7 @@ class Http {
       url += '?' + build_url_params({...this.params, ...args});
     }
 
-    if (method === 'GET' && is_defined(cache) && cache.has(url) && !force) {
+    if (method === 'GET' && isDefined(cache) && cache.has(url) && !force) {
       log.debug('Using http response for url', url, 'from cache', cache);
 
       const entry = cache.get(url);
@@ -144,7 +144,7 @@ class Http {
     const promise = Promise.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
-      if (is_defined(responseType)) {
+      if (isDefined(responseType)) {
         xhr.responseType = responseType;
       }
 
@@ -174,7 +174,7 @@ class Http {
         log.debug('Canceled http request', method, url);
       };
 
-      if (is_defined(cancel_token)) {
+      if (isDefined(cancel_token)) {
         cancel_token.promise.then(reason => {
           xhr.abort();
           reject(new Rejection(this, Rejection.REASON_CANCEL, reason));

@@ -21,292 +21,300 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  is_defined,
-  has_value,
-  is_object,
-  is_string,
-  is_array,
-  is_number,
-  is_function,
-  is_jsdate,
-  is_model_element,
+  isDefined,
+  hasValue,
+  isObject,
+  isString,
+  isArray,
+  isNumber,
+  isFunction,
+  isJsDate,
+  isModelElement,
 } from '../identity';
 
-describe('is_defined function test', () => {
+describe('isDefined function test', () => {
+
   test('should return false for undefined let variable', () => {
     let x;
-    expect(is_defined(x)).toBe(false);
+    expect(isDefined(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
     let x = 1; // eslint-disable-line prefer-const
-    expect(is_defined(x)).toBe(true);
+    expect(isDefined(x)).toBe(true);
   });
 });
 
-describe('has_value function test', () => {
+describe('hasValue function test', () => {
+
   test('should return false for undefined let variable', () => {
     let x;
-    expect(has_value(x)).toBe(false);
+    expect(hasValue(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
     let x = 1; // eslint-disable-line prefer-const
-    expect(has_value(x)).toBe(true);
+    expect(hasValue(x)).toBe(true);
   });
 
   test('should return false for null let variable', () => {
     let x = null; // eslint-disable-line prefer-const
-    expect(has_value(x)).toBe(false);
+    expect(hasValue(x)).toBe(false);
   });
 });
 
-describe('is_object function test', () => {
+describe('isObject function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return true for an array', () => {
     const x = [];
-    expect(is_object(x)).toBe(true);
+    expect(isObject(x)).toBe(true);
   });
 
   test('should return true for empty object', () => {
     const x = {};
-    expect(is_object(x)).toBe(true);
+    expect(isObject(x)).toBe(true);
   });
 });
 
-describe('is_string function test', () => {
+describe('isString function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_string(x)).toBe(false);
+    expect(isString(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_string(x)).toBe(false);
+    expect(isString(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_string(x)).toBe(false);
+    expect(isString(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_string(x)).toBe(false);
+    expect(isString(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_string(x)).toBe(false);
+    expect(isString(x)).toBe(false);
   });
 
   test('should return true for an empty string', () => {
     const x = '';
-    expect(is_string(x)).toBe(true);
+    expect(isString(x)).toBe(true);
   });
 
   test('should return true for a string', () => {
     const x = 'foo';
-    expect(is_string(x)).toBe(true);
+    expect(isString(x)).toBe(true);
   });
 });
 
-describe('is_array function test', () => {
+describe('isArray function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_array(x)).toBe(false);
+    expect(isArray(x)).toBe(false);
   });
 
   test('should return true for an array', () => {
     const x = [];
-    expect(is_array(x)).toBe(true);
+    expect(isArray(x)).toBe(true);
   });
 });
 
-describe('is_number function test', () => {
+describe('isNumber function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_number(x)).toBe(false);
+    expect(isNumber(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_number(x)).toBe(false);
+    expect(isNumber(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_number(x)).toBe(false);
+    expect(isNumber(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_number(x)).toBe(false);
+    expect(isNumber(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_number(x)).toBe(false);
+    expect(isNumber(x)).toBe(false);
   });
 
   test('should return true for int number variable', () => {
     const x = 1;
-    expect(is_number(x)).toBe(true);
+    expect(isNumber(x)).toBe(true);
   });
 
   test('should return true for float number variable', () => {
     const x = 1.23456;
-    expect(is_number(x)).toBe(true);
+    expect(isNumber(x)).toBe(true);
   });
 });
 
-describe('is_function function test', () => {
+describe('isFunction function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for a function', () => {
     function x() {};
-    expect(is_function(x)).toBe(true);
+    expect(isFunction(x)).toBe(true);
   });
 
   test('should return false for an arrow function', () => {
     const x = () => {};
-    expect(is_function(x)).toBe(true);
+    expect(isFunction(x)).toBe(true);
   });
 });
 
-describe('is_jsdate function test', () => {
+describe('isJsDate function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_jsdate(x)).toBe(false);
+    expect(isJsDate(x)).toBe(false);
   });
 
   test('should return true for a date', () => {
     const x = new Date();
-    expect(is_jsdate(x)).toBe(true);
+    expect(isJsDate(x)).toBe(true);
   });
 });
 
-describe('is_model_element function test', () => {
+describe('isModelElement function test', () => {
 
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should throw for null variable', () => {
     const x = null;
-    expect(() => is_model_element(x)).toThrow(TypeError);
+    expect(() => isModelElement(x)).toThrow(TypeError);
   });
 
   test('should return false for an empty object', () => {
     const x = {};
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should return false for an object without _id', () => {
     const x = {foo: 'bar'};
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should return false for empty id', () => {
-    expect(is_model_element({_id: ''})).toBe(false);
+    expect(isModelElement({_id: ''})).toBe(false);
   });
 
   test('should return true for an object with _id', () => {
-    expect(is_model_element({_id: '1'})).toBe(true);
+    expect(isModelElement({_id: '1'})).toBe(true);
   });
 });
 

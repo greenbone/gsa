@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -53,7 +53,7 @@ const TagDetails = ({
     >
       <InfoTable>
         <TableBody>
-          {is_defined(comment) &&
+          {isDefined(comment) &&
             <TableRow>
               <TableData>
                 {_('Comment')}
@@ -73,7 +73,7 @@ const TagDetails = ({
             </TableData>
           </TableRow>
 
-          {is_defined(resources) &&
+          {isDefined(resources) &&
             <TableRow>
               <TableData>
                 {_('Resoure Type')}

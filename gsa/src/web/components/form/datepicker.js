@@ -27,9 +27,10 @@ import glamorous from 'glamorous';
 import DatePicker from 'react-datepicker';
 
 import _ from 'gmp/locale';
+
 import {get_language} from 'gmp/locale/lang';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
@@ -106,7 +107,7 @@ class DatePickerComponent extends React.Component {
   handleChange(value) {
     const {name, onChange} = this.props;
 
-    if (is_defined(onChange)) {
+    if (isDefined(onChange)) {
       onChange(value, name);
     }
   }

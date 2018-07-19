@@ -25,8 +25,8 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {isDefined, hasValue} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
 import compose from 'web/utils/compose';
@@ -113,11 +113,11 @@ class EntitiesPage extends React.Component {
       return null;
     }
 
-    if (!is_defined(SectionComponent)) {
+    if (!isDefined(SectionComponent)) {
       SectionComponent = Section;
     }
 
-    const extra = is_defined(dashboardControls) ? dashboardControls() :
+    const extra = isDefined(dashboardControls) ? dashboardControls() :
       undefined;
     return (
       <SectionComponent
@@ -133,10 +133,10 @@ class EntitiesPage extends React.Component {
           {DashboardComponent &&
             <DashboardComponent filter={filter}/>
           }
-          {is_defined(dashboard2) &&
+          {isDefined(dashboard2) &&
             dashboard2({filter, onFilterChanged})
           }
-          {loading && !is_defined(entities) ?
+          {loading && !isDefined(entities) ?
             this.renderLoading() :
             this.renderTable()
           }
@@ -161,11 +161,11 @@ class EntitiesPage extends React.Component {
       ...props
     } = this.props;
 
-    if (!is_defined(entities) || !is_defined(TableComponent)) {
+    if (!isDefined(entities) || !isDefined(TableComponent)) {
       return null;
     }
 
-    const other = exclude_object_props(props, exclude_props);
+    const other = excludeObjectProps(props, exclude_props);
 
     return (
       <TableComponent
@@ -196,7 +196,7 @@ class EntitiesPage extends React.Component {
 
     const PowerFilterComponent = powerfilter;
 
-    const handler = is_defined(filterEditDialog) ?
+    const handler = isDefined(filterEditDialog) ?
       this.handleFilterEditClick : undefined;
 
     return (
@@ -221,14 +221,14 @@ class EntitiesPage extends React.Component {
   renderToolbarIcons() {
     let {toolBarIcons, ...other} = this.props;
 
-    if (!is_defined(toolBarIcons)) {
+    if (!isDefined(toolBarIcons)) {
       return null;
     }
 
     if (React.isValidElement(toolBarIcons)) {
       return toolBarIcons;
     }
-    other = exclude_object_props(other, exclude_props);
+    other = excludeObjectProps(other, exclude_props);
     return React.createElement(toolBarIcons, other);
   }
 
@@ -308,7 +308,7 @@ export const createEntitiesPage = (options = {}) => {
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
-  if (!is_defined(filtersFilter)) {
+  if (!isDefined(filtersFilter)) {
     return {
       filters: [],
     };
@@ -317,7 +317,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
   const filterSelector = selector(state);
   const filters = filterSelector.getEntities(filtersFilter);
   return {
-    filters: has_value(filters) ? filters : [],
+    filters: hasValue(filters) ? filters : [],
   };
 };
 

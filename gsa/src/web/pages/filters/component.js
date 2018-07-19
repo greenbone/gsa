@@ -21,12 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined, first, shorten} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
+import {first} from 'gmp/utils/array';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilties from '../../utils/withCapabilities.js';
@@ -94,11 +95,11 @@ class FilterComponent extends React.Component {
     let types = FILTER_OPTIONS.filter(option =>
       filter_types(capabilities, option[0]));
 
-    if (!is_defined(types)) {
+    if (!isDefined(types)) {
       types = [];
     };
 
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       let {filter_type} = filter;
       if (!includes_type(types, filter_type)) {
         filter_type = first(types, [])[0];

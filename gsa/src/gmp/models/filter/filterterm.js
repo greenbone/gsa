@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/includes';
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 
 import convert from './convert.js';
 
@@ -59,7 +59,7 @@ class FilterTerm {
    * @returns {bool} True if this FilterTerm has a keyword
    */
   hasKeyword() {
-    return is_defined(this.keyword);
+    return isDefined(this.keyword);
   }
 
   /**
@@ -68,7 +68,7 @@ class FilterTerm {
    * @returns {bool} True if this FilterTerm has a relation
    */
   hasRelation() {
-    return is_defined(this.relation);
+    return isDefined(this.relation);
   }
 
   /**
@@ -77,7 +77,7 @@ class FilterTerm {
    * @returns {bool} True if this FilterTerm has a value
    */
   hasValue() {
-    return is_defined(this.value);
+    return isDefined(this.value);
   }
 
   /**
@@ -104,7 +104,7 @@ class FilterTerm {
    */
   equals(term) {
     return term instanceof FilterTerm &&
-      is_defined(term) &&
+      isDefined(term) &&
       this.keyword === term.keyword &&
       this.value === term.value &&
       this.relation === term.relation;

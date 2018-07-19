@@ -24,9 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined, shorten} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -69,7 +70,7 @@ class AgentComponent extends React.Component {
   openAgentDialog(agent) {
     let title = '';
 
-    if (is_defined(agent)) {
+    if (isDefined(agent)) {
       title = _('Edit Agent {{name}}', {name: shorten(agent.name)});
     }
     else {

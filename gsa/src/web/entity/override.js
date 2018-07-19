@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/index.js';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 import {
@@ -47,7 +47,7 @@ const OverrideBox = ({
 }) => {
   let severity;
   let new_severity = '';
-  if (!is_defined(override.severity)) {
+  if (!isDefined(override.severity)) {
     severity = _('Any');
   }
   else if (override.severity > LOG_VALUE) {

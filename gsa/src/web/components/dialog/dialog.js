@@ -24,7 +24,8 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined} from 'gmp/utils';
+import {KeyCode} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -71,8 +72,8 @@ class Dialog extends React.Component {
   defaultState() {
     const {width, height} = this.props;
     return {
-      width: is_defined(width) ? width : DEFAULT_DIALOG_WIDTH,
-      height: is_defined(height) ? height : DEFAULT_DIALOG_HEIGHT,
+      width: isDefined(width) ? width : DEFAULT_DIALOG_WIDTH,
+      height: isDefined(height) ? height : DEFAULT_DIALOG_HEIGHT,
     };
   }
 
@@ -202,7 +203,7 @@ class Dialog extends React.Component {
       height = 'auto';
     }
 
-    const maxHeight = is_defined(height) ?
+    const maxHeight = isDefined(height) ?
       undefined : DEFAULT_DIALOG_MAX_HEIGHT;
 
     return (

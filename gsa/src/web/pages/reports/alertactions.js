@@ -23,12 +23,14 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
-import {first} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import logger from 'gmp/log';
+
+import {first} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withGmp from '../../utils/withGmp.js';
 
 import Select from '../../components/form/select.js';
@@ -122,10 +124,9 @@ class AlertActions extends React.Component {
             <Select
               name="alert_id"
               value={alert_id}
+              items={renderSelectItems(alerts)}
               onChange={this.handleAlertChange}
-            >
-              {render_options(alerts)}
-            </Select>
+            />
             <Icon
               img="start.svg"
               title={_('Run Alert')}

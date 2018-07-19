@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   scanner_type_name,
@@ -121,7 +121,7 @@ const OspScannerDetails = ({
     description,
     params = [],
   } = info;
-  if (is_defined(scanner.name)) {
+  if (isDefined(scanner.name)) {
     return (
       <div>
         <DetailsBlock
@@ -268,7 +268,7 @@ const ScannerDetails = ({
     >
       <InfoTable>
         <TableBody>
-          {is_defined(comment) &&
+          {isDefined(comment) &&
             <TableRow>
               <TableData>
                 {_('Comment')}
@@ -316,7 +316,7 @@ const ScannerDetails = ({
             </TableRow>
           }
 
-          {is_defined(credential) &&
+          {isDefined(credential) &&
             <TableRow>
               <TableData>
                 {_('Credential')}
@@ -376,14 +376,14 @@ const ScannerDetails = ({
         </TableBody>
       </InfoTable>
 
-      {scanner_type === OSP_SCANNER_TYPE && is_defined(info) &&
+      {scanner_type === OSP_SCANNER_TYPE && isDefined(info) &&
         <OspScannerDetails
           info={info}
         />
       }
 
-      {!entity.hasUnixSocket() && is_defined(credential) &&
-          is_defined(credential.certificate_info) &&
+      {!entity.hasUnixSocket() && isDefined(credential) &&
+          isDefined(credential.certificate_info) &&
           <DetailsBlock
             title={_('Client Certificate (from Credential)')}
           >

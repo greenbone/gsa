@@ -21,13 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  is_defined,
-  is_array,
+  isDefined,
+  isArray,
 } from '../utils/identity';
 
 import HttpCommand from './http.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 class PerformanceCommand extends HttpCommand {
 
@@ -44,15 +44,15 @@ class PerformanceCommand extends HttpCommand {
       const {get_system_reports_response: sys_response = {}} = sys_reports;
       const {system_report: reports} = sys_response;
 
-      if (!is_defined(reports)) {
+      if (!isDefined(reports)) {
         throw new Error('Invalid response data for system reports');
       }
 
-      return response.setData(is_array(reports) ? reports : [reports]);
+      return response.setData(isArray(reports) ? reports : [reports]);
     });
   }
 }
 
-register_command('performance', PerformanceCommand);
+registerCommand('performance', PerformanceCommand);
 
 // vim: set ts=2 sw=2 tw=80:

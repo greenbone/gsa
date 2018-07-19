@@ -28,8 +28,8 @@ import _ from 'gmp/locale';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat} from 'gmp/parser';
-import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -69,22 +69,22 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
   handleDataClick(filterValue) {
     const {onFilterChanged, filter} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
     let wordFilter;
 
-    if (!is_empty(filterValue)) {
+    if (!isEmpty(filterValue)) {
       const wordTerm = FilterTerm.fromString(`description~"${filterValue}"`);
 
-      if (is_defined(filter) && filter.hasTerm(wordTerm)) {
+      if (isDefined(filter) && filter.hasTerm(wordTerm)) {
         return;
       }
       wordFilter = Filter.fromTerm(wordTerm);
     }
 
-    const newFilter = is_defined(filter) ? filter.copy().and(wordFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(wordFilter) :
       wordFilter;
 
     onFilterChanged(newFilter);
@@ -117,7 +117,7 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
                 displayLegend={false}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

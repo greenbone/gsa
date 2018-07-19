@@ -24,9 +24,10 @@
 
 import React from 'react';
 
-import {is_defined, debounce} from 'gmp/utils';
+import {debounce} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 
-import {parseInt} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -53,7 +54,7 @@ const withChangeHandler = (options = {}) => Component => {
 
       const debounce_value = parseInt(this.props.debounce);
 
-      if (is_defined(debounce_value) && debounce_value > 0) {
+      if (isDefined(debounce_value) && debounce_value > 0) {
         this.notifyChange = debounce(this.notifyChange, debounce_value);
       }
     }
@@ -63,7 +64,7 @@ const withChangeHandler = (options = {}) => Component => {
 
       // we may be an uncontrolled input
       // https://facebook.github.io/react/docs/uncontrolled-components.html
-      if (!is_defined(next.value)) {
+      if (!isDefined(next.value)) {
         return;
       }
 
@@ -84,7 +85,7 @@ const withChangeHandler = (options = {}) => Component => {
     notifyChange(value) {
       const {name, onChange} = this.props;
 
-      if (is_defined(onChange)) {
+      if (isDefined(onChange)) {
         onChange(value, name);
       }
     }

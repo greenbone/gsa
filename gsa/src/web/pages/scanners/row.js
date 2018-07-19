@@ -20,16 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -92,7 +92,7 @@ const Actions = ({
       title={_('Verify Scanner')}
       onClick={onScannerVerifyClick}
     />
-    {is_defined(entity.credential) &&
+    {isDefined(entity.credential) &&
       <Icon
         title={_('Download Certificate')}
         img="key.svg"
@@ -100,7 +100,7 @@ const Actions = ({
         onClick={onScannerCredentialDownloadClick}
       />
     }
-    {is_defined(entity.ca_pub) &&
+    {isDefined(entity.ca_pub) &&
       <Icon
         img="key.svg"
         title={_('Download CA Certificate')}
@@ -149,11 +149,11 @@ const Row = ({
       {scanner_type_name(entity.scanner_type)}
     </TableData>
     <TableData>
-      {is_defined(entity.credential) &&
+      {isDefined(entity.credential) &&
         <EntityLink entity={entity.credential}/>
       }
     </TableData>
-    {render_component(actions, {...props, entity})}
+    {renderComponent(actions, {...props, entity})}
   </TableRow>
 );
 

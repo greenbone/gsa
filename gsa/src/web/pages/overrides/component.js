@@ -27,10 +27,11 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined, shorten} from 'gmp/utils';
-import {has_id} from 'gmp/utils/id.js';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser.js';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   ANY,
@@ -81,10 +82,10 @@ class OverrideComponent extends React.Component {
   }
 
   openOverrideDialog(override, initial) {
-    if (is_defined(override)) {
+    if (isDefined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
-        if (is_defined(override.endTime)) {
+        if (isDefined(override.endTime)) {
           active = ACTIVE_YES_UNTIL_VALUE;
         }
         else {
@@ -115,17 +116,17 @@ class OverrideComponent extends React.Component {
         hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt_name: is_defined(nvt) ? nvt.name : undefined,
-        oid: is_defined(nvt) ? nvt.oid : undefined,
+        nvt_name: isDefined(nvt) ? nvt.name : undefined,
+        oid: isDefined(nvt) ? nvt.oid : undefined,
         override,
-        port: is_defined(override.port) ? MANUAL : ANY,
+        port: isDefined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
-        result_id: has_id(result) ? RESULT_UUID : RESULT_ANY,
-        result_name: has_id(result) ? result.name : undefined,
-        result_uuid: has_id(result) ? result.id : undefined,
+        result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
+        result_name: hasId(result) ? result.name : undefined,
+        result_uuid: hasId(result) ? result.id : undefined,
         severity: override.severity,
-        task_id: has_id(task) ? TASK_SELECTED : TASK_ANY,
-        task_uuid: has_id(task) ? task.id : undefined,
+        task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: hasId(task) ? task.id : undefined,
         text: override.text,
         title: _('Edit Override {{- name}}',
           {name: shorten(override.text, 20)}),

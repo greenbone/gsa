@@ -28,8 +28,8 @@ import React from 'react';
 import logger from 'gmp/log';
 
 import {map} from 'gmp/utils/array';
-import {is_defined} from 'gmp/utils/identity';
-import {exclude_object_props} from 'gmp/utils/object';
+import {isDefined} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
 import {
   getEntityType,
   typeName,
@@ -132,7 +132,7 @@ class EntitiesContainer extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    if (is_defined(next.location) && is_defined(next.location.query) &&
+    if (isDefined(next.location) && isDefined(next.location.query) &&
       next.location.query.filter !== this.props.location.query.filter) {
       const {filter} = next.location.query;
       this.updateFilter(filter);
@@ -140,7 +140,7 @@ class EntitiesContainer extends React.Component {
   }
 
   updateFilter(filterstring, reload = false) {
-    const filter = is_defined(filterstring) ? Filter.fromString(filterstring) :
+    const filter = isDefined(filterstring) ? Filter.fromString(filterstring) :
       undefined;
 
     this.load({filter, reload});
@@ -154,8 +154,8 @@ class EntitiesContainer extends React.Component {
 
     this.cancelLoading();
 
-    if (is_defined(loaded_filter) &&
-      is_defined(filter) && !loaded_filter.equals(filter)) {
+    if (isDefined(loaded_filter) &&
+      isDefined(filter) && !loaded_filter.equals(filter)) {
       this.setState({
         loading: true,
         updating: true,
@@ -183,7 +183,7 @@ class EntitiesContainer extends React.Component {
         let refresh = false;
 
         const reverse_field = loaded_filter.get('sort-reverse');
-        const reverse = is_defined(reverse_field);
+        const reverse = isDefined(reverse_field);
         const field = reverse ? reverse_field : loaded_filter.get('sort');
 
         log.debug('Loaded entities', response);
@@ -206,7 +206,7 @@ class EntitiesContainer extends React.Component {
 
         this.startTimer(refresh);
       }, error => {
-        if (is_defined(error.isCancel) && error.isCancel()) {
+        if (isDefined(error.isCancel) && error.isCancel()) {
           return;
         }
         this.setState({loading: false});
@@ -240,7 +240,7 @@ class EntitiesContainer extends React.Component {
   }
 
   clearTimer() {
-    if (is_defined(this.timer)) {
+    if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
       window.clearTimeout(this.timer);
     }
@@ -255,7 +255,7 @@ class EntitiesContainer extends React.Component {
   }
 
   cancelLastRequest() {
-    if (is_defined(this.cancel)) {
+    if (isDefined(this.cancel)) {
       this.cancel();
     }
   }
@@ -563,7 +563,7 @@ class EntitiesContainer extends React.Component {
 
     let entitiesType;
     let resourceTypes;
-    if (is_defined(entities) && entities.length > 0) {
+    if (isDefined(entities) && entities.length > 0) {
       entitiesType = getEntityType(entities[0]);
       resourceTypes = [[entitiesType, typeName(entitiesType)]];
     }
@@ -579,7 +579,7 @@ class EntitiesContainer extends React.Component {
       title = 'Add Tag to All Filtered';
     }
     const Component = this.props.component;
-    const other = exclude_object_props(this.props, exclude_props);
+    const other = excludeObjectProps(this.props, exclude_props);
 
     return (
       <Wrapper>

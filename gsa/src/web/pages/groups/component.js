@@ -23,8 +23,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -55,7 +56,7 @@ class GroupComponent extends React.Component {
       this.setState({allUsers});
     });
 
-    if (is_defined(group)) {
+    if (isDefined(group)) {
 
       const title = _('Edit Group {{name}}', group);
 

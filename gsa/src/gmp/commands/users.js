@@ -21,21 +21,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import registerCommand from '../command';
 
-import {for_each, map} from '../utils/array';
-import {is_defined} from '../utils/identity';
+import {forEach, map} from '../utils/array';
+import {isDefined} from '../utils/identity';
 
-import logger from '../log.js';
-
-import Capabilities from '../capabilities/capabilities.js';
+import Capabilities from '../capabilities/capabilities';
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
-} from '../models/user.js';
-import Settings from '../models/settings.js';
+} from '../models/user';
+import Settings from '../models/settings';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.users');
 
@@ -55,14 +57,14 @@ class UserCommand extends EntityCommand {
       const settings = new Settings();
       const {data} = response;
 
-      if (is_defined(data.auth_settings) &&
-       is_defined(data.auth_settings.describe_auth_response)) {
-        for_each(data.auth_settings.describe_auth_response.group, group => {
+      if (isDefined(data.auth_settings) &&
+       isDefined(data.auth_settings.describe_auth_response)) {
+        forEach(data.auth_settings.describe_auth_response.group, group => {
           const values = {};
 
-          for_each(group.auth_conf_setting, setting => {
+          forEach(group.auth_conf_setting, setting => {
             values[setting.key] = setting.value;
-            if (is_defined(setting.certificate_info)) {
+            if (isDefined(setting.certificate_info)) {
               values.certificate_info = setting.certificate_info;
             }
           });
@@ -82,7 +84,7 @@ class UserCommand extends EntityCommand {
     ).then(response => {
       const settings = new Settings();
       const {data} = response;
-      for_each(data.get_my_settings.get_settings_response.setting, setting => {
+      forEach(data.get_my_settings.get_settings_response.setting, setting => {
         settings.set(setting.name, {
             id: setting._id,
             comment: setting.comment,
@@ -273,7 +275,7 @@ class UsersCommand extends EntitiesCommand {
   }
 }
 
-register_command('user', UserCommand);
-register_command('users', UsersCommand);
+registerCommand('user', UserCommand);
+registerCommand('users', UsersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

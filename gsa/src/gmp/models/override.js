@@ -20,9 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, is_model_element} from '../utils/identity';
+import {isDefined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -73,14 +73,14 @@ class Override extends Model {
 
     ret = {...ret, ...parseText(ret.text)};
 
-    if (is_model_element(ret.task)) {
+    if (isModelElement(ret.task)) {
       ret.task = new Model(ret.task, 'task');
     }
     else {
       delete ret.task;
     }
 
-    if (is_model_element(ret.result)) {
+    if (isModelElement(ret.result)) {
       ret.result = new Model(ret.result, 'result');
     }
     else {
@@ -92,7 +92,7 @@ class Override extends Model {
 
     ret.hosts = parseCsv(ret.hosts);
 
-    if (is_empty(elem.port)) {
+    if (isEmpty(elem.port)) {
       delete ret.port;
     }
 
@@ -107,7 +107,7 @@ class Override extends Model {
 export const parse_overrides = overrides => {
   let active = false;
   let entries = [];
-  if (is_defined(overrides)) {
+  if (isDefined(overrides)) {
     entries = map(overrides.override, override => {
       const o = new Override(override);
       active = active || o.isActive();

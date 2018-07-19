@@ -30,7 +30,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_options} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -54,11 +54,9 @@ const EmailMethodPart = ({
     onChange,
   }, {capabilities}) => {
 
-  const report_format_opts = render_options(
-    reportFormats.filter(format => {
-      return (isTaskEvent && format.content_type.startsWith('text/')) ||
-        !isTaskEvent;
-    })
+  const reportFormatItems = renderSelectItems(
+    reportFormats.filter(format =>
+      (isTaskEvent && format.content_type.startsWith('text/')) || !isTaskEvent)
   );
   return (
     <Layout flex="column" grow="1">
@@ -113,9 +111,9 @@ const EmailMethodPart = ({
                   <Select
                     name={prefix + 'notice_report_format'}
                     value={noticeReportFormat}
-                    onChange={onChange}>
-                    {report_format_opts}
-                  </Select>
+                    items={reportFormatItems}
+                    onChange={onChange}
+                  />
                 }
               </Divider>
               <TextArea
@@ -143,9 +141,9 @@ const EmailMethodPart = ({
                     <Select
                       name={prefix + 'notice_attach_format'}
                       value={noticeAttachFormat}
-                      onChange={onChange}>
-                      {render_options(reportFormats)}
-                    </Select>
+                      items={renderSelectItems(reportFormats)}
+                      onChange={onChange}
+                    />
                   }
                 </Divider>
               </Layout>

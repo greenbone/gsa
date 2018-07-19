@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
 
 import RestoreIcon from 'web/components/icon/restoreicon';
@@ -42,12 +42,12 @@ const check_by_type = {
   },
   alert: entity => {
     const restorable =
-     is_defined(entity.filter) ? !entity.filter.isInTrash() : true;
+     isDefined(entity.filter) ? !entity.filter.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
   },
   scanconfig: entity => {
     const restorable =
-      is_defined(entity.scanner) ? !entity.scanner.isInTrash() : true;
+      isDefined(entity.scanner) ? !entity.scanner.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
   },
   credential: entity => {
@@ -78,7 +78,7 @@ const check_by_type = {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   scanner: entity => {
-    const restorable = is_defined(entity.credential) ?
+    const restorable = isDefined(entity.credential) ?
       !entity.credential.isInTrash() : true;
     return {restorable, deletable: !entity.isInUse()};
   },
@@ -89,15 +89,15 @@ const check_by_type = {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   target: entity => {
-    const ssh_cred = is_defined(entity.ssh_credential) ?
+    const ssh_cred = isDefined(entity.ssh_credential) ?
      !entity.ssh_credential.isInTrash() : true;
-    const smb_cred = is_defined(entity.smb_credential) ?
+    const smb_cred = isDefined(entity.smb_credential) ?
      !entity.smb_credential.isInTrash() : true;
-    const esxi_cred = is_defined(entity.esxi_credential) ?
+    const esxi_cred = isDefined(entity.esxi_credential) ?
      !entity.esxi_credential.isInTrash() : true;
-    const snmp_cred = is_defined(entity.snmp_credential) ?
+    const snmp_cred = isDefined(entity.snmp_credential) ?
      !entity.snmp_credential.isInTrash() : true;
-    const portlist = is_defined(entity.port_list) ?
+    const portlist = isDefined(entity.port_list) ?
      !entity.port_list.isInTrash() : true;
 
     const restorable =
@@ -105,15 +105,15 @@ const check_by_type = {
     return {restorable, deletable: !entity.isInUse()};
   },
   task: entity => {
-    const schedule = is_defined(entity.schedule) ?
+    const schedule = isDefined(entity.schedule) ?
       !entity.schedule.isInTrash() : true;
-    const target = is_defined(entity.target) ?
+    const target = isDefined(entity.target) ?
       !entity.target.isInTrash() : true;
-    const config = is_defined(entity.config) ?
+    const config = isDefined(entity.config) ?
       !entity.config.isInTrash() : true;
-    const scanner = is_defined(entity.scanner) ?
+    const scanner = isDefined(entity.scanner) ?
       !entity.scanner.isInTrash() : true;
-    const alerts = is_defined(entity.alerts) ?
+    const alerts = isDefined(entity.alerts) ?
       !entity.alerts.some(alert => alert.isInTrash()) : true;
 
     const restorable = schedule && target && config && scanner && alerts;

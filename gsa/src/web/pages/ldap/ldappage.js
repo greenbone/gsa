@@ -23,10 +23,11 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import _ from 'gmp/locale';
 
-import {is_empty} from 'gmp/utils';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Button from '../../components/form/button.js';
 import CheckBox from '../../components/form/checkbox.js';
@@ -115,7 +116,7 @@ class LdapAuthentication extends React.Component {
   }
 
   showCertfificateInfo(certificate_info) {
-    if (!is_empty(certificate_info)) {
+    if (isDefined(certificate_info)) {
       return (
         <Table>
           <TableBody>

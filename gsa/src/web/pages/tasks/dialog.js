@@ -24,16 +24,19 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import logger from 'gmp/log';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {
   NO_VALUE,
   YES_VALUE,
-} from 'gmp/parser.js';
+} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task.js';
+import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task';
 
 import {
   OPENVAS_SCANNER_TYPE,
@@ -41,18 +44,18 @@ import {
   SLAVE_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   CVE_SCANNER_TYPE,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
 import {
   EMPTY_SCAN_CONFIG_ID,
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from 'gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities';
-import {render_select_items, UNSET_VALUE} from '../../utils/render.js';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -75,7 +78,7 @@ import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 const log = logger.getLogger('web.tasks.dialog');
 
 const get_scanner = (scanners, scanner_id) => {
-  if (!is_defined(scanners)) {
+  if (!isDefined(scanners)) {
     return undefined;
   }
 
@@ -97,15 +100,15 @@ class ScannerSelect extends React.Component {
     let config_id;
 
     const scanner = get_scanner(scanners, value);
-    const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+    const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
+      config_id = selectSaveId(scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
         FULL_AND_FAST_SCAN_CONFIG_ID);
     }
     else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE],
+      config_id = selectSaveId(scanConfigs[OSP_SCAN_CONFIG_TYPE],
         UNSET_VALUE);
     }
     else {
@@ -133,7 +136,7 @@ class ScannerSelect extends React.Component {
           name="scanner_id"
           value={scannerId}
           disabled={!changeTask}
-          items={render_select_items(scanners)}
+          items={renderSelectItems(scanners)}
           onChange={this.handleScannerChange}
         />
       </FormGroup>
@@ -202,24 +205,24 @@ const TaskDialog = ({
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+  const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
 
-  const tag_items = render_select_items(tags);
+  const tag_items = renderSelectItems(tags);
 
-  const target_items = render_select_items(targets);
+  const target_items = renderSelectItems(targets);
 
-  const schedule_items = render_select_items(schedules, UNSET_VALUE);
+  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
 
-  const osp_scan_config_items = render_select_items(
+  const osp_scan_config_items = renderSelectItems(
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
-  const openvas_scan_config_items = render_select_items(
+  const openvas_scan_config_items = renderSelectItems(
     scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
       // Skip the "empty" config
       return config.id !== EMPTY_SCAN_CONFIG_ID;
     }));
 
-  const alert_items = render_select_items(alerts);
+  const alert_items = renderSelectItems(alerts);
 
   const change_task = task ? task.isChangeable() : true;
 
@@ -266,9 +269,9 @@ const TaskDialog = ({
         values: state,
         onValueChange,
       }) => {
-        const osp_config_id = select_save_id(
+        const osp_config_id = selectSaveId(
           scan_configs[OSP_SCAN_CONFIG_TYPE], state.config_id);
-        const openvas_config_id = select_save_id(
+        const openvas_config_id = selectSaveId(
           scan_configs[OPENVAS_SCAN_CONFIG_TYPE], state.config_id);
 
         const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;

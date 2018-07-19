@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -57,7 +57,7 @@ const PermissionDetails = ({
     >
       <InfoTable>
         <TableBody>
-          {is_defined(comment) &&
+          {isDefined(comment) &&
             <TableRow>
               <TableData>
                 {_('Comment')}
@@ -77,7 +77,7 @@ const PermissionDetails = ({
             </TableData>
           </TableRow>
 
-          {is_defined(resource) &&
+          {isDefined(resource) &&
             <TableRow>
               <TableData>
                 {_('Resource')}
@@ -91,7 +91,7 @@ const PermissionDetails = ({
             </TableRow>
           }
 
-          {is_defined(subject) &&
+          {isDefined(subject) &&
             <TableRow>
               <TableData>
                 {_('Subject')}

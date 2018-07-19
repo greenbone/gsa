@@ -20,15 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
-import {render_component} from '../utils/render.js';
+import {renderComponent} from '../utils/render.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
@@ -42,7 +41,7 @@ const EntityActions = ({
   onEntitySelected,
   ...other
 }) => {
-  if (!is_defined(actionsComponent) &&
+  if (!isDefined(actionsComponent) &&
     selectionType !== SelectionType.SELECTION_USER) {
     return null;
   }
@@ -57,7 +56,7 @@ const EntityActions = ({
             onDeselected={onEntityDeselected}/>
         </Layout> :
         <Layout flex="column" grow>
-          {render_component(actionsComponent, {...other, entity})}
+          {renderComponent(actionsComponent, {...other, entity})}
         </Layout>
       }
     </td>

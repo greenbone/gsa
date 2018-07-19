@@ -24,8 +24,9 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -68,7 +69,7 @@ const CveDetails = ({
       flex="column"
       grow="1">
 
-      {is_defined(cwe_id) &&
+      {isDefined(cwe_id) &&
         <InfoTable>
           <TableBody>
             <TableRow>
@@ -83,7 +84,7 @@ const CveDetails = ({
         </InfoTable>
       }
 
-      {is_defined(description) &&
+      {isDefined(description) &&
         <DetailsBlock
           title={_('Description')}>
           <p>{description}</p>
@@ -104,7 +105,7 @@ const CveDetails = ({
                 />
               </TableData>
             </TableRow>
-            {is_defined(cvssBaseVector) &&
+            {isDefined(cvssBaseVector) &&
               <TableRow>
                 <TableData>
                   {_('Base Vector')}
@@ -120,7 +121,7 @@ const CveDetails = ({
               </TableRow>
             }
             {Object.entries(CVSS_PROPS)
-              .filter(([name]) => is_defined(entity[name]))
+              .filter(([name]) => isDefined(entity[name]))
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>

@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import {Col} from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -90,7 +90,7 @@ const OverrideDetails = ({
                 {_('Port')}
               </TableData>
               <TableData>
-                {is_defined(port) ?
+                {isDefined(port) ?
                   port :
                   _('Any')
                 }
@@ -102,7 +102,7 @@ const OverrideDetails = ({
                 {_('Severity')}
               </TableData>
               <TableData>
-                {is_defined(severity) ? (
+                {isDefined(severity) ? (
                   severity > LOG_VALUE ?
                     _('> 0.0') :
                     translatedResultSeverityRiskFactor(severity)
@@ -118,7 +118,7 @@ const OverrideDetails = ({
               <TableData>
                 {entity.isOrphan() ?
                   <b>{_('Orphan')}</b> : (
-                  is_defined(task) ?
+                  isDefined(task) ?
                     <EntityLink
                       entity={task}
                     /> :
@@ -135,7 +135,7 @@ const OverrideDetails = ({
               <TableData>
                 {entity.isOrphan() ?
                   <b>{_('Orphan')}</b> : (
-                  is_defined(result) ?
+                  isDefined(result) ?
                     <EntityLink
                       entity={result}
                     /> :

@@ -34,7 +34,7 @@ import {
 
 import {parseFloat} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -126,7 +126,7 @@ export class NotesActiveDaysDisplay extends React.Component {
     const {onFilterChanged, filter} = this.props;
     const {filterValue, bulked = false} = data;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -140,12 +140,12 @@ export class NotesActiveDaysDisplay extends React.Component {
         FilterTerm.fromString(`active_days="${filterValue}"`);
     }
 
-    if (is_defined(filter) && filter.hasTerm(activeDaysTerm)) {
+    if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
       return;
     }
     const activeDaysFilter = Filter.fromTerm(activeDaysTerm);
 
-    const newFilter = is_defined(filter) ? filter.copy().and(activeDaysFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(activeDaysFilter) :
       activeDaysFilter;
 
     onFilterChanged(newFilter);
@@ -177,7 +177,7 @@ export class NotesActiveDaysDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

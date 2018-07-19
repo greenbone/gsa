@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseSeverity, parseInt} from 'gmp/parser';
 
@@ -63,7 +63,7 @@ const transformSeverityData = (
     let {value} = group;
 
     value = parseSeverity(value);
-    if (!is_defined(value)) {
+    if (!isDefined(value)) {
       value = NA_VALUE;
     }
 

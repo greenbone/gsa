@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_string} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -32,7 +33,7 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
 const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
-  const filterstring = is_string(filter) ?
+  const filterstring = isString(filter) ?
     filter : filter.toFilterCriteriaString();
   return (
     <FormGroup title={_('Filter')} flex>

@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import _ from '../locale';
 
-import _ from '../locale.js';
+import HttpCommand from './http';
 
-import {HttpCommand} from '../command.js';
-
-import Login from '../models/login.js';
+import Login from '../models/login';
 
 class LoginCommand extends HttpCommand {
 

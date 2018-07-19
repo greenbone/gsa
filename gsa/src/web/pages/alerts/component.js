@@ -25,8 +25,13 @@
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined, select_save_id, first, shorten} from 'gmp/utils';
-import {parseYesNo, NO_VALUE} from 'gmp/parser.js';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
+import {first} from 'gmp/utils/array';
+import {shorten} from 'gmp/utils/string';
+
+import {parseYesNo, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -60,7 +65,7 @@ import AlertDialog, {
 } from './dialog.js';
 
 const select_verinice_report_id = (report_formats, report_id) => {
-  if (is_defined(report_id)) {
+  if (isDefined(report_id)) {
     for (const format of report_formats) {
       if (format.id === report_id) {
         return format.id;
@@ -187,7 +192,7 @@ class AlertComponent extends React.Component {
   openAlertDialog(alert) {
     const {gmp} = this.props;
 
-    if (is_defined(alert)) {
+    if (isDefined(alert)) {
       gmp.alert.editAlertSettings(alert).then(response => {
         const settings = response.data;
         const {
@@ -255,14 +260,14 @@ class AlertComponent extends React.Component {
           feed_event = 'new';
         }
 
-        const scp_credential_id = is_defined(method.data.scp_credential) ?
+        const scp_credential_id = isDefined(method.data.scp_credential) ?
           method.data.scp_credential.credential.id : undefined;
 
         const verinice_credential_id =
-          is_defined(method.data.verinice_server_credential) ?
+          isDefined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
-        const tp_sms_credential_id = is_defined(method.data.tp_sms_credential) ?
+        const tp_sms_credential_id = isDefined(method.data.tp_sms_credential) ?
           value(method.data.tp_sms_credential.credential) : undefined;
 
         this.setState({
@@ -273,7 +278,7 @@ class AlertComponent extends React.Component {
           name: alert.name,
           comment: alert.comment,
           filters,
-          filter_id: is_defined(alert.filter) ? alert.filter.id : NO_VALUE,
+          filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
@@ -311,16 +316,16 @@ class AlertComponent extends React.Component {
           method_data_message,
           method_data_message_attach,
           method_data_notice,
-          method_data_notice_report_format: select_save_id(report_formats,
+          method_data_notice_report_format: selectSaveId(report_formats,
             value(method.data.notice_report_format,
               DEFAULT_NOTICE_REPORT_FORMAT)),
-          method_data_notice_attach_format: select_save_id(report_formats,
+          method_data_notice_attach_format: selectSaveId(report_formats,
             value(method.data.attach_report_format,
               DEFAULT_NOTICE_ATTACH_FORMAT)),
 
-          method_data_scp_credential: select_save_id(credentials,
+          method_data_scp_credential: selectSaveId(credentials,
             scp_credential_id),
-          method_data_scp_report_format: select_save_id(report_formats,
+          method_data_scp_report_format: selectSaveId(report_formats,
             value(method.data.scp_report_format)),
           method_data_scp_path: value(method.data.scp_path, DEFAULT_SCP_PATH),
           method_data_scp_host: value(method.data.scp_host, ''),
@@ -328,7 +333,7 @@ class AlertComponent extends React.Component {
 
           method_data_send_port: value(method.data.send_port, ''),
           method_data_send_host: value(method.data.send_host, ''),
-          method_data_send_report_format: select_save_id(report_formats,
+          method_data_send_report_format: selectSaveId(report_formats,
             value(method.data.send_report_format)),
 
           method_data_smb_credential: value(method.data.smb_credential, ''),
@@ -342,10 +347,10 @@ class AlertComponent extends React.Component {
             ''),
           method_data_snmp_message: value(method.data.snmp_message, ''),
 
-          method_data_start_task_task: select_save_id(tasks, value(
+          method_data_start_task_task: selectSaveId(tasks, value(
             method.data.start_task_task)),
 
-          method_data_tp_sms_credential: select_save_id(credentials,
+          method_data_tp_sms_credential: selectSaveId(credentials,
             tp_sms_credential_id),
           method_data_tp_sms_hostname: value(method.data.tp_sms_hostname, ''),
           method_data_tp_sms_tls_workaround: parseYesNo(
@@ -355,7 +360,7 @@ class AlertComponent extends React.Component {
             report_formats, value(method.data.verinice_server_report_format)),
           method_data_verinice_server_url: value(
             method.data.verinice_server_url),
-          method_data_verinice_server_credential: select_save_id(credentials,
+          method_data_verinice_server_credential: selectSaveId(credentials,
             verinice_credential_id),
 
           method_data_URL: value(method.data.URL, ''),
@@ -380,8 +385,8 @@ class AlertComponent extends React.Component {
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
 
-        const result_filter_id = select_save_id(result_filters);
-        const report_format_id = select_save_id(report_formats);
+        const result_filter_id = selectSaveId(result_filters);
+        const report_format_id = selectSaveId(report_formats);
 
         this.setState({
           id: undefined,
@@ -408,11 +413,11 @@ class AlertComponent extends React.Component {
           condition_data_filters: result_filters,
           condition_data_filter_id: result_filter_id,
           condition_data_at_least_filter_id: result_filter_id,
-          method_data_notice_report_format: select_save_id(report_formats,
+          method_data_notice_report_format: selectSaveId(report_formats,
             DEFAULT_NOTICE_REPORT_FORMAT),
-          method_data_notice_attach_format: select_save_id(report_formats,
+          method_data_notice_attach_format: selectSaveId(report_formats,
             DEFAULT_NOTICE_ATTACH_FORMAT),
-          method_data_start_task_task: select_save_id(tasks),
+          method_data_start_task_task: selectSaveId(tasks),
           report_formats,
           method_data_scp_report_format: report_format_id,
           method_data_send_report_format: report_format_id,
@@ -435,12 +440,12 @@ class AlertComponent extends React.Component {
     gmp.alert.test(alert).then(response => {
       const {success, details, message} = response.data;
       if (success) {
-        if (is_defined(onTestSuccess)) {
+        if (isDefined(onTestSuccess)) {
           onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
         }
       }
-      else if (is_defined(onTestError)) {
-        if (is_defined(details)) {
+      else if (isDefined(onTestError)) {
+        if (isDefined(details)) {
           onTestError(
             <React.Fragment>
               <p>
@@ -461,7 +466,7 @@ class AlertComponent extends React.Component {
         }
       }
     }, () => {
-      if (is_defined(onTestError)) {
+      if (isDefined(onTestError)) {
         onTestError(_('An error occurred during Testing the alert {{name}}',
           alert));
       }

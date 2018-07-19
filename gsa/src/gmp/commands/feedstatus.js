@@ -20,13 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {HttpCommand, register_command} from '../command.js';
+import registerCommand from '../command';
 
-import {parseDate} from '../parser.js';
+import {parseDate} from '../parser';
 
 import {map} from '../utils/array';
 
 import date, {duration} from '../models/date';
+
+import HttpCommand from './http';
 
 const convertVersion = version => version.slice(0, 8) + 'T' +
   version.slice(8, 12);
@@ -76,6 +78,6 @@ class FeedStatus extends HttpCommand {
   }
 }
 
-register_command('feedstatus', FeedStatus);
+registerCommand('feedstatus', FeedStatus);
 
 // vim: set ts=2 sw=2 tw=80:

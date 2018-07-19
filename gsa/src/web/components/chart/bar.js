@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/string';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from '../layout/layout';
 
@@ -101,7 +101,7 @@ class BarChart extends React.Component {
     const maxWidth = width - marginLeft - margin.right;
     let maxHeight = height - margin.top - margin.bottom;
 
-    if (is_defined(xLabel)) {
+    if (isDefined(xLabel)) {
       // adjust height for x axis label
       maxHeight = maxHeight - LABEL_HEIGHT;
     }
@@ -152,7 +152,7 @@ class BarChart extends React.Component {
               >
                 {({targetRef, hide, show}) => (
                   <Group
-                    onClick={is_defined(onDataClick) ?
+                    onClick={isDefined(onDataClick) ?
                       () => onDataClick(d) : undefined}
                   >
                     <rect

@@ -25,12 +25,12 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
@@ -54,8 +54,8 @@ const Row = ({
   ...other
 }) => {
   const {host} = entity;
-  const shown_name = is_defined(entity.name) ? entity.name : entity.nvt.oid;
-  const has_tags = is_defined(entity.nvt) && is_defined(entity.nvt.tags);
+  const shown_name = isDefined(entity.name) ? entity.name : entity.nvt.oid;
+  const has_tags = isDefined(entity.nvt) && isDefined(entity.nvt.tags);
 
   return (
     <TableRow>
@@ -106,7 +106,7 @@ const Row = ({
       <TableData>
         {longDate(entity.modificationTime)}
       </TableData>
-      {render_component(actions, {...other, entity})}
+      {renderComponent(actions, {...other, entity})}
     </TableRow>
   );
 };

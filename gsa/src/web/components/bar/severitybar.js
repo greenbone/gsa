@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
-import {parseFloat} from 'gmp/parser.js';
+import {isDefined} from 'gmp/utils/identity';
+
+import {parseFloat} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
@@ -48,7 +48,7 @@ const SeverityBar = ({severity}) => {
   let threat;
   let title;
 
-  if (is_defined(severity)) {
+  if (isDefined(severity)) {
     cvss = parseFloat(severity);
     threat = resultSeverityRiskFactor(cvss);
     title = translateRiskFactor(threat);
@@ -57,10 +57,10 @@ const SeverityBar = ({severity}) => {
     title = _NA;
   }
 
-  const fill = is_defined(cvss) && cvss > 0 ? cvss * 10 : 0;
+  const fill = isDefined(cvss) && cvss > 0 ? cvss * 10 : 0;
 
   let text;
-  if (!is_defined(cvss) || cvss < LOG_VALUE) {
+  if (!isDefined(cvss) || cvss < LOG_VALUE) {
     text = title;
   }
   else {

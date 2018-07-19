@@ -20,12 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import logger from '../log.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import registerCommand from '../command';
 
-import Scanner from '../models/scanner.js';
+import Scanner from '../models/scanner';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanners');
 
@@ -109,7 +111,7 @@ class ScannerCommand extends EntityCommand {
   }
 }
 
-register_command('scanner', ScannerCommand);
-register_command('scanners', ScannersCommand);
+registerCommand('scanner', ScannerCommand);
+registerCommand('scanners', ScannersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

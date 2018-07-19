@@ -24,7 +24,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, throttleAnimation} from 'gmp/utils';
+import {throttleAnimation} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -78,7 +79,7 @@ class Resizer extends React.Component {
 
     event.preventDefault();
 
-    if (is_defined(onResize)) {
+    if (isDefined(onResize)) {
       this.notifyResize(event.pageY);
     }
   }

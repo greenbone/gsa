@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -79,18 +79,18 @@ export class SecInfosTypeDisplay extends React.Component {
     const {onFilterChanged, filter} = this.props;
     const {filterValue} = data;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
     const typeTerm = FilterTerm.fromString(`type="${filterValue}"`);
 
-    if (is_defined(filter) && filter.hasTerm(typeTerm)) {
+    if (isDefined(filter) && filter.hasTerm(typeTerm)) {
       return;
     }
     const typeFilter = Filter.fromTerm(typeTerm);
 
-    const newFilter = is_defined(filter) ? filter.copy().and(typeFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(typeFilter) :
       typeFilter;
 
     onFilterChanged(newFilter);
@@ -122,7 +122,7 @@ export class SecInfosTypeDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

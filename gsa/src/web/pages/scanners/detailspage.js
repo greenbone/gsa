@@ -21,15 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import {CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import PropTypes from '../../utils/proptypes.js';
-
-import {CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {
@@ -116,7 +116,7 @@ const ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
-        {is_defined(entity.credential) &&
+        {isDefined(entity.credential) &&
           <Icon
             title={_('Download Certificate')}
             img="key.svg"
@@ -124,7 +124,7 @@ const ToolBarIcons = ({
             onClick={onScannerCredentialDownloadClick}
           />
         }
-        {is_defined(entity.ca_pub) &&
+        {isDefined(entity.ca_pub) &&
           <Icon
             img="key.svg"
             title={_('Download CA Certificate')}
@@ -225,12 +225,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <Tab>
                       {tagsTitle}
                     </Tab>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <Tab>
                       {permissionsTitle}
                     </Tab>
@@ -245,12 +245,12 @@ const Page = ({
                       entity={entity}
                     />
                   </TabPanel>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <TabPanel>
                       {tagsComponent}
                     </TabPanel>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <TabPanel>
                       {permissionsComponent}
                     </TabPanel>

@@ -23,11 +23,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {shorten, is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 import {
   extraRiskFactor,
   translateRiskFactor,
@@ -52,7 +54,7 @@ import TableData from '../../components/table/data.js';
 
 
 const render_severity = severity => {
-  if (is_defined(severity)) {
+  if (isDefined(severity)) {
     if (severity <= LOG_VALUE) {
       return translateRiskFactor(extraRiskFactor(severity));
     }
@@ -136,7 +138,7 @@ const Row = ({
       <TableData>
         {entity.isActive() ? _('yes') : _('no')}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {EntityCommand} from '../command.js';
+import EntityCommand from './entity';
 
 class InfoEntityCommand extends EntityCommand {
 

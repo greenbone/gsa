@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter.js';
 
@@ -54,7 +54,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
     }
 
     setFilter(filter) {
-      if (!is_defined(filter)) {
+      if (!isDefined(filter)) {
         return {};
       }
 
@@ -76,7 +76,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
         onFilterChanged(filter);
       }
 
-      if (is_defined(onCloseClick)) {
+      if (isDefined(onCloseClick)) {
         onCloseClick();
       }
     }
@@ -117,7 +117,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       const {onCloseClick} = this.props;
       const {filter, filterstring} = this.state;
 
-      if (!is_defined(filter)) {
+      if (!isDefined(filter)) {
         return null;
       }
 

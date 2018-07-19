@@ -21,10 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import Result from '../models/result';
 
-import Result from '../models/result.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 class ResultsCommand extends EntitiesCommand {
 
@@ -76,7 +78,7 @@ class ResultCommand extends EntityCommand {
   }
 }
 
-register_command('result', ResultCommand);
-register_command('results', ResultsCommand);
+registerCommand('result', ResultCommand);
+registerCommand('results', ResultsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

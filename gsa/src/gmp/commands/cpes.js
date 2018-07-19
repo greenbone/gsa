@@ -21,17 +21,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {is_defined} from '../utils';
+import {isDefined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Cpe from '../models/cpe.js';
 
-const info_filter = info => is_defined(info.cpe);
+const info_filter = info => isDefined(info.cpe);
 
 class CpeCommand extends InfoEntityCommand {
 
@@ -63,7 +62,7 @@ class CpesCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('cpe', CpeCommand);
-register_command('cpes', CpesCommand);
+registerCommand('cpe', CpeCommand);
+registerCommand('cpes', CpesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

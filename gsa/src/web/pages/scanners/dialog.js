@@ -28,13 +28,13 @@ import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {filter, map} from 'gmp/utils/array';
-import {is_defined} from 'gmp/utils/identity';
-import {select_save_id} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
 
@@ -90,7 +90,7 @@ const filter_credentials = (credentials, type) => {
 };
 
 const render_certificate_info = info => {
-  if (!is_defined(info)) {
+  if (!isDefined(info)) {
     return null;
   }
 
@@ -142,7 +142,7 @@ class ScannerDialog extends React.Component {
       const scan_credentials = filter_credentials(credentials, value);
 
       onScannerTypeChange(value, name);
-      onScannerTypeChange(select_save_id(scan_credentials, credential_id),
+      onScannerTypeChange(selectSaveId(scan_credentials, credential_id),
         'credential_id');
     }
   }
@@ -179,10 +179,10 @@ class ScannerDialog extends React.Component {
     };
 
     const scanner_credentials = filter_credentials(credentials, type);
-    const is_edit = is_defined(scanner);
-    const in_use = is_defined(scanner) && scanner.isInUse();
-    const show_cred_info = is_defined(scanner) &&
-      is_defined(scanner.credential) &&
+    const is_edit = isDefined(scanner);
+    const in_use = isDefined(scanner) && scanner.isInUse();
+    const show_cred_info = isDefined(scanner) &&
+      isDefined(scanner.credential) &&
       scanner.credential.type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
     return (
@@ -257,7 +257,7 @@ class ScannerDialog extends React.Component {
                   <Divider>
                     {is_edit &&
                       <Layout flex box>
-                        {is_defined(state.ca_pub) &&
+                        {isDefined(state.ca_pub) &&
                           <Radio
                             title={_('Existing')}
                             name="which_cert"
@@ -288,7 +288,7 @@ class ScannerDialog extends React.Component {
                       onChange={onValueChange}/>
                   </Divider>
                 </Layout>
-                {is_edit && is_defined(state.ca_pub) &&
+                {is_edit && isDefined(state.ca_pub) &&
                   <CertStatus info={state.ca_pub.info}/>
                 }
               </FormGroup>
@@ -297,7 +297,7 @@ class ScannerDialog extends React.Component {
                 <Divider>
                   <Select
                     name="credential_id"
-                    items={render_select_items(scanner_credentials)}
+                    items={renderSelectItems(scanner_credentials)}
                     value={credential_id}
                     onChange={onCredentialChange}/>
                   <Layout flex box>

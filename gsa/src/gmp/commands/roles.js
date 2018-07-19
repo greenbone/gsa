@@ -22,16 +22,20 @@
  */
 import 'core-js/fn/set';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import registerCommand from '../command';
 
-import logger from '../log.js';
-import {is_array, is_defined} from '../utils/identity';
+import logger from '../log';
+
+import {isArray, isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Permission from '../models/permission.js';
-import Role from '../models/role.js';
+import Permission from '../models/permission';
+import Role from '../models/role';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.roles');
 
@@ -50,7 +54,7 @@ class RoleCommand extends EntityCommand {
       cmd: 'create_role',
       name,
       comment,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Creating new role', data);
     return this.action(data);
@@ -67,7 +71,7 @@ class RoleCommand extends EntityCommand {
       id,
       name,
       comment,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving role', data);
     return this.action(data);
@@ -90,7 +94,7 @@ class RoleCommand extends EntityCommand {
       edit_role.permissions = map(
         edit_role.get_permissions_response.permission, permission => {
           const perm = new Permission(permission);
-          if (!is_defined(perm.resource)) {
+          if (!isDefined(perm.resource)) {
             perm_names.add(permission.name);
           }
           return perm;
@@ -135,7 +139,7 @@ class RolesCommand extends EntitiesCommand {
   }
 }
 
-register_command('role', RoleCommand);
-register_command('roles', RolesCommand);
+registerCommand('role', RoleCommand);
+registerCommand('roles', RolesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

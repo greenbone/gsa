@@ -20,15 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_array, is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isArray, isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import {setProperties, parseInt, parseDate} from 'gmp/parser';
 
 const parse_count = value => {
   const parsed = parseInt(value);
 
-  if (is_defined(parsed)) {
+  if (isDefined(parsed)) {
     return parsed;
   }
 
@@ -36,7 +36,7 @@ const parse_count = value => {
 };
 
 const parse_page_count = value => {
-  if (is_defined(value)) {
+  if (isDefined(value)) {
     return parse_count(value.page);
   }
   return 0;
@@ -53,7 +53,7 @@ class Host {
 
     const {asset = {}, port_count = {}, result_count} = elem;
 
-    if (is_empty(asset._asset_id)) {
+    if (isEmpty(asset._asset_id)) {
       delete copy.asset;
     }
     else {
@@ -63,7 +63,7 @@ class Host {
 
     copy.port_count = parse_page_count(port_count.page);
 
-    if (is_defined(result_count)) {
+    if (isDefined(result_count)) {
       copy.result_counts = {
         hole: parse_page_count(result_count.hole),
         warning: parse_page_count(result_count.warning),
@@ -91,7 +91,7 @@ class Host {
 
     copy.details = {};
 
-    if (is_array(elem.detail)) {
+    if (isArray(elem.detail)) {
       elem.detail.forEach(details => {
         const {name, value} = details;
         switch (name) {

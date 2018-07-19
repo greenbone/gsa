@@ -22,29 +22,29 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {first} from './array';
-import {is_defined, is_string} from './identity';
+import {isDefined, isString} from './identity';
 
-export const has_id = model => is_defined(model) && is_string(model.id) &&
+export const hasId = model => isDefined(model) && isString(model.id) &&
   model.id.length > 0;
 
-export function includes_id(list, id) {
+export const includesId = (list, id) => {
   for (const value of list) {
     if (value.id === id) {
       return true;
     }
   }
   return false;
-}
+};
 
-export function select_save_id(list, id, empty_default) {
-  if (!is_defined(id) || !includes_id(list, id)) {
-    if (!is_defined(empty_default)) {
+export const selectSaveId = (list, id, empty_default) => {
+  if (!isDefined(id) || !includesId(list, id)) {
+    if (!isDefined(empty_default)) {
       return first(list).id;
     }
     return empty_default;
   }
   return id;
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:
 

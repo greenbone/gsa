@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -271,12 +271,12 @@ const CertBundAdvPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <Tab>
                           {tagsTitle}
                         </Tab>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <Tab>
                           {permissionsTitle}
                         </Tab>
@@ -291,12 +291,12 @@ const CertBundAdvPage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <TabPanel>
                           {tagsComponent}
                         </TabPanel>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <TabPanel>
                           {permissionsComponent}
                         </TabPanel>

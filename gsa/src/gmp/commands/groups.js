@@ -20,13 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import logger from '../log';
 
-import logger from '../log.js';
-import {is_array} from '../utils/identity';
+import {isArray} from '../utils/identity';
 
-import Group from '../models/group.js';
+import Group from '../models/group';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.groups');
 
@@ -47,7 +50,7 @@ class GroupCommand extends EntityCommand {
       name,
       comment,
       grant_full,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Creating new group', data);
     return this.action(data);
@@ -66,7 +69,7 @@ class GroupCommand extends EntityCommand {
       name,
       comment,
       grant_full,
-      users: is_array(users) ? users.join(',') : '',
+      users: isArray(users) ? users.join(',') : '',
     };
     log.debug('Saving group', data);
     return this.action(data);
@@ -88,7 +91,7 @@ class GroupsCommand extends EntitiesCommand {
   }
 }
 
-register_command('group', GroupCommand);
-register_command('groups', GroupsCommand);
+registerCommand('group', GroupCommand);
+registerCommand('groups', GroupsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

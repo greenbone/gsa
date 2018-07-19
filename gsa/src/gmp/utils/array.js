@@ -25,34 +25,34 @@ import 'core-js/fn/array/includes';
 import 'core-js/fn/object/is';
 import 'core-js/fn/symbol';
 
-import {has_value, is_defined, is_array} from './identity';
+import {hasValue, isDefined, isArray} from './identity';
 
-export function for_each(array, func) {
-  if (!has_value(array) || !is_defined(func)) {
+export const forEach = (array, func) => {
+  if (!hasValue(array) || !isDefined(func)) {
     return;
   }
 
-  if (is_defined(array.forEach)) {
+  if (isDefined(array.forEach)) {
     array.forEach(func);
     return;
   }
 
-  if (!is_array(array)) {
+  if (!isArray(array)) {
     array = [array];
   }
   array.forEach(func);
-}
+};
 
 export function map(array, func, empty = []) {
-  if (!has_value(array) || !is_defined(func)) {
+  if (!hasValue(array) || !isDefined(func)) {
     return empty;
   }
 
-  if (is_defined(array.map)) {
+  if (isDefined(array.map)) {
     return array.map(func);
   }
 
-  if (is_defined(array.forEach)) { // support array like objects e.g. Set and Map
+  if (isDefined(array.forEach)) { // support array like objects e.g. Set and Map
     const result = [];
 
     array.forEach(entry => result.push(func(entry)));
@@ -63,24 +63,24 @@ export function map(array, func, empty = []) {
     return result;
   }
 
-  if (!is_array(array)) {
+  if (!isArray(array)) {
     array = [array];
   }
   return array.map(func);
 }
 
 export function filter(array, func, empty = []) {
-  if (!has_value(array) || !is_defined(func)) {
+  if (!hasValue(array) || !isDefined(func)) {
     return empty;
   }
-  if (!is_defined(array.filter)) {
+  if (!isDefined(array.filter)) {
     array = [array];
   }
   return array.filter(func);
 };
 
 export function first(array, non = {}) {
-  if (is_array(array)) {
+  if (isArray(array)) {
 
     if (array.length === 0) {
       return non;
@@ -90,7 +90,7 @@ export function first(array, non = {}) {
   }
 
   // support array like objects which have an iterator
-  if (!is_defined(array[Symbol.iterator])) { // not an array like object
+  if (!isDefined(array[Symbol.iterator])) { // not an array like object
     return non;
   }
 
@@ -98,12 +98,12 @@ export function first(array, non = {}) {
   return done ? non : value; // done is true for empty iterables
 }
 
-export function arrays_equal(arr1, arr2) {
+export const arraysEqual = (arr1, arr2) => {
   if (Object.is(arr1, arr2)) {
     return true;
   }
 
-  if (!is_array(arr1) || !is_array(arr2)) {
+  if (!isArray(arr1) || !isArray(arr2)) {
     return false;
   }
 
@@ -117,6 +117,6 @@ export function arrays_equal(arr1, arr2) {
     }
   }
   return true;
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:

@@ -22,16 +22,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Nvt from '../models/nvt.js';
 
-const info_filter = info => is_defined(info.nvt);
+const info_filter = info => isDefined(info.nvt);
 
 class NvtCommand extends InfoEntityCommand {
 
@@ -88,7 +88,7 @@ class NvtsCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('nvt', NvtCommand);
-register_command('nvts', NvtsCommand);
+registerCommand('nvt', NvtCommand);
+registerCommand('nvts', NvtsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

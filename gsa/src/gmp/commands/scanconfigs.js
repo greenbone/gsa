@@ -20,19 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
-import {for_each, map} from '../utils/array';
-import {is_defined} from '../utils/identity';
+import {forEach, map} from '../utils/array';
+import {isDefined} from '../utils/identity';
 
-import Model from '../model.js';
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
-import {YES_VALUE, NO_VALUE} from '../parser.js';
+import Model from '../model';
+import registerCommand from '../command';
+import {YES_VALUE, NO_VALUE} from '../parser';
 
-import {parse_counts} from '../collection/parser.js';
+import {parseCounts} from '../collection/parser';
 
-import Nvt from '../models/nvt.js';
-import ScanConfig, {parse_count} from '../models/scanconfig.js';
+import Nvt from '../models/nvt';
+import ScanConfig, {parse_count} from '../models/scanconfig';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.scanconfigs');
 
@@ -59,7 +62,7 @@ const convert_preferences = (values, nvt_name) => {
   for (const prop in values) {
     const data = values[prop];
     const {type, value} = data;
-    if (is_defined(value)) {
+    if (isDefined(value)) {
       const typestring = nvt_name + '[' + type + ']:' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
@@ -188,7 +191,7 @@ class ScanConfigCommand extends EntityCommand {
       settings.config = new Model(config_resp.config, 'config');
 
       const nvts = {};
-      for_each(config_resp.get_nvts_response.nvt, nvt => {
+      forEach(config_resp.get_nvts_response.nvt, nvt => {
         const oid = nvt._oid;
         nvts[oid] = true;
       });
@@ -255,8 +258,8 @@ class ScanConfigCommand extends EntityCommand {
       settings.config = new Model(config_resp.config, 'config');
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
 
-      settings.nvt.notes_counts = parse_counts(data.get_notes_response, 'note');
-      settings.nvt.overrides_counts = parse_counts(data.get_overrides_response,
+      settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
+      settings.nvt.overrides_counts = parseCounts(data.get_overrides_response,
         'override');
 
       return response.setData(settings);
@@ -280,7 +283,7 @@ class ScanConfigsCommand extends EntitiesCommand {
   }
 }
 
-register_command('scanconfig', ScanConfigCommand);
-register_command('scanconfigs', ScanConfigsCommand);
+registerCommand('scanconfig', ScanConfigCommand);
+registerCommand('scanconfigs', ScanConfigsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

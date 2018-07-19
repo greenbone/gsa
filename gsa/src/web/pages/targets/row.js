@@ -23,11 +23,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
@@ -97,7 +99,7 @@ const Cred = ({
   title,
   links = true,
 }) => {
-  if (!is_defined(cred) || !is_defined(cred.id)) {
+  if (!isDefined(cred) || !isDefined(cred.id)) {
     return null;
   }
   return (
@@ -174,7 +176,7 @@ const Row = ({
           links={links}
         />
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

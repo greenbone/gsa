@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -45,7 +44,7 @@ class Tabs extends React.Component {
     super(...args);
 
     this.state = {
-      active: is_defined(this.props.active) ? this.props.active : 0,
+      active: isDefined(this.props.active) ? this.props.active : 0,
     };
 
     this.handleActivateTab = this.handleActivateTab.bind(this);

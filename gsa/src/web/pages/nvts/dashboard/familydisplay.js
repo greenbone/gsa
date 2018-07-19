@@ -30,8 +30,8 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
-import {is_empty} from 'gmp/utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 import PropTypes from 'web/utils/proptypes';
 import {severityFormat} from 'web/utils/render';
 import {resultSeverityRiskFactor} from 'web/utils/severity';
@@ -91,7 +91,7 @@ export class NvtsFamilyDisplay extends React.Component {
   handleDataClick(data) {
     const {onFilterChanged, filter} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -99,16 +99,16 @@ export class NvtsFamilyDisplay extends React.Component {
 
     let familyFilter;
 
-    if (!is_empty(filterValue)) {
+    if (!isEmpty(filterValue)) {
       const familyTerm = FilterTerm.fromString(`family="${filterValue}"`);
 
-      if (is_defined(filter) && filter.hasTerm(familyTerm)) {
+      if (isDefined(filter) && filter.hasTerm(familyTerm)) {
         return;
       }
       familyFilter = Filter.fromTerm(familyTerm);
     }
 
-    const newFilter = is_defined(filter) ? filter.copy().and(familyFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(familyFilter) :
       familyFilter;
 
     onFilterChanged(newFilter);
@@ -139,7 +139,7 @@ export class NvtsFamilyDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

@@ -20,12 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
-import {TAG_NA} from 'gmp/models/nvt.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -56,7 +57,7 @@ const NvtDetails = ({
       flex="column"
       grow="1">
 
-      {is_defined(tags.summary) &&
+      {isDefined(tags.summary) &&
         <DetailsBlock
           title={_('Summary')}>
           <Pre>
@@ -65,7 +66,7 @@ const NvtDetails = ({
         </DetailsBlock>
       }
 
-      {is_defined(tags.affected) && tags.affected !== TAG_NA &&
+      {isDefined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
           title={_('Affected Software/OS')}>
           <Pre>
@@ -87,7 +88,7 @@ const NvtDetails = ({
               </TableData>
             </TableRow>
 
-            {is_defined(tags.cvss_base_vector) &&
+            {isDefined(tags.cvss_base_vector) &&
               tags.cvss_base_vector !== TAG_NA &&
               <TableRow>
                 <TableData>
@@ -107,7 +108,7 @@ const NvtDetails = ({
         </InfoTable>
       </DetailsBlock>
 
-      {is_defined(tags.insight) && tags.insight !== TAG_NA &&
+      {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
           title={_('Vulnerability Insight')}>
           <Pre>
@@ -116,24 +117,24 @@ const NvtDetails = ({
         </DetailsBlock>
       }
 
-      {(is_defined(qod) ||
-      (is_defined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
+      {(isDefined(qod) ||
+      (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
         <DetailsBlock
           title={_('Vulnerability Detection Method')}>
-          {is_defined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
+          {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
             <Pre>
               {tags.vuldetect}
             </Pre>
           }
-          {is_defined(qod) &&
+          {isDefined(qod) &&
             <Pre>
               <b>{_('Quality of Detection')}: </b>
 
-              {is_defined(qod.type) ?
+              {isDefined(qod.type) ?
                 qod.type :
                 _('N/A')
               }
-              {is_defined(qod.value) &&
+              {isDefined(qod.value) &&
                 ' (' + qod.value + '%)'
               }
             </Pre>
@@ -141,7 +142,7 @@ const NvtDetails = ({
         </DetailsBlock>
       }
 
-      {is_defined(tags.impact) && tags.impact !== TAG_NA &&
+      {isDefined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
           title={_('Impact')}>
           <Pre>
@@ -155,7 +156,7 @@ const NvtDetails = ({
         solutionType={tags.solution_type}
       />
 
-      {is_defined(family) &&
+      {isDefined(family) &&
         <DetailsBlock
           title={_('Family')}
         >

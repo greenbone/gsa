@@ -29,8 +29,8 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 
 import {getEntityType} from 'gmp/utils/entitytype';
-import {is_defined} from 'gmp/utils/identity';
-import {select_save_id} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -98,7 +98,7 @@ class EntityPermissions extends React.Component {
   openPermissionDialog(permission) {
     const {onPermissionEditClick} = this.props;
 
-    if (is_defined(onPermissionEditClick)) {
+    if (isDefined(onPermissionEditClick)) {
       onPermissionEditClick(permission, true);
     }
   }
@@ -132,21 +132,21 @@ class EntityPermissions extends React.Component {
       const {data: groups} = response;
       this.setState({
         groups,
-        groupId: select_save_id(groups),
+        groupId: selectSaveId(groups),
       });
     });
     gmp.roles.getAll().then(response => {
       const {data: roles} = response;
       this.setState({
         roles,
-        roleId: select_save_id(roles),
+        roleId: selectSaveId(roles),
       });
     });
     gmp.users.getAll().then(response => {
       const {data: users} = response;
       this.setState({
         users,
-        userId: select_save_id(users),
+        userId: selectSaveId(users),
       });
     });
   }
@@ -190,7 +190,7 @@ class EntityPermissions extends React.Component {
       />
     );
 
-    const hasPermissions = is_defined(permissions);
+    const hasPermissions = isDefined(permissions);
     const count = hasPermissions ? permissions.length : 0;
 
     return (

@@ -25,7 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -62,7 +62,7 @@ const ScheduleDetails = ({
     >
       <InfoTable>
         <TableBody>
-          {is_defined(comment) &&
+          {isDefined(comment) &&
             <TableRow>
               <TableData>
                 {_('Comment')}
@@ -87,7 +87,7 @@ const ScheduleDetails = ({
               {_('Next Run')}
             </TableData>
             <TableData>
-              {is_defined(nextDate) ? longDate(nextDate) : '-'}
+              {isDefined(nextDate) ? longDate(nextDate) : '-'}
             </TableData>
           </TableRow>
 
@@ -98,7 +98,7 @@ const ScheduleDetails = ({
             <TableData>
               <Divider>
                 <span>{timezone}</span>
-                {is_defined(timezone_abbrev) && timezone !== timezone_abbrev &&
+                {isDefined(timezone_abbrev) && timezone !== timezone_abbrev &&
                   <span>({timezone_abbrev})</span>
                 }
               </Divider>

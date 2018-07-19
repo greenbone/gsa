@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, is_array, has_value, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -136,7 +138,7 @@ const Param = ({
       <Select
         name={name}
         items={typeOptions}
-        value={is_array(field_value) ? field_value : [field_value]}
+        value={isArray(field_value) ? field_value : [field_value]}
         onChange={onPrefChange}
       />
     );
@@ -192,7 +194,7 @@ class Dialog extends React.Component {
   handleIdListsChange(value, name) {
     const {id_lists, onValueChange} = this.props;
 
-    if (!has_value(value)) {
+    if (!hasValue(value)) {
       value = [];
     }
 
@@ -215,7 +217,7 @@ class Dialog extends React.Component {
       onSave,
     } = this.props;
 
-    if (is_defined(reportformat)) {
+    if (isDefined(reportformat)) {
       return (
         <SaveDialog
           visible={visible}

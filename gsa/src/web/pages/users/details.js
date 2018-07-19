@@ -22,15 +22,14 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_empty} from 'gmp/utils';
+import _ from 'gmp/locale';
 
 import {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_RADIUS,
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
-} from 'gmp/models/user.js';
+} from 'gmp/models/user';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -56,16 +55,20 @@ export const convert_auth_method = auth_method => {
 
 export const convert_allow = ({addresses, allow}) => {
   if (allow === ACCESS_ALLOW_ALL) {
-    if (is_empty(addresses)) {
+    if (addresses.length === 0) {
       return _('Allow all');
     }
-    return _('Allow all and deny from {{addresses}}', {addresses});
+    return _('Allow all and deny from {{addresses}}', {
+      addresses: addresses.join(', '),
+    });
   }
   if (allow === ACCESS_DENY_ALL) {
-    if (is_empty(addresses)) {
+    if (addresses.length === 0) {
       return _('Deny all');
     }
-    return _('Deny all and allow from {{addresses}}', {addresses});
+    return _('Deny all and allow from {{addresses}}', {
+      addresses: addresses.join(', '),
+    });
   }
   return '';
 };

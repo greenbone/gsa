@@ -22,8 +22,8 @@
  */
 import _ from '../locale';
 
-import {is_defined, is_string} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined, isString} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {parseInt, parseYesNo, parseDate} from '../parser.js';
@@ -64,10 +64,10 @@ export function scanner_type_name(scanner_type) {
 const parse_scanner_info = (info = {}) => {
   const data = {};
 
-  if (!is_empty(info.name)) {
+  if (!isEmpty(info.name)) {
     data.name = info.name;
   }
-  if (!is_empty(info.version)) {
+  if (!isEmpty(info.version)) {
     data.version = info.version;
   }
 
@@ -83,11 +83,11 @@ class Scanner extends Model {
 
     ret.scanner_type = parseInt(elem.type);
 
-    ret.credential = is_defined(ret.credential) &&
-      !is_empty(ret.credential._id) ? new Credential(ret.credential) :
+    ret.credential = isDefined(ret.credential) &&
+      !isEmpty(ret.credential._id) ? new Credential(ret.credential) :
       undefined;
 
-    if (is_empty(ret.ca_pub)) {
+    if (isEmpty(ret.ca_pub)) {
       delete ret.ca_pub;
     }
     else {
@@ -95,7 +95,7 @@ class Scanner extends Model {
         certificate: ret.ca_pub,
       };
 
-      if (is_defined(ret.ca_pub_info)) {
+      if (isDefined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
         ret.ca_pub.info.activationTime = parseDate(
           ret.ca_pub.info.activation_time
@@ -109,14 +109,14 @@ class Scanner extends Model {
       }
     }
 
-    if (is_defined(ret.tasks)) {
+    if (isDefined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
     }
     else {
       ret.tasks = [];
     }
 
-    if (is_empty(ret.configs)) {
+    if (isEmpty(ret.configs)) {
       ret.configs = [];
     }
     else {
@@ -124,17 +124,17 @@ class Scanner extends Model {
         config => new Model(config, 'config'));
     }
 
-    if (is_defined(ret.info)) {
+    if (isDefined(ret.info)) {
       const {scanner, daemon, description, params, protocol} = ret.info;
 
       ret.info.scanner = parse_scanner_info(scanner);
       ret.info.daemon = parse_scanner_info(daemon);
       ret.info.protocol = parse_scanner_info(protocol);
 
-      if (is_empty(description)) {
+      if (isEmpty(description)) {
         delete ret.info.description;
       }
-      if (is_empty(params)) {
+      if (isEmpty(params)) {
         delete ret.info.params;
       }
       else {
@@ -162,7 +162,7 @@ class Scanner extends Model {
   }
 
   hasUnixSocket() {
-    return is_string(this.host) && this.host[0] === '/';
+    return isString(this.host) && this.host[0] === '/';
   }
 }
 

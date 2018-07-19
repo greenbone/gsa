@@ -20,14 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import {isString} from '../utils/identity';
 
-import {is_string} from '../utils/identity';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import Target from '../models/target';
 
-import Target from '../models/target.js';
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.targets');
 
@@ -112,7 +114,7 @@ class TargetCommand extends EntityCommand {
       file,
       exclude_file,
       hosts,
-      in_use: is_string(in_use) ? in_use : in_use ? '1' : '0',
+      in_use: isString(in_use) ? in_use : in_use ? '1' : '0',
       name,
       port,
       port_list_id,
@@ -142,7 +144,7 @@ class TargetsCommand extends EntitiesCommand {
   }
 }
 
-register_command('target', TargetCommand);
-register_command('targets', TargetsCommand);
+registerCommand('target', TargetCommand);
+registerCommand('targets', TargetsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

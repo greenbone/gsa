@@ -32,9 +32,9 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
-import {exclude_object_props} from 'gmp/utils/object';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import {
   loadSettings,
@@ -113,7 +113,7 @@ export class Dashboard extends React.Component {
     permittedDisplays.forEach(name => {
       const display = getDisplay(name);
 
-      if (is_defined(display)) {
+      if (isDefined(display)) {
         this.components[name] = display.component;
       }
       else {
@@ -184,14 +184,14 @@ export class Dashboard extends React.Component {
       ...props
     } = this.props;
 
-    if (is_defined(error) && !isLoading) {
+    if (isDefined(error) && !isLoading) {
       return (
         <RowPlaceHolder>
           {_('Could not load dashboard settings. Reason: {{error}}', {error})}
         </RowPlaceHolder>
       );
     }
-    else if (!is_defined(items) && isLoading) {
+    else if (!isDefined(items) && isLoading) {
       return (
         <RowPlaceHolder>
           <Loading />
@@ -199,10 +199,10 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const other = exclude_object_props(props, ownPropNames);
+    const other = excludeObjectProps(props, ownPropNames);
     return (
       <Grid
-        items={is_defined(items) ? items : []}
+        items={isDefined(items) ? items : []}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
@@ -217,7 +217,7 @@ export class Dashboard extends React.Component {
         }) => {
           const {name, filterId} = itemProps;
           const Component = this.components[name];
-          return is_defined(Component) ? (
+          return isDefined(Component) ? (
             <Component
               {...other}
               dragHandleProps={dragHandleProps}
@@ -243,14 +243,14 @@ const mapStateToProps = (rootState, {id}) => {
   const error = settingsSelector.getError();
 
   let items;
-  if (hasLoaded && is_defined(settings.rows)) {
+  if (hasLoaded && isDefined(settings.rows)) {
     items = settings.rows;
   }
   else if (hasLoaded) {
     items = defaults.rows;
   }
   return {
-    error: has_value(error) ? error : undefined,
+    error: hasValue(error) ? error : undefined,
     isLoading: settingsSelector.getIsLoading(),
     items,
   };

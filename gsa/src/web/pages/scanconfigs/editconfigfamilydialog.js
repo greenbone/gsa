@@ -24,8 +24,11 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {map, is_empty} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {map} from 'gmp/utils/array';
+import {isEmpty} from 'gmp/utils/string';
+
 import {YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -92,11 +95,11 @@ class Nvt extends React.Component {
           />
         </TableData>
         <TableData>
-          {is_empty(timeout) ?
+          {isEmpty(timeout) ?
               _('default') :
               timeout
           }
-          {is_empty(default_timeout) ?
+          {isEmpty(default_timeout) ?
             '' : ' (' + default_timeout + ')'
           }
         </TableData>

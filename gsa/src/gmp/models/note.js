@@ -21,9 +21,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, is_model_element} from '../utils/identity';
+import {isDefined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import List from '../list.js';
 import Model from '../model.js';
@@ -56,14 +56,14 @@ class Note extends Model {
 
     ret.severity = parseSeverity(ret.severity);
 
-    if (is_model_element(ret.task)) {
+    if (isModelElement(ret.task)) {
       ret.task = new Model(ret.task, 'task');
     }
     else {
       delete ret.task;
     }
 
-    if (is_model_element(ret.result)) {
+    if (isModelElement(ret.result)) {
       ret.result = new Model(ret.result, 'result');
     }
     else {
@@ -75,7 +75,7 @@ class Note extends Model {
 
     ret.hosts = parseCsv(elem.hosts);
 
-    if (is_empty(elem.port)) {
+    if (isEmpty(elem.port)) {
       delete ret.port;
     }
 
@@ -90,7 +90,7 @@ class Note extends Model {
 export const parse_notes = notes => {
   let active = false;
   let entries = [];
-  if (is_defined(notes)) {
+  if (isDefined(notes)) {
     entries = map(notes.note, note => {
       const n = new Note(note);
       active = active || n.isActive();

@@ -26,14 +26,14 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
-import {render_options} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 
 import FormGroup from '../../components/form/formgroup.js';
 import Select from '../../components/form/select.js';
@@ -134,7 +134,7 @@ const ReportImage = ({
     token: gmp.token,
   };
 
-  if (is_defined(duration)) {
+  if (isDefined(duration)) {
     params.duration = DURATIONS[duration];
   }
   else {
@@ -224,7 +224,7 @@ class PerformancePage extends React.Component {
   }
 
   handleDurationChange(duration) {
-    if (is_defined(duration)) {
+    if (isDefined(duration)) {
       const end = date();
       const start = end.clone().subtract(DURATIONS[duration], 'seconds');
 
@@ -328,10 +328,9 @@ class PerformancePage extends React.Component {
             <Select
               name="slave_id"
               value={slave_id}
+              items={renderSelectItems(scanners, 0)}
               onChange={this.handleValueChange}
-            >
-              {render_options(scanners, 0)}
-            </Select>
+            />
           </FormGroup>
 
           {reports.map(report => (

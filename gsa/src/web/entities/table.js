@@ -21,12 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
+
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined, for_each, exclude_object_props} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {forEach} from 'gmp/utils/array';
+import {excludeObjectProps} from 'gmp/utils/object';
 
 import FootNote from '../components/footnote/footnote.js';
 
@@ -104,10 +107,10 @@ class EntitiesTable extends React.Component {
     }
 
     if (allToggled) {
-      for_each(entities, entity => details[entity.id] = true);
+      forEach(entities, entity => details[entity.id] = true);
     }
     else {
-      for_each(entities, entity => details[entity.id] = false);
+      forEach(entities, entity => details[entity.id] = false);
     }
     this.setState({details, allToggled});
   }
@@ -154,21 +157,21 @@ class EntitiesTable extends React.Component {
       body: BodyComponent = TableBody,
     } = this.props;
 
-    if (!is_defined(entities)) {
+    if (!isDefined(entities)) {
       return null;
     }
 
-    const other = exclude_object_props(this.props, exclude_props);
+    const other = excludeObjectProps(this.props, exclude_props);
 
-    const filterstring = is_defined(filter) ? filter.toFilterString() : '';
+    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
       return <div className="entities-table">{emptyTitle}</div>;
     }
 
     const rows = [];
-    if (is_defined(RowComponent)) {
-      for_each(entities, entity => {
+    if (isDefined(RowComponent)) {
+      forEach(entities, entity => {
         rows.push(
           <RowComponent
             {...other}
@@ -177,7 +180,7 @@ class EntitiesTable extends React.Component {
             entity={entity}
           />
         );
-        if (is_defined(RowDetailsComponent) && details[entity.id]) {
+        if (isDefined(RowDetailsComponent) && details[entity.id]) {
           if (doubleRow) {
             rows.push(
               <TableBody key={'details-' + entity.id}>
@@ -214,7 +217,7 @@ class EntitiesTable extends React.Component {
         />
       );
 
-    const header = !is_defined(HeaderComponent) || HeaderComponent === false ?
+    const header = !isDefined(HeaderComponent) || HeaderComponent === false ?
       undefined :
       (
         <HeaderComponent
@@ -224,7 +227,7 @@ class EntitiesTable extends React.Component {
         />
       );
 
-    const footer = !is_defined(FooterComponent) || FooterComponent === false ?
+    const footer = !isDefined(FooterComponent) || FooterComponent === false ?
       undefined :
       <FooterComponent {...other} />;
 

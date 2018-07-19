@@ -25,7 +25,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -41,7 +41,7 @@ import TimeZoneSelect from '../../components/form/timezoneselect.js';
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
-import {render_options} from '../../utils/render.js';
+import {renderOptions} from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 import PropTypes from '../../utils/proptypes.js';
 
@@ -71,7 +71,7 @@ const UserSettingsDialog = ({
 
   const languageItems = languagesList.map(([code, name, native_name]) => ({
     value: code,
-    label: is_defined(native_name) ? `${name} | ${native_name}` : name,
+    label: isDefined(native_name) ? `${name} | ${native_name}` : name,
   }));
 
   return (
@@ -237,7 +237,7 @@ const UserSettingsDialog = ({
                 size="30"
                 maxLength="400"
                 onChange={onValueChange}>
-                {render_options(severitiesList, '')}
+                {renderOptions(severitiesList, '')}
               </Select>
             </FormGroup>
 
@@ -270,7 +270,7 @@ const UserSettingsDialog = ({
                   value={defaultalert}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(alertsList, '')}
+                  {renderOptions(alertsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -282,7 +282,7 @@ const UserSettingsDialog = ({
                   value={defaultesxicredential}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(credentialsList, '')}
+                  {renderOptions(credentialsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -295,7 +295,7 @@ const UserSettingsDialog = ({
                   size="30"
                   onChange={onValueChange}>
                   {/* FIXME insert options */}
-                  {render_options([], '')}
+                  {renderOptions([], '')}
                 </Select>
               </FormGroup>
             }
@@ -308,7 +308,7 @@ const UserSettingsDialog = ({
                   size="30"
                   onChange={onValueChange}>
                   {/* FIXME insert options */}
-                  {render_options([], '')}
+                  {renderOptions([], '')}
                 </Select>
               </FormGroup>
             }
@@ -320,7 +320,7 @@ const UserSettingsDialog = ({
                   value={defaultopenvasscanconfig}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(scanconfigsList, '')}
+                  {renderOptions(scanconfigsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -332,7 +332,7 @@ const UserSettingsDialog = ({
                   value={defaultopenvasscanner}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(scannersList, '')}
+                  {renderOptions(scannersList, '')}
                 </Select>
               </FormGroup>
             }
@@ -344,7 +344,7 @@ const UserSettingsDialog = ({
                   value={defaultportlist}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(portlistsList, '')}
+                  {renderOptions(portlistsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -356,7 +356,7 @@ const UserSettingsDialog = ({
                   value={defaultreportformat}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(reportformatsList, '')}
+                  {renderOptions(reportformatsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -369,7 +369,7 @@ const UserSettingsDialog = ({
                     value={defaultsmbcredential}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(credentialsList, '')}
+                    {renderOptions(credentialsList, '')}
                   </Select>
                 </FormGroup>
 
@@ -379,7 +379,7 @@ const UserSettingsDialog = ({
                     value={defaultsnmpcredential}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(credentialsList, '')}
+                    {renderOptions(credentialsList, '')}
                   </Select>
                 </FormGroup>
 
@@ -389,7 +389,7 @@ const UserSettingsDialog = ({
                     value={defaultsshcredential}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(credentialsList, '')}
+                    {renderOptions(credentialsList, '')}
                   </Select>
                 </FormGroup>
               </div>
@@ -402,7 +402,7 @@ const UserSettingsDialog = ({
                   value={defaultschedule}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(schedulesList, '')}
+                  {renderOptions(schedulesList, '')}
                 </Select>
               </FormGroup>
             }
@@ -414,7 +414,7 @@ const UserSettingsDialog = ({
                   value={defaulttarget}
                   size="30"
                   onChange={onValueChange}>
-                  {render_options(targetsList, '')}
+                  {renderOptions(targetsList, '')}
                 </Select>
               </FormGroup>
             }
@@ -430,7 +430,7 @@ const UserSettingsDialog = ({
                     value={agentsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.agent, '')}
+                    {renderOptions(filtersList.agent, '')}
                   </Select>
                 </FormGroup>
 
@@ -440,7 +440,7 @@ const UserSettingsDialog = ({
                     value={alertsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.alert, '')}
+                    {renderOptions(filtersList.alert, '')}
                   </Select>
                 </FormGroup>
 
@@ -450,7 +450,7 @@ const UserSettingsDialog = ({
                     value={assetsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.asset, '')}
+                    {renderOptions(filtersList.asset, '')}
                   </Select>
                 </FormGroup>
 
@@ -460,7 +460,7 @@ const UserSettingsDialog = ({
                     value={configsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.config, '')}
+                    {renderOptions(filtersList.config, '')}
                   </Select>
                 </FormGroup>
 
@@ -470,7 +470,7 @@ const UserSettingsDialog = ({
                     value={credentialsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.credential, '')}
+                    {renderOptions(filtersList.credential, '')}
                   </Select>
                 </FormGroup>
 
@@ -480,7 +480,7 @@ const UserSettingsDialog = ({
                     value={filtersfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.filter, '')}
+                    {renderOptions(filtersList.filter, '')}
                   </Select>
                 </FormGroup>
 
@@ -490,7 +490,7 @@ const UserSettingsDialog = ({
                     value={notesfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.note, '')}
+                    {renderOptions(filtersList.note, '')}
                   </Select>
                 </FormGroup>
 
@@ -500,7 +500,7 @@ const UserSettingsDialog = ({
                     value={overridesfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.override, '')}
+                    {renderOptions(filtersList.override, '')}
                   </Select>
                 </FormGroup>
 
@@ -510,7 +510,7 @@ const UserSettingsDialog = ({
                     value={permissionsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.permission, '')}
+                    {renderOptions(filtersList.permission, '')}
                   </Select>
                 </FormGroup>
 
@@ -520,7 +520,7 @@ const UserSettingsDialog = ({
                     value={portlistsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.portlist, '')}
+                    {renderOptions(filtersList.portlist, '')}
                   </Select>
                 </FormGroup>
 
@@ -530,7 +530,7 @@ const UserSettingsDialog = ({
                     value={reportsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.report, '')}
+                    {renderOptions(filtersList.report, '')}
                   </Select>
                 </FormGroup>
 
@@ -540,7 +540,7 @@ const UserSettingsDialog = ({
                     value={reportformatsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.reportformat, '')}
+                    {renderOptions(filtersList.reportformat, '')}
                   </Select>
                 </FormGroup>
 
@@ -550,7 +550,7 @@ const UserSettingsDialog = ({
                     value={resultsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.result, '')}
+                    {renderOptions(filtersList.result, '')}
                   </Select>
                 </FormGroup>
 
@@ -560,7 +560,7 @@ const UserSettingsDialog = ({
                     value={rolesfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.role, '')}
+                    {renderOptions(filtersList.role, '')}
                   </Select>
                 </FormGroup>
 
@@ -570,7 +570,7 @@ const UserSettingsDialog = ({
                     value={schedulesfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.schedule, '')}
+                    {renderOptions(filtersList.schedule, '')}
                   </Select>
                 </FormGroup>
 
@@ -580,7 +580,7 @@ const UserSettingsDialog = ({
                     value={tagsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.tag, '')}
+                    {renderOptions(filtersList.tag, '')}
                   </Select>
                 </FormGroup>
 
@@ -590,7 +590,7 @@ const UserSettingsDialog = ({
                     value={targetsfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.target, '')}
+                    {renderOptions(filtersList.target, '')}
                   </Select>
                 </FormGroup>
 
@@ -600,7 +600,7 @@ const UserSettingsDialog = ({
                     value={tasksfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.task, '')}
+                    {renderOptions(filtersList.task, '')}
                   </Select>
                 </FormGroup>
 
@@ -610,7 +610,7 @@ const UserSettingsDialog = ({
                     value={cpefilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -620,7 +620,7 @@ const UserSettingsDialog = ({
                     value={cvefilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -630,7 +630,7 @@ const UserSettingsDialog = ({
                     value={nvtfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -640,7 +640,7 @@ const UserSettingsDialog = ({
                     value={ovalfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -650,7 +650,7 @@ const UserSettingsDialog = ({
                     value={certbundfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -660,7 +660,7 @@ const UserSettingsDialog = ({
                     value={dfncertfilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
 
@@ -670,7 +670,7 @@ const UserSettingsDialog = ({
                     value={secinfofilter}
                     size="30"
                     onChange={onValueChange}>
-                    {render_options(filtersList.secinfo, '')}
+                    {renderOptions(filtersList.secinfo, '')}
                   </Select>
                 </FormGroup>
               </div>

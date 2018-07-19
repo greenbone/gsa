@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, map} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -49,7 +51,7 @@ const Dialog = ({
     onClose,
     onSave,
   }) => {
-  const is_edit = is_defined(group);
+  const is_edit = isDefined(group);
 
   const userOptions = map(allUsers, user => ({
     value: user.name,

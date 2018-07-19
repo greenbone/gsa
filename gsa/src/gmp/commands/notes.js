@@ -21,18 +21,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from '../log';
 
-import logger from '../log.js';
+import registerCommand from '../command';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
-
-import Note from '../models/note.js';
+import Note from '../models/note';
 import {
   DEFAULT_DAYS,
   ACTIVE_YES_ALWAYS_VALUE,
   ANY,
   MANUAL,
-} from '../models/override.js';
+} from '../models/override';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.notes');
 
@@ -131,7 +133,7 @@ class NotesCommand extends EntitiesCommand {
   }
 };
 
-register_command('note', NoteCommand);
-register_command('notes', NotesCommand);
+registerCommand('note', NoteCommand);
+registerCommand('notes', NotesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

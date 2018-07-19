@@ -22,7 +22,7 @@
  */
 import Model from '../model';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import {parseYesNo, NO_VALUE, parseDate} from '../parser';
@@ -86,7 +86,7 @@ class Credential extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(ret.certificate_info)) {
+    if (isDefined(ret.certificate_info)) {
       ret.certificate_info.activationTime = parseDate(
         ret.certificate_info.activation_time
       );
@@ -101,7 +101,7 @@ class Credential extends Model {
 
     ret.allow_insecure = parseYesNo(elem.allow_insecure);
 
-    if (is_defined(elem.targets)) {
+    if (isDefined(elem.targets)) {
       ret.targets = map(elem.targets.target,
         target => new Model(target, 'target'));
     }
@@ -109,7 +109,7 @@ class Credential extends Model {
       ret.targets = [];
     }
 
-    if (is_defined(elem.scanners)) {
+    if (isDefined(elem.scanners)) {
       ret.scanners = map(elem.scanners.scanner,
         scanner => new Model(scanner, 'scanner'));
     }

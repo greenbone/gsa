@@ -22,9 +22,9 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, is_object} from '../utils/identity';
-import {is_empty} from '../utils/string';
-import {for_each, map} from '../utils/array';
+import {isDefined, isObject} from '../utils/identity';
+import {isEmpty} from '../utils/string';
+import {forEach, map} from '../utils/array';
 
 import {parseYesNo, YES_VALUE} from '../parser.js';
 
@@ -63,12 +63,12 @@ export const DELTA_TYPE_PREVIOUS = 'Previous';
 export const DELTA_TYPE_REPORT = 'Report';
 
 const create_values = data => {
-  const value = is_empty(data.__text) ? undefined : data.__text;
+  const value = isEmpty(data.__text) ? undefined : data.__text;
   const values = {value};
   const {__text, name, ...other} = data;
 
   for (const [key, obj] of Object.entries(other)) {
-    if (is_defined(obj._id)) {
+    if (isDefined(obj._id)) {
       if (obj._id.length > 0) {
         obj.id = obj._id;
       }
@@ -90,10 +90,10 @@ class Alert extends Model {
     const types = ['condition', 'method', 'event'];
 
     for (const type of types) {
-      if (is_object(ret[type])) {
+      if (isObject(ret[type])) {
         const data = {};
 
-        for_each(ret[type].data, value => {
+        forEach(ret[type].data, value => {
           data[value.name] = create_values(value);
         });
 
@@ -110,11 +110,11 @@ class Alert extends Model {
       }
     }
 
-    if (is_defined(ret.filter)) {
+    if (isDefined(ret.filter)) {
       ret.filter = new Model(ret.filter, 'filter');
     }
 
-    if (is_defined(elem.tasks)) {
+    if (isDefined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task,
         task => new Model(task, 'task'));
     }

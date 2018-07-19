@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import {is_defined, is_empty} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import glamorous, {Col, Div} from 'glamorous';
 
@@ -51,7 +51,7 @@ const Action = glamorous.a({
 });
 
 const filter_identifiers = (identifiers, latest = true) => {
-  if (!latest || is_empty(identifiers)) {
+  if (!latest || !isDefined(identifiers) || identifiers.length === 0) {
     return identifiers;
   }
   const last_id = identifiers[0].source.id;
@@ -209,7 +209,7 @@ class Identifiers extends React.Component {
       </TableRow>
     );
 
-    displayActions = displayActions && is_defined(onDelete);
+    displayActions = displayActions && isDefined(onDelete);
     return (
       <DetailsBlock
         title={title}>
@@ -253,7 +253,7 @@ class Identifiers extends React.Component {
                 <TableData>
                   <DetailsLink
                     type="os"
-                    id={is_defined(identifier.os) ? identifier.os.id : ''}
+                    id={isDefined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
                   >
                     <Div wordBreak="break-all">

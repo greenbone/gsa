@@ -22,8 +22,8 @@
  */
 import _ from 'gmp/locale';
 
-import {is_defined, is_array} from '../utils/identity';
-import {is_empty} from '../utils/string';
+import {isDefined, isArray} from '../utils/identity';
+import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import {
@@ -123,7 +123,7 @@ class Task extends Model {
   }
 
   isContainer() {
-    return !is_defined(this.target);
+    return !isDefined(this.target);
   }
 
   getTranslatableStatus() {
@@ -135,7 +135,7 @@ class Task extends Model {
 
     const {report_count} = elem;
 
-    if (is_defined(report_count)) {
+    if (isDefined(report_count)) {
       elem.report_count = {...report_count};
       elem.report_count.total = parseInt(report_count.__text);
       elem.report_count.finished = parseInt(report_count.finished);
@@ -153,7 +153,7 @@ class Task extends Model {
 
     reports.forEach(name => {
       const report = elem[name];
-      if (is_defined(report)) {
+      if (isDefined(report)) {
         elem[name] = new Report(report.report);
       }
     });
@@ -168,7 +168,7 @@ class Task extends Model {
       const model = Model;
 
       const data = elem[name];
-      if (is_defined(data) && !is_empty(data._id)) {
+      if (isDefined(data) && !isEmpty(data._id)) {
         elem[name] = new model(data, name);
       }
       else {
@@ -176,19 +176,19 @@ class Task extends Model {
       }
     });
 
-    if (is_defined(elem.alert)) {
+    if (isDefined(elem.alert)) {
       elem.alerts = map(elem.alert, alert => new Model(alert, 'alert'));
       delete elem.alert;
     }
 
-    if (is_defined(elem.scanner) && !is_empty(elem.scanner._id)) {
+    if (isDefined(elem.scanner) && !isEmpty(elem.scanner._id)) {
       elem.scanner = new Scanner(elem.scanner);
     }
     else {
       delete elem.scanner;
     }
 
-    if (is_defined(elem.schedule) && !is_empty(elem.schedule._id)) {
+    if (isDefined(elem.schedule) && !isEmpty(elem.schedule._id)) {
       elem.schedule = new Schedule(elem.schedule);
     }
     else {
@@ -201,7 +201,7 @@ class Task extends Model {
 
     const prefs = {};
 
-    if (elem.preferences && is_array(elem.preferences.preference)) {
+    if (elem.preferences && isArray(elem.preferences.preference)) {
       for (const pref of elem.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
@@ -237,7 +237,7 @@ class Task extends Model {
 
     elem.preferences = prefs;
 
-    if (is_defined(elem.average_duration)) {
+    if (isDefined(elem.average_duration)) {
       elem.average_duration = parseDuration(elem.average_duration);
     }
 

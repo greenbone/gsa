@@ -26,9 +26,13 @@ import React from 'react';
 
 import 'core-js/fn/array/includes';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-import {is_defined, map} from 'gmp/utils';
+
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -39,7 +43,7 @@ import {
   SNMP_PRIVACY_ALOGRITHM_NONE,
   SNMP_PRIVACY_ALGORITHM_AES,
   SNMP_PRIVACY_ALGORITHM_DES,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -120,9 +124,9 @@ class CredentialsDialog extends React.Component {
       value: type,
     }));
 
-    const is_edit = is_defined(credential);
+    const is_edit = isDefined(credential);
 
-    if (!is_defined(base)) {
+    if (!isDefined(base)) {
       if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
         base = USERNAME_PASSWORD_CREDENTIAL_TYPE;
       }
@@ -148,7 +152,7 @@ class CredentialsDialog extends React.Component {
       password,
       privacy_algorithm,
       privacy_password,
-      id: is_defined(credential) ? credential.id : undefined,
+      id: isDefined(credential) ? credential.id : undefined,
     };
 
     return (

@@ -28,7 +28,7 @@ import _ from 'gmp/locale.js';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component, na} from '../../utils/render.js';
+import {renderComponent, na} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -130,7 +130,7 @@ const Row = ({
             'considered.')}
         />
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

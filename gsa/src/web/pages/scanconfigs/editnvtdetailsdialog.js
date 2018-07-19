@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -176,7 +176,7 @@ class EditDialog extends React.Component {
                 </TableBody>
               </SimpleTable>
 
-              {is_defined(nvt.tags.summary) &&
+              {isDefined(nvt.tags.summary) &&
                 <div>
                   <h1>{_('Summary')}</h1>
                   <p>
@@ -185,7 +185,7 @@ class EditDialog extends React.Component {
                 </div>
               }
 
-              {is_defined(nvt.tags.affected) &&
+              {isDefined(nvt.tags.affected) &&
                 <div>
                   <h1>{_('Affected Software/OS')}</h1>
                   <p>
@@ -206,7 +206,7 @@ class EditDialog extends React.Component {
                         <SeverityBar severity={nvt.severity}/>
                       </TableData>
                     </TableRow>
-                    {is_defined(nvt.tags.cvss_base_vector) &&
+                    {isDefined(nvt.tags.cvss_base_vector) &&
                       <TableRow>
                         <TableData>
                           {_('CVSS base vector')}
@@ -258,7 +258,7 @@ class EditDialog extends React.Component {
                         <Text>
                           {_('Apply default timeout')}
                           {
-                            is_defined(nvt.default_timeout) ?
+                            isDefined(nvt.default_timeout) ?
                                 ' (' + nvt.default_timeout + ')' :
                                 ''
                           }
@@ -282,7 +282,7 @@ class EditDialog extends React.Component {
                     </TableData>
                     <TableData>
                       {
-                        is_defined(nvt.default_timeout) ?
+                        isDefined(nvt.default_timeout) ?
                             nvt.default_timeout :
                             ''
                       }
@@ -293,7 +293,7 @@ class EditDialog extends React.Component {
                   {
                     nvt.preferences.map(pref => {
                       const prefValue =
-                        is_defined(preference_values[pref.name]) ?
+                        isDefined(preference_values[pref.name]) ?
                         preference_values[pref.name].value : undefined;
                       return (
                         <NvtPreference

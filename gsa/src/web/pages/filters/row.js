@@ -30,7 +30,7 @@ import {typeName} from 'gmp/utils/entitytype';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -110,7 +110,7 @@ const Row = ({
     <TableData>
       {typeName(entity.filter_type)}
     </TableData>
-    {render_component(actions, {...props, entity})}
+    {renderComponent(actions, {...props, entity})}
   </TableRow>
 );
 

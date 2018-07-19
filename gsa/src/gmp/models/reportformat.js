@@ -20,16 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, is_object} from '../utils/identity';
+import {isDefined, isObject} from '../utils/identity';
 import {map} from '../utils/array';
-import {is_empty} from '../utils/string';
+import {isEmpty} from '../utils/string';
 
 import {parseDate, parseYesNo, YES_VALUE} from '../parser';
 
 import Model from '../model.js';
 
 const get_value = val => {
-  return is_object(val) ? val.__text : val;
+  return isObject(val) ? val.__text : val;
 };
 
 class Param {
@@ -41,7 +41,7 @@ class Param {
     this.min = type.min;
     this.type = get_value(type);
 
-    if (is_object(options)) {
+    if (isObject(options)) {
       this.options = map(options.option, opt => {
         return {
           value: opt,
@@ -69,10 +69,10 @@ class ReportFormat extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(ret.trust)) {
+    if (isDefined(ret.trust)) {
       ret.trust = {
         value: ret.trust.__text,
-        time: is_empty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
+        time: isEmpty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
       };
     }
     else {
@@ -86,7 +86,7 @@ class ReportFormat extends Model {
 
     delete ret.param;
 
-    if (is_defined(ret.alerts)) {
+    if (isDefined(ret.alerts)) {
       ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
     }
     else {

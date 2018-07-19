@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -66,7 +65,7 @@ class EntityComponent extends React.Component {
     const {gmp, name} = this.props;
     const cmd = gmp[name];
 
-    if (is_defined(data.id)) {
+    if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
       return cmd.save(data).then(onSaved, onSaveError);
     }

@@ -20,17 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import _ from 'gmp/locale';
 
-import _ from 'gmp/locale.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import {is_defined} from 'gmp/utils';
-
-import {secinfo_type} from 'gmp/models/secinfo.js';
+import {secinfo_type} from 'gmp/models/secinfo';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
-} from 'gmp/models/alert.js';
+} from 'gmp/models/alert';
 
 const Event = ({
   event,
@@ -46,7 +45,7 @@ const Event = ({
   }
 
   if (event.type === EVENT_TYPE_TASK_RUN_STATUS_CHANGED &&
-    is_defined(event.data.status)) {
+    isDefined(event.data.status)) {
     return _('Task run status changed to {{status}}',
       {status: event.data.status.value});
   }

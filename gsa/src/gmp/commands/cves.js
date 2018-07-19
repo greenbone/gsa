@@ -22,16 +22,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
 
-import register_command from '../command.js';
+import registerCommand from '../command.js';
 
 import Cve from '../models/cve.js';
 
-const info_filter = info => is_defined(info.cve);
+const info_filter = info => isDefined(info.cve);
 
 class CveCommand extends InfoEntityCommand {
 
@@ -63,7 +63,7 @@ class CvesCommand extends InfoEntitiesCommand {
   }
 }
 
-register_command('cve', CveCommand);
-register_command('cves', CvesCommand);
+registerCommand('cve', CveCommand);
+registerCommand('cves', CvesCommand);
 
 // vim: set ts=2 sw=2 tw=80:

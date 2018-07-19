@@ -24,7 +24,7 @@
 
 import logger from './log.js';
 
-import {is_defined, is_function} from './utils/identity';
+import {isDefined, isFunction} from './utils/identity';
 
 import {parseInt, parseFloat} from './parser.js';
 
@@ -52,7 +52,7 @@ function generic_compare_desc(a_val, b_val) {
 
 function get_property(object, property) {
   try {
-    if (is_function(property)) {
+    if (isFunction(property)) {
       return property(object);
     }
 
@@ -65,7 +65,7 @@ function get_property(object, property) {
 }
 
 const ip_to_number = original => {
-  if (!is_defined(original)) {
+  if (!isDefined(original)) {
     return undefined;
   }
 
@@ -76,7 +76,7 @@ const ip_to_number = original => {
       ret = ret << 8; // eslint-disable-line no-bitwise
       const number = parseInt(item);
 
-      if (!is_defined(number)) { // wasn't a number. it's not an ip
+      if (!isDefined(number)) { // wasn't a number. it's not an ip
         return original;
       }
 
@@ -93,7 +93,7 @@ const ip_to_number = original => {
 const get_value = (convert_func, value, property, undefined_val) => {
   const val = convert_func(get_property(value, property));
 
-  return is_defined(val) ? val : undefined_val;
+  return isDefined(val) ? val : undefined_val;
 };
 
 const make_compare = convert_func => (property, undefined_val) => reverse => {

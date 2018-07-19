@@ -24,27 +24,27 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, is_empty} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
 import Icon from '../../components/icon/icon.js';
 
 const ObserverIcon = ({
-    entity,
-    userName,
-    displayName = _('Entity'),
-  }) => {
-
-  let owner = is_defined(entity.owner) ? entity.owner.name : undefined;
+  entity,
+  userName,
+  displayName = _('Entity'),
+}) => {
+  const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
 
   if (owner === userName) {
     return null;
   }
 
   let title;
-  if (is_empty(owner)) {
+  if (isDefined(owner)) {
     title = _('Global {{type}}', {type: displayName});
   }
   else {

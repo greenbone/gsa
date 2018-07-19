@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {types} from './actions';
 
-export const filterIdentifier = filter => is_defined(filter) ?
+export const filterIdentifier = filter => isDefined(filter) ?
   `filter:${filter.toFilterString()}` :
   'default';
 

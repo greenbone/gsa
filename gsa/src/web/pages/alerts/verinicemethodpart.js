@@ -32,7 +32,7 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_select_items} from '../../utils/render.js';
+import {renderSelectItems} from '../../utils/render.js';
 import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
@@ -77,7 +77,7 @@ const VeriniceMethodPart = ({
         <Divider>
           <Select
             name={prefix + 'verinice_server_credential'}
-            items={render_select_items(credentials)}
+            items={renderSelectItems(credentials)}
             value={veriniceServerCredential}
             onChange={onCredentialChange}
           />
@@ -95,7 +95,7 @@ const VeriniceMethodPart = ({
       <FormGroup title={_('verinice.PRO Report')}>
         <Select
           name={prefix + 'verinice_server_report_format'}
-          items={render_select_items(reportFormats)}
+          items={renderSelectItems(reportFormats)}
           value={veriniceServerReportFormat}
           onChange={onChange}
         />

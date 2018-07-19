@@ -23,7 +23,7 @@
 
 import glamorous from 'glamorous';
 
-import {is_array} from 'gmp/utils';
+import {isArray} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withContext from '../../utils/withContext';
@@ -49,7 +49,7 @@ const withIconSize = (defaultSize = 'small') => Component => {
     else if (size === 'large') {
       height = width = '50px';
     }
-    else if (is_array(size)) {
+    else if (isArray(size)) {
       width = size[0];
       height = size[1];
     }

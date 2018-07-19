@@ -20,14 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import logger from '../log.js';
 
-import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
+import registerCommand from '../command';
 
-import Agent from '../models/agent.js';
+import Agent from '../models/agent';
 
-import DefaultTransform from '../http/transform/default.js';
+import DefaultTransform from '../http/transform/default';
+
+import EntitiesCommand from './entities';
+import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.agents');
 
@@ -91,7 +93,7 @@ class AgentsCommand extends EntitiesCommand {
   }
 }
 
-register_command('agent', AgentCommand);
-register_command('agents', AgentsCommand);
+registerCommand('agent', AgentCommand);
+registerCommand('agents', AgentsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

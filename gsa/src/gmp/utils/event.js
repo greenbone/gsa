@@ -52,7 +52,7 @@ export const KeyCode = {
  *
  * @returns {Function} Wrapper function
  */
-export function debounce(func, wait, immediate = false) {
+export const debounce = (func, wait, immediate = false) => {
   let timeout;
   return function(...args) {
     const context = this;
@@ -69,7 +69,7 @@ export function debounce(func, wait, immediate = false) {
       func.apply(context, args);
     }
   };
-}
+};
 
 /**
  * Throttle animation paths by using requestAnimationFrame

@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -80,18 +80,18 @@ export class NvtsQodTypeDisplay extends React.Component {
     const {onFilterChanged, filter} = this.props;
     const {filterValue} = data;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
     const qodTypeTerm = FilterTerm.fromString(`qod_type="${filterValue}"`);
 
-    if (is_defined(filter) && filter.hasTerm(qodTypeTerm)) {
+    if (isDefined(filter) && filter.hasTerm(qodTypeTerm)) {
       return;
     }
     const qodTypeFilter = Filter.fromTerm(qodTypeTerm);
 
-    const newFilter = is_defined(filter) ? filter.copy().and(qodTypeFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(qodTypeFilter) :
       qodTypeFilter;
 
     onFilterChanged(newFilter);
@@ -122,7 +122,7 @@ export class NvtsQodTypeDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

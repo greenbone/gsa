@@ -22,7 +22,7 @@
  */
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {_localeData} from 'gmp/models/date';
 import {ReccurenceFrequency} from 'gmp/models/event';
@@ -51,7 +51,7 @@ export const renderRecurrence = ({
       return _('Every {{interval}} years', {interval});
 
     case ReccurenceFrequency.MONTHLY:
-      if (is_defined(monthdays)) {
+      if (isDefined(monthdays)) {
         if (interval === 1) {
           return _('Every month at days {{days}}',
             {days: monthdays.join(', ')});
@@ -59,7 +59,7 @@ export const renderRecurrence = ({
         return _('Every {{interval}} month at days {{days}}',
           {interval, days: monthdays.join(', ')});
       }
-      else if (is_defined(weekdays)) {
+      else if (isDefined(weekdays)) {
         const weekday = weekdays.getSelectedWeekDay();
         const nth = weekdays.get(weekday);
         const localeData = _localeData();
@@ -79,7 +79,7 @@ export const renderRecurrence = ({
       return _('Every {{interval}} months', {interval});
 
     case ReccurenceFrequency.WEEKLY:
-      if (is_defined(weekdays)) {
+      if (isDefined(weekdays)) {
         const days = weekdays.entries()
           .filter(([, value]) => value)
           .map(([day]) => WEEKDAY[day]);
@@ -125,7 +125,7 @@ export const renderRecurrence = ({
 };
 
 export const renderDuration = duration => {
-  return is_defined(duration) && duration.asSeconds() > 0 ?
+  return isDefined(duration) && duration.asSeconds() > 0 ?
     duration.humanize() :
     _('Entire Operation');
 };

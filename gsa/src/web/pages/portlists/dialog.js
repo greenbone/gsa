@@ -21,12 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-import {is_defined} from 'gmp/utils';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -65,7 +66,7 @@ const PortListsDialog = ({
   onSave,
 }) => {
 
-  const is_edit = is_defined(port_list);
+  const is_edit = isDefined(port_list);
 
   const newrangeicon = (
     <div>
@@ -162,7 +163,7 @@ const PortListsDialog = ({
             }
             {is_edit &&
               <Section title={_('Port Ranges')} extra={newrangeicon}>
-                {is_defined(port_list) &&
+                {isDefined(port_list) &&
                   <PortRangesTable
                     portRanges={state.port_ranges}
                     onDeleteClick={onTmpDeletePortRange}

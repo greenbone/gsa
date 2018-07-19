@@ -21,32 +21,31 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  arrays_equal,
-  is_empty,
+  arraysEqual,
   map,
-  for_each,
+  forEach,
   filter,
   first,
 } from '../array';
 
-describe('array_equals function test', () => {
+describe('arrayEquals function test', () => {
 
   test('should return true if arrays are equal', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 3];
-    expect(arrays_equal(array1, array2)).toBe(true);
+    expect(arraysEqual(array1, array2)).toBe(true);
   });
 
   test('should return false if arrays are different', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 4];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should return false if param is not an array', () => {
     const array1 = [2, 3, 4];
     const array2 = 'This is a string';
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should not deep compare Objects', () => {
@@ -54,25 +53,25 @@ describe('array_equals function test', () => {
     const obj2 = {a: 1};
     const array1 = [obj1];
     const array2 = [obj2];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('should return true for same Objects', () => {
     const obj1 = {a: 1};
     const array1 = [obj1];
     const array2 = [obj1];
-    expect(arrays_equal(array1, array2)).toBe(true);
+    expect(arraysEqual(array1, array2)).toBe(true);
   });
 
   test('should return false if lengths of arrays differ', () => {
     const array1 = [1, 2, 3];
     const array2 = [1, 2, 3, 4];
-    expect(arrays_equal(array1, array2)).toBe(false);
+    expect(arraysEqual(array1, array2)).toBe(false);
   });
 
   test('array should equals with itself', () => {
     const array1 = [1, 2, 3];
-    expect(arrays_equal(array1, array1)).toBe(true);
+    expect(arraysEqual(array1, array1)).toBe(true);
   });
 });
 
@@ -132,26 +131,26 @@ describe('map function tests', () => {
 
 describe('for_each function tests', () => {
   test('should return undefined for undefined array', () => {
-    const array = for_each(undefined, item => item);
+    const array = forEach(undefined, item => item);
 
     expect(array).toBeUndefined();
   });
 
   test('should return undefined for null array', () => {
-    const array = for_each(null, item => item);
+    const array = forEach(null, item => item);
 
     expect(array).toBeUndefined();
   });
 
   test('should return undefined if no function is set', () => {
-    const array = for_each([1, 2, 3]);
+    const array = forEach([1, 2, 3]);
 
     expect(array).toBeUndefined();
   });
 
   test('should iterate over array', () => {
     const callback = jest.fn();
-    for_each([1, 2, 3], callback);
+    forEach([1, 2, 3], callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(3);
@@ -162,7 +161,7 @@ describe('for_each function tests', () => {
 
   test('should iterate over single item', () => {
     const callback = jest.fn();
-    for_each(2, callback);
+    forEach(2, callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);
@@ -171,7 +170,7 @@ describe('for_each function tests', () => {
 
   test('should iterate over Set', () => {
     const callback = jest.fn();
-    for_each(new Set([1, 2, 3]), callback);
+    forEach(new Set([1, 2, 3]), callback);
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(3);

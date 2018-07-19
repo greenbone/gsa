@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -123,7 +123,7 @@ const Row = ({
     <TableData>
       {entity.trust.status} ({shortDate(entity.trust.time)})
     </TableData>
-    {render_component(actions, {...props, entity})}
+    {renderComponent(actions, {...props, entity})}
   </TableRow>
 );
 

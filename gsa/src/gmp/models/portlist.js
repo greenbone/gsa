@@ -23,7 +23,7 @@
 
 import Model from '../model.js';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import {parseInt} from '../parser.js';
@@ -44,7 +44,7 @@ class PortList extends Model {
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
-    const ranges = is_defined(ret.port_ranges) ?
+    const ranges = isDefined(ret.port_ranges) ?
       ret.port_ranges.port_range : [];
 
     ret.port_ranges = map(ranges, range => {
@@ -53,11 +53,11 @@ class PortList extends Model {
     });
 
     const {port_count} = elem;
-    if (is_defined(port_count)) {
+    if (isDefined(port_count)) {
       ret.port_count = {
-        all: is_defined(port_count.all) ? parseInt(port_count.all) : 0,
-        tcp: is_defined(port_count.tcp) ? parseInt(port_count.tcp) : 0,
-        udp: is_defined(port_count.udp) ? parseInt(port_count.udp) : 0,
+        all: isDefined(port_count.all) ? parseInt(port_count.all) : 0,
+        tcp: isDefined(port_count.tcp) ? parseInt(port_count.tcp) : 0,
+        udp: isDefined(port_count.udp) ? parseInt(port_count.udp) : 0,
       };
     }
     else {
@@ -68,7 +68,7 @@ class PortList extends Model {
       };
     }
 
-    if (is_defined(elem.targets) && is_defined(elem.targets.target)) {
+    if (isDefined(elem.targets) && isDefined(elem.targets.target)) {
       ret.targets = map(elem.targets.target, target =>
         new Model(target, 'target'));
     }
