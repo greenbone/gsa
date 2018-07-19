@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EditIcon from '../../entity/icon/editicon.js';
 import DeleteIcon from '../../entity/icon/deleteicon.js';
@@ -148,7 +148,7 @@ const Row = ({
           longDate(entity.modificationTime)
         }
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

@@ -30,7 +30,7 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  render_component,
+  renderComponent,
   permissionDescription,
 } from '../../utils/render.js';
 
@@ -129,7 +129,7 @@ const Row = ({
         <EntityLink entity={entity.subject}/>
       }
     </TableData>
-    {render_component(actions, {...props, entity})}
+    {renderComponent(actions, {...props, entity})}
   </TableRow>
 );
 

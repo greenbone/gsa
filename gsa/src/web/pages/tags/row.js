@@ -31,7 +31,7 @@ import {typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import {
-  render_component,
+  renderComponent,
   render_yesno,
 } from '../../utils/render.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -162,7 +162,7 @@ const Row = ({
       <TableData>
         {shortDate(entity.modificationTime)}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 import withUserName from '../../utils/withUserName.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
@@ -189,7 +189,7 @@ const Row = ({
           <Trend name={entity.trend} />
         }
       </TableData>
-      {render_component(actions, {
+      {renderComponent(actions, {
         links,
         ...props,
         entity,

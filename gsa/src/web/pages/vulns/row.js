@@ -26,7 +26,7 @@ import React from 'react';
 import {longDate} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityRow} from '../../entities/row.js';
 
@@ -78,7 +78,7 @@ const Row = ({
       <TableData flex align="center">
         {hosts.count}
       </TableData>
-      {render_component(actions, {...other, entity})}
+      {renderComponent(actions, {...other, entity})}
     </TableRow>
   );
 };

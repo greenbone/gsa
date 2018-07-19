@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
@@ -122,7 +122,7 @@ const Row = ({
       <TableData>
         {entity.isActive() ? _('yes') : _('no')}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

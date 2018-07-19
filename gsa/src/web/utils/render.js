@@ -103,7 +103,7 @@ export function renderNvtName(oid, name, length = 70) {
   );
 }
 
-export function render_component(Component, props = {}) {
+export function renderComponent(Component, props = {}) {
   if (Component) {
     return <Component {...props}/>;
   }

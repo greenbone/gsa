@@ -32,7 +32,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {TASK_STATUS} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityActions} from '../../entities/actions.js';
 import {withEntityRow} from '../../entities/row.js';
@@ -162,7 +162,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
       <TableData flex align="end">
         {report.result_count.false_positive.filtered}
       </TableData>
-      {render_component(actions, {...other, entity})}
+      {renderComponent(actions, {...other, entity})}
     </TableRow>
   );
 };

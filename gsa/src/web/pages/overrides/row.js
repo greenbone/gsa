@@ -29,7 +29,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 import {
   extraRiskFactor,
   translateRiskFactor,
@@ -138,7 +138,7 @@ const Row = ({
       <TableData>
         {entity.isActive() ? _('yes') : _('no')}
       </TableData>
-      {render_component(actions, {...props, entity})}
+      {renderComponent(actions, {...props, entity})}
     </TableRow>
   );
 };

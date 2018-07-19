@@ -26,7 +26,7 @@ import React from 'react';
 import {longDate} from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
@@ -95,7 +95,7 @@ const Row = ({
       <TableData flex align="center">
         {entity.qod && entity.qod.value} %
       </TableData>
-      {render_component(actions, {...other, entity})}
+      {renderComponent(actions, {...other, entity})}
     </TableRow>
   );
 };

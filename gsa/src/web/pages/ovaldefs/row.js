@@ -28,7 +28,7 @@ import {longDate} from 'gmp/locale';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {na, render_component} from '../../utils/render.js';
+import {na, renderComponent} from '../../utils/render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
@@ -81,7 +81,7 @@ const Row = ({
         <TableData flex align="center">
           <SeverityBar severity={entity.severity}/>
         </TableData>
-        {render_component(actions, {...other, entity})}
+        {renderComponent(actions, {...other, entity})}
       </TableRow>
       <TableRow>
         <TableData colSpan="8">

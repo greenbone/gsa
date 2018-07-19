@@ -30,7 +30,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
 
@@ -106,7 +106,7 @@ const Row = ({
       <TableData>
         {longDate(entity.modificationTime)}
       </TableData>
-      {render_component(actions, {...other, entity})}
+      {renderComponent(actions, {...other, entity})}
     </TableRow>
   );
 };

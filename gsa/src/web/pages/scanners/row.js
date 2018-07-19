@@ -29,7 +29,7 @@ import {isDefined} from 'gmp/utils/identity';
 import IconDivider from '../../components/layout/icondivider.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_component} from '../../utils/render.js';
+import {renderComponent} from '../../utils/render.js';
 
 import EntityNameTableData from '../../entities/entitynametabledata.js';
 import {withEntityActions} from '../../entities/actions.js';
@@ -153,7 +153,7 @@ const Row = ({
         <EntityLink entity={entity.credential}/>
       }
     </TableData>
-    {render_component(actions, {...props, entity})}
+    {renderComponent(actions, {...props, entity})}
   </TableRow>
 );
 

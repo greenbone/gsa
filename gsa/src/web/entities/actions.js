@@ -27,7 +27,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Layout from '../components/layout/layout.js';
 
 import PropTypes from '../utils/proptypes.js';
-import {render_component} from '../utils/render.js';
+import {renderComponent} from '../utils/render.js';
 
 import SelectionType from '../utils/selectiontype.js';
 
@@ -56,7 +56,7 @@ const EntityActions = ({
             onDeselected={onEntityDeselected}/>
         </Layout> :
         <Layout flex="column" grow>
-          {render_component(actionsComponent, {...other, entity})}
+          {renderComponent(actionsComponent, {...other, entity})}
         </Layout>
       }
     </td>
