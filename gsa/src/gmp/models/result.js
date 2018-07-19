@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, is_string} from '../utils/identity';
-import {forEach} from '../utils/array'
+import {is_defined, isString} from '../utils/identity';
+import {forEach} from '../utils/array';
 
 import Model from '../model.js';
 import {parseSeverity, parseQod} from '../parser.js';
@@ -41,7 +41,7 @@ export class Delta {
   static TYPE_GONE = 'gone';
 
   constructor(elem) {
-    if (is_string(elem)) {
+    if (isString(elem)) {
       this.delta_type = elem;
     }
     else {
@@ -72,7 +72,7 @@ class Result extends Model {
       qod = {},
     } = elem;
 
-    if (is_string(host)) {
+    if (isString(host)) {
       // openvas 8
       copy.host = {
         name: host,

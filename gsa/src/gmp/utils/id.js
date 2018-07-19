@@ -22,9 +22,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {first} from './array';
-import {is_defined, is_string} from './identity';
+import {is_defined, isString} from './identity';
 
-export const hasId = model => is_defined(model) && is_string(model.id) &&
+export const hasId = model => is_defined(model) && isString(model.id) &&
   model.id.length > 0;
 
 export const includesId = (list, id) => {

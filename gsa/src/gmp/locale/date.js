@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_defined, is_string, isJsDate} from '../utils/identity';
+import {is_defined, isString, isJsDate} from '../utils/identity';
 
 import {parseDate} from '../parser';
 
@@ -43,7 +43,7 @@ const dateFormat = (date, format) => {
   }
 
   if (!isDate(date)) {
-    if (is_string(date) || isJsDate(date)) {
+    if (isString(date) || isJsDate(date)) {
       date = parseDate(date);
     }
     else {

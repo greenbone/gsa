@@ -56,7 +56,7 @@ import TaskStatus from './status.js';
 import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
-import {is_string} from 'gmp/utils/index.js';
+import {isString} from 'gmp/utils/index.js';
 
 const render_report = (report, links) => {
   if (!is_defined(report)) {
@@ -118,7 +118,7 @@ const Row = ({
 
   const obs = [];
   if (is_defined(observers)) {
-    if (is_string(observers)) {
+    if (isString(observers)) {
       obs.push(_('User {{name}}', {name: observers}));
     }
     else {

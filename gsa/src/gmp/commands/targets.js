@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_string} from '../utils/identity';
+import {isString} from '../utils/identity';
 
 import registerCommand from '../command';
 
@@ -114,7 +114,7 @@ class TargetCommand extends EntityCommand {
       file,
       exclude_file,
       hosts,
-      in_use: is_string(in_use) ? in_use : in_use ? '1' : '0',
+      in_use: isString(in_use) ? in_use : in_use ? '1' : '0',
       name,
       port,
       port_list_id,

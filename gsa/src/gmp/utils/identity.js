@@ -35,7 +35,7 @@ export function is_object(value) {
   return value !== null && typeof value === 'object';
 }
 
-export function is_string(value) {
+export function isString(value) {
   return typeof value === 'string';
 }
 
@@ -52,6 +52,6 @@ export function isJsDate(value) {
 }
 
 export const isModelElement = elem => is_defined(elem) &&
-  is_string(elem._id) && elem._id.length > 0;
+  isString(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

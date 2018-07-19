@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {is_defined, is_string} from '../utils/identity';
+import {is_defined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -47,7 +47,7 @@ const parse_tags = tags => {
 };
 
 const parse_ids = (ids, no) => {
-  if (is_string(ids) && ids.length > 0 && ids !== no) {
+  if (isString(ids) && ids.length > 0 && ids !== no) {
     return ids.split(',').map(id => id.trim());
   }
   return [];

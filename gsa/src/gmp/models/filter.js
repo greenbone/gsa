@@ -24,7 +24,7 @@
 import 'core-js/fn/array/find-index';
 import 'core-js/fn/array/includes';
 
-import {is_defined, is_string} from '../utils/identity';
+import {is_defined, isString} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model from '../model.js';
@@ -654,7 +654,7 @@ class Filter extends Model {
    * @return {Filter} This filter.
    */
   parseString(filterstring) {
-    if (is_string(filterstring)) {
+    if (isString(filterstring)) {
       const fterms = filterstring.split(' ');
       for (let fterm of fterms) {
         // strip whitespace

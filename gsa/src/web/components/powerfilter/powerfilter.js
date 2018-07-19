@@ -29,7 +29,7 @@ import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 
 import {KeyCode} from 'gmp/utils/event';
-import {is_defined, is_string} from 'gmp/utils/identity';
+import {is_defined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -98,7 +98,7 @@ class PowerFilter extends React.Component {
     if (is_defined(filter) && is_defined(filter.toFilterCriteriaString)) {
       userfilter = filter.toFilterCriteriaString();
     }
-    else if (is_string(filter)) {
+    else if (isString(filter)) {
       userfilter = filter;
     }
     else {

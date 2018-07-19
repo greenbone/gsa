@@ -23,7 +23,7 @@
  */
 import logger from '../log.js';
 
-import {is_defined, is_string} from '../utils/identity';
+import {is_defined, isString} from '../utils/identity';
 import {map, forEach} from '../utils/array';
 
 import {parseCollectionList} from '../collection/parser.js';
@@ -83,7 +83,7 @@ class EntitiesCommand extends HttpCommand {
     if (!is_defined(filter)) {
       params.filter = ALL_FILTER;
     }
-    else if (is_string(filter)) {
+    else if (isString(filter)) {
       params.filter = Filter.fromString(filter).all();
     }
     else {

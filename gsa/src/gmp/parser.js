@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/starts-with';
 
-import {is_defined, is_string} from './utils/identity';
+import {is_defined, isString} from './utils/identity';
 import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
@@ -121,7 +121,7 @@ export function parseEnvelopeMeta(envelope) {
 export const parseProperties = (element, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
-  if (is_string(element._id) && element._id.length > 0) {
+  if (isString(element._id) && element._id.length > 0) {
     // only set id if it id defined
     copy.id = element._id;
   }
@@ -390,7 +390,7 @@ export const parseDate = value => is_defined(value) ?
  * @returns duration A duration instance
  */
 export const parseDuration = value => {
-  if (is_string(value)) {
+  if (isString(value)) {
     value = parseInt(value);
   }
   if (!is_defined(value)) {

@@ -26,7 +26,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, is_string} from 'gmp/utils';
+import {is_defined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -76,7 +76,7 @@ const SectionHeader = ({
             flex
             align={['start', 'end']}
           >
-            {is_string(img) ?
+            {isString(img) ?
               <Icon size="large" img={img}/> : img
             }
           </HeaderIconLayout>

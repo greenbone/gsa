@@ -22,7 +22,7 @@
  */
 import _ from '../locale';
 
-import {is_defined, is_string} from '../utils/identity';
+import {is_defined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -162,7 +162,7 @@ class Scanner extends Model {
   }
 
   hasUnixSocket() {
-    return is_string(this.host) && this.host[0] === '/';
+    return isString(this.host) && this.host[0] === '/';
   }
 }
 
