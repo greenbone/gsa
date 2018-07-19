@@ -43,7 +43,7 @@ export function is_number(value) {
   return typeof value === 'number';
 }
 
-export function is_function(value) {
+export function isFunction(value) {
   return typeof value === 'function';
 }
 

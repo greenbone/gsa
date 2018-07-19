@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_function} from 'gmp/utils/identity';
+import {isFunction} from 'gmp/utils/identity';
 
 import {createAll} from '../main';
 import {createState} from '../testing';
@@ -45,18 +45,18 @@ describe('createAll function tests', () => {
       },
     });
 
-    expect(is_function(loadEntities)).toBe(true);
-    expect(is_function(loadEntity)).toBe(true);
-    expect(is_function(reducer)).toBe(true);
-    expect(is_function(selector)).toBe(true);
+    expect(isFunction(loadEntities)).toBe(true);
+    expect(isFunction(loadEntity)).toBe(true);
+    expect(isFunction(reducer)).toBe(true);
+    expect(isFunction(selector)).toBe(true);
 
-    expect(is_function(entitiesActions.request)).toBe(true);
-    expect(is_function(entitiesActions.success)).toBe(true);
-    expect(is_function(entitiesActions.error)).toBe(true);
+    expect(isFunction(entitiesActions.request)).toBe(true);
+    expect(isFunction(entitiesActions.success)).toBe(true);
+    expect(isFunction(entitiesActions.error)).toBe(true);
 
-    expect(is_function(entityActions.request)).toBe(true);
-    expect(is_function(entityActions.success)).toBe(true);
-    expect(is_function(entityActions.error)).toBe(true);
+    expect(isFunction(entityActions.request)).toBe(true);
+    expect(isFunction(entityActions.success)).toBe(true);
+    expect(isFunction(entityActions.error)).toBe(true);
 
     expect(selector(rootState).isLoadingEntities()).toBe(true);
     expect(selector(rootState).isLoadingEntity(id)).toBe(true);

@@ -27,7 +27,7 @@ import {
   is_string,
   is_array,
   is_number,
-  is_function,
+  isFunction,
   isJsDate,
   isModelElement,
 } from '../identity';
@@ -202,42 +202,42 @@ describe('is_number function test', () => {
 describe('is_function function test', () => {
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for empty object', () => {
     const x = {};
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for an array', () => {
     const x = [];
-    expect(is_function(x)).toBe(false);
+    expect(isFunction(x)).toBe(false);
   });
 
   test('should return false for a function', () => {
     function x() {};
-    expect(is_function(x)).toBe(true);
+    expect(isFunction(x)).toBe(true);
   });
 
   test('should return false for an arrow function', () => {
     const x = () => {};
-    expect(is_function(x)).toBe(true);
+    expect(isFunction(x)).toBe(true);
   });
 });
 

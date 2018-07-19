@@ -24,7 +24,7 @@
 
 import logger from './log.js';
 
-import {is_defined, is_function} from './utils/identity';
+import {is_defined, isFunction} from './utils/identity';
 
 import {parseInt, parseFloat} from './parser.js';
 
@@ -52,7 +52,7 @@ function generic_compare_desc(a_val, b_val) {
 
 function get_property(object, property) {
   try {
-    if (is_function(property)) {
+    if (isFunction(property)) {
       return property(object);
     }
 

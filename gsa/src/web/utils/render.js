@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, is_function, is_object} from 'gmp/utils/identity';
+import {is_defined, isFunction, is_object} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
@@ -484,7 +484,7 @@ export const render_section_title = (counts, title) => {
 
 export const setRef = (...refs) => ref => {
   for (const rf of refs) {
-    if (is_function(rf)) {
+    if (isFunction(rf)) {
       rf(ref);
     }
     else if (is_object(rf) && is_defined(rf.current)) {

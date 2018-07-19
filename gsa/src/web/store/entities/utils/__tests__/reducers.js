@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_function} from 'gmp/utils/identity';
+import {isFunction} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
@@ -32,7 +32,7 @@ describe('entities reducers test', () => {
   test('should create a reducer function', () => {
     const reducer = createReducer('foo');
 
-    expect(is_function(reducer)).toBe(true);
+    expect(isFunction(reducer)).toBe(true);
   });
 
   test('Should create initial state', () => {

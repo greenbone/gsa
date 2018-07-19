@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_function} from 'gmp/utils/identity';
+import {isFunction} from 'gmp/utils/identity';
 import {pluralizeType} from 'gmp/utils/entitytype';
 
 import Filter from 'gmp/models/filter';
@@ -42,7 +42,7 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
   describe(`${entityType} entities reducer tests`, () => {
 
     test('should be a reducer function', () => {
-      expect(is_function(reducer)).toBe(true);
+      expect(isFunction(reducer)).toBe(true);
     });
 
     test('should create initial state', () => {
@@ -105,9 +105,9 @@ export const testEntitiesActions = (entityType, actions) => {
   describe(`${entityType} entities actions tests`, () => {
 
     test('should have action creators', () => {
-      expect(is_function(actions.request)).toBe(true);
-      expect(is_function(actions.success)).toBe(true);
-      expect(is_function(actions.error)).toBe(true);
+      expect(isFunction(actions.request)).toBe(true);
+      expect(isFunction(actions.success)).toBe(true);
+      expect(isFunction(actions.error)).toBe(true);
     });
 
     test('should create a load request action', () => {
@@ -210,7 +210,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
       };
 
       expect(loadEntities).toBeDefined();
-      expect(is_function(loadEntities)).toBe(true);
+      expect(isFunction(loadEntities)).toBe(true);
 
       return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
@@ -309,7 +309,7 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
   describe(`${entityType} entity reducer tests`, () => {
 
     test('should be a reducer function', () => {
-      expect(is_function(reducer)).toBe(true);
+      expect(isFunction(reducer)).toBe(true);
     });
 
     test('should create initial state', () => {
@@ -375,9 +375,9 @@ export const testEntityActions = (entityType, actions) => {
   describe(`${entityType} entity actions tests`, () => {
 
     test('should have action creators', () => {
-      expect(is_function(actions.request)).toBe(true);
-      expect(is_function(actions.success)).toBe(true);
-      expect(is_function(actions.error)).toBe(true);
+      expect(isFunction(actions.request)).toBe(true);
+      expect(isFunction(actions.success)).toBe(true);
+      expect(isFunction(actions.error)).toBe(true);
     });
 
     test('should create a load request action', () => {
@@ -451,7 +451,7 @@ export const testLoadEntity = (entityType, loadEntity) => {
       };
 
       expect(loadEntity).toBeDefined();
-      expect(is_function(loadEntity)).toBe(true);
+      expect(isFunction(loadEntity)).toBe(true);
 
       return loadEntity(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
