@@ -28,7 +28,7 @@ import {
   first,
 } from '../array';
 
-describe('array_equals function test', () => {
+describe('arrayEquals function test', () => {
 
   test('should return true if arrays are equal', () => {
     const array1 = [1, 2, 3];

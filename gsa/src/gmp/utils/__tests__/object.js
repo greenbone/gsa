@@ -26,6 +26,7 @@ import {
 } from '../object';
 
 describe('exclude function test', () => {
+
   test('exclude object property', () => {
     const obj = {
       foo: 1,
@@ -38,7 +39,8 @@ describe('exclude function test', () => {
   });
 });
 
-describe('exclude_object_props function test', () => {
+describe('excludeObjectProps function test', () => {
+
   test('exclude object properties', () => {
     const obj = {
       foo: 1,

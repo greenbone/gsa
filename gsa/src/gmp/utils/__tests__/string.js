@@ -28,6 +28,7 @@ import {
 } from '../string';
 
 describe('split function tests', () => {
+
   test('should split a string', () => {
     expect(split('abc_def_hij', '_')).toEqual(['abc', 'def', 'hij']);
     expect(split('abc.def.hij', '.')).toEqual(['abc', 'def', 'hij']);
@@ -48,7 +49,8 @@ describe('split function tests', () => {
   });
 });
 
-describe('capatalize_first_letter function tests', () => {
+describe('capatalizeFirstLetter function tests', () => {
+
   test('should capitalize first letter', () => {
     expect(capitalizeFirstLetter('foo')).toEqual('Foo');
     expect(capitalizeFirstLetter('Foo')).toEqual('Foo');
@@ -57,6 +59,7 @@ describe('capatalize_first_letter function tests', () => {
 });
 
 describe('shorten function tests', () => {
+
   test('should shorten string', () => {
     expect(shorten('foo bar', 4)).toEqual('foo ...');
   });
@@ -70,7 +73,8 @@ describe('shorten function tests', () => {
   });
 });
 
-describe('is_empty function test', () => {
+describe('isEmpty function test', () => {
+
   test('should return true for undefined', () => {
     expect(isEmpty()).toBe(true);
   });

@@ -32,7 +32,8 @@ import {
   isModelElement,
 } from '../identity';
 
-describe('is_defined function test', () => {
+describe('isDefined function test', () => {
+
   test('should return false for undefined let variable', () => {
     let x;
     expect(isDefined(x)).toBe(false);
@@ -44,7 +45,8 @@ describe('is_defined function test', () => {
   });
 });
 
-describe('has_value function test', () => {
+describe('hasValue function test', () => {
+
   test('should return false for undefined let variable', () => {
     let x;
     expect(hasValue(x)).toBe(false);
@@ -61,7 +63,8 @@ describe('has_value function test', () => {
   });
 });
 
-describe('is_object function test', () => {
+describe('isObject function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isObject(x)).toBe(false);
@@ -93,7 +96,8 @@ describe('is_object function test', () => {
   });
 });
 
-describe('is_string function test', () => {
+describe('isString function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isString(x)).toBe(false);
@@ -130,7 +134,8 @@ describe('is_string function test', () => {
   });
 });
 
-describe('is_array function test', () => {
+describe('isArray function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isArray(x)).toBe(false);
@@ -162,7 +167,8 @@ describe('is_array function test', () => {
   });
 });
 
-describe('is_number function test', () => {
+describe('isNumber function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isNumber(x)).toBe(false);
@@ -199,7 +205,8 @@ describe('is_number function test', () => {
   });
 });
 
-describe('is_function function test', () => {
+describe('isFunction function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isFunction(x)).toBe(false);
@@ -241,7 +248,8 @@ describe('is_function function test', () => {
   });
 });
 
-describe('is_jsdate function test', () => {
+describe('isJsDate function test', () => {
+
   test('should return false for undefined variable', () => {
     let x;
     expect(isJsDate(x)).toBe(false);
@@ -279,7 +287,7 @@ describe('is_jsdate function test', () => {
   });
 });
 
-describe('is_model_element function test', () => {
+describe('isModelElement function test', () => {
 
   test('should return false for undefined variable', () => {
     let x;

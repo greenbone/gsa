@@ -26,7 +26,8 @@ import {
   hasId,
 } from '../id';
 
-describe('includes_id function tests', () => {
+describe('includesId function tests', () => {
+
   test('should return true for found id', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
@@ -48,7 +49,8 @@ describe('includes_id function tests', () => {
   });
 });
 
-describe('select_save_id function tests', () => {
+describe('selectSaveId function tests', () => {
+
   test('should return id if id is in list', () => {
     const list = [{id: 1}, {id: 2}, {id: 3}];
 
@@ -72,7 +74,8 @@ describe('select_save_id function tests', () => {
   });
 });
 
-describe('has_id tests', () => {
+describe('hasId tests', () => {
+
   test('should return false if model is undefined', () => {
     expect(hasId(undefined)).toBe(false);
   });
