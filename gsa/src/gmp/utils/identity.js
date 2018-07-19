@@ -31,7 +31,7 @@ export function has_value(value) {
   return value !== null && is_defined(value);
 }
 
-export function is_object(value) {
+export function isObject(value) {
   return value !== null && typeof value === 'object';
 }
 

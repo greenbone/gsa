@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, isFunction, is_object} from 'gmp/utils/identity';
+import {is_defined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
@@ -487,7 +487,7 @@ export const setRef = (...refs) => ref => {
     if (isFunction(rf)) {
       rf(ref);
     }
-    else if (is_object(rf) && is_defined(rf.current)) {
+    else if (isObject(rf) && is_defined(rf.current)) {
       rf.current = ref;
     }
   }

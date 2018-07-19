@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import {is_object} from 'gmp/utils';
+import {isObject} from 'gmp/utils/identity';
 
 import PropTypes from './proptypes.js';
 
@@ -32,7 +32,7 @@ export const withCache = names => Component => {
   const CacheWrapper = (props, {cache, caches}) => {
     const cache_props = {cache};
 
-    if (is_object(names)) {
+    if (isObject(names)) {
       for (const [key, value] of Object.entries(names)) {
         cache_props[key] = caches.get(value);
       }

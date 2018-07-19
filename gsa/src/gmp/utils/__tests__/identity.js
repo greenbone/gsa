@@ -23,7 +23,7 @@
 import {
   is_defined,
   has_value,
-  is_object,
+  isObject,
   isString,
   is_array,
   isNumber,
@@ -64,32 +64,32 @@ describe('has_value function test', () => {
 describe('is_object function test', () => {
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for number variable', () => {
     const x = 1;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for null variable', () => {
     const x = null;
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return false for a string', () => {
     const x = 'foo';
-    expect(is_object(x)).toBe(false);
+    expect(isObject(x)).toBe(false);
   });
 
   test('should return true for an array', () => {
     const x = [];
-    expect(is_object(x)).toBe(true);
+    expect(isObject(x)).toBe(true);
   });
 
   test('should return true for empty object', () => {
     const x = {};
-    expect(is_object(x)).toBe(true);
+    expect(isObject(x)).toBe(true);
   });
 });
 

@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, is_object} from '../utils/identity';
+import {is_defined, isObject} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {forEach, map} from '../utils/array';
 
@@ -90,7 +90,7 @@ class Alert extends Model {
     const types = ['condition', 'method', 'event'];
 
     for (const type of types) {
-      if (is_object(ret[type])) {
+      if (isObject(ret[type])) {
         const data = {};
 
         forEach(ret[type].data, value => {
