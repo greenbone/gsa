@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {isArray, is_defined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model from '../model';
@@ -54,7 +54,7 @@ export function parseInfoCounts(response) {
   let es = isArray(infos) ? infos[infos.length - 1] : infos;
   let ec = response.info_count;
 
-  if (!is_defined(es)) {
+  if (!isDefined(es)) {
     // houston we have a problem ...
     log.error('No info found in response. Can not get correct counts.',
       response);
@@ -64,7 +64,7 @@ export function parseInfoCounts(response) {
     };
   }
 
-  if (!is_defined(ec)) {
+  if (!isDefined(ec)) {
     // houston we have another problem ...
     log.error('No info_count found in response. Can not get correct counts.',
       response);
@@ -90,18 +90,18 @@ export function parseFilter(element) {
 }
 
 export function parseCounts(element, name, plural_name) {
-  if (!is_defined(element)) {
+  if (!isDefined(element)) {
     return {};
   }
 
-  if (!is_defined(plural_name)) {
+  if (!isDefined(plural_name)) {
     plural_name = name + 's';
   }
 
   const es = element[plural_name];
   const ec = element[name + '_count'];
 
-  if (is_defined(es) && is_defined(ec)) {
+  if (isDefined(es) && isDefined(ec)) {
     return {
       first: es._start,
       rows: es._max,

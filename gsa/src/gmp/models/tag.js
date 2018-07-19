@@ -24,7 +24,7 @@
 
 import Model from '../model.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 class Tag extends Model {
@@ -33,7 +33,7 @@ class Tag extends Model {
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
-    if (is_defined(elem.resources)) {
+    if (isDefined(elem.resources)) {
       ret.resources = map(ret.resources.resource,
         res => new Model(res, elem.resources.type));
       ret.resource_type = elem.resources.type;

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 class DashboardData {
 
@@ -29,12 +29,12 @@ class DashboardData {
   }
 
   _getById(id, filter) {
-    if (is_defined(this.state)) {
+    if (isDefined(this.state)) {
       const state = this.state[id];
-      if (!is_defined(state)) {
+      if (!isDefined(state)) {
         return undefined;
       }
-      const filterString = is_defined(filter) ? filter.toFilterString() :
+      const filterString = isDefined(filter) ? filter.toFilterString() :
         'default';
       return state[filterString];
     }
@@ -43,22 +43,22 @@ class DashboardData {
 
   getIsLoading(id, filter) {
     const state = this._getById(id, filter);
-    return is_defined(state) ? state.isLoading : false;
+    return isDefined(state) ? state.isLoading : false;
   }
 
   getError(id, filter) {
     const state = this._getById(id, filter);
-    return is_defined(state) ? state.error : undefined;
+    return isDefined(state) ? state.error : undefined;
   }
 
   getData(id, filter) {
     const state = this._getById(id, filter);
-    return is_defined(state) ? state.data : undefined;
+    return isDefined(state) ? state.data : undefined;
   }
 }
 
 const getDashboardData = rootState => {
-  const dashboardData = is_defined(rootState) ?
+  const dashboardData = isDefined(rootState) ?
     rootState.dashboardData : undefined;
 
   return new DashboardData(dashboardData);

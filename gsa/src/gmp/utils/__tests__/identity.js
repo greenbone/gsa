@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  is_defined,
+  isDefined,
   hasValue,
   isObject,
   isString,
@@ -35,12 +35,12 @@ import {
 describe('is_defined function test', () => {
   test('should return false for undefined let variable', () => {
     let x;
-    expect(is_defined(x)).toBe(false);
+    expect(isDefined(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
     let x = 1; // eslint-disable-line prefer-const
-    expect(is_defined(x)).toBe(true);
+    expect(isDefined(x)).toBe(true);
   });
 });
 

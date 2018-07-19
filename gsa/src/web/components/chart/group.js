@@ -24,11 +24,11 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
-const StyledGroup = glamorous.g(({onClick}) => is_defined(onClick) ? {
+const StyledGroup = glamorous.g(({onClick}) => isDefined(onClick) ? {
   cursor: 'pointer',
 } : undefined);
 

@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import {parseFloat} from 'gmp/parser';
@@ -95,7 +95,7 @@ const NoteDialog = ({
   onClose,
   onSave,
 }) => {
-  const is_edit = is_defined(note);
+  const is_edit = isDefined(note);
 
   const data = {
     severity,
@@ -105,7 +105,7 @@ const NoteDialog = ({
     hosts,
     hosts_manual,
     id,
-    oid: is_defined(oid) ? oid : DEFAULT_OID_VALUE,
+    oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     port,
     port_manual,
     result_id,
@@ -183,7 +183,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 {is_edit && note.isActive() &&
-                  is_defined(note.endTime) &&
+                  isDefined(note.endTime) &&
                   <Divider>
                     <Radio
                       name="active"
@@ -286,7 +286,7 @@ const NoteDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {is_defined(severity) &&
+              {isDefined(severity) &&
                 <Layout flex>
                   {severity > LOG_VALUE ?
                     <Radio
@@ -309,7 +309,7 @@ const NoteDialog = ({
                   }
                 </Layout>
               }
-              {!is_defined(severity) &&
+              {!isDefined(severity) &&
                 <Layout flex>
                   <Radio
                     name="severity"

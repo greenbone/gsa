@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -38,7 +38,7 @@ import Theme from '../utils/theme.js';
 
 const OwnerInfo = ({
   owner,
-}) => is_defined(owner) ?
+}) => isDefined(owner) ?
   <span>{owner.name}</span> :
   <i>{_('(Global Object)')}</i>
 ;

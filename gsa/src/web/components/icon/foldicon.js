@@ -20,11 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -42,7 +42,7 @@ export const FoldIcon = ({
       foldState === FoldState.FOLDING_START;
   let img = folded ? 'unfold.svg' : 'fold.svg';
 
-  if (!is_defined(title)) {
+  if (!isDefined(title)) {
     title = folded ? _('Unfold') : _('Fold');
   }
 

@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -66,7 +66,7 @@ class RoleComponent extends React.Component {
       this.setState({allUsers});
     });
 
-    if (is_defined(role)) {
+    if (isDefined(role)) {
       this.setState({
         allUsers,
         dialogVisible: true,

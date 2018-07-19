@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, isString} from '../utils/identity';
+import {isDefined, isString} from '../utils/identity';
 import {forEach} from '../utils/array';
 
 import Model from '../model.js';
@@ -83,31 +83,31 @@ class Result extends Model {
     else {
       copy.host = {
         name: host.__text,
-        id: is_defined(host.asset) ? host.asset._asset_id : host.__text,
-        hostname: is_defined(host.hostname) ? host.hostname : '',
+        id: isDefined(host.asset) ? host.asset._asset_id : host.__text,
+        hostname: isDefined(host.hostname) ? host.hostname : '',
       };
     }
 
     copy.nvt = new Nvt(nvt);
 
-    if (is_defined(severity)) {
+    if (isDefined(severity)) {
       copy.severity = parseSeverity(severity);
     }
 
-    copy.vulnerability = is_defined(name) ? name : nvt.oid;
+    copy.vulnerability = isDefined(name) ? name : nvt.oid;
 
-    if (is_defined(report)) {
+    if (isDefined(report)) {
       copy.report = new Model(report, 'report');
     }
 
-    if (is_defined(task)) {
+    if (isDefined(task)) {
       copy.task = new Model(task, 'task');
     }
 
-    if (is_defined(detection) && is_defined(detection.result)) {
+    if (isDefined(detection) && isDefined(detection.result)) {
       const details = {};
 
-      if (is_defined(detection.result.details)) {
+      if (isDefined(detection.result.details)) {
         forEach(detection.result.details.detail, detail => {
           details[detail.name] = detail.value;
         });
@@ -122,11 +122,11 @@ class Result extends Model {
 
     }
 
-    if (is_defined(delta)) {
+    if (isDefined(delta)) {
       copy.delta = new Delta(delta);
     }
 
-    if (is_defined(original_severity)) {
+    if (isDefined(original_severity)) {
       copy.original_severity = parseSeverity(original_severity);
     }
 
@@ -139,7 +139,7 @@ class Result extends Model {
   }
 
   hasDelta() {
-    return is_defined(this.delta);
+    return isDefined(this.delta);
   }
 }
 

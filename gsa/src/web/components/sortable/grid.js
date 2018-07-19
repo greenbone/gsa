@@ -30,7 +30,7 @@ import uuid from 'uuid/v4';
 
 import {DragDropContext} from 'react-beautiful-dnd';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -109,7 +109,7 @@ class Grid extends React.Component {
   notifyChange(items) {
     const {onChange} = this.props;
 
-    if (is_defined(onChange)) {
+    if (isDefined(onChange)) {
       onChange(items);
     }
   }
@@ -227,7 +227,7 @@ class Grid extends React.Component {
   render() {
     const {isDragging, dragSourceRowId} = this.state;
     const {maxItemsPerRow, maxRows, items = [], children} = this.props;
-    const showEmptyRow = !is_defined(maxRows) || items.length < maxRows;
+    const showEmptyRow = !isDefined(maxRows) || items.length < maxRows;
 
     let emptyRowHeight = DEFAULT_ROW_HEIGHT;
     if (isDragging) {
@@ -247,7 +247,7 @@ class Grid extends React.Component {
                 const {items: rowItems = [], height = DEFAULT_ROW_HEIGHT} = row;
                 const {length: itemCount} = rowItems;
 
-                const isRowFull = is_defined(maxItemsPerRow) &&
+                const isRowFull = isDefined(maxItemsPerRow) &&
                   maxItemsPerRow <= itemCount;
                 const disabled = isRowFull && dragSourceRowId !== row.id;
 

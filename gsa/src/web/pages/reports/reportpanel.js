@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -37,7 +36,7 @@ import InfoPanel from '../../components/panel/infopanel.js';
 
 const Content = glamorous.span(
   ({onClick}) => {
-    if (!is_defined(onClick)) {
+    if (!isDefined(onClick)) {
       return undefined;
     }
 

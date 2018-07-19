@@ -24,9 +24,9 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -48,7 +48,7 @@ const EmptyResultsReport = ({
   const levels = filter.get('levels', '');
   const severity = filter.getTerm('severity');
   const min_qod = filter.get('min_qod');
-  const has_severity_filter = is_defined(severity) && severity.relation === '>';
+  const has_severity_filter = isDefined(severity) && severity.relation === '>';
   return (
     <Divider
       flex="column"
@@ -85,7 +85,7 @@ const EmptyResultsReport = ({
           </ReportPanel>
         }
 
-        {is_defined(min_qod) && min_qod > 30 &&
+        {isDefined(min_qod) && min_qod > 30 &&
           <ReportPanel
             icon="filter.svg"
             title={

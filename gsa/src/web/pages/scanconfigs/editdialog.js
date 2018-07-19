@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -316,7 +316,7 @@ class NvtFamily extends React.Component {
       max: family.max,
     };
 
-    if (is_defined(config_family)) {
+    if (isDefined(config_family)) {
       counts.count = config_family.nvts.count;
       counts.max = config_family.nvts.max;
     }

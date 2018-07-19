@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
@@ -51,7 +51,7 @@ class SeverityClassDisplay extends React.Component {
 
 
     let severityFilter;
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -60,7 +60,7 @@ class SeverityClassDisplay extends React.Component {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
-      if (is_defined(filter) && filter.hasTerm(startTerm) &&
+      if (isDefined(filter) && filter.hasTerm(startTerm) &&
         filter.hasTerm(endTerm)) {
         return;
       }
@@ -80,14 +80,14 @@ class SeverityClassDisplay extends React.Component {
         severityTerm = FilterTerm.fromString(`severity=${start}`);
       }
 
-      if (is_defined(filter) && filter.hasTerm(severityTerm)) {
+      if (isDefined(filter) && filter.hasTerm(severityTerm)) {
         return;
       }
 
       severityFilter = Filter.fromTerm(severityTerm);
     }
 
-    const newFilter = is_defined(filter) ? filter.copy().and(severityFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(severityFilter) :
       severityFilter;
 
     onFilterChanged(newFilter);
@@ -109,9 +109,9 @@ class SeverityClassDisplay extends React.Component {
             width={width}
             height={height}
             data={data}
-            onDataClick={is_defined(onFilterChanged) ?
+            onDataClick={isDefined(onFilterChanged) ?
               this.handleDataClick : undefined}
-            onLegendItemClick={is_defined(onFilterChanged) ?
+            onLegendItemClick={isDefined(onFilterChanged) ?
               this.handleDataClick : undefined}
           />
         )}

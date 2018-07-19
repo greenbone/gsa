@@ -25,7 +25,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {is_defined, hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
@@ -113,11 +113,11 @@ class EntitiesPage extends React.Component {
       return null;
     }
 
-    if (!is_defined(SectionComponent)) {
+    if (!isDefined(SectionComponent)) {
       SectionComponent = Section;
     }
 
-    const extra = is_defined(dashboardControls) ? dashboardControls() :
+    const extra = isDefined(dashboardControls) ? dashboardControls() :
       undefined;
     return (
       <SectionComponent
@@ -133,10 +133,10 @@ class EntitiesPage extends React.Component {
           {DashboardComponent &&
             <DashboardComponent filter={filter}/>
           }
-          {is_defined(dashboard2) &&
+          {isDefined(dashboard2) &&
             dashboard2({filter, onFilterChanged})
           }
-          {loading && !is_defined(entities) ?
+          {loading && !isDefined(entities) ?
             this.renderLoading() :
             this.renderTable()
           }
@@ -161,7 +161,7 @@ class EntitiesPage extends React.Component {
       ...props
     } = this.props;
 
-    if (!is_defined(entities) || !is_defined(TableComponent)) {
+    if (!isDefined(entities) || !isDefined(TableComponent)) {
       return null;
     }
 
@@ -196,7 +196,7 @@ class EntitiesPage extends React.Component {
 
     const PowerFilterComponent = powerfilter;
 
-    const handler = is_defined(filterEditDialog) ?
+    const handler = isDefined(filterEditDialog) ?
       this.handleFilterEditClick : undefined;
 
     return (
@@ -221,7 +221,7 @@ class EntitiesPage extends React.Component {
   renderToolbarIcons() {
     let {toolBarIcons, ...other} = this.props;
 
-    if (!is_defined(toolBarIcons)) {
+    if (!isDefined(toolBarIcons)) {
       return null;
     }
 
@@ -308,7 +308,7 @@ export const createEntitiesPage = (options = {}) => {
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
-  if (!is_defined(filtersFilter)) {
+  if (!isDefined(filtersFilter)) {
     return {
       filters: [],
     };

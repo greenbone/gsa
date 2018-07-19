@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 class Rejection {
 
@@ -35,7 +35,7 @@ class Rejection {
     this.xhr = xhr;
     this.error = error;
 
-    if (!is_defined(error)) {
+    if (!isDefined(error)) {
       error = new Error();
     }
 

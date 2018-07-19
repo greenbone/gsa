@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {TASK_STATUS} from 'gmp/models/task';
+import {isDefined} from 'gmp/utils/identity';
 
-import {is_defined} from 'gmp/utils';
+import {TASK_STATUS} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -36,10 +35,10 @@ import StatusBar from '../../components/bar/statusbar.js';
 
 const TaskStatus = ({task, links = true}) => {
   let report_id;
-  if (is_defined(task.current_report)) {
+  if (isDefined(task.current_report)) {
     report_id = task.current_report.id;
   }
-  else if (is_defined(task.last_report)) {
+  else if (isDefined(task.last_report)) {
     report_id = task.last_report.id;
   }
   else {

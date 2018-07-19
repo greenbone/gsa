@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
@@ -139,11 +139,11 @@ class ScheduleDialog extends React.Component {
     } = this.props;
 
     const monthly = freq === ReccurenceFrequency.MONTHLY &&
-      !is_defined(weekdays) ? RepeatMonthly.days : RepeatMonthly.nth;
+      !isDefined(weekdays) ? RepeatMonthly.days : RepeatMonthly.nth;
 
     let recurrenceType;
-    if (is_defined(freq)) {
-      if (!is_defined(weekdays) && !is_defined(monthdays) && interval === 1) {
+    if (isDefined(freq)) {
+      if (!isDefined(weekdays) && !isDefined(monthdays) && interval === 1) {
         recurrenceType = freq;
       }
       else {
@@ -155,11 +155,11 @@ class ScheduleDialog extends React.Component {
       freq = ReccurenceFrequency.WEEKLY;
     }
 
-    const endDate = is_defined(duration) ?
+    const endDate = isDefined(duration) ?
       startDate.clone().add(duration) :
       startDate.clone().add(1, 'hour');
 
-    if (!is_defined(weekdays)) {
+    if (!isDefined(weekdays)) {
       weekdays = new WeekDays();
       weekdays = weekdays.setWeekDayFromDate(startDate);
     }
@@ -174,10 +174,10 @@ class ScheduleDialog extends React.Component {
       endDate,
       endHour: endDate.hours(),
       endMinute: endDate.minutes(),
-      endOpen: !is_defined(duration),
+      endOpen: !isDefined(duration),
       freq,
       interval,
-      monthdays: is_defined(monthdays) ? monthdays : [startDate.date()],
+      monthdays: isDefined(monthdays) ? monthdays : [startDate.date()],
       recurrenceType,
       monthly,
       monthlyDay,
@@ -216,7 +216,7 @@ class ScheduleDialog extends React.Component {
   }) {
     const {onSave} = this.props;
 
-    if (!is_defined(onSave)) {
+    if (!isDefined(onSave)) {
       return Promise.resolve();
     }
 

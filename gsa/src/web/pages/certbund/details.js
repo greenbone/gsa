@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -62,7 +61,7 @@ const CertBundAdvDetails = ({
 
       <InfoTable>
         <TableBody>
-          {is_defined(version) &&
+          {isDefined(version) &&
             <TableRow>
               <TableData>
                 {_('Version')}
@@ -72,7 +71,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(title) &&
+          {isDefined(title) &&
             <TableRow>
               <TableData>
                 {_('Title')}
@@ -82,7 +81,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(software) &&
+          {isDefined(software) &&
             <TableRow>
               <TableData>
                 {_('Software')}
@@ -92,7 +91,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(platform) &&
+          {isDefined(platform) &&
             <TableRow>
               <TableData>
                 {_('Platform')}
@@ -102,7 +101,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(effect) &&
+          {isDefined(effect) &&
             <TableRow>
               <TableData>
                 {_('Effect')}
@@ -112,7 +111,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(remote_attack) &&
+          {isDefined(remote_attack) &&
             <TableRow>
               <TableData>
                 {_('Remote Attack')}
@@ -122,7 +121,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(severity) &&
+          {isDefined(severity) &&
             <TableRow>
               <TableData>
                 {_('Severity')}
@@ -134,7 +133,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(risk) &&
+          {isDefined(risk) &&
             <TableRow>
               <TableData>
                 {_('CERT-Bund Risk Rating')}
@@ -144,7 +143,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(reference_source) &&
+          {isDefined(reference_source) &&
             <TableRow>
               <TableData>
                 {_('Reference Source')}
@@ -154,7 +153,7 @@ const CertBundAdvDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(reference_url) &&
+          {isDefined(reference_url) &&
             <TableRow>
               <TableData>
                 {_('Reference URL')}

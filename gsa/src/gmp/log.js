@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, isString} from './utils/identity';
+import {isDefined, isString} from './utils/identity';
 
 const GREENBONE_GREEN = '#99CE48';
 
@@ -48,7 +48,7 @@ export class Logger {
     level = isString(level) ? level.toLowerCase() : undefined;
     let loglevel = LogLevels[level];
 
-    if (is_defined(loglevel)) {
+    if (isDefined(loglevel)) {
       this.level = level;
     }
     else {
@@ -71,7 +71,7 @@ const DEFAULT_LOG_LEVEL = 'error';
 class DefaultLogger {
 
   constructor() {
-    this.level = is_defined(window.config) &&
+    this.level = isDefined(window.config) &&
       isString(window.config.loglevel) ? window.config.loglevel :
       DEFAULT_LOG_LEVEL;
     this.loggers = {};
@@ -85,7 +85,7 @@ class DefaultLogger {
     name = isString(name) ? name : 'unknown';
     let logger = this.loggers[name];
 
-    if (!is_defined(logger)) {
+    if (!isDefined(logger)) {
       logger = new Logger(name, this.level);
       this.loggers[name] = logger;
     }

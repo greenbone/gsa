@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -67,7 +67,7 @@ const HostsDialog = ({
                 grow="1"
                 value={state.name}
                 size="30"
-                disabled={is_defined(host)}
+                disabled={isDefined(host)}
                 onChange={onValueChange}
                 maxLength="80"/>
             </FormGroup>

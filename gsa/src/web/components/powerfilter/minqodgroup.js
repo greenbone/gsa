@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -36,7 +36,7 @@ import Text from '../form/text.js';
 import Divider from '../layout/divider.js';
 
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
-  if (!is_defined(qod) && is_defined(filter)) {
+  if (!isDefined(qod) && isDefined(filter)) {
     qod = filter.get('min_qod');
   }
   return (

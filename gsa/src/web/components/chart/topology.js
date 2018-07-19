@@ -42,7 +42,7 @@ import equal from 'fast-deep-equal';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -113,7 +113,7 @@ const TEXT_SCALE_THRESHOLD = 1;
 const DEFAULT_STROKE_WIDTH = 1;
 const SCANNER_STROKE_WIDTH = 2;
 
-const copyArray = array => is_defined(array) ? array.map(current => ({
+const copyArray = array => isDefined(array) ? array.map(current => ({
   ...current,
 })) : undefined;
 
@@ -177,7 +177,7 @@ class HostsTopologyChart extends React.Component {
     const hostsCopy = copyHosts(hosts);
     const linksCopy = copyArray(links);
 
-    if (is_defined(simulation)) {
+    if (isDefined(simulation)) {
       simulation.nodes(hostsCopy);
       linkForce.links(linksCopy);
     }
@@ -231,7 +231,7 @@ class HostsTopologyChart extends React.Component {
   componentWillUnmount() {
     const {simulation} = this.state;
 
-    if (is_defined(simulation)) {
+    if (isDefined(simulation)) {
       simulation.stop();
       simulation.on('tick', null);
       simulation.on('end', null);
@@ -239,7 +239,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   hostFillColor(host) {
-    return is_defined(host.uuid) ? this.colorScale(host.severity) : Theme.white;
+    return isDefined(host.uuid) ? this.colorScale(host.severity) : Theme.white;
   }
 
   hostStrokeColor(host) {
@@ -247,7 +247,7 @@ class HostsTopologyChart extends React.Component {
       return Theme.green;
     }
 
-    if (is_defined(host.uuid)) {
+    if (isDefined(host.uuid)) {
       return color(this.colorScale(host.severity)).darker();
     }
 
@@ -378,7 +378,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   handleMousUp(event) {
-    if (is_defined(this.draggingHost)) {
+    if (isDefined(this.draggingHost)) {
       this.state.simulation.alphaTarget(0);
 
       this.draggingHost.fx = undefined;
@@ -391,7 +391,7 @@ class HostsTopologyChart extends React.Component {
   }
 
   handleMousMove(event) {
-    if (is_defined(this.draggingHost)) {
+    if (isDefined(this.draggingHost)) {
       // we are dragging a host circle
 
       const {x: mx, y: my} = this.getMousePosition(event);
@@ -491,7 +491,7 @@ class HostsTopologyChart extends React.Component {
                       textAnchor="middle"
                       dominantBaseline="hanging"
                       fontSize="6px"
-                      fill={is_defined(host.uuid) ?
+                      fill={isDefined(host.uuid) ?
                         Theme.black : Theme.lightGray}
                       x={host.x}
                       y={host.y + 1 + radius}

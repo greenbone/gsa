@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -47,7 +47,7 @@ const AgentDialog = ({
     onSave,
   }) => {
 
-  const is_edit = is_defined(agent);
+  const is_edit = isDefined(agent);
 
   return (
     <SaveDialog

@@ -25,9 +25,9 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {permissionDescription} from '../../utils/render.js';
@@ -262,7 +262,7 @@ const Page = ({
           entity,
           ...other
         }) => {
-          const genPermsCount = is_defined(general_permissions) ?
+          const genPermsCount = isDefined(general_permissions) ?
             general_permissions.entities.length : 0;
 
           return (
@@ -285,12 +285,12 @@ const Page = ({
                       count={genPermsCount}
                     />
                   </Tab>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <Tab>
                       {tagsTitle}
                     </Tab>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <Tab>
                       {permissionsTitle}
                     </Tab>
@@ -308,16 +308,16 @@ const Page = ({
                   </TabPanel>
                   <TabPanel>
                     <GeneralPermissions
-                      permissions={is_defined(general_permissions) ?
+                      permissions={isDefined(general_permissions) ?
                         general_permissions.entities : []}
                     />
                   </TabPanel>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <TabPanel>
                       {tagsComponent}
                     </TabPanel>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <TabPanel>
                       {permissionsComponent}
                     </TabPanel>

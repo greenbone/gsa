@@ -22,7 +22,7 @@
  */
 import Model from '../model';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import {parseDate} from '../parser';
 
@@ -33,7 +33,7 @@ class Agent extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(elem.installer) && is_defined(elem.installer.trust)) {
+    if (isDefined(elem.installer) && isDefined(elem.installer.trust)) {
       ret.trust = {
         time: parseDate(elem.installer.trust.time),
         status: elem.installer.trust.__text,

@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {render_yesno} from '../../utils/render.js';
 import PropTypes from '../../utils/proptypes.js';
@@ -137,7 +137,7 @@ const Details = ({
               {_('NVT Name')}
             </TableData>
             <TableData>
-              {is_defined(nvt) ?
+              {isDefined(nvt) ?
                 <DetailsLink
                   id={nvt.id}
                   type="nvt"
@@ -164,7 +164,7 @@ const Details = ({
             </TableData>
             <TableData>
               {render_yesno(entity.isActive())}
-              {entity.isActive() && is_defined(entity.endTime) &&
+              {entity.isActive() && isDefined(entity.endTime) &&
                 ' ' + _('until {{- enddate}}',
                   {enddate: longDate(entity.endTime)})
               }
@@ -252,12 +252,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <Tab>
                       {tagsTitle}
                     </Tab>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <Tab>
                       {permissionsTitle}
                     </Tab>
@@ -272,12 +272,12 @@ const Page = ({
                       entity={entity}
                     />
                   </TabPanel>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <TabPanel>
                       {tagsComponent}
                     </TabPanel>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <TabPanel>
                       {permissionsComponent}
                     </TabPanel>

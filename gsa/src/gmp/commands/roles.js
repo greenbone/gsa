@@ -26,7 +26,7 @@ import registerCommand from '../command';
 
 import logger from '../log';
 
-import {isArray, is_defined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model from '../model';
@@ -94,7 +94,7 @@ class RoleCommand extends EntityCommand {
       edit_role.permissions = map(
         edit_role.get_permissions_response.permission, permission => {
           const perm = new Permission(permission);
-          if (!is_defined(perm.resource)) {
+          if (!isDefined(perm.resource)) {
             perm_names.add(permission.name);
           }
           return perm;

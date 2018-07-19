@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 
 import {setProperties, parseSeverity} from '../../parser.js';
 
@@ -46,7 +46,7 @@ class ReportCve {
 
     const severity = parseSeverity(result.severity);
 
-    if (!is_defined(this.severity) || severity > this.severity) {
+    if (!isDefined(this.severity) || severity > this.severity) {
       this.severity = severity;
     }
   }

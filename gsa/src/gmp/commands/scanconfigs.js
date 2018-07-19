@@ -23,7 +23,7 @@
 import logger from '../log';
 
 import {forEach, map} from '../utils/array';
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import Model from '../model';
 import registerCommand from '../command';
@@ -62,7 +62,7 @@ const convert_preferences = (values, nvt_name) => {
   for (const prop in values) {
     const data = values[prop];
     const {type, value} = data;
-    if (is_defined(value)) {
+    if (isDefined(value)) {
       const typestring = nvt_name + '[' + type + ']:' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';

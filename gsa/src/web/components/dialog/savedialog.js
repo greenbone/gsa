@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import State from '../../utils/state.js';
 import PropTypes, {deprecated} from '../../utils/proptypes.js';
@@ -54,7 +53,7 @@ class SaveDialogContent extends React.Component {
 
   componentWillReceiveProps(next) {
     const {externalError} = next;
-    if (is_defined(externalError)) {
+    if (isDefined(externalError)) {
       const {onExternalErrorSet} = this.props;
       this.setError(externalError);
       onExternalErrorSet();
@@ -66,7 +65,7 @@ class SaveDialogContent extends React.Component {
 
     if (onSave && !this.state.loading) {
       const promise = onSave(state);
-      if (is_defined(promise)) {
+      if (isDefined(promise)) {
         this.setState({loading: true});
         promise.then(
           () => this.handleClose(),

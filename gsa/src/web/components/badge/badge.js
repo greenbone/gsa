@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -116,7 +116,7 @@ class Badge extends React.Component {
       >
         {children}
 
-        {is_defined(content) &&
+        {isDefined(content) &&
           <BadgeIcon
             innerRef={ref => this.icon = ref}
             color={color}

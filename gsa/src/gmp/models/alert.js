@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, isObject} from '../utils/identity';
+import {isDefined, isObject} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {forEach, map} from '../utils/array';
 
@@ -68,7 +68,7 @@ const create_values = data => {
   const {__text, name, ...other} = data;
 
   for (const [key, obj] of Object.entries(other)) {
-    if (is_defined(obj._id)) {
+    if (isDefined(obj._id)) {
       if (obj._id.length > 0) {
         obj.id = obj._id;
       }
@@ -110,11 +110,11 @@ class Alert extends Model {
       }
     }
 
-    if (is_defined(ret.filter)) {
+    if (isDefined(ret.filter)) {
       ret.filter = new Model(ret.filter, 'filter');
     }
 
-    if (is_defined(elem.tasks)) {
+    if (isDefined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task,
         task => new Model(task, 'task'));
     }

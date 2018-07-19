@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
@@ -57,7 +57,7 @@ const EntityNameTableData = ({
         {entity.isOrphan() &&
           <b>{_('Orphan')}</b>
         }
-        {is_defined(onToggleDetailsClick) ?
+        {isDefined(onToggleDetailsClick) ?
           <RowDetailsToggle
             name={entity.id}
             onClick={onToggleDetailsClick}>
@@ -77,7 +77,7 @@ const EntityNameTableData = ({
         userName={userName}
       />
     </Layout>
-    {is_defined(entity.comment) &&
+    {isDefined(entity.comment) &&
       <Comment>({entity.comment})</Comment>
     }
     {children}

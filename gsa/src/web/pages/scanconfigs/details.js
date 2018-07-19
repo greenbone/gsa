@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
 
-import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
+import {isDefined} from 'gmp/utils/identity';
+
+import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -56,7 +56,7 @@ const ScanConfigDetails = ({
     >
       <InfoTable>
         <TableBody>
-          {is_defined(comment) &&
+          {isDefined(comment) &&
             <TableRow>
               <TableData>
                 {_('Comment')}
@@ -66,7 +66,7 @@ const ScanConfigDetails = ({
               </TableData>
             </TableRow>
           }
-          {scan_config_type === OSP_SCAN_CONFIG_TYPE && is_defined(scanner) &&
+          {scan_config_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) &&
             <TableRow>
               <TableData>
                 {_('Scanner')}

@@ -25,7 +25,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -43,7 +43,7 @@ const EntityCreateIcon = ({
   onClick,
   ...props
 }) => {
-  if (!is_defined(name)) {
+  if (!isDefined(name)) {
     name = getEntityType(entity);
   }
 
@@ -52,11 +52,11 @@ const EntityCreateIcon = ({
     return null;
   }
 
-  if (!is_defined(displayName)) {
+  if (!isDefined(displayName)) {
     displayName = typeName(name);
   }
 
-  if (!is_defined(title)) {
+  if (!isDefined(title)) {
     if (active) {
       title = _('Create new {{entity}}', {entity: displayName});
     }

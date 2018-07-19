@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {first} from 'gmp/utils/array';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
@@ -44,7 +44,7 @@ import PortListDialog from '../portlists/dialog.js';
 import TargetDialog from './dialog.js';
 
 const id_or__ = value => {
-  return is_defined(value) ? value.id : UNSET_VALUE;
+  return isDefined(value) ? value.id : UNSET_VALUE;
 };
 
 class TargetComponent extends React.Component {
@@ -95,19 +95,19 @@ class TargetComponent extends React.Component {
   }
 
   openTargetDialog(entity, initial = {}) {
-    if (is_defined(entity)) {
+    if (isDefined(entity)) {
       this.setState({
         targetDialogVisible: true,
         id: entity.id,
         alive_tests: entity.alive_tests,
         comment: entity.comment,
         esxi_credential_id: id_or__(entity.esxi_credential),
-        exclude_hosts: is_defined(entity.exclude_hosts) ?
+        exclude_hosts: isDefined(entity.exclude_hosts) ?
           entity.exclude_hosts.join(', ') : '',
         hosts: entity.hosts.join(', '),
         in_use: entity.isInUse(),
         name: entity.name,
-        port: is_defined(entity.ssh_credential) ?
+        port: isDefined(entity.ssh_credential) ?
           entity.ssh_credential.port : '22',
         reverse_lookup_only: entity.reverse_lookup_only,
         reverse_lookup_unify: entity.reverse_lookup_unify,

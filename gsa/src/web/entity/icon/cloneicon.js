@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
@@ -43,16 +43,16 @@ const EntityCloneIcon = ({
   ...props
 }) => {
 
-  if (!is_defined(name)) {
+  if (!isDefined(name)) {
     name = getEntityType(entity);
   }
 
-  if (!is_defined(displayName)) {
+  if (!isDefined(displayName)) {
     displayName = typeName(name);
   }
 
   const active = mayClone && capabilities.mayClone(name);
-  if (!is_defined(title)) {
+  if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
     }

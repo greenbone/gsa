@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 class DashboardSetting {
 
@@ -29,36 +29,36 @@ class DashboardSetting {
   }
 
   getById(id) {
-    if (is_defined(this.state) && is_defined(this.state.byId)) {
+    if (isDefined(this.state) && isDefined(this.state.byId)) {
       return this.state.byId[id];
     }
     return undefined;
   }
 
   getDefaultsById(id) {
-    if (is_defined(this.state) && is_defined(this.state.defaults)) {
+    if (isDefined(this.state) && isDefined(this.state.defaults)) {
       const defaults = this.state.defaults[id];
-      return is_defined(defaults) ? defaults : {};
+      return isDefined(defaults) ? defaults : {};
     }
     return {};
   }
 
   hasSettings(id) {
-    return is_defined(this.getById(id));
+    return isDefined(this.getById(id));
   }
 
   getError() {
-    return is_defined(this.state) ? this.state.error : undefined;
+    return isDefined(this.state) ? this.state.error : undefined;
   }
 
   getIsLoading() {
-    return is_defined(this.state) ? this.state.isLoading : false;
+    return isDefined(this.state) ? this.state.isLoading : false;
   }
 
 }
 
 const getDashboardSettings = rootState => {
-  const dashboardSettings = is_defined(rootState) ?
+  const dashboardSettings = isDefined(rootState) ?
     rootState.dashboardSettings : undefined;
 
   return new DashboardSetting(dashboardSettings);

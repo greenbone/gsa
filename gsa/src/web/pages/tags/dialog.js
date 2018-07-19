@@ -30,7 +30,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
@@ -81,13 +81,13 @@ class TagDialog extends React.Component {
       resourceType,
     } = this.state;
 
-    if (is_defined(resourceType)) {
+    if (isDefined(resourceType)) {
       this.loadResourcesByType(resourceType);
     }
   }
 
   loadResourcesByType(type) {
-    if (!is_defined(type)) {
+    if (!isDefined(type)) {
       return;
     }
     const {gmp} = this.props;
@@ -142,7 +142,7 @@ class TagDialog extends React.Component {
     gmp[pluralizeType(normalizeType(resourceType))]
       .get({filter: 'uuid=' + id})
       .then(response => {
-        const ids = is_defined(resourceIdsSelected) ? resourceIdsSelected : [];
+        const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
         if (response.data.length === 0) {
 
           let {resourceOptions} = this.state;
@@ -213,7 +213,7 @@ class TagDialog extends React.Component {
       value,
     };
 
-    const typeIsChosen = is_defined(this.state.resourceType);
+    const typeIsChosen = isDefined(this.state.resourceType);
 
     const controlledData = {
       resource_ids: this.state.resourceIdsSelected,

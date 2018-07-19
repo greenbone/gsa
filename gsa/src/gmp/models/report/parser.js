@@ -25,7 +25,7 @@ import 'core-js/fn/object/values';
 import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 import {
   filter as filter_func,
@@ -64,7 +64,7 @@ const empty_collection_list = filter => {
 const get_cert = (certs, fingerprint) => {
   let cert = certs[fingerprint];
 
-  if (!is_defined(cert)) {
+  if (!isDefined(cert)) {
     cert = new TLSCertificate(fingerprint);
     certs[fingerprint] = cert;
 
@@ -75,7 +75,7 @@ const get_cert = (certs, fingerprint) => {
 export const parse_tls_certificates = (report, filter) => {
   const {host: hosts, ssl_certs} = report;
 
-  if (!is_defined(ssl_certs)) {
+  if (!isDefined(ssl_certs)) {
     return empty_collection_list(filter);
   }
 
@@ -142,7 +142,7 @@ export const parse_tls_certificates = (report, filter) => {
 
     const certs = Object.values(host_certs);
 
-    if (is_defined(hostname)) {
+    if (isDefined(hostname)) {
       for (const cert of certs) {
         cert.hostname = hostname;
       }
@@ -177,7 +177,7 @@ export const parse_tls_certificates = (report, filter) => {
   return {
     counts,
     entities: certs_per_port,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -185,7 +185,7 @@ export const parse_ports = (report, filter) => {
   const temp_ports = {};
   const {ports} = report;
 
-  if (!is_defined(ports)) {
+  if (!isDefined(ports)) {
     return empty_collection_list(filter);
   }
 
@@ -194,10 +194,10 @@ export const parse_ports = (report, filter) => {
   forEach(ports.port, port => {
     const {__text: id} = port;
 
-    if (is_defined(id) && !id.startsWith('general')) {
+    if (isDefined(id) && !id.startsWith('general')) {
       let tport = temp_ports[id];
 
-      if (is_defined(tport)) {
+      if (isDefined(tport)) {
         const severity = parseSeverity(port.severity);
 
         tport.setSeverity(severity);
@@ -224,7 +224,7 @@ export const parse_ports = (report, filter) => {
 
   return {
     entities: ports_array.sort((porta, portb) => porta.number > portb.number),
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
     counts,
   };
 };
@@ -233,7 +233,7 @@ export const parse_vulnerabilities = (report, filter) => {
   const temp_vulns = {};
   const {vulns, results = {}} = report;
 
-  if (!is_defined(vulns)) {
+  if (!isDefined(vulns)) {
     return empty_collection_list(filter);
   }
 
@@ -243,12 +243,12 @@ export const parse_vulnerabilities = (report, filter) => {
     const {nvt = {}, host} = result;
     const {_oid: oid} = nvt;
 
-    if (is_defined(oid)) {
+    if (isDefined(oid)) {
       const severity = parseSeverity(result.severity);
 
       let vuln = temp_vulns[oid];
 
-      if (is_defined(vuln)) {
+      if (isDefined(vuln)) {
 
         vuln.addResult(results);
       }
@@ -275,7 +275,7 @@ export const parse_vulnerabilities = (report, filter) => {
 
   return {
     entities: vulns_array,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
     counts,
   };
 };
@@ -285,7 +285,7 @@ export const parse_apps = (report, filter) => {
   const apps_temp = {};
   const cpe_host_details = {};
 
-  if (!is_defined(apps)) {
+  if (!isDefined(apps)) {
     return empty_collection_list(filter);
   }
 
@@ -296,17 +296,17 @@ export const parse_apps = (report, filter) => {
   forEach(results.result, result => {
     const result_severity = parseSeverity(result.severity);
 
-    if (is_defined(result.detection) && is_defined(result.detection.result) &&
-      is_defined(result.detection.result.details)) {
+    if (isDefined(result.detection) && isDefined(result.detection.result) &&
+      isDefined(result.detection.result.details)) {
       filter_func(result.detection.result.details.detail,
         detail => detail.name === 'product'
       ).forEach(detail => {
         const {value: cpe} = detail;
 
-        if (is_defined(cpe)) {
+        if (isDefined(cpe)) {
           const severity = severities[cpe];
 
-          if (is_defined(severity)) {
+          if (isDefined(severity)) {
             if (severity < result_severity) {
               severities[cpe] = result_severity;
             }
@@ -330,7 +330,7 @@ export const parse_apps = (report, filter) => {
         const cpe = detail.value;
         let app = apps_temp[cpe];
 
-        if (!is_defined(app)) {
+        if (!isDefined(app)) {
           app = new App({...detail, severity: severities[cpe]});
           apps_temp[cpe] = app;
         }
@@ -340,7 +340,7 @@ export const parse_apps = (report, filter) => {
       else if (name.startsWith('cpe:/a')) {
         const details_count_for_cpe = cpe_host_details[name];
 
-        if (is_defined(details_count_for_cpe)) {
+        if (isDefined(details_count_for_cpe)) {
           cpe_host_details[name] += 1;
         }
         else {
@@ -369,7 +369,7 @@ export const parse_apps = (report, filter) => {
   });
 
   return {
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
     entities: apps_array,
     counts,
   };
@@ -383,11 +383,11 @@ export const parse_host_severities = (results = {}) => {
     const {host} = result;
     const {__text: ip} = host;
 
-    if (is_defined(ip)) {
+    if (isDefined(ip)) {
       const result_severity = parseSeverity(result.severity);
       const severity = severities[ip];
 
-      if (is_defined(severity)) {
+      if (isDefined(severity)) {
         if (severity < result_severity) {
           severities[ip] = result_severity;
         }
@@ -404,7 +404,7 @@ export const parse_host_severities = (results = {}) => {
 export const parse_operatingsystems = (report, filter) => {
   const {host: hosts, results, os: os_count} = report;
 
-  if (!is_defined(os_count)) {
+  if (!isDefined(os_count)) {
     return empty_collection_list(filter);
   }
 
@@ -418,7 +418,7 @@ export const parse_operatingsystems = (report, filter) => {
     let best_os_cpe;
     let best_os_txt;
 
-    if (is_defined(ip)) {
+    if (isDefined(ip)) {
       forEach(details, detail => {
         const {name, value} = detail;
         if (name === 'best_os_cpe') {
@@ -429,11 +429,11 @@ export const parse_operatingsystems = (report, filter) => {
         }
       });
 
-      if (is_defined(best_os_cpe)) {
+      if (isDefined(best_os_cpe)) {
         let os = operating_systems[best_os_cpe];
         const severity = severities[ip];
 
-        if (!is_defined(os)) {
+        if (!isDefined(os)) {
           os = operating_systems[best_os_cpe] = new OperatingSystem({
             best_os_cpe,
             best_os_txt,
@@ -458,7 +458,7 @@ export const parse_operatingsystems = (report, filter) => {
   });
 
   return {
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
     entities: os_array,
     counts,
   };
@@ -467,7 +467,7 @@ export const parse_operatingsystems = (report, filter) => {
 export const parse_hosts = (report, filter) => {
   const {host: hosts, results, hosts: hosts_count} = report;
 
-  if (!is_defined(hosts_count)) {
+  if (!isDefined(hosts_count)) {
     return empty_collection_list(filter);
   }
 
@@ -491,7 +491,7 @@ export const parse_hosts = (report, filter) => {
   return {
     counts,
     entities: hosts_array,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
 
@@ -499,13 +499,13 @@ const parse_report_report_counts = elem => {
   const es = elem.results;
   const ec = elem.result_count;
 
-  const length = is_defined(es.result) ? es.result.length : 0;
+  const length = isDefined(es.result) ? es.result.length : 0;
 
   const counts = {
     first: es._start,
     rows: ec.filtered,
     length,
-    all: is_defined(ec.full) ? ec.full : ec.filtered, // ec.full isn't available for delta reports
+    all: isDefined(ec.full) ? ec.full : ec.filtered, // ec.full isn't available for delta reports
     filtered: ec.filtered,
   };
   return new CollectionCounts(counts);
@@ -514,7 +514,7 @@ const parse_report_report_counts = elem => {
 export const parse_results = (report, filter) => {
   const {results} = report;
 
-  if (!is_defined(results)) {
+  if (!isDefined(results)) {
     return empty_collection_list(filter);
   }
 
@@ -527,7 +527,7 @@ export const parse_results = (report, filter) => {
 export const parse_errors = (report, filter) => {
   const {host: hosts, errors} = report;
 
-  if (!is_defined(errors)) {
+  if (!isDefined(errors)) {
     return empty_collection_list(filter);
   }
 
@@ -538,7 +538,7 @@ export const parse_errors = (report, filter) => {
   forEach(hosts, host => {
     const {ip} = host;
 
-    if (is_defined(ip)) {
+    if (isDefined(ip)) {
       forEach(host.detail, detail => {
         const {name, value} = detail;
         if (name === 'hostname') {
@@ -550,7 +550,7 @@ export const parse_errors = (report, filter) => {
   });
 
   const errors_array = filter_func(errors.error, error =>
-    is_defined(error.host) && is_defined(error.nvt)
+    isDefined(error.host) && isDefined(error.nvt)
   ).map(error => {
     const {host, description, port, nvt} = error;
     const {__text: ip, asset} = host;
@@ -561,7 +561,7 @@ export const parse_errors = (report, filter) => {
       host: {
         ip,
         name: hostname,
-        id: is_defined(asset) && !isEmpty(asset._asset_id) ?
+        id: isDefined(asset) && !isEmpty(asset._asset_id) ?
           asset._asset_id : undefined,
       },
       nvt: {
@@ -585,14 +585,14 @@ export const parse_errors = (report, filter) => {
   return {
     counts,
     entities: errors_array,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
 
 export const parse_closed_cves = (report, filter) => {
   const {host: hosts, closed_cves} = report;
 
-  if (!is_defined(closed_cves)) {
+  if (!isDefined(closed_cves)) {
     return empty_collection_list(filter);
   }
 
@@ -609,14 +609,14 @@ export const parse_closed_cves = (report, filter) => {
     forEach(host.detail, detail => {
       const {name, value = '', extra, source} = detail;
 
-      if (is_defined(name)) {
+      if (isDefined(name)) {
         if (name.startsWith('Closed CVE')) {
           host_cves = host_cves.concat(value.split(',').map(val => {
             return {
               id: val.trim(),
               host: {
                 ip: host.ip,
-                id: is_defined(host.asset) ? host.asset._asset_id : undefined,
+                id: isDefined(host.asset) ? host.asset._asset_id : undefined,
               },
               source,
               severity: parseSeverity(extra),
@@ -630,7 +630,7 @@ export const parse_closed_cves = (report, filter) => {
       }
     });
 
-    if (is_defined(hostname)) {
+    if (isDefined(hostname)) {
       host_cves.forEach(cve => {
         cve.host.name = hostname;
       });
@@ -652,14 +652,14 @@ export const parse_closed_cves = (report, filter) => {
   return {
     counts,
     entities: cves_array,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
 
 export const parse_cves = (report, filter) => {
   const {results} = report;
 
-  if (!is_defined(results)) {
+  if (!isDefined(results)) {
     return empty_collection_list(filter);
   }
 
@@ -672,17 +672,17 @@ export const parse_cves = (report, filter) => {
     const {host = {}, nvt = {}} = result;
     const {cve: id} = nvt;
 
-    if (is_defined(id)) {
+    if (isDefined(id)) {
       let cve = cves[id];
 
-      if (!is_defined(cve)) {
+      if (!isDefined(cve)) {
         cve = new Cve(nvt);
         cves[id] = cve;
       }
 
       const {__text: ip} = host;
 
-      if (is_defined(ip)) {
+      if (isDefined(ip)) {
         cve.addHost({ip});
       }
       cve.addResult(result);
@@ -704,7 +704,7 @@ export const parse_cves = (report, filter) => {
   return {
     counts,
     entities: cves_array,
-    filter: is_defined(filter) ? filter : parseFilter(report),
+    filter: isDefined(filter) ? filter : parseFilter(report),
   };
 };
 

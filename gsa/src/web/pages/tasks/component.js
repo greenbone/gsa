@@ -31,7 +31,7 @@ import logger from 'gmp/log';
 import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
-import {isArray, is_defined} from 'gmp/utils/identity';
+import {isArray, isDefined} from 'gmp/utils/identity';
 import {includesId, selectSaveId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
@@ -129,7 +129,7 @@ class TaskComponent extends React.Component {
   }
 
   handleSaveContainerTask(data) {
-    if (is_defined(data.id)) {
+    if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = this.props;
       return this.cmd.saveContainer(data).then(onContainerSaved,
         onContainerSaveError);
@@ -214,7 +214,7 @@ class TaskComponent extends React.Component {
   }
 
   openTaskDialog(task) {
-    if (is_defined(task) && task.isContainer()) {
+    if (isDefined(task) && task.isContainer()) {
       this.openContainerTaskDialog(task);
     }
     else {
@@ -229,7 +229,7 @@ class TaskComponent extends React.Component {
   openStandardTaskDialog(task) {
     const {capabilities, gmp} = this.props;
 
-    if (is_defined(task)) {
+    if (isDefined(task)) {
       gmp.task.editTaskSettings(task).then(response => {
         const settings = response.data;
         const {targets, scan_configs, alerts, scanners, schedules} = settings;
@@ -239,12 +239,12 @@ class TaskComponent extends React.Component {
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
         const schedule_id = capabilities.mayAccess('schedules') &&
-          is_defined(task.schedule) ?
+          isDefined(task.schedule) ?
             task.schedule.id : UNSET_VALUE;
 
         const data = {};
         if (task.isChangeable()) {
-          data.config_id = is_defined(task.config) ? task.config.id : undefined;
+          data.config_id = isDefined(task.config) ? task.config.id : undefined;
           data.scanner_id = task.scanner.id;
           data.target_id = task.target.id;
         }
@@ -320,7 +320,7 @@ class TaskComponent extends React.Component {
 
         alert_id = includesId(alerts, alert_id) ? alert_id : undefined;
 
-        const alert_ids = is_defined(alert_id) ? [alert_id] : [];
+        const alert_ids = isDefined(alert_id) ? [alert_id] : [];
 
         this.setState({
           taskDialogVisible: true,
@@ -398,7 +398,7 @@ class TaskComponent extends React.Component {
       const settings = response.data;
       let config_id = settings.get('Default OpenVAS Scan Config').value;
 
-      if (!is_defined(config_id) || config_id.length === 0) {
+      if (!isDefined(config_id) || config_id.length === 0) {
         config_id = FULL_AND_FAST_SCAN_CONFIG_ID;
       }
 

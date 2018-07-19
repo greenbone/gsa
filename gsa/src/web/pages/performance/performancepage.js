@@ -26,7 +26,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
@@ -134,7 +134,7 @@ const ReportImage = ({
     token: gmp.token,
   };
 
-  if (is_defined(duration)) {
+  if (isDefined(duration)) {
     params.duration = DURATIONS[duration];
   }
   else {
@@ -224,7 +224,7 @@ class PerformancePage extends React.Component {
   }
 
   handleDurationChange(duration) {
-    if (is_defined(duration)) {
+    if (isDefined(duration)) {
       const end = date();
       const start = end.clone().subtract(DURATIONS[duration], 'seconds');
 

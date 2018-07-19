@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
@@ -67,7 +67,7 @@ class HostComponent extends React.Component {
   openHostDialog(host) {
     let title;
 
-    if (is_defined(host)) {
+    if (isDefined(host)) {
       title = _('Edit Host {{name}}', {name: shorten(host.name)});
     }
 

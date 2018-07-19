@@ -28,7 +28,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {duration as createDuration} from 'gmp/models/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -90,19 +90,19 @@ const ReportScanInfoTable = ({
 
   const {id, name, comment, progress} = task;
 
-  const hosts_count = is_defined(hosts) && is_defined(hosts.counts) ?
+  const hosts_count = isDefined(hosts) && isDefined(hosts.counts) ?
     hosts.counts.all : 0;
 
-  if (!is_defined(filterString)) {
+  if (!isDefined(filterString)) {
     filterString = filter.simple().toFilterString();
   }
 
-  const status = is_defined(task.isContainer) && task.isContainer() ?
+  const status = isDefined(task.isContainer) && task.isContainer() ?
     _('Container') : scan_run_status;
 
   const delta = report.isDeltaReport();
 
-  const is_ended = is_defined(scan_end) && scan_end.isValid();
+  const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (
     <Table>
       <TableBody>
@@ -120,7 +120,7 @@ const ReportScanInfoTable = ({
             </DetailsLink>
           </TableData>
         </TableRow>
-        {is_defined(comment) &&
+        {isDefined(comment) &&
           <TableRow>
             <TableData>
               {_('Comment')}
@@ -146,7 +146,7 @@ const ReportScanInfoTable = ({
             </TableData>
           </TableRow>
         }
-        {is_defined(scan_start) &&
+        {isDefined(scan_start) &&
           <TableRow>
             <TableData>
               {delta ? _('Scan Time Report 1') : _('Scan Time')}
@@ -200,7 +200,7 @@ const ReportScanInfoTable = ({
             </TableData>
             <TableData>
               {longDate(delta_report.scan_start)}
-              {is_defined(delta_report.scan_end) &&
+              {isDefined(delta_report.scan_end) &&
                 delta_report.scan_end.isValid() ?
                 ' - ' + longDate(delta_report.scan_end) : ''}
             </TableData>
@@ -228,7 +228,7 @@ const ReportScanInfoTable = ({
             </TableData>
           </TableRow>
         }
-        {is_defined(slave) &&
+        {isDefined(slave) &&
           <TableRow>
             <TableData>
               {_('Scan slave')}

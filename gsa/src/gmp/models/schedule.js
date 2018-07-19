@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Model from '../model';
@@ -36,7 +36,7 @@ class Schedule extends Model {
 
     const {timezone, icalendar} = elem;
 
-    if (is_defined(icalendar)) {
+    if (isDefined(icalendar)) {
       ret.event = Event.fromIcal(icalendar, timezone);
 
       delete ret.icalendar;
@@ -52,7 +52,7 @@ class Schedule extends Model {
     delete ret.simple_duration;
     delete ret.simple_period;
 
-    if (is_defined(ret.tasks)) {
+    if (isDefined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
     }
     else {

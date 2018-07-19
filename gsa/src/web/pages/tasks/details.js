@@ -27,7 +27,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser.js';
 
@@ -62,7 +62,7 @@ class TaskDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
-    if (is_defined(entity.schedule)) {
+    if (isDefined(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
@@ -92,10 +92,10 @@ class TaskDetails extends React.Component {
     const {max_checks = {}, iface = {}, max_hosts} = preferences;
 
     let dur;
-    const has_duration = is_defined(last_report) &&
-      is_defined(last_report.scan_start);
+    const has_duration = isDefined(last_report) &&
+      isDefined(last_report.scan_start);
     if (has_duration) {
-      if (is_defined(last_report.scan_end)) {
+      if (isDefined(last_report.scan_end)) {
         const diff = last_report.scan_end.diff(last_report.scan_start);
         dur = duration(diff).humanize();
       }
@@ -107,7 +107,7 @@ class TaskDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const has_av_duration = is_defined(average_duration) &&
+    const has_av_duration = isDefined(average_duration) &&
       average_duration > 0;
     const av_duration = has_av_duration ? average_duration.humanize() : '';
 
@@ -116,7 +116,7 @@ class TaskDetails extends React.Component {
         grow="1"
         flex="column">
 
-        {is_defined(target) &&
+        {isDefined(target) &&
           <DetailsBlock
             title={_('Target')}>
             <DetailsLink
@@ -128,7 +128,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         }
 
-        {is_defined(alerts) &&
+        {isDefined(alerts) &&
           <DetailsBlock
             title={_('Alerts')}>
             <Divider>
@@ -147,7 +147,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         }
 
-        {is_defined(scanner) &&
+        {isDefined(scanner) &&
           <DetailsBlock
             title={_('Scanner')}>
             <InfoTable>
@@ -173,7 +173,7 @@ class TaskDetails extends React.Component {
                     {scanner_type_name(scanner.scanner_type)}
                   </TableData>
                 </TableRow>
-                {is_defined(config) &&
+                {isDefined(config) &&
                   <TableRow>
                     <TableData>
                       {_('Scan Config')}
@@ -188,7 +188,7 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 }
-                {is_defined(config) &&
+                {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   <TableRow>
                     <TableData>
@@ -199,7 +199,7 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 }
-                {is_defined(config) &&
+                {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
                   <TableRow>
                     <TableData>
@@ -210,9 +210,9 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 }
-                {is_defined(config) &&
+                {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  is_defined(max_checks.name) &&
+                  isDefined(max_checks.name) &&
                   <TableRow>
                     <TableData>
                       {_('Maximum concurrently executed NVTs per host')}
@@ -222,9 +222,9 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 }
-                {is_defined(config) &&
+                {isDefined(config) &&
                   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  is_defined(max_hosts.name) &&
+                  isDefined(max_hosts.name) &&
                   <TableRow>
                     <TableData>
                       {_('Maximum concurrently scanned hosts')}
@@ -277,7 +277,7 @@ class TaskDetails extends React.Component {
           </InfoTable>
         </DetailsBlock>
 
-        {is_defined(schedule) &&
+        {isDefined(schedule) &&
           <DetailsBlock
             title={_('Schedule')}>
             <InfoTable>
@@ -296,7 +296,7 @@ class TaskDetails extends React.Component {
                     </DetailsLink>
                   </TableData>
                 </TableRow>
-                {is_defined(schedule.event) &&
+                {isDefined(schedule.event) &&
                   <TableRow>
                     <TableData>
                       {_('Next')}
@@ -377,7 +377,7 @@ TaskDetails.propTypes = {
 const mapStateToProps = (rootState, {entity = {}}) => {
   const selector = scheduleSelector(rootState);
   return {
-    schedule: is_defined(entity.schedule) ?
+    schedule: isDefined(entity.schedule) ?
       selector.getEntity(entity.schedule.id) :
       undefined,
   };

@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 import 'core-js/fn/string/starts-with';
 
-import {is_defined, isString} from './utils/identity';
+import {isDefined, isString} from './utils/identity';
 import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
@@ -33,17 +33,17 @@ export function parseSeverity(value) {
 }
 
 export function parseProgress(value) {
-  if (!is_defined(value)) {
+  if (!isDefined(value)) {
     return 0;
   }
-  if (is_defined(value.__text)) {
+  if (isDefined(value.__text)) {
     value = value.__text;
   }
   return parseFloat(value);
 }
 
 export function parseText(text) {
-  if (is_defined(text.__text)) {
+  if (isDefined(text.__text)) {
     return {
       text: text.__text,
       text_excerpt: text.__excerpt,
@@ -126,16 +126,16 @@ export const parseProperties = (element, object = {}) => {
     copy.id = element._id;
   }
 
-  if (is_defined(element.creation_time)) {
+  if (isDefined(element.creation_time)) {
     copy.creationTime = parseDate(element.creation_time);
     delete copy.creation_time;
   }
-  if (is_defined(element.modification_time)) {
+  if (isDefined(element.modification_time)) {
     copy.modificationTime = parseDate(element.modification_time);
     delete copy.modification_time;
   }
 
-  if (is_defined(copy.type)) {
+  if (isDefined(copy.type)) {
     // type should not be used directly
     copy._type = copy.type;
     delete copy.type;
@@ -145,7 +145,7 @@ export const parseProperties = (element, object = {}) => {
 };
 
 export const setProperties = (properties, object = {}) => {
-  if (is_defined(properties)) {
+  if (isDefined(properties)) {
     for (const [key, value] of Object.entries(properties)) {
       if (!key.startsWith('_')) {
         Object.defineProperty(object, key, {
@@ -167,12 +167,12 @@ export const parseCvssBaseVector = ({
   confidentialityImpact,
   integrityImpact,
 }) => {
-  if (!is_defined(accessVector) &&
-    !is_defined(accessComplexity) &&
-    !is_defined(authentication) &&
-    !is_defined(confidentialityImpact) &&
-    !is_defined(integrityImpact) &&
-    !is_defined(availabilityImpact)) {
+  if (!isDefined(accessVector) &&
+    !isDefined(accessComplexity) &&
+    !isDefined(authentication) &&
+    !isDefined(confidentialityImpact) &&
+    !isDefined(integrityImpact) &&
+    !isDefined(availabilityImpact)) {
     return undefined;
   }
 
@@ -271,7 +271,7 @@ export const parseCvssBaseVector = ({
 };
 
 export const parseCvssBaseFromVector = vector => {
-  if (!is_defined(vector)) {
+  if (!isDefined(vector)) {
     return {};
   }
 
@@ -379,7 +379,7 @@ export const parseCvssBaseFromVector = vector => {
  *
  * @returns {date} A date instance (Not a js Date!)
  */
-export const parseDate = value => is_defined(value) ?
+export const parseDate = value => isDefined(value) ?
   date(value) : undefined;
 
 /**
@@ -393,7 +393,7 @@ export const parseDuration = value => {
   if (isString(value)) {
     value = parseInt(value);
   }
-  if (!is_defined(value)) {
+  if (!isDefined(value)) {
     return undefined;
   }
   return duration(value, 'seconds');

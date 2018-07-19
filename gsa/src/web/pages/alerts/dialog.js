@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
@@ -368,7 +368,7 @@ class AlertDialog extends React.Component {
     };
 
     for (const [key, value] of Object.entries(props)) {
-      if (is_defined(value)) {
+      if (isDefined(value)) {
         data[key] = value;
       }
     }

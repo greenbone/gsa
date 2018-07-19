@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, isFunction, isObject} from 'gmp/utils/identity';
+import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
@@ -46,7 +46,7 @@ export function render_options(list, default_opt_value,
       <option key={entry.id} value={entry.id}>{entry.name}</option>
     );
   });
-  if (is_defined(default_opt_value)) {
+  if (isDefined(default_opt_value)) {
     options.unshift(
       <option key={default_opt_value} value={default_opt_value}>
         {default_opt}
@@ -70,11 +70,11 @@ export const render_select_items = (
   default_item_value,
   default_item_label = UNSET_LABEL,
 ) => {
-  const items = is_defined(list) ?
+  const items = isDefined(list) ?
     list.map(item => ({label: item.name, value: item.id})) :
     undefined;
 
-  if (!is_defined(default_item_value)) {
+  if (!isDefined(default_item_value)) {
     return items;
   }
 
@@ -82,13 +82,13 @@ export const render_select_items = (
     value: default_item_value,
     label: default_item_label,
   };
-  return is_defined(items) ? [default_item, ...items] : [default_item];
+  return isDefined(items) ? [default_item, ...items] : [default_item];
 };
 
 export const severityFormat = format('0.1f');
 
 export function render_nvt_name(oid, name, length = 70) {
-  if (!is_defined(name)) {
+  if (!isDefined(name)) {
     return '';
   }
 
@@ -228,12 +228,12 @@ const getPermissionTypeName = type => {
 };
 
 export const permissionDescription = (name, resource, subject) =>
-  is_defined(subject) ?
+  isDefined(subject) ?
     permissionDescriptionResourceWithSubject(name, resource, subject) :
     permissionDescriptionResource(name, resource);
 
 export function permissionDescriptionResource(name, resource) {
-  if (is_defined(resource)) {
+  if (isDefined(resource)) {
     name = name.toLowerCase();
     const resourceType = {
       type: typeName(getEntityType(resource)),
@@ -265,7 +265,7 @@ export function permissionDescriptionResource(name, resource) {
 
 export function permissionDescriptionResourceWithSubject(name, resource,
   subject) {
-  if (is_defined(resource)) {
+  if (isDefined(resource)) {
     name = name.toLowerCase();
     const type = {
       subjectType: typeName(getEntityType(subject)),
@@ -472,7 +472,7 @@ export const render_entities_counts = counts => {
 };
 
 export const render_section_title = (counts, title) => {
-  if (!is_defined(counts)) {
+  if (!isDefined(counts)) {
     return title;
   }
 
@@ -487,7 +487,7 @@ export const setRef = (...refs) => ref => {
     if (isFunction(rf)) {
       rf(ref);
     }
-    else if (isObject(rf) && is_defined(rf.current)) {
+    else if (isObject(rf) && isDefined(rf.current)) {
       rf.current = ref;
     }
   }

@@ -33,7 +33,7 @@ import _ from 'gmp/locale';
 import logger from 'gmp/log';
 
 import {KeyCode} from 'gmp/utils/event';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import Layout from '../components/layout/layout.js';
@@ -103,7 +103,7 @@ class LoginForm extends React.Component {
   handleSubmit() {
     const {onSubmit} = this.props;
 
-    if (!is_defined(onSubmit)) {
+    if (!isDefined(onSubmit)) {
       return;
     }
 
@@ -183,7 +183,7 @@ class LoginForm extends React.Component {
             </Layout>
           </Layout>
         </LoginPanel>
-        {is_defined(error) &&
+        {isDefined(error) &&
           <Panel>
             <Error>{error}</Error>
           </Panel>

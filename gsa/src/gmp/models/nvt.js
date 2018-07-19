@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {is_defined, isString} from '../utils/identity';
+import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -82,7 +82,7 @@ class Nvt extends Info {
     ret.severity = parseSeverity(ret.cvss_base);
     delete ret.cvss_base;
 
-    if (is_defined(ret.preferences)) {
+    if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
         delete pref.nvt;
@@ -93,7 +93,7 @@ class Nvt extends Info {
       ret.preferences = [];
     }
 
-    if (is_defined(ret.cert)) {
+    if (isDefined(ret.cert)) {
       ret.certs = map(ret.cert.cert_ref, ref => {
         return {
           id: ref._id,
@@ -107,7 +107,7 @@ class Nvt extends Info {
       ret.certs = [];
     }
 
-    if (is_defined(ret.cert_refs)) {
+    if (isDefined(ret.cert_refs)) {
       ret.certs.concat(
         map(ret.cert_refs.cert_ref, ref => {
           return {
@@ -134,7 +134,7 @@ class Nvt extends Info {
 
     delete ret.xref;
 
-    if (is_defined(elem.qod)) {
+    if (isDefined(elem.qod)) {
       if (isEmpty(elem.qod.value)) {
         delete ret.qod.value;
       }

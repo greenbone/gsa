@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -59,8 +59,8 @@ class PermissionsComponent extends React.Component {
     let state;
     let opts;
 
-    if (is_defined(permission)) {
-      const subjectType = is_defined(permission.subject) ?
+    if (isDefined(permission)) {
+      const subjectType = isDefined(permission.subject) ?
         getEntityType(permission.subject) : undefined;
 
       state = {
@@ -69,9 +69,9 @@ class PermissionsComponent extends React.Component {
         comment: permission.comment,
         groupId: undefined,
         permission,
-        resourceId: is_defined(permission.resource) ?
+        resourceId: isDefined(permission.resource) ?
           permission.resource.id : '',
-        resourceType: is_defined(permission.resource) ?
+        resourceType: isDefined(permission.resource) ?
           getEntityType(permission.resource) : '',
         roleId: undefined,
         subjectType,
@@ -114,7 +114,7 @@ class PermissionsComponent extends React.Component {
     state.fixedResource = fixed;
 
     if (capabilities.mayAccess('users')) {
-      if (!is_defined(state.subjectType)) {
+      if (!isDefined(state.subjectType)) {
         state.subjectType = 'user';
       }
 
@@ -129,7 +129,7 @@ class PermissionsComponent extends React.Component {
 
     if (capabilities.mayAccess('roles')) {
       if (!capabilities.mayAccess('users') &&
-        !is_defined(state.subjectType)) {
+        !isDefined(state.subjectType)) {
         state.subjectType = 'role';
       }
 
@@ -144,7 +144,7 @@ class PermissionsComponent extends React.Component {
 
     if (capabilities.mayAccess('groups')) {
       if (!capabilities.mayAccess('users') &&
-        !capabilities.mayAccess('roles') && !is_defined(state.subjectType)) {
+        !capabilities.mayAccess('roles') && !isDefined(state.subjectType)) {
         state.subjectType = 'group';
       }
 

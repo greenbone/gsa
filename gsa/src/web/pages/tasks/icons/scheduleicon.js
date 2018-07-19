@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../../utils/proptypes.js';
 
@@ -54,7 +54,7 @@ const ScheduleIcon = ({
   const {count} = recurrence;
 
   let title;
-  if (!is_defined(nextDate)) {
+  if (!isDefined(nextDate)) {
     title = _('View Details of Schedule {{name}} (Next due: over)', {name});
   }
   else if (count === 1) {

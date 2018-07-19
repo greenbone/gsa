@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import registerCommand from '../command';
@@ -194,7 +194,7 @@ class AlertCommand extends EntityCommand {
       const {status, details} = action_result;
       return response.setData({
         ...action_result,
-        details: is_defined(details) && details.length > 0 ?
+        details: isDefined(details) && details.length > 0 ?
           details : undefined,
         success: status[0] === '2',
       });

@@ -21,13 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from './identity';
+import {isDefined} from './identity';
 
 export const capitalizeFirstLetter = string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
 export const shorten = (text, length = 60) => {
-  if (!is_defined(text)) {
+  if (!isDefined(text)) {
     return '';
   }
 
@@ -50,7 +50,7 @@ export const shorten = (text, length = 60) => {
  * @returns {Array} Split String as an array
  */
 export const split = (string, separator, limit) => {
-  if (is_defined(limit) && limit <= 0) {
+  if (isDefined(limit) && limit <= 0) {
     return [string];
   }
 
@@ -64,6 +64,6 @@ export const split = (string, separator, limit) => {
   return splits;
 };
 
-export const isEmpty = string => !is_defined(string) || string.length === 0;
+export const isEmpty = string => !isDefined(string) || string.length === 0;
 
 // vim: set ts=2 sw=2 tw=80:

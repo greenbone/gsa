@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import Theme from '../../utils/theme.js';
@@ -140,10 +140,10 @@ const Menu = ({
   ...props
 }) => {
   let link;
-  if (is_defined(to)) {
+  if (isDefined(to)) {
     link = <Link to={to}>{title}</Link>;
   }
-  else if (is_defined(children) && children.length > 0) {
+  else if (isDefined(children) && children.length > 0) {
     const [child] = children;
     link = React.cloneElement(child, {title});
   }
@@ -159,7 +159,7 @@ const Menu = ({
       <DefaultEntry>
         {link}
       </DefaultEntry>
-      {is_defined(children) && children.length > 0 &&
+      {isDefined(children) && children.length > 0 &&
         <MenuList>
           <MenuPoint/>
           {menuentries}

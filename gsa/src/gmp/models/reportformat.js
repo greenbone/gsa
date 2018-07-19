@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, isObject} from '../utils/identity';
+import {isDefined, isObject} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
@@ -69,7 +69,7 @@ class ReportFormat extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(ret.trust)) {
+    if (isDefined(ret.trust)) {
       ret.trust = {
         value: ret.trust.__text,
         time: isEmpty(ret.trust.time) ? undefined : parseDate(ret.trust.time),
@@ -86,7 +86,7 @@ class ReportFormat extends Model {
 
     delete ret.param;
 
-    if (is_defined(ret.alerts)) {
+    if (isDefined(ret.alerts)) {
       ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
     }
     else {

@@ -24,8 +24,9 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import {get_language} from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import {get_language} from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -38,14 +39,14 @@ const DEFAULT_LANGUAGE_PATH = 'en';
 const get_language_path = () => {
   const lang = get_language();
 
-  if (!is_defined(lang)) {
+  if (!isDefined(lang)) {
     return DEFAULT_LANGUAGE_PATH;
   }
 
   const code = lang.slice(0, 1);
   const path = LANGUAGE_MAPPING[code];
 
-  return is_defined(path) ? path : DEFAULT_LANGUAGE_PATH;
+  return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
 const ManualLink = ({
@@ -64,10 +65,10 @@ const ManualLink = ({
 
   url += get_language_path() + '/' + page + '.html';
 
-  if (page === 'search' && is_defined(searchTerm)) {
+  if (page === 'search' && isDefined(searchTerm)) {
     url += '?q=' + searchTerm;
   }
-  else if (is_defined(anchor)) {
+  else if (isDefined(anchor)) {
     url += '#' + anchor;
   }
   return (

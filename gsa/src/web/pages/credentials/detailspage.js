@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   CERTIFICATE_STATUS_INACTIVE,
@@ -147,7 +147,7 @@ const Details = ({
         entity={entity}
         links={links}
       />
-      {is_defined(cert) &&
+      {isDefined(cert) &&
         <DetailsBlock
           title={_('Certificate')}
         >
@@ -284,12 +284,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <Tab>
                         {tagsTitle}
                       </Tab>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <Tab>
                         {permissionsTitle}
                       </Tab>
@@ -304,12 +304,12 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <TabPanel>
                         {tagsComponent}
                       </TabPanel>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <TabPanel>
                         {permissionsComponent}
                       </TabPanel>

@@ -20,13 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -55,7 +54,7 @@ const CpeDetails = ({
       flex="column"
       grow="1">
 
-      {!is_defined(title) &&
+      {!isDefined(title) &&
         <p>
           {_('This CPE does not appear in the CPE dictionary but is ' +
              'referenced by one or more CVE.')}
@@ -64,7 +63,7 @@ const CpeDetails = ({
 
       <InfoTable>
         <TableBody>
-          {is_defined(title) &&
+          {isDefined(title) &&
             <TableRow>
               <TableData>
                 {_('Title')}
@@ -74,7 +73,7 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(nvd_id) &&
+          {isDefined(nvd_id) &&
             <TableRow>
               <TableData>
                 {_('NVD ID')}
@@ -84,7 +83,7 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(deprecated_by) &&
+          {isDefined(deprecated_by) &&
             <TableRow>
               <TableData>
                 {_('Deprectated By')}
@@ -94,7 +93,7 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(updateTime) &&
+          {isDefined(updateTime) &&
             <TableRow>
               <TableData>
                 {_('Last updated')}
@@ -104,7 +103,7 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(status) &&
+          {isDefined(status) &&
             <TableRow>
               <TableData>
                 {_('Status')}
@@ -114,7 +113,7 @@ const CpeDetails = ({
               </TableData>
             </TableRow>
           }
-          {is_defined(severity) &&
+          {isDefined(severity) &&
             <TableRow>
               <TableData>
                 {_('Severity')}

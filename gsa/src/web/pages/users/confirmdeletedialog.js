@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -52,7 +52,7 @@ const ConfirmDeleteDialog = ({
 
   let headline = '';
 
-  if (is_defined(username)) {
+  if (isDefined(username)) {
     headline = _('User {{username}} will be deleted.', {username});
   }
   else if (deleteUsers.length > 1) {

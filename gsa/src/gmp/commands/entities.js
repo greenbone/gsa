@@ -23,7 +23,7 @@
  */
 import logger from '../log.js';
 
-import {is_defined, isString} from '../utils/identity';
+import {isDefined, isString} from '../utils/identity';
 import {map, forEach} from '../utils/array';
 
 import {parseCollectionList} from '../collection/parser.js';
@@ -51,8 +51,8 @@ class EntitiesCommand extends HttpCommand {
     const {filter, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
-    if (is_defined(filter)) {
-      if (is_defined(filter.id)) {
+    if (isDefined(filter)) {
+      if (isDefined(filter.id)) {
         rparams.filt_id = filter.id;
       }
       rparams.filter = filter_string(filter);
@@ -80,7 +80,7 @@ class EntitiesCommand extends HttpCommand {
 
   getAll(params = {}, options) {
     const {filter} = params;
-    if (!is_defined(filter)) {
+    if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
     }
     else if (isString(filter)) {
@@ -161,7 +161,7 @@ class EntitiesCommand extends HttpCommand {
         ...group,
       };
 
-      if (is_defined(text)) {
+      if (isDefined(text)) {
         newGroup.text = {};
 
         forEach(text, t => {
@@ -170,7 +170,7 @@ class EntitiesCommand extends HttpCommand {
           newGroup.text[name] = value;
         });
       }
-      if (is_defined(stats)) {
+      if (isDefined(stats)) {
         newGroup.stats = {};
 
         forEach(stats, s => {
@@ -213,15 +213,15 @@ class EntitiesCommand extends HttpCommand {
       requestParams[`sort_stats:${i}`] = stat;
     });
 
-    if (is_defined(aggregateMode)) {
+    if (isDefined(aggregateMode)) {
       requestParams.aggregate_mode = aggregateMode;
     }
 
-    if (is_defined(maxGroups)) {
+    if (isDefined(maxGroups)) {
       requestParams.max_groups = maxGroups;
     }
 
-    if (is_defined(subgroupColumn)) {
+    if (isDefined(subgroupColumn)) {
       requestParams.subgroup_column = subgroupColumn;
     }
 

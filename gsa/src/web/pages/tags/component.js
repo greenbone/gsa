@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
@@ -117,14 +117,14 @@ class TagComponent extends React.Component {
   getResourceTypes() {
     const {capabilities} = this.props;
     return TYPES.map(type => capabilities.mayAccess(type) ?
-     [type, typeName(type)] : undefined).filter(is_defined);
+     [type, typeName(type)] : undefined).filter(isDefined);
   }
 
   openTagDialog(tag, options = {}) {
     const {gmp} = this.props;
     const resource_types = this.getResourceTypes();
 
-    if (is_defined(tag)) {
+    if (isDefined(tag)) {
       gmp.tag.get({id: tag.id}).then(response => {
         const {
           active,
@@ -143,7 +143,7 @@ class TagComponent extends React.Component {
           id,
           name,
           resource_ids: resources.map(res => res.id),
-          resource_type: is_defined(resource_type) ?
+          resource_type: isDefined(resource_type) ?
             resource_type :
             first(resource_types, [])[0],
           resource_types,

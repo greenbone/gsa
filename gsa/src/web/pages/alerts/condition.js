@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import _ from 'gmp/locale';
 
-import _ from 'gmp/locale.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import {is_defined} from 'gmp/utils';
-
-import {parseInt} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser';
 
 import {
   EVENT_TYPE_UPDATED_SECINFO,
@@ -35,7 +34,7 @@ import {
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
   CONDITION_DIRECTION_DECREASED,
-} from 'gmp/models/alert.js';
+} from 'gmp/models/alert';
 
 const Condition = ({
   condition,
@@ -72,13 +71,13 @@ const Condition = ({
   }
 
   if (condition.type === CONDITION_TYPE_SEVERITY_AT_LEAST &&
-    is_defined(condition.data.severity)) {
+    isDefined(condition.data.severity)) {
     return _('Severity at least {{severity}}',
       {severity: condition.data.severity.value});
   }
 
   if (condition.type === 'Severity changed') {
-    if (is_defined(condition.data.direction)) {
+    if (isDefined(condition.data.direction)) {
       if (condition.data.direction.value === CONDITION_DIRECTION_DECREASED) {
         return _('Severity level decreased');
       }

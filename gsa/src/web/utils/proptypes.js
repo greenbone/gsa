@@ -22,7 +22,7 @@
  */
 import ReactPropTypes from 'prop-types';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {CacheFactory, Cache} from 'gmp/cache';
 
@@ -54,7 +54,7 @@ export const mayRequire = validator => {
   };
 
   wrapper.isRequired = (props, prop_name, component_name, ...rest) => {
-    if (is_defined(props[prop_name])) {
+    if (isDefined(props[prop_name])) {
       return validator(props, prop_name, component_name, ...rest);
     }
     return new Error('Prop `' + prop_name + '` supplied to' +
@@ -66,7 +66,7 @@ export const mayRequire = validator => {
 
 export const deprecated = (validator, message = '') =>
   (props, prop_name, component_name, ...rest) => {
-  warning(is_defined(props[prop_name]),
+  warning(isDefined(props[prop_name]),
     `'${prop_name}' is deprecated on ${component_name}. ${message}`);
   return validator(props, prop_name, component_name, ...rest);
 };
@@ -141,7 +141,7 @@ const cache = ReactPropTypes.instanceOf(Cache);
 
 const dateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
-  if (is_defined(value) && !isDate(value)) {
+  if (isDefined(value) && !isDate(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Not a valid moment date. Value is ' + value);
   }
@@ -156,7 +156,7 @@ const timeunit = ReactPropTypes.oneOf([
 
 const durationValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
-  if (is_defined(value) && !isDuration(value)) {
+  if (isDefined(value) && !isDuration(value)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Not a valid moment duration. Value is ' +
       value);
@@ -175,7 +175,7 @@ const iconSize = ReactPropTypes.oneOfType([
 
 const toStringValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
-  if (is_defined(value) && !is_defined(value.toString)) {
+  if (isDefined(value) && !isDefined(value.toString)) {
     return new Error('Invalid prop `' + prop_name + '` supplied to' +
       ' `' + component_name + '`. Prop ' + prop_name + ' can not be ' +
       'converted to String. Value is `' + value + '`.');

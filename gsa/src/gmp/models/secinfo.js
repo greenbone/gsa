@@ -22,12 +22,12 @@
  */
 
 import _ from '../locale.js';
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import Info from './info.js';
 
 export const secinfo_type = (type, unknown = _('N/A')) => {
-  if (!is_defined(type)) {
+  if (!isDefined(type)) {
     return unknown;
   }
   switch (type) {

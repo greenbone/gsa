@@ -25,7 +25,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
 import SaveDialog from '../../components/dialog/savedialog.js';
@@ -71,7 +71,7 @@ const UserSettingsDialog = ({
 
   const languageItems = languagesList.map(([code, name, native_name]) => ({
     value: code,
-    label: is_defined(native_name) ? `${name} | ${native_name}` : name,
+    label: isDefined(native_name) ? `${name} | ${native_name}` : name,
   }));
 
   return (

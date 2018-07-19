@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import Logger from './log';
 
-import {is_defined} from './utils/identity';
+import {isDefined} from './utils/identity';
 
 const log = Logger.getLogger('gmp.cache');
 
@@ -67,7 +67,7 @@ export class Cache {
 
   getValue(key) {
     const entry = this._cache[key];
-    if (is_defined(entry)) {
+    if (isDefined(entry)) {
       return entry.value;
     }
     return undefined;

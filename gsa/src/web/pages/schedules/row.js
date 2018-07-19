@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -116,7 +116,7 @@ const Row = ({
         {dateTimeWithTimeZone(startDate)}
       </TableData>
       <TableData>
-        {is_defined(nextDate) ? dateTimeWithTimeZone(nextDate) : '-'}
+        {isDefined(nextDate) ? dateTimeWithTimeZone(nextDate) : '-'}
       </TableData>
       <TableData>
         {renderRecurrence(recurrence)}

@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import {Col} from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_yesno} from '../../utils/render.js';
@@ -155,14 +155,14 @@ const TargetDetails = ({
         </InfoTable>
       </DetailsBlock>
 
-      {capabilities.mayAccess('credentials') && (is_defined(ssh_credential) ||
-        is_defined(snmp_credential) || is_defined(smb_credential) ||
-        is_defined(esxi_credential)) &&
+      {capabilities.mayAccess('credentials') && (isDefined(ssh_credential) ||
+        isDefined(snmp_credential) || isDefined(smb_credential) ||
+        isDefined(esxi_credential)) &&
         <DetailsBlock
           title={_('Credentials')}>
           <InfoTable>
             <TableBody>
-              {is_defined(ssh_credential) &&
+              {isDefined(ssh_credential) &&
                 <TableRow>
                   <TableData>
                     {_('SSH')}
@@ -178,7 +178,7 @@ const TargetDetails = ({
                 </TableRow>
               }
 
-              {is_defined(smb_credential) &&
+              {isDefined(smb_credential) &&
                 <TableRow>
                   <TableData>
                     {_('SMB')}
@@ -193,7 +193,7 @@ const TargetDetails = ({
                 </TableRow>
               }
 
-              {is_defined(esxi_credential) &&
+              {isDefined(esxi_credential) &&
                 <TableRow>
                   <TableData>
                     {_('ESXi')}
@@ -208,7 +208,7 @@ const TargetDetails = ({
                 </TableRow>
               }
 
-              {is_defined(snmp_credential) &&
+              {isDefined(snmp_credential) &&
                 <TableRow>
                   <TableData>
                     {_('SNMP')}
@@ -226,7 +226,7 @@ const TargetDetails = ({
           </InfoTable>
         </DetailsBlock>
       }
-      {is_defined(tasks) && tasks.length > 0 &&
+      {isDefined(tasks) && tasks.length > 0 &&
         <DetailsBlock
           title={_('Tasks using this Target ({{count}})',
             {count: tasks.length})}

@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -99,7 +99,7 @@ const Cred = ({
   title,
   links = true,
 }) => {
-  if (!is_defined(cred) || !is_defined(cred.id)) {
+  if (!isDefined(cred) || !isDefined(cred.id)) {
     return null;
   }
   return (

@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 import Downshift from 'downshift';
 
 import {arraysEqual} from 'gmp/utils/array';
-import {is_defined, isArray} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 import ArrowIcon from '../icon/arrowicon.js';
 
@@ -98,7 +98,7 @@ class MultiSelect extends React.Component {
   notifyChange(value) {
     const {name, onChange} = this.props;
 
-    if (is_defined(onChange)) {
+    if (isDefined(onChange)) {
       onChange(value, name);
     }
   }
@@ -146,7 +146,7 @@ class MultiSelect extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {value} = nextProps;
 
-    if (is_defined(value) && !arraysEqual(value, this.state.selectedItems)) {
+    if (isDefined(value) && !arraysEqual(value, this.state.selectedItems)) {
       this.setState({selectedItems: value});
     }
   }
@@ -154,7 +154,7 @@ class MultiSelect extends React.Component {
   renderItem(value, items) {
     const {disabled} = this.props;
     const item = items.find(i => i.value === value);
-    const itemLabel = is_defined(item) ? item.label : value;
+    const itemLabel = isDefined(item) ? item.label : value;
 
     return (
       <MultiSelectedValue
@@ -188,13 +188,13 @@ class MultiSelect extends React.Component {
       selectedItems,
     } = this.state;
 
-    if (!is_defined(items)) {
+    if (!isDefined(items)) {
       items = option_items(children);
     }
 
-    disabled = disabled || !is_defined(items) || items.length === 0;
+    disabled = disabled || !isDefined(items) || items.length === 0;
 
-    const displayedItems = is_defined(items) ?
+    const displayedItems = isDefined(items) ?
       items.filter(case_insensitive_filter(search)) : [];
 
     return (
@@ -236,7 +236,7 @@ class MultiSelect extends React.Component {
                       onClick: isOpen ? undefined : event => {
                         event.preventDefault(); // don't call default handler from downshift
                         openMenu(() =>
-                          is_defined(this.input) && this.input.focus()); // set focus to input field after menu is opened
+                          isDefined(this.input) && this.input.focus()); // set focus to input field after menu is opened
                       },
                     })}
                     size="small"

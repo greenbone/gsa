@@ -34,7 +34,7 @@ import {scaleLinear, scaleUtc} from 'd3-scale';
 
 import {Line, LinePath} from '@vx/shape';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
@@ -365,14 +365,14 @@ class LineChart extends React.Component {
       xScale,
     } = this.state;
 
-    const lines = (is_defined(yLine) ? 1 : 0) + (is_defined(y2Line) ? 1 : 0);
+    const lines = (isDefined(yLine) ? 1 : 0) + (isDefined(y2Line) ? 1 : 0);
 
-    if (!displayInfo || !is_defined(infoX) || lines === 0) {
+    if (!displayInfo || !isDefined(infoX) || lines === 0) {
       return null;
     }
 
     const value = data.find(findX(timeline, infoX));
-    if (!is_defined(value)) {
+    if (!isDefined(value)) {
       return null;
     }
 
@@ -471,7 +471,7 @@ class LineChart extends React.Component {
       xValues,
     } = this.state;
 
-    if (!is_defined(rangeX) || !is_defined(infoX) || xValues.length <= 1) {
+    if (!isDefined(rangeX) || !isDefined(infoX) || xValues.length <= 1) {
       return null;
     }
 
@@ -523,7 +523,7 @@ class LineChart extends React.Component {
     const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
-    const hasLines = is_defined(yLine) && is_defined(y2Line);
+    const hasLines = isDefined(yLine) && isDefined(y2Line);
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -540,7 +540,7 @@ class LineChart extends React.Component {
             top={margin.top}
             left={margin.left}
           >
-            {is_defined(yLine) &&
+            {isDefined(yLine) &&
               <Axis
                 orientation="left"
                 scale={yScale}
@@ -575,7 +575,7 @@ class LineChart extends React.Component {
                   y={d => d.y}
                   stroke={yLine.color}
                   strokeWidth={
-                    is_defined(yLine.lineWidth) ?
+                    isDefined(yLine.lineWidth) ?
                       yLine.lineWidth : 1
                   }
                   strokeDasharray={yLine.dashArray}
@@ -588,7 +588,7 @@ class LineChart extends React.Component {
                   y={d => d.y2}
                   stroke={y2Line.color}
                   strokeWidth={
-                    is_defined(y2Line.lineWidth) ?
+                    isDefined(y2Line.lineWidth) ?
                       y2Line.lineWidth : 1
                   }
                   strokeDasharray={y2Line.dashArray}
@@ -599,7 +599,7 @@ class LineChart extends React.Component {
             }
             {hasOneValue &&
               <Group>
-                {is_defined(yLine) &&
+                {isDefined(yLine) &&
                   <Cross
                     x={xScale(data[0].x)}
                     y={yScale(data[0].y)}
@@ -608,7 +608,7 @@ class LineChart extends React.Component {
                     lineWidth={yLine.lineWidth}
                   />
                 }
-                {is_defined(y2Line) &&
+                {isDefined(y2Line) &&
                   <CrossY2
                     x={xScale(data[0].x)}
                     y={y2Scale(data[0].y2)}

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from './utils/identity';
+import {isDefined} from './utils/identity';
 import {isEmpty} from './utils/string';
 import {map} from './utils/array';
 
@@ -42,7 +42,7 @@ class Model {
   constructor(element, type) {
     this.init();
 
-    this.entity_type = is_defined(type) ? type : this.constructor.entity_type;
+    this.entity_type = isDefined(type) ? type : this.constructor.entity_type;
 
     if (element) {
       this.updateFromElement(element);
@@ -57,7 +57,7 @@ class Model {
   }
 
   updateFromElement(elem) {
-    if (is_defined(elem)) {
+    if (isDefined(elem)) {
       const properties = this.parseProperties(elem);
       this.setProperties(properties);
     }
@@ -67,14 +67,14 @@ class Model {
   parseProperties(elem) {
     const copy = parseProperties(elem);
 
-    if (is_defined(elem.end_time)) {
+    if (isDefined(elem.end_time)) {
       if (elem.end_time.length > 0) {
         copy.endTime = parseDate(elem.end_time);
       }
       delete copy.end_time;
     }
 
-    if (is_defined(elem.permissions)) {
+    if (isDefined(elem.permissions)) {
       // these are the permissions the current user has on the entity
       const caps = map(elem.permissions.permission, perm => perm.name);
       copy.userCapabilities = new Capabilities(caps);
@@ -84,7 +84,7 @@ class Model {
       copy.userCapabilities = new Capabilities();
     }
 
-    if (is_defined(elem.user_tags)) {
+    if (isDefined(elem.user_tags)) {
       copy.userTags = map(elem.user_tags.tag, tag => {
         return new Model(tag, 'tag');
       });
@@ -98,12 +98,12 @@ class Model {
 
     for (const name of yes_no_props) {
       const prop = elem[name];
-      if (is_defined(prop)) {
+      if (isDefined(prop)) {
         copy[name] = parseYesNo(prop);
       }
     }
 
-    if (is_defined(elem.owner) && isEmpty(elem.owner.name)) {
+    if (isDefined(elem.owner) && isEmpty(elem.owner.name)) {
       delete copy.owner;
     }
 

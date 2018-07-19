@@ -24,8 +24,9 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import OperatingSystems from '../../utils/os.js';
 
@@ -43,13 +44,13 @@ const OsIcon = ({
   osCpe,
   ...props,
 }) => {
-  const os = is_defined(osCpe) ?
+  const os = isDefined(osCpe) ?
     OperatingSystems.find(osCpe) : undefined;
 
   let title;
   let os_icon;
 
-  if (is_defined(osTxt) && osTxt.includes('[possible conflict]')) {
+  if (isDefined(osTxt) && osTxt.includes('[possible conflict]')) {
     os_icon = 'os_conflict.svg';
     if (displayOsCpe) {
       title = _('OS Conflict: {{best_os_txt}} ({{best_os_cpe}})', {
@@ -63,7 +64,7 @@ const OsIcon = ({
       });
     }
   }
-  else if (is_defined(os)) {
+  else if (isDefined(os)) {
     os_icon = os.icon;
     title = os.title;
     if (displayOsCpe) {
@@ -71,7 +72,7 @@ const OsIcon = ({
     }
   }
 
-  if (!is_defined(os_icon)) {
+  if (!isDefined(os_icon)) {
     os_icon = 'os_unknown.svg';
     if (osTxt) {
       title = osTxt;
@@ -88,7 +89,7 @@ const OsIcon = ({
           {...props}
           img={os_icon}
         />
-        {displayOsName && is_defined(os) &&
+        {displayOsName && isDefined(os) &&
           <span>{os.title}</span>
         }
       </Divider>

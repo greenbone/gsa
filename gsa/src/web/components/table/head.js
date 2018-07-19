@@ -27,7 +27,7 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -78,7 +78,7 @@ const TableHead = ({
       className={className}
       rowSpan={rowSpan}
       colSpan={colSpan}>
-      {sort && sortBy && is_defined(onSortChange) ?
+      {sort && sortBy && isDefined(onSortChange) ?
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>
             {children}

@@ -29,7 +29,7 @@ import _ from 'gmp/locale.js';
 import logger from 'gmp/log.js';
 
 import {KeyCode} from 'gmp/utils/event';
-import {is_defined, isString} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';
@@ -84,7 +84,7 @@ class PowerFilter extends React.Component {
   updateFilter(filter) {
     const {onUpdate} = this.props;
 
-    if (!is_defined(this.state.filter)) {
+    if (!isDefined(this.state.filter)) {
       // filter hasn't been loaded yet
       return;
     }
@@ -95,7 +95,7 @@ class PowerFilter extends React.Component {
 
     let userfilter;
 
-    if (is_defined(filter) && is_defined(filter.toFilterCriteriaString)) {
+    if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
       userfilter = filter.toFilterCriteriaString();
     }
     else if (isString(filter)) {
@@ -175,7 +175,7 @@ class PowerFilter extends React.Component {
         onFilterCreated(f);
       }
     }).catch(err => {
-      if (is_defined(onError)) {
+      if (isDefined(onError)) {
         onError(err);
       }
       else {
@@ -192,14 +192,14 @@ class PowerFilter extends React.Component {
       filters,
     });
 
-    if (!is_defined(filter)) {
+    if (!isDefined(filter)) {
       this.setState({
         filter,
         userfilter: '',
       });
     }
     else if (
-      !is_defined(state_filter) ||
+      !isDefined(state_filter) ||
       filter.id !== state_filter.id ||
       !filter.equals(this.state.filter)
     ) {
@@ -214,7 +214,7 @@ class PowerFilter extends React.Component {
     const {capabilities} = this.context;
     const {userfilter = '', filter, filtername = ''} = this.state;
     const {filters, onEditClick, onResetClick} = this.props;
-    const namedfilterid = is_defined(filter) && is_defined(filter.id) ?
+    const namedfilterid = isDefined(filter) && isDefined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
     const filter_items = render_select_items(filters, DEFAULT_FILTER_ID);
@@ -252,8 +252,8 @@ class PowerFilter extends React.Component {
                 <DeleteIcon
                   img="delete.svg"
                   title={_('Reset Filter')}
-                  active={is_defined(filter)}
-                  onClick={is_defined(filter) ? onResetClick : undefined}
+                  active={isDefined(filter)}
+                  onClick={isDefined(filter) ? onResetClick : undefined}
                 />
               }
 
@@ -266,8 +266,8 @@ class PowerFilter extends React.Component {
               {onEditClick &&
                 <EditIcon
                   title={_('Edit Filter')}
-                  active={is_defined(filter)}
-                  onClick={is_defined(filter) ? onEditClick : undefined}/>
+                  active={isDefined(filter)}
+                  onClick={isDefined(filter) ? onEditClick : undefined}/>
               }
             </IconDivider>
           </LeftDivider>

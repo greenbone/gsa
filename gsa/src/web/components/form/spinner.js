@@ -27,7 +27,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import {debounce, KeyCode} from 'gmp/utils/event';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat, parseInt} from 'gmp/parser.js';
 
@@ -126,7 +126,7 @@ class SpinnerComponent extends React.Component {
     const {value = 0, type} = this.props;
 
     let {step} = this.props;
-    if (is_defined(step)) {
+    if (isDefined(step)) {
       step = parseFloat(step);
     }
     else {
@@ -166,7 +166,7 @@ class SpinnerComponent extends React.Component {
 
     const debounce_value = parseInt(this.props.debounce);
 
-    if (is_defined(debounce_value) && debounce_value > 0) {
+    if (isDefined(debounce_value) && debounce_value > 0) {
       this.notifyChange = debounce(this.notifyChange, debounce_value);
     }
   }
@@ -286,7 +286,7 @@ class SpinnerComponent extends React.Component {
       return;
     }
 
-    const base = is_defined(min) ? parseFloat(min) : 0;
+    const base = isDefined(min) ? parseFloat(min) : 0;
 
     let above_min = value - base;
 
@@ -318,10 +318,10 @@ class SpinnerComponent extends React.Component {
       value = this.value; // reset to last valid value;
     }
     else {
-      if (is_defined(max) && value > max) {
+      if (isDefined(max) && value > max) {
         value = max;
       }
-      if (is_defined(min) && value < min) {
+      if (isDefined(min) && value < min) {
         value = min;
       }
 

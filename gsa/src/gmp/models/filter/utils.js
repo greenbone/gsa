@@ -21,10 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 
 export const filter_string = filter =>
-  is_defined(filter) && is_defined(filter.toFilterString) ?
+  isDefined(filter) && isDefined(filter.toFilterString) ?
     filter.toFilterString() :
     '' + filter;
 

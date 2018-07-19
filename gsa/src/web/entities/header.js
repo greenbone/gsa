@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -128,7 +127,7 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
         <TableRow>
           {
             columns.map(column => {
-              const width = is_defined(column[2]) ? column[2] : '';
+              const width = isDefined(column[2]) ? column[2] : '';
               return (
                 <TableHead
                   key={column[0]}

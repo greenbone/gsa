@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Asset from 'gmp/models/os.js';
 
@@ -37,7 +37,7 @@ class OperatingSystem extends Asset {
   }
 
   addSeverity(severity) {
-    if (!is_defined(this.severity) || this.severity < severity) {
+    if (!isDefined(this.severity) || this.severity < severity) {
       this.severity = severity;
     }
   }

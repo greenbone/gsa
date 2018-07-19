@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
@@ -65,7 +65,7 @@ import AlertDialog, {
 } from './dialog.js';
 
 const select_verinice_report_id = (report_formats, report_id) => {
-  if (is_defined(report_id)) {
+  if (isDefined(report_id)) {
     for (const format of report_formats) {
       if (format.id === report_id) {
         return format.id;
@@ -192,7 +192,7 @@ class AlertComponent extends React.Component {
   openAlertDialog(alert) {
     const {gmp} = this.props;
 
-    if (is_defined(alert)) {
+    if (isDefined(alert)) {
       gmp.alert.editAlertSettings(alert).then(response => {
         const settings = response.data;
         const {
@@ -260,14 +260,14 @@ class AlertComponent extends React.Component {
           feed_event = 'new';
         }
 
-        const scp_credential_id = is_defined(method.data.scp_credential) ?
+        const scp_credential_id = isDefined(method.data.scp_credential) ?
           method.data.scp_credential.credential.id : undefined;
 
         const verinice_credential_id =
-          is_defined(method.data.verinice_server_credential) ?
+          isDefined(method.data.verinice_server_credential) ?
             method.data.verinice_server_credential.credential.id : undefined;
 
-        const tp_sms_credential_id = is_defined(method.data.tp_sms_credential) ?
+        const tp_sms_credential_id = isDefined(method.data.tp_sms_credential) ?
           value(method.data.tp_sms_credential.credential) : undefined;
 
         this.setState({
@@ -278,7 +278,7 @@ class AlertComponent extends React.Component {
           name: alert.name,
           comment: alert.comment,
           filters,
-          filter_id: is_defined(alert.filter) ? alert.filter.id : NO_VALUE,
+          filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
@@ -440,12 +440,12 @@ class AlertComponent extends React.Component {
     gmp.alert.test(alert).then(response => {
       const {success, details, message} = response.data;
       if (success) {
-        if (is_defined(onTestSuccess)) {
+        if (isDefined(onTestSuccess)) {
           onTestSuccess(_('Testing the alert {{name}} was successful.', alert));
         }
       }
-      else if (is_defined(onTestError)) {
-        if (is_defined(details)) {
+      else if (isDefined(onTestError)) {
+        if (isDefined(details)) {
           onTestError(
             <React.Fragment>
               <p>
@@ -466,7 +466,7 @@ class AlertComponent extends React.Component {
         }
       }
     }, () => {
-      if (is_defined(onTestError)) {
+      if (isDefined(onTestError)) {
         onTestError(_('An error occurred during Testing the alert {{name}}',
           alert));
       }

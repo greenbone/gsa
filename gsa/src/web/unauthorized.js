@@ -24,7 +24,7 @@ import React from 'react';
 
 import {withRouter} from 'react-router';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -45,7 +45,7 @@ class Unauthorized extends React.Component {
   }
 
   componentWillUnmount() {
-    if (is_defined(this.unsubscribe)) {
+    if (isDefined(this.unsubscribe)) {
       this.unsubscribe();
     }
   }

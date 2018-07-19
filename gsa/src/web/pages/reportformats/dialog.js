@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, isArray, hasValue} from 'gmp/utils/identity';
+import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -217,7 +217,7 @@ class Dialog extends React.Component {
       onSave,
     } = this.props;
 
-    if (is_defined(reportformat)) {
+    if (isDefined(reportformat)) {
       return (
         <SaveDialog
           visible={visible}

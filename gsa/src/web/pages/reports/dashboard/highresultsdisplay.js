@@ -27,7 +27,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -70,7 +70,7 @@ export class ReportsHighResultsDisplay extends React.Component {
 
     const {filter, onFilterChanged} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -78,9 +78,9 @@ export class ReportsHighResultsDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = is_defined(filter) ? filter.copy() : new Filter();
+    let newFilter = isDefined(filter) ? filter.copy() : new Filter();
 
-    if (is_defined(startDate)) {
+    if (isDefined(startDate)) {
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
         endDate = endDate.clone().add(1, 'day');
@@ -94,7 +94,7 @@ export class ReportsHighResultsDisplay extends React.Component {
       }
     }
 
-    if (is_defined(endDate)) {
+    if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
         `date<${endDate.format(dateFormat)}`);
 

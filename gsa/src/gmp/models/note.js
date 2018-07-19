@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, isModelElement} from '../utils/identity';
+import {isDefined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
@@ -90,7 +90,7 @@ class Note extends Model {
 export const parse_notes = notes => {
   let active = false;
   let entries = [];
-  if (is_defined(notes)) {
+  if (isDefined(notes)) {
     entries = map(notes.note, note => {
       const n = new Note(note);
       active = active || n.isActive();

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseSeverity} from 'gmp/parser.js';
 
@@ -39,7 +39,7 @@ class App extends Asset {
   }
 
   addOccurence(count) {
-    if (is_defined(count)) {
+    if (isDefined(count)) {
       this.occurrences.detail += count;
       this.occurrences.total += count;
     }

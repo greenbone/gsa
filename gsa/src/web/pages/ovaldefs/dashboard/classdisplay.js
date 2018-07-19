@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat} from 'gmp/parser';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../../utils/proptypes';
 
@@ -80,18 +80,18 @@ export class OvaldefClassDisplay extends React.Component {
     const {onFilterChanged, filter} = this.props;
     const {filterValue} = data;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
     const classTerm = FilterTerm.fromString(`class="${filterValue}"`);
 
-    if (is_defined(filter) && filter.hasTerm(classTerm)) {
+    if (isDefined(filter) && filter.hasTerm(classTerm)) {
       return;
     }
     const classFilter = Filter.fromTerm(classTerm);
 
-    const newFilter = is_defined(filter) ? filter.copy().and(classFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(classFilter) :
       classFilter;
 
     onFilterChanged(newFilter);
@@ -125,7 +125,7 @@ export class OvaldefClassDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

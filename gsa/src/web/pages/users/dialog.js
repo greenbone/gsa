@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import {
@@ -95,7 +95,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
     };
 
     const {capabilities} = this.context;
-    const is_edit = is_defined(user);
+    const is_edit = isDefined(user);
 
     const rolesOptions = map(roles, role => ({
       label: role.name,

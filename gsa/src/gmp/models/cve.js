@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -45,7 +45,7 @@ const delete_empty = (obj, props) => {
 
 const rename_props = (obj, rename = {}) => {
   for (const [oldname, newname] of Object.entries(rename)) {
-    if (is_defined(obj[oldname])) {
+    if (isDefined(obj[oldname])) {
       obj[newname] = obj[oldname];
       delete obj[oldname];
     }
@@ -59,7 +59,7 @@ class Cve extends Info {
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cve');
 
-    if (is_defined(ret.update_time)) {
+    if (isDefined(ret.update_time)) {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
@@ -67,7 +67,7 @@ class Cve extends Info {
     ret.severity = parseSeverity(ret.cvss);
     delete ret.cvss;
 
-    if (is_defined(ret.nvts)) {
+    if (isDefined(ret.nvts)) {
       ret.nvts = map(ret.nvts.nvt, nvt => {
         return setProperties({
           ...nvt,
@@ -77,7 +77,7 @@ class Cve extends Info {
       });
     }
 
-    if (is_defined(ret.cert)) {
+    if (isDefined(ret.cert)) {
       ret.certs = map(ret.cert.cert_ref, ref => {
         return {
           name: ref.name,
@@ -128,10 +128,10 @@ class Cve extends Info {
       ret.products = ret.products.split(' ');
     }
 
-    if (is_defined(ret.raw_data) && is_defined(ret.raw_data.entry)) {
+    if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
 
-      if (is_defined(ret.cwe)) {
+      if (isDefined(ret.cwe)) {
         ret.cwe_id = entry.cwe._id;
       }
 
@@ -146,12 +146,12 @@ class Cve extends Info {
         reference_type: ref._reference_type,
       }));
 
-      if (is_defined(entry.cvss) && is_defined(entry.cvss.base_metrics) &&
-        is_defined(entry.cvss.base_metrics.source)) {
+      if (isDefined(entry.cvss) && isDefined(entry.cvss.base_metrics) &&
+        isDefined(entry.cvss.base_metrics.source)) {
         ret.source = entry.cvss.base_metrics.source.__text;
       }
 
-      if (is_defined(entry.summary) && !isEmpty(entry.summary.__text)) {
+      if (isDefined(entry.summary) && !isEmpty(entry.summary.__text)) {
         // really don't know why entry.summary and ret.description can differ
         // but xslt did use the summary and and e.g. the description of
         // CVE-2017-2988 was empty but summary not
@@ -159,7 +159,7 @@ class Cve extends Info {
       }
 
       const products = entry['vulnerable-software-list'];
-      if (is_defined(products)) {
+      if (isDefined(products)) {
         ret.products = map(products.product, product => product.__text);
       }
 

@@ -24,7 +24,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
@@ -49,7 +49,7 @@ class CvssDisplay extends React.Component {
   handleDataClick(data) {
     const {onFilterChanged, filter} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -58,11 +58,11 @@ class CvssDisplay extends React.Component {
 
     let statusFilter;
 
-    if (is_defined(start) && start > 0 && end < 10) {
+    if (isDefined(start) && start > 0 && end < 10) {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
-      if (is_defined(filter) && filter.hasTerm(startTerm) &&
+      if (isDefined(filter) && filter.hasTerm(startTerm) &&
         filter.hasTerm(endTerm)) {
         return;
       }
@@ -72,7 +72,7 @@ class CvssDisplay extends React.Component {
     else {
       let statusTerm;
 
-      if (is_defined(start)) {
+      if (isDefined(start)) {
 
         if (start > 0) {
           statusTerm = FilterTerm.fromString(`severity>${start}`);
@@ -85,14 +85,14 @@ class CvssDisplay extends React.Component {
         }
       }
 
-      if (is_defined(filter) && filter.hasTerm(statusTerm)) {
+      if (isDefined(filter) && filter.hasTerm(statusTerm)) {
         return;
       }
 
       statusFilter = Filter.fromTerm(statusTerm);
     }
 
-    const newFilter = is_defined(filter) ? filter.copy().and(statusFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
       statusFilter;
 
     onFilterChanged(newFilter);
@@ -121,7 +121,7 @@ class CvssDisplay extends React.Component {
             data={data}
             xLabel={xLabel}
             yLabel={yLabel}
-            onDataClick={is_defined(onFilterChanged) ?
+            onDataClick={isDefined(onFilterChanged) ?
               this.handleDataClick : undefined}
           />
         )}

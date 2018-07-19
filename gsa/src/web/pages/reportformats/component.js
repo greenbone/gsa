@@ -21,12 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
-import Promise from 'gmp/promise.js';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import Promise from 'gmp/promise';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -57,7 +58,7 @@ class ReportFormatComponent extends React.Component {
   }
 
   openReportFormatDialog(reportformat) {
-    if (is_defined(reportformat)) {
+    if (isDefined(reportformat)) {
       const {gmp} = this.props;
 
       // (re-)load report format to get params
@@ -110,7 +111,7 @@ class ReportFormatComponent extends React.Component {
 
   handleSave(data) {
     const {gmp} = this.props;
-    if (is_defined(data.id)) {
+    if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
       return gmp.reportformat.save(data).then(onSaved, onSaveError);
     }

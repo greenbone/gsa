@@ -24,8 +24,9 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -69,7 +70,7 @@ class SeverityLevelsFilterGroup extends React.Component {
 
     let levels = filter.get('levels');
 
-    if (!is_defined(levels)) {
+    if (!isDefined(levels)) {
       levels = '';
     }
     return (

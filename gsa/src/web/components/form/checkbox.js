@@ -21,10 +21,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
@@ -39,10 +38,10 @@ import withChangeHandler from './withChangeHandler.js';
 const convert_checked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;
 
-  if (value && is_defined(checkedValue)) {
+  if (value && isDefined(checkedValue)) {
     value = checkedValue;
   }
-  else if (!value && is_defined(unCheckedValue)) {
+  else if (!value && isDefined(unCheckedValue)) {
     value = unCheckedValue;
   }
   return value;
@@ -65,7 +64,7 @@ const CheckboxComponent = ({
           disabled={disabled}
           type="checkbox"
         />
-        {is_defined(title) &&
+        {isDefined(title) &&
           <StyledTitle disabled={disabled}>
             {title}
           </StyledTitle>

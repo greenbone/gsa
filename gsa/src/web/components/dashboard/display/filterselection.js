@@ -28,7 +28,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {hasValue, is_defined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import SaveDialog from '../../dialog/savedialog';
 
@@ -76,9 +76,9 @@ class FilterSelection extends React.Component {
     const {onChanged} = this.props;
     this.setState({showDialog: false});
 
-    if (is_defined(onChanged)) {
+    if (isDefined(onChanged)) {
       onChanged({
-        filterId: is_defined(filterId) && filterId !== UNSET_VALUE ?
+        filterId: isDefined(filterId) && filterId !== UNSET_VALUE ?
           filterId : undefined,
       });
     }
@@ -99,7 +99,7 @@ class FilterSelection extends React.Component {
         {_('Select Filter')}
       </MenuEntry>
     );
-    const filter = is_defined(filterId) ?
+    const filter = isDefined(filterId) ?
       filters.find(f => f.id === filterId) : undefined;
     return (
       <React.Fragment>
@@ -110,7 +110,7 @@ class FilterSelection extends React.Component {
         {showDialog &&
           <SaveDialog
             defaultValues={{
-              filterId: is_defined(filterId) ? filterId : UNSET_VALUE,
+              filterId: isDefined(filterId) ? filterId : UNSET_VALUE,
             }}
             title={_('Select Filter')}
             buttonTitle={_('Select')}
@@ -160,7 +160,7 @@ FilterSelection.propTypes = {
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {
-  if (!is_defined(filtersFilter)) {
+  if (!isDefined(filtersFilter)) {
     return {
       filters: [],
     };

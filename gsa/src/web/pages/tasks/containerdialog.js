@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/index.js';
+import {isDefined} from 'gmp/utils/index.js';
 
 import {YES_VALUE} from 'gmp/parser.js';
 
@@ -56,7 +56,7 @@ const ContainerTaskDialog = ({
   onClose,
   onSave,
 }) => {
-  const isEdit = is_defined(task);
+  const isEdit = isDefined(task);
 
   const data = {
     auto_delete,

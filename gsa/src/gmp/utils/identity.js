@@ -23,12 +23,12 @@
  */
 export const {isArray} = global.Array;
 
-export function is_defined(value) {
+export function isDefined(value) {
   return value !== undefined;
 }
 
 export function hasValue(value) {
-  return value !== null && is_defined(value);
+  return value !== null && isDefined(value);
 }
 
 export function isObject(value) {
@@ -51,7 +51,7 @@ export function isJsDate(value) {
   return Object.prototype.toString.call(value) === '[object Date]';
 }
 
-export const isModelElement = elem => is_defined(elem) &&
+export const isModelElement = elem => isDefined(elem) &&
   isString(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

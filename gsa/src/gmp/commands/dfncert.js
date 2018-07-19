@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import InfoEntitiesCommand from './infoentities.js';
 import InfoEntityCommand from './infoentity.js';
@@ -31,7 +31,7 @@ import registerCommand from '../command.js';
 
 import DfnCertAdv from '../models/dfncert.js';
 
-const info_filter = info => is_defined(info.dfn_cert_adv);
+const info_filter = info => isDefined(info.dfn_cert_adv);
 
 class DfnCertAdvCommand extends InfoEntityCommand {
 

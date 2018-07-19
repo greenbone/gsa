@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import {parseSeverity, parseDate} from '../parser';
 
@@ -49,14 +49,14 @@ class Report extends Model {
       timestamp,
     } = elem;
 
-    if (is_defined(report)) {
+    if (isDefined(report)) {
       copy.report = new ReportReport(report);
     }
 
     copy.report_format = new Model(report_format, 'report_format');
     copy.task = new Model(task, 'task');
 
-    if (is_defined(severity)) {
+    if (isDefined(severity)) {
       copy.severity = parseSeverity(severity);
     }
 
@@ -66,7 +66,7 @@ class Report extends Model {
     copy.scan_start = parseDate(scan_start);
     copy.timestamp = parseDate(timestamp);
 
-    if (is_defined(scan_end)) {
+    if (isDefined(scan_end)) {
       copy.scan_end = parseDate(scan_end);
     }
 

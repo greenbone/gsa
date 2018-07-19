@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/object/entries';
 
-import {is_defined, isArray} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 import {createRow, createItem} from 'web/components/sortable/grid';
 
@@ -125,7 +125,7 @@ export const resetSettings = ({gmp}) => id =>
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   if (isArray(rows) && rows.length > 0 &&
-    is_defined(maxItemsPerRow) && is_defined(maxRows)) {
+    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
     const lastRow = rows[rows.length - 1];
     return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
   }
@@ -139,7 +139,7 @@ export const addDisplayToSettings = (settings, displayId) => {
     currentRows[currentRows.length - 1] : {items: []};
 
   let rows;
-  if (is_defined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
+  if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
     const newRow = createRow([createItem({name: displayId})]);
     rows = [...currentRows, newRow];
@@ -164,7 +164,7 @@ export const addDisplayToSettings = (settings, displayId) => {
 
 export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   (dispatch, getState) => {
-  if (!is_defined(displayId) || !is_defined(dashboardId)) {
+  if (!isDefined(displayId) || !isDefined(dashboardId)) {
     return;
   }
 

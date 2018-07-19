@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -58,7 +58,7 @@ class User extends Model {
       });
     }
 
-    if (is_defined(elem.hosts)) {
+    if (isDefined(elem.hosts)) {
       ret.hosts = {
         addresses: parseCsv(elem.hosts.__text),
         allow: elem.hosts._allow,
@@ -70,7 +70,7 @@ class User extends Model {
       };
     }
 
-    if (is_defined(elem.ifaces)) {
+    if (isDefined(elem.ifaces)) {
       ret.ifaces = {
         addresses: parseCsv(elem.ifaces.__text),
         allow: elem.ifaces._allow,

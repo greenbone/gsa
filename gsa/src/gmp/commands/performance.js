@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  is_defined,
+  isDefined,
   isArray,
 } from '../utils/identity';
 
@@ -44,7 +44,7 @@ class PerformanceCommand extends HttpCommand {
       const {get_system_reports_response: sys_response = {}} = sys_reports;
       const {system_report: reports} = sys_response;
 
-      if (!is_defined(reports)) {
+      if (!isDefined(reports)) {
         throw new Error('Invalid response data for system reports');
       }
 

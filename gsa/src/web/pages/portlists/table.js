@@ -24,8 +24,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -65,7 +66,7 @@ const Header = ({
           colSpan="3">
           {_('Port Counts')}
         </TableHead>
-        {is_defined(actionsColumn) ?
+        {isDefined(actionsColumn) ?
           actionsColumn :
           <TableHead rowSpan="2" width="6em">{_('Actions')}</TableHead>
         }

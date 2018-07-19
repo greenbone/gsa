@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import logger from '../log.js';
 
@@ -47,7 +47,7 @@ class EntityCommand extends GmpCommand {
     const {id, ...other} = params;
     const rparams = super.getParams(other, extra_params);
 
-    if (is_defined(id)) {
+    if (isDefined(id)) {
       rparams[this.id_name] = id;
     }
     return rparams;
@@ -59,7 +59,7 @@ class EntityCommand extends GmpCommand {
 
   transformResponse(response) {
     let entity = this.getModelFromResponse(response);
-    if (!is_defined(entity.id)) {
+    if (!isDefined(entity.id)) {
       log.warn('Entity with undefined id found.'); // FIXME gsad MUST return 404 if no entity has been found
       entity = undefined;
     }

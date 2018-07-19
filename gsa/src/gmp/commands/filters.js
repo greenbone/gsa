@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import CollectionCounts from '../collection/collectioncounts';
 import {parseCollectionList} from '../collection/parser';
@@ -77,14 +77,14 @@ class FilterCommand extends EntityCommand {
 // FIXME parsing counts is horrible
 
 const parse_filter = element => {
-  const filter = is_defined(element) && is_defined(element.filters) ?
+  const filter = isDefined(element) && isDefined(element.filters) ?
     element.filters[0] : undefined;
   return new Filter(filter);
 };
 
 const parse_counts = element => {
-  if (is_defined(element) && is_defined(element.filters) &&
-    is_defined(element.filter_count)) {
+  if (isDefined(element) && isDefined(element.filters) &&
+    isDefined(element.filter_count)) {
     const es = element.filters[1]; // eslint-disable-line prefer-destructuring
     const ec = element.filter_count;
     return {

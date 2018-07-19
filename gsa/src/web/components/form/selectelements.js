@@ -27,7 +27,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import Theme from '../../utils/theme';
 import PropTypes from '../../utils/proptypes';
@@ -162,10 +162,10 @@ const getScrollParent = element => {
   return getScrollParent(getParentNode(element));
 };
 
-const getScrollX = () => is_defined(window.scrollX) ?
+const getScrollX = () => isDefined(window.scrollX) ?
   window.scrollX : window.pageXOffset;
 
-const getScrollY = () => is_defined(window.scrollY) ?
+const getScrollY = () => isDefined(window.scrollY) ?
   window.scrollY : window.pageYOffset;
 
 export class Menu extends React.Component {
@@ -208,7 +208,7 @@ export class Menu extends React.Component {
       ...props
     } = this.props;
 
-    if (!is_defined(target)) {
+    if (!isDefined(target)) {
       return null;
     }
 
@@ -254,7 +254,7 @@ export const SelectedValue = glamorous.div({
 } : null);
 
 export const case_insensitive_filter = search => {
-  if (!is_defined(search) || search.length === 0) {
+  if (!isDefined(search) || search.length === 0) {
     return () => true;
   }
   search = search.toLowerCase();
@@ -262,7 +262,7 @@ export const case_insensitive_filter = search => {
 };
 
 export const option_items = children => {
-  if (!is_defined(children)) {
+  if (!isDefined(children)) {
     return undefined;
   }
 
@@ -272,7 +272,7 @@ export const option_items = children => {
     const {props} = child;
     return {
       label: props.children,
-      value: is_defined(props.value) ? props.value : props.children,
+      value: isDefined(props.value) ? props.value : props.children,
     };
   });
 };

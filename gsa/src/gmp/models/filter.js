@@ -24,7 +24,7 @@
 import 'core-js/fn/array/find-index';
 import 'core-js/fn/array/includes';
 
-import {is_defined, isString} from '../utils/identity';
+import {isDefined, isString} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import Model from '../model.js';
@@ -70,7 +70,7 @@ class Filter extends Model {
 
     ret.filter_type = ret._type;
 
-    if (is_defined(ret.keywords)) {
+    if (isDefined(ret.keywords)) {
       forEach(ret.keywords.keyword, keyword => {
 
         const {relation, value, column: key} = keyword;
@@ -81,7 +81,7 @@ class Filter extends Model {
       });
       delete ret.keywords;
     }
-    else if (is_defined(ret.term)) {
+    else if (isDefined(ret.term)) {
       this.parseString(ret.term);
 
       // ret.term should not be part of the public api
@@ -90,7 +90,7 @@ class Filter extends Model {
       delete ret.term;
     }
 
-    if (is_defined(ret.alerts)) {
+    if (isDefined(ret.alerts)) {
       ret.alerts = map(ret.alerts.alert, alert => new Model(alert, 'alert'));
     }
 
@@ -118,7 +118,7 @@ class Filter extends Model {
 
     const {keyword} = term;
 
-    if (!is_defined(keyword) || !this.has(keyword)) {
+    if (!isDefined(keyword) || !this.has(keyword)) {
       this._addTerm(term);
     }
     else {
@@ -181,10 +181,10 @@ class Filter extends Model {
    * @return {Filter} This filter with merged terms.
    */
   _mergeExtraKeywords(filter) {
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       filter.forEach(term => {
         const {keyword: key} = term;
-        if (is_defined(key) && EXTRA_KEYWORDS.includes(key) &&
+        if (isDefined(key) && EXTRA_KEYWORDS.includes(key) &&
           !this.has(key)) {
           this._addTerm(term);
         }
@@ -204,7 +204,7 @@ class Filter extends Model {
    * @return {Filter} This filter with merged terms.
    */
   _merge(filter) {
-    if (is_defined(filter)) {
+    if (isDefined(filter)) {
       this._addTerm(...filter.getAllTerms());
     }
     return this;
@@ -243,7 +243,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (!is_defined(key) || !EXTRA_KEYWORDS.includes(key)) {
+      if (!isDefined(key) || !EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });
@@ -261,7 +261,7 @@ class Filter extends Model {
     let fstring = '';
     this.forEach(term => {
       const key = term.keyword;
-      if (is_defined(key) && EXTRA_KEYWORDS.includes(key)) {
+      if (isDefined(key) && EXTRA_KEYWORDS.includes(key)) {
         fstring += term.toString() + ' ';
       }
     });
@@ -278,7 +278,7 @@ class Filter extends Model {
    *                  this Filter.
    */
   getTerm(key) {
-    if (!is_defined(key)) {
+    if (!isDefined(key)) {
       return undefined;
     }
     return this.terms.find(term => key === term.keyword);
@@ -306,7 +306,7 @@ class Filter extends Model {
    *                  has been found.
    */
   getTerms(key) {
-    if (!is_defined(key)) {
+    if (!isDefined(key)) {
       return [];
     }
 
@@ -340,7 +340,7 @@ class Filter extends Model {
    */
   get(key, def = undefined) {
     const term = this.getTerm(key);
-    if (is_defined(term)) {
+    if (isDefined(term)) {
       return term.value;
     }
     return def;
@@ -375,7 +375,7 @@ class Filter extends Model {
    *                this Filter.
    */
   has(key) {
-    if (!is_defined(key)) {
+    if (!isDefined(key)) {
       return false;
     }
     const index = this._getIndex(key);
@@ -405,7 +405,7 @@ class Filter extends Model {
    * @return {bool} Returns true if this filter equals to the other filter
    */
   equals(filter) {
-    if (!is_defined(filter)) {
+    if (!isDefined(filter)) {
       return false;
     }
 
@@ -470,11 +470,11 @@ class Filter extends Model {
     let first = filter.get('first');
     let rows = filter.get('rows');
 
-    if (!is_defined(rows)) {
+    if (!isDefined(rows)) {
       rows = 10;
     }
 
-    if (is_defined(first)) {
+    if (isDefined(first)) {
       first += rows;
     }
     else {
@@ -497,11 +497,11 @@ class Filter extends Model {
     let first = filter.get('first');
     let rows = filter.get('rows');
 
-    if (!is_defined(rows)) {
+    if (!isDefined(rows)) {
       rows = 10;
     }
 
-    if (is_defined(first)) {
+    if (isDefined(first)) {
       first -= rows;
     }
     else {

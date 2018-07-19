@@ -24,7 +24,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {is_defined, hasValue} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import compose from '../../../utils/compose';
 import withGmp from '../../../utils/withGmp';
@@ -79,7 +79,7 @@ class Loader extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     const {data} = props;
-    if (is_defined(data)) {
+    if (isDefined(data)) {
       // Only update data if data is set and keep latest set data in state.
 
       // This avoids reloading data for the initial load.
@@ -140,7 +140,7 @@ class Loader extends React.Component {
   render() {
     const {children, isLoading} = this.props;
     const {data} = this.state;
-    return is_defined(children) && children({data, isLoading});
+    return isDefined(children) && children({data, isLoading});
   }
 }
 

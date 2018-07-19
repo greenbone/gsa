@@ -29,7 +29,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -105,13 +105,13 @@ const Criteria = ({criteria}) => {
   return (
     <li>
       <Divider>
-        {is_defined(operator) &&
+        {isDefined(operator) &&
           <b>{operator}</b>
         }
         {negate &&
           <b>NOT</b>
         }
-        {is_defined(comment) &&
+        {isDefined(comment) &&
           <span>({comment})</span>
         }
       </Divider>
@@ -261,7 +261,7 @@ const Details = ({
                   </DetailsLink>
                 </TableData>
                 <TableData>
-                  {is_defined(ref.url) &&
+                  {isDefined(ref.url) &&
                     <ExternalLink to={ref.url}>
                       {ref.url}
                     </ExternalLink>
@@ -274,7 +274,7 @@ const Details = ({
       }
 
       <h2>{_('Repository History')}</h2>
-      {is_defined(repository) ?
+      {isDefined(repository) ?
         <div>
           <StyledDivider>
             <b>{_('Status')}</b>
@@ -302,7 +302,7 @@ const Details = ({
                       <span>
                         {change.name}
                       </span>
-                      {is_defined(change.description) &&
+                      {isDefined(change.description) &&
                         <span>(<i>{change.description}</i>)</span>
                       }
                     </Divider>
@@ -317,7 +317,7 @@ const Details = ({
                           <span>
                             {contributor.name}
                           </span>
-                          {is_defined(contributor.organization) &&
+                          {isDefined(contributor.organization) &&
                             <span>(<i>{contributor.organization}</i>)</span>
                           }
                         </Divider>
@@ -393,12 +393,12 @@ const OvaldefPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <Tab>
                           {tagsTitle}
                         </Tab>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <Tab>
                           {permissionsTitle}
                         </Tab>
@@ -413,12 +413,12 @@ const OvaldefPage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {is_defined(tagsComponent) &&
+                      {isDefined(tagsComponent) &&
                         <TabPanel>
                           {tagsComponent}
                         </TabPanel>
                       }
-                      {is_defined(permissionsComponent) &&
+                      {isDefined(permissionsComponent) &&
                         <TabPanel>
                           {permissionsComponent}
                         </TabPanel>

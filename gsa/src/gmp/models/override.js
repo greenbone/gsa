@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, isModelElement} from '../utils/identity';
+import {isDefined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
@@ -107,7 +107,7 @@ class Override extends Model {
 export const parse_overrides = overrides => {
   let active = false;
   let entries = [];
-  if (is_defined(overrides)) {
+  if (isDefined(overrides)) {
     entries = map(overrides.override, override => {
       const o = new Override(override);
       active = active || o.isActive();

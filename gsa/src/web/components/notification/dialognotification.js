@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -75,13 +74,13 @@ class DialogNotification extends React.Component {
   }
 
   isDialogOpen() {
-    return is_defined(this.state.message);
+    return isDefined(this.state.message);
   }
 
   render() {
     const {children} = this.props;
 
-    if (!is_defined(children)) {
+    if (!isDefined(children)) {
       return null;
     }
 

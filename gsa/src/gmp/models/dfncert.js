@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
 import {parseSeverity} from '../parser.js';
@@ -42,10 +42,10 @@ class DfnCertAdv extends Info {
     ret.additional_links = [];
     ret.cves = [];
 
-    if (is_defined(raw_data) && is_defined(raw_data.entry)) {
+    if (isDefined(raw_data) && isDefined(raw_data.entry)) {
       const {entry} = raw_data;
 
-      if (is_defined(entry.link)) {
+      if (isDefined(entry.link)) {
         forEach(entry.link, link => {
           if (link._rel === 'alternate') {
             ret.advisory_link = link._href;
@@ -56,11 +56,11 @@ class DfnCertAdv extends Info {
         });
       }
 
-      if (is_defined(entry.summary)) {
+      if (isDefined(entry.summary)) {
         ret.summary = entry.summary.__text;
       }
 
-      if (is_defined(entry.cve)) {
+      if (isDefined(entry.cve)) {
         ret.cves = map(entry.cve, cve => cve.__text);
       }
     }

@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_component} from '../../utils/render.js';
@@ -114,9 +114,9 @@ const Row = ({
   ...props,
 }) => {
   const {details = {}} = entity;
-  const os_cpe = is_defined(details.best_os_cpe) ? details.best_os_cpe.value :
+  const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
     undefined;
-  const os_txt = is_defined(details.best_os_txt) ? details.best_os_txt.value :
+  const os_txt = isDefined(details.best_os_txt) ? details.best_os_txt.value :
     undefined;
   return (
     <TableRow>
@@ -144,7 +144,7 @@ const Row = ({
         <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData>
-        {is_defined(entity.modificationTime) &&
+        {isDefined(entity.modificationTime) &&
           longDate(entity.modificationTime)
         }
       </TableData>

@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -46,7 +46,7 @@ const HelpIcon = ({
 
   const path = 'help/' + page + '.html';
 
-  if (!is_defined(title)) {
+  if (!isDefined(title)) {
     title = _('Help: {{pagename}}', {pagename: capitalizeFirstLetter(page)});
   }
 

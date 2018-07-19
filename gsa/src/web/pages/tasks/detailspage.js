@@ -27,7 +27,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Promise from 'gmp/promise';
 
@@ -103,8 +103,8 @@ const ToolBarIcons = ({
   onTaskResumeClick,
 }, {capabilities}) => {
 
-  const notes_count = is_defined(notes) ? notes.counts.length : undefined;
-  const override_count = is_defined(overrides) ? overrides.counts.length :
+  const notes_count = isDefined(notes) ? notes.counts.length : undefined;
+  const override_count = isDefined(overrides) ? overrides.counts.length :
     undefined;
 
   return (
@@ -153,7 +153,7 @@ const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        {is_defined(entity.schedule) &&
+        {isDefined(entity.schedule) &&
           <ScheduleIcon
             schedule={entity.schedule}
             schedulePeriods={entity.schedule_periods}
@@ -173,7 +173,7 @@ const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {is_defined(entity.current_report) &&
+          {isDefined(entity.current_report) &&
             <DetailsLink
               type="report"
               id={entity.current_report.id}
@@ -188,7 +188,7 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
-          {is_defined(entity.last_report) &&
+          {isDefined(entity.last_report) &&
             <DetailsLink
               type="report"
               id={entity.last_report.id}
@@ -437,12 +437,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <Tab>
                       {tagsTitle}
                     </Tab>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <Tab>
                       {permissionsTitle}
                     </Tab>
@@ -457,12 +457,12 @@ const Page = ({
                       entity={entity}
                     />
                   </TabPanel>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <TabPanel>
                       {tagsComponent}
                     </TabPanel>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <TabPanel>
                       {permissionsComponent}
                     </TabPanel>
@@ -485,28 +485,28 @@ Page.propTypes = {
 
 const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
-    ({entity, gmp}) => is_defined(entity.alerts) ?
+    ({entity, gmp}) => isDefined(entity.alerts) ?
       Promise.resolve([...entity.alerts]) : Promise.resolve([]),
     ({entity, gmp}) => {
       const resources = [];
       const names = ['config', 'scanner', 'schedule'];
 
       for (const name of names) {
-        if (is_defined(entity[name])) {
+        if (isDefined(entity[name])) {
           resources.push(entity[name]);
         }
       }
       return Promise.resolve(resources);
     },
     ({entity, gmp}) => {
-      if (is_defined(entity.target)) {
+      if (isDefined(entity.target)) {
         return gmp.target.get(entity.target).then(response => {
           const target = response.data;
           const resources = [target];
 
           for (const name of ['port_list', ...TARGET_CREDENTIAL_NAMES]) {
             const cred = target[name];
-            if (is_defined(cred)) {
+            if (isDefined(cred)) {
               resources.push(cred);
             }
           }

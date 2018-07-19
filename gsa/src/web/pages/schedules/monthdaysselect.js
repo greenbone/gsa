@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
 
@@ -50,7 +50,7 @@ class MonthDaysSelect extends React.Component {
   handleChange(val, valname) {
     const {onChange, value = [], name} = this.props;
 
-    if (!is_defined(onChange)) {
+    if (!isDefined(onChange)) {
       return;
     }
 

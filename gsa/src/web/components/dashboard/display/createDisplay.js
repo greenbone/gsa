@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withFilterSelection from './withFilterSelection';
@@ -50,7 +50,7 @@ const createDisplay = ({
           {...props}
           filter={filter}
         >
-          {is_defined(Chart) ? displayProps => (
+          {isDefined(Chart) ? displayProps => (
             <Chart
               {...displayProps}
             />

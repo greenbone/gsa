@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
 import Model from '../model.js';
@@ -33,14 +33,14 @@ class Permission extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(elem.resource) && !isEmpty(elem.resource._id)) {
+    if (isDefined(elem.resource) && !isEmpty(elem.resource._id)) {
       ret.resource = new Model(elem.resource, elem.resource.type);
     }
     else {
       delete ret.resource;
     }
 
-    if (is_defined(elem.subject) && !isEmpty(elem.subject._id)) {
+    if (isDefined(elem.subject) && !isEmpty(elem.subject._id)) {
       ret.subject = new Model(elem.subject, elem.subject.type);
     }
     else {

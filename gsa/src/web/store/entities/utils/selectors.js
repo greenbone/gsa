@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {filterIdentifier} from './reducers';
 
@@ -31,39 +31,39 @@ class EntitiesSelector {
   }
 
   isLoadingEntities(filter) {
-    return is_defined(this.state.isLoading) ?
+    return isDefined(this.state.isLoading) ?
       !!this.state.isLoading[filterIdentifier(filter)] :
       false;
   }
 
   isLoadingEntity(id) {
-    return is_defined(this.state.isLoading) ?
+    return isDefined(this.state.isLoading) ?
       !!this.state.isLoading[id] :
       false;
   }
 
   getEntitiesError(filter) {
-    return is_defined(this.state.errors) ?
+    return isDefined(this.state.errors) ?
       this.state.errors[filterIdentifier(filter)] :
       undefined;
   }
 
   getEntityError(id) {
-    return is_defined(this.state.errors) ?
+    return isDefined(this.state.errors) ?
       this.state.errors[id] :
       undefined;
   }
 
   getEntities(filter) {
     const ids = this.state[filterIdentifier(filter)];
-    if (is_defined(ids) && is_defined(this.state.byId)) {
-      return ids.map(id => this.state.byId[id]).filter(is_defined);
+    if (isDefined(ids) && isDefined(this.state.byId)) {
+      return ids.map(id => this.state.byId[id]).filter(isDefined);
     }
     return [];
   }
 
   getEntity(id) {
-    return is_defined(this.state.byId) ? this.state.byId[id] : undefined;
+    return isDefined(this.state.byId) ? this.state.byId[id] : undefined;
   }
 };
 

@@ -21,13 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -167,9 +167,9 @@ const Details = ({
   ...props
 }) => {
   const {details = {}, routes, severity} = entity;
-  const os_cpe = is_defined(details.best_os_cpe) ? details.best_os_cpe.value :
+  const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
     undefined;
-  const os_txt = is_defined(details.best_os_txt) ? details.best_os_txt.value :
+  const os_txt = isDefined(details.best_os_txt) ? details.best_os_txt.value :
     undefined;
   return (
     <Layout flex="column">
@@ -209,7 +209,7 @@ const Details = ({
             <TableData>
               <DetailsLink
                 type="cpe"
-                textOnly={!is_defined(os_cpe)}
+                textOnly={!isDefined(os_cpe)}
                 id={os_cpe}
               >
                 <OsIcon
@@ -235,7 +235,7 @@ const Details = ({
                           <DetailsLink
                             type="host"
                             id={host.id}
-                            textOnly={!is_defined(host.id)}
+                            textOnly={!isDefined(host.id)}
                           >
                             {host.ip}
                           </DetailsLink>
@@ -346,12 +346,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <Tab>
                         {tagsTitle}
                       </Tab>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <Tab>
                         {permissionsTitle}
                       </Tab>
@@ -366,12 +366,12 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {is_defined(tagsComponent) &&
+                    {isDefined(tagsComponent) &&
                       <TabPanel>
                         {tagsComponent}
                       </TabPanel>
                     }
-                    {is_defined(permissionsComponent) &&
+                    {isDefined(permissionsComponent) &&
                       <TabPanel>
                         {permissionsComponent}
                       </TabPanel>

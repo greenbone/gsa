@@ -22,7 +22,7 @@
  */
 import _ from '../locale';
 
-import {is_defined, isString} from '../utils/identity';
+import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -83,7 +83,7 @@ class Scanner extends Model {
 
     ret.scanner_type = parseInt(elem.type);
 
-    ret.credential = is_defined(ret.credential) &&
+    ret.credential = isDefined(ret.credential) &&
       !isEmpty(ret.credential._id) ? new Credential(ret.credential) :
       undefined;
 
@@ -95,7 +95,7 @@ class Scanner extends Model {
         certificate: ret.ca_pub,
       };
 
-      if (is_defined(ret.ca_pub_info)) {
+      if (isDefined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
         ret.ca_pub.info.activationTime = parseDate(
           ret.ca_pub.info.activation_time
@@ -109,7 +109,7 @@ class Scanner extends Model {
       }
     }
 
-    if (is_defined(ret.tasks)) {
+    if (isDefined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
     }
     else {
@@ -124,7 +124,7 @@ class Scanner extends Model {
         config => new Model(config, 'config'));
     }
 
-    if (is_defined(ret.info)) {
+    if (isDefined(ret.info)) {
       const {scanner, daemon, description, params, protocol} = ret.info;
 
       ret.info.scanner = parse_scanner_info(scanner);

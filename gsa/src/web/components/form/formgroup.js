@@ -21,11 +21,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
+
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
+
 import {parseInt} from 'gmp/parser';
 
 import Layout from '../layout/layout';
@@ -63,12 +64,12 @@ const Title = glamorous.label({
 }));
 
 const FormGroupContent = glamorous(Layout)(
-  ({size}) => is_defined(size) ? {
+  ({size}) => isDefined(size) ? {
     width: COLUMNS[parseInt(size) - 1],
     paddingLeft: '10px',
     paddingRight: '10px',
   } : null,
-  ({offset}) => is_defined(offset) ? {
+  ({offset}) => isDefined(offset) ? {
     marginLeft: COLUMNS[parseInt(offset) - 1],
   } : null,
 );
@@ -86,11 +87,11 @@ const FormGroup = ({
   ...other
 }) => {
 
-  if (is_defined(condition) && !condition) {
+  if (isDefined(condition) && !condition) {
     return null;
   }
 
-  if (title && !is_defined(size)) {
+  if (title && !isDefined(size)) {
       size = 12 - titleSize - titleOffset;
   }
 
@@ -99,7 +100,7 @@ const FormGroup = ({
       flex
       align={['start', 'center']}
     >
-      {is_defined(title) &&
+      {isDefined(title) &&
         <Title
           titleOffset={titleOffset}
           titleSize={titleSize}

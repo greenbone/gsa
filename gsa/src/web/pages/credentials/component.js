@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import {
@@ -55,7 +55,7 @@ class CredentialsComponent extends React.Component {
   }
 
   openCredentialsDialog(credential) {
-    if (is_defined(credential)) {
+    if (isDefined(credential)) {
       const title = _('Edit Credential {{name}}',
         {name: shorten(credential.name)});
 
@@ -67,7 +67,7 @@ class CredentialsComponent extends React.Component {
         auth_algorithm: credential.auth_algorithm,
         name: credential.name,
         credential_login: credential.login,
-        privacy_algorithm: is_defined(credential.privacy) ?
+        privacy_algorithm: isDefined(credential.privacy) ?
           credential.privacy.algorithm : undefined,
         types: [credential.credential_type],
         dialogVisible: true,

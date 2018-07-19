@@ -21,11 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -143,7 +143,7 @@ const Footer = ({
   }
   else if (selectionType === SelectionType.SELECTION_USER) {
     title = _('Create Target from selection');
-    has_selected = is_defined(entitiesSelected) && entitiesSelected.size > 0;
+    has_selected = isDefined(entitiesSelected) && entitiesSelected.size > 0;
     value = {
       entitiesSelected,
       selectionType,

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import Model from '../model.js';
 
@@ -33,8 +33,8 @@ class Info extends Model {
   constructor(elem, info_type) {
     super(elem);
 
-    if (!is_defined(this.info_type)) { // only overwrite if not already set
-      this.info_type = is_defined(info_type) ? info_type :
+    if (!isDefined(this.info_type)) { // only overwrite if not already set
+      this.info_type = isDefined(info_type) ? info_type :
         this.constructor.info_type;
     }
   }
@@ -42,7 +42,7 @@ class Info extends Model {
   parseProperties(elem, info_type) {
     const info_elem = elem[info_type];
 
-    if (is_defined(info_elem)) { // elem is an info element content is in its child
+    if (isDefined(info_elem)) { // elem is an info element content is in its child
       elem = {
         ...elem,
         ...info_elem,

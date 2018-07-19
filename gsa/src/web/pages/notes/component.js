@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, isArray} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import {
@@ -64,10 +64,10 @@ class NoteComponent extends React.Component {
   }
 
   openNoteDialog(note, initial) {
-    if (is_defined(note)) {
+    if (isDefined(note)) {
       let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
-        if (is_defined(note.endTime)) {
+        if (isDefined(note.endTime)) {
           active = ACTIVE_YES_ALWAYS_VALUE;
         }
         else {
@@ -81,13 +81,13 @@ class NoteComponent extends React.Component {
         dialogVisible: true,
         id: note.id,
         active,
-        hosts: is_defined(hosts) && hosts.length > 0 ? MANUAL : ANY,
+        hosts: isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY,
         hosts_manual: isArray(hosts) ? hosts.join(', ') : undefined,
-        port: is_defined(port) ? MANUAL : ANY,
+        port: isDefined(port) ? MANUAL : ANY,
         port_manual: port,
-        oid: is_defined(nvt) ? nvt.oid : undefined,
+        oid: isDefined(nvt) ? nvt.oid : undefined,
         note,
-        nvt_name: is_defined(nvt) ? nvt.name : undefined,
+        nvt_name: isDefined(nvt) ? nvt.name : undefined,
         task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
         task_uuid: hasId(task) ? task.id : undefined,
         result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,

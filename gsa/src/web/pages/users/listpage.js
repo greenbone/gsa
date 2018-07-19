@@ -24,8 +24,9 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
@@ -101,7 +102,7 @@ class UsersPage extends React.Component {
       inheritor_id = undefined;
     }
 
-    if (is_defined(id)) {
+    if (isDefined(id)) {
       return gmp.user.delete({id, inheritor_id}).then(() => onChanged());
     }
 
@@ -115,7 +116,7 @@ class UsersPage extends React.Component {
     gmp.users.getAll().then(response => {
       let {data: users} = response;
 
-      if (is_defined(user)) {
+      if (isDefined(user)) {
         users = users.filter(luser => luser.id !== user.id);
 
         this.setState({

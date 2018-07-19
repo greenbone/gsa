@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 
 import {map} from '../utils/array';
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
 import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
@@ -45,7 +45,7 @@ class Criteria {
     this.criterions = map(criterions, criterion => ({
       applicability_check: criterion._applicability_check,
       comment: isEmpty(criterion._comment) ? undefined : criterion._comment,
-      negate: is_defined(criterion._negate) ?
+      negate: isDefined(criterion._negate) ?
         criterion._negate.toLowerCase() === 'true' : false,
       test_ref: criterion._test_ref,
     }));
@@ -54,21 +54,21 @@ class Criteria {
       applicability_check: extend_definition._applicability_check,
       comment: isEmpty(extend_definition._comment) ? undefined :
         extend_definition._comment,
-      negate: is_defined(extend_definition._negate) ?
+      negate: isDefined(extend_definition._negate) ?
         extend_definition._negate.toLowerCase() === 'true' : false,
       definition_ref: extend_definition._definition_ref,
     }));
 
     this.criterias = map(criterias, criteria => new Criteria(criteria));
 
-    if (is_defined(comment)) {
+    if (isDefined(comment)) {
       this.comment = comment;
     }
-    if (is_defined(operator)) {
+    if (isDefined(operator)) {
       this.operator = operator;
     }
 
-    this.negate = is_defined(negate) ? negate.toLowerCase() === 'true' : false;
+    this.negate = isDefined(negate) ? negate.toLowerCase() === 'true' : false;
   }
 }
 
@@ -84,23 +84,23 @@ class Ovaldef extends Info {
 
     const {raw_data} = ret;
 
-    if (is_defined(raw_data) && is_defined(raw_data.definition)) {
+    if (isDefined(raw_data) && isDefined(raw_data.definition)) {
       const {definition} = raw_data;
 
-      if (is_defined(definition._id)) {
+      if (isDefined(definition._id)) {
         ret.short_id = definition._id;
       }
-      if (is_defined(definition._version)) {
+      if (isDefined(definition._version)) {
         ret.version = definition._version;
       }
-      if (is_defined(definition._class)) {
+      if (isDefined(definition._class)) {
         ret.class = definition._class;
       }
-      if (is_defined(definition._depreacted)) {
+      if (isDefined(definition._depreacted)) {
         ret.deprecation = definition._depreacted;
       }
 
-      if (is_defined(definition.metadata)) {
+      if (isDefined(definition.metadata)) {
         const {metadata} = definition;
 
         ret.affecteds = map(metadata.affected, a => ({
@@ -112,7 +112,7 @@ class Ovaldef extends Info {
         ret.references = map(metadata.reference, ref => ({
           id: ref._ref_id,
           source: ref._source,
-          type: is_defined(ref._source) ?
+          type: isDefined(ref._source) ?
             ref._source.toLowerCase() : undefined,
           url: ref._ref_url,
         }));

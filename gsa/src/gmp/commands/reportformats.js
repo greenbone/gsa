@@ -22,7 +22,7 @@
  */
 import logger from '../log';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import PromiseFactory from '../promise';
 
@@ -93,8 +93,8 @@ class ReportFormatCommand extends EntityCommand {
     }).then(this.transformRequest, rej => {
       const {root} = rej;
 
-      if (is_defined(root) && is_defined(root.get_report_formats) &&
-        is_defined(root.get_report_formats.verify_report_format_response)) {
+      if (isDefined(root) && isDefined(root.get_report_formats) &&
+        isDefined(root.get_report_formats.verify_report_format_response)) {
         const response = root.get_report_formats.verify_report_format_response;
         rej.setMessage(response._status_text);
       }

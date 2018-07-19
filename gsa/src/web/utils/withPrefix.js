@@ -20,16 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from './proptypes.js';
 
 export const withPrefix = Component => {
   const ComponentPrefixWrapper = ({prefix, ...props}) => {
-    if (is_defined(prefix)) {
+    if (isDefined(prefix)) {
       prefix += '_';
     }
     else {

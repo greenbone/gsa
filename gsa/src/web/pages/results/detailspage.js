@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
@@ -382,12 +381,12 @@ class Page extends React.Component {
                           <Tab>
                             {_('Information')}
                           </Tab>
-                          {is_defined(tagsComponent) &&
+                          {isDefined(tagsComponent) &&
                             <Tab>
                               {tagsTitle}
                             </Tab>
                           }
-                          {is_defined(permissionsComponent) &&
+                          {isDefined(permissionsComponent) &&
                             <Tab>
                               {permissionsTitle}
                             </Tab>
@@ -402,12 +401,12 @@ class Page extends React.Component {
                               entity={entity}
                             />
                           </TabPanel>
-                          {is_defined(tagsComponent) &&
+                          {isDefined(tagsComponent) &&
                             <TabPanel>
                               {tagsComponent}
                             </TabPanel>
                           }
-                          {is_defined(permissionsComponent) &&
+                          {isDefined(permissionsComponent) &&
                             <TabPanel>
                               {permissionsComponent}
                             </TabPanel>

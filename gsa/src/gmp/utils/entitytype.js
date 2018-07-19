@@ -22,14 +22,14 @@
  */
 import _ from '../locale';
 
-import {is_defined} from './identity';
+import {isDefined} from './identity';
 
 export const getEntityType = (model = {}) => {
   const {entity_type: entityType} = model;
-  if (entityType === 'info' && is_defined(model.info_type)) {
+  if (entityType === 'info' && isDefined(model.info_type)) {
     return model.info_type;
   }
-  if (entityType === 'asset' && is_defined(model.asset_type)) {
+  if (entityType === 'asset' && isDefined(model.asset_type)) {
     return model.asset_type;
   }
   return entityType;
@@ -50,7 +50,7 @@ const TYPES = {
 
 export const normalizeType = type => {
   const ctype = TYPES[type];
-  return is_defined(ctype) ? ctype : type;
+  return isDefined(ctype) ? ctype : type;
 };
 
 const ENTITY_TYPES = {
@@ -93,7 +93,7 @@ const ENTITY_TYPES = {
 export const typeName = type => {
   type = normalizeType(type);
   const name = ENTITY_TYPES[type];
-  return is_defined(name) ? name : type;
+  return isDefined(name) ? name : type;
 };
 
 const CMD_TYPES = {
@@ -115,7 +115,7 @@ const CMD_TYPES = {
  */
 export const apiType = type => {
   const name = CMD_TYPES[type];
-  return is_defined(name) ? name : type;
+  return isDefined(name) ? name : type;
 };
 
 // vim: set ts=2 sw=2 tw=80:

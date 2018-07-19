@@ -21,14 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-
-import _ from 'gmp/locale.js';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 
@@ -72,7 +71,7 @@ class EntityPage extends React.Component {
   renderToolbarIcons() {
     const {toolBarIcons: ToolBarIconsComponent, entity, ...other} = this.props;
 
-    if (!is_defined(ToolBarIconsComponent)) {
+    if (!isDefined(ToolBarIconsComponent)) {
       return null;
     }
 
@@ -109,7 +108,7 @@ class EntityPage extends React.Component {
     }
 
     let section_title = title;
-    if (is_defined(entity)) {
+    if (isDefined(entity)) {
       section_title = title + ': ' + entity.name;
     }
 
@@ -122,8 +121,8 @@ class EntityPage extends React.Component {
     );
 
     let hasPermissions = false;
-    if (is_defined(permissions)) {
-      hasPermissions = is_defined(permissions.entities);
+    if (isDefined(permissions)) {
+      hasPermissions = isDefined(permissions.entities);
     }
     const permissionsCount = hasPermissions ? permissions.entities.length : 0;
     const permissionsTitle = (
@@ -163,7 +162,7 @@ class EntityPage extends React.Component {
       return null;
     }
 
-    if (!is_defined(InfoComponent)) {
+    if (!isDefined(InfoComponent)) {
       InfoComponent = EntityInfo;
     }
 
@@ -223,7 +222,7 @@ class EntityPage extends React.Component {
     return (
       <PermissionsComponent
         entity={entity}
-        permissions={is_defined(permissions) ? permissions.entities : undefined}
+        permissions={isDefined(permissions) ? permissions.entities : undefined}
         onChanged={onPermissionChanged}
         onDownloaded={onPermissionDownloaded}
         onError={onPermissionDownloadError}
@@ -237,7 +236,7 @@ class EntityPage extends React.Component {
       loading,
     } = this.props;
 
-    if (!is_defined(entity)) {
+    if (!isDefined(entity)) {
       if (loading) {
         return (
           <Loading loading={loading}/>

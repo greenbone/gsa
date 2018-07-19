@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 
 import {Link as RLink} from 'react-router';
 
-import {is_defined, isString} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -85,11 +85,11 @@ let Link = ({
 
   const location = {
     pathname,
-    query: is_defined(query) ? {...query} : {},
-    hash: is_defined(anchor) ? '#' + anchor : undefined,
+    query: isDefined(query) ? {...query} : {},
+    hash: isDefined(anchor) ? '#' + anchor : undefined,
   };
 
-  if (is_defined(filter)) {
+  if (isDefined(filter)) {
     location.query.filter = isString(filter) ?
       filter : filter.toFilterString();
   }

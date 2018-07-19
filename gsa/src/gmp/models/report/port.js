@@ -22,7 +22,7 @@
  */
 import 'core-js/fn/string/includes';
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 
 import {setProperties, parseInt, parseSeverity} from '../../parser.js';
 
@@ -57,7 +57,7 @@ class ReportPort {
 
       copy.number = parseInt(number);
 
-      if (!is_defined(copy.number)) {
+      if (!isDefined(copy.number)) {
         // port number wasn't a number (e.g. general)
         copy.number = 0;
       }

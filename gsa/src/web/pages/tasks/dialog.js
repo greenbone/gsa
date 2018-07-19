@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {
@@ -78,7 +78,7 @@ import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 const log = logger.getLogger('web.tasks.dialog');
 
 const get_scanner = (scanners, scanner_id) => {
-  if (!is_defined(scanners)) {
+  if (!isDefined(scanners)) {
     return undefined;
   }
 
@@ -100,7 +100,7 @@ class ScannerSelect extends React.Component {
     let config_id;
 
     const scanner = get_scanner(scanners, value);
-    const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+    const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
@@ -205,7 +205,7 @@ const TaskDialog = ({
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = is_defined(scanner) ? scanner.scanner_type : undefined;
+  const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
 
   const tag_items = render_select_items(tags);
 

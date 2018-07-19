@@ -27,7 +27,7 @@ import {shortDate} from 'gmp/locale/date';
 
 import {parseInt, parseDate} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -76,7 +76,7 @@ export class HostsModifiedHighDisplay extends React.Component {
   handleRangeSelect(start, end) {
     const {filter, onFilterChanged} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -84,9 +84,9 @@ export class HostsModifiedHighDisplay extends React.Component {
     let {x: endDate} = end;
     const dateFormat = 'YYYY-MM-DDTHH:mm';
 
-    let newFilter = is_defined(filter) ? filter.copy() : new Filter();
+    let newFilter = isDefined(filter) ? filter.copy() : new Filter();
 
-    if (is_defined(startDate)) {
+    if (isDefined(startDate)) {
 
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
@@ -101,7 +101,7 @@ export class HostsModifiedHighDisplay extends React.Component {
       }
     }
 
-    if (is_defined(endDate)) {
+    if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
         `modified<${endDate.format(dateFormat)}`);
 

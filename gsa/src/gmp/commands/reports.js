@@ -23,7 +23,7 @@
  */
 import logger from '../log';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import registerCommand from '../command';
 
@@ -92,7 +92,7 @@ class ReportCommand extends EntityCommand {
       delta_report_id,
       report_id: id,
       report_format_id,
-      filter: is_defined(filter) ? filter.all() : ALL_FILTER,
+      filter: isDefined(filter) ? filter.all() : ALL_FILTER,
     }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
 

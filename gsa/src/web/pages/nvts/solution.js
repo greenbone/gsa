@@ -20,12 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
-import {is_defined} from 'gmp/utils';
-import {TAG_NA} from 'gmp/models/nvt.js';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from '../../utils/proptypes.js';
 import DetailsBlock from '../../entity/block.js';
@@ -40,7 +41,7 @@ const Solution = ({
   solution,
   solutionType,
 }) => {
-  const has_solution = is_defined(solution) && solution !== TAG_NA;
+  const has_solution = isDefined(solution) && solution !== TAG_NA;
 
   if (!has_solution) {
     return null;

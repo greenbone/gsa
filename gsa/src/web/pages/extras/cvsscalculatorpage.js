@@ -28,7 +28,7 @@ import glamorous from 'glamorous';
 import _ from 'gmp/locale';
 
 import {KeyCode} from 'gmp/utils/event';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   parseCvssBaseVector,
@@ -91,8 +91,8 @@ class CvssCalculator extends React.Component {
   componentDidMount() {
     const {location} = this.props;
 
-    if (is_defined(location) && is_defined(location.query) &&
-      is_defined(location.query.cvssVector)) {
+    if (isDefined(location) && isDefined(location.query) &&
+      isDefined(location.query.cvssVector)) {
       const {cvssVector} = location.query;
       this.setState({cvssVector, userVector: cvssVector});
       this.calculateScore(cvssVector);
@@ -157,9 +157,9 @@ class CvssCalculator extends React.Component {
       availabilityImpact,
     } = cvssValues;
 
-    if (is_defined(accessVector) && is_defined(accessComplexity) &&
-      is_defined(confidentialityImpact) && is_defined(authentication) &&
-      is_defined(integrityImpact) && is_defined(availabilityImpact)) {
+    if (isDefined(accessVector) && isDefined(accessComplexity) &&
+      isDefined(confidentialityImpact) && isDefined(authentication) &&
+      isDefined(integrityImpact) && isDefined(availabilityImpact)) {
 
       /* only override cvss values and vector if user vector has valid input */
 

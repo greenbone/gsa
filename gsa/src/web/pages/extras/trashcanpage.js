@@ -26,7 +26,7 @@ import {Col} from 'glamorous';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import AlertsTable from '../alerts/table.js';
 import AgentsTable from '../agents/table.js';
@@ -151,23 +151,23 @@ class Trashcan extends React.Component {
   }
 
   createContentsTable(trash) {
-    const render_agents = is_defined(trash.agent_list);
-    const render_alerts = is_defined(trash.alert_list);
-    const render_configs = is_defined(trash.config_list);
-    const render_credentials = is_defined(trash.credential_list);
-    const render_filters = is_defined(trash.filter_list);
-    const render_groups = is_defined(trash.group_list);
-    const render_notes = is_defined(trash.note_list);
-    const render_overrides = is_defined(trash.override_list);
-    const render_permissions = is_defined(trash.permission_list);
-    const render_port_lists = is_defined(trash.port_list_list);
-    const render_report_formats = is_defined(trash.report_format_list);
-    const render_roles = is_defined(trash.role_list);
-    const render_scanners = is_defined(trash.scanner_list);
-    const render_schedules = is_defined(trash.schedule_list);
-    const render_tags = is_defined(trash.tag_list);
-    const render_targets = is_defined(trash.target_list);
-    const render_tasks = is_defined(trash.task_list);
+    const render_agents = isDefined(trash.agent_list);
+    const render_alerts = isDefined(trash.alert_list);
+    const render_configs = isDefined(trash.config_list);
+    const render_credentials = isDefined(trash.credential_list);
+    const render_filters = isDefined(trash.filter_list);
+    const render_groups = isDefined(trash.group_list);
+    const render_notes = isDefined(trash.note_list);
+    const render_overrides = isDefined(trash.override_list);
+    const render_permissions = isDefined(trash.permission_list);
+    const render_port_lists = isDefined(trash.port_list_list);
+    const render_report_formats = isDefined(trash.report_format_list);
+    const render_roles = isDefined(trash.role_list);
+    const render_scanners = isDefined(trash.scanner_list);
+    const render_schedules = isDefined(trash.schedule_list);
+    const render_tags = isDefined(trash.tag_list);
+    const render_targets = isDefined(trash.target_list);
+    const render_tasks = isDefined(trash.task_list);
 
     return (
       <TableBody>
@@ -211,7 +211,7 @@ class Trashcan extends React.Component {
 
   render() {
     const {trash} = this.state;
-    if (!is_defined(trash)) {
+    if (!isDefined(trash)) {
       return <Loading/>;
     }
 
@@ -257,7 +257,7 @@ class Trashcan extends React.Component {
           {contents_table}
         </Table>
 
-        {is_defined(trash.agent_list) &&
+        {isDefined(trash.agent_list) &&
           <span>
             <LinkTarget id="agent"/>
             <h1>{_('Agents')}</h1>
@@ -267,7 +267,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.alert_list) &&
+        {isDefined(trash.alert_list) &&
           <span>
             <LinkTarget id="alert"/>
             <h1>{_('Alerts')}</h1>
@@ -277,7 +277,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.config_list) &&
+        {isDefined(trash.config_list) &&
           <span>
             <LinkTarget id="config"/>
             <h1>{_('Scan Configs')}</h1>
@@ -287,7 +287,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.credential_list) &&
+        {isDefined(trash.credential_list) &&
           <span>
             <LinkTarget id="credential"/>
             <h1>{_('Credentials')}</h1>
@@ -297,7 +297,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.filter_list) &&
+        {isDefined(trash.filter_list) &&
           <span>
             <LinkTarget id="filter"/>
             <h1>{_('Filters')}</h1>
@@ -307,7 +307,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.group_list) &&
+        {isDefined(trash.group_list) &&
           <span>
             <LinkTarget id="group"/>
             <h1>{_('Groups')}</h1>
@@ -317,7 +317,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.note_list) &&
+        {isDefined(trash.note_list) &&
           <span>
             <LinkTarget id="note"/>
             <h1>{_('Notes')}</h1>
@@ -327,7 +327,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.override_list) &&
+        {isDefined(trash.override_list) &&
           <span>
             <LinkTarget id="override"/>
             <h1>{_('Overrides')}</h1>
@@ -337,7 +337,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.permission_list) &&
+        {isDefined(trash.permission_list) &&
           <span>
             <LinkTarget id="permission"/>
             <h1>{_('Permissions')}</h1>
@@ -347,7 +347,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.port_list_list) &&
+        {isDefined(trash.port_list_list) &&
           <span>
             <LinkTarget id="port_list"/>
             <h1>{_('Port Lists')}</h1>
@@ -357,7 +357,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.report_format_list) &&
+        {isDefined(trash.report_format_list) &&
           <span>
             <LinkTarget id="report_format"/>
             <h1>{_('Report Formats')}</h1>
@@ -367,7 +367,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.role_list) &&
+        {isDefined(trash.role_list) &&
           <span>
             <LinkTarget id="role"/>
             <h1>{_('Roles')}</h1>
@@ -377,7 +377,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.scanner_list) &&
+        {isDefined(trash.scanner_list) &&
           <span>
             <LinkTarget id="scanner"/>
             <h1>{_('Scanners')}</h1>
@@ -387,7 +387,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.schedule_list) &&
+        {isDefined(trash.schedule_list) &&
           <span>
             <LinkTarget id="schedule"/>
             <h1>{_('Schedules')}</h1>
@@ -397,7 +397,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.tag_list) &&
+        {isDefined(trash.tag_list) &&
           <span>
             <LinkTarget id="tag"/>
             <h1>{_('Tags')}</h1>
@@ -407,7 +407,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.target_list) &&
+        {isDefined(trash.target_list) &&
           <span>
             <LinkTarget id="target"/>
             <h1>{_('Targets')}</h1>
@@ -417,7 +417,7 @@ class Trashcan extends React.Component {
             />
           </span>
         }
-        {is_defined(trash.task_list) &&
+        {isDefined(trash.task_list) &&
           <span>
             <LinkTarget id="task"/>
             <h1>{_('Tasks')}</h1>

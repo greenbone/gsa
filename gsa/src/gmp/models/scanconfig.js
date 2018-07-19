@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {
   forEach,
   map,
@@ -54,7 +54,7 @@ class ScanConfig extends Model {
     // family by name is required
     const families = {};
 
-    if (is_defined(elem.families)) {
+    if (isDefined(elem.families)) {
       ret.family_list = map(elem.families.family, family => {
         const {name} = family;
         const new_family = {
@@ -73,7 +73,7 @@ class ScanConfig extends Model {
       ret.family_list = [];
     }
 
-    if (is_defined(ret.family_count)) {
+    if (isDefined(ret.family_count)) {
       families.count = parse_count(ret.family_count.__text);
       families.trend = ret.family_count.growing;
 
@@ -85,7 +85,7 @@ class ScanConfig extends Model {
 
     ret.families = families;
 
-    if (is_defined(ret.nvt_count)) {
+    if (isDefined(ret.nvt_count)) {
       ret.nvts = {
         count: parse_count(ret.nvt_count.__text),
         trend: ret.nvt_count.growing,
@@ -93,12 +93,12 @@ class ScanConfig extends Model {
 
       delete ret.nvt_count;
 
-      if (is_defined(ret.known_nvt_count)) {
+      if (isDefined(ret.known_nvt_count)) {
         ret.nvts.known = parse_count(ret.known_nvt_count);
         delete ret.known_nvt_count;
       }
 
-      if (is_defined(ret.max_nvt_count)) {
+      if (isDefined(ret.max_nvt_count)) {
         ret.nvts.max = parse_count(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
@@ -110,7 +110,7 @@ class ScanConfig extends Model {
     const nvt_preferences = [];
     const scanner_preferences = [];
 
-    if (is_defined(elem.preferences)) {
+    if (isDefined(elem.preferences)) {
       forEach(elem.preferences.preference, preference => {
         const pref = {...preference};
         if (isEmpty(pref.nvt.name)) {
@@ -136,7 +136,7 @@ class ScanConfig extends Model {
 
     ret.scan_config_type = parseInt(elem.type);
 
-    if (is_defined(elem.scanner)) {
+    if (isDefined(elem.scanner)) {
       const scanner = {
         ...elem.scanner,
         name: elem.scanner.__text,
@@ -144,7 +144,7 @@ class ScanConfig extends Model {
       ret.scanner = new Model(scanner, 'scanner');
     }
 
-    if (is_defined(elem.tasks)) {
+    if (isDefined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
     }
     else {

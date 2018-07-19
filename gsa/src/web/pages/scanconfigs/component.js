@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {forEach} from 'gmp/utils/array';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty, shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -204,7 +204,7 @@ class ScanConfigComponent extends React.Component {
         const {name} = family;
         const config_family = scanconfig.families[name];
 
-        if (is_defined(config_family)) {
+        if (isDefined(config_family)) {
           trend[name] = parseYesNo(config_family.trend);
           select[name] = config_family.nvts.count === family.max ? YES_VALUE :
             NO_VALUE;

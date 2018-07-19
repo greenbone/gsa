@@ -21,10 +21,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 const DialogContainer = glamorous.div(
   {
@@ -36,10 +35,10 @@ const DialogContainer = glamorous.div(
     outline: '0',
   },
   ({width}) => ({
-    width: is_defined(width) ? width : '400px',
+    width: isDefined(width) ? width : '400px',
   }),
   ({height}) => ({
-    height: is_defined(height) ? height : 'auto',
+    height: isDefined(height) ? height : 'auto',
   }),
 );
 

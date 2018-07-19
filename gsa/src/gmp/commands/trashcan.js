@@ -23,7 +23,7 @@
 import registerCommand from '../command';
 
 import {apiType} from '../utils/entitytype.js';
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
 import Agent from '../models/agent';
@@ -74,77 +74,77 @@ class Trashcan extends HttpCommand {
     return this.httpGet({cmd: 'get_trash'}).then(response => {
       const trash_data = response.data.get_trash;
       const data = {};
-      if (is_defined(trash_data.get_agents_response)) {
+      if (isDefined(trash_data.get_agents_response)) {
         data.agent_list = map(trash_data.get_agents_response.agent,
           model => new Agent(model));
       }
-      if (is_defined(trash_data.get_alerts_response)) {
+      if (isDefined(trash_data.get_alerts_response)) {
         data.alert_list = map(trash_data.get_alerts_response.alert,
           model => new Alert(model));
       }
-      if (is_defined(trash_data.get_configs_response)) {
+      if (isDefined(trash_data.get_configs_response)) {
         data.config_list = map(trash_data.get_configs_response.config,
           model => new Scanconfig(model));
       }
-      if (is_defined(trash_data.get_credentials_response)) {
+      if (isDefined(trash_data.get_credentials_response)) {
         data.credential_list = map(
           trash_data.get_credentials_response.credential,
           model => new Credential(model)
         );
       }
-      if (is_defined(trash_data.get_filters_response)) {
+      if (isDefined(trash_data.get_filters_response)) {
         data.filter_list = map(trash_data.get_filters_response.filter,
             model => new Filter(model));
       }
-      if (is_defined(trash_data.get_groups_response)) {
+      if (isDefined(trash_data.get_groups_response)) {
         data.group_list = map(trash_data.get_groups_response.group,
             model => new Group(model));
       }
-      if (is_defined(trash_data.get_notes_response)) {
+      if (isDefined(trash_data.get_notes_response)) {
         data.note_list = map(trash_data.get_notes_response.note,
           model => new Note(model));
       }
-      if (is_defined(trash_data.get_overrides_response)) {
+      if (isDefined(trash_data.get_overrides_response)) {
         data.override_list = map(trash_data.get_overrides_response.override,
           model => new Override(model));
       }
-      if (is_defined(trash_data.get_permissions_response)) {
+      if (isDefined(trash_data.get_permissions_response)) {
         data.permission_list = map(
           trash_data.get_permissions_response.permission,
           model => new Permission(model)
         );
       }
-      if (is_defined(trash_data.get_port_lists_response)) {
+      if (isDefined(trash_data.get_port_lists_response)) {
         data.port_list_list = map(trash_data.get_port_lists_response.port_list,
           model => new PortList(model));
       }
-      if (is_defined(trash_data.get_report_formats_response)) {
+      if (isDefined(trash_data.get_report_formats_response)) {
         data.report_format_list = map(
           trash_data.get_report_formats_response.report_format,
           model => new ReportFormat(model)
         );
       }
-      if (is_defined(trash_data.get_roles_response)) {
+      if (isDefined(trash_data.get_roles_response)) {
         data.role_list = map(trash_data.get_roles_response.role,
           model => new Role(model));
       }
-      if (is_defined(trash_data.get_scanners_response)) {
+      if (isDefined(trash_data.get_scanners_response)) {
         data.scanner_list = map(trash_data.get_scanners_response.scanner,
           model => new Scanner(model));
       }
-      if (is_defined(trash_data.get_schedules_response)) {
+      if (isDefined(trash_data.get_schedules_response)) {
         data.schedule_list = map(trash_data.get_schedules_response.schedule,
           model => new Schedule(model));
       }
-      if (is_defined(trash_data.get_tags_response)) {
+      if (isDefined(trash_data.get_tags_response)) {
         data.tag_list = map(trash_data.get_tags_response.tag,
           model => new Tag(model));
       }
-      if (is_defined(trash_data.get_targets_response)) {
+      if (isDefined(trash_data.get_targets_response)) {
         data.target_list = map(trash_data.get_targets_response.target,
           model => new Target(model));
       }
-      if (is_defined(trash_data.get_tasks_response)) {
+      if (isDefined(trash_data.get_tasks_response)) {
         data.task_list = map(trash_data.get_tasks_response.task,
           model => new Task(model));
       }

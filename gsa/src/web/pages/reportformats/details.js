@@ -26,7 +26,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_yesno} from '../../utils/render.js';
@@ -87,7 +87,7 @@ const ReportFormatDetails = ({
                 <span>
                   {render_yesno(trust.value)}
                 </span>
-                {is_defined(trust.time) &&
+                {isDefined(trust.time) &&
                   <span>({shortDate(trust.time)})</span>
                 }
               </Divider>

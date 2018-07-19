@@ -30,7 +30,7 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import {
@@ -124,9 +124,9 @@ class CredentialsDialog extends React.Component {
       value: type,
     }));
 
-    const is_edit = is_defined(credential);
+    const is_edit = isDefined(credential);
 
-    if (!is_defined(base)) {
+    if (!isDefined(base)) {
       if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
         base = USERNAME_PASSWORD_CREDENTIAL_TYPE;
       }
@@ -152,7 +152,7 @@ class CredentialsDialog extends React.Component {
       password,
       privacy_algorithm,
       privacy_password,
-      id: is_defined(credential) ? credential.id : undefined,
+      id: isDefined(credential) ? credential.id : undefined,
     };
 
     return (

@@ -25,7 +25,7 @@ import XHRBackend from 'i18next-xhr-backend';
 
 import logger from '../log';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 import Detector from './detector';
 import LanguageStore from './store';
@@ -89,13 +89,13 @@ export const get_language = () => i18next.language;
  * @returns undefined
  */
 export const set_language = lang => i18next.changeLanguage(lang, err => {
-  if (is_defined(err)) {
+  if (isDefined(err)) {
     log.error('Could not set language to', lang, err);
   }
   else {
     log.debug('Language changed to', get_language());
 
-    if (is_defined(lang)) {
+    if (isDefined(lang)) {
       // store set language
       LanguageStore.set(lang);
     }

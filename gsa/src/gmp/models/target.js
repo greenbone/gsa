@@ -23,7 +23,7 @@
 
 import Model from '../model.js';
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
@@ -45,7 +45,7 @@ class Target extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    if (is_defined(elem.port_list) && !isEmpty(elem.port_list._id)) {
+    if (isDefined(elem.port_list) && !isEmpty(elem.port_list._id)) {
       ret.port_list = new PortList(ret.port_list);
     }
     else {
@@ -54,7 +54,7 @@ class Target extends Model {
 
     for (const name of TARGET_CREDENTIAL_NAMES) {
       const cred = ret[name];
-      if (is_defined(cred) && !isEmpty(cred._id)) {
+      if (isDefined(cred) && !isEmpty(cred._id)) {
         ret[name] = new Model(cred, 'credential');
       }
       else {
@@ -70,7 +70,7 @@ class Target extends Model {
     ret.reverse_lookup_only = parseYesNo(elem.reverse_lookup_only);
     ret.reverse_lookup_unify = parseYesNo(elem.reverse_lookup_unify);
 
-    if (is_defined(elem.tasks)) {
+    if (isDefined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
     }
 

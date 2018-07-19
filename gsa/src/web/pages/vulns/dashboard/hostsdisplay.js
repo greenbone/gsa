@@ -30,7 +30,7 @@ import _ from 'gmp/locale';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat} from 'gmp/parser';
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -136,7 +136,7 @@ export class VulnsHostsDisplay extends React.Component {
   handleDataClick(data) {
     const {onFilterChanged, filter} = this.props;
 
-    if (!is_defined(onFilterChanged)) {
+    if (!isDefined(onFilterChanged)) {
       return;
     }
 
@@ -145,11 +145,11 @@ export class VulnsHostsDisplay extends React.Component {
 
     let hostFilter;
 
-    if (is_defined(start) && start > 0) {
+    if (isDefined(start) && start > 0) {
       const startTerm = FilterTerm.fromString(`hosts>${start - 1}`);
       const endTerm = FilterTerm.fromString(`hosts<${end + 1}`);
 
-      if (is_defined(filter) && filter.hasTerm(startTerm) &&
+      if (isDefined(filter) && filter.hasTerm(startTerm) &&
         filter.hasTerm(endTerm)) {
         return;
       }
@@ -158,7 +158,7 @@ export class VulnsHostsDisplay extends React.Component {
     else {
       let hostTerm;
 
-      if (is_defined(start)) {
+      if (isDefined(start)) {
         if (start === 0) {
           hostTerm = FilterTerm.fromString(`hosts=${start}`);
         }
@@ -167,14 +167,14 @@ export class VulnsHostsDisplay extends React.Component {
         hostTerm = FilterTerm.fromString(`hosts=""`);
       }
 
-      if (is_defined(filter) && filter.hasTerm(hostTerm)) {
+      if (isDefined(filter) && filter.hasTerm(hostTerm)) {
         return;
       }
 
       hostFilter = Filter.fromTerm(hostTerm);
     }
 
-    const newFilter = is_defined(filter) ? filter.copy().and(hostFilter) :
+    const newFilter = isDefined(filter) ? filter.copy().and(hostFilter) :
       hostFilter;
 
     onFilterChanged(newFilter);
@@ -210,7 +210,7 @@ export class VulnsHostsDisplay extends React.Component {
                 width={width}
                 xLabel={_('# of Hosts')}
                 yLabel={_('# of Vulnerabilities')}
-                onDataClick={is_defined(onFilterChanged) ?
+                onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
             )}

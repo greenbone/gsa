@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils/identity';
+import {isDefined} from '../utils/identity';
 
 class Settings {
 
@@ -35,7 +35,7 @@ class Settings {
 
   get(name) {
     const setting = this._settings[name];
-    if (is_defined(setting)) {
+    if (isDefined(setting)) {
       return setting;
     }
     return {};

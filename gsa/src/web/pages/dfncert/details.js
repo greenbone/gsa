@@ -22,9 +22,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -56,7 +56,7 @@ const DfnCertAdvDetails = ({
       <InfoTable>
         <TableBody>
 
-          {is_defined(title) &&
+          {isDefined(title) &&
             <TableRow>
               <TableData>
                 {_('Title')}
@@ -78,7 +78,7 @@ const DfnCertAdvDetails = ({
             </TableData>
           </TableRow>
 
-          {is_defined(advisory_link) &&
+          {isDefined(advisory_link) &&
             <TableRow>
               <TableData>
                 {_('Advisory Link')}

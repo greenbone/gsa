@@ -21,14 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale.js';
 
 import glamorous from 'glamorous';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
@@ -304,12 +303,12 @@ const Page = ({
                       count={paramsCount}
                     />
                   </Tab>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <Tab>
                       {tagsTitle}
                     </Tab>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <Tab>
                       {permissionsTitle}
                     </Tab>
@@ -328,12 +327,12 @@ const Page = ({
                   <TabPanel>
                     <Parameters entity={entity}/>
                   </TabPanel>
-                  {is_defined(tagsComponent) &&
+                  {isDefined(tagsComponent) &&
                     <TabPanel>
                       {tagsComponent}
                     </TabPanel>
                   }
-                  {is_defined(permissionsComponent) &&
+                  {isDefined(permissionsComponent) &&
                     <TabPanel>
                       {permissionsComponent}
                     </TabPanel>

@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {WeekDays} from 'gmp/models/event';
 
@@ -50,7 +50,7 @@ class WeekDaySelect extends React.Component {
   handleChange(val, valname) {
     const {onChange, value, name} = this.props;
 
-    if (!is_defined(onChange)) {
+    if (!isDefined(onChange)) {
       return;
     }
 

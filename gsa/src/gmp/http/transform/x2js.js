@@ -24,7 +24,7 @@ import X2JS2 from 'x2js';
 
 import _ from '../../locale.js';
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 
 import {parseEnvelopeMeta} from '../../parser.js';
 
@@ -59,14 +59,14 @@ const rejection = (rej, options) => {
 
     const {envelope} = xml2json(rej.xhr.responseXML);
 
-    if (is_defined(envelope)) {
+    if (isDefined(envelope)) {
       rej.root = envelope;
 
-      if (is_defined(envelope.gsad_response)) {
+      if (isDefined(envelope.gsad_response)) {
         return rej.setMessage(envelope.gsad_response.message);
       }
 
-      if (is_defined(envelope.action_result)) {
+      if (isDefined(envelope.action_result)) {
         return rej.setMessage(envelope.action_result.message);
       }
     }

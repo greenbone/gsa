@@ -23,7 +23,7 @@
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {ReccurenceFrequency} from 'gmp/models/event';
@@ -44,7 +44,7 @@ const week = today.clone().add(7, 'days');
 
 const transformScheduleData = (data = [], {endDate}) => {
   return data
-    .filter(task => is_defined(task.schedule))
+    .filter(task => isDefined(task.schedule))
     .map(task => {
       const {schedule, name} = task;
       const {event = {}} = schedule;
@@ -65,7 +65,7 @@ const transformScheduleData = (data = [], {endDate}) => {
         duration,
         nextStart: event.nextDate,
         starts: event.getNextDates(endDate),
-        isInfinite: is_defined(recurrence.isFinite) && !recurrence.isFinite(),
+        isInfinite: isDefined(recurrence.isFinite) && !recurrence.isFinite(),
         period,
       };
     });
@@ -91,7 +91,7 @@ export const TasksSchedulesTableDisplay = createDisplay({
   dataTitles: [_('Task Name'), _('Next Schedule Time')],
   dataRow: row => [
     row.label,
-    is_defined(row.nextStart) ? longDate(row.nextStart) : '-',
+    isDefined(row.nextStart) ? longDate(row.nextStart) : '-',
   ],
   dataTransform: transformScheduleData,
   title: () => _('Next Scheduled Tasks'),

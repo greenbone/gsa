@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../../utils/identity';
+import {isDefined} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
 import {parseInt} from '../../parser.js';
@@ -74,12 +74,12 @@ const VALUE_CONVERTERS = {
 
 const convert = (keyword, value, relation) => {
   let converter = KEYWORD_CONVERTERS[keyword];
-  if (is_defined(converter)) {
+  if (isDefined(converter)) {
     return converter(keyword, value, relation);
   }
 
   converter = VALUE_CONVERTERS[value];
-  if (is_defined(converter)) {
+  if (isDefined(converter)) {
     return converter(keyword, value, relation);
   }
 

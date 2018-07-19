@@ -21,12 +21,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -51,7 +50,7 @@ class ScheduleComponent extends React.Component {
   openScheduleDialog(schedule) {
     const {gmp} = this.props;
 
-    if (is_defined(schedule)) {
+    if (isDefined(schedule)) {
       const {event} = schedule;
       const {
         startDate,

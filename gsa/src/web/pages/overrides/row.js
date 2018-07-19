@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -54,7 +54,7 @@ import TableData from '../../components/table/data.js';
 
 
 const render_severity = severity => {
-  if (is_defined(severity)) {
+  if (isDefined(severity)) {
     if (severity <= LOG_VALUE) {
       return translateRiskFactor(extraRiskFactor(severity));
     }

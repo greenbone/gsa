@@ -27,7 +27,7 @@ import React from 'react';
 
 import _ from 'gmp/locale.js';
 
-import {is_defined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
@@ -82,10 +82,10 @@ class OverrideComponent extends React.Component {
   }
 
   openOverrideDialog(override, initial) {
-    if (is_defined(override)) {
+    if (isDefined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
-        if (is_defined(override.endTime)) {
+        if (isDefined(override.endTime)) {
           active = ACTIVE_YES_UNTIL_VALUE;
         }
         else {
@@ -116,10 +116,10 @@ class OverrideComponent extends React.Component {
         hosts_manual: hosts.join(' '),
         new_severity,
         new_severity_from_list,
-        nvt_name: is_defined(nvt) ? nvt.name : undefined,
-        oid: is_defined(nvt) ? nvt.oid : undefined,
+        nvt_name: isDefined(nvt) ? nvt.name : undefined,
+        oid: isDefined(nvt) ? nvt.oid : undefined,
         override,
-        port: is_defined(override.port) ? MANUAL : ANY,
+        port: isDefined(override.port) ? MANUAL : ANY,
         port_manual: override.port,
         result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
         result_name: hasId(result) ? result.name : undefined,
