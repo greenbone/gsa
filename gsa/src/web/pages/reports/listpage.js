@@ -24,8 +24,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -116,7 +118,7 @@ class Page extends React.Component {
     this.loadTasks().then(
       tasks => this.setState({
         tasks,
-        task_id: select_save_id(tasks),
+        task_id: selectSaveId(tasks),
         importDialogVisible: true,
       }));
   }

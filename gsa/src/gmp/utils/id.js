@@ -36,7 +36,7 @@ export function includesId(list, id) {
   return false;
 }
 
-export function select_save_id(list, id, empty_default) {
+export function selectSaveId(list, id, empty_default) {
   if (!is_defined(id) || !includesId(list, id)) {
     if (!is_defined(empty_default)) {
       return first(list).id;

@@ -32,7 +32,7 @@ import {NO_VALUE} from 'gmp/parser';
 
 import {first, forEach, map} from 'gmp/utils/array';
 import {is_array, is_defined} from 'gmp/utils/identity';
-import {includesId, select_save_id} from 'gmp/utils/id';
+import {includesId, selectSaveId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 
@@ -312,11 +312,11 @@ class TaskComponent extends React.Component {
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        scanner_id = select_save_id(scanners, scanner_id);
+        scanner_id = selectSaveId(scanners, scanner_id);
 
-        target_id = select_save_id(targets, target_id);
+        target_id = selectSaveId(targets, target_id);
 
-        schedule_id = select_save_id(schedules, schedule_id, UNSET_VALUE);
+        schedule_id = selectSaveId(schedules, schedule_id, UNSET_VALUE);
 
         alert_id = includesId(alerts, alert_id) ? alert_id : undefined;
 
@@ -404,11 +404,11 @@ class TaskComponent extends React.Component {
 
       const {credentials} = settings;
 
-      const ssh_credential = select_save_id(credentials,
+      const ssh_credential = selectSaveId(credentials,
         settings.get('Default SSH Credential').value, '');
-      const smb_credential = select_save_id(credentials,
+      const smb_credential = selectSaveId(credentials,
         settings.get('Default SMB Credential').value, '');
-      const esxi_credential = select_save_id(credentials,
+      const esxi_credential = selectSaveId(credentials,
         settings.get('Default ESXi Credential').value, '');
 
       const now = date().tz(settings.timezone);
@@ -450,7 +450,7 @@ class TaskComponent extends React.Component {
         modifyTaskWizardVisible: true,
         tasks: settings.tasks,
         reschedule: NO_VALUE,
-        task_id: select_save_id(settings.tasks),
+        task_id: selectSaveId(settings.tasks),
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),

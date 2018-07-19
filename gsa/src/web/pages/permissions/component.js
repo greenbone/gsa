@@ -24,8 +24,11 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, shorten, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {selectSaveId} from 'gmp/utils/id';
 
 import PropTypes from '../../utils/proptypes.js';
 import compose from '../../utils/compose.js';
@@ -118,7 +121,7 @@ class PermissionsComponent extends React.Component {
       gmp.users.getAll().then(response => {
         const {data: users} = response;
         this.setState({
-          userId: select_save_id(users, state.userId),
+          userId: selectSaveId(users, state.userId),
           users,
         });
       });
@@ -133,7 +136,7 @@ class PermissionsComponent extends React.Component {
       gmp.roles.getAll().then(response => {
         const {data: roles} = response;
         this.setState({
-          roleId: select_save_id(roles, state.roleId),
+          roleId: selectSaveId(roles, state.roleId),
           roles,
         });
       });
@@ -148,7 +151,7 @@ class PermissionsComponent extends React.Component {
       gmp.groups.getAll().then(response => {
         const {data: groups} = response;
         this.setState({
-          groupId: select_save_id(groups, state.groupId),
+          groupId: selectSaveId(groups, state.groupId),
           groups,
         });
       });

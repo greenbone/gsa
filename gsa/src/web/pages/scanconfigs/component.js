@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {forEach} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
 import {is_empty, shorten} from 'gmp/utils/string';
-import {select_save_id} from 'gmp/utils/id';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
 
@@ -186,7 +186,7 @@ class ScanConfigComponent extends React.Component {
         scanner.scanner_type === OSP_SCANNER_TYPE);
       return {
         scanners,
-        scanner_id: select_save_id(scanners),
+        scanner_id: selectSaveId(scanners),
       };
     });
   }

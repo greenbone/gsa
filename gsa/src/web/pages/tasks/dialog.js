@@ -24,16 +24,19 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
-import {is_defined, select_save_id} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import logger from 'gmp/log';
+
+import {is_defined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {
   NO_VALUE,
   YES_VALUE,
-} from 'gmp/parser.js';
+} from 'gmp/parser';
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task.js';
+import {AUTO_DELETE_KEEP, AUTO_DELETE_DEFAULT_VALUE} from 'gmp/models/task';
 
 import {
   OPENVAS_SCANNER_TYPE,
@@ -41,14 +44,14 @@ import {
   SLAVE_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
   CVE_SCANNER_TYPE,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
 import {
   EMPTY_SCAN_CONFIG_ID,
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from 'gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities';
@@ -101,11 +104,11 @@ class ScannerSelect extends React.Component {
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
+      config_id = selectSaveId(scanConfigs[OPENVAS_SCAN_CONFIG_TYPE],
         FULL_AND_FAST_SCAN_CONFIG_ID);
     }
     else if (scanner_type === OSP_SCANNER_TYPE) {
-      config_id = select_save_id(scanConfigs[OSP_SCAN_CONFIG_TYPE],
+      config_id = selectSaveId(scanConfigs[OSP_SCAN_CONFIG_TYPE],
         UNSET_VALUE);
     }
     else {
@@ -266,9 +269,9 @@ const TaskDialog = ({
         values: state,
         onValueChange,
       }) => {
-        const osp_config_id = select_save_id(
+        const osp_config_id = selectSaveId(
           scan_configs[OSP_SCAN_CONFIG_TYPE], state.config_id);
-        const openvas_config_id = select_save_id(
+        const openvas_config_id = selectSaveId(
           scan_configs[OPENVAS_SCAN_CONFIG_TYPE], state.config_id);
 
         const is_osp_scanner = state.scanner_type === OSP_SCANNER_TYPE;

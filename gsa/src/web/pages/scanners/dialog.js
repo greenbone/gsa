@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {filter, map} from 'gmp/utils/array';
 import {is_defined} from 'gmp/utils/identity';
-import {select_save_id} from 'gmp/utils/id';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt} from 'gmp/parser';
 
@@ -142,7 +142,7 @@ class ScannerDialog extends React.Component {
       const scan_credentials = filter_credentials(credentials, value);
 
       onScannerTypeChange(value, name);
-      onScannerTypeChange(select_save_id(scan_credentials, credential_id),
+      onScannerTypeChange(selectSaveId(scan_credentials, credential_id),
         'credential_id');
     }
   }
