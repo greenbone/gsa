@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {longDate} from 'gmp/locale';
+import {longDate} from 'gmp/locale/date';
 
 import PropTypes from '../../utils/proptypes.js';
 import {na, renderComponent} from '../../utils/render.js';
