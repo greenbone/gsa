@@ -26,8 +26,10 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale.js';
-import {KeyCode, is_defined, is_string} from 'gmp/utils';
 import logger from 'gmp/log.js';
+
+import {KeyCode} from 'gmp/utils/event';
+import {is_defined, is_string} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {render_select_items} from '../../utils/render.js';

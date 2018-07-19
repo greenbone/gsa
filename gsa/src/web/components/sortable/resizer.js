@@ -24,7 +24,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, throttleAnimation} from 'gmp/utils';
+import {throttleAnimation} from 'gmp/utils/event';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';

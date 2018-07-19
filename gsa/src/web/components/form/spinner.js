@@ -26,7 +26,8 @@ import 'core-js/fn/array/includes';
 import React from 'react';
 import glamorous from 'glamorous';
 
-import {debounce, is_defined, KeyCode} from 'gmp/utils';
+import {debounce, KeyCode} from 'gmp/utils/event';
+import {is_defined} from 'gmp/utils/identity';
 
 import {parseFloat, parseInt} from 'gmp/parser.js';
 

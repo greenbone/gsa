@@ -24,7 +24,8 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined} from 'gmp/utils';
+import {KeyCode} from 'gmp/utils/event';
+import {is_defined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 

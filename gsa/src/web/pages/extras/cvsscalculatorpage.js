@@ -25,13 +25,15 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import {is_defined, KeyCode} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {KeyCode} from 'gmp/utils/event';
+import {is_defined} from 'gmp/utils/identity';
 
 import {
   parseCvssBaseVector,
   parseCvssBaseFromVector,
-} from 'gmp/parser.js';
+} from 'gmp/parser';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 

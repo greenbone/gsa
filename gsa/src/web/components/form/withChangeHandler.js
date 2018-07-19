@@ -24,9 +24,10 @@
 
 import React from 'react';
 
-import {is_defined, debounce} from 'gmp/utils';
+import {debounce} from 'gmp/utils/event';
+import {is_defined} from 'gmp/utils/identity';
 
-import {parseInt} from 'gmp/parser.js';
+import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 
