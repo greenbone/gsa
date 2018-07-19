@@ -51,7 +51,7 @@ export function is_jsdate(value) {
   return Object.prototype.toString.call(value) === '[object Date]';
 }
 
-export const is_model_element = elem => is_defined(elem) &&
+export const isModelElement = elem => is_defined(elem) &&
   is_string(elem._id) && elem._id.length > 0;
 
 // vim: set ts=2 sw=2 tw=80:

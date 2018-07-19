@@ -29,7 +29,7 @@ import {
   is_number,
   is_function,
   is_jsdate,
-  is_model_element,
+  isModelElement,
 } from '../identity';
 
 describe('is_defined function test', () => {
@@ -283,30 +283,30 @@ describe('is_model_element function test', () => {
 
   test('should return false for undefined variable', () => {
     let x;
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should throw for null variable', () => {
     const x = null;
-    expect(() => is_model_element(x)).toThrow(TypeError);
+    expect(() => isModelElement(x)).toThrow(TypeError);
   });
 
   test('should return false for an empty object', () => {
     const x = {};
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should return false for an object without _id', () => {
     const x = {foo: 'bar'};
-    expect(is_model_element(x)).toBe(false);
+    expect(isModelElement(x)).toBe(false);
   });
 
   test('should return false for empty id', () => {
-    expect(is_model_element({_id: ''})).toBe(false);
+    expect(isModelElement({_id: ''})).toBe(false);
   });
 
   test('should return true for an object with _id', () => {
-    expect(is_model_element({_id: '1'})).toBe(true);
+    expect(isModelElement({_id: '1'})).toBe(true);
   });
 });
 

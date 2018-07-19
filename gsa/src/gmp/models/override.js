@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {is_defined, is_model_element} from '../utils/identity';
+import {is_defined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
@@ -73,14 +73,14 @@ class Override extends Model {
 
     ret = {...ret, ...parseText(ret.text)};
 
-    if (is_model_element(ret.task)) {
+    if (isModelElement(ret.task)) {
       ret.task = new Model(ret.task, 'task');
     }
     else {
       delete ret.task;
     }
 
-    if (is_model_element(ret.result)) {
+    if (isModelElement(ret.result)) {
       ret.result = new Model(ret.result, 'result');
     }
     else {
