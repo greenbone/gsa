@@ -25,7 +25,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import PropTypes from '../utils/proptypes.js';
@@ -317,7 +317,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
   const filterSelector = selector(state);
   const filters = filterSelector.getEntities(filtersFilter);
   return {
-    filters: has_value(filters) ? filters : [],
+    filters: hasValue(filters) ? filters : [],
   };
 };
 

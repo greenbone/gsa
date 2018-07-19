@@ -25,10 +25,10 @@ import 'core-js/fn/array/includes';
 import 'core-js/fn/object/is';
 import 'core-js/fn/symbol';
 
-import {has_value, is_defined, isArray} from './identity';
+import {hasValue, is_defined, isArray} from './identity';
 
 export const forEach = (array, func) => {
-  if (!has_value(array) || !is_defined(func)) {
+  if (!hasValue(array) || !is_defined(func)) {
     return;
   }
 
@@ -44,7 +44,7 @@ export const forEach = (array, func) => {
 };
 
 export function map(array, func, empty = []) {
-  if (!has_value(array) || !is_defined(func)) {
+  if (!hasValue(array) || !is_defined(func)) {
     return empty;
   }
 
@@ -70,7 +70,7 @@ export function map(array, func, empty = []) {
 }
 
 export function filter(array, func, empty = []) {
-  if (!has_value(array) || !is_defined(func)) {
+  if (!hasValue(array) || !is_defined(func)) {
     return empty;
   }
   if (!is_defined(array.filter)) {

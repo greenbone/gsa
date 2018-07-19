@@ -24,7 +24,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 
 import compose from '../../../utils/compose';
 import withGmp from '../../../utils/withGmp';
@@ -102,7 +102,7 @@ class Loader extends React.Component {
   componentDidMount() {
     const {subscribe, subscriptions = [], data} = this.props;
 
-    if (!has_value(data)) {
+    if (!hasValue(data)) {
       // only call load if we don't have data yet
       this.load();
     }

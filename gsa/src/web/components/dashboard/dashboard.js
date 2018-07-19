@@ -32,7 +32,7 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {excludeObjectProps} from 'gmp/utils/object';
 
@@ -250,7 +250,7 @@ const mapStateToProps = (rootState, {id}) => {
     items = defaults.rows;
   }
   return {
-    error: has_value(error) ? error : undefined,
+    error: hasValue(error) ? error : undefined,
     isLoading: settingsSelector.getIsLoading(),
     items,
   };

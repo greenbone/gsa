@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -92,7 +92,7 @@ class Badge extends React.Component {
   }
 
   calcMargin() {
-    if (has_value(this.icon)) {
+    if (hasValue(this.icon)) {
       const {width} = this.icon.getBoundingClientRect();
       this.setState({margin: width / 2});
     }

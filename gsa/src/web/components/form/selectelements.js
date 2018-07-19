@@ -27,7 +27,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, has_value} from 'gmp/utils';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 
 import Theme from '../../utils/theme';
 import PropTypes from '../../utils/proptypes';
@@ -142,7 +142,7 @@ const getStyleComputedProperty = (element, property) => {
 };
 
 const getScrollParent = element => {
-  if (!has_value(element)) {
+  if (!hasValue(element)) {
     return document.body;
   }
 

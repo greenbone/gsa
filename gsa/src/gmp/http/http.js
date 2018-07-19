@@ -24,7 +24,7 @@ import logger from '../log.js';
 
 import _ from '../locale.js';
 
-import {is_defined, has_value, isArray} from '../utils/identity';
+import {is_defined, hasValue, isArray} from '../utils/identity';
 
 import Promise from '../promise.js';
 
@@ -40,7 +40,7 @@ const log = logger.getLogger('gmp.http');
 export const DEFAULT_TIMEOUT = 300000; // 5 min
 
 function formdata_append(formdata, key, value) {
-  if (has_value(value)) {
+  if (hasValue(value)) {
     formdata.append(key, value);
   }
 }

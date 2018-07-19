@@ -28,7 +28,7 @@ import {withRouter} from 'react-router';
 
 import _ from 'gmp/locale';
 
-import {is_defined, has_value} from 'gmp/utils/identity';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -43,7 +43,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 import {HostsTopologyLoader} from './loaders';
 
 const transformTopologyData = (data = []) => {
-  if (!has_value(data)) {
+  if (!hasValue(data)) {
     return {};
   }
 

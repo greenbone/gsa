@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {has_value} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 import Theme from '../../utils/theme';
@@ -108,7 +108,7 @@ class ToolTip extends React.Component {
     const target = this.target.current;
     const tooltip = this.tooltip.current;
 
-    if (!has_value(target) || !has_value(tooltip)) {
+    if (!hasValue(target) || !hasValue(tooltip)) {
       // ensure both refs have been set to not crash
       return;
     }

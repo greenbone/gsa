@@ -27,7 +27,7 @@ export function is_defined(value) {
   return value !== undefined;
 }
 
-export function has_value(value) {
+export function hasValue(value) {
   return value !== null && is_defined(value);
 }
 

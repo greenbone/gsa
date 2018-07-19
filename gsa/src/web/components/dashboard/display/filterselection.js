@@ -28,7 +28,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {has_value, is_defined} from 'gmp/utils/identity';
+import {hasValue, is_defined} from 'gmp/utils/identity';
 
 import SaveDialog from '../../dialog/savedialog';
 
@@ -169,7 +169,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
   const filterSelector = selector(state);
   const filters = filterSelector.getEntities(filtersFilter);
   return {
-    filters: has_value(filters) ? filters : [],
+    filters: hasValue(filters) ? filters : [],
   };
 };
 

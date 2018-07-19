@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {is_defined, has_value} from 'gmp/utils';
+import {is_defined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import Theme from '../../utils/theme.js';
@@ -148,7 +148,7 @@ const Menu = ({
     link = React.cloneElement(child, {title});
   }
 
-  const menuentries = React.Children.map(children, child => has_value(child) ? (
+  const menuentries = React.Children.map(children, child => hasValue(child) ? (
     <StyledMenuEntry key={child.key}>
       {child}
     </StyledMenuEntry>

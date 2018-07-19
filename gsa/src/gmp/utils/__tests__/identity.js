@@ -22,7 +22,7 @@
  */
 import {
   is_defined,
-  has_value,
+  hasValue,
   isObject,
   isString,
   isArray,
@@ -47,17 +47,17 @@ describe('is_defined function test', () => {
 describe('has_value function test', () => {
   test('should return false for undefined let variable', () => {
     let x;
-    expect(has_value(x)).toBe(false);
+    expect(hasValue(x)).toBe(false);
   });
 
   test('should return true for defined let variable', () => {
     let x = 1; // eslint-disable-line prefer-const
-    expect(has_value(x)).toBe(true);
+    expect(hasValue(x)).toBe(true);
   });
 
   test('should return false for null let variable', () => {
     let x = null; // eslint-disable-line prefer-const
-    expect(has_value(x)).toBe(false);
+    expect(hasValue(x)).toBe(false);
   });
 });
 

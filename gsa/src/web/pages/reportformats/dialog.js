@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {is_defined, isArray, has_value} from 'gmp/utils/identity';
+import {is_defined, isArray, hasValue} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -194,7 +194,7 @@ class Dialog extends React.Component {
   handleIdListsChange(value, name) {
     const {id_lists, onValueChange} = this.props;
 
-    if (!has_value(value)) {
+    if (!hasValue(value)) {
       value = [];
     }
 
