@@ -28,7 +28,6 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 import {hasValue, isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import EditIcon from 'web/components/icon/editicon';
