@@ -23,11 +23,10 @@
  */
 import {is_defined} from './identity';
 
-export function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+export const capitalizeFirstLetter = string =>
+  string.charAt(0).toUpperCase() + string.slice(1);
 
-export function shorten(text, length = 60) {
+export const shorten = (text, length = 60) => {
   if (!is_defined(text)) {
     return '';
   }
@@ -37,7 +36,7 @@ export function shorten(text, length = 60) {
   }
 
   return text.substr(0, length) + '...';
-}
+};
 
 /**
  * Split a string into several terms
@@ -50,7 +49,7 @@ export function shorten(text, length = 60) {
  *
  * @returns {Array} Split String as an array
  */
-export function split(string, separator, limit) {
+export const split = (string, separator, limit) => {
   if (is_defined(limit) && limit <= 0) {
     return [string];
   }
@@ -63,7 +62,7 @@ export function split(string, separator, limit) {
   }
 
   return splits;
-}
+};
 
 export const isEmpty = string => !is_defined(string) || string.length === 0;
 
