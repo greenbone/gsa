@@ -22,7 +22,7 @@
  */
 import {
   split,
-  capitalize_first_letter,
+  capitalizeFirstLetter,
   shorten,
   is_empty,
 } from '../string';
@@ -50,9 +50,9 @@ describe('split function tests', () => {
 
 describe('capatalize_first_letter function tests', () => {
   test('should capitalize first letter', () => {
-    expect(capitalize_first_letter('foo')).toEqual('Foo');
-    expect(capitalize_first_letter('Foo')).toEqual('Foo');
-    expect(capitalize_first_letter('bAR')).toEqual('BAR');
+    expect(capitalizeFirstLetter('foo')).toEqual('Foo');
+    expect(capitalizeFirstLetter('Foo')).toEqual('Foo');
+    expect(capitalizeFirstLetter('bAR')).toEqual('BAR');
   });
 });
 

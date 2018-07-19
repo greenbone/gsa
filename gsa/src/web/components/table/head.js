@@ -21,13 +21,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-import _ from 'gmp/locale.js';
 
 import glamorous from 'glamorous';
 
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -56,7 +57,7 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing down
         <span
           title={_('Sorted In Descending Order By {{sortBy}}',
-            {sortBy: capitalize_first_letter(sortBy)})}>
+            {sortBy: capitalizeFirstLetter(sortBy)})}>
           &nbsp;&#9660;
         </span>
       );
@@ -65,7 +66,7 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing up
         <span
           title={_('Sorted In Ascending Order By {{sortBy}}',
-            {sortBy: capitalize_first_letter(sortBy)})}>
+            {sortBy: capitalizeFirstLetter(sortBy)})}>
           &nbsp;&#9650;
         </span>
       );

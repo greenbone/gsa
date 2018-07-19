@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {is_defined, capitalize_first_letter} from 'gmp/utils';
+import _ from 'gmp/locale';
+
+import {is_defined} from 'gmp/utils/identity';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp.js';
@@ -45,7 +47,7 @@ const HelpIcon = ({
   const path = 'help/' + page + '.html';
 
   if (!is_defined(title)) {
-    title = _('Help: {{pagename}}', {pagename: capitalize_first_letter(page)});
+    title = _('Help: {{pagename}}', {pagename: capitalizeFirstLetter(page)});
   }
 
   const url = gmp.buildUrl(path, params, anchor);

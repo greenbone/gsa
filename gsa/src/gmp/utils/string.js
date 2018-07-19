@@ -23,7 +23,7 @@
  */
 import {is_defined} from './identity';
 
-export function capitalize_first_letter(string) {
+export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
