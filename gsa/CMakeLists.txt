@@ -742,7 +742,11 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/users/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/users/row.js
      ${GSA_SRC_DIR}/src/web/pages/users/table.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/defaultspart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/dialog.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/filterpart.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/generalpart.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/severitypart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
@@ -764,13 +768,26 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
-     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
+     ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
+     ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
+     ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
+     ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
+     ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/actions.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/actions.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/selectors.js
      ${GSA_SRC_DIR}/src/web/unauthorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js
      ${GSA_SRC_DIR}/src/web/utils/compose.js

@@ -1,7 +1,6 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
@@ -21,30 +20,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
 
-import {reducer as alert} from './alerts';
-import {reducer as credential} from './credentials';
-import {reducer as filter} from './filters';
-import {reducer as portlist} from './portlists';
-import {reducer as reportformat} from './reportformats';
-import {reducer as scanconfig} from './scanconfigs';
-import {reducer as scanner} from './scanners';
-import {reducer as schedule} from './schedules';
-import {reducer as target} from './targets';
+import {
+  TIMEZONE_LOADING_REQUEST,
+  TIMEZONE_LOADING_SUCCESS,
+} from './actions';
 
-const entitiesReducer = combineReducers({
-  alert,
-  credential,
-  filter,
-  portlist,
-  reportformat,
-  scanconfig,
-  scanner,
-  schedule,
-  target,
-});
+const initialState = {
+  value: null,
+  isLoading: false,
+  error: null,
+};
 
-export default entitiesReducer;
+const timezone = (state = initialState, action) => {
+  switch (action.type) {
+    case TIMEZONE_LOADING_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case TIMEZONE_LOADING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        value: action.value,
+      };
+    default:
+      return state;
+  }
+};
 
-// vim: set ts=2 sw=2 tw=80:
+export default timezone;

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -24,6 +25,8 @@ import {combineReducers} from 'redux';
 
 import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
+import timezone from './usersettings/timezone/reducers';
+import userSettings from './usersettings/reducers';
 
 import entities from './entities/reducers';
 import {CLEAR_STORE} from 'web/store/actions';
@@ -32,6 +35,8 @@ const rootReducer = combineReducers({
   dashboardData,
   dashboardSettings,
   entities,
+  timezone,
+  userSettings,
 });
 
 const clearStoreReducer = (state = {}, action) => {

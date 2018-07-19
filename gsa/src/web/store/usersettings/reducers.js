@@ -1,7 +1,6 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
@@ -21,30 +20,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
 
-import {reducer as alert} from './alerts';
-import {reducer as credential} from './credentials';
-import {reducer as filter} from './filters';
-import {reducer as portlist} from './portlists';
-import {reducer as reportformat} from './reportformats';
-import {reducer as scanconfig} from './scanconfigs';
-import {reducer as scanner} from './scanners';
-import {reducer as schedule} from './schedules';
-import {reducer as target} from './targets';
+import {
+  USER_SETTINGS_LOADING_REQUEST,
+  USER_SETTINGS_LOADING_SUCCESS,
+  USER_SETTINGS_LOADING_ERROR,
+} from './actions';
 
-const entitiesReducer = combineReducers({
-  alert,
-  credential,
-  filter,
-  portlist,
-  reportformat,
-  scanconfig,
-  scanner,
-  schedule,
-  target,
-});
+const userSettings = (state = {}, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_LOADING_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case USER_SETTINGS_LOADING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        data: action.data,
+      };
+    case USER_SETTINGS_LOADING_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
 
-export default entitiesReducer;
-
-// vim: set ts=2 sw=2 tw=80:
+export default userSettings;
