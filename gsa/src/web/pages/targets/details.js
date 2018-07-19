@@ -29,7 +29,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
@@ -116,7 +116,7 @@ const TargetDetails = ({
                 {_('Reverse Lookup Only')}
               </TableData>
               <TableData>
-                {render_yesno(reverse_lookup_only)}
+                {renderYesNo(reverse_lookup_only)}
               </TableData>
             </TableRow>
 
@@ -125,7 +125,7 @@ const TargetDetails = ({
                 {_('Reverse Lookup Unify')}
               </TableData>
               <TableData>
-                {render_yesno(reverse_lookup_unify)}
+                {renderYesNo(reverse_lookup_unify)}
               </TableData>
             </TableRow>
 

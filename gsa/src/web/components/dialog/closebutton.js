@@ -25,7 +25,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import Theme from '../../utils/theme.js';
 

@@ -65,7 +65,7 @@ import './commands/vulns.js';
 import './commands/wizard.js';
 
 import GmpHttp from './http/gmp.js';
-import {build_server_url, build_url_params} from './http/utils.js';
+import {buildServerUrl, buildUrlParams} from './http/utils.js';
 import DefaultTransform from './http/transform/default';
 
 import {getCommands} from './command.js';
@@ -177,10 +177,10 @@ class Gmp {
   }
 
   buildUrl(path, params, anchor) {
-    let url = build_server_url(this.server, path, this.protocol);
+    let url = buildServerUrl(this.server, path, this.protocol);
 
     if (isDefined(params)) {
-      url += '?' + build_url_params(params);
+      url += '?' + buildUrlParams(params);
     }
 
     if (isDefined(anchor)) {

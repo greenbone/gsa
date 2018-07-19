@@ -23,8 +23,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-import {parseInt} from 'gmp/parser.js';
+import _ from 'gmp/locale';
+
+import {parseInt} from 'gmp/parser';
 
 import PropTypes from '../../utils/proptypes.js';
 

@@ -23,9 +23,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale.js';
-
 import glamorous from 'glamorous';
+
+import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 

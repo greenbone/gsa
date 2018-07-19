@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';

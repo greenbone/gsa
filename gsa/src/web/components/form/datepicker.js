@@ -28,7 +28,7 @@ import DatePicker from 'react-datepicker';
 
 import _ from 'gmp/locale';
 
-import {get_language} from 'gmp/locale/lang';
+import {getLanguage} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -136,7 +136,7 @@ class DatePickerComponent extends React.Component {
         maxDate={date().add(3, 'years')}
         selected={value}
         todayButton={_('Today')}
-        locale={get_language()}
+        locale={getLanguage()}
         onChange={this.handleChange}
       />
     );

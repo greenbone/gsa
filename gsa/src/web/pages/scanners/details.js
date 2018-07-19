@@ -38,7 +38,7 @@ import {
 } from 'gmp/models/scanner.js';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
 
@@ -208,7 +208,7 @@ const OspScannerDetails = ({
                   def = _('List');
                 }
                 else if (param_type === PARAM_TYPE_BOOLEAN) {
-                  def = render_yesno(def);
+                  def = renderYesNo(def);
                 }
                 return (
                   <TableRow
@@ -227,7 +227,7 @@ const OspScannerDetails = ({
                       {def}
                     </TableData>
                     <TableData>
-                      {render_yesno(param.mandatory)}
+                      {renderYesNo(param.mandatory)}
                     </TableData>
                   </TableRow>
                 );

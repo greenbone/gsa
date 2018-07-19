@@ -25,8 +25,9 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import _ from 'gmp/locale.js';
-import logger from 'gmp/log.js';
+import _ from 'gmp/locale';
+
+import logger from 'gmp/log';
 
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';

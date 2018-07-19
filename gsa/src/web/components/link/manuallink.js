@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import {get_language} from 'gmp/locale';
+import {getLanguage} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -37,7 +37,7 @@ const LANGUAGE_MAPPING = {};
 const DEFAULT_LANGUAGE_PATH = 'en';
 
 const get_language_path = () => {
-  const lang = get_language();
+  const lang = getLanguage();
 
   if (!isDefined(lang)) {
     return DEFAULT_LANGUAGE_PATH;

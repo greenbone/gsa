@@ -22,13 +22,13 @@
  */
 import X2JS2 from 'x2js';
 
-import _ from '../../locale.js';
+import _ from '../../locale';
 
 import {isDefined} from '../../utils/identity';
 
-import {parseEnvelopeMeta} from '../../parser.js';
+import {parseEnvelopeMeta} from '../../parser';
 
-import Rejection from '../rejection.js';
+import Rejection from '../rejection';
 
 const x2js2 = new X2JS2();
 

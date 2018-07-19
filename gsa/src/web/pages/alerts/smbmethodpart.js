@@ -21,15 +21,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
 
 import {
   SMB_CREDENTIAL_TYPES,
   smb_credential_filter,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';

@@ -20,15 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale.js';
+import _ from 'gmp/locale';
+
 import {isDefined} from 'gmp/utils/identity';
 import {typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -89,7 +89,7 @@ const TagDetails = ({
               {_('Active')}
             </TableData>
             <TableData>
-              {render_yesno(entity.isActive())}
+              {renderYesNo(entity.isActive())}
             </TableData>
           </TableRow>
         </TableBody>

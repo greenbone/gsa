@@ -34,7 +34,7 @@ import Promise from 'gmp/promise';
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
 import PropTypes from '../../utils/proptypes.js';
-import {render_yesno} from '../../utils/render.js';
+import {renderYesNo} from '../../utils/render.js';
 import withComponentDefaults from '../../utils/withComponentDefaults.js';
 
 import EntityPage from '../../entity/page.js';
@@ -324,7 +324,7 @@ const Details = ({
               {_('Alterable')}
             </TableData>
             <TableData>
-              {render_yesno(entity.isAlterable())}
+              {renderYesNo(entity.isAlterable())}
             </TableData>
           </TableRow>
 
