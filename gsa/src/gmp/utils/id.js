@@ -27,16 +27,16 @@ import {is_defined, is_string} from './identity';
 export const hasId = model => is_defined(model) && is_string(model.id) &&
   model.id.length > 0;
 
-export function includesId(list, id) {
+export const includesId = (list, id) => {
   for (const value of list) {
     if (value.id === id) {
       return true;
     }
   }
   return false;
-}
+};
 
-export function selectSaveId(list, id, empty_default) {
+export const selectSaveId = (list, id, empty_default) => {
   if (!is_defined(id) || !includesId(list, id)) {
     if (!is_defined(empty_default)) {
       return first(list).id;
@@ -44,7 +44,7 @@ export function selectSaveId(list, id, empty_default) {
     return empty_default;
   }
   return id;
-}
+};
 
 // vim: set ts=2 sw=2 tw=80:
 
