@@ -38,8 +38,8 @@ export const N_A = _('N/A');
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
-export function renderOptions(list, default_opt_value,
-  default_opt = UNSET_LABEL) {
+export const renderOptions = (list, default_opt_value,
+  default_opt = UNSET_LABEL) => {
   const options = map(list, entry => {
     return (
       <option key={entry.id} value={entry.id}>{entry.name}</option>
@@ -53,7 +53,7 @@ export function renderOptions(list, default_opt_value,
     );
   }
   return options;
-}
+};
 
 /**
  * Render a entities list as items array
@@ -86,7 +86,7 @@ export const renderSelectItems = (
 
 export const severityFormat = format('0.1f');
 
-export function renderNvtName(oid, name, length = 70) {
+export const renderNvtName = (oid, name, length = 70) => {
   if (!isDefined(name)) {
     return '';
   }
@@ -100,23 +100,15 @@ export function renderNvtName(oid, name, length = 70) {
       {shorten(name, length)}
     </abbr>
   );
-}
+};
 
-export function renderComponent(Component, props = {}) {
-  if (Component) {
-    return <Component {...props}/>;
-  }
-  return null;
-}
+export const renderComponent = (Component, props = {}) => Component ?
+  <Component {...props}/> :
+  null;
 
-export function renderChildren(children) {
-  if (React.Children.count(children) > 1) {
-    return (
-      <React.Fragment>{children}</React.Fragment>
-    );
-  }
-  return children;
-}
+export const renderChildren = children => React.Children.count(children) > 1 ?
+  <React.Fragment>{children}</React.Fragment> :
+  children;
 
 export const na = value => {
   return isEmpty(value) ? N_A : value;
@@ -231,7 +223,7 @@ export const permissionDescription = (name, resource, subject) =>
     permissionDescriptionResourceWithSubject(name, resource, subject) :
     permissionDescriptionResource(name, resource);
 
-export function permissionDescriptionResource(name, resource) {
+export const permissionDescriptionResource = (name, resource) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
     const resourceType = {
@@ -260,10 +252,10 @@ export function permissionDescriptionResource(name, resource) {
   }
 
   return simplePermissionDescription(name);
-}
+};
 
-export function permissionDescriptionResourceWithSubject(name, resource,
-  subject) {
+export const permissionDescriptionResourceWithSubject = (name, resource,
+  subject) => {
   if (isDefined(resource)) {
     name = name.toLowerCase();
     const type = {
@@ -298,9 +290,9 @@ export function permissionDescriptionResourceWithSubject(name, resource,
   }
 
   return simplePermissionDescriptionWithSubject(name, subject);
-}
+};
 
-export function simplePermissionDescription(name) {
+export const simplePermissionDescription = name => {
   name = name.toLowerCase();
   switch (name) {
     case 'super':
@@ -369,9 +361,9 @@ export function simplePermissionDescription(name) {
     default:
       return name;
   }
-}
+};
 
-export function simplePermissionDescriptionWithSubject(name, subject) {
+export const simplePermissionDescriptionWithSubject = (name, subject) => {
   name = name.toLowerCase();
   let type = {
     subjectType: typeName(getEntityType(subject)),
@@ -464,7 +456,7 @@ export function simplePermissionDescriptionWithSubject(name, subject) {
     default:
       return name;
   }
-}
+};
 
 export const setRef = (...refs) => ref => {
   for (const rf of refs) {
