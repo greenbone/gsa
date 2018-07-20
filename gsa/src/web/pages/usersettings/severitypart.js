@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -54,7 +54,7 @@ const SeverityPart = ({
     <FormGroup title={_('Dynamic Severity')} titleSize="3">
       <Checkbox
         name="dynamicSeverity"
-        checked={parseYesNo(dynamicSeverity) === YES_VALUE}
+        checked={dynamicSeverity === YES_VALUE}
         checkedValue={YES_VALUE}
         unCheckedValue={NO_VALUE}
         onChange={onChange}
@@ -76,7 +76,7 @@ const SeverityPart = ({
 
 SeverityPart.propTypes = {
   defaultSeverity: PropTypes.number,
-  dynamicSeverity: PropTypes.string,
+  dynamicSeverity: PropTypes.yesno,
   severityClass: PropTypes.string,
   onChange: PropTypes.func,
 };
