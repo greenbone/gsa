@@ -51,7 +51,7 @@
  *
  * The validator must be freed with \ref openvas_validator_rule_free.
  *
- * @return A newly allocated validator.
+ * @return A newly allocated validator rule.
  */
 validator_rule_t *
 openvas_validator_rule_new (const char *regex)
@@ -60,9 +60,27 @@ openvas_validator_rule_new (const char *regex)
   rule = g_malloc (sizeof (validator_rule_t));
   rule->regex = g_strdup (regex);
   rule->alias_for = NULL;
+  rule->is_binary = FALSE;
   return rule;
 }
 
+/**
+ * @brief Create a new validator rule for a binary parameter.
+ *
+ * The validator must be freed with \ref openvas_validator_rule_free.
+ *
+ * @return A newly allocated validator rule.
+ */
+validator_rule_t *
+openvas_validator_rule_new_binary ()
+{
+  validator_rule_t *rule;
+  rule = g_malloc (sizeof (validator_rule_t));
+  rule->regex = NULL;
+  rule->alias_for = NULL;
+  rule->is_binary = TRUE;
+  return rule;
+}
 
 /**
  * @brief Free a validator rule.
@@ -111,6 +129,21 @@ openvas_validator_add (validator_t validator,
   g_hash_table_insert (validator,
                        (gpointer) g_strdup (name),
                        (gpointer) openvas_validator_rule_new (regex));
+}
+
+/**
+ * @brief Add or overwrite a validation rule for a binary data param.
+ *
+ * @param  validator  Validator to add rule to.
+ * @param  name       Name of the rule.
+ */
+void
+openvas_validator_add_binary (validator_t validator,
+                              const char *name)
+{
+  g_hash_table_insert (validator,
+                       (gpointer) g_strdup (name),
+                       (gpointer) openvas_validator_rule_new_binary ());
 }
 
 /**
@@ -189,11 +222,6 @@ openvas_validate (validator_t validator, const char *name, const char *value)
       g_debug ("%s: name is not valid UTF-8", __FUNCTION__);
       return 1;
     }
-  else if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
-    {
-      g_debug ("%s: value is not valid UTF-8", __FUNCTION__);
-      return 2;
-    }
 
   g_debug ("%s: name %s value %s", __FUNCTION__, name, value);
 
@@ -204,6 +232,18 @@ openvas_validate (validator_t validator, const char *name, const char *value)
       assert (value_rule);
 
       rule = (validator_rule_t*) value_rule;
+
+      if (rule->is_binary)
+        {
+          // Skip UTF-8 and regex validation for binary data
+          return 0;
+        }
+
+      if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
+        {
+          g_debug ("%s: value is not valid UTF-8", __FUNCTION__);
+          return 2;
+        }
 
       if (rule->regex == NULL)
         {
