@@ -41,39 +41,38 @@ const SeverityPart = ({
   dynamicSeverity,
   severityClass,
   onChange,
-}) => {
-  return (
-    <React.Fragment>
-      <FormGroup title={_('Severity Class')} titleSize="3">
-        <Select
-          name="severityClass"
-          value={severityClass}
-          items={renderSelectItems(SEVERITY_CLASSES)}
-          onChange={onChange}
-        />
-      </FormGroup>
-      <FormGroup title={_('Dynamic Severity')} titleSize="3">
-        <Checkbox
-          name="dynamicSeverity"
-          checked={parseYesNo(dynamicSeverity) === YES_VALUE}
-          checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
-          onChange={onChange}
-        />
-      </FormGroup>
-      <FormGroup title={_('Default Severity')} titleSize="3">
-        <Spinner
-          name="defaultSeverity"
-          value={defaultSeverity}
-          min="0"
-          max="10"
-          step="0.1"
-          type="float"
-          onChange={onChange}/>
-      </FormGroup>
-    </React.Fragment>
-  );
-};
+}) => (
+  <React.Fragment>
+    <FormGroup title={_('Severity Class')} titleSize="3">
+      <Select
+        name="severityClass"
+        value={severityClass}
+        items={renderSelectItems(SEVERITY_CLASSES)}
+        onChange={onChange}
+      />
+    </FormGroup>
+    <FormGroup title={_('Dynamic Severity')} titleSize="3">
+      <Checkbox
+        name="dynamicSeverity"
+        checked={parseYesNo(dynamicSeverity) === YES_VALUE}
+        checkedValue={YES_VALUE}
+        unCheckedValue={NO_VALUE}
+        onChange={onChange}
+      />
+    </FormGroup>
+    <FormGroup title={_('Default Severity')} titleSize="3">
+      <Spinner
+        name="defaultSeverity"
+        value={defaultSeverity}
+        min="0"
+        max="10"
+        step="0.1"
+        type="float"
+        onChange={onChange}
+      />
+    </FormGroup>
+  </React.Fragment>
+);
 
 SeverityPart.propTypes = {
   defaultSeverity: PropTypes.number,
