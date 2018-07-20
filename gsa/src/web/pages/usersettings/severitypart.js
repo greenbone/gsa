@@ -78,7 +78,7 @@ SeverityPart.propTypes = {
   defaultSeverity: PropTypes.number,
   dynamicSeverity: PropTypes.yesno,
   severityClass: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default SeverityPart;
