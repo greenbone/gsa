@@ -76,7 +76,7 @@ const SeverityPart = ({
 };
 
 SeverityPart.propTypes = {
-  defaultSeverity: PropTypes.string,
+  defaultSeverity: PropTypes.number,
   dynamicSeverity: PropTypes.string,
   severityClass: PropTypes.string,
   onChange: PropTypes.func,
