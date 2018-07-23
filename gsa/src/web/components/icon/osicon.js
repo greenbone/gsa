@@ -42,7 +42,7 @@ const OsIcon = ({
   displayOsName = false,
   osTxt,
   osCpe,
-  ...props,
+  ...props
 }) => {
   const os = isDefined(osCpe) ?
     OperatingSystems.find(osCpe) : undefined;
@@ -98,10 +98,10 @@ const OsIcon = ({
 };
 
 OsIcon.propTypes = {
-  displayOsName: PropTypes.bool,
   displayOsCpe: PropTypes.bool,
-  osTxt: PropTypes.string,
+  displayOsName: PropTypes.bool,
   osCpe: PropTypes.string,
+  osTxt: PropTypes.string,
 };
 
 
