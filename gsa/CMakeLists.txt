@@ -791,6 +791,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/reducers.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/utils.js
      ${GSA_SRC_DIR}/src/web/unauthorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js
      ${GSA_SRC_DIR}/src/web/utils/compose.js
