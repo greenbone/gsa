@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,11 @@ const NewIcon = ({
   if (capabilities.mayCreate('task')) {
     return (
       <IconMenu img="new.svg" onClick={onNewClick}>
-        <MenuEntry title={_('New Task')}
+        <MenuEntry
+          title={_('New Task')}
           onClick={onNewClick}/>
-        <MenuEntry title={_('New Container Task')}
+        <MenuEntry
+          title={_('New Container Task')}
           onClick={onNewContainerClick}/>
       </IconMenu>
     );
