@@ -21,7 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Promise from './promise.js';
 
 /*
  * The CancelToken class is based on the cancelable-promises tc39 proposal
@@ -69,7 +68,7 @@ class CancelToken {
   constructor(executor) {
     this.canceled = false;
 
-    this.promise = Promise.create(resolve => {
+    this.promise = new Promise(resolve => {
       executor(reason => {
         this.reason = reason;
         this.canceled = true;
