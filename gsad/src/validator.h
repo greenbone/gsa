@@ -46,6 +46,7 @@ struct validator_rule
 {
   gchar *alias_for;   ///< Name of the rule for which this is an alias.
   gchar *regex;       ///< Regular expression.
+  gboolean is_binary; ///< Whether to expect raw byte data, skip UTF-8 checks.
 };
 
 /**
@@ -55,6 +56,7 @@ typedef struct validator_rule validator_rule_t;
 
 validator_t openvas_validator_new ();
 void openvas_validator_add (validator_t, const char *, const char *);
+void openvas_validator_add_binary (validator_t, const char *);
 int openvas_validator_alias (validator_t, const char *, const char *);
 gchar *openvas_validator_alias_for (validator_t, const char *);
 int openvas_validate (validator_t, const char *, const char *);
