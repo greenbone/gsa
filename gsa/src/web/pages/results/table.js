@@ -105,7 +105,8 @@ const Header = ({
           onSortChange={onSortChange}>
           {_('QoD')}
         </TableHead>
-        <TableHead colSpan="2"
+        <TableHead
+          colSpan="2"
           width="13%">
           {_('Host')}
         </TableHead>
