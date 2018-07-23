@@ -24,18 +24,20 @@
 import 'core-js/fn/array/includes';
 
 import React from 'react';
+
 import glamorous from 'glamorous';
 
-import {debounce, KeyCode} from 'gmp/utils/event';
+import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseFloat, parseInt} from 'gmp/parser.js';
+import {parseFloat, parseInt} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Theme from '../../utils/theme.js';
+import withLayout from '../layout/withLayout';
 
-import withLayout from '../layout/withLayout.js';
+import NumberField from './numberfield';
 
 const StyledSpinner = glamorous.span({
   borderRadius: '4px',
@@ -54,7 +56,7 @@ const StyledSpinner = glamorous.span({
   } : undefined,
 );
 
-const StyledInput = glamorous.input({
+const StyledInput = glamorous(NumberField)({
   /* use font and line settings from parents not from browser default */
   fontamily: 'inherit',
   fontSize: 'inherit',
@@ -123,46 +125,20 @@ class SpinnerComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    const {value = 0, type} = this.props;
-
-    let {step} = this.props;
-    if (isDefined(step)) {
-      step = parseFloat(step);
-    }
-    else {
-      step = type === 'float' ? 0.1 : 1;
-    }
-
-    this.allowed = [
-      KeyCode.SUBTRACT,
-      KeyCode.MINUS,
-    ];
-
-    if (type === 'float') {
-      this.allowed.push(KeyCode.PERIOD);
-    }
-
-    this.disallowed = [
-      KeyCode.SPACE,
-    ];
-
     this.state = {
-      value_set: value, // external value for the outside world
-      value: parseFloat(value), // internal value shown in the spinner
-      up_active: false,
-      down_active: false,
-      step,
+      upActive: false,
+      downActive: false,
     };
 
-    this.handleBlur = this.handleBlur.bind(this);
     this.handleDbClick = this.handleDbClick.bind(this);
     this.handleDownMouse = this.handleDownMouse.bind(this);
-    this.handleDown = this.handleDown.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleDownButton = this.handleDownButton.bind(this);
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
-    this.handleUp = this.handleUp.bind(this);
+    this.handleUpButton = this.handleUpButton.bind(this);
     this.handleUpMouse = this.handleUpMouse.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.notifyChange = this.notifyChange.bind(this);
+    this.handleDownKey = this.handleDownKey.bind(this);
+    this.handleUpKey = this.handleUpKey.bind(this);
 
     const debounce_value = parseInt(this.props.debounce);
 
@@ -171,87 +147,54 @@ class SpinnerComponent extends React.Component {
     }
   }
 
-  componentWillReceiveProps(new_props) {
-    const new_value = parseFloat(new_props.value);
+  getStep() {
+    const {step, type} = this.props;
 
-    if (new_value !== this.state.value_set) {
-      // parent component has set a different value then before
-      this.setState({
-        value: new_value,
-        value_set: new_value,
-      });
+    if (isDefined(step)) {
+      return parseFloat(step);
     }
+    return type === 'float' ? 0.1 : 1;
   }
 
-  handleBlur(event) {
-    const {value} = event.target;
-    this.setValue(value);
-  }
-
-  handleUp(event) {
-    const {value, step} = this.state;
+  handleUpButton(event) {
+    const step = this.getStep();
 
     event.preventDefault();
 
+    const {value} = this.props;
+
+    this.setAdjustedValue(parseFloat(value) + step);
+  }
+
+  handleUpKey(value) {
+    const step = this.getStep();
     this.setAdjustedValue(value + step);
   }
 
-  handleDown(event) {
-    const {value, step} = this.state;
+  handleDownButton(event) {
+    const step = this.getStep();
 
     event.preventDefault();
 
+    const {value} = this.props;
+
+    this.setAdjustedValue(parseFloat(value) - step);
+  }
+
+  handleDownKey(value) {
+    const step = this.getStep();
     this.setAdjustedValue(value - step);
   }
 
-  handleKeyDown(event) {
-    const key_code = event.keyCode;
-    const {allowed, disallowed} = this;
-
-    // '9' == keycode 57 and 105 on numpad
-    // '0' == keycode 48 and 96 on numpad
-    // umlauts seems to have keycode 0
-    if ((key_code <= 0 || (key_code > 57 && key_code < 96) || key_code > 105 ||
-      disallowed.includes(key_code)) &&
-      !allowed.includes(key_code) && !event.ctrlKey) {
-        event.preventDefault();
-        return;
-    }
-
-    switch (key_code) {
-      case KeyCode.UP:
-      case KeyCode.PAGE_UP:
-        this.handleUp(event);
-        return;
-      case KeyCode.DOWN:
-      case KeyCode.PAGE_DOWN:
-        this.handleDown(event);
-        return;
-      case KeyCode.ENTER:
-        this.notifyChange(this.state.value);
-        return;
-      default:
-        break;
-    }
-  }
-
-  handleChange(event) {
-    if (this.props.disabled) {
-      return;
-    }
-
-    const value = parseFloat(event.target.value);
-
-    this.setState({value});
-  }
-
   handleMouseWheel(event) {
-    const {step} = this.state;
     const direction = event.deltaY > 1 ? 1 : -1;
+    const step = this.getStep();
 
     event.preventDefault();
 
-    this.setAdjustedValue(this.state.value + (step * direction));
+    const {value} = this.props;
+
+    this.setAdjustedValue(parseFloat(value) + (step * direction));
   }
 
   handleDbClick(event) {
@@ -259,34 +202,34 @@ class SpinnerComponent extends React.Component {
   }
 
   handleDownMouse(event) {
-    this.setState({down_active: !this.state.down_active});
+    this.setState({downActive: !this.state.down_active});
 
     event.preventDefault();
   }
 
   handleUpMouse(event) {
-    this.setState({up_active: !this.state.up_active});
+    this.setState({upActive: !this.state.up_active});
 
     event.preventDefault();
   }
 
   notifyChange(value) {
-    const {onChange, name} = this.props;
+    const {onChange, name, disabled = false} = this.props;
 
-    if (onChange) {
+    if (!disabled && onChange) {
       onChange(value, name);
     }
   }
 
   setAdjustedValue(value) {
-    const {step} = this.state;
-    const {min, disabled} = this.props;
+    const step = this.getStep();
+    const {min = 0, disabled} = this.props;
 
     if (disabled) {
       return;
     }
 
-    const base = isDefined(min) ? parseFloat(min) : 0;
+    const base = parseFloat(min);
 
     let above_min = value - base;
 
@@ -310,14 +253,10 @@ class SpinnerComponent extends React.Component {
       return;
     }
 
-    value = parseFloat(value);
     min = parseFloat(min);
     max = parseFloat(max);
 
-    if (isNaN(value)) {
-      value = this.value; // reset to last valid value;
-    }
-    else {
+    if (isDefined(value)) {
       if (isDefined(max) && value > max) {
         value = max;
       }
@@ -325,24 +264,15 @@ class SpinnerComponent extends React.Component {
         value = min;
       }
 
-      this.value = value;
-
       this.notifyChange(value);
     }
-
-    this.setState({
-      value,
-      value_set: value,
-    });
   }
 
   getPrecision() {
-    const {step} = this.state;
-    let precision = this.precisionOf(step);
+    const {precision = 0} = this.props;
+    const step = this.getStep();
 
-    precision = Math.max(precision, this.precisionOf(step));
-
-    return precision;
+    return Math.max(precision, this.precisionOf(step));
   }
 
   precisionOf(num) {
@@ -353,7 +283,8 @@ class SpinnerComponent extends React.Component {
   }
 
   render() {
-    const {value, down_active, up_active} = this.state;
+    const {value} = this.props;
+    const {downActive, upActive} = this.state;
     const {
       size,
       type,
@@ -363,29 +294,30 @@ class SpinnerComponent extends React.Component {
       maxLength,
       name,
     } = this.props;
-
+    const precision = this.getPrecision();
     return (
       <StyledSpinner
         disabled={disabled}
-        onWheel={this.handleMouseWheel}>
+        onWheel={this.handleMouseWheel}
+      >
         <StyledInput
-          data-type={type}
+          type={type}
           min={min}
           max={max}
-          type="text" name={name}
-          value={value}
-          disabled={disabled}
-          onBlur={this.handleBlur}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
+          name={name}
           size={size}
           maxLength={maxLength}
-        >
-        </StyledInput>
-        <SpinnerButtonUp
-          active={up_active}
+          value={value}
           disabled={disabled}
-          onClick={disabled ? undefined : this.handleUp}
+          precision={precision}
+          onChange={this.notifyChange}
+          onUpKeyPressed={this.handleUpKey}
+          onDownKeyPressed={this.handleDownKey}
+        />
+        <SpinnerButtonUp
+          active={upActive}
+          disabled={disabled}
+          onClick={disabled ? undefined : this.handleUpButton}
           onMouseDown={this.handleUpMouse}
           onMouseUp={this.handleUpMouse}
           onDoubleClick={this.handleDbClick}
@@ -393,9 +325,9 @@ class SpinnerComponent extends React.Component {
           ▲
         </SpinnerButtonUp>
         <SpinnerButtonDown
-          active={down_active}
+          active={downActive}
           disabled={disabled}
-          onClick={disabled ? undefined : this.handleDown}
+          onClick={disabled ? undefined : this.handleDownButton}
           onMouseDown={this.handleDownMouse}
           onMouseUp={this.handleDownMouse}
           onDoubleClick={this.handleDbClick}
@@ -421,10 +353,11 @@ SpinnerComponent.propTypes = {
   maxLength: PropTypes.numberOrNumberString,
   min: PropTypes.numberOrNumberString,
   name: PropTypes.string,
+  precision: PropTypes.number,
   size: PropTypes.numberOrNumberString,
   step: PropTypes.numberOrNumberString,
   type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.numberOrNumberString,
+  value: PropTypes.number,
   onChange: PropTypes.func,
 };
 

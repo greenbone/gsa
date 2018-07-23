@@ -23,10 +23,13 @@
 import React from 'react';
 
 import glamorous from 'glamorous';
+
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
+
+import {parseFloat, parseYesNo} from 'gmp/parser';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -124,8 +127,8 @@ let UserSettingsDialog = ({
     reportExportFileName,
     autoCacheRebuild,
     severityClass,
-    dynamicSeverity,
-    defaultSeverity,
+    dynamicSeverity: parseYesNo(dynamicSeverity),
+    defaultSeverity: parseFloat(defaultSeverity),
     defaultAlert,
     defaultEsxiCredential,
     defaultOspScanConfig,
