@@ -361,6 +361,7 @@ module.exports = {
     ],
     'react/jsx-no-duplicate-props': 'error', // prevent duplicate props in JSX
     'react/jsx-wrap-multilines': 'warn', // prevent missing parentheses around multiline JSX
+    'react/jsx-closing-bracket-location': 'warn',
   },
 };
 
