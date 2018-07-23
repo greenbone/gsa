@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,11 +102,11 @@ const OverrideDetails = ({
                 {_('Severity')}
               </TableData>
               <TableData>
-                {isDefined(severity) ? (
+                {isDefined(severity) ?
                   severity > LOG_VALUE ?
                     _('> 0.0') :
-                    translatedResultSeverityRiskFactor(severity)
-                ) : _('Any')
+                    translatedResultSeverityRiskFactor(severity) :
+                 _('Any')
                 }
               </TableData>
             </TableRow>
@@ -117,13 +117,12 @@ const OverrideDetails = ({
               </TableData>
               <TableData>
                 {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> : (
+                  <b>{_('Orphan')}</b> :
                   isDefined(task) ?
                     <EntityLink
                       entity={task}
                     /> :
                     _('Any')
-                  )
                 }
               </TableData>
             </TableRow>
@@ -134,13 +133,12 @@ const OverrideDetails = ({
               </TableData>
               <TableData>
                 {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> : (
+                  <b>{_('Orphan')}</b> :
                   isDefined(result) ?
                     <EntityLink
                       entity={result}
                     /> :
                     _('Any')
-                  )
                 }
               </TableData>
             </TableRow>
