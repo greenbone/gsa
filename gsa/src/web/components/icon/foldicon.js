@@ -4,7 +4,7 @@
  * Timo Pollmeier <timo.pollmeier@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,12 @@ import Icon from './icon.js';
 export const FoldIcon = ({
     foldState,
     title,
-    ...other,
+    ...other
   }) => {
-  let folded = foldState === FoldState.FOLDED ||
+  const folded = foldState === FoldState.FOLDED ||
       foldState === FoldState.FOLDING ||
       foldState === FoldState.FOLDING_START;
-  let img = folded ? 'unfold.svg' : 'fold.svg';
+  const img = folded ? 'unfold.svg' : 'fold.svg';
 
   if (!isDefined(title)) {
     title = folded ? _('Unfold') : _('Fold');
@@ -62,4 +62,3 @@ FoldIcon.propTypes = {
 export default FoldIcon;
 
 // vim: set ts=2 sw=2 tw=80:
-
