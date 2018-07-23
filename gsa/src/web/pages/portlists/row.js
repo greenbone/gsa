@@ -57,17 +57,20 @@ const IconActions = ({
       entity={entity}
       displayName={_('Port List')}
       name="portlist"
-      onClick={onPortListDeleteClick}/>
+      onClick={onPortListDeleteClick}
+    />
     <EditIcon
       entity={entity}
       displayName={_('Port List')}
       name="port_list"
-      onClick={onPortListEditClick}/>
+      onClick={onPortListEditClick}
+    />
     <CloneIcon
       entity={entity}
       displayName={_('Port List')}
       name="port_list"
-      onClick={onPortListCloneClick}/>
+      onClick={onPortListCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Port List')}
@@ -100,15 +103,18 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData
-      flex align="end">
+      flex align="end"
+    >
       {entity.port_count.all}
     </TableData>
     <TableData
-      flex align="end">
+      flex align="end"
+    >
       {entity.port_count.tcp}
     </TableData>
     <TableData
-      flex align="end">
+      flex align="end"
+    >
       {entity.port_count.udp}
     </TableData>
     {renderComponent(actions, {...props, entity})}

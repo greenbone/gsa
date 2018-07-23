@@ -49,11 +49,13 @@ const ToolBarIcons = withCapabilities(({
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="alerts"
-      title={_('Help: Alerts')}/>
+      title={_('Help: Alerts')}
+    />
     {capabilities.mayCreate('alert') &&
       <NewIcon
         title={_('New Alert')}
-        onClick={onAlertCreateClick}/>
+        onClick={onAlertCreateClick}
+      />
     }
   </IconDivider>
 ));

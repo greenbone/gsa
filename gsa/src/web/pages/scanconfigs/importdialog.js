@@ -59,7 +59,8 @@ const ImportDialog = ({
             >
               <FileField
                 name="xml_file"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
           </Layout>
         );

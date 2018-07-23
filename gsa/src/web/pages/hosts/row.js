@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ const Actions = ({
   }, {capabilities}) => {
 
   let new_title;
-  let can_create_target = capabilities.mayCreate('target');
+  const can_create_target = capabilities.mayCreate('target');
   if (can_create_target) {
     new_title = _('Create Target from Host');
   }
@@ -74,17 +74,20 @@ const Actions = ({
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onHostDeleteClick}/>
+        onClick={onHostDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onHostEditClick}/>
+        onClick={onHostEditClick}
+      />
       <NewIcon
         value={entity}
         active={can_create_target}
         title={new_title}
-        onClick={onTargetCreateFromHostClick}/>
+        onClick={onTargetCreateFromHostClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Host')}
@@ -98,8 +101,8 @@ Actions.propTypes = {
   entity: PropTypes.model,
   onHostDeleteClick: PropTypes.func,
   onHostDownloadClick: PropTypes.func,
-  onTargetCreateFromHostClick: PropTypes.func,
   onHostEditClick: PropTypes.func,
+  onTargetCreateFromHostClick: PropTypes.func,
 };
 
 Actions.contextTypes = {
@@ -111,7 +114,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   const {details = {}} = entity;
   const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
@@ -123,7 +126,8 @@ const Row = ({
       <TableData flex="column">
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {entity.name}
         </RowDetailsToggle>
         <Comment text={entity.comment}/>

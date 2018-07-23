@@ -67,19 +67,22 @@ const Actions = ({
       displayName={_('Alert')}
       name="alert"
       entity={entity}
-      onClick={onAlertDeleteClick}/>
+      onClick={onAlertDeleteClick}
+    />
     <EditIcon
       displayName={_('Alert')}
       name="alert"
       entity={entity}
-      onClick={onAlertEditClick}/>
+      onClick={onAlertEditClick}
+    />
     <CloneIcon
       displayName={_('Alert')}
       name="alert"
       entity={entity}
       title={_('Clone Alert')}
       value={entity}
-      onClick={onAlertCloneClick}/>
+      onClick={onAlertCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Alert')}
@@ -112,7 +115,8 @@ const render_filter = (filter, caps, links = true) => {
     <DetailsLink
       textOnly={!caps.mayAccess('filters') || !links}
       type="filter"
-      id={filter.id}>
+      id={filter.id}
+    >
       {filter.name}
     </DetailsLink>
   );

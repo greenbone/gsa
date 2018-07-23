@@ -36,7 +36,8 @@ const DetailsBlock = ({
   <Layout
     flex="column"
     id={id}
-    className={className}>
+    className={className}
+  >
     <h2>{title}</h2>
     <div>
       {children}

@@ -135,7 +135,8 @@ const Row = ({
         <Layout flex align="space-between">
           <RowDetailsToggle
             name={entity.id}
-            onClick={onToggleDetailsClick}>
+            onClick={onToggleDetailsClick}
+          >
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
@@ -143,14 +144,16 @@ const Row = ({
               <Icon
                 size="small"
                 img="alterable.svg"
-                title={_('Task is alterable')}/>
+                title={_('Task is alterable')}
+              />
             }
             {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
               <Icon
                 size="small"
                 img="sensor.svg"
                 title={_('Task is configured to run on slave scanner {{name}}',
-                  {name: scanner.name})}/>
+                  {name: scanner.name})}
+              />
             }
             <ObserverIcon
               displayName={_('Task')}
@@ -162,7 +165,8 @@ const Row = ({
                 size="small"
                 img="provide_view.svg"
                 title={_('Task made visible for: {{observers}}',
-                  {observers: obs.join(', ')})}/> // TODO observer roles and groups
+                  {observers: obs.join(', ')})}
+              /> // TODO observer roles and groups
             }
           </IconDivider>
         </Layout>

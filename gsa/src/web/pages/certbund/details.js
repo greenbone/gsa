@@ -57,7 +57,8 @@ const CertBundAdvDetails = ({
   return (
     <Layout
       flex="column"
-      grow>
+      grow
+    >
 
       <InfoTable>
         <TableBody>

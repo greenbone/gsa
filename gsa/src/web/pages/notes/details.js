@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,9 +60,11 @@ const NoteDetails = ({
   return (
     <Layout
       grow="1"
-      flex="column">
+      flex="column"
+    >
       <DetailsBlock
-        title={_('Application')}>
+        title={_('Application')}
+      >
         <InfoTable size="full">
           <colgroup>
             <Col width="20%"/>
@@ -102,11 +104,11 @@ const NoteDetails = ({
                 {_('Severity')}
               </TableData>
               <TableData>
-                {isDefined(severity) ? (
+                {isDefined(severity) ?
                   severity > LOG_VALUE ?
                     _('> 0.0') :
-                    translatedResultSeverityRiskFactor(severity)
-                ) : _('Any')
+                    translatedResultSeverityRiskFactor(severity) :
+                 _('Any')
                 }
               </TableData>
             </TableRow>
@@ -117,13 +119,12 @@ const NoteDetails = ({
               </TableData>
               <TableData>
                 {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> : (
+                  <b>{_('Orphan')}</b> :
                   isDefined(task) ?
                     <EntityLink
                       entity={task}
                     /> :
                     _('Any')
-                  )
                 }
               </TableData>
             </TableRow>
@@ -134,13 +135,12 @@ const NoteDetails = ({
               </TableData>
               <TableData>
                 {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> : (
+                  <b>{_('Orphan')}</b> :
                   isDefined(result) ?
                     <EntityLink
                       entity={result}
                     /> :
                     _('Any')
-                  )
                 }
               </TableData>
             </TableRow>
@@ -153,7 +153,8 @@ const NoteDetails = ({
           entity.isActive() ?
             _('Appearance') :
             _('Appearance when active')
-        }>
+        }
+      >
         <NoteBox
           note={entity}
           detailsLink={false}

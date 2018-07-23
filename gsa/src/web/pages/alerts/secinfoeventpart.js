@@ -48,19 +48,22 @@ const SecinfoEventPart = ({
         name="event"
         value={VALUE}
         checked={event === VALUE}
-        onChange={onEventChange}>
+        onChange={onEventChange}
+      >
       </Radio>
       <Select
         value={feedEvent}
         name={prefix + 'feed_event'}
-        onChange={onChange}>
+        onChange={onChange}
+      >
         <option value="new">{_('New')}</option>
         <option value="updated">{_('Updated')}</option>
       </Select>
       <Select
         value={secinfoType}
         name={prefix + 'secinfo_type'}
-        onChange={onChange}>
+        onChange={onChange}
+      >
         <option value="nvt">{_('NVTs')}</option>
         <option value="cve">{_('CVEs')}</option>
         <option value="cpe">{_('CPEs')}</option>

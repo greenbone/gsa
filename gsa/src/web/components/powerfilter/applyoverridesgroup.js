@@ -50,7 +50,8 @@ const ApplyOverridesGroup = ({
         yesValue={1}
         noValue={0}
         convert={parseInt}
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };

@@ -45,7 +45,8 @@ const ToolBarIcons = props => {
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="oval"
-      title={_('Help: OVAL Definitions')}/>
+      title={_('Help: OVAL Definitions')}
+    />
   );
 };
 

@@ -57,7 +57,8 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing down
         <span
           title={_('Sorted In Descending Order By {{sortBy}}',
-            {sortBy: capitalizeFirstLetter(sortBy)})}>
+            {sortBy: capitalizeFirstLetter(sortBy)})}
+        >
           &nbsp;&#9660;
         </span>
       );
@@ -66,7 +67,8 @@ const TableHead = ({
       sortSymbol = ( // triangle pointing up
         <span
           title={_('Sorted In Ascending Order By {{sortBy}}',
-            {sortBy: capitalizeFirstLetter(sortBy)})}>
+            {sortBy: capitalizeFirstLetter(sortBy)})}
+        >
           &nbsp;&#9650;
         </span>
       );
@@ -77,7 +79,8 @@ const TableHead = ({
     <th
       className={className}
       rowSpan={rowSpan}
-      colSpan={colSpan}>
+      colSpan={colSpan}
+    >
       {sort && sortBy && isDefined(onSortChange) ?
         <Sort by={sortBy} onClick={onSortChange}>
           <Layout {...other}>

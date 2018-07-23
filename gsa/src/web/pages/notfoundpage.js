@@ -38,7 +38,8 @@ const PageNotFound = () => {
         flex
         align={['center', 'center']}
         grow="1"
-        style={{height: '100%'}}>
+        style={{height: '100%'}}
+      >
         <h1>{_('Page Not Found.')}</h1>
       </Main>
       <Footer/>

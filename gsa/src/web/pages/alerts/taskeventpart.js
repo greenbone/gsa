@@ -48,12 +48,14 @@ const TaskEventPart = ({
         name="event"
         value={VALUE}
         checked={event === VALUE}
-        onChange={onEventChange}>
+        onChange={onEventChange}
+      >
       </Radio>
       <Select
         onChange={onChange}
         name={prefix + 'status'}
-        value={status}>
+        value={status}
+      >
         <option value="Done">{('Done')}</option>
         <option value="New">{_('New')}</option>
         <option value="Requested">{_('Requested')}</option>

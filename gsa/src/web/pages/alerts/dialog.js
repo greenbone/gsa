@@ -521,7 +521,8 @@ class AlertDialog extends React.Component {
                       title={_('None')}
                       name="method_data_delta_type"
                       value={DELTA_TYPE_NONE}
-                      checked={values.method_data_delta_type === DELTA_TYPE_NONE}
+                      checked={
+                        values.method_data_delta_type === DELTA_TYPE_NONE}
                       onChange={onValueChange}
                     />
 
@@ -529,7 +530,8 @@ class AlertDialog extends React.Component {
                       title={_('Previous completed report of the same task')}
                       name="method_data_delta_type"
                       value={DELTA_TYPE_PREVIOUS}
-                      checked={values.method_data_delta_type === DELTA_TYPE_PREVIOUS}
+                      checked={
+                        values.method_data_delta_type === DELTA_TYPE_PREVIOUS}
                       onChange={onValueChange}
                     />
 
@@ -538,7 +540,8 @@ class AlertDialog extends React.Component {
                         title={_('Report with ID')}
                         name="method_data_delta_type"
                         value={DELTA_TYPE_REPORT}
-                        checked={values.method_data_delta_type === DELTA_TYPE_REPORT}
+                        checked={
+                          values.method_data_delta_type === DELTA_TYPE_REPORT}
                         onChange={onValueChange}
                       />
                       <TextField
@@ -558,7 +561,7 @@ class AlertDialog extends React.Component {
                   value={values.method}
                   items={method_types}
                   onChange={onValueChange}
-                 />
+                />
               </FormGroup>
 
               {values.method === METHOD_TYPE_EMAIL &&
@@ -721,10 +724,10 @@ AlertDialog.propTypes = {
   filter_id: PropTypes.idOrZero,
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
-  method_data_delta_type: PropTypes.string,
-  method_data_delta_report_id: PropTypes.string,
   method_data_defense_center_ip: PropTypes.string,
   method_data_defense_center_port: PropTypes.numberOrNumberString,
+  method_data_delta_report_id: PropTypes.string,
+  method_data_delta_type: PropTypes.string,
   method_data_details_url: PropTypes.string,
   method_data_from_address: PropTypes.string,
   method_data_message: PropTypes.string,

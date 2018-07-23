@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ import Icon from '../../../components/icon/icon.js';
 const StartIcon = ({
   task,
   size,
-  onClick
+  onClick,
 }, {capabilities}) => {
 
   if (task.isRunning() || task.isContainer()) {
@@ -43,7 +43,8 @@ const StartIcon = ({
       <Icon
         size={size}
         img="start_inactive.svg"
-        title={_('Permission to start Task denied')}/>
+        title={_('Permission to start Task denied')}
+      />
     );
   }
 
@@ -54,14 +55,16 @@ const StartIcon = ({
         img="start.svg"
         title={_('Start')}
         value={task}
-        onClick={onClick}/>
+        onClick={onClick}
+      />
     );
   }
   return (
     <Icon
       size={size}
       img="start_inactive.svg"
-      title={_('Task is already active')}/>
+      title={_('Task is already active')}
+    />
   );
 };
 

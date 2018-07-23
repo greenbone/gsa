@@ -39,8 +39,7 @@ class SortByGroup extends React.Component {
   renderSortFieldOptions() {
     const {fields} = this.props;
     return map(fields, field => {
-      const value = field[0];
-      const title = field[1];
+      const [value, title] = field;
       return <option key={value} value={value}>{title}</option>;
     });
   }
@@ -57,7 +56,8 @@ class SortByGroup extends React.Component {
         <Select
           name="sort_by"
           value={by}
-          onChange={onSortByChange}>
+          onChange={onSortByChange}
+        >
           {this.renderSortFieldOptions()}
         </Select>
         <Radio
@@ -65,13 +65,15 @@ class SortByGroup extends React.Component {
           value="sort"
           checked={order === 'sort'}
           title={_('Ascending')}
-          onChange={onSortOrderChange}/>
+          onChange={onSortOrderChange}
+        />
         <Radio
           name="sort_order"
           value="sort-reverse"
           checked={order === 'sort-reverse'}
           title={_('Descending')}
-          onChange={onSortOrderChange}/>
+          onChange={onSortOrderChange}
+        />
       </FormGroup>
     );
   }
@@ -79,9 +81,9 @@ class SortByGroup extends React.Component {
 
 SortByGroup.propTypes = {
   by: PropTypes.string,
-  order: PropTypes.oneOf(['sort', 'sort-reverse']),
-  filter: PropTypes.filter,
   fields: PropTypes.array,
+  filter: PropTypes.filter,
+  order: PropTypes.oneOf(['sort', 'sort-reverse']),
   onSortByChange: PropTypes.func,
   onSortOrderChange: PropTypes.func,
 };

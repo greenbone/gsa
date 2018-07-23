@@ -48,7 +48,8 @@ const SeverityLeastConditionPart = ({
         value={VALUE}
         checked={condition === VALUE}
         name="condition"
-        onChange={onChange}>
+        onChange={onChange}
+      >
       </Radio>
       <Spinner
         value={severity}
@@ -56,7 +57,8 @@ const SeverityLeastConditionPart = ({
         type="float"
         min="0"
         size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </Divider>
   );
 };

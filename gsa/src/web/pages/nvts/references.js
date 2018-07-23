@@ -51,7 +51,8 @@ const References = ({
   }
   return (
     <DetailsBlock
-      title={_('References')}>
+      title={_('References')}
+    >
       <InfoTable>
         <TableBody>
           {cves.length > 0 &&
@@ -123,7 +124,8 @@ const References = ({
                       <ExternalLink
                         key={xref.ref}
                         textOnly={!links || xref.type !== 'URL'}
-                        to={xref.ref}>
+                        to={xref.ref}
+                      >
                         {xref.ref}
                       </ExternalLink>
                     ))

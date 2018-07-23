@@ -52,7 +52,8 @@ const OvaldefDetails = ({
   return (
     <Layout
       flex="column"
-      grow="1">
+      grow="1"
+    >
 
       <InfoTable>
         <TableBody>

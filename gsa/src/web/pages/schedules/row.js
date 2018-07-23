@@ -65,19 +65,22 @@ const Actions = ({
       displayName={_('Schedule')}
       name="schedule"
       entity={entity}
-      onClick={onScheduleDeleteClick}/>
+      onClick={onScheduleDeleteClick}
+    />
     <EditIcon
       displayName={_('Schedule')}
       name="schedule"
       entity={entity}
-      onClick={onScheduleEditClick}/>
+      onClick={onScheduleEditClick}
+    />
     <CloneIcon
       displayName={_('Schedule')}
       name="schedule"
       entity={entity}
       title={_('Clone Schedule')}
       value={entity}
-      onClick={onScheduleCloneClick}/>
+      onClick={onScheduleCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Schedule')}

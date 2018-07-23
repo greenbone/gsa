@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,14 +43,15 @@ const HttpMethodPart = ({
         name={prefix + 'URL'}
         maxLength="301"
         value={URL}
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };
 
 HttpMethodPart.propTypes = {
-  prefix: PropTypes.string,
   URL: PropTypes.string.isRequired,
+  prefix: PropTypes.string,
   onChange: PropTypes.func,
 };
 

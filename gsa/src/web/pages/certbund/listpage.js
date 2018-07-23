@@ -44,7 +44,8 @@ const ToolBarIcons = props => {
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="cert-bund"
-      title={_('Help: CERT-Bund Advisories')}/>
+      title={_('Help: CERT-Bund Advisories')}
+    />
   );
 };
 

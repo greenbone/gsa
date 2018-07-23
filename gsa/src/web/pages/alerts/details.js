@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,8 @@ const AlertDetails = ({
             </TableData>
           </TableRow>
 
-          {capabilities.mayAccess('report') && isDefined(method.data.delta_type) &&
+          {capabilities.mayAccess('report') &&
+            isDefined(method.data.delta_type) &&
             method.data.delta_type.value === DELTA_TYPE_PREVIOUS &&
             <TableRow>
               <TableData>
@@ -114,7 +115,8 @@ const AlertDetails = ({
             </TableRow>
           }
 
-          {capabilities.mayAccess('report') && isDefined(method.data.delta_type) &&
+          {capabilities.mayAccess('report') &&
+            isDefined(method.data.delta_type) &&
             isDefined(method.data.delta_report_id) &&
             method.data.delta_type.value === DELTA_TYPE_REPORT &&
             <TableRow>

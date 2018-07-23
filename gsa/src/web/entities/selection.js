@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,11 @@ export class EntitySelection extends React.Component {
   }
 
   handleSelection(value) {
-    let {onDeselected, onSelected, entity} = this.props;
+    const {
+      onDeselected,
+      onSelected,
+      entity,
+    } = this.props;
 
     if (value) {
       if (onSelected) {
@@ -57,10 +61,9 @@ export class EntitySelection extends React.Component {
 
 EntitySelection.propTypes = {
   entity: PropTypes.model,
-  onSelected: PropTypes.func,
   onDeselected: PropTypes.func,
+  onSelected: PropTypes.func,
 };
-
 
 export default EntitySelection;
 

@@ -95,7 +95,8 @@ class StatefulTabs extends React.Component {
                 />
               </Tab>
               <Tab
-                disabled={disableSecondTab}>
+                disabled={disableSecondTab}
+              >
                 <TabTitle
                   title="Second Tab"
                   count="1337"

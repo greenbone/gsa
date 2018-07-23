@@ -214,7 +214,8 @@ const AdvancedTaskWizard = ({
             <FormGroup
               title={_('Start Time')}
               titleSize="3"
-              flex="column">
+              flex="column"
+            >
               <FormGroup>
                 <Radio
                   title={_('Start immediately')}

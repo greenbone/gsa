@@ -51,7 +51,8 @@ const Row = ({
         <DetailsLink
           type="nvt"
           id={entity.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.name}
         </DetailsLink>
       </TableData>
@@ -71,7 +72,8 @@ const Row = ({
         <Link
           to="results"
           filter={'nvt=' + entity.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {results.count}
         </Link>
       </TableData>

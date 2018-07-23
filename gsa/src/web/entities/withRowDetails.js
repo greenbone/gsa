@@ -64,12 +64,14 @@ const withRowDetails = (type, colSpan = '10') => Component => {
       <TableData
         colSpan={colSpan}
         flex
-        align={['start', 'stretch']}>
+        align={['start', 'stretch']}
+      >
         {links &&
           <Layout flex align={['start', 'start']}>
             <DetailsLink
               type={isFunction(type) ? type(entity) : type}
-              id={entity.id}>
+              id={entity.id}
+            >
               <Icon
                 img="details.svg"
                 size="small"

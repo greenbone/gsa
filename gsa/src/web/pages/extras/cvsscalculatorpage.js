@@ -202,7 +202,7 @@ class CvssCalculator extends React.Component {
             value={accessVector}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="LOCAL">{_('Local')}</option>
             <option value="ADJACENT_NETWORK">{_('Adjacent')}</option>
             <option value="NETWORK">{_('Network')}</option>
@@ -214,7 +214,7 @@ class CvssCalculator extends React.Component {
             value={accessComplexity}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="LOW">{_('Low')}</option>
             <option value="MEDIUM">{_('Medium')}</option>
             <option value="HIGH">{_('High')}</option>
@@ -226,7 +226,7 @@ class CvssCalculator extends React.Component {
             value={authentication}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="NONE">{_('None')}</option>
             <option value="SINGLE_INSTANCES">{_('Single')}</option>
             <option value="MULTIPLE_INSTANCES">{_('Multiple')}</option>
@@ -237,7 +237,7 @@ class CvssCalculator extends React.Component {
             name="confidentialityImpact"
             value={confidentialityImpact}
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>
@@ -249,7 +249,7 @@ class CvssCalculator extends React.Component {
             value={integrityImpact}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>
@@ -261,7 +261,7 @@ class CvssCalculator extends React.Component {
             value={availabilityImpact}
             menuPosition="adjust"
             onChange={this.handleMetricsChange}
-            >
+          >
             <option value="NONE">{_('None')}</option>
             <option value="PARTIAL">{_('Partial')}</option>
             <option value="COMPLETE">{_('Complete')}</option>

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,15 +60,18 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="note"
-        onClick={onNoteDeleteClick}/>
+        onClick={onNoteDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="note"
-        onClick={onNoteEditClick}/>
+        onClick={onNoteEditClick}
+      />
       <CloneIcon
         entity={entity}
         name="note"
-        onClick={onNoteCloneClick}/>
+        onClick={onNoteCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Note')}
@@ -91,7 +94,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   const text = (
     <div>
@@ -106,12 +109,13 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {text}
         </RowDetailsToggle>
       </TableData>
       <TableData>
-        {entity.nvt ? entity.nvt.name : ""}
+        {entity.nvt ? entity.nvt.name : ''}
       </TableData>
       <TableData title={entity.hosts}>
         {shorten(entity.hosts.join(', '))}

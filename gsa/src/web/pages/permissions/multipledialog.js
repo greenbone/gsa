@@ -118,7 +118,8 @@ const MultiplePermissionDialog = withCapabilities(({
         return (
           <Layout flex="column">
             <FormGroup
-              title={_('Grant')}>
+              title={_('Grant')}
+            >
               <Divider>
                 <Select
                   name="permission"
@@ -147,7 +148,8 @@ const MultiplePermissionDialog = withCapabilities(({
                       checked={state.subjectType === 'user'}
                       title={_('User')}
                       value="user"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
                       name="userId"
@@ -165,7 +167,8 @@ const MultiplePermissionDialog = withCapabilities(({
                       checked={state.subjectType === 'role'}
                       title={_('Role')}
                       value="role"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
                       name="roleId"
@@ -183,7 +186,8 @@ const MultiplePermissionDialog = withCapabilities(({
                       checked={state.subjectType === 'group'}
                       title={_('Group')}
                       value="group"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
                       name="groupId"

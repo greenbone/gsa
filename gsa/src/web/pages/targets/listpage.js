@@ -50,7 +50,8 @@ const ToolBarIcons = ({onTargetCreateClick}) => {
       />
       <NewIcon
         title={_('New Target')}
-        onClick={onTargetCreateClick}/>
+        onClick={onTargetCreateClick}
+      />
     </IconDivider>
   );
 };

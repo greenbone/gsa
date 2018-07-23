@@ -78,15 +78,18 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="override"
-        onClick={onOverrideDeleteClick}/>
+        onClick={onOverrideDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="override"
-        onClick={onOverrideEditClick}/>
+        onClick={onOverrideEditClick}
+      />
       <CloneIcon
         entity={entity}
         name="override"
-        onClick={onOverrideCloneClick}/>
+        onClick={onOverrideCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Override')}
@@ -109,19 +112,20 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   return (
     <TableRow>
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {shorten(entity.text)}
         </RowDetailsToggle>
       </TableData>
       <TableData>
-        {entity.nvt ? entity.nvt.name : ""}
+        {entity.nvt ? entity.nvt.name : ''}
       </TableData>
       <TableData title={entity.hosts}>
         {shorten(entity.hosts.join(', '))}

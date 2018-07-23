@@ -62,7 +62,8 @@ const ToolBarIcons = ({onUploadReportClick}) => (
     <Icon
       title={_('Upload report')}
       img="upload.svg"
-      onClick={onUploadReportClick}/>
+      onClick={onUploadReportClick}
+    />
   </IconDivider>
 );
 

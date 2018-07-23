@@ -56,19 +56,22 @@ const IconActions = ({
       displayName={_('Role')}
       name="role"
       entity={entity}
-      onClick={onRoleDeleteClick}/>
+      onClick={onRoleDeleteClick}
+    />
     <EditIcon
       displayName={_('Role')}
       name="role"
       entity={entity}
-      onClick={onRoleEditClick}/>
+      onClick={onRoleEditClick}
+    />
     <CloneIcon
       displayName={_('Role')}
       name="user"
       entity={entity}
       title={_('Clone Role')}
       value={entity}
-      onClick={onRoleCloneClick}/>
+      onClick={onRoleCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Role')}

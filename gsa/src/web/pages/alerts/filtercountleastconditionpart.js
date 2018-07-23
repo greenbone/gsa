@@ -52,7 +52,8 @@ const FilterCountLeastConditionPart = ({
         value={VALUE}
         name="condition"
         checked={condition === VALUE}
-        onChange={onChange}>
+        onChange={onChange}
+      >
       </Radio>
       <Select
         value={atLeastFilterId}
@@ -69,7 +70,8 @@ const FilterCountLeastConditionPart = ({
         type="int"
         min="0"
         size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
       <Layout flex box>
         {_('result(s) NVT(s)')}
       </Layout>

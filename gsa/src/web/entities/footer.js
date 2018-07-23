@@ -69,7 +69,8 @@ export const EntitiesFooter = ({
                 {selection &&
                   <Select
                     value={selectionType}
-                    onChange={onSelectionTypeChange}>
+                    onChange={onSelectionTypeChange}
+                  >
                     <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
                       {_('Apply to page contents')}
                     </option>
@@ -91,18 +92,21 @@ export const EntitiesFooter = ({
                   {trash &&
                     <TrashIcon
                       onClick={onTrashClick}
-                      selectionType={selectionType}/>
+                      selectionType={selectionType}
+                    />
                   }
                   {deleteEntities &&
                     <DeleteIcon
                       onClick={onDeleteClick}
-                      selectionType={selectionType}/>
+                      selectionType={selectionType}
+                    />
                   }
                   {download &&
                     <ExportIcon
                       onClick={onDownloadClick}
                       selectionType={selectionType}
-                      value={download}/>
+                      value={download}
+                    />
                   }
                   {children}
                 </IconDivider>

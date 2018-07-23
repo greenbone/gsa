@@ -42,7 +42,8 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
         grow="1"
         value={filterstring} size="30"
         onChange={onChange}
-        maxLength="80"/>
+        maxLength="80"
+      />
     </FormGroup>
   );
 };

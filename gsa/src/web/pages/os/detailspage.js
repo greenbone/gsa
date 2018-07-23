@@ -91,20 +91,24 @@ const ToolBarIcons = ({
           entity.isInUse() ?
             <DeleteIcon
               active={false}
-              title={_('Operating System is in use')}/> :
+              title={_('Operating System is in use')}
+            /> :
             <DeleteIcon
               value={entity}
               title={_('Delete')}
-              onClick={onOperatingSystemDeleteClick}/>
+              onClick={onOperatingSystemDeleteClick}
+            />
         )}
         <ExportIcon
           value={entity}
           onClick={onOperatingSystemDownloadClick}
-          title={_('Export Operating System')}/>
+          title={_('Export Operating System')}
+        />
       </IconDivider>
       <IconDivider>
         <Badge
-          content={hosts.length}>
+          content={hosts.length}
+        >
           <Link
             to="hosts"
             filter={'os~"' + entity.name + '"'}

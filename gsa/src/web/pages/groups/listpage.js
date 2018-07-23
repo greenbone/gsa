@@ -49,11 +49,13 @@ const ToolBarIcons = ({
       <ManualIcon
         page="gui_administration"
         anchor="groups"
-        title={_('Help: Groups')}/>
+        title={_('Help: Groups')}
+      />
       {capabilities.mayCreate('group') &&
         <NewIcon
           title={_('New Group')}
-          onClick={onGroupCreateClick}/>
+          onClick={onGroupCreateClick}
+        />
       }
     </IconDivider>
   );

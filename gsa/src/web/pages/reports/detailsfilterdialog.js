@@ -100,7 +100,8 @@ const FilterDialog = ({
           checkedValue={1}
           unCheckedValue={0}
           checked={notes === 1}
-          onChange={onFilterValueChange}/>
+          onChange={onFilterValueChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Show Overrides')}>
@@ -109,7 +110,8 @@ const FilterDialog = ({
           checkedValue={1}
           unCheckedValue={0}
           checked={overrides === 1}
-          onChange={onFilterValueChange}/>
+          onChange={onFilterValueChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Only show hosts that have results')}>
@@ -118,7 +120,8 @@ const FilterDialog = ({
           checkedValue={1}
           unCheckedValue={0}
           checked={result_hosts_only === 1}
-          onChange={onFilterValueChange}/>
+          onChange={onFilterValueChange}
+        />
       </FormGroup>
 
       <MinQodGroup

@@ -62,7 +62,8 @@ const ToolBarIcons = withCapabilities(({
     {capabilities.mayCreate('host') &&
       <NewIcon
         title={_('New Host')}
-        onClick={onHostCreateClick}/>
+        onClick={onHostCreateClick}
+      />
     }
   </IconDivider>
 ));

@@ -320,7 +320,8 @@ class Dialog extends React.Component {
               <FormGroup title={_('Import XML Report Format')} titleSize="3">
                 <FileField
                   name="xml_file"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
             </Layout>
           );

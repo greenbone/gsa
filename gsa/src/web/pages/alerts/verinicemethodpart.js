@@ -86,7 +86,7 @@ const VeriniceMethodPart = ({
               title={_('Create a credential')}
               value={VERINICE_CREDENTIAL_TYPES}
               onClick={onNewCredentialClick}
-          />
+            />
           </Layout>
         </Divider>
       </FormGroup>

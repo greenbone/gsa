@@ -84,17 +84,20 @@ const ResultDetails = ({
     <Layout
       flex="column"
       grow="1"
-      className={className}>
+      className={className}
+    >
 
       <DetailsBlock
-        title={_('Summary')}>
+        title={_('Summary')}
+      >
         <P>
           {tags.summary}
         </P>
       </DetailsBlock>
 
       <DetailsBlock
-        title={_('Vulnerability Detection Result')}>
+        title={_('Vulnerability Detection Result')}
+      >
         {!isEmpty(result.description) && result.description.length > 1 ?
           (
             <Pre>
@@ -107,7 +110,8 @@ const ResultDetails = ({
 
       {isDefined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
-          title={_('Impact')}>
+          title={_('Impact')}
+        >
           <P>
             {tags.impact}
           </P>
@@ -121,7 +125,8 @@ const ResultDetails = ({
 
       {isDefined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
-          title={_('Affected Software/OS')}>
+          title={_('Affected Software/OS')}
+        >
           <P>
             {tags.affected}
           </P>
@@ -130,7 +135,8 @@ const ResultDetails = ({
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
-          title={_('Vulnerability Insight')}>
+          title={_('Vulnerability Insight')}
+        >
           <P>
             {tags.insight}
           </P>
@@ -138,7 +144,8 @@ const ResultDetails = ({
       }
 
       <DetailsBlock
-        title={detection_title}>
+        title={detection_title}
+      >
         <Layout flex="column">
           <Layout flex box>
             {tags.vuldetect}
@@ -194,7 +201,8 @@ const ResultDetails = ({
 
       {has_detection &&
         <DetailsBlock
-          title={_('Product Detection Result')}>
+          title={_('Product Detection Result')}
+        >
           <InfoTable>
             <TableBody>
               <TableRow>

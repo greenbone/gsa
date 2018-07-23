@@ -50,7 +50,8 @@ const AutoFpGroup = ({
           unCheckedValue={0}
           checked={autofp >= 1}
           title={_('Trust vendor security updates')}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
         <Divider>
           <Radio
             name="autofp"
@@ -59,7 +60,8 @@ const AutoFpGroup = ({
             disabled={autofp === 0}
             checked={autofp === 1}
             convert={parseInt}
-            onChange={onChange}/>
+            onChange={onChange}
+          />
           <Radio
             name="autofp"
             title={_('Partial CVE match')}
@@ -67,7 +69,8 @@ const AutoFpGroup = ({
             disabled={autofp === 0}
             checked={autofp === 2}
             convert={parseInt}
-            onChange={onChange}/>
+            onChange={onChange}
+          />
         </Divider>
       </Divider>
     </FormGroup>

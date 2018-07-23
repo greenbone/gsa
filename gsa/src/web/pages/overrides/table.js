@@ -55,7 +55,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'text' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Text')}
         </TableHead>
         <TableHead
@@ -63,7 +64,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'nvt' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('NVT')}
         </TableHead>
         <TableHead
@@ -71,7 +73,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Hosts')}
         </TableHead>
         <TableHead
@@ -79,7 +82,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Location')}
         </TableHead>
         <TableHead
@@ -87,7 +91,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('From')}
         </TableHead>
         <TableHead
@@ -95,7 +100,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           width="8%"
           sortBy={sort ? 'new_severity' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('To')}
         </TableHead>
         <TableHead
@@ -103,7 +109,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'active' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Active')}
         </TableHead>
         {actionsColumn}

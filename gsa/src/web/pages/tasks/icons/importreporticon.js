@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,10 +28,10 @@ import PropTypes from '../../../utils/proptypes.js';
 
 import Icon from '../../../components/icon/icon.js';
 
-const  ImportIcon = ({
+const ImportIcon = ({
   size,
   task,
-  onClick
+  onClick,
 }, {capabilities}) => {
 
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
@@ -45,7 +45,8 @@ const  ImportIcon = ({
       img="upload.svg"
       onClick={onClick}
       alt={_('Import Report')}
-      title={_('Import Report')}/>
+      title={_('Import Report')}
+    />
   );
 };
 

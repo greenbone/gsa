@@ -51,16 +51,19 @@ const ToolBarIcons = withCapabilities(({
     <ManualIcon
       page="search"
       searchTerm="port list"
-      title={_('Help: Port Lists')}/>
+      title={_('Help: Port Lists')}
+    />
     {capabilities.mayCreate('port_list') &&
       <NewIcon
         title={_('New Port List')}
-        onClick={onPortListCreateClick}/>
+        onClick={onPortListCreateClick}
+      />
     }
     <Icon
       img="upload.svg"
       title={_('Import Port List')}
-      onClick={onPortListImportClick}/>
+      onClick={onPortListImportClick}
+    />
   </IconDivider>
 ));
 

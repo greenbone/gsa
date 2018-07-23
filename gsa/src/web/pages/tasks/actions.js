@@ -78,15 +78,18 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="task"
-        onClick={onTaskDeleteClick}/>
+        onClick={onTaskDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="task"
-        onClick={onTaskEditClick}/>
+        onClick={onTaskEditClick}
+      />
       <CloneIcon
         entity={entity}
         name="task"
-        onClick={onTaskCloneClick}/>
+        onClick={onTaskCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Task')}

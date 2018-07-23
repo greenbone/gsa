@@ -58,12 +58,14 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
           rowSpan="2"
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Name')}
         </TableHead>
         <TableHead
           width="33%"
-          colSpan="3">
+          colSpan="3"
+        >
           {_('Port Counts')}
         </TableHead>
         {isDefined(actionsColumn) ?
@@ -77,7 +79,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'total' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Total')}
         </TableHead>
         <TableHead
@@ -85,7 +88,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'tcp' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('TCP')}
         </TableHead>
         <TableHead
@@ -93,7 +97,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'udp' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('UDP')}
         </TableHead>
       </TableRow>

@@ -48,11 +48,13 @@ const ToolBarIcons = ({
     <ManualIcon
       page="gui_administration"
       anchor="user-roles"
-      title={_('Help: Roles')}/>
+      title={_('Help: Roles')}
+    />
     {capabilities.mayCreate('role') &&
       <NewIcon
         title={_('New Role')}
-        onClick={onRoleCreateClick}/>
+        onClick={onRoleCreateClick}
+      />
     }
   </IconDivider>
 );

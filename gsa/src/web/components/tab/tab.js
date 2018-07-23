@@ -71,7 +71,8 @@ const Tab = ({
 }) => (
   <StyledDiv
     active={isActive}
-    onClick={disabled ? undefined : onActivate}>
+    onClick={disabled ? undefined : onActivate}
+  >
     {children}
   </StyledDiv>
 );

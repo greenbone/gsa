@@ -47,12 +47,14 @@ const SeverityChangedConditionPart = ({
         value={VALUE}
         name="condition"
         checked={condition === VALUE}
-        onChange={onChange}>
+        onChange={onChange}
+      >
       </Radio>
       <Select
         value={direction}
         name={prefix + 'direction'}
-        onChange={onChange}>
+        onChange={onChange}
+      >
         <option value="changed">{_('changed')}</option>
         <option value="increased">{_('increased')}</option>
         <option value="decreased">{_('decreased')}</option>

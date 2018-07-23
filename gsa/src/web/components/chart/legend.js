@@ -86,7 +86,7 @@ export const Line = ({
       height={height}
       backgroundColor={Theme.white}
       padding="0 2px"
-     >
+    >
       <svg width={width} height={height}>
         <VxLine
           from={{x: 0, y}}

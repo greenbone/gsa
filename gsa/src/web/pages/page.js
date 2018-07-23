@@ -85,10 +85,12 @@ class Page extends React.Component {
 
     return (
       <CapabilitiesProvider
-        capabilities={capabilities}>
+        capabilities={capabilities}
+      >
         <StyledLayout
           flex="column"
-          align={['start', 'stretch']}>
+          align={['start', 'stretch']}
+        >
           <Header/>
           <StickyContainer>
             <MenuBar/>

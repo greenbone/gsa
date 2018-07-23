@@ -55,11 +55,13 @@ const NvtDetails = ({
   return (
     <Layout
       flex="column"
-      grow="1">
+      grow="1"
+    >
 
       {isDefined(tags.summary) &&
         <DetailsBlock
-          title={_('Summary')}>
+          title={_('Summary')}
+        >
           <Pre>
             {tags.summary}
           </Pre>
@@ -68,7 +70,8 @@ const NvtDetails = ({
 
       {isDefined(tags.affected) && tags.affected !== TAG_NA &&
         <DetailsBlock
-          title={_('Affected Software/OS')}>
+          title={_('Affected Software/OS')}
+        >
           <Pre>
             {tags.affected}
           </Pre>
@@ -76,7 +79,8 @@ const NvtDetails = ({
       }
 
       <DetailsBlock
-        title={_('Vulnerability Scoring')}>
+        title={_('Vulnerability Scoring')}
+      >
         <InfoTable>
           <TableBody>
             <TableRow>
@@ -110,7 +114,8 @@ const NvtDetails = ({
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
-          title={_('Vulnerability Insight')}>
+          title={_('Vulnerability Insight')}
+        >
           <Pre>
             {tags.insight}
           </Pre>
@@ -120,7 +125,8 @@ const NvtDetails = ({
       {(isDefined(qod) ||
       (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
         <DetailsBlock
-          title={_('Vulnerability Detection Method')}>
+          title={_('Vulnerability Detection Method')}
+        >
           {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
             <Pre>
               {tags.vuldetect}
@@ -144,7 +150,8 @@ const NvtDetails = ({
 
       {isDefined(tags.impact) && tags.impact !== TAG_NA &&
         <DetailsBlock
-          title={_('Impact')}>
+          title={_('Impact')}
+        >
           <Pre>
             {tags.impact}
           </Pre>

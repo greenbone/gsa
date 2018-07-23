@@ -60,19 +60,22 @@ const Actions = ({
       displayName={_('Filter')}
       name="filter"
       entity={entity}
-      onClick={onFilterDeleteClick}/>
+      onClick={onFilterDeleteClick}
+    />
     <EditIcon
       displayName={_('Filter')}
       name="filter"
       entity={entity}
-      onClick={onFilterEditClick}/>
+      onClick={onFilterEditClick}
+    />
     <CloneIcon
       displayName={_('Filter')}
       name="filter"
       entity={entity}
       title={_('Clone Filter')}
       value={entity}
-      onClick={onFilterCloneClick}/>
+      onClick={onFilterCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Filter')}

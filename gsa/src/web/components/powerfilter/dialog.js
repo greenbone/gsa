@@ -45,18 +45,22 @@ export const DefaultFilterDialog = ({
   <Layout flex="column">
     <FilterStringGroup
       filter={filterstring}
-      onChange={onFilterStringChange}/>
+      onChange={onFilterStringChange}
+    />
     <FirstResultGroup
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
     <ResultsPerPageGroup
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
     <SortByGroup
       fields={sortFields}
       filter={filter}
       onSortByChange={onSortByChange}
-      onSortOrderChange={onSortOrderChange}/>
+      onSortOrderChange={onSortOrderChange}
+    />
   </Layout>
 );
 

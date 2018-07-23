@@ -65,19 +65,22 @@ const IconActions = ({
       displayName={_('Target')}
       name="target"
       entity={entity}
-      onClick={onTargetDeleteClick}/>
+      onClick={onTargetDeleteClick}
+    />
     <EditIcon
       displayName={_('Target')}
       name="target"
       entity={entity}
-      onClick={onTargetEditClick}/>
+      onClick={onTargetEditClick}
+    />
     <CloneIcon
       displayName={_('Target')}
       name="target"
       entity={entity}
       title={_('Clone Target')}
       value={entity}
-      onClick={onTargetCloneClick}/>
+      onClick={onTargetCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Target')}
@@ -109,7 +112,8 @@ const Cred = ({
         <DetailsLink
           type="credential"
           id={cred.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {cred.name}
         </DetailsLink>
       </Layout>
@@ -136,7 +140,8 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {entity.name}
         </RowDetailsToggle>
       </TableData>
@@ -150,7 +155,8 @@ const Row = ({
         <DetailsLink
           type="portlist"
           id={entity.port_list.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.port_list.name}
         </DetailsLink>
       </TableData>

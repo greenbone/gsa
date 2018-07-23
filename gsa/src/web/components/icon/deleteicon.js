@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ const DeleteIcon = ({
   active = true,
   selectionType,
   title,
-  ...other,
+  ...other
 }) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -50,16 +50,18 @@ const DeleteIcon = ({
     }
   }
   return (
-    <Icon  {...other}
+    <Icon
+      {...other}
       img={active ? 'delete.svg' : 'delete_inactive.svg'}
-      title={title}/>
+      title={title}
+    />
   );
 };
 
 DeleteIcon.propTypes = {
   active: PropTypes.bool,
-  title: PropTypes.string,
   selectionType: PropTypes.string,
+  title: PropTypes.string,
   onClick: PropTypes.func,
 };
 

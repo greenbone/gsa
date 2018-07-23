@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,15 +42,16 @@ const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
         name={name}
         value={first}
         size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };
 
 FirstResultGroup.propTypes = {
-  name: PropTypes.string,
-  first: PropTypes.number,
   filter: PropTypes.filter,
+  first: PropTypes.number,
+  name: PropTypes.string,
   onChange: PropTypes.func,
 };
 

@@ -42,7 +42,8 @@ const Wrapper = ({
   <Layout
     flex="column"
     align={['start', 'stretch']}
-    grow="1">
+    grow="1"
+  >
     {children}
   </Layout>
 );

@@ -61,7 +61,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Name')}
         </TableHead>
         <TableHead
@@ -69,7 +70,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hostname' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Hostname')}
         </TableHead>
         <TableHead
@@ -77,7 +79,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ip' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('IP Address')}
         </TableHead>
         <TableHead
@@ -85,7 +88,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'os' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('OS')}
         </TableHead>
         <TableHead
@@ -93,7 +97,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Severity')}
         </TableHead>
         <TableHead
@@ -101,7 +106,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'modified' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Modified')}
         </TableHead>
         {actionsColumn}
@@ -164,7 +170,8 @@ const Footer = ({
         active={has_selected}
         title={title}
         value={value}
-        onClick={onTargetCreateFromSelection}/>
+        onClick={onTargetCreateFromSelection}
+      />
     </EntitiesFooter>
   );
 };

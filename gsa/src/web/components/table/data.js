@@ -38,7 +38,8 @@ const TableData = ({
     <td
       className={className}
       colSpan={colSpan}
-      rowSpan={rowSpan}>
+      rowSpan={rowSpan}
+    >
       <Layout flex="column" {...other}>
         {children}
       </Layout>

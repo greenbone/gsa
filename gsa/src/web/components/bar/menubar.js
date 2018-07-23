@@ -122,13 +122,15 @@ const MenuBar = ({
         <li>
           <Link
             to="/"
-            title={_('Dashboards')}>
+            title={_('Dashboards')}
+          >
             <GreenboneIcon size={['35px', '35px']}/>
           </Link>
         </li>
         <Menu
           to="/"
-          title={_('Dashboards')}>
+          title={_('Dashboards')}
+        >
         </Menu>
         {may_op_scans &&
           <Menu title={_('Scans')}>

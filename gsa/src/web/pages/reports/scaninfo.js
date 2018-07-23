@@ -174,7 +174,8 @@ const ReportScanInfoTable = ({
           <TableData>
             <StatusBar
               status={status}
-              progress={progress}/>
+              progress={progress}
+            />
           </TableData>
         </TableRow>
         {delta &&

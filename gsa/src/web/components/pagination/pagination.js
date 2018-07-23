@@ -67,17 +67,20 @@ const Pagination = ({
   return (
     <PaginationLayout
       flex
-      align={['end', 'center']}>
+      align={['end', 'center']}
+    >
       {counts.hasPrevious() ?
         <IconDivider>
           <NavigationIcon
             img="first.svg"
             title={_('First')}
-            onClick={onFirstClick}/>
+            onClick={onFirstClick}
+          />
           <NavigationIcon
             img="previous.svg"
             title={_('Previous')}
-            onClick={onPreviousClick}/>
+            onClick={onPreviousClick}
+          />
         </IconDivider> :
         <IconDivider>
           <NavigationIcon img="first_inactive.svg" title={_('First')}/>
@@ -92,11 +95,13 @@ const Pagination = ({
           <NavigationIcon
             img="next.svg"
             title={_('Next')}
-            onClick={onNextClick}/>
+            onClick={onNextClick}
+          />
           <NavigationIcon
             img="last.svg"
             title={_('Last')}
-            onClick={onLastClick}/>
+            onClick={onLastClick}
+          />
         </IconDivider> :
         <IconDivider>
           <NavigationIcon img="next_inactive.svg" title={_('Next')}/>

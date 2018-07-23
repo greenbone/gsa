@@ -37,7 +37,8 @@ const HostDetails = ({
   return (
     <Layout
       grow="1"
-      flex="column">
+      flex="column"
+    >
       <Identifiers
         displayActions
         identifiers={identifiers}

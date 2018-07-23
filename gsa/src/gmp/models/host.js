@@ -65,7 +65,7 @@ class Host extends Asset {
   static asset_type = 'host';
 
   parseProperties(elem) {
-    let ret = super.parseProperties(elem);
+    const ret = super.parseProperties(elem);
 
     if (isDefined(ret.host) && isDefined(ret.host.severity)) {
       ret.severity = parseSeverity(ret.host.severity.value);

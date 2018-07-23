@@ -57,7 +57,8 @@ const DialogTitle = ({
   return (
     <DialogTitleBar
       align={['space-between', 'center']}
-      onMouseDown={onMouseDown}>
+      onMouseDown={onMouseDown}
+    >
       <span>{title}</span>
       {showClose &&
         <DialogCloseButton
