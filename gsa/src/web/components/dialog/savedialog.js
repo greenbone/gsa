@@ -217,7 +217,8 @@ SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
   defaultValues: PropTypes.object, // default values for uncontrolled values
   externalError: PropTypes.object, // for errors from outside SaveDialog
-  initialData: deprecated(PropTypes.object, 'Please use \'defaultValues\' instead.'), // should not be used anymore. use defaultValues instead.
+  initialData:
+    deprecated(PropTypes.object, 'Please use \'defaultValues\' instead.'), // should not be used anymore. use defaultValues instead.
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
   title: PropTypes.string.isRequired,
