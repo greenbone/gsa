@@ -46,7 +46,7 @@ export class Logger {
 
   setLevel(level) {
     level = isString(level) ? level.toLowerCase() : undefined;
-    let loglevel = LogLevels[level];
+    const loglevel = LogLevels[level];
 
     if (isDefined(loglevel)) {
       this.level = level;
@@ -57,8 +57,8 @@ export class Logger {
       this.level = 'silent';
     }
 
-    for (let logname in LogLevels) { // eslint-disable-line guard-for-in
-      this[logname] = (LogLevels[logname] < loglevel) ? noop : (...args) => {
+    for (const logname in LogLevels) { // eslint-disable-line guard-for-in
+      this[logname] = LogLevels[logname] < loglevel ? noop : (...args) => {
         return console[logname]('%c' + this.name, 'color: ' + GREENBONE_GREEN,
           ...args);
       };
