@@ -169,7 +169,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/user.js
      ${GSA_SRC_DIR}/src/gmp/models/vulnerability.js
      ${GSA_SRC_DIR}/src/gmp/parser.js
-     ${GSA_SRC_DIR}/src/gmp/promise.js
      ${GSA_SRC_DIR}/src/gmp/timezones.js
      ${GSA_SRC_DIR}/src/gmp/utils/array.js
      ${GSA_SRC_DIR}/src/gmp/utils/entitytype.js

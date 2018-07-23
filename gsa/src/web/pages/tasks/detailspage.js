@@ -29,8 +29,6 @@ import {shortDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Promise from 'gmp/promise';
-
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
 import PropTypes from '../../utils/proptypes.js';

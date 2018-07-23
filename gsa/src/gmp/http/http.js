@@ -24,8 +24,6 @@ import logger from '../log';
 
 import _ from '../locale';
 
-import Promise from '../promise';
-
 import {isDefined, hasValue, isArray} from '../utils/identity';
 
 import Rejection from './rejection';
@@ -141,7 +139,7 @@ class Http {
       ...other,
     };
 
-    const promise = Promise.create(function(resolve, reject) {
+    const promise = new Promise(function(resolve, reject) {
       xhr = new XMLHttpRequest();
 
       if (isDefined(responseType)) {

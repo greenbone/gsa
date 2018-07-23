@@ -24,8 +24,6 @@ import logger from '../log';
 
 import {isDefined} from '../utils/identity';
 
-import PromiseFactory from '../promise';
-
 import registerCommand from '../command';
 
 import ReportFormat from '../models/reportformat';
@@ -99,7 +97,7 @@ class ReportFormatCommand extends EntityCommand {
         rej.setMessage(response._status_text);
       }
 
-      return PromiseFactory.reject(rej);
+      return Promise.reject(rej);
     });
   }
 
