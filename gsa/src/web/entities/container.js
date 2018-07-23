@@ -37,7 +37,6 @@ import {
   normalizeType,
 } from 'gmp/utils/entitytype';
 
-import PromiseFactory from 'gmp/promise';
 import CancelToken from 'gmp/cancel';
 
 import Filter from 'gmp/models/filter';
@@ -211,7 +210,7 @@ class EntitiesContainer extends React.Component {
         }
         this.setState({loading: false});
         this.handleError(error);
-        return PromiseFactory.reject(error);
+        return Promise.reject(error);
       });
   }
 
