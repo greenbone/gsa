@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ const Actions = ({
   }, {capabilities}) => {
 
   let new_title;
-  let can_create_target = capabilities.mayCreate('target');
+  const can_create_target = capabilities.mayCreate('target');
   if (can_create_target) {
     new_title = _('Create Target from Host');
   }
@@ -98,8 +98,8 @@ Actions.propTypes = {
   entity: PropTypes.model,
   onHostDeleteClick: PropTypes.func,
   onHostDownloadClick: PropTypes.func,
-  onTargetCreateFromHostClick: PropTypes.func,
   onHostEditClick: PropTypes.func,
+  onTargetCreateFromHostClick: PropTypes.func,
 };
 
 Actions.contextTypes = {
@@ -111,7 +111,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   const {details = {}} = entity;
   const os_cpe = isDefined(details.best_os_cpe) ? details.best_os_cpe.value :
