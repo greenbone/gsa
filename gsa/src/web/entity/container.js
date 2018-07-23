@@ -42,7 +42,7 @@ import TagsHandler from './tagshandler.js';
 const log = logger.getLogger('web.entity.container');
 
 export const loader = (type, filter_func, name = type) =>
-  function (id, cancel_token) {
+  function(id, cancel_token) {
     const {gmp} = this.props;
 
     log.debug('Loading', name, 'for entity', id);

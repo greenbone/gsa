@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import React from 'react';
 import PropTypes from '../../utils/proptypes.js';
 
 const TableRow = ({items = [], children, ...other}) => {
-  let data = items.map((item, i) => {
+  const data = items.map((item, i) => {
     return <th key={i}>{item}</th>;
   });
   return (

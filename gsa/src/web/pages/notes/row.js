@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   const text = (
     <div>
@@ -111,7 +111,7 @@ const Row = ({
         </RowDetailsToggle>
       </TableData>
       <TableData>
-        {entity.nvt ? entity.nvt.name : ""}
+        {entity.nvt ? entity.nvt.name : ''}
       </TableData>
       <TableData title={entity.hosts}>
         {shorten(entity.hosts.join(', '))}

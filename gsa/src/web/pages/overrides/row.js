@@ -109,7 +109,7 @@ const Row = ({
   links = true,
   actions,
   onToggleDetailsClick,
-  ...props,
+  ...props
 }) => {
   return (
     <TableRow>
@@ -121,7 +121,7 @@ const Row = ({
         </RowDetailsToggle>
       </TableData>
       <TableData>
-        {entity.nvt ? entity.nvt.name : ""}
+        {entity.nvt ? entity.nvt.name : ''}
       </TableData>
       <TableData title={entity.hosts}>
         {shorten(entity.hosts.join(', '))}

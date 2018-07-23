@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,9 @@ import {get_img_url} from '../../utils/urls.js';
 const Img = ({
   alt = '',
   src,
-  ...other,
+  ...other
 }) => {
-  let img_path = get_img_url(src);
+  const img_path = get_img_url(src);
   return (
     <img
       {...other}

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,14 +43,15 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
     download_title = _('Export all filtered');
   }
   return (
-    <Icon img="download.svg"
+    <Icon
+      img="download.svg"
       title={download_title} {...other}/>
   );
 };
 
 ExportIcon.propTypes = {
-  title: PropTypes.string,
   selectionType: PropTypes.string,
+  title: PropTypes.string,
   onClick: PropTypes.func,
 };
 

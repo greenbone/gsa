@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ const SolutionType = ({
 
   if (displayTitleText) {
     return (
-      <Divider flex align={["start", "center"]}>
+      <Divider flex align={['start', 'center']}>
         <Icon
           img={img}
           title={title}
@@ -90,8 +90,8 @@ const SolutionType = ({
 };
 
 SolutionType.propTypes = {
-  type: PropTypes.string,
   displayTitleText: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 

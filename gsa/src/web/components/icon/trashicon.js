@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ const TrashIcon = ({
   active = true,
   selectionType,
   title,
-  ...other,
+  ...other
 }) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -50,7 +50,8 @@ const TrashIcon = ({
     }
   }
   return (
-    <Icon  {...other}
+    <Icon
+      {...other}
       img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
       title={title}/>
   );
@@ -58,8 +59,8 @@ const TrashIcon = ({
 
 TrashIcon.propTypes = {
   active: PropTypes.bool,
-  title: PropTypes.string,
   selectionType: PropTypes.string,
+  title: PropTypes.string,
   onClick: PropTypes.func,
 };
 

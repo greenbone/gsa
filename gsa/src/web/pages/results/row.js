@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,11 +94,11 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
-        {host.hostname.length > 0
-          ? <span title={host.hostname}>
-              ({shorten (host.hostname, 40)})
-            </span>
-          : false}
+        {host.hostname.length > 0 ?
+          <span title={host.hostname}>
+              ({shorten(host.hostname, 40)})
+            </span> :
+          false}
       </TableData>
       <TableData>
         {entity.port}

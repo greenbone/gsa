@@ -113,6 +113,7 @@ const PortRangeDialog = ({
 };
 
 PortRangeDialog.propTypes = {
+  id: PropTypes.id.isRequired,
   port_list: PropTypes.model,
   port_type: PropTypes.string,
   title: PropTypes.string,
