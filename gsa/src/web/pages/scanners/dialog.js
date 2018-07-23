@@ -211,7 +211,8 @@ class ScannerDialog extends React.Component {
                   value={state.name}
                   size="30"
                   onChange={onValueChange}
-                  maxLength="80"/>
+                  maxLength="80"
+                />
               </FormGroup>
 
               <FormGroup title={_('Comment')}>
@@ -221,7 +222,8 @@ class ScannerDialog extends React.Component {
                   grow="1"
                   size="30"
                   maxLength="400"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Host')}>
@@ -230,7 +232,8 @@ class ScannerDialog extends React.Component {
                   value={state.host}
                   disabled={in_use}
                   grow="1"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Port')}>
@@ -239,7 +242,8 @@ class ScannerDialog extends React.Component {
                   value={state.port}
                   disabled={in_use}
                   grow="1"
-                  onChange={onValueChange}/>
+                  onChange={onValueChange}
+                />
               </FormGroup>
 
               <FormGroup title={_('Type')}>
@@ -285,7 +289,8 @@ class ScannerDialog extends React.Component {
                     <FileField
                       disabled={is_edit && state.which_cert !== 'new'}
                       name="ca_pub"
-                      onChange={onValueChange}/>
+                      onChange={onValueChange}
+                    />
                   </Divider>
                 </Layout>
                 {is_edit && isDefined(state.ca_pub) &&
@@ -299,12 +304,14 @@ class ScannerDialog extends React.Component {
                     name="credential_id"
                     items={renderSelectItems(scanner_credentials)}
                     value={credential_id}
-                    onChange={onCredentialChange}/>
+                    onChange={onCredentialChange}
+                  />
                   <Layout flex box>
                     <NewIcon
                       value={type}
                       title={_('Create a new Credential')}
-                      onClick={onNewCredentialClick}/>
+                      onClick={onNewCredentialClick}
+                    />
                   </Layout>
                 </Divider>
                 {show_cred_info &&

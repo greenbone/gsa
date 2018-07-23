@@ -129,7 +129,8 @@ const Dialog = ({
 
             <FormGroup
               title={_('Comment')}
-              flex="column">
+              flex="column"
+            >
               <TextField
                 name="comment"
                 value={state.comment}
@@ -140,7 +141,8 @@ const Dialog = ({
             </FormGroup>
 
             <FormGroup
-              title={_('Users')}>
+              title={_('Users')}
+            >
               <MultiSelect
                 name="users"
                 items={usersOptions}
@@ -155,7 +157,8 @@ const Dialog = ({
 
                 <FormGroup
                   title={_('Name')}
-                  flex align={['space-between', 'center']}>
+                  flex align={['space-between', 'center']}
+                >
                   <Select
                     name="permission_name"
                     items={permissionsOptions}
@@ -174,7 +177,8 @@ const Dialog = ({
 
                 <FormGroup
                   title={_('Group')}
-                  flex align={['space-between', 'center']}>
+                  flex align={['space-between', 'center']}
+                >
                   <Select
                     name="group_id"
                     items={groupOptions}

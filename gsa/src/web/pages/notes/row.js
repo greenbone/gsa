@@ -60,15 +60,18 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="note"
-        onClick={onNoteDeleteClick}/>
+        onClick={onNoteDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="note"
-        onClick={onNoteEditClick}/>
+        onClick={onNoteEditClick}
+      />
       <CloneIcon
         entity={entity}
         name="note"
-        onClick={onNoteCloneClick}/>
+        onClick={onNoteCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Note')}
@@ -106,7 +109,8 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {text}
         </RowDetailsToggle>
       </TableData>

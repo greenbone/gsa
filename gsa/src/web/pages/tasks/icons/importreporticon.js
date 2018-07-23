@@ -45,7 +45,8 @@ const ImportIcon = ({
       img="upload.svg"
       onClick={onClick}
       alt={_('Import Report')}
-      title={_('Import Report')}/>
+      title={_('Import Report')}
+    />
   );
 };
 

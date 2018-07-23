@@ -43,7 +43,8 @@ const ToolBarIcons = props => {
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="network-vulnerability-tests"
-      title={_('Help: NVTs')}/>
+      title={_('Help: NVTs')}
+    />
   );
 };
 

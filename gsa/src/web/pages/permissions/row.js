@@ -65,12 +65,14 @@ const Actions = ({
       displayName={_('Permission')}
       name="permission"
       entity={entity}
-      onClick={onPermissionDeleteClick}/>
+      onClick={onPermissionDeleteClick}
+    />
     <EditIcon
       displayName={_('Permission')}
       name="permission"
       entity={entity}
-      onClick={onPermissionEditClick}/>
+      onClick={onPermissionEditClick}
+    />
     <CloneIcon
       displayName={_('Permission')}
       name="permission"
@@ -78,7 +80,8 @@ const Actions = ({
       title={_('Clone Permission')}
       value={entity}
       mayClone={entity.isWritable()}
-      onClick={onPermissionCloneClick}/>
+      onClick={onPermissionCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Permission')}

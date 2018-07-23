@@ -77,25 +77,29 @@ class DeltaStatesFilterGroup extends React.Component {
           <Checkbox
             checked={delta_states.includes('s')}
             name="s"
-            onChange={this.handleDeltaStatesChange}>
+            onChange={this.handleDeltaStatesChange}
+          >
             {_('Same')}
           </Checkbox>
           <Checkbox
             checked={delta_states.includes('n')}
             name="n"
-            onChange={this.handleDeltaStatesChange}>
+            onChange={this.handleDeltaStatesChange}
+          >
             {_('New')}
           </Checkbox>
           <Checkbox
             checked={delta_states.includes('g')}
             name="g"
-            onChange={this.handleDeltaStatesChange}>
+            onChange={this.handleDeltaStatesChange}
+          >
             {_('Gone')}
           </Checkbox>
           <Checkbox
             checked={delta_states.includes('c')}
             name="c"
-            onChange={this.handleDeltaStatesChange}>
+            onChange={this.handleDeltaStatesChange}
+          >
             {_('Changed')}
           </Checkbox>
         </Divider>

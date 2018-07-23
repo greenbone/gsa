@@ -53,7 +53,8 @@ const FilterCountChangedConditionPart = ({
         value={VALUE}
         checked={condition === VALUE}
         name="condition"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
       <Select
         value={filterId}
         name={prefix + 'filter_id'}
@@ -68,7 +69,8 @@ const FilterCountChangedConditionPart = ({
         name={prefix + 'count'}
         type="int"
         min="0" size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
       <Layout flex box>
         {_('result(s) more than previous scan')}
       </Layout>

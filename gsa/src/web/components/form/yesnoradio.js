@@ -54,7 +54,8 @@ const YesNoRadio = ({
           checked={value === yesValue}
           convert={convert}
           onChange={onChange}
-          disabled={disabled}/>
+          disabled={disabled}
+        />
         <Radio
           title={_('No')}
           value={noValue}
@@ -62,7 +63,8 @@ const YesNoRadio = ({
           checked={value === noValue}
           convert={convert}
           onChange={onChange}
-          disabled={disabled}/>
+          disabled={disabled}
+        />
       </Divider>
     </Layout>
   );

@@ -73,7 +73,8 @@ const EntityCreateIcon = ({
       {...props}
       title={title}
       active={active}
-      onClick={active ? onClick : undefined}/>
+      onClick={active ? onClick : undefined}
+    />
   );
 };
 

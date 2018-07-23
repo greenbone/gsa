@@ -54,14 +54,16 @@ const Header = ({
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'ip' : false}
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('IP Address')}
       </TableHead>
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hostname' : false}
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Hostname')}
       </TableHead>
       <TableHead
@@ -69,7 +71,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'os' : false}
         width="5em"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('OS')}
       </TableHead>
       <TableHead
@@ -77,7 +80,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'high' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('High')}
       </TableHead>
       <TableHead
@@ -85,7 +89,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'medium' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Medium')}
       </TableHead>
       <TableHead
@@ -93,7 +98,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'low' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Low')}
       </TableHead>
       <TableHead
@@ -101,7 +107,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'log' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Log')}
       </TableHead>
       <TableHead
@@ -109,7 +116,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'false_positive' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('False Positive')}
       </TableHead>
       <TableHead
@@ -117,7 +125,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'total' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Total')}
       </TableHead>
       <TableHead
@@ -125,7 +134,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Severity')}
       </TableHead>
     </TableRow>

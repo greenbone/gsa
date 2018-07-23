@@ -46,7 +46,8 @@ const ToolBarIcons = props => {
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="id15"
-      title={_('Help: DFN-CERT Advisories')}/>
+      title={_('Help: DFN-CERT Advisories')}
+    />
   );
 };
 

@@ -78,15 +78,18 @@ const Actions = ({
       <TrashIcon
         entity={entity}
         name="override"
-        onClick={onOverrideDeleteClick}/>
+        onClick={onOverrideDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="override"
-        onClick={onOverrideEditClick}/>
+        onClick={onOverrideEditClick}
+      />
       <CloneIcon
         entity={entity}
         name="override"
-        onClick={onOverrideCloneClick}/>
+        onClick={onOverrideCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Override')}
@@ -116,7 +119,8 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {shorten(entity.text)}
         </RowDetailsToggle>
       </TableData>

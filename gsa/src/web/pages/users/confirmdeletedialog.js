@@ -103,7 +103,8 @@ const ConfirmDeleteDialog = ({
                   ' be deleted as well.')}
             </p>
             <FormGroup
-              title={_('Inheriting user')}>
+              title={_('Inheriting user')}
+            >
               <Select
                 name="inheritor_id"
                 items={inheritingUserOptions}

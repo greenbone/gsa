@@ -114,15 +114,18 @@ class TaskDetails extends React.Component {
     return (
       <Layout
         grow="1"
-        flex="column">
+        flex="column"
+      >
 
         {isDefined(target) &&
           <DetailsBlock
-            title={_('Target')}>
+            title={_('Target')}
+          >
             <DetailsLink
               textOnly={!links}
               type="target"
-              id={target.id}>
+              id={target.id}
+            >
               {target.name}
             </DetailsLink>
           </DetailsBlock>
@@ -130,7 +133,8 @@ class TaskDetails extends React.Component {
 
         {isDefined(alerts) &&
           <DetailsBlock
-            title={_('Alerts')}>
+            title={_('Alerts')}
+          >
             <Divider>
               {
                 alerts.map(alert => (
@@ -138,7 +142,8 @@ class TaskDetails extends React.Component {
                     key={alert.id}
                     textOnly={!links}
                     type="alert"
-                    id={alert.id}>
+                    id={alert.id}
+                  >
                     {alert.name}
                   </DetailsLink>
                 ))
@@ -149,7 +154,8 @@ class TaskDetails extends React.Component {
 
         {isDefined(scanner) &&
           <DetailsBlock
-            title={_('Scanner')}>
+            title={_('Scanner')}
+          >
             <InfoTable>
               <TableBody>
                 <TableRow>
@@ -160,7 +166,8 @@ class TaskDetails extends React.Component {
                     <DetailsLink
                       textOnly={!links}
                       type="scanner"
-                      id={scanner.id}>
+                      id={scanner.id}
+                    >
                       {scanner.name}
                     </DetailsLink>
                   </TableData>
@@ -182,7 +189,8 @@ class TaskDetails extends React.Component {
                       <DetailsLink
                         textOnly={!links}
                         type="scanconfig"
-                        id={config.id}>
+                        id={config.id}
+                      >
                         {config.name}
                       </DetailsLink>
                     </TableData>
@@ -240,7 +248,8 @@ class TaskDetails extends React.Component {
         }
 
         <DetailsBlock
-          title={_('Assets')}>
+          title={_('Assets')}
+        >
           <InfoTable>
             <TableBody>
               <TableRow>
@@ -279,7 +288,8 @@ class TaskDetails extends React.Component {
 
         {isDefined(schedule) &&
           <DetailsBlock
-            title={_('Schedule')}>
+            title={_('Schedule')}
+          >
             <InfoTable>
               <TableBody>
                 <TableRow>
@@ -312,7 +322,8 @@ class TaskDetails extends React.Component {
         }
 
         <DetailsBlock
-          title={_('Scan')}>
+          title={_('Scan')}
+        >
           <InfoTable>
             <TableBody>
               <TableRow>

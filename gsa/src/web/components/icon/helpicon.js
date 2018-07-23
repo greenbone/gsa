@@ -56,7 +56,8 @@ const HelpIcon = ({
       img="help.svg"
       to={url}
       title={title}
-      {...other}/>
+      {...other}
+    />
   );
 };
 

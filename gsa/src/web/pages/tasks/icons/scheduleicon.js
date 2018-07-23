@@ -44,7 +44,8 @@ const ScheduleIcon = ({
         size={size}
         img="scheduled_inactive.svg"
         title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
-          {name: schedule.name, id: schedule.id})}/>
+          {name: schedule.name, id: schedule.id})}
+      />
     );
   }
 

@@ -57,7 +57,8 @@ const CertLink = ({
       title={title}
       id={id}
       type={info_type}
-      textOnly={textOnly}>
+      textOnly={textOnly}
+    >
       {id}
     </DetailsLink>
   );

@@ -74,17 +74,20 @@ const Actions = ({
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onHostDeleteClick}/>
+        onClick={onHostDeleteClick}
+      />
       <EditIcon
         entity={entity}
         name="asset"
         displayName={_('Host')}
-        onClick={onHostEditClick}/>
+        onClick={onHostEditClick}
+      />
       <NewIcon
         value={entity}
         active={can_create_target}
         title={new_title}
-        onClick={onTargetCreateFromHostClick}/>
+        onClick={onTargetCreateFromHostClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Host')}
@@ -123,7 +126,8 @@ const Row = ({
       <TableData flex="column">
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {entity.name}
         </RowDetailsToggle>
         <Comment text={entity.comment}/>

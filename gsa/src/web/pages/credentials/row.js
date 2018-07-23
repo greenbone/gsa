@@ -64,19 +64,22 @@ const Actions = ({
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onCredentialDeleteClick}/>
+        onClick={onCredentialDeleteClick}
+      />
       <EditIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
-        onClick={onCredentialEditClick}/>
+        onClick={onCredentialEditClick}
+      />
       <CloneIcon
         displayName={_('Credential')}
         name="credential"
         entity={entity}
         title={_('Clone Credential')}
         value={entity}
-        onClick={onCredentialCloneClick}/>
+        onClick={onCredentialCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Credential')}

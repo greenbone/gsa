@@ -62,7 +62,8 @@ const SmbMethodPart = ({
     <Layout
       flex="column"
       box
-      grow="1">
+      grow="1"
+    >
       <FormGroup title=" ">
         <Text>
           {_('Security note: The SMB protocol does not offer a ' +

@@ -76,7 +76,8 @@ const EntityDeleteIcon = ({
       title={title}
       value={entity}
       active={active}
-      onClick={active ? onClick : undefined}/>
+      onClick={active ? onClick : undefined}
+    />
   );
 };
 

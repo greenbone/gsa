@@ -51,7 +51,8 @@ const DfnCertAdvDetails = ({
   return (
     <Layout
       flex="column"
-      grow>
+      grow
+    >
 
       <InfoTable>
         <TableBody>

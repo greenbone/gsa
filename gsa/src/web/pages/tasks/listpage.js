@@ -61,32 +61,38 @@ const ToolBarIcons = ({
       <ManualIcon
         page="vulnerabilitymanagement"
         anchor="creating-a-task"
-        title={_('Help: Tasks')}/>
+        title={_('Help: Tasks')}
+      />
       {capabilities.mayOp('run_wizard') &&
         <IconMenu
           img="wizard.svg"
-          onClick={onTaskWizardClick}>
+          onClick={onTaskWizardClick}
+        >
           {capabilities.mayCreate('task') &&
             <MenuEntry
               title={_('Task Wizard')}
-              onClick={onTaskWizardClick}/>
+              onClick={onTaskWizardClick}
+            />
           }
           {capabilities.mayCreate('task') &&
             <MenuEntry
               title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}/>
+              onClick={onAdvancedTaskWizardClick}
+            />
           }
           {capabilities.mayEdit('task') &&
             <MenuEntry
               title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}/>
+              onClick={onModifyTaskWizardClick}
+            />
           }
         </IconMenu>
       }
 
       <NewIconMenu
         onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}/>
+        onNewContainerClick={onContainerTaskCreateClick}
+      />
 
     </IconDivider>
   );

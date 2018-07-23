@@ -53,7 +53,8 @@ const DeleteIcon = ({
     <Icon
       {...other}
       img={active ? 'delete.svg' : 'delete_inactive.svg'}
-      title={title}/>
+      title={title}
+    />
   );
 };
 

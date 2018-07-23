@@ -71,7 +71,8 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {shown_name}
         </RowDetailsToggle>
       </TableData>

@@ -413,7 +413,8 @@ const Page = ({
               <Layout grow="1" flex="column">
                 <TabLayout
                   grow="1"
-                  align={['start', 'end']}>
+                  align={['start', 'end']}
+                >
                   <TabList
                     active={activeTab}
                     align={['start', 'stretch']}

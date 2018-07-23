@@ -114,7 +114,8 @@ class Titlebar extends React.Component {
     return (
       <TitlebarLayout
         flex
-        align={['space-between', 'center']}>
+        align={['space-between', 'center']}
+      >
         {gmp.isLoggedIn() &&
           <Link
             to="/"

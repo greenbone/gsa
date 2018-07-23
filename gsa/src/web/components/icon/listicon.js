@@ -33,7 +33,8 @@ const ListIcon = ({page, filter, ...props}) => {
   return (
     <Link
       to={page}
-      filter={filter}>
+      filter={filter}
+    >
       <Icon
         {...props}
         img="list.svg"

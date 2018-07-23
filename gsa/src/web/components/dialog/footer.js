@@ -47,7 +47,8 @@ const DialogFooter = ({
 }) => (
   <StyledLayout
     align={['end', 'center']}
-    shrink="0">
+    shrink="0"
+  >
     <Button
       onClick={onClick}
       title={title}

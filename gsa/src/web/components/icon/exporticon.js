@@ -45,7 +45,8 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
   return (
     <Icon
       img="download.svg"
-      title={download_title} {...other}/>
+      title={download_title} {...other}
+    />
   );
 };
 

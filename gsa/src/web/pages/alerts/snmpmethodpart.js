@@ -43,14 +43,16 @@ const SnmpMethodPart = ({
     <Layout
       flex="column"
       grow="1"
-      box>
+      box
+    >
       <FormGroup title={_('Community')}>
         <TextField
           size="30"
           maxLength="301"
           name={prefix + 'snmp_community'}
           value={snmpCommunity}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Agent')}>
@@ -59,7 +61,8 @@ const SnmpMethodPart = ({
           maxLength="301"
           name={prefix + 'snmp_agent'}
           value={snmpAgent}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Message')}>
@@ -68,7 +71,8 @@ const SnmpMethodPart = ({
           maxLength="301"
           name={prefix + 'snmp_message'}
           value={snmpMessage}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
     </Layout>
   );

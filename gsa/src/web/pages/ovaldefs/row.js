@@ -51,10 +51,12 @@ const Row = ({
     <TableBody>
       <TableRow>
         <TableData
-          rowSpan="2">
+          rowSpan="2"
+        >
           <RowDetailsToggle
             name={entity.id}
-            onClick={onToggleDetailsClick}>
+            onClick={onToggleDetailsClick}
+          >
             {entity.name}
           </RowDetailsToggle>
           <div>{shorten(entity.file, 45)}</div>

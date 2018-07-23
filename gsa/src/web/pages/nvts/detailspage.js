@@ -158,7 +158,8 @@ const Details = ({
       />
 
       <DetailsBlock
-        title={_('Preferences')}>
+        title={_('Preferences')}
+      >
         <Preferences
           preferences={preferences}
           default_timeout={default_timeout}
@@ -168,11 +169,13 @@ const Details = ({
       {overrides.length > 0 &&
         <DetailsBlock
           id="overrides"
-          title={_('Overrides')}>
+          title={_('Overrides')}
+        >
           <Divider
             wrap
             align={['start', 'stretch']}
-            width="15px">
+            width="15px"
+          >
             {
               overrides.map(override => (
                 <Override
@@ -188,11 +191,13 @@ const Details = ({
       {notes.length > 0 &&
         <DetailsBlock
           id="notes"
-          title={_('Notes')}>
+          title={_('Notes')}
+        >
           <Divider
             wrap
             align={['start', 'stretch']}
-            width="15px">
+            width="15px"
+          >
             {
               notes.map(note => (
                 <Note

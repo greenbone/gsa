@@ -60,13 +60,15 @@ const EntityNameTableData = ({
         {isDefined(onToggleDetailsClick) ?
           <RowDetailsToggle
             name={entity.id}
-            onClick={onToggleDetailsClick}>
+            onClick={onToggleDetailsClick}
+          >
             {entity.name}
           </RowDetailsToggle> :
           <DetailsLink
             type={type}
             id={entity.id}
-            textOnly={!links}>
+            textOnly={!links}
+          >
             {entity.name}
           </DetailsLink>
         }

@@ -43,7 +43,8 @@ const ResultsPerPageGroup = ({rows, filter, onChange, name = 'rows'}) => {
         name={name}
         value={rows}
         size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };

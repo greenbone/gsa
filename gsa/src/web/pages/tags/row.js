@@ -96,19 +96,22 @@ const Actions = withCapabilities(({
         displayName={_('Tag')}
         name="tag"
         entity={entity}
-        onClick={onTagDeleteClick}/>
+        onClick={onTagDeleteClick}
+      />
       <EditIcon
         displayName={_('Tag')}
         name="tag"
         entity={entity}
-        onClick={onTagEditClick}/>
+        onClick={onTagEditClick}
+      />
       <CloneIcon
         displayName={_('Tag')}
         name="tag"
         entity={entity}
         title={_('Clone Tag')}
         value={entity}
-        onClick={onTagCloneClick}/>
+        onClick={onTagCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Tag')}

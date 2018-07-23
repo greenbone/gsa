@@ -38,10 +38,12 @@ const NewIcon = ({
       <IconMenu img="new.svg" onClick={onNewClick}>
         <MenuEntry
           title={_('New Task')}
-          onClick={onNewClick}/>
+          onClick={onNewClick}
+        />
         <MenuEntry
           title={_('New Container Task')}
-          onClick={onNewContainerClick}/>
+          onClick={onNewContainerClick}
+        />
       </IconMenu>
     );
   }

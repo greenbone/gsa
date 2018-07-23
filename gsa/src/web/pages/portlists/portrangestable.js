@@ -61,7 +61,8 @@ const PortRangesTable = ({
           </TableHead>
           {actions &&
             <TableHead
-              width="3em">
+              width="3em"
+            >
               {_('Actions')}
             </TableHead>
           }
@@ -84,7 +85,8 @@ const PortRangesTable = ({
                 <DeleteIcon
                   title={_('Delete Port Range')}
                   value={range}
-                  onClick={onDeleteClick}/>
+                  onClick={onDeleteClick}
+                />
               </TableData>
             }
           </TableRow>

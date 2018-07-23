@@ -79,31 +79,36 @@ class SeverityLevelsFilterGroup extends React.Component {
           <Checkbox
             checked={levels.includes('h')}
             name="h"
-            onChange={this.handleLevelChange}>
+            onChange={this.handleLevelChange}
+          >
             <SeverityClassLabel.High/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('m')}
             name="m"
-            onChange={this.handleLevelChange}>
+            onChange={this.handleLevelChange}
+          >
             <SeverityClassLabel.Medium/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('l')}
             name="l"
-            onChange={this.handleLevelChange}>
+            onChange={this.handleLevelChange}
+          >
             <SeverityClassLabel.Low/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('g')}
             name="g"
-            onChange={this.handleLevelChange}>
+            onChange={this.handleLevelChange}
+          >
             <SeverityClassLabel.Log/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('f')}
             name="f"
-            onChange={this.handleLevelChange}>
+            onChange={this.handleLevelChange}
+          >
             <SeverityClassLabel.FalsePositive/>
           </Checkbox>
         </IconDivider>

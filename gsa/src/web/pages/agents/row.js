@@ -62,19 +62,22 @@ const Actions = ({
       displayName={_('Agent')}
       name="agent"
       entity={entity}
-      onClick={onAgentDeleteClick}/>
+      onClick={onAgentDeleteClick}
+    />
     <EditIcon
       displayName={_('Agent')}
       name="agent"
       entity={entity}
-      onClick={onAgentEditClick}/>
+      onClick={onAgentEditClick}
+    />
     <CloneIcon
       displayName={_('Agent')}
       name="agent"
       entity={entity}
       title={_('Clone Agent')}
       value={entity}
-      onClick={onAgentCloneClick}/>
+      onClick={onAgentCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Agent')}

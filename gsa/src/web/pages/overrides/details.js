@@ -60,9 +60,11 @@ const OverrideDetails = ({
   return (
     <Layout
       grow="1"
-      flex="column">
+      flex="column"
+    >
       <DetailsBlock
-        title={_('Application')}>
+        title={_('Application')}
+      >
         <InfoTable size="full">
           <colgroup>
             <Col width="20%"/>
@@ -151,7 +153,8 @@ const OverrideDetails = ({
           entity.isActive() ?
             _('Appearance') :
             _('Appearance when active')
-        }>
+        }
+      >
         <OverrideBox
           override={entity}
           detailsLink={false}

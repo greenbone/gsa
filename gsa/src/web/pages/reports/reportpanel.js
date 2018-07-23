@@ -61,7 +61,8 @@ const ReportPanel = ({
     >
       <Divider
         margin="1em"
-        align={['start', 'center']}>
+        align={['start', 'center']}
+      >
         <Icon
           size="large"
           img={icon}

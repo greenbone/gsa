@@ -51,21 +51,24 @@ const Header = ({
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'cve' : false}
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('CVE')}
       </TableHead>
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'hosts' : false}
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Hosts')}
       </TableHead>
       <TableHead
         currentSortDir={currentSortDir}
         currentSortBy={currentSortBy}
         sortBy={sort ? 'occurrences' : false}
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Occurrences')}
       </TableHead>
       <TableHead
@@ -73,7 +76,8 @@ const Header = ({
         currentSortBy={currentSortBy}
         sortBy={sort ? 'severity' : false}
         width="10%"
-        onSortChange={onSortChange}>
+        onSortChange={onSortChange}
+      >
         {_('Severity')}
       </TableHead>
     </TableRow>

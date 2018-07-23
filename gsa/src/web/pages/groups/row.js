@@ -57,19 +57,22 @@ const IconActions = ({
         displayName={_('Group')}
         name="group"
         entity={entity}
-        onClick={onGroupDeleteClick}/>
+        onClick={onGroupDeleteClick}
+      />
       <EditIcon
         displayName={_('Group')}
         name="group"
         entity={entity}
-        onClick={onGroupEditClick}/>
+        onClick={onGroupEditClick}
+      />
       <CloneIcon
         displayName={_('Group')}
         name="user"
         entity={entity}
         title={_('Clone Group')}
         value={entity}
-        onClick={onGroupCloneClick}/>
+        onClick={onGroupCloneClick}
+      />
       <ExportIcon
         value={entity}
         title={_('Export Group')}

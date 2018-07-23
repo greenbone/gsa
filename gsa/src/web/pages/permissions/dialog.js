@@ -244,7 +244,8 @@ const PermissionDialog = ({
 
             <FormGroup
               title={_('Subject')}
-              flex="column">
+              flex="column"
+            >
               <Divider flex="column">
                 {capabilities.mayAccess('users') &&
                   <Divider>
@@ -271,7 +272,8 @@ const PermissionDialog = ({
                       checked={state.subjectType === 'role'}
                       title={_('Role')}
                       value="role"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
                       name="roleId"
@@ -288,7 +290,8 @@ const PermissionDialog = ({
                       checked={state.subjectType === 'group'}
                       title={_('Group')}
                       value="group"
-                      onChange={onValueChange}>
+                      onChange={onValueChange}
+                    >
                     </Radio>
                     <Select
                       name="groupId"

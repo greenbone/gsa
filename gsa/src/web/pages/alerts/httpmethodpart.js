@@ -43,7 +43,8 @@ const HttpMethodPart = ({
         name={prefix + 'URL'}
         maxLength="301"
         value={URL}
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };

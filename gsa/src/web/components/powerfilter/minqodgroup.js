@@ -50,7 +50,8 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
           step="1"
           value={qod}
           size="1"
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </Divider>
     </FormGroup>
   );

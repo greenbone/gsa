@@ -216,7 +216,8 @@ class EntitiesPage extends React.Component {
       <Layout
         flex
         align="end"
-        grow="1">
+        grow="1"
+      >
         <PowerFilterComponent
           createFilterType={createFilterType}
           filter={filter}

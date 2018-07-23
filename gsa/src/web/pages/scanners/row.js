@@ -73,14 +73,16 @@ const Actions = ({
       displayName={_('Scanner')}
       name="permission"
       entity={entity}
-      onClick={onScannerEditClick}/>
+      onClick={onScannerEditClick}
+    />
     <CloneIcon
       displayName={_('Scanner')}
       name="permission"
       entity={entity}
       value={entity}
       mayClone={entity.isClonable()}
-      onClick={onScannerCloneClick}/>
+      onClick={onScannerCloneClick}
+    />
     <ExportIcon
       value={entity}
       title={_('Export Scanner')}

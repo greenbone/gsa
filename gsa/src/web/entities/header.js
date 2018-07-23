@@ -135,7 +135,8 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
                   currentSortBy={currentSortBy}
                   currentSortDir={currentSortDir}
                   sortBy={sort ? column[0] : false}
-                  onSortChange={onSortChange}>
+                  onSortChange={onSortChange}
+                >
                   {column[1]}
                 </TableHead>
               );

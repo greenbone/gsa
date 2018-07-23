@@ -475,7 +475,7 @@ const TaskDialog = ({
                     ]}
                     value={state.hosts_ordering}
                     onChange={onValueChange}
-                   />
+                  />
                 </FormGroup>
                 <FormGroup
                   titleSize="4"

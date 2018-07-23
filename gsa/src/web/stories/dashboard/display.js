@@ -40,7 +40,8 @@ storiesOf('Dashboard/Display', module)
       <Div width="500px">
         <Display
           title="Foo Bar"
-          onRemoveClick={removeaction}>
+          onRemoveClick={removeaction}
+        >
           <Div
             backgroundColor="blue"
             width="400px"

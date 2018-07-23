@@ -43,7 +43,8 @@ const StartIcon = ({
       <Icon
         size={size}
         img="start_inactive.svg"
-        title={_('Permission to start Task denied')}/>
+        title={_('Permission to start Task denied')}
+      />
     );
   }
 
@@ -54,14 +55,16 @@ const StartIcon = ({
         img="start.svg"
         title={_('Start')}
         value={task}
-        onClick={onClick}/>
+        onClick={onClick}
+      />
     );
   }
   return (
     <Icon
       size={size}
       img="start_inactive.svg"
-      title={_('Task is already active')}/>
+      title={_('Task is already active')}
+    />
   );
 };
 
