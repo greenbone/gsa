@@ -91,7 +91,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
           <DetailsLink
             type="os"
             id={entity.id}
-            textOnly={!links}>
+            textOnly={!links}
+          >
             {entity.name}
           </DetailsLink>
         </IconDivider>
@@ -112,7 +113,8 @@ const Row = ({entity, links = true, actions, ...props}) => {
         <Link
           to={'hosts'}
           filter={'os~"' + entity.name + '"'}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.hosts.length}
         </Link>
       </TableData>

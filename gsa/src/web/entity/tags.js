@@ -135,11 +135,13 @@ const EntityTags = ({
             {userTags.map(tag => {
                 return (
                   <TableRow
-                    key={tag.id}>
+                    key={tag.id}
+                  >
                     <TableData>
                       <DetailsLink
                         id={tag.id}
-                        type="tag">
+                        type="tag"
+                      >
                         {tag.name}
                       </DetailsLink>
                     </TableData>

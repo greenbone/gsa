@@ -31,7 +31,8 @@ export const NewIcon = ({active = true, ...props}) => {
   return (
     <Icon
       {...props}
-      img={active ? 'new.svg' : 'new_inactive.svg'}/>
+      img={active ? 'new.svg' : 'new_inactive.svg'}
+    />
   );
 };
 

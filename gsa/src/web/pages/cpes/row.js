@@ -49,7 +49,8 @@ const Row = ({
       <TableData>
         <RowDetailsToggle
           name={entity.id}
-          onClick={onToggleDetailsClick}>
+          onClick={onToggleDetailsClick}
+        >
           {entity.name}
         </RowDetailsToggle>
         <Comment text={entity.comment}/>

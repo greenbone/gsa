@@ -51,11 +51,13 @@ const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
       <ManualIcon
         page="vulnerabilitymanagement"
         anchor="notes"
-        title={_('Help: Notes')}/>
+        title={_('Help: Notes')}
+      />
       {capabilities.mayCreate('note') &&
         <NewIcon
           title={_('New Note')}
-          onClick={onNoteCreateClick}/>
+          onClick={onNoteCreateClick}
+        />
       }
     </IconDivider>
   );

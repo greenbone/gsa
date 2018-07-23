@@ -65,11 +65,13 @@ const DialogError = ({error, onCloseClick}) => {
   }
   return (
     <StyledLayout
-      align={['space-between', 'center']}>
+      align={['space-between', 'center']}
+    >
       <span>{error}</span>
       <DialogCloseButton
         onClick={onCloseClick}
-        title={_('Close')}/>
+        title={_('Close')}
+      />
     </StyledLayout>
   );
 };

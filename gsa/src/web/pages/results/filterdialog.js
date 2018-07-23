@@ -65,11 +65,13 @@ const ResultsFilterDialogComponent = ({
     <FilterStringGroup
       name="filterstring"
       filter={filterstring}
-      onChange={onFilterStringChange}/>
+      onChange={onFilterStringChange}
+    />
 
     <ApplyOverridesGroup
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
 
     <AutoFpGroup
       filter={filter}
@@ -84,21 +86,25 @@ const ResultsFilterDialogComponent = ({
     <MinQodGroup
       name="min_qod"
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
 
     <FirstResultGroup
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
 
     <ResultsPerPageGroup
       filter={filter}
-      onChange={onFilterValueChange}/>
+      onChange={onFilterValueChange}
+    />
 
     <SortByGroup
       filter={filter}
       fields={SORT_FIELDS}
       onSortOrderChange={onSortOrderChange}
-      onSortByChange={onSortByChange}/>
+      onSortByChange={onSortByChange}
+    />
   </Layout>
 );
 

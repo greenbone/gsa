@@ -49,7 +49,8 @@ const Row = ({
         <DetailsLink
           type="nvt"
           id={entity.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.name}
         </DetailsLink>
       </TableData>
@@ -63,7 +64,8 @@ const Row = ({
         <Link
           to="results"
           filter={'nvt=' + entity.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.results.count}
         </Link>
       </TableData>
@@ -93,7 +95,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Name')}
         </TableHead>
         <TableHead
@@ -101,7 +104,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           width="10em"
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Severity')}
         </TableHead>
         <TableHead
@@ -109,7 +113,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'qod' : false}
           width="6em"
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('QoD')}
         </TableHead>
         <TableHead
@@ -117,7 +122,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'results' : false}
           width="6em"
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Results')}
         </TableHead>
         <TableHead
@@ -125,7 +131,8 @@ const Header = ({
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
           width="6em"
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Hosts')}
         </TableHead>
       </TableRow>

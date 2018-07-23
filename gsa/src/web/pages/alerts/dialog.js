@@ -561,7 +561,7 @@ class AlertDialog extends React.Component {
                   value={values.method}
                   items={method_types}
                   onChange={onValueChange}
-                 />
+                />
               </FormGroup>
 
               {values.method === METHOD_TYPE_EMAIL &&

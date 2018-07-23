@@ -60,9 +60,11 @@ const NoteDetails = ({
   return (
     <Layout
       grow="1"
-      flex="column">
+      flex="column"
+    >
       <DetailsBlock
-        title={_('Application')}>
+        title={_('Application')}
+      >
         <InfoTable size="full">
           <colgroup>
             <Col width="20%"/>
@@ -151,7 +153,8 @@ const NoteDetails = ({
           entity.isActive() ?
             _('Appearance') :
             _('Appearance when active')
-        }>
+        }
+      >
         <NoteBox
           note={entity}
           detailsLink={false}

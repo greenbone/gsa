@@ -50,7 +50,8 @@ const ToolBarIcons = () => (
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="operating-systems-view"
-      title={_('Help: Operating Systems')}/>
+      title={_('Help: Operating Systems')}
+    />
   </Layout>
 );
 

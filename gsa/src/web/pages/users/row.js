@@ -109,7 +109,8 @@ const Row = ({
       textOnly={!links}
       key={role.id}
       type="role"
-      id={role.id}>
+      id={role.id}
+    >
       {role.name}
     </DetailsLink>
   ));
@@ -119,7 +120,8 @@ const Row = ({
       textOnly={!links}
       type="group"
       key={group.id}
-      id={group.id}>
+      id={group.id}
+    >
       {group.name}
     </DetailsLink>
   ));

@@ -108,7 +108,8 @@ const Details = ({
 
       {certs.length > 0 &&
         <DetailsBlock
-          title={_('CERT Advisories referencing this CVE')}>
+          title={_('CERT Advisories referencing this CVE')}
+        >
           <Table>
             <TableHeader>
               <TableRow>
@@ -142,7 +143,8 @@ const Details = ({
 
       {products.length > 0 &&
         <DetailsBlock
-          title={_('Vulnerable Products')}>
+          title={_('Vulnerable Products')}
+        >
           <Layout flex="column">
             {products.map(product => (
               <DetailsLink
@@ -159,7 +161,8 @@ const Details = ({
 
       {nvts.length > 0 &&
         <DetailsBlock
-          title={_('NVTs addressing this CVE')}>
+          title={_('NVTs addressing this CVE')}
+        >
           <Layout flex="column">
             {nvts.map(nvt => (
               <DetailsLink

@@ -50,11 +50,13 @@ const ToolBarIcons = withCapabilities(({
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="scheduled-scan"
-      title={_('Help: Schedules')}/>
+      title={_('Help: Schedules')}
+    />
     {capabilities.mayCreate('schedule') &&
       <NewIcon
         title={_('New Schedule')}
-        onClick={onScheduleCreateClick}/>
+        onClick={onScheduleCreateClick}
+      />
     }
   </IconDivider>
 ));

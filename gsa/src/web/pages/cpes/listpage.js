@@ -44,7 +44,8 @@ const ToolBarIcons = props => {
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="cpe"
-      title={_('Help: CPEs')}/>
+      title={_('Help: CPEs')}
+    />
   );
 };
 

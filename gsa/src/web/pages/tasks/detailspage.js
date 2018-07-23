@@ -136,15 +136,18 @@ const ToolBarIcons = ({
         <CloneIcon
           entity={entity}
           name="task"
-          onClick={onTaskCloneClick}/>
+          onClick={onTaskCloneClick}
+        />
         <EditIcon
           entity={entity}
           name="task"
-          onClick={onTaskEditClick}/>
+          onClick={onTaskEditClick}
+        />
         <TrashIcon
           entity={entity}
           name="task"
-          onClick={onTaskDeleteClick}/>
+          onClick={onTaskDeleteClick}
+        />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -204,7 +207,8 @@ const ToolBarIcons = ({
           }
 
           <Badge
-            content={entity.report_count.total}>
+            content={entity.report_count.total}
+          >
             <Link
               to="reports"
               filter={'task_id=' + entity.id}
@@ -217,7 +221,8 @@ const ToolBarIcons = ({
           </Badge>
 
           <Badge
-            content={entity.report_count.finished}>
+            content={entity.report_count.finished}
+          >
             <Link
               to="reports"
               filter={'task_id=' + entity.id + ' and status=Done'}
@@ -231,7 +236,8 @@ const ToolBarIcons = ({
         </IconDivider>
 
         <Badge
-          content={entity.result_count}>
+          content={entity.result_count}
+        >
           <Link
             to="results"
             filter={'task_id=' + entity.id}
@@ -245,7 +251,8 @@ const ToolBarIcons = ({
 
         <IconDivider>
           <Badge
-            content={notes_count}>
+            content={notes_count}
+          >
             <Link
               to="notes"
               filter={'task_id=' + entity.id}
@@ -258,7 +265,8 @@ const ToolBarIcons = ({
           </Badge>
 
           <Badge
-            content={override_count}>
+            content={override_count}
+          >
             <Link
               to="overrides"
               filter={'task_id=' + entity.id}

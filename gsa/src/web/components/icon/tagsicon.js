@@ -53,7 +53,8 @@ const TagsIcon = ({
     <Icon
       {...other}
       img={'tag.svg'}
-      title={title}/>
+      title={title}
+    />
   );
 };
 

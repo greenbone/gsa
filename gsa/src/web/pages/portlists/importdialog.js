@@ -55,10 +55,12 @@ const ImportDialog = ({
           <Layout flex="column">
             <FormGroup
               title={_('Import XML Port List')}
-              titleSize="3">
+              titleSize="3"
+            >
               <FileField
                 name="xml_file"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
           </Layout>
         );

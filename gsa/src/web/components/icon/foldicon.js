@@ -50,7 +50,8 @@ export const FoldIcon = ({
     <Icon
       {...other}
       img={img}
-      title={title}/>
+      title={title}
+    />
   );
 };
 

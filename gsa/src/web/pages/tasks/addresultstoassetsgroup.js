@@ -35,7 +35,8 @@ export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
       <YesNoRadio
         name="in_assets"
         value={inAssets}
-        onChange={onChange} />
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };

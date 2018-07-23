@@ -70,7 +70,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Name')}
         </TableHead>
         <TableHead
@@ -78,7 +79,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Hosts')}
         </TableHead>
         <TableHead
@@ -86,7 +88,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ips' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('IPs')}
         </TableHead>
         <TableHead
@@ -94,7 +97,8 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'port_list' : false}
-          onSortChange={onSortChange}>
+          onSortChange={onSortChange}
+        >
           {_('Port List')}
         </TableHead>
         <TableHead flex width="22%">
@@ -106,7 +110,8 @@ const Header = ({
           {sort !== false &&
             <Select
               value={select_sort}
-              onChange={onSortChange}>
+              onChange={onSortChange}
+            >
               <option value="ssh_credential">{_('SSH')}</option>
               <option value="smb_credential">{_('SMB')}</option>
               <option value="esxi_credential">{_('ESXi')}</option>

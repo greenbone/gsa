@@ -53,7 +53,8 @@ const TrashIcon = ({
     <Icon
       {...other}
       img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
-      title={title}/>
+      title={title}
+    />
   );
 };
 

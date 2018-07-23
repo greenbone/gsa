@@ -35,7 +35,8 @@ const Table = ({
   }) => {
   return (
     <table
-      className={className}>
+      className={className}
+    >
       {header}
       {children}
       {footer}

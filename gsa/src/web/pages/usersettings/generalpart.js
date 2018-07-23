@@ -115,7 +115,8 @@ const GeneralPart = ({
               size="30"
               maxLength="400"
               autoComplete="off"
-              onChange={onChange}/>
+              onChange={onChange}
+            />
           </FormGroup>
           <FormGroup title={_('New')}>
             <PasswordField
@@ -155,7 +156,8 @@ const GeneralPart = ({
           name="userInterfaceLanguage"
           value={userInterfaceLanguage}
           items={renderLanguageItems()}
-          onChange={onChange}>
+          onChange={onChange}
+        >
         </Select>
       </FormGroup>
       <FormGroup title={_('Rows Per Page')} titleSize="3">

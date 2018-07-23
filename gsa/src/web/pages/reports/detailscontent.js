@@ -144,7 +144,8 @@ const ToolBarIcons = ({
         <ManualIcon
           page="vulnerabilitymanagement"
           anchor="reports-and-vulnerability-management"
-          title={_('Help: Reports')}/>
+          title={_('Help: Reports')}
+        />
         <ListIcon
           title={_('Reports List')}
           page="reports"
@@ -400,7 +401,8 @@ const PageContent = ({
       >
         <TabLayout
           grow="1"
-          align={['start', 'end']}>
+          align={['start', 'end']}
+        >
           <TabList
             active={activeTab}
             align={['start', 'stretch']}i

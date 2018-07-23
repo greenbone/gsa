@@ -212,7 +212,8 @@ class Identifiers extends React.Component {
     displayActions = displayActions && isDefined(onDelete);
     return (
       <DetailsBlock
-        title={title}>
+        title={title}
+      >
         <Table footer={footer}>
           <colgroup>
             <Col width="15%"/>

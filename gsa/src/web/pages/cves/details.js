@@ -67,7 +67,8 @@ const CveDetails = ({
   return (
     <Layout
       flex="column"
-      grow="1">
+      grow="1"
+    >
 
       {isDefined(cwe_id) &&
         <InfoTable>
@@ -86,13 +87,15 @@ const CveDetails = ({
 
       {isDefined(description) &&
         <DetailsBlock
-          title={_('Description')}>
+          title={_('Description')}
+        >
           <p>{description}</p>
         </DetailsBlock>
       }
 
       <DetailsBlock
-        title={_('CVSS')}>
+        title={_('CVSS')}
+      >
         <InfoTable>
           <TableBody>
             <TableRow>
@@ -139,7 +142,8 @@ const CveDetails = ({
 
       {references.length > 0 &&
         <DetailsBlock
-          title={_('References')}>
+          title={_('References')}
+        >
           <InfoTable>
             <TableBody>
               {references.map(ref => (
@@ -151,7 +155,8 @@ const CveDetails = ({
                   </TableData>
                   <TableData>
                     <ExternalLink
-                      to={ref.href}>
+                      to={ref.href}
+                    >
                       {ref.name}
                     </ExternalLink>
                   </TableData>

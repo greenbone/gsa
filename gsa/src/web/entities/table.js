@@ -251,7 +251,8 @@ class EntitiesTable extends React.Component {
       <Layout
         flex="column"
         grow="1"
-        className="entities-table">
+        className="entities-table"
+      >
         {toggleDetailsIcon ?
           <Layout align="space-between" grow="1">
             {detailsIcon}

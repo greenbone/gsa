@@ -73,7 +73,8 @@ const SolutionType = ({
         <Icon
           img={img}
           title={title}
-          alt={title}/>
+          alt={title}
+        />
         <span>
           {title}
         </span>
@@ -85,7 +86,8 @@ const SolutionType = ({
     <Icon
       img={img}
       title={title}
-      alt={title}/>
+      alt={title}
+    />
   );
 };
 

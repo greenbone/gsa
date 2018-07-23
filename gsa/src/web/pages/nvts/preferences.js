@@ -65,7 +65,8 @@ const Preferences = ({
         </TableRow>
         {preferences.map(pref => (
           <TableRow
-            key={pref.name}>
+            key={pref.name}
+          >
             <TableData>
               {pref.hr_name}
             </TableData>

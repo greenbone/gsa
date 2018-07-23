@@ -83,22 +83,26 @@ const Dialog = ({
                 value={state.name}
                 size="30"
                 onChange={onValueChange}
-                maxLength="80"/>
+                maxLength="80"
+              />
             </FormGroup>
 
             <FormGroup
               title={_('Comment')}
-              flex="column">
+              flex="column"
+            >
               <TextField
                 name="comment"
                 value={state.comment}
                 size="30"
                 maxLength="400"
-                onChange={onValueChange}/>
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup
-              title={_('Users')}>
+              title={_('Users')}
+            >
               <MultiSelect
                 name="users"
                 items={userOptions}
@@ -109,7 +113,8 @@ const Dialog = ({
 
             {!is_edit &&
               <FormGroup
-                title={_('Special Groups')}>
+                title={_('Special Groups')}
+              >
                 <Checkbox
                   name="grant_full"
                   checkedValue="1"

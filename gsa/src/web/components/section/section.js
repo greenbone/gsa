@@ -60,17 +60,20 @@ const Section = ({
     header = (
       <SectionHeader
         img={img}
-        title={title}>
+        title={title}
+      >
         <Layout
           flex
-          align={['space-between', 'center']}>
+          align={['space-between', 'center']}
+        >
           {extra}
           {foldable &&
             <FoldLayout>
               <FoldIcon
                 className="section-fold-icon"
                 foldState={foldState}
-                onClick={onFoldToggle}/>
+                onClick={onFoldToggle}
+              />
             </FoldLayout>
           }
         </Layout>
@@ -84,7 +87,8 @@ const Section = ({
         <FoldableLayout
           grow="1"
           foldState={foldState}
-          onFoldStepEnd={onFoldStepEnd}>
+          onFoldStepEnd={onFoldStepEnd}
+        >
           {children}
         </FoldableLayout> :
         children

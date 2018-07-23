@@ -49,12 +49,14 @@ const Solution = ({
 
   return (
     <DetailsBlock
-      title={_('Solution')}>
+      title={_('Solution')}
+    >
       <IconDivider>
         <b>{_('Solution Type: ')}</b>
         <SolutionTypeIcon
           displayTitleText
-          type={solutionType}/>
+          type={solutionType}
+        />
       </IconDivider>
       <Pre>
         {solution}

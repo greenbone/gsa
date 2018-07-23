@@ -241,13 +241,15 @@ class PowerFilter extends React.Component {
                 maxLength="1000"
                 value={userfilter}
                 onKeyDown={this.handleUserFilterKeyPress}
-                onChange={this.handleValueChange}/>
+                onChange={this.handleValueChange}
+              />
             </Layout>
             <IconDivider flex align={['start', 'center']}>
               <Icon
                 img="refresh.svg"
                 title={_('Update Filter')}
-                onClick={this.handleUpdateFilter}/>
+                onClick={this.handleUpdateFilter}
+              />
 
               {onResetClick &&
                 <DeleteIcon
@@ -268,7 +270,8 @@ class PowerFilter extends React.Component {
                 <EditIcon
                   title={_('Edit Filter')}
                   active={isDefined(filter)}
-                  onClick={isDefined(filter) ? onEditClick : undefined}/>
+                  onClick={isDefined(filter) ? onEditClick : undefined}
+                />
               }
             </IconDivider>
           </LeftDivider>
@@ -279,15 +282,18 @@ class PowerFilter extends React.Component {
                 size="10"
                 maxLength="80"
                 value={filtername}
-                onChange={this.handleValueChange}/>
+                onChange={this.handleValueChange}
+              />
             }
             {can_create ?
               <NewIcon
                 title={_('Create new filter from current term')}
-                onClick={this.handleCreateFilter}/> :
+                onClick={this.handleCreateFilter}
+              /> :
               <Icon
                 img="new_inactive.svg"
-                title={_('Please insert a filter name')}/>
+                title={_('Please insert a filter name')}
+              />
             }
             {capabilities.mayAccess('filters') &&
               <Select

@@ -67,7 +67,8 @@ const EntityBox = ({
     <BoxLayout
       {...props}
       flex="column"
-      align="space-between">
+      align="space-between"
+    >
       <Layout flex align={['space-between', 'start']}>
         <h3>{title}</h3>
         {isDefined(toolbox) && toolbox}

@@ -54,7 +54,8 @@ const TaskStatus = ({task, links = true}) => {
     >
       <StatusBar
         status={task.isContainer() ? TASK_STATUS.container : task.status}
-        progress={task.progress}/>
+        progress={task.progress}
+      />
     </DetailsLink>
   );
 };

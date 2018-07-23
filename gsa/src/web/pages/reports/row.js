@@ -127,20 +127,23 @@ const Row = ({entity, links = true, actions, ...other}) => {
         <DetailsLink
           type="report"
           id={entity.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {longDate(report.timestamp)}
         </DetailsLink>
       </TableData>
       <TableData>
         <StatusBar
           status={status}
-          progress={progress}/>
+          progress={progress}
+        />
       </TableData>
       <TableData>
         <DetailsLink
           type="task"
           id={entity.task.id}
-          textOnly={!links}>
+          textOnly={!links}
+        >
           {entity.task.name}
         </DetailsLink>
       </TableData>

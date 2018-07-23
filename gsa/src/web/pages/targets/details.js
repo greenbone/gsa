@@ -64,10 +64,12 @@ const TargetDetails = ({
   return (
     <Layout
       grow="1"
-      flex="column">
+      flex="column"
+    >
 
       <DetailsBlock
-        title={_('Hosts')}>
+        title={_('Hosts')}
+      >
         <InfoTable size="full">
           <colgroup>
             <Col width="20%"/>
@@ -145,7 +147,8 @@ const TargetDetails = ({
               <TableData>
                 <DetailsLink
                   id={port_list.id}
-                  type="portlist">
+                  type="portlist"
+                >
                   {port_list.name}
                 </DetailsLink>
               </TableData>
@@ -159,7 +162,8 @@ const TargetDetails = ({
         isDefined(snmp_credential) || isDefined(smb_credential) ||
         isDefined(esxi_credential)) &&
         <DetailsBlock
-          title={_('Credentials')}>
+          title={_('Credentials')}
+        >
           <InfoTable>
             <TableBody>
               {isDefined(ssh_credential) &&
@@ -170,7 +174,8 @@ const TargetDetails = ({
                   <TableData>
                     <DetailsLink
                       id={ssh_credential.id}
-                      type="credential">
+                      type="credential"
+                    >
                       {ssh_credential.name}
                     </DetailsLink>
                     {_(' on Port {{port}}', {port: ssh_credential.port})}
@@ -186,7 +191,8 @@ const TargetDetails = ({
                   <TableData>
                     <DetailsLink
                       id={smb_credential.id}
-                      type="credential">
+                      type="credential"
+                    >
                       {smb_credential.name}
                     </DetailsLink>
                   </TableData>
@@ -201,7 +207,8 @@ const TargetDetails = ({
                   <TableData>
                     <DetailsLink
                       id={esxi_credential.id}
-                      type="credential">
+                      type="credential"
+                    >
                       {esxi_credential.name}
                     </DetailsLink>
                   </TableData>
@@ -216,7 +223,8 @@ const TargetDetails = ({
                   <TableData>
                     <DetailsLink
                       id={snmp_credential.id}
-                      type="credential">
+                      type="credential"
+                    >
                       {snmp_credential.name}
                     </DetailsLink>
                   </TableData>
@@ -236,7 +244,8 @@ const TargetDetails = ({
               <DetailsLink
                 key={task.id}
                 id={task.id}
-                type="task">
+                type="task"
+              >
                 {task.name}
               </DetailsLink>
             ))}

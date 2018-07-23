@@ -40,7 +40,8 @@ const StopIcon = ({
         img="stop.svg"
         title={_('Stop')}
         value={task}
-        onClick={onClick}/>
+        onClick={onClick}
+      />
     );
   }
   return null;

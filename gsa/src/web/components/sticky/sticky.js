@@ -141,14 +141,16 @@ class Sticky extends React.Component {
         <Placeholder
           isSticky={isSticky}
           height={height}
-          innerRef={ref => this.placeholder = ref}>
+          innerRef={ref => this.placeholder = ref}
+        >
         </Placeholder>
         <StickyWrapper
           {...props}
           isSticky={isSticky}
           difference={difference}
           left={left}
-          width={width}>
+          width={width}
+        >
           {element}
         </StickyWrapper>
       </Wrapper>

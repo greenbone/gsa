@@ -53,7 +53,8 @@ const EntityActions = ({
           <EntitySelection
             entity={entity}
             onSelected={onEntitySelected}
-            onDeselected={onEntityDeselected}/>
+            onDeselected={onEntityDeselected}
+          />
         </Layout> :
         <Layout flex="column" grow>
           {renderComponent(actionsComponent, {...other, entity})}

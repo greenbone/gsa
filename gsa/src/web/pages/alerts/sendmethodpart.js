@@ -48,7 +48,8 @@ const SendMethodPart = ({
     <Layout
       flex="column"
       box
-      grow="1">
+      grow="1"
+    >
       <FormGroup title={_('Send to host')}>
         <Divider>
           <TextField
@@ -56,7 +57,8 @@ const SendMethodPart = ({
             value={sendHost}
             size="30"
             maxLength="256"
-            onChange={onChange}/>
+            onChange={onChange}
+          />
           <Layout flex box>
             {_('on port')}
           </Layout>
@@ -65,7 +67,8 @@ const SendMethodPart = ({
             value={sendPort}
             maxLength="6"
             size="6"
-            onChange={onChange}/>
+            onChange={onChange}
+          />
         </Divider>
       </FormGroup>
 

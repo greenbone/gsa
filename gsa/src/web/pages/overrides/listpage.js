@@ -53,7 +53,8 @@ const ToolBarIcons = ({
       <ManualIcon
         page="vulnerabilitymanagement"
         anchor="overrides-and-false-positives"
-        title={_('Help: Overrides')}/>
+        title={_('Help: Overrides')}
+      />
 
       {capabilities.mayCreate('override') &&
         <NewIcon

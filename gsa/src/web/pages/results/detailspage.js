@@ -161,7 +161,8 @@ const Details = ({
   return (
     <Layout flex="column">
       <DetailsBlock
-        title={_('Vulnerability')}>
+        title={_('Vulnerability')}
+      >
         <InfoTable>
           <TableBody>
             <TableRow>
@@ -181,7 +182,8 @@ const Details = ({
                   <SeverityBar severity={entity.severity}/>
                   {overrides.active &&
                     <InnerLink
-                      to="overrides">
+                      to="overrides"
+                    >
                       <Icon
                         img="override.svg"
                         title={_('Overrides are applied')}
@@ -206,7 +208,8 @@ const Details = ({
               <TableData>
                 <DetailsLink
                   type="host"
-                  id={host.id}>
+                  id={host.id}
+                >
                   {host.name}
                 </DetailsLink>
               </TableData>
@@ -249,11 +252,13 @@ const Details = ({
       {active_overrides.length > 0 &&
         <DetailsBlock
           id="overrides"
-          title={_('Overrides')}>
+          title={_('Overrides')}
+        >
           <Divider
             wrap
             align={['start', 'stretch']}
-            width="15px">
+            width="15px"
+          >
             {
               active_overrides.map(override => (
                 <Override
@@ -269,11 +274,13 @@ const Details = ({
       {active_notes.length > 0 &&
         <DetailsBlock
           id="notes"
-          title={_('Notes')}>
+          title={_('Notes')}
+        >
           <Divider
             wrap
             align={['start', 'stretch']}
-            width="15px">
+            width="15px"
+          >
             {
               active_notes.map(note => (
                 <Note

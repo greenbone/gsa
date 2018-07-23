@@ -66,7 +66,8 @@ const EmailMethodPart = ({
           grow="1"
           name={prefix + 'to_address'}
           value={toAddress}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('From Address')}>
@@ -74,7 +75,8 @@ const EmailMethodPart = ({
           grow="1"
           name={prefix + 'from_address'}
           value={fromAddress}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Subject')}>
@@ -84,7 +86,8 @@ const EmailMethodPart = ({
           size="30"
           maxLength="80"
           value={subject}
-          onChange={onChange}/>
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Content')} flex="column">
@@ -94,7 +97,8 @@ const EmailMethodPart = ({
             name={prefix + 'notice'}
             checked={notice === '1'}
             value="1"
-            onChange={onChange}/>
+            onChange={onChange}
+          />
 
           {capabilities.mayOp('get_report_formats') &&
             <Layout flex="column" box>
@@ -105,7 +109,8 @@ const EmailMethodPart = ({
                     _('Include list of resources with message:')}
                   checked={notice === '0'}
                   value="0"
-                  onChange={onChange}>
+                  onChange={onChange}
+                >
                 </Radio>
                 {isTaskEvent &&
                   <Select
@@ -121,7 +126,8 @@ const EmailMethodPart = ({
                 rows="8"
                 cols="50"
                 value={message}
-                onChange={onChange}/>
+                onChange={onChange}
+              />
             </Layout>
           }
 
@@ -135,7 +141,8 @@ const EmailMethodPart = ({
                       _('Attach list of resources with message:')}
                     checked={notice === '2'}
                     value="2"
-                    onChange={onChange}>
+                    onChange={onChange}
+                  >
                   </Radio>
                   {isTaskEvent &&
                     <Select
@@ -152,7 +159,8 @@ const EmailMethodPart = ({
                 rows="8"
                 cols="50"
                 value={messageAttach}
-                onChange={onChange}/>
+                onChange={onChange}
+              />
             </Layout>
           }
         </Divider>

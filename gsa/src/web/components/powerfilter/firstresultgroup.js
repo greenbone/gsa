@@ -42,7 +42,8 @@ const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
         name={name}
         value={first}
         size="5"
-        onChange={onChange}/>
+        onChange={onChange}
+      />
     </FormGroup>
   );
 };

@@ -51,7 +51,7 @@ const ToolBarIcons = withCapabilities(({
       page="vulnerabilitymanagement"
       anchor="scan-configuration"
       title={_('Help: Scan Configs')}
-     />
+    />
     {capabilities.mayCreate('config') &&
       <NewIcon
         title={_('New Scan Config')}
