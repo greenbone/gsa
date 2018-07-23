@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ const Trend = ({
     trend,
     titleDynamic,
     titleStatic,
-    ...props,
+    ...props
   }) => {
   if (trend === '1') {
     return (
@@ -60,9 +60,9 @@ const Trend = ({
 };
 
 Trend.propTypes = {
-  trend: PropTypes.string,
-  titleStatic: PropTypes.string,
   titleDynamic: PropTypes.string,
+  titleStatic: PropTypes.string,
+  trend: PropTypes.string,
 };
 
 export default Trend;
