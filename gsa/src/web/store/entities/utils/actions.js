@@ -37,11 +37,13 @@ export const createEntitiesActions = entityType => ({
     entityType,
     filter,
   }),
-  success: (data, filter) => ({
+  success: (data, filter, loadedFilter, counts) => ({
     type: types.ENTITIES_LOADING_SUCCESS,
     entityType,
     filter,
     data,
+    loadedFilter,
+    counts,
   }),
   error: (error, filter) => ({
     type: types.ENTITIES_LOADING_ERROR,
