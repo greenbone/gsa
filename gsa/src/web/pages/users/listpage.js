@@ -47,7 +47,6 @@ import Wrapper from '../../components/layout/wrapper.js';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 import {USERS_FILTER_FILTER} from 'gmp/models/filter.js';
-import Promise from 'gmp/promise.js';
 
 import ConfirmDeleteDialog from './confirmdeletedialog.js';
 import UserComponent from './component.js';

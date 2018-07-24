@@ -20,22 +20,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import glamorous from 'glamorous';
 
-import PropTypes from '../../utils/proptypes.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../../utils/compose.js';
-import {get_img_url} from '../../utils/urls.js';
+import PropTypes from 'web/utils/proptypes';
 
-import withIconCss from './withIconCss.js';
-import withIconSize from './withIconSize.js';
+import Img from 'web/components/img/img';
+
+import withIconSize from './withIconSize';
 
 const Anchor = glamorous.a({
   display: 'flex',
 });
+
+const StyledIcon = glamorous.span(
+  ({onClick}) => isDefined(onClick) ? {
+    cursor: 'pointer',
+    '@media print': {
+      display: 'none',
+    },
+  } : undefined,
+);
 
 class IconComponent extends React.Component {
 
@@ -62,43 +70,38 @@ class IconComponent extends React.Component {
       onClick,
       ...other
     } = this.props;
-
-    const img_path = get_img_url(img);
-
-    if (to) {
-      return (
-        <Anchor
-          {...other}
-          href={to}
-          onClick={this.handleClick}
-        >
-          <img src={img_path} alt={alt}/>
-        </Anchor>
-      );
-    }
     return (
-      <img
+      <StyledIcon
         {...other}
-        alt={alt}
-        src={img_path}
         onClick={this.handleClick}
-      />
+      >
+        {isDefined(to) ?
+          <Anchor
+            href={to}
+          >
+            <Img
+              alt={alt}
+              src={img}
+            />
+          </Anchor> :
+          <Img
+            alt={alt}
+            src={img}
+          />
+        }
+      </StyledIcon>
     );
   }
 }
 
 IconComponent.propTypes = {
   alt: PropTypes.string,
-  className: PropTypes.string,
   img: PropTypes.string.isRequired,
   to: PropTypes.string,
   value: PropTypes.any,
   onClick: PropTypes.func,
 };
 
-export default compose(
-  withIconSize(),
-  withIconCss,
-)(IconComponent);
+export default withIconSize()(IconComponent);
 
 // vim: set ts=2 sw=2 tw=80:
