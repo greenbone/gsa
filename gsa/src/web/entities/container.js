@@ -34,7 +34,6 @@ import {
   getEntityType,
   typeName,
   pluralizeType,
-  normalizeType,
 } from 'gmp/utils/entitytype';
 
 import CancelToken from 'gmp/cancel';
@@ -175,7 +174,7 @@ class EntitiesContainer extends React.Component {
     })
       .then(response => {
         const {data: entities, meta} = response;
-        const {filter: loaded_filter, counts: entities_counts} = meta; // eslint-disable-line no-shadow
+        const {filter: loaded_filter, counts: entitiesCounts} = meta; // eslint-disable-line no-shadow
 
         this.cancel = undefined;
 
@@ -189,7 +188,7 @@ class EntitiesContainer extends React.Component {
 
         this.setState({
           entities,
-          entities_counts,
+          entitiesCounts,
           filter,
           loaded_filter,
           loading: false,
@@ -383,7 +382,7 @@ class EntitiesContainer extends React.Component {
   }
 
   handleLast() {
-    const {loaded_filter: filter, entities_counts: counts} = this.state;
+    const {loaded_filter: filter, entitiesCounts: counts} = this.state;
 
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
@@ -517,10 +516,9 @@ class EntitiesContainer extends React.Component {
   }
 
   getMultiTagEntitiesCount() {
-    const {gmp} = this.props;
     const {
       entities,
-      loaded_filter: filter,
+      entitiesCounts,
       selection_type,
       selected,
     } = this.state;
@@ -533,14 +531,13 @@ class EntitiesContainer extends React.Component {
       return Promise.resolve(entities.length);
     }
 
-    const type = pluralizeType(normalizeType(getEntityType(entities[0])));
-    return gmp[type].getAll({filter}).then(response => response.data.length);
+    return Promise.resolve(entitiesCounts.filtered);
   }
 
   render() {
     const {
       entities,
-      entities_counts,
+      entitiesCounts,
       loaded_filter,
       loading,
       selected,
@@ -587,7 +584,7 @@ class EntitiesContainer extends React.Component {
           {...other}
           loading={loading}
           entities={entities}
-          entitiesCounts={entities_counts}
+          entitiesCounts={entitiesCounts}
           entitiesSelected={selected}
           filter={loaded_filter}
           selectionType={selection_type}
