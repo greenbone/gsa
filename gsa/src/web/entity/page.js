@@ -43,6 +43,10 @@ import EntityInfo from './info.js';
 import EntityPermissions from './permissions.js';
 import EntityTags from './tags.js';
 
+export const Col = glamorous.col(
+  ({width}) => ({width})
+);
+
 const TabTitleCounts = glamorous.span({
   fontSize: '0.7em',
 });
