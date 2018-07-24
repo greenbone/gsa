@@ -25,7 +25,8 @@ import {pluralizeType} from 'gmp/utils/entitytype';
 
 import Filter from 'gmp/models/filter';
 
-import {filterIdentifier} from './reducers';
+import {filterIdentifier} from 'web/store/utils';
+
 import {types} from './actions';
 
 export const createRootState = stateData => ({

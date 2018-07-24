@@ -22,7 +22,7 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {filterIdentifier} from './reducers';
+import {filterIdentifier} from 'web/store/utils';
 
 class EntitiesSelector {
 

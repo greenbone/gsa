@@ -24,8 +24,10 @@ import {isFunction} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
+import {filterIdentifier} from 'web/store/utils';
+
 import {createEntitiesActions, createEntityActions} from '../actions';
-import {createReducer, filterIdentifier} from '../reducers';
+import {createReducer} from '../reducers';
 
 describe('entities reducers test', () => {
 

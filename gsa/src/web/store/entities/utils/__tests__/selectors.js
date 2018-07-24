@@ -22,10 +22,11 @@
  */
 import Filter from 'gmp/models/filter';
 
+import {filterIdentifier} from 'web/store/utils';
+
 import {createRootState, createState} from '../testing';
 
 import {createSelector} from '../selectors';
-import {filterIdentifier} from '../reducers';
 
 describe('EntitiesSelector getIsLoadingEntities tests', () => {
 

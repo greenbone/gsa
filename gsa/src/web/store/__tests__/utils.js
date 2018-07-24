@@ -20,7 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'web/store/utils';
+import Filter from 'gmp/models/filter';
+
+import {combineReducers, filterIdentifier} from 'web/store/utils';
 
 describe('store utils module tests', () => {
 
@@ -132,6 +134,20 @@ describe('store utils module tests', () => {
       expect(foo).toBeCalledWith(1, action);
       expect(bar).toBeCalledWith(2, action);
     });
+  });
+
+  describe('filterIdentifier tests', () => {
+
+    test('use default for undefined filter', () => {
+      expect(filterIdentifier()).toEqual('default');
+    });
+
+    test('should create an identifier for an existing filter', () => {
+      const filter = Filter.fromString('foo=bar');
+
+      expect(filterIdentifier(filter)).toEqual('filter:foo=bar');
+    });
+
   });
 
 });

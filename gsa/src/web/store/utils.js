@@ -22,6 +22,19 @@
  */
 import 'core-js/fn/object/entries';
 
+import {isDefined} from 'gmp/utils/identity';
+
+/**
+ * Return a unique identifier string for a filter
+ *
+ * @param {Filter} filter A Filter model (may be undefined)
+ *
+ * @returns {String} A filter identifier to be used in the store
+ */
+export const filterIdentifier = filter => isDefined(filter) ?
+  `filter:${filter.toFilterString()}` :
+  'default';
+
 /**
  * A combineReducers version to allow to return undefined for a state.
  *
