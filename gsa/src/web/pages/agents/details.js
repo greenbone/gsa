@@ -26,14 +26,16 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout.js';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable.js';
+import TableBody from 'web/components/table/body.js';
+import TableData from 'web/components/table/data.js';
+import TableRow from 'web/components/table/row.js';
+
+import {Col} from 'web/entity/page';
 
 const AgentDetails = ({
   entity,
@@ -48,6 +50,10 @@ const AgentDetails = ({
       flex="column"
     >
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>

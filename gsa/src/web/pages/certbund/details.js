@@ -39,6 +39,8 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
+import {Col} from 'web/entity/page';
+
 const CertBundAdvDetails = ({
   entity,
 }) => {
@@ -61,6 +63,10 @@ const CertBundAdvDetails = ({
     >
 
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           {isDefined(version) &&
             <TableRow>

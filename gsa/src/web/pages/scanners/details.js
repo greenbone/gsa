@@ -35,25 +35,27 @@ import {
   PARAM_TYPE_OVALDEF_FILE,
   PARAM_TYPE_SELECTION,
   PARAM_TYPE_BOOLEAN,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderYesNo} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from '../../components/table/infotable.js';
-import SimpleTable from '../../components/table/simpletable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import SimpleTable from 'web/components/table/simpletable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
+
+import {Col} from 'web/entity/page';
 
 const CertInfo = ({
   info,
@@ -66,6 +68,10 @@ const CertInfo = ({
   } = info;
   return (
     <InfoTable>
+      <colgroup>
+        <Col width="10%"/>
+        <Col width="90%"/>
+      </colgroup>
       <TableBody>
         <TableRow>
           <TableData>
