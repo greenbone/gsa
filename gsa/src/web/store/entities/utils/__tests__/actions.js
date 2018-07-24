@@ -93,6 +93,24 @@ describe('entities actions tests', () => {
       });
     });
 
+    test('should create a load success action with meta info', () => {
+      const filter = Filter.fromString('type=abc');
+      const loadedFilter = Filter.fromString('type=abc rows=100');
+      const actions = createEntitiesActions('foo');
+      const counts = {first: 1};
+      const action = actions.success(['foo', 'bar'], filter, loadedFilter,
+        counts);
+
+      expect(action).toEqual({
+        type: types.ENTITIES_LOADING_SUCCESS,
+        entityType: 'foo',
+        data: ['foo', 'bar'],
+        filter,
+        counts,
+        loadedFilter,
+      });
+    });
+
     test('should create a load error action', () => {
       const actions = createEntitiesActions('foo');
       const action = actions.error('An error');
@@ -220,11 +238,17 @@ describe('entities actions tests', () => {
         .fn()
         .mockReturnValue({foo: 'bar'});
 
+      const loadedFilter = Filter.fromString('name=abc');
+      const counts = {first: 1};
       const dispatch = jest.fn();
       const getAll = jest
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
+          meta: {
+            filter: loadedFilter,
+            counts,
+          },
         }));
       const gmp = {
         foos: {
@@ -260,7 +284,8 @@ describe('entities actions tests', () => {
         expect(isLoadingEntities).toBeCalledWith('myfilter');
         expect(getAll).toBeCalledWith({filter: 'myfilter'});
         expect(actions.request).toBeCalledWith('myfilter');
-        expect(actions.success).toBeCalledWith('foo', 'myfilter');
+        expect(actions.success).toBeCalledWith('foo', 'myfilter', loadedFilter,
+          counts);
         expect(actions.error).not.toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
