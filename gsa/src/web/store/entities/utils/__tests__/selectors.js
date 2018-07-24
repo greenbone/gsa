@@ -28,7 +28,7 @@ import {createRootState, createState} from '../testing';
 
 import {createSelector} from '../selectors';
 
-describe('EntitiesSelector getIsLoadingEntities tests', () => {
+describe('EntitiesSelector isLoadingEntities tests', () => {
 
   test('should be false for undefined state', () => {
     const selector = createSelector('foo');
@@ -219,8 +219,12 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {},
-      default: ['foo', 'bar'],
-      'name=foo': ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      'name=foo': {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
@@ -238,8 +242,12 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'bar',
         },
       },
-      default: ['foo', 'bar'],
-      'name=foo': ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      'name=foo': {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
@@ -264,8 +272,12 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'ipsum',
         },
       },
-      default: ['foo', 'bar'],
-      [filterIdentifier(filter)]: ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      [filterIdentifier(filter)]: {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
