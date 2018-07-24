@@ -25,7 +25,6 @@ import {types} from './actions';
 import {filterIdentifier} from 'web/store/utils';
 
 const initialState = {
-  default: [],
   byId: {},
   errors: {},
   isLoading: {},
@@ -128,13 +127,30 @@ export const createReducer = entityType => {
     }
 
     const filterString = filterIdentifier(action.filter);
-    return {
-      ...state,
-      byId: byId(state.byId, action),
-      isLoading: isLoading(state.isLoading, action),
-      errors: errors(state.errors, action),
-      [filterString]: entities(state[filterString], action),
-    };
+
+    switch (action.type) {
+      case types.ENTITIES_LOADING_REQUEST:
+      case types.ENTITIES_LOADING_SUCCESS:
+      case types.ENTITIES_LOADING_ERROR:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
+          isLoading: isLoading(state.isLoading, action),
+          errors: errors(state.errors, action),
+          [filterString]: entities(state[filterString], action),
+        };
+      case types.ENTITY_LOADING_REQUEST:
+      case types.ENTITY_LOADING_SUCCESS:
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
+          isLoading: isLoading(state.isLoading, action),
+          errors: errors(state.errors, action),
+        };
+      default:
+        return state;
+    }
   };
 };
 
