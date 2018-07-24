@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import glamorous from 'glamorous';
+
 import _ from 'gmp/locale';
 
 import {renderSelectItems} from 'web/utils/render';
@@ -38,7 +40,11 @@ import NewIcon from '../components/icon/newicon.js';
 import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
-const ENTITIES_THRESHOLD = 1000;
+const ENTITIES_THRESHOLD = 50000;
+
+const Notification = glamorous(Layout)({
+  justifyContent: 'center',
+});
 
 const TagsDialog = ({
   comment = '',
@@ -92,10 +98,10 @@ const TagsDialog = ({
           {comment}
         </FormGroup>
         {entitiesCount >= ENTITIES_THRESHOLD &&
-          <span>
-            {_('Please note that assigning a tag to a large number of ' +
-               'items may take several minutes.')}
-          </span>
+          <Notification>
+            {_('Please note that assigning a tag to {{count}} ' +
+               'items may take several minutes.', {count: entitiesCount})}
+          </Notification>
         }
       </Layout>
     )}
