@@ -51,7 +51,6 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         byId: {},
         errors: {},
         isLoading: {},
-        default: [],
       });
     });
 
@@ -64,7 +63,7 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: true,
         },
-        default: [],
+        default: {},
       });
     });
 
@@ -81,7 +80,9 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: false,
         },
-        default: ['foo'],
+        default: {
+          ids: ['foo'],
+        },
       });
     });
 
@@ -96,7 +97,7 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: false,
         },
-        default: [],
+        default: {},
       });
     });
   });
@@ -151,6 +152,38 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
+    test('should create a load success action with default filter, ' +
+      'loadedFilter and counts', () => {
+      const loadedFilter = Filter.fromString('foo=bar');
+      const counts = {first: 1};
+      const action = actions.success(['foo', 'bar'], undefined, loadedFilter,
+        counts);
+      expect(action).toEqual({
+        type: types.ENTITIES_LOADING_SUCCESS,
+        data: ['foo', 'bar'],
+        entityType,
+        loadedFilter,
+        counts,
+      });
+    });
+
+    test('should create a load success action with filter, ' +
+      'loadedFilter and counts', () => {
+      const filter = Filter.fromString('type=abc');
+      const loadedFilter = Filter.fromString('foo=bar');
+      const counts = {first: 1};
+      const action = actions.success(['foo', 'bar'], filter, loadedFilter,
+        counts);
+      expect(action).toEqual({
+        type: types.ENTITIES_LOADING_SUCCESS,
+        data: ['foo', 'bar'],
+        filter,
+        entityType,
+        loadedFilter,
+        counts,
+      });
+    });
+
     test('should create a load error action', () => {
       const action = actions.error('An error');
       expect(action).toEqual({
@@ -181,6 +214,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
     test('should load all entities successfully', () => {
       const filter = Filter.fromString('myfilter');
+      const loadedFilter = Filter.fromString('myfilter rows=100');
+      const counts = {first: 1};
       const rootState = createState(entityType, {
         isLoading: {
           [filterIdentifier(filter)]: false,
@@ -196,6 +231,10 @@ export const testLoadEntities = (entityType, loadEntities) => {
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
+          meta: {
+            counts,
+            filter: loadedFilter,
+          },
         }));
 
       const gmp = {
@@ -227,6 +266,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
           entityType,
           filter,
           data: 'foo',
+          loadedFilter,
+          counts,
         }]);
       });
     });
@@ -318,7 +359,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         byId: {},
         errors: {},
         isLoading: {},
-        default: [],
       });
     });
 
@@ -332,7 +372,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: true,
         },
-        default: [],
       });
     });
 
@@ -350,7 +389,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: false,
         },
-        default: [],
       });
     });
 
@@ -366,7 +404,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: false,
         },
-        default: [],
       });
     });
   });
