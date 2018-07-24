@@ -92,11 +92,15 @@ export const createReducer = entityType => {
     }
   };
 
-  const entities = (state = [], action) => {
+  const entities = (state = {}, action) => {
     switch (action.type) {
       case types.ENTITIES_LOADING_SUCCESS:
-        const {data = []} = action;
-        return data.map(entity => entity.id);
+        const {data = [], counts, loadedFilter} = action;
+        return {
+          ids: data.map(entity => entity.id),
+          counts,
+          loadedFilter,
+        };
       default:
         return state;
     }
