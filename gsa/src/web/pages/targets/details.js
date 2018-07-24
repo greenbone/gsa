@@ -22,26 +22,25 @@
  */
 import React from 'react';
 
-import {Col} from 'glamorous';
-
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderYesNo} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
 
 const TargetDetails = ({
   entity,
@@ -72,8 +71,8 @@ const TargetDetails = ({
       >
         <InfoTable size="full">
           <colgroup>
-            <Col width="20%"/>
-            <Col width="80%"/>
+            <Col width="15%"/>
+            <Col width="85%"/>
           </colgroup>
           <TableBody>
             <TableRow>

@@ -27,44 +27,46 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import EntityPage from '../../entity/page.js';
+import EntityPage from 'web/entity/page';
 import EntityContainer, {
   permissions_resource_loader,
-} from '../../entity/container.js';
-import {goto_list} from '../../entity/component.js';
+} from 'web/entity/container';
+import {goto_list} from 'web/entity/component';
 
-import Badge from '../../components/badge/badge.js';
+import Badge from 'web/components/badge/badge';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import CpeIcon from '../../components/icon/cpeicon.js';
-import DeleteIcon from '../../components/icon/deleteicon.js';
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import CpeIcon from 'web/components/icon/cpeicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import Link from '../../components/link/link.js';
+import Link from 'web/components/link/link';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import OsComponent from './component.js';
+import {Col} from 'web/entity/page';
+
+import OsComponent from './component';
 
 const ToolBarIcons = ({
   entity,
@@ -146,6 +148,10 @@ const Details = ({entity}) => {
   return (
     <Layout flex="column">
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>
