@@ -44,7 +44,6 @@ describe('entities reducers test', () => {
       byId: {},
       isLoading: {},
       errors: {},
-      default: [],
     });
   });
 
@@ -55,7 +54,6 @@ describe('entities reducers test', () => {
       byId: {},
       isLoading: {},
       errors: {},
-      default: [],
     });
   });
 
@@ -74,7 +72,9 @@ describe('entities reducers test', () => {
       isLoading: {
         default: true,
       },
-      default: ['bar'],
+      default: {
+        ids: ['bar'],
+      },
     };
 
     expect(reducer(state, action)).toEqual({
@@ -91,8 +91,12 @@ describe('entities reducers test', () => {
         default: true,
         [filterId]: false,
       },
-      default: ['bar'],
-      [filterId]: ['foo'],
+      default: {
+        ids: ['bar'],
+      },
+      [filterId]: {
+        ids: ['foo'],
+      },
     });
   });
 
@@ -111,7 +115,9 @@ describe('entities reducers test', () => {
       isLoading: {
         default: true,
       },
-      default: ['bar'],
+      default: {
+        ids: ['bar'],
+      },
     };
 
     expect(reducer(state, action)).toEqual({
@@ -128,8 +134,12 @@ describe('entities reducers test', () => {
         default: true,
         [filterId]: false,
       },
-      default: ['bar'],
-      [filterId]: ['foo'],
+      default: {
+        ids: ['bar'],
+      },
+      [filterId]: {
+        ids: ['foo'],
+      },
     });
   });
 
@@ -146,7 +156,7 @@ describe('entities reducers test', () => {
           default: true,
         },
         errors: {},
-        default: [],
+        default: {},
       });
     });
 
@@ -163,8 +173,7 @@ describe('entities reducers test', () => {
           [filterId]: true,
         },
         errors: {},
-        default: [],
-        [filterId]: [],
+        [filterId]: {},
       });
     });
 
@@ -180,7 +189,7 @@ describe('entities reducers test', () => {
         isLoading: {
           [otherFilterId]: false,
         },
-        [otherFilterId]: [],
+        [otherFilterId]: {},
       };
 
       expect(reducer(state, action)).toEqual({
@@ -190,8 +199,8 @@ describe('entities reducers test', () => {
           [otherFilterId]: false,
           [filterId]: true,
         },
-        [otherFilterId]: [],
-        [filterId]: [],
+        [otherFilterId]: {},
+        [filterId]: {},
       });
     });
 
@@ -199,8 +208,10 @@ describe('entities reducers test', () => {
       const actions = createEntitiesActions('foo');
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=foo');
+      const loadedFilter = Filter.fromString('name=foo rows=10');
       const filterId = filterIdentifier(filter);
       const action = actions.request(filter);
+      const counts = {first: 1};
       const state = {
         errors: {
           [filterId]: 'An Error',
@@ -208,7 +219,11 @@ describe('entities reducers test', () => {
         isLoading: {
           [filterId]: false,
         },
-        [filterId]: ['foo', 'bar'],
+        [filterId]: {
+          ids: ['foo', 'bar'],
+          loadedFilter,
+          counts,
+        },
       };
 
       expect(reducer(state, action)).toEqual({
@@ -219,7 +234,11 @@ describe('entities reducers test', () => {
         isLoading: {
           [filterId]: true,
         },
-        [filterId]: ['foo', 'bar'],
+        [filterId]: {
+          ids: ['foo', 'bar'],
+          loadedFilter,
+          counts,
+        },
       });
     });
 
@@ -245,7 +264,9 @@ describe('entities reducers test', () => {
         isLoading: {
           default: false,
         },
-        default: ['foo', 'bar'],
+        default: {
+          ids: ['foo', 'bar'],
+        },
       });
     });
 
@@ -260,7 +281,7 @@ describe('entities reducers test', () => {
         isLoading: {
           default: true,
         },
-        default: [],
+        default: {},
       };
 
       expect(reducer(state, action)).toEqual({
@@ -276,7 +297,9 @@ describe('entities reducers test', () => {
         isLoading: {
           default: false,
         },
-        default: ['foo', 'bar'],
+        default: {
+          ids: ['foo', 'bar'],
+        },
       });
     });
 
@@ -285,9 +308,12 @@ describe('entities reducers test', () => {
       const reducer = createReducer('foo');
       const filter = Filter.fromString('name=bar');
       const filterId = filterIdentifier(filter);
+      const counts = {first: 1};
       const otherFilter = Filter.fromString('name=foo');
       const otherFilterId = filterIdentifier(otherFilter);
-      const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter);
+      const otherCounts = {last: 22};
+      const action = actions.success([{id: 'foo'}, {id: 'bar'}], filter,
+        filter, counts);
       const state = {
         errors: {
           [otherFilterId]: 'An error',
@@ -295,7 +321,11 @@ describe('entities reducers test', () => {
         isLoading: {
           [otherFilterId]: true,
         },
-        [otherFilterId]: ['lorem', 'ipsum'],
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+          loadedFilter: otherFilter,
+          counts: otherCounts,
+        },
       };
 
       expect(reducer(state, action)).toEqual({
@@ -314,8 +344,16 @@ describe('entities reducers test', () => {
           [otherFilterId]: true,
           [filterId]: false,
         },
-        [otherFilterId]: ['lorem', 'ipsum'],
-        [filterId]: ['foo', 'bar'],
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+          loadedFilter: otherFilter,
+          counts: otherCounts,
+        },
+        [filterId]: {
+          ids: ['foo', 'bar'],
+          loadedFilter: filter,
+          counts,
+        },
       });
     });
 
@@ -336,7 +374,7 @@ describe('entities reducers test', () => {
         isLoading: {
           default: false,
         },
-        default: [],
+        default: {},
       });
     });
 
@@ -351,7 +389,9 @@ describe('entities reducers test', () => {
         isLoading: {
           default: true,
         },
-        default: ['foo', 'bar'],
+        default: {
+          ids: ['foo', 'bar'],
+        },
       };
 
       expect(reducer(state, action)).toEqual({
@@ -362,7 +402,9 @@ describe('entities reducers test', () => {
         isLoading: {
           default: false,
         },
-        default: ['foo', 'bar'],
+        default: {
+          ids: ['foo', 'bar'],
+        },
       });
     });
 
@@ -389,7 +431,9 @@ describe('entities reducers test', () => {
         isLoading: {
           [otherFilterId]: true,
         },
-        [otherFilterId]: ['lorem', 'ipsum'],
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+        },
       };
 
       expect(reducer(state, action)).toEqual({
@@ -409,8 +453,10 @@ describe('entities reducers test', () => {
           [otherFilterId]: true,
           [filterId]: false,
         },
-        [otherFilterId]: ['lorem', 'ipsum'],
-        [filterId]: [],
+        [otherFilterId]: {
+          ids: ['lorem', 'ipsum'],
+        },
+        [filterId]: {},
       });
     });
 
@@ -430,7 +476,6 @@ describe('entities reducers test', () => {
           [id]: true,
         },
         errors: {},
-        default: [],
       });
     });
 
@@ -456,7 +501,9 @@ describe('entities reducers test', () => {
           a1: 'An error',
           a2: 'Another error',
         },
-        default: ['a2'],
+        default: {
+          ids: ['a2'],
+        },
       };
 
       expect(reducer(state, action)).toEqual({
@@ -477,7 +524,9 @@ describe('entities reducers test', () => {
           a1: 'An error',
           a2: 'Another error',
         },
-        default: ['a2'],
+        default: {
+          ids: ['a2'],
+        },
       });
     });
 
@@ -502,7 +551,6 @@ describe('entities reducers test', () => {
             foo: 'bar',
           },
         },
-        default: [],
         errors: {},
         isLoading: {
           [id]: false,
@@ -532,7 +580,6 @@ describe('entities reducers test', () => {
             foo: 'bar',
           },
         },
-        default: [],
         errors: {},
         isLoading: {
           [id]: false,
@@ -562,7 +609,6 @@ describe('entities reducers test', () => {
             foo: 'bar',
           },
         },
-        default: [],
         errors: {},
         isLoading: {
           [id]: false,
@@ -595,7 +641,6 @@ describe('entities reducers test', () => {
             foo: 'bar',
           },
         },
-        default: [],
         errors: {},
         isLoading: {
           [id]: false,
@@ -638,7 +683,6 @@ describe('entities reducers test', () => {
             old: 'mydata',
           },
         },
-        default: [],
         errors: {
           baz: 'An error',
         },
@@ -661,7 +705,6 @@ describe('entities reducers test', () => {
 
       expect(reducer(undefined, action)).toEqual({
         byId: {},
-        default: [],
         errors: {
           [id]: 'An error',
         },
@@ -684,7 +727,6 @@ describe('entities reducers test', () => {
 
       expect(reducer(state, action)).toEqual({
         byId: {},
-        default: [],
         errors: {
           [id]: 'An error',
         },
@@ -707,7 +749,6 @@ describe('entities reducers test', () => {
 
       expect(reducer(state, action)).toEqual({
         byId: {},
-        default: [],
         errors: {
           [id]: 'An error',
         },
@@ -744,7 +785,6 @@ describe('entities reducers test', () => {
             old: 'mydata',
           },
         },
-        default: [],
         errors: {
           baz: 'Another error',
           [id]: 'An error',
