@@ -27,16 +27,18 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar.js';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout.js';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable.js';
+import TableBody from 'web/components/table/body.js';
+import TableData from 'web/components/table/data.js';
+import TableRow from 'web/components/table/row.js';
+
+import {Col} from 'web/entity/page';
 
 const CpeDetails = ({
   entity,
@@ -63,6 +65,10 @@ const CpeDetails = ({
       }
 
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           {isDefined(title) &&
             <TableRow>

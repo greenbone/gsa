@@ -30,19 +30,21 @@ import {
   SNMP_PRIVACY_ALOGRITHM_NONE,
 } from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Footnote from '../../components/footnote/footnote.js';
+import Footnote from 'web/components/footnote/footnote';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
+import {Col} from 'web/entity/page';
 
 const CredentialDetails = ({
   entity,
@@ -65,6 +67,10 @@ const CredentialDetails = ({
       grow
     >
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>
