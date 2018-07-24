@@ -490,11 +490,10 @@ class EntitiesContainer extends React.Component {
 
   openTagsDialog() {
     this.getTagsByType();
-    this.getMultiTagEntitiesCount().then(count =>
-      this.setState({
-        tagsDialogVisible: true,
-        multiTagEntitiesCount: count,
-      }));
+    this.setState({
+      tagsDialogVisible: true,
+      multiTagEntitiesCount: this.getMultiTagEntitiesCount(),
+    });
   }
 
   closeTagsDialog() {
@@ -524,14 +523,14 @@ class EntitiesContainer extends React.Component {
     } = this.state;
 
     if (selection_type === SelectionType.SELECTION_USER) {
-      return Promise.resolve(selected.size);
+      return selected.size;
     }
 
     if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      return Promise.resolve(entities.length);
+      return entities.length;
     }
 
-    return Promise.resolve(entitiesCounts.filtered);
+    return entitiesCounts.filtered;
   }
 
   render() {
