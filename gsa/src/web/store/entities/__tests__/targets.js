@@ -22,8 +22,8 @@
  */
 import {testAll} from '../utils/testing';
 
-import * as alert from '../alerts';
+import * as targets from '../targets';
 
-testAll('alert', alert);
+testAll('target', targets);
 
 // vim: set ts=2 sw=2 tw=80:
