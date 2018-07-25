@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import {
   loadEntities,
@@ -34,76 +35,71 @@ import {
 } from 'web/store/entities/tasks';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from '../../entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+
+import DashboardControls from 'web/components/dashboard/controls';
+
+import ManualIcon from 'web/components/icon/manualicon';
+
+import IconDivider from 'web/components/layout/icondivider';
+
+import IconMenu from 'web/components/menu/iconmenu';
+import MenuEntry from 'web/components/menu/menuentry';
 
 import NewIconMenu from './icons/newiconmenu';
-
-import DashboardControls from '../../components/dashboard/controls';
-
-import ManualIcon from '../../components/icon/manualicon';
-
-import IconDivider from '../../components/layout/icondivider';
-
-import IconMenu from '../../components/menu/iconmenu';
-import MenuEntry from '../../components/menu/menuentry';
 
 import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
 
-const ToolBarIcons = ({
-    onAdvancedTaskWizardClick,
-    onModifyTaskWizardClick,
-    onContainerTaskCreateClick,
-    onTaskCreateClick,
-    onTaskWizardClick,
-  }, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="creating-a-task"
-        title={_('Help: Tasks')}
-      />
-      {capabilities.mayOp('run_wizard') &&
-        <IconMenu
-          img="wizard.svg"
-          onClick={onTaskWizardClick}
-        >
-          {capabilities.mayCreate('task') &&
-            <MenuEntry
-              title={_('Task Wizard')}
-              onClick={onTaskWizardClick}
-            />
-          }
-          {capabilities.mayCreate('task') &&
-            <MenuEntry
-              title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}
-            />
-          }
-          {capabilities.mayEdit('task') &&
-            <MenuEntry
-              title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}
-            />
-          }
-        </IconMenu>
-      }
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onAdvancedTaskWizardClick,
+  onModifyTaskWizardClick,
+  onContainerTaskCreateClick,
+  onTaskCreateClick,
+  onTaskWizardClick,
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="creating-a-task"
+      title={_('Help: Tasks')}
+    />
+    {capabilities.mayOp('run_wizard') &&
+      <IconMenu
+        img="wizard.svg"
+        onClick={onTaskWizardClick}
+      >
+        {capabilities.mayCreate('task') &&
+          <MenuEntry
+            title={_('Task Wizard')}
+            onClick={onTaskWizardClick}
+          />
+        }
+        {capabilities.mayCreate('task') &&
+          <MenuEntry
+            title={_('Advanced Task Wizard')}
+            onClick={onAdvancedTaskWizardClick}
+          />
+        }
+        {capabilities.mayEdit('task') &&
+          <MenuEntry
+            title={_('Modify Task Wizard')}
+            onClick={onModifyTaskWizardClick}
+          />
+        }
+      </IconMenu>
+    }
 
-      <NewIconMenu
-        onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
-      />
+    <NewIconMenu
+      onNewClick={onTaskCreateClick}
+      onNewContainerClick={onContainerTaskCreateClick}
+    />
 
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onAdvancedTaskWizardClick: PropTypes.func.isRequired,
