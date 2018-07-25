@@ -27,6 +27,9 @@ import glamorous, {Span} from 'glamorous';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
+import Model from 'gmp/model';
+import Filter from 'gmp/models/filter';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -106,7 +109,7 @@ const TabTitle = ({title, counts}) => (
 );
 
 TabTitle.propTypes = {
-  counts: PropTypes.counts.isRequired,
+  counts: PropTypes.counts,
   title: PropTypes.string.isRequired,
 };
 
@@ -118,7 +121,7 @@ const TabTitleForUserTags = ({title, count}) => (
 );
 
 TabTitleForUserTags.propTypes = {
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
   title: PropTypes.string.isRequired,
 };
 
@@ -136,8 +139,8 @@ const ToolBarIcons = ({
   showErrorMessage,
   showSuccessMessage,
 }) => {
-  const {task} = report;
-  const {id: task_id} = task;
+  const {task = {}} = report;
+  const {id: task_id = ''} = task;
   return (
     <Divider margin="15px">
       <IconDivider>
@@ -276,8 +279,8 @@ UserTags.propTypes = {
 
 const PageContent = ({
   activeTab,
-  entity,
-  filter,
+  entity = new Model(),
+  filter = new Filter(),
   filters,
   loading = false,
   report_formats,
@@ -302,52 +305,61 @@ const PageContent = ({
   onTagSuccess,
   onTargetEditClick,
 }) => {
-  if (!isDefined(entity)) {
-    return (
-      <Loading loading={loading}/>
-    );
-  }
 
   const {
-    report,
+    report = new Model(),
   } = entity;
 
-  const userTagsCount = report.userTags.length;
+  const {userTags = {}} = report;
+  const userTagsCount = userTags.length;
 
   const {
-    applications,
-    closed_cves,
-    cves,
-    errors,
-    hosts,
-    operatingsystems,
-    ports,
-    results,
+    applications = {},
+    closed_cves = {},
+    cves = {},
+    errors = {},
+    hosts = {},
+    operatingsystems = {},
+    ports = {},
+    results = {},
     task = {},
-    tls_certificates,
+    tls_certificates = {},
     timestamp,
     scan_run_status,
   } = report;
 
-  const delta = report.isDeltaReport();
+  const delta = isDefined(report.isDeltaReport) ?
+    report.isDeltaReport() : undefined;
 
   const status = isDefined(task.isContainer) && task.isContainer() ?
     _('Container') : scan_run_status;
+
+  const progress = isDefined(task.progress) ? task.progress : 0;
+  const counts = isDefined(results.counts) ?
+    results.counts : new CollectionCounts();
+  const entities = isDefined(results.entities) ? results.entities : [];
 
   const header_title = (
     <Divider>
       <span>
         {_('Report:')}
       </span>
-      <span>
-        {longDate(timestamp)}
-      </span>
-      <Span marginTop="2px">
-        <StatusBar
-          status={status}
-          progress={task.progress}
-        />
-      </Span>
+      {loading ?
+        <span>
+          {_('Loading')}
+        </span> :
+        <Divider>
+          <span>
+            {longDate(timestamp)}
+          </span>
+          <Span marginTop="2px">
+            <StatusBar
+              status={status}
+              progress={task.progress}
+            />
+          </Span>
+        </Divider>
+      }
     </Divider>
   );
 
@@ -399,252 +411,257 @@ const PageContent = ({
       <Section
         header={header}
       >
-        <TabLayout
-          grow="1"
-          align={['start', 'end']}
-        >
-          <TabList
-            active={activeTab}
-            align={['start', 'stretch']}i
-            onActivateTab={onActivateTab}
-          >
-            <Tab>
-              {_('Information')}
-            </Tab>
-            <Tab>
-              <TabTitle
-                title={_('Results')}
-                counts={results.counts}
-              />
-            </Tab>
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Hosts')}
-                  counts={hosts.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Ports')}
-                  counts={ports.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Applications')}
-                  counts={applications.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Operating Systems')}
-                  counts={operatingsystems.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('CVEs')}
-                  counts={cves.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Closed CVEs')}
-                  counts={closed_cves.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('TLS Certificates')}
-                  counts={tls_certificates.counts}
-                />
-              </Tab>
-            }
-            {!delta &&
-              <Tab>
-                <TabTitle
-                  title={_('Error Messages')}
-                  counts={errors.counts}
-                />
-              </Tab>
-            }
-            <Tab>
-              <TabTitleForUserTags
-                title={_('User Tags')}
-                count={userTagsCount}
-              />
-            </Tab>
-          </TabList>
-        </TabLayout>
-        <Tabs active={activeTab}>
-          <TabPanels>
-            <TabPanel>
-              <Summary
-                report={report}
-                onError={onError}
-                onTagChanged={onTagSuccess}
-              />
-            </TabPanel>
-            <TabPanel>
-              <ResultsTab
-                delta={delta}
-                filter={filter}
-                results={results.entities}
-                counts={results.counts}
-                progress={task.progress}
-                onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-                onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-                onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-                onFilterEditClick={onFilterEditClick}
-                onFilterResetClick={onFilterResetClick}
-                onTargetEditClick={onTargetEditClick}
-              />
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={hosts.counts}
-                entities={hosts.entities}
-                filter={filter}
-                sortFunctions={hosts_sort_functions}
+        {loading ?
+          <Loading/> :
+          <React.Fragment>
+            <TabLayout
+              grow="1"
+              align={['start', 'end']}
+            >
+              <TabList
+                active={activeTab}
+                align={['start', 'stretch']}i
+                onActivateTab={onActivateTab}
               >
-                {props => (
-                  <HostsTable
-                    {...props}
-                    toggleDetailsIcon={false}
+                <Tab>
+                  {_('Information')}
+                </Tab>
+                <Tab>
+                  <TabTitle
+                    title={_('Results')}
+                    counts={results.counts}
                   />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={ports.counts}
-                entities={ports.entities}
-                filter={filter}
-                sortFunctions={ports_sort_functions}
-              >
-                {props => (
-                  <PortsTable
-                    {...props}
-                    toggleDetailsIcon={false}
+                </Tab>
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Hosts')}
+                      counts={hosts.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Ports')}
+                      counts={ports.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Applications')}
+                      counts={applications.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Operating Systems')}
+                      counts={operatingsystems.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('CVEs')}
+                      counts={cves.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Closed CVEs')}
+                      counts={closed_cves.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('TLS Certificates')}
+                      counts={tls_certificates.counts}
+                    />
+                  </Tab>
+                }
+                {!delta &&
+                  <Tab>
+                    <TabTitle
+                      title={_('Error Messages')}
+                      counts={errors.counts}
+                    />
+                  </Tab>
+                }
+                <Tab>
+                  <TabTitleForUserTags
+                    title={_('User Tags')}
+                    count={userTagsCount}
                   />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={applications.counts}
-                entities={applications.entities}
-                filter={filter}
-                sortFunctions={apps_sort_functions}
-              >
-                {props => (
-                  <ApplicationsTable
-                    {...props}
-                    toggleDetailsIcon={false}
+                </Tab>
+              </TabList>
+            </TabLayout>
+            <Tabs active={activeTab}>
+              <TabPanels>
+                <TabPanel>
+                  <Summary
+                    report={report}
+                    onError={onError}
+                    onTagChanged={onTagSuccess}
                   />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                {...operatingsystems}
-                counts={operatingsystems.counts}
-                entities={operatingsystems.entities}
-                filter={filter}
-                sortFunctions={operatingssystems_sort_functions}
-              >
-                {props => (
-                  <OperatingSystemsTable
-                    {...props}
-                    toggleDetailsIcon={false}
+                </TabPanel>
+                <TabPanel>
+                  <ResultsTab
+                    delta={delta}
+                    filter={filter}
+                    results={entities}
+                    counts={counts}
+                    progress={progress}
+                    onFilterAddLogLevelClick={onFilterAddLogLevelClick}
+                    onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
+                    onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
+                    onFilterEditClick={onFilterEditClick}
+                    onFilterResetClick={onFilterResetClick}
+                    onTargetEditClick={onTargetEditClick}
                   />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={cves.counts}
-                entities={cves.entities}
-                filter={filter}
-                sortFunctions={cves_sort_functions}
-              >
-                {props => (
-                  <CvesTable
-                    {...props}
-                    toggleDetailsIcon={false}
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={hosts.counts}
+                    entities={hosts.entities}
+                    filter={filter}
+                    sortFunctions={hosts_sort_functions}
+                  >
+                    {props => (
+                      <HostsTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={ports.counts}
+                    entities={ports.entities}
+                    filter={filter}
+                    sortFunctions={ports_sort_functions}
+                  >
+                    {props => (
+                      <PortsTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={applications.counts}
+                    entities={applications.entities}
+                    filter={filter}
+                    sortFunctions={apps_sort_functions}
+                  >
+                    {props => (
+                      <ApplicationsTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    {...operatingsystems}
+                    counts={operatingsystems.counts}
+                    entities={operatingsystems.entities}
+                    filter={filter}
+                    sortFunctions={operatingssystems_sort_functions}
+                  >
+                    {props => (
+                      <OperatingSystemsTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={cves.counts}
+                    entities={cves.entities}
+                    filter={filter}
+                    sortFunctions={cves_sort_functions}
+                  >
+                    {props => (
+                      <CvesTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={closed_cves.counts}
+                    entities={closed_cves.entities}
+                    filter={filter}
+                    sortFunctions={closed_cves_sort_functions}
+                  >
+                    {props => (
+                      <ClosedCvesTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={tls_certificates.counts}
+                    entities={tls_certificates.entities}
+                    filter={filter}
+                    sortFunctions={tls_certificates_sort_functions}
+                  >
+                    {props => (
+                      <TLSCertificatesTable
+                        {...props}
+                        onTlsCertificateDownloadClick={
+                          onTlsCertificateDownloadClick}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <ReportEntitiesContainer
+                    counts={errors.counts}
+                    entities={errors.entities}
+                    filter={filter}
+                    sortFunctions={errors_sort_functions}
+                  >
+                    {props => (
+                      <ErrorsTable
+                        {...props}
+                        toggleDetailsIcon={false}
+                      />
+                    )}
+                  </ReportEntitiesContainer>
+                </TabPanel>
+                <TabPanel>
+                  <UserTags
+                    report={report}
+                    onError={onError}
+                    onTagChanged={onTagSuccess}
                   />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={closed_cves.counts}
-                entities={closed_cves.entities}
-                filter={filter}
-                sortFunctions={closed_cves_sort_functions}
-              >
-                {props => (
-                  <ClosedCvesTable
-                    {...props}
-                    toggleDetailsIcon={false}
-                  />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={tls_certificates.counts}
-                entities={tls_certificates.entities}
-                filter={filter}
-                sortFunctions={tls_certificates_sort_functions}
-              >
-                {props => (
-                  <TLSCertificatesTable
-                    {...props}
-                    onTlsCertificateDownloadClick={
-                      onTlsCertificateDownloadClick}
-                    toggleDetailsIcon={false}
-                  />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <ReportEntitiesContainer
-                counts={errors.counts}
-                entities={errors.entities}
-                filter={filter}
-                sortFunctions={errors_sort_functions}
-              >
-                {props => (
-                  <ErrorsTable
-                    {...props}
-                    toggleDetailsIcon={false}
-                  />
-                )}
-              </ReportEntitiesContainer>
-            </TabPanel>
-            <TabPanel>
-              <UserTags
-                report={report}
-                onError={onError}
-                onTagChanged={onTagSuccess}
-              />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </React.Fragment>
+        }
       </Section>
     </Layout>
   );
