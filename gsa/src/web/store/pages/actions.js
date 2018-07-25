@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,33 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+export const CHANGE_PAGE_FILTER = 'CHANGE_PAGE_FILTER';
 
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import timezone from './usersettings/timezone/reducers';
-import userSettings from './usersettings/reducers';
-import pages from './pages/reducers';
-
-import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
-
-const rootReducer = combineReducers({
-  dashboardData,
-  dashboardSettings,
-  entities,
-  timezone,
-  userSettings,
-  pages,
+export const pageFilter = (page, filter) => ({
+  type: CHANGE_PAGE_FILTER,
+  page,
+  filter,
 });
-
-const clearStoreReducer = (state = {}, action) => {
-  if (action.type === CLEAR_STORE) {
-    state = {};
-  }
-  return rootReducer(state, action);
-};
-
-export default clearStoreReducer;
 
 // vim: set ts=2 sw=2 tw=80:
