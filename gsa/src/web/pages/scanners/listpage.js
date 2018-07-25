@@ -26,21 +26,21 @@ import _ from 'gmp/locale';
 
 import {SCANNERS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page.js';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import ScannerComponent from './component.js';
-import ScannersTable, {SORT_FIELDS} from './table.js';
+import ScannerComponent from './component';
+import ScannersTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
