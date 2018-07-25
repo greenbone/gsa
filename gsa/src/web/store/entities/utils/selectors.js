@@ -62,6 +62,16 @@ class EntitiesSelector {
     return [];
   }
 
+  getEntitiesCounts(filter) {
+    const state = this.state[filterIdentifier(filter)];
+    return isDefined(state) ? state.counts : undefined;
+  }
+
+  getLoadedFilter(filter) {
+    const state = this.state[filterIdentifier(filter)];
+    return isDefined(state) ? state.loadedFilter : undefined;
+  }
+
   getEntity(id) {
     return isDefined(this.state.byId) ? this.state.byId[id] : undefined;
   }
