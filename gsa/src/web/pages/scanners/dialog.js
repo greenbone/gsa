@@ -33,36 +33,35 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FootNote from '../../components/footnote/footnote.js';
+import FootNote from 'web/components/footnote/footnote';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import Select from '../../components/form/select.js';
-import Text from '../../components/form/text.js';
-import TextField from '../../components/form/textfield.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import Icon from '../../components/icon/icon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import Icon from 'web/components/icon/icon';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import {
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
   scanner_type_name,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 const scanner_types = [
   SLAVE_SCANNER_TYPE,
@@ -114,9 +113,9 @@ const CertStatus = ({
       <Layout flex box>
         <Icon img="key.svg"/>
       </Layout>
-      <Text>
+      <span>
         {render_certificate_info(info)}
-      </Text>
+      </span>
     </FootNote>
   );
 };

@@ -46,15 +46,15 @@ import {
   RESULT_UUID,
 } from 'gmp/models/override';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import {
   renderNvtName,
   renderSelectItems,
   severityFormat,
-} from '../../utils/render.js';
+} from 'web/utils/render';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
@@ -67,17 +67,16 @@ import {
   _MEDIUM,
   _HIGH,
   translatedResultSeverityRiskFactor,
-} from '../../utils/severity';
+} from 'web/utils/severity';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import Spinner from '../../components/form/spinner.js';
-import Text from '../../components/form/text.js';
-import TextArea from '../../components/form/textarea.js';
-import TextField from '../../components/form/textfield.js';
-import Select from '../../components/form/select.js';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
 
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
@@ -104,7 +103,6 @@ const OverrideDialog = ({
   task_uuid,
   text = '',
   title = _('New Override'),
-  visible,
   onClose,
   onSave,
 }) => {
@@ -157,7 +155,6 @@ const OverrideDialog = ({
   }
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={data}
       values={{id}}
@@ -172,7 +169,7 @@ const OverrideDialog = ({
           <Layout flex="column">
             {fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{renderNvtName(oid, nvt_name)}</Text>
+                <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
             }
             {is_edit && !fixed &&
@@ -230,7 +227,7 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <Text>{longDate(override.endTime)}</Text>
+                    <span>{longDate(override.endTime)}</span>
                   </Divider>
                 </Layout>
               }
@@ -251,7 +248,7 @@ const OverrideDialog = ({
                   value={state.days}
                   onChange={onValueChange}
                 />
-                <Text>{_('days')}</Text>
+                <span>{_('days')}</span>
               </Divider>
               <Radio
                 name="active"
@@ -512,7 +509,6 @@ OverrideDialog.propTypes = {
   tasks: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

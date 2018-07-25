@@ -34,9 +34,9 @@ import SeverityBar from 'web/components/bar/severitybar';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Radio from 'web/components/form/radio';
-import Text from 'web/components/form/text';
 import TextField from 'web/components/form/textfield';
 
+import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -247,38 +247,40 @@ class EditDialog extends React.Component {
                     <TableData>
                       {_('Timeout')}
                     </TableData>
-                    <TableData flex="column">
-                      <Layout flex box>
-                        <Radio
-                          value="0"
-                          name="timeout"
-                          checked={state.timeout === '0'}
-                          onChange={onValueChange}
-                        />
-                        <Text>
-                          {_('Apply default timeout')}
-                          {
-                            isDefined(nvt.default_timeout) ?
-                                ' (' + nvt.default_timeout + ')' :
-                                ''
-                          }
-                        </Text>
-                      </Layout>
-                      <Layout flex box>
-                        <Radio
-                          value="1"
-                          name="timeout"
-                          checked={state.timeout !== '0'}
-                          onChange={onValueChange}
-                        />
-                        <TextField
-                          disabled={state.timeout === '0'}
-                          name="manual_timeout"
-                          value={state.manual_timeout}
-                          onChange={onValueChange}
-                          maxLength="400"
-                        />
-                      </Layout>
+                    <TableData>
+                      <Divider flex="column">
+                        <Divider>
+                          <Radio
+                            value="0"
+                            name="timeout"
+                            checked={state.timeout === '0'}
+                            onChange={onValueChange}
+                          />
+                          <span>
+                            {_('Apply default timeout')}
+                            {
+                              isDefined(nvt.default_timeout) ?
+                                  ' (' + nvt.default_timeout + ')' :
+                                  ''
+                            }
+                          </span>
+                        </Divider>
+                        <Divider>
+                          <Radio
+                            value="1"
+                            name="timeout"
+                            checked={state.timeout !== '0'}
+                            onChange={onValueChange}
+                          />
+                          <TextField
+                            disabled={state.timeout === '0'}
+                            name="manual_timeout"
+                            value={state.manual_timeout}
+                            onChange={onValueChange}
+                            maxLength="400"
+                          />
+                        </Divider>
+                      </Divider>
                     </TableData>
                     <TableData>
                       {
