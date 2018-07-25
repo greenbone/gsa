@@ -186,7 +186,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities for undefined state with filter', () => {
@@ -195,7 +195,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
   test('getEntities for empty state', () => {
@@ -203,7 +203,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities for empty state with filter', () => {
@@ -212,7 +212,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
   test('getEntities should return empty array if byId is empty', () => {
@@ -293,7 +293,7 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities should return empty array for unkown filter', () => {
@@ -305,7 +305,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
 });

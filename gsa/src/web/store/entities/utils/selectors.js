@@ -59,7 +59,7 @@ class EntitiesSelector {
     if (isDefined(state) && state.ids && isDefined(this.state.byId)) {
       return state.ids.map(id => this.state.byId[id]).filter(isDefined);
     }
-    return [];
+    return undefined;
   }
 
   getEntitiesCounts(filter) {
