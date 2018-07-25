@@ -30,20 +30,19 @@ import {
   smb_credential_filter,
 } from 'gmp/models/credential';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {renderSelectItems} from '../../utils/render.js';
-import withPrefix from '../../utils/withPrefix.js';
+import {renderSelectItems} from 'web/utils/render';
+import withPrefix from 'web/utils/withPrefix';
 
-import Select from '../../components/form/select.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import Text from '../../components/form/text.js';
+import Select from 'web/components/form/select';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
-import NewIcon from '../../components/icon/newicon.js';
+import NewIcon from 'web/components/icon/newicon';
 
 const SmbMethodPart = ({
   prefix,
@@ -65,11 +64,11 @@ const SmbMethodPart = ({
       grow="1"
     >
       <FormGroup title=" ">
-        <Text>
+        <span>
           {_('Security note: The SMB protocol does not offer a ' +
              'fingerprint to establish complete mutual trust. Thus a ' +
              'man-in-the-middle attack can not be fully prevented.')}
-        </Text>
+        </span>
       </FormGroup>
 
       <FormGroup title={_('Credential')}>

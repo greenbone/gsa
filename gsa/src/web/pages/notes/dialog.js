@@ -45,29 +45,28 @@ import {
   RESULT_ANY,
 } from 'gmp/models/override';
 
-import SaveDialog from '../../components/dialog/savedialog';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Divider from '../../components/layout/divider';
-import Layout from '../../components/layout/layout';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 import {
   renderNvtName,
   renderSelectItems,
   severityFormat,
-} from '../../utils/render.js';
+} from 'web/utils/render';
 import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
-} from '../../utils/severity';
+} from 'web/utils/severity';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Text from '../../components/form/text.js';
-import TextArea from '../../components/form/textarea.js';
-import TextField from '../../components/form/textfield.js';
-import Radio from '../../components/form/radio.js';
-import Select from '../../components/form/select.js';
-import Spinner from '../../components/form/spinner.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
 
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
@@ -133,7 +132,7 @@ const NoteDialog = ({
           <Layout flex="column">
             {state.fixed &&
               <FormGroup title={_('NVT')} flex="column">
-                <Text>{renderNvtName(oid, nvt_name)}</Text>
+                <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
             }
             {is_edit && !state.fixed &&
@@ -190,7 +189,7 @@ const NoteDialog = ({
                       value={ACTIVE_YES_UNTIL_VALUE}
                       onChange={onValueChange}
                     />
-                    <Text>{longDate(note.endTime)}</Text>
+                    <span>{longDate(note.endTime)}</span>
                   </Divider>
                 }
               </Divider>
@@ -211,7 +210,7 @@ const NoteDialog = ({
                   value={state.days}
                   onChange={onValueChange}
                 />
-                <Text>{_('days')}</Text>
+                <span>{_('days')}</span>
               </Divider>
               <Radio
                 name="active"

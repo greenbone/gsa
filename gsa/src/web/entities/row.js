@@ -25,11 +25,9 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import Text from '../components/form/text.js';
-
 import Theme from '../utils/theme';
 
-import EntityActions from './actions.js';
+import EntityActions from './actions';
 
 export const withEntityRow = (actions = EntityActions, options = {}) =>
   Component => {
@@ -46,7 +44,7 @@ export const withEntityRow = (actions = EntityActions, options = {}) =>
   return EntityRowWrapper;
 };
 
-export const RowDetailsToggle = glamorous(Text)(
+export const RowDetailsToggle = glamorous.span(
   'row-details-toggle',
   {
     cursor: 'pointer',

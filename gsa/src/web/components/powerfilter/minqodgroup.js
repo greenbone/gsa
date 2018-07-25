@@ -27,13 +27,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import FormGroup from '../form/formgroup.js';
-import Spinner from '../form/spinner.js';
-import Text from '../form/text.js';
+import FormGroup from '../form/formgroup';
+import Spinner from '../form/spinner';
 
-import Divider from '../layout/divider.js';
+import Divider from '../layout/divider';
 
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   if (!isDefined(qod) && isDefined(filter)) {
@@ -42,7 +41,7 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   return (
     <FormGroup title={_('QoD')}>
       <Divider>
-        <Text>{_('must be at least')}</Text>
+        <span>{_('must be at least')}</span>
         <Spinner
           type="int"
           name={name}
@@ -52,6 +51,7 @@ const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
           size="1"
           onChange={onChange}
         />
+        <span>%</span>
       </Divider>
     </FormGroup>
   );
