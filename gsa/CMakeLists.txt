@@ -511,6 +511,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/nvts/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/filterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/nvts/nvtpreference.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/preferences.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/preformatted.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/references.js
@@ -653,7 +654,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/header.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/importdialog.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/scanconfigs/nvtpreference.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/row.js
      ${GSA_SRC_DIR}/src/web/pages/scanconfigs/trend.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/component.js

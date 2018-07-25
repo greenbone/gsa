@@ -28,20 +28,20 @@ import _ from 'gmp/locale';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Checkbox from '../../components/form/checkbox.js';
-import FileField from '../../components/form/filefield.js';
-import {noop_convert} from '../../components/form/form.js';
-import PasswordField from '../../components/form/passwordfield.js';
-import Radio from '../../components/form/radio.js';
-import TextField from '../../components/form/textfield.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import Checkbox from 'web/components/form/checkbox';
+import FileField from 'web/components/form/filefield';
+import {noop_convert} from 'web/components/form/form';
+import PasswordField from 'web/components/form/passwordfield';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 class NvtPreference extends React.Component {
 
