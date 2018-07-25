@@ -34,7 +34,12 @@ import NewIcon from 'web/components/icon/newicon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/targets';
 
 import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';
@@ -111,7 +116,9 @@ TargetsPage.propTypes = {
 };
 
 export default withEntitiesContainer('target', {
+  entitiesSelector,
   filtersFilter: TARGETS_FILTER_FILTER,
+  loadEntities,
 })(TargetsPage);
 
 // vim: set ts=2 sw=2 tw=80:
