@@ -24,21 +24,21 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import PropTypes from 'web/utils/proptypes';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import TargetsFilterDialog from './filterdialog.js';
-import TargetsTable from './table.js';
-import TargetComponent from './component.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
+import TargetsFilterDialog from './filterdialog';
+import TargetsTable from './table';
+import TargetComponent from './component';
 
 const ToolBarIcons = ({onTargetCreateClick}) => {
   return (
