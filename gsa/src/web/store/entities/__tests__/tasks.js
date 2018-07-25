@@ -1,8 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoenr.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,32 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {testAll} from '../utils/testing';
 
-import {reducer as alert} from './alerts';
-import {reducer as credential} from './credentials';
-import {reducer as filter} from './filters';
-import {reducer as portlist} from './portlists';
-import {reducer as reportformat} from './reportformats';
-import {reducer as scanconfig} from './scanconfigs';
-import {reducer as scanner} from './scanners';
-import {reducer as schedule} from './schedules';
-import {reducer as target} from './targets';
-import {reducer as task} from './tasks';
+import * as tasks from '../tasks';
 
-const entitiesReducer = combineReducers({
-  alert,
-  credential,
-  filter,
-  portlist,
-  reportformat,
-  scanconfig,
-  scanner,
-  schedule,
-  target,
-  task,
-});
-
-export default entitiesReducer;
+testAll('task', tasks);
 
 // vim: set ts=2 sw=2 tw=80:
