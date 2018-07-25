@@ -25,6 +25,8 @@ import React from 'react';
 
 import logger from 'gmp/log';
 
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -50,13 +52,13 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {entities, filter, counts} = this.props;
+    const {entities = [], filter, counts = new CollectionCounts()} = this.props;
 
     this.updateFromEntities(entities, filter, counts);
   }
 
   componentWillReceiveProps(next) {
-    const {entities, filter, counts} = next;
+    const {entities = [], filter, counts = new CollectionCounts()} = next;
 
     if (entities !== this.props.entities ||
       (isDefined(filter) && !filter.equals(this.props.filter))) {
@@ -139,13 +141,16 @@ class ReportEntitiesContainer extends React.Component {
       }
     }
 
-
-    const paged_entities = entities.slice(index, index + rows);
-    const paged_counts = counts.clone({
-      first: index + 1,
-      length: paged_entities.length,
-      rows,
-    });
+    let paged_entities = {};
+    let paged_counts = {};
+    if (isDefined(entities)) {
+      paged_entities = entities.slice(index, index + rows);
+      paged_counts = counts.clone({
+        first: index + 1,
+        length: paged_entities.length,
+        rows,
+      });
+    }
 
     this.setState({
       current_entity_index: index,
@@ -260,8 +265,8 @@ class ReportEntitiesContainer extends React.Component {
 
 ReportEntitiesContainer.propTypes = {
   children: PropTypes.func,
-  counts: PropTypes.counts.isRequired,
-  entities: PropTypes.array.isRequired,
+  counts: PropTypes.counts,
+  entities: PropTypes.array,
   filter: PropTypes.filter,
   sortFunctions: PropTypes.object,
 };
