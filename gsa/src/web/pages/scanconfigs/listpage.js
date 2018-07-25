@@ -24,6 +24,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
+
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -128,6 +130,7 @@ ScanConfigsPage.propTypes = {
 };
 
 export default withEntitiesContainer('scanconfig', {
+  filtersFilter: SCANCONFIGS_FILTER_FILTER,
 })(ScanConfigsPage);
 
 // vim: set ts=2 sw=2 tw=80:
