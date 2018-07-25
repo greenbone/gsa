@@ -104,7 +104,6 @@ const OverrideDialog = ({
   task_uuid,
   text = '',
   title = _('New Override'),
-  visible,
   onClose,
   onSave,
 }) => {
@@ -157,7 +156,6 @@ const OverrideDialog = ({
   }
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={data}
       values={{id}}
@@ -512,7 +510,6 @@ OverrideDialog.propTypes = {
   tasks: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
