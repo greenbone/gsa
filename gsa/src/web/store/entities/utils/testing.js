@@ -227,7 +227,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
@@ -239,7 +239,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
@@ -254,7 +254,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
-        expect(getAll).toBeCalledWith({filter});
+        expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
           type: types.ENTITIES_LOADING_REQUEST,
@@ -286,20 +286,20 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
       return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
-        expect(getAll).not.toBeCalled();
+        expect(get).not.toBeCalled();
       });
     });
 
@@ -317,19 +317,19 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
       return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
-        expect(getAll).toBeCalledWith({filter});
+        expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
           type: types.ENTITIES_LOADING_REQUEST,

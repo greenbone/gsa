@@ -198,10 +198,10 @@ describe('entities actions tests', () => {
       const isLoadingEntities = jest
         .fn()
         .mockReturnValue(true);
-      const getAll = jest.fn();
+      const get = jest.fn();
       const gmp = {
         foos: {
-          getAll,
+          get,
         },
       };
 
@@ -223,7 +223,7 @@ describe('entities actions tests', () => {
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalled();
         expect(dispatch).not.toBeCalled();
-        expect(getAll).not.toBeCalled();
+        expect(get).not.toBeCalled();
       });
     });
 
@@ -241,7 +241,7 @@ describe('entities actions tests', () => {
       const loadedFilter = Filter.fromString('name=abc');
       const counts = {first: 1};
       const dispatch = jest.fn();
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
@@ -252,7 +252,7 @@ describe('entities actions tests', () => {
         }));
       const gmp = {
         foos: {
-          getAll,
+          get,
         },
       };
       const isLoadingEntities = jest
@@ -282,7 +282,7 @@ describe('entities actions tests', () => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalledWith('myfilter');
-        expect(getAll).toBeCalledWith({filter: 'myfilter'});
+        expect(get).toBeCalledWith({filter: 'myfilter'});
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).toBeCalledWith('foo', 'myfilter', loadedFilter,
           counts);
@@ -305,12 +305,12 @@ describe('entities actions tests', () => {
         .mockReturnValue({foo: 'bar'});
 
       const dispatch = jest.fn();
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
       const gmp = {
         foos: {
-          getAll,
+          get,
         },
       };
       const isLoadingEntities = jest
@@ -343,7 +343,7 @@ describe('entities actions tests', () => {
         expect(actions.request).toBeCalledWith('myfilter');
         expect(actions.success).not.toBeCalled();
         expect(actions.error).toBeCalledWith('AnError', 'myfilter');
-        expect(getAll).toBeCalledWith({filter: 'myfilter'});
+        expect(get).toBeCalledWith({filter: 'myfilter'});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{type: 'MY_REQUEST_ACTION'}]);
         expect(dispatch.mock.calls[1]).toEqual([{type: 'MY_ERROR_ACTION'}]);

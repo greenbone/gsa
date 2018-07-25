@@ -88,7 +88,7 @@ export const createLoadEntities = ({
 
   dispatch(actions.request(filter));
 
-  return gmp[pluralizeType(entityType)].getAll({filter})
+  return gmp[pluralizeType(entityType)].get({filter})
     .then(response => {
         const {data, meta} = response;
         const {filter: loadedFilter, counts} = meta;
