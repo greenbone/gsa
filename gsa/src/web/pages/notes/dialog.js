@@ -91,7 +91,6 @@ const NoteDialog = ({
   task_uuid,
   text = '',
   title = _('New Note'),
-  visible,
   onClose,
   onSave,
 }) => {
@@ -119,7 +118,6 @@ const NoteDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={data}
       values={{id}}
@@ -435,7 +433,6 @@ NoteDialog.propTypes = {
   tasks: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
