@@ -340,6 +340,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/table/table.js
      ${GSA_SRC_DIR}/src/web/entities/actions.js
      ${GSA_SRC_DIR}/src/web/entities/container.js
+     ${GSA_SRC_DIR}/src/web/entities/container2.js
      ${GSA_SRC_DIR}/src/web/entities/entitynametabledata.js
      ${GSA_SRC_DIR}/src/web/entities/footer.js
      ${GSA_SRC_DIR}/src/web/entities/header.js
@@ -349,6 +350,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/table.js
      ${GSA_SRC_DIR}/src/web/entities/tagsdialog.js
      ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer.js
+     ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer2.js
      ${GSA_SRC_DIR}/src/web/entities/withRowDetails.js
      ${GSA_SRC_DIR}/src/web/entity/block.js
      ${GSA_SRC_DIR}/src/web/entity/box.js
