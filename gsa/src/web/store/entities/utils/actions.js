@@ -37,11 +37,13 @@ export const createEntitiesActions = entityType => ({
     entityType,
     filter,
   }),
-  success: (data, filter) => ({
+  success: (data, filter, loadedFilter, counts) => ({
     type: types.ENTITIES_LOADING_SUCCESS,
     entityType,
     filter,
     data,
+    loadedFilter,
+    counts,
   }),
   error: (error, filter) => ({
     type: types.ENTITIES_LOADING_ERROR,
@@ -76,21 +78,25 @@ export const createLoadEntities = ({
   actions,
   entityType,
 }) => ({gmp, filter, ...props}) => (dispatch, getState) => {
-    const rootState = getState();
-    const state = selector(rootState);
+  const rootState = getState();
+  const state = selector(rootState);
 
-    if (state.isLoadingEntities(filter)) {
-      // we are already loading data
-      return Promise.resolve();
-    }
+  if (state.isLoadingEntities(filter)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
 
-    dispatch(actions.request(filter));
+  dispatch(actions.request(filter));
 
-    return gmp[pluralizeType(entityType)].getAll({filter}).then(
-      response => dispatch(actions.success(response.data, filter)),
+  return gmp[pluralizeType(entityType)].get({filter})
+    .then(response => {
+        const {data, meta} = response;
+        const {filter: loadedFilter, counts} = meta;
+        return dispatch(actions.success(data, filter, loadedFilter, counts));
+      },
       error => dispatch(actions.error(error, filter)),
-    );
-  };
+  );
+};
 
 export const createLoadEntity = ({
   selector,

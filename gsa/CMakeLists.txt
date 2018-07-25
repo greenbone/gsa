@@ -340,6 +340,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/table/table.js
      ${GSA_SRC_DIR}/src/web/entities/actions.js
      ${GSA_SRC_DIR}/src/web/entities/container.js
+     ${GSA_SRC_DIR}/src/web/entities/container2.js
      ${GSA_SRC_DIR}/src/web/entities/entitynametabledata.js
      ${GSA_SRC_DIR}/src/web/entities/footer.js
      ${GSA_SRC_DIR}/src/web/entities/header.js
@@ -349,6 +350,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/table.js
      ${GSA_SRC_DIR}/src/web/entities/tagsdialog.js
      ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer.js
+     ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer2.js
      ${GSA_SRC_DIR}/src/web/entities/withRowDetails.js
      ${GSA_SRC_DIR}/src/web/entity/block.js
      ${GSA_SRC_DIR}/src/web/entity/box.js
@@ -781,16 +783,21 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
      ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
+     ${GSA_SRC_DIR}/src/web/store/entities/tasks.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/pages/actions.js
+     ${GSA_SRC_DIR}/src/web/store/pages/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/pages/selectors.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/reducers.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/reducers.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/utils.js
      ${GSA_SRC_DIR}/src/web/unauthorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js
      ${GSA_SRC_DIR}/src/web/utils/compose.js

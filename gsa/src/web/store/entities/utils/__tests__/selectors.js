@@ -22,12 +22,13 @@
  */
 import Filter from 'gmp/models/filter';
 
+import {filterIdentifier} from 'web/store/utils';
+
 import {createRootState, createState} from '../testing';
 
 import {createSelector} from '../selectors';
-import {filterIdentifier} from '../reducers';
 
-describe('EntitiesSelector getIsLoadingEntities tests', () => {
+describe('EntitiesSelector isLoadingEntities tests', () => {
 
   test('should be false for undefined state', () => {
     const selector = createSelector('foo');
@@ -185,7 +186,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const selector = createSelector('foo');
     const rootState = createRootState({});
     const fooSelector = selector(rootState);
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities for undefined state with filter', () => {
@@ -194,7 +195,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
   test('getEntities for empty state', () => {
@@ -202,7 +203,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const rootState = createState('foo', {});
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities for empty state with filter', () => {
@@ -211,15 +212,19 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=foo');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
   test('getEntities should return empty array if byId is empty', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {},
-      default: ['foo', 'bar'],
-      'name=foo': ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      'name=foo': {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
@@ -237,8 +242,12 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'bar',
         },
       },
-      default: ['foo', 'bar'],
-      'name=foo': ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      'name=foo': {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
@@ -263,8 +272,12 @@ describe('EntitiesSelector getEntities tests', () => {
           id: 'ipsum',
         },
       },
-      default: ['foo', 'bar'],
-      [filterIdentifier(filter)]: ['lorem', 'ipsum'],
+      default: {
+        ids: ['foo', 'bar'],
+      },
+      [filterIdentifier(filter)]: {
+        ids: ['lorem', 'ipsum'],
+      },
     });
     const fooSelector = selector(rootState);
 
@@ -280,7 +293,7 @@ describe('EntitiesSelector getEntities tests', () => {
     });
     const fooSelector = selector(rootState);
 
-    expect(fooSelector.getEntities()).toEqual([]);
+    expect(fooSelector.getEntities()).toBeUndefined();
   });
 
   test('getEntities should return empty array for unkown filter', () => {
@@ -292,7 +305,7 @@ describe('EntitiesSelector getEntities tests', () => {
     const fooSelector = selector(rootState);
     const filter = Filter.fromString('name=bar');
 
-    expect(fooSelector.getEntities(filter)).toEqual([]);
+    expect(fooSelector.getEntities(filter)).toBeUndefined();
   });
 
 });
@@ -387,6 +400,141 @@ describe('EntitiesSelector getEntitiesError tests', () => {
     expect(fooSelector.getEntitiesError(filter)).toBeUndefined();
   });
 
+});
+
+describe('EntitiesSelector getEntitiesCounts tests', () => {
+
+  test('should return undefined for undefined state', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntitiesCounts()).toBeUndefined();
+  });
+
+  test('should return undefined for undefined state with filter', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+    const filter = Filter.fromString('name=foo');
+
+    expect(fooSelector.getEntitiesCounts(filter)).toBeUndefined();
+  });
+
+  test('should return undefined for empty state', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntitiesCounts()).toBeUndefined();
+  });
+
+  test('should return undefined for empty state with filter', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+    const filter = Filter.fromString('name=foo');
+
+    expect(fooSelector.getEntitiesCounts(filter)).toBeUndefined();
+  });
+
+  test('should return counts', () => {
+    const selector = createSelector('foo');
+    const counts = {
+      first: 1,
+    };
+    const rootState = createState('foo', {
+      default: {
+        counts,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntitiesCounts()).toEqual(counts);
+  });
+
+  test('should return counts with filter', () => {
+    const selector = createSelector('foo');
+    const counts = {
+      first: 1,
+    };
+    const filter = Filter.fromString('name=foo');
+    const filterId = filterIdentifier(filter);
+    const rootState = createState('foo', {
+      [filterId]: {
+        counts,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getEntitiesCounts(filter)).toEqual(counts);
+  });
+
+});
+
+describe('EntitiesSelector getLoadedFilter tests', () => {
+
+  test('should return undefined for undefined state', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getLoadedFilter()).toBeUndefined();
+  });
+
+  test('should return undefined for undefined state with filter', () => {
+    const selector = createSelector('foo');
+    const rootState = createRootState({});
+    const fooSelector = selector(rootState);
+    const filter = Filter.fromString('name=foo');
+
+    expect(fooSelector.getLoadedFilter(filter)).toBeUndefined();
+  });
+
+  test('should return undefined for empty state', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getLoadedFilter()).toBeUndefined();
+  });
+
+  test('should return undefined for empty state with filter', () => {
+    const selector = createSelector('foo');
+    const rootState = createState('foo', {});
+    const fooSelector = selector(rootState);
+    const filter = Filter.fromString('name=foo');
+
+    expect(fooSelector.getLoadedFilter(filter)).toBeUndefined();
+  });
+
+  test('should return loaded filter', () => {
+    const selector = createSelector('foo');
+    const loadedFilter = Filter.fromString('foo=bar');
+    const rootState = createState('foo', {
+      default: {
+        loadedFilter,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getLoadedFilter()).toEqual(loadedFilter);
+  });
+
+  test('should return loadedFilter with filter', () => {
+    const selector = createSelector('foo');
+    const loadedFilter = Filter.fromString('foo=bar');
+    const filter = Filter.fromString('name=foo');
+    const filterId = filterIdentifier(filter);
+    const rootState = createState('foo', {
+      [filterId]: {
+        loadedFilter,
+      },
+    });
+    const fooSelector = selector(rootState);
+
+    expect(fooSelector.getLoadedFilter(filter)).toEqual(loadedFilter);
+  });
 });
 
 describe('EntitiesSelector getEntity tests', () => {

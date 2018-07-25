@@ -24,30 +24,33 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
 
-import TaskFilterDialog from './filterdialog.js';
-import Table from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/tasks';
 
-import NewIconMenu from './icons/newiconmenu.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from '../../entities/withEntitiesContainer2';
 
-import DashboardControls from '../../components/dashboard/controls.js';
+import NewIconMenu from './icons/newiconmenu';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import DashboardControls from '../../components/dashboard/controls';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from '../../components/icon/manualicon';
 
-import IconMenu from '../../components/menu/iconmenu.js';
-import MenuEntry from '../../components/menu/menuentry.js';
+import IconDivider from '../../components/layout/icondivider';
 
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter.js';
+import IconMenu from '../../components/menu/iconmenu';
+import MenuEntry from '../../components/menu/menuentry';
 
-import TaskComponent from './component.js';
-import TaskDashboard from './dashboard';
-import {TASK_DASHBOARD_ID} from './dashboard/index.js';
+import TaskComponent from './component';
+import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
+import TaskFilterDialog from './filterdialog';
+import Table from './table';
 
 const ToolBarIcons = ({
     onAdvancedTaskWizardClick,
@@ -192,7 +195,9 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('task', {
+  entitiesSelector,
   filtersFilter: TASKS_FILTER_FILTER,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
