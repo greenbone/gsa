@@ -35,22 +35,22 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import {create_pem_certificate} from '../../utils/cert.js';
-import withCache from '../../utils/withCache.js';
-import withGmp from '../../utils/withGmp.js';
-import compose from '../../utils/compose.js';
+import PropTypes from 'web/utils/proptypes';
+import {create_pem_certificate} from 'web/utils/cert';
+import withCache from 'web/utils/withCache';
+import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
 
-import withDownload from '../../components/form/withDownload.js';
+import withDownload from 'web/components/form/withDownload';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import withDialogNotification from '../../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import TargetComponent from '../targets/component.js';
+import TargetComponent from '../targets/component';
 
-import Page from './detailscontent.js';
-import FilterDialog from './detailsfilterdialog.js';
+import Page from './detailscontent';
+import FilterDialog from './detailsfilterdialog';
 
 const log = logger.getLogger('web.pages.report.details');
 
