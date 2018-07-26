@@ -23,21 +23,14 @@
  */
 import {combineReducers} from 'redux';
 
-import {reducer as alert} from './alerts';
-import {reducer as credential} from './credentials';
-import {reducer as filter} from './filters';
-import {reducer as portlist} from './portlists';
-import {reducer as reportformat} from './reportformats';
-import {reducer as scanconfig} from './scanconfigs';
-import {reducer as scanner} from './scanners';
-import {reducer as schedule} from './schedules';
-import {reducer as target} from './targets';
-import {reducer as task} from './tasks';
 import {reducer as agent} from './agents';
+import {reducer as alert} from './alerts';
 import {reducer as certbund} from './certbund';
 import {reducer as cpe} from './cpes';
+import {reducer as credential} from './credentials';
 import {reducer as cve} from './cves';
 import {reducer as dfncert} from './dfncerts';
+import {reducer as filter} from './filters';
 import {reducer as group} from './groups';
 import {reducer as host} from './hosts';
 import {reducer as note} from './notes';
@@ -45,23 +38,23 @@ import {reducer as nvts} from './nvts';
 import {reducer as os} from './os';
 import {reducer as ovaldef} from './ovaldefs';
 import {reducer as permission} from './permissions';
+import {reducer as portlist} from './portlists';
+import {reducer as reportformat} from './reportformats';
+import {reducer as scanconfig} from './scanconfigs';
+import {reducer as scanner} from './scanners';
+import {reducer as schedule} from './schedules';
+import {reducer as target} from './targets';
+import {reducer as task} from './tasks';
 
 const entitiesReducer = combineReducers({
-  alert,
-  credential,
-  filter,
-  portlist,
-  reportformat,
-  scanconfig,
-  scanner,
-  schedule,
-  target,
-  task,
   agent,
+  alert,
   certbund,
   cpe,
+  credential,
   cve,
   dfncert,
+  filter,
   group,
   host,
   note,
@@ -69,6 +62,13 @@ const entitiesReducer = combineReducers({
   os,
   ovaldef,
   permission,
+  portlist,
+  reportformat,
+  scanconfig,
+  scanner,
+  schedule,
+  target,
+  task,
 });
 
 export default entitiesReducer;
