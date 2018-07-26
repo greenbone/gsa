@@ -100,7 +100,12 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard2={OverridesDashboard}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID}/>
+        )}
         filterEditDialog={FilterDialog}
+        filtersFilter={OVERRIDES_FILTER_FILTER}
         sectionIcon="override.svg"
         table={OverridesTable}
         title={_('Overrides')}
@@ -126,12 +131,6 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('override', {
-  dashboard2: OverridesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID}/>
-  ),
-  extraLoadParams: {details: 1},
-  filtersFilter: OVERRIDES_FILTER_FILTER,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
