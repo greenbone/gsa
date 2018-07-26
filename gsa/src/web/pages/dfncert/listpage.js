@@ -28,11 +28,16 @@ import _ from 'gmp/locale';
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/dfncerts';
 
  // DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog';
@@ -66,7 +71,9 @@ const Page = props => (
 );
 
 export default withEntitiesContainer('dfncert', {
+  entitiesSelector,
   filtersFilter: DFNCERT_FILTER_FILTER,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
