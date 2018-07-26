@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {GROUPS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -41,32 +42,27 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 import GroupComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = ({
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onGroupCreateClick,
-}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="gui_administration"
-        anchor="groups"
-        title={_('Help: Groups')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="groups"
+      title={_('Help: Groups')}
+    />
+    {capabilities.mayCreate('group') &&
+      <NewIcon
+        title={_('New Group')}
+        onClick={onGroupCreateClick}
       />
-      {capabilities.mayCreate('group') &&
-        <NewIcon
-          title={_('New Group')}
-          onClick={onGroupCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onGroupCreateClick: PropTypes.func.isRequired,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const GroupsFilterDialog = createFilterDialog({sortFields: SORT_FIELDS});
