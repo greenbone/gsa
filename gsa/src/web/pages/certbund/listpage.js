@@ -27,17 +27,17 @@ import _ from 'gmp/locale';
 
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import CertBundFilterDialog from './filterdialog.js';
-import CertBundTable from './table.js';
+import CertBundFilterDialog from './filterdialog';
+import CertBundTable from './table';
 
-import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard/index.js';
+import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => {
   return (
