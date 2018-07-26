@@ -171,12 +171,19 @@ class ReportDetails extends React.Component {
   }) {
     log.debug('Loading report', id, delta_id, filter);
     const {gmp, cache} = this.props;
+    const {loaded_filter} = this.state;
 
     this.cancelLastRequest();
 
     const token = new CancelToken(cancel => this.cancel = cancel);
 
-    this.setState({loading: true});
+    if (isDefined(loaded_filter) &&
+      isDefined(filter) && !loaded_filter.equals(filter)) {
+        this.setState({
+          loading: true,
+          updating: true,
+        });
+      }
 
     const options = {
       cache,
@@ -201,13 +208,12 @@ class ReportDetails extends React.Component {
       const {data: entity, meta} = response;
 
       const {report} = entity;
-      const {filter: loaded_filter} = report;
-
+      const {filter: loaded_rfilter} = report;
       if (isDefined(filter)) {
-        filter = filter.mergeExtraKeywords(loaded_filter);
+        filter = filter.mergeExtraKeywords(loaded_rfilter);
       }
       else {
-        filter = loaded_filter.set('rows', DEFAULT_NUM_ROWS);
+        filter = loaded_rfilter.set('rows', DEFAULT_NUM_ROWS);
       }
 
       log.debug('Loaded report', entity);
@@ -215,9 +221,11 @@ class ReportDetails extends React.Component {
       this.setState({
         entity,
         filter,
+        loaded_filter: filter,
         id,
         delta_id,
         loading: false,
+        updating: false,
       });
 
       if (meta.fromcache && (meta.dirty || reload)) {
@@ -443,7 +451,11 @@ class ReportDetails extends React.Component {
   }
 
   render() {
-    const {filter, entity = {}, showFilterDialog = false} = this.state;
+    const {
+      filter,
+      entity = {},
+      showFilterDialog = false,
+    } = this.state;
     const {report} = entity;
     return (
       <Wrapper>
