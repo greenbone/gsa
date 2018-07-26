@@ -27,23 +27,22 @@ import _ from 'gmp/locale';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import OsFilterDialog from './filterdialog.js';
-import OsTable from './table.js';
-import OsComponent from './component.js';
+import OsFilterDialog from './filterdialog';
+import OsTable from './table';
+import OsComponent from './component';
 
-import OsDashboard from './dashboard';
-import {OS_DASHBOARD_ID} from './dashboard/index.js';
+import OsDashboard, {OS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
   <Layout flex box>
