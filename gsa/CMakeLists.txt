@@ -528,17 +528,17 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/qoddisplay.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/qodtypedisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/component.js
-     ${GSA_SRC_DIR}/src/web/pages/os/detailspage.js
-     ${GSA_SRC_DIR}/src/web/pages/os/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/os/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/os/row.js
-     ${GSA_SRC_DIR}/src/web/pages/os/table.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/severityclassdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/vulnscoredisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/component.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/filterdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/row.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/table.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/cvssdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/index.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/loaders.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/severityclassdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/vulnscoredisplay.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/details.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js

@@ -43,7 +43,7 @@ import {NOTES_DISPLAYS} from '../notes/dashboard';
 import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
 import {VULNS_DISPLAYS} from '../vulns/dashboard';
 import {HOSTS_DISPLAYS} from '../hosts/dashboard';
-import {OS_DISPLAYS} from '../os/dashboard';
+import {OS_DISPLAYS} from '../operatingsystems/dashboard';
 import {NVTS_DISPLAYS} from '../nvts/dashboard';
 import {OVALDEF_DISPLAYS} from '../ovaldefs/dashboard';
 import {CERTBUND_DISPLAYS} from '../certbund/dashboard';

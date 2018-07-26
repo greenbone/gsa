@@ -33,11 +33,11 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 
 import {HOSTS_DISPLAYS} from '../hosts/dashboard';
-import {OS_DISPLAYS} from '../os/dashboard/index';
+import {OS_DISPLAYS} from '../operatingsystems/dashboard';
 import {HostsVulnScoreDisplay} from '../hosts/dashboard/vulnscoredisplay';
 import {HostsTopologyDisplay} from '../hosts/dashboard/topologydisplay';
-import {OsVulnScoreDisplay} from '../os/dashboard/vulnscoredisplay';
-import {OsSeverityClassDisplay} from '../os/dashboard/severityclassdisplay';
+import {OsVulnScoreDisplay} from '../operatingsystems/dashboard/vulnscoredisplay'; // eslint-disable-line max-len
+import {OsSeverityClassDisplay} from '../operatingsystems/dashboard/severityclassdisplay'; // eslint-disable-line max-len
 import {HostsModifiedDisplay} from '../hosts/dashboard/modifieddisplay';
 
 
