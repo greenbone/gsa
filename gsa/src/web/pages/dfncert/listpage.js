@@ -27,19 +27,19 @@ import _ from 'gmp/locale';
 
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
+import DashboardControls from 'web/components/dashboard/controls';
+
+import ManualIcon from 'web/components/icon/manualicon';
+
  // DFN-CERT uses same filter dialog as CERT-Bund
-import FilterDialog from '../certbund/filterdialog.js';
+import FilterDialog from '../certbund/filterdialog';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import DfnCertTable from './table';
 
-import DashboardControls from '../../components/dashboard/controls';
-
-import ManualIcon from '../../components/icon/manualicon.js';
-
-import DfnCertTable from './table.js';
-
-import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard/index.js';
+import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => {
   return (
