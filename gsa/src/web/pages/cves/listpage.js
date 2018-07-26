@@ -27,17 +27,17 @@ import _ from 'gmp/locale';
 
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import CveFilterDialog from './filterdialog.js';
-import CvesTable from './table.js';
+import CveFilterDialog from './filterdialog';
+import CvesTable from './table';
 
-import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard/index.js';
+import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => {
   return (
