@@ -23,32 +23,66 @@
  */
 import {combineReducers} from 'redux';
 
+import {reducer as agent} from './agents';
 import {reducer as alert} from './alerts';
+import {reducer as certbund} from './certbund';
+import {reducer as cpe} from './cpes';
 import {reducer as credential} from './credentials';
+import {reducer as cve} from './cves';
+import {reducer as dfncert} from './dfncerts';
 import {reducer as filter} from './filters';
+import {reducer as group} from './groups';
+import {reducer as host} from './hosts';
+import {reducer as note} from './notes';
+import {reducer as nvts} from './nvts';
+import {reducer as os} from './os';
+import {reducer as ovaldef} from './ovaldefs';
+import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
+import {reducer as report} from './reports';
+import {reducer as result} from './results';
+import {reducer as role} from './roles';
 import {reducer as scanconfig} from './scanconfigs';
 import {reducer as scanner} from './scanners';
 import {reducer as schedule} from './schedules';
+import {reducer as secinfo} from './secinfo';
+import {reducer as tag} from './tags';
 import {reducer as target} from './targets';
 import {reducer as task} from './tasks';
-import {reducer as agent} from './agents';
-import {reducer as certbund} from './certbund';
+import {reducer as user} from './users';
+import {reducer as vuln} from './vulns';
 
 const entitiesReducer = combineReducers({
+  agent,
   alert,
+  certbund,
+  cpe,
   credential,
+  cve,
+  dfncert,
   filter,
+  group,
+  host,
+  note,
+  nvts,
+  os,
+  ovaldef,
+  permission,
   portlist,
   reportformat,
+  report,
+  result,
+  role,
   scanconfig,
   scanner,
   schedule,
+  secinfo,
+  tag,
   target,
   task,
-  agent,
-  certbund,
+  user,
+  vuln,
 });
 
 export default entitiesReducer;

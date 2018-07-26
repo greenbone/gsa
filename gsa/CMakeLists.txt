@@ -776,16 +776,33 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/agents.js
      ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
      ${GSA_SRC_DIR}/src/web/store/entities/certbund.js
+     ${GSA_SRC_DIR}/src/web/store/entities/cpes.js
      ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
+     ${GSA_SRC_DIR}/src/web/store/entities/cves.js
+     ${GSA_SRC_DIR}/src/web/store/entities/dfncerts.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
+     ${GSA_SRC_DIR}/src/web/store/entities/groups.js
+     ${GSA_SRC_DIR}/src/web/store/entities/hosts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/notes.js
+     ${GSA_SRC_DIR}/src/web/store/entities/nvts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/os.js
+     ${GSA_SRC_DIR}/src/web/store/entities/ovaldefs.js
+     ${GSA_SRC_DIR}/src/web/store/entities/permissions.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
+     ${GSA_SRC_DIR}/src/web/store/entities/reports.js
+     ${GSA_SRC_DIR}/src/web/store/entities/results.js
+     ${GSA_SRC_DIR}/src/web/store/entities/roles.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
      ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
+     ${GSA_SRC_DIR}/src/web/store/entities/secinfo.js
+     ${GSA_SRC_DIR}/src/web/store/entities/tags.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/tasks.js
+     ${GSA_SRC_DIR}/src/web/store/entities/users.js
+     ${GSA_SRC_DIR}/src/web/store/entities/vulns.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js

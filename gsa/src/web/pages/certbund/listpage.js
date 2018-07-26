@@ -28,39 +28,50 @@ import _ from 'gmp/locale';
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/certbund';
 
 import CertBundFilterDialog from './filterdialog';
 import CertBundTable from './table';
 
 import CertBundDashboard, {CERTBUND_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cert-bund"
-      title={_('Help: CERT-Bund Advisories')}
-    />
-  );
-};
+const ToolBarIcons = props => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cert-bund"
+    title={_('Help: CERT-Bund Advisories')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={CertBundDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={CertBundFilterDialog}
+    sectionIcon="cert_bund_adv.svg"
+    table={CertBundTable}
+    title={_('CERT-Bund Advisories')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('certbund', {
-  createFilterType: 'info',
-  dashboard2: CertBundDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: CertBundFilterDialog,
+  entitiesSelector,
   filtersFilter: CERTBUND_FILTER_FILTER,
-  sectionIcon: 'cert_bund_adv.svg',
-  table: CertBundTable,
-  title: _('CERT-Bund Advisories'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+  loadEntities,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

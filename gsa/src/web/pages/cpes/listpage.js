@@ -27,40 +27,51 @@ import _ from 'gmp/locale';
 
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import CpeFilterDialog from './filterdialog.js';
-import CpesTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/cpes';
 
-import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard/index.js';
+import CpeFilterDialog from './filterdialog';
+import CpesTable from './table';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cpe"
-      title={_('Help: CPEs')}
-    />
-  );
-};
+import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
+
+const ToolBarIcons = props => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cpe"
+    title={_('Help: CPEs')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={CpesDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={CpeFilterDialog}
+    sectionIcon="cpe.svg"
+    table={CpesTable}
+    title={_('CPEs')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('cpe', {
-  createFilterType: 'info',
-  dashboard2: CpesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: CpeFilterDialog,
+  entitiesSelector,
   filtersFilter: CPES_FILTER_FILTER,
-  sectionIcon: 'cpe.svg',
-  table: CpesTable,
-  title: _('CPEs'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+  loadEntities,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
