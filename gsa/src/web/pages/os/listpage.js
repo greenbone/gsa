@@ -50,7 +50,7 @@ import OsComponent from './component';
 import OsDashboard, {OS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = () => (
-  <Layout flex box>
+  <Layout>
     <ManualIcon
       page="vulnerabilitymanagement"
       anchor="operating-systems-view"
