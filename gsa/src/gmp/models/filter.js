@@ -722,6 +722,7 @@ export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');
+export const SCANCONFIGS_FILTER_FILTER = Filter.fromString('type=config');
 export const SCANNERS_FILTER_FILTER = Filter.fromString('type=scanner');
 export const SCHEDULES_FILTER_FILTER = Filter.fromString('type=schedule');
 export const SECINFO_FILTER_FILTER = Filter.fromString('type=info');

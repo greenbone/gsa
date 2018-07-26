@@ -26,21 +26,26 @@ import _ from 'gmp/locale';
 
 import {AGENTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import AgentComponent from './component.js';
-import AgentsTable, {SORT_FIELDS} from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/agents';
+
+import AgentComponent from './component';
+import AgentsTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -129,7 +134,9 @@ AgentsPage.propTypes = {
 
 
 export default withEntitiesContainer('agent', {
+  entitiesSelector,
   filtersFilter: AGENTS_FILTER_FILTER,
+  loadEntities,
 })(AgentsPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -773,7 +773,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
+     ${GSA_SRC_DIR}/src/web/store/entities/agents.js
      ${GSA_SRC_DIR}/src/web/store/entities/alerts.js
+     ${GSA_SRC_DIR}/src/web/store/entities/certbund.js
      ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
