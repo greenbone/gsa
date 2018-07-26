@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,45 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isDefined} from 'gmp/utils/identity';
 
-import React from 'react';
+import {CHANGE_PAGE_FILTER} from './actions';
+import {combineReducers} from 'web/store/utils';
 
-import glamorous from 'glamorous';
-
-import Theme from 'web/utils/theme';
-import withClickHandler from 'web/components/form/withClickHandler';
-
-import EntityActions from './actions';
-
-export const withEntityRow = (actions = EntityActions, options = {}) =>
-  Component => {
-
-  const EntityRowWrapper = props => {
-    return (
-      <Component
-        {...options}
-        actions={actions}
-        {...props}
-      />
-    );
-  };
-  return EntityRowWrapper;
+const filter = (state, action) => {
+  switch (action.type) {
+    case CHANGE_PAGE_FILTER:
+      return action.filter;
+    default:
+      return state;
+  }
 };
 
-export const RowDetailsToggle = withClickHandler()(glamorous.span(
-  'row-details-toggle',
-  {
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: Theme.blue,
-    ':hover': {
-      textDecoration: 'underline',
-      color: Theme.blue,
-    },
-    '@media print': {
-      color: Theme.black,
-    },
-  },
-));
+const page = combineReducers({
+  filter,
+});
+
+const pageByName = (state = {}, action) => {
+  const {page: pageName} = action;
+
+  if (!isDefined(pageName)) {
+    return state;
+  }
+
+  return {
+    ...state,
+    [pageName]: page(state[pageName], action),
+  };
+};
+
+export default pageByName;
 
 // vim: set ts=2 sw=2 tw=80:

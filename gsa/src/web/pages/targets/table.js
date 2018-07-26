@@ -25,24 +25,25 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
 
-import Select from '../../components/form/select.js';
-import Text from '../../components/form/text.js';
+import Select from 'web/components/form/select';
 
-import Sort from '../../components/sortby/sortby.js';
+import Divider from 'web/components/layout/divider';
 
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import Sort from 'web/components/sortby/sortby';
 
-import TargetDetails from './details.js';
-import TargetRow from './row.js';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
+
+import TargetDetails from './details';
+import TargetRow from './row';
 
 const Header = ({
   actionsColumn,
@@ -102,22 +103,22 @@ const Header = ({
           {_('Port List')}
         </TableHead>
         <TableHead flex width="22%">
-          <Text>
+          <Divider>
             <Sort by={sort ? select_sort : false} onClick={onSortChange}>
               {_('Credentials')}
             </Sort>
-          </Text>
-          {sort !== false &&
-            <Select
-              value={select_sort}
-              onChange={onSortChange}
-            >
-              <option value="ssh_credential">{_('SSH')}</option>
-              <option value="smb_credential">{_('SMB')}</option>
-              <option value="esxi_credential">{_('ESXi')}</option>
-              <option value="snmp_credential">{_('SNMP')}</option>
-            </Select>
-          }
+            {sort !== false &&
+              <Select
+                value={select_sort}
+                onChange={onSortChange}
+              >
+                <option value="ssh_credential">{_('SSH')}</option>
+                <option value="smb_credential">{_('SMB')}</option>
+                <option value="esxi_credential">{_('ESXi')}</option>
+                <option value="snmp_credential">{_('SNMP')}</option>
+              </Select>
+            }
+          </Divider>
         </TableHead>
         {actionsColumn}
       </TableRow>

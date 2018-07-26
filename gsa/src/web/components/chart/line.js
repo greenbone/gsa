@@ -40,9 +40,9 @@ import date from 'gmp/models/date';
 
 import Layout from '../layout/layout';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
-import {setRef} from '../../utils/render';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
+import {setRef} from 'web/utils/render';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';

@@ -20,16 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
-
 import {types} from './actions';
 
-export const filterIdentifier = filter => isDefined(filter) ?
-  `filter:${filter.toFilterString()}` :
-  'default';
+import {filterIdentifier} from 'web/store/utils';
 
 const initialState = {
-  default: [],
   byId: {},
   errors: {},
   isLoading: {},
@@ -97,11 +92,15 @@ export const createReducer = entityType => {
     }
   };
 
-  const entities = (state = [], action) => {
+  const entities = (state = {}, action) => {
     switch (action.type) {
       case types.ENTITIES_LOADING_SUCCESS:
-        const {data = []} = action;
-        return data.map(entity => entity.id);
+        const {data = [], counts, loadedFilter} = action;
+        return {
+          ids: data.map(entity => entity.id),
+          counts,
+          loadedFilter,
+        };
       default:
         return state;
     }
@@ -132,13 +131,30 @@ export const createReducer = entityType => {
     }
 
     const filterString = filterIdentifier(action.filter);
-    return {
-      ...state,
-      byId: byId(state.byId, action),
-      isLoading: isLoading(state.isLoading, action),
-      errors: errors(state.errors, action),
-      [filterString]: entities(state[filterString], action),
-    };
+
+    switch (action.type) {
+      case types.ENTITIES_LOADING_REQUEST:
+      case types.ENTITIES_LOADING_SUCCESS:
+      case types.ENTITIES_LOADING_ERROR:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
+          isLoading: isLoading(state.isLoading, action),
+          errors: errors(state.errors, action),
+          [filterString]: entities(state[filterString], action),
+        };
+      case types.ENTITY_LOADING_REQUEST:
+      case types.ENTITY_LOADING_SUCCESS:
+      case types.ENTITY_LOADING_ERROR:
+        return {
+          ...state,
+          byId: byId(state.byId, action),
+          isLoading: isLoading(state.isLoading, action),
+          errors: errors(state.errors, action),
+        };
+      default:
+        return state;
+    }
   };
 };
 

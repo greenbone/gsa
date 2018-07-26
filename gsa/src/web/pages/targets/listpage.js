@@ -24,37 +24,46 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import TargetsFilterDialog from './filterdialog.js';
-import TargetsTable from './table.js';
-import TargetComponent from './component.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
-import {TARGETS_FILTER_FILTER} from 'gmp/models/filter.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/targets';
 
-const ToolBarIcons = ({onTargetCreateClick}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="creating-a-target"
-        title={_('Help: Targets')}
-      />
+import TargetsFilterDialog from './filterdialog';
+import TargetsTable from './table';
+import TargetComponent from './component';
+
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onTargetCreateClick,
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="creating-a-target"
+      title={_('Help: Targets')}
+    />
+    {capabilities.mayCreate('target') &&
       <NewIcon
         title={_('New Target')}
         onClick={onTargetCreateClick}
       />
-    </IconDivider>
-  );
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onTargetCreateClick: PropTypes.func.isRequired,
@@ -111,7 +120,9 @@ TargetsPage.propTypes = {
 };
 
 export default withEntitiesContainer('target', {
+  entitiesSelector,
   filtersFilter: TARGETS_FILTER_FILTER,
+  loadEntities,
 })(TargetsPage);
 
 // vim: set ts=2 sw=2 tw=80:

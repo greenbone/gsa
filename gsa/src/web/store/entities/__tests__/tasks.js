@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoenr.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -22,8 +22,8 @@
  */
 import {testAll} from '../utils/testing';
 
-import * as targets from '../targets';
+import * as tasks from '../tasks';
 
-testAll('target', targets);
+testAll('task', tasks);
 
 // vim: set ts=2 sw=2 tw=80:

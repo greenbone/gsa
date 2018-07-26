@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,25 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const CHANGE_PAGE_FILTER = 'CHANGE_PAGE_FILTER';
 
-import React from 'react';
-
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
-
-import withLayout from '../layout/withLayout.js';
-
-import {withClickHandler} from './form.js';
-
-const TextComponent = ({value, ...props}) => (<span {...props} />);
-
-TextComponent.propTypes = {
-  value: PropTypes.any,
-};
-
-export default compose(
-  withLayout(),
-  withClickHandler,
-)(TextComponent);
+export const pageFilter = (page, filter) => ({
+  type: CHANGE_PAGE_FILTER,
+  page,
+  filter,
+});
 
 // vim: set ts=2 sw=2 tw=80:

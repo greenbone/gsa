@@ -27,6 +27,7 @@ import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
 import timezone from './usersettings/timezone/reducers';
 import userSettings from './usersettings/reducers';
+import pages from './pages/reducers';
 
 import entities from './entities/reducers';
 import {CLEAR_STORE} from 'web/store/actions';
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   entities,
   timezone,
   userSettings,
+  pages,
 });
 
 const clearStoreReducer = (state = {}, action) => {

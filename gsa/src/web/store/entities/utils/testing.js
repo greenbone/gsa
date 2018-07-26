@@ -25,7 +25,8 @@ import {pluralizeType} from 'gmp/utils/entitytype';
 
 import Filter from 'gmp/models/filter';
 
-import {filterIdentifier} from './reducers';
+import {filterIdentifier} from 'web/store/utils';
+
 import {types} from './actions';
 
 export const createRootState = stateData => ({
@@ -50,7 +51,6 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         byId: {},
         errors: {},
         isLoading: {},
-        default: [],
       });
     });
 
@@ -63,7 +63,7 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: true,
         },
-        default: [],
+        default: {},
       });
     });
 
@@ -80,7 +80,9 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: false,
         },
-        default: ['foo'],
+        default: {
+          ids: ['foo'],
+        },
       });
     });
 
@@ -95,7 +97,7 @@ export const testReducerForEntities = (entityType, reducer, actions) => {
         isLoading: {
           default: false,
         },
-        default: [],
+        default: {},
       });
     });
   });
@@ -150,6 +152,38 @@ export const testEntitiesActions = (entityType, actions) => {
       });
     });
 
+    test('should create a load success action with default filter, ' +
+      'loadedFilter and counts', () => {
+      const loadedFilter = Filter.fromString('foo=bar');
+      const counts = {first: 1};
+      const action = actions.success(['foo', 'bar'], undefined, loadedFilter,
+        counts);
+      expect(action).toEqual({
+        type: types.ENTITIES_LOADING_SUCCESS,
+        data: ['foo', 'bar'],
+        entityType,
+        loadedFilter,
+        counts,
+      });
+    });
+
+    test('should create a load success action with filter, ' +
+      'loadedFilter and counts', () => {
+      const filter = Filter.fromString('type=abc');
+      const loadedFilter = Filter.fromString('foo=bar');
+      const counts = {first: 1};
+      const action = actions.success(['foo', 'bar'], filter, loadedFilter,
+        counts);
+      expect(action).toEqual({
+        type: types.ENTITIES_LOADING_SUCCESS,
+        data: ['foo', 'bar'],
+        filter,
+        entityType,
+        loadedFilter,
+        counts,
+      });
+    });
+
     test('should create a load error action', () => {
       const action = actions.error('An error');
       expect(action).toEqual({
@@ -180,6 +214,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
     test('should load all entities successfully', () => {
       const filter = Filter.fromString('myfilter');
+      const loadedFilter = Filter.fromString('myfilter rows=100');
+      const counts = {first: 1};
       const rootState = createState(entityType, {
         isLoading: {
           [filterIdentifier(filter)]: false,
@@ -191,15 +227,19 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.resolve({
           data: 'foo',
+          meta: {
+            counts,
+            filter: loadedFilter,
+          },
         }));
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
@@ -214,7 +254,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       return loadEntities(props)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
-        expect(getAll).toBeCalledWith({filter});
+        expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
           type: types.ENTITIES_LOADING_REQUEST,
@@ -226,6 +266,8 @@ export const testLoadEntities = (entityType, loadEntities) => {
           entityType,
           filter,
           data: 'foo',
+          loadedFilter,
+          counts,
         }]);
       });
     });
@@ -244,20 +286,20 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
       return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
-        expect(getAll).not.toBeCalled();
+        expect(get).not.toBeCalled();
       });
     });
 
@@ -275,19 +317,19 @@ export const testLoadEntities = (entityType, loadEntities) => {
 
       const dispatch = jest.fn();
 
-      const getAll = jest
+      const get = jest
         .fn()
         .mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
         [pluralizeType(entityType)]: {
-          getAll,
+          get,
         },
       };
 
       return loadEntities({gmp, filter})(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
-        expect(getAll).toBeCalledWith({filter});
+        expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch.mock.calls[0]).toEqual([{
           type: types.ENTITIES_LOADING_REQUEST,
@@ -317,7 +359,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         byId: {},
         errors: {},
         isLoading: {},
-        default: [],
       });
     });
 
@@ -331,7 +372,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: true,
         },
-        default: [],
       });
     });
 
@@ -349,7 +389,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: false,
         },
-        default: [],
       });
     });
 
@@ -365,7 +404,6 @@ export const testReducerForEntity = (entityType, reducer, actions) => {
         isLoading: {
           [id]: false,
         },
-        default: [],
       });
     });
   });

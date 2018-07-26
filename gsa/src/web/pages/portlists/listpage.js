@@ -24,23 +24,28 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
-import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import NewIcon from 'web/components/icon/newicon';
 
-import PortListComponent from './component.js';
-import PortListsFilterDialog from './filterdialog.js';
-import PortListsTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/portlists';
+
+import PortListComponent from './component';
+import PortListsFilterDialog from './filterdialog';
+import PortListsTable from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -127,7 +132,9 @@ PortListsPage.propTypes = {
 };
 
 export default withEntitiesContainer('portlist', {
+  entitiesSelector,
   filtersFilter: PORTLISTS_FILTER_FILTER,
+  loadEntities,
 })(PortListsPage);
 
 // vim: set ts=2 sw=2 tw=80:

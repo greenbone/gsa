@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,45 +20,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isDefined} from 'gmp/utils/identity';
 
-import React from 'react';
+class PageSelector {
 
-import glamorous from 'glamorous';
+  constructor(state = {}) {
+    this.state = state;
+  }
 
-import Theme from 'web/utils/theme';
-import withClickHandler from 'web/components/form/withClickHandler';
+  getFilter(name) {
+    const page = this.state[name];
+    return isDefined(page) ? page.filter : undefined;
+  }
+}
 
-import EntityActions from './actions';
+const getPage = (rootState = {}) => new PageSelector(rootState.pages);
 
-export const withEntityRow = (actions = EntityActions, options = {}) =>
-  Component => {
-
-  const EntityRowWrapper = props => {
-    return (
-      <Component
-        {...options}
-        actions={actions}
-        {...props}
-      />
-    );
-  };
-  return EntityRowWrapper;
-};
-
-export const RowDetailsToggle = withClickHandler()(glamorous.span(
-  'row-details-toggle',
-  {
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: Theme.blue,
-    ':hover': {
-      textDecoration: 'underline',
-      color: Theme.blue,
-    },
-    '@media print': {
-      color: Theme.black,
-    },
-  },
-));
+export default getPage;
 
 // vim: set ts=2 sw=2 tw=80:
