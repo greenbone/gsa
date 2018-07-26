@@ -793,6 +793,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
      ${GSA_SRC_DIR}/src/web/store/entities/reports.js
      ${GSA_SRC_DIR}/src/web/store/entities/results.js
+     ${GSA_SRC_DIR}/src/web/store/entities/roles.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanconfigs.js
      ${GSA_SRC_DIR}/src/web/store/entities/scanners.js
      ${GSA_SRC_DIR}/src/web/store/entities/schedules.js
