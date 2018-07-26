@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -45,30 +46,25 @@ import OverrideComponent from './component';
 
 import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = ({
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onOverrideCreateClick,
-}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="overrides-and-false-positives"
-        title={_('Help: Overrides')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="overrides-and-false-positives"
+      title={_('Help: Overrides')}
+    />
+
+    {capabilities.mayCreate('override') &&
+      <NewIcon
+        title={_('New Override')}
+        onClick={onOverrideCreateClick}
       />
-
-      {capabilities.mayCreate('override') &&
-        <NewIcon
-          title={_('New Override')}
-          onClick={onOverrideCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
