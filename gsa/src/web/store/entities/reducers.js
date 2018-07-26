@@ -50,6 +50,7 @@ import {reducer as secinfo} from './secinfo';
 import {reducer as tag} from './tags';
 import {reducer as target} from './targets';
 import {reducer as task} from './tasks';
+import {reducer as user} from './users';
 
 const entitiesReducer = combineReducers({
   agent,
@@ -79,6 +80,7 @@ const entitiesReducer = combineReducers({
   tag,
   target,
   task,
+  user,
 });
 
 export default entitiesReducer;

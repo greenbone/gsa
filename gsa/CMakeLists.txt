@@ -801,6 +801,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/tags.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/tasks.js
+     ${GSA_SRC_DIR}/src/web/store/entities/users.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/main.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/reducers.js
