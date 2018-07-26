@@ -38,28 +38,32 @@ import NvtsTable from './table';
 
 import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="network-vulnerability-tests"
-      title={_('Help: NVTs')}
-    />
-  );
-};
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="network-vulnerability-tests"
+    title={_('Help: NVTs')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={NvtsDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={NVTS_DASHBOARD_ID} />
+    )}
+    filterEditDialog={NvtsFilterDialog}
+    sectionIcon="nvt.svg"
+    table={NvtsTable}
+    title={_('NVTs')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('nvt', {
-  createFilterType: 'info',
-  dashboard2: NvtsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={NVTS_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: NvtsFilterDialog,
   filtersFilter: NVTS_FILTER_FILTER,
-  sectionIcon: 'nvt.svg',
-  table: NvtsTable,
-  title: _('NVTs'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
