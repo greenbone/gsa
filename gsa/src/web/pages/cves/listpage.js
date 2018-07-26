@@ -39,28 +39,32 @@ import CvesTable from './table';
 
 import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cve"
-      title={_('Help: CVEs')}
-    />
-  );
-};
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cve"
+    title={_('Help: CVEs')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={CvesDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={CveFilterDialog}
+    sectionIcon="cve.svg"
+    table={CvesTable}
+    title={_('CVEs')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('cve', {
-  createFilterType: 'info',
-  dashboard2: CvesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: CveFilterDialog,
   filtersFilter: CVES_FILTER_FILTER,
-  sectionIcon: 'cve.svg',
-  table: CvesTable,
-  title: _('CVEs'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
