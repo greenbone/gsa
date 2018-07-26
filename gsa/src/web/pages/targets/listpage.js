@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -45,21 +46,24 @@ import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';
 import TargetComponent from './component';
 
-const ToolBarIcons = ({onTargetCreateClick}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="creating-a-target"
-        title={_('Help: Targets')}
-      />
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onTargetCreateClick,
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="creating-a-target"
+      title={_('Help: Targets')}
+    />
+    {capabilities.mayCreate('target') &&
       <NewIcon
         title={_('New Target')}
         onClick={onTargetCreateClick}
       />
-    </IconDivider>
-  );
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onTargetCreateClick: PropTypes.func.isRequired,
