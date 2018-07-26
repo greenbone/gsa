@@ -41,6 +41,7 @@ import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
 import {reducer as report} from './reports';
+import {reducer as result} from './results';
 import {reducer as scanconfig} from './scanconfigs';
 import {reducer as scanner} from './scanners';
 import {reducer as schedule} from './schedules';
@@ -66,6 +67,7 @@ const entitiesReducer = combineReducers({
   portlist,
   reportformat,
   report,
+  result,
   scanconfig,
   scanner,
   schedule,
