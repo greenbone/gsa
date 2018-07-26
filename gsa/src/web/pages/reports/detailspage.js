@@ -445,9 +445,14 @@ class ReportDetails extends React.Component {
     const {gmp} = this.props;
     const {report} = entity;
     const {task} = report;
-    const {target} = task;
+    const {target = {}} = task;
 
-    return gmp.target.get(target).then(response => response.data);
+    return gmp.target.get(target)
+      .then(response => response.data)
+      .catch(err => {
+        this.props.showError(err);
+        throw err;
+      });
   }
 
   render() {
