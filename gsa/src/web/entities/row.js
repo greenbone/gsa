@@ -25,7 +25,8 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import Theme from '../utils/theme';
+import Theme from 'web/utils/theme';
+import withClickHandler from 'web/components/form/withClickHandler';
 
 import EntityActions from './actions';
 
@@ -44,7 +45,7 @@ export const withEntityRow = (actions = EntityActions, options = {}) =>
   return EntityRowWrapper;
 };
 
-export const RowDetailsToggle = glamorous.span(
+export const RowDetailsToggle = withClickHandler()(glamorous.span(
   'row-details-toggle',
   {
     cursor: 'pointer',
@@ -58,6 +59,6 @@ export const RowDetailsToggle = glamorous.span(
       color: Theme.black,
     },
   },
-);
+));
 
 // vim: set ts=2 sw=2 tw=80:
