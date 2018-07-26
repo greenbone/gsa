@@ -40,6 +40,7 @@ import {reducer as ovaldef} from './ovaldefs';
 import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
+import {reducer as report} from './reports';
 import {reducer as scanconfig} from './scanconfigs';
 import {reducer as scanner} from './scanners';
 import {reducer as schedule} from './schedules';
@@ -64,6 +65,7 @@ const entitiesReducer = combineReducers({
   permission,
   portlist,
   reportformat,
+  report,
   scanconfig,
   scanner,
   schedule,
