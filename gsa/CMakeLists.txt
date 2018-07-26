@@ -782,6 +782,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/dfncerts.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
      ${GSA_SRC_DIR}/src/web/store/entities/groups.js
+     ${GSA_SRC_DIR}/src/web/store/entities/hosts.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/reportformats.js
