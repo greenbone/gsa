@@ -26,17 +26,23 @@ import _ from 'gmp/locale';
 
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities.js';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page.js';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2.js';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon.js';
+import NewIcon from 'web/components/icon/newicon.js';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import IconDivider from 'web/components/layout/icondivider';
+
+import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/alerts';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
@@ -128,7 +134,9 @@ AlertsPage.propTypes = {
 };
 
 export default withEntitiesContainer('alert', {
+  entitiesSelector,
   filtersFilter: ALERTS_FILTER_FILTER,
+  loadEntities,
 })(AlertsPage);
 
 // vim: set ts=2 sw=2 tw=80:

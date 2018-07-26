@@ -24,22 +24,29 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import NewIcon from 'web/components/icon/newicon';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import ScanConfigComponent from './component.js';
-import Table, {SORT_FIELDS} from './table.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/scanconfigs';
+
+import ScanConfigComponent from './component';
+import Table, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -128,6 +135,9 @@ ScanConfigsPage.propTypes = {
 };
 
 export default withEntitiesContainer('scanconfig', {
+  entitiesSelector,
+  filtersFilter: SCANCONFIGS_FILTER_FILTER,
+  loadEntities,
 })(ScanConfigsPage);
 
 // vim: set ts=2 sw=2 tw=80:
