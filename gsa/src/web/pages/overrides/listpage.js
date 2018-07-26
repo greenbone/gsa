@@ -25,25 +25,25 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import FilterDialog from './filterdialog.js';
-import OverridesTable from './table.js';
-import OverrideComponent from './component.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard/index.js';
+import FilterDialog from './filterdialog';
+import OverridesTable from './table';
+import OverrideComponent from './component';
 
-import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
+import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = ({
   onOverrideCreateClick,
