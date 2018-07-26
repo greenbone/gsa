@@ -27,11 +27,16 @@ import _ from 'gmp/locale';
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/nvts';
 
 import NvtsFilterDialog from './filterdialog';
 import NvtsTable from './table';
@@ -63,7 +68,9 @@ const Page = props => (
 );
 
 export default withEntitiesContainer('nvt', {
+  entitiesSelector,
   filtersFilter: NVTS_FILTER_FILTER,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
