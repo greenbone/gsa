@@ -25,22 +25,20 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import Layout from 'web/components/layout/layout';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ResultsFilterDialog from './filterdialog.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import ResultsTable from './table.js';
-
+import ResultsFilterDialog from './filterdialog';
+import ResultsTable from './table';
 import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
-
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = props => {
   return (
