@@ -99,6 +99,7 @@ class NotesCommand extends EntitiesCommand {
 
   constructor(http) {
     super(http, 'note', Note);
+    this.setParam('details', 1);
   }
 
   getEntitiesResponse(root) {
