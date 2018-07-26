@@ -94,6 +94,10 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard2={NotesDashboard}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={NOTES_DASHBOARD_ID} />
+        )}
         filterEditDialog={FilterDialog}
         sectionIcon="note.svg"
         table={NotesTable}
@@ -117,11 +121,6 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('note', {
-  dashboard2: NotesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={NOTES_DASHBOARD_ID}/>
-  ),
-  extraLoadParams: {details: 1},
   filtersFilter: NOTES_FILTER_FILTER,
 })(Page);
 
