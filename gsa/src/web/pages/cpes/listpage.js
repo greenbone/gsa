@@ -39,28 +39,32 @@ import CpesTable from './table';
 
 import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cpe"
-      title={_('Help: CPEs')}
-    />
-  );
-};
+const ToolBarIcons = props => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cpe"
+    title={_('Help: CPEs')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={CpesDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={CpeFilterDialog}
+    sectionIcon="cpe.svg"
+    table={CpesTable}
+    title={_('CPEs')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('cpe', {
-  createFilterType: 'info',
-  dashboard2: CpesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: CpeFilterDialog,
   filtersFilter: CPES_FILTER_FILTER,
-  sectionIcon: 'cpe.svg',
-  table: CpesTable,
-  title: _('CPEs'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
