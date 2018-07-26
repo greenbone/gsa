@@ -40,30 +40,34 @@ import ResultsFilterDialog from './filterdialog';
 import ResultsTable from './table';
 import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <Layout flex box>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="results"
-        title={_('Help: Results')}
-      />
-    </Layout>
-  );
-};
+const ToolBarIcons = () => (
+  <Layout>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="results"
+      title={_('Help: Results')}
+    />
+  </Layout>
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    filtersFilter={RESULTS_FILTER_FILTER}
+    dashboard2={ResultsDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
+    )}
+    title={_('Results')}
+    sectionIcon="result.svg"
+    toolBarIcons={ToolBarIcons}
+    table={ResultsTable}
+    filterEditDialog={ResultsFilterDialog}
+  />
+);
 
 export default withEntitiesContainer('result', {
-  filtersFilter: RESULTS_FILTER_FILTER,
-  dashboard2: ResultsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
-  ),
-  title: _('Results'),
-  sectionIcon: 'result.svg',
-  toolBarIcons: ToolBarIcons,
-  table: ResultsTable,
-  filterEditDialog: ResultsFilterDialog,
-})(EntitiesPage);
+})(Page);
 
 // export default ResultsPage;
 
