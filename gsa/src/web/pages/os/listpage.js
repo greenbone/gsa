@@ -32,11 +32,16 @@ import PropTypes from 'web/utils/proptypes';
 import Layout from 'web/components/layout/layout';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/operatingsystems';
 
 import OsFilterDialog from './filterdialog';
 import OsTable from './table';
@@ -109,4 +114,7 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('operatingsystem')(Page);
+export default withEntitiesContainer('operatingsystem', {
+  entitiesSelector,
+  loadEntities,
+})(Page);
