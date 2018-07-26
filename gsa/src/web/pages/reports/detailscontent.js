@@ -282,7 +282,7 @@ UserTags.propTypes = {
 
 const PageContent = ({
   activeTab,
-  entity = {},
+  entity,
   filter,
   filters,
   loading = true,
@@ -311,7 +311,7 @@ const PageContent = ({
 
   const {
     report = {},
-  } = entity;
+  } = entity || {};
 
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
@@ -330,6 +330,9 @@ const PageContent = ({
     timestamp,
     scan_run_status,
   } = report;
+
+  const hasReport = isDefined(entity);
+  loading = loading && !hasReport;
 
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
@@ -366,7 +369,7 @@ const PageContent = ({
       img="report.svg"
       title={header_title}
     >
-      {!loading &&
+      {hasReport &&
         <EntityInfo
           entity={entity}
         />
