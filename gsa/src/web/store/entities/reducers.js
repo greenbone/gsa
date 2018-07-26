@@ -43,6 +43,7 @@ import {reducer as host} from './hosts';
 import {reducer as note} from './notes';
 import {reducer as nvts} from './nvts';
 import {reducer as os} from './os';
+import {reducer as ovaldef} from './ovaldefs';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -65,6 +66,7 @@ const entitiesReducer = combineReducers({
   note,
   nvts,
   os,
+  ovaldef,
 });
 
 export default entitiesReducer;
