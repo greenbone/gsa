@@ -26,17 +26,17 @@ import _ from 'gmp/locale';
 
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import NvtsFilterDialog from './filterdialog.js';
-import NvtsTable from './table.js';
+import NvtsFilterDialog from './filterdialog';
+import NvtsTable from './table';
 
-import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard/index.js';
+import NvtsDashboard, {NVTS_DASHBOARD_ID} from './dashboard';
 
 const ToolBarIcons = props => {
   return (
