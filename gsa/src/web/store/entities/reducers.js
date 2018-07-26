@@ -44,6 +44,7 @@ import {reducer as note} from './notes';
 import {reducer as nvts} from './nvts';
 import {reducer as os} from './os';
 import {reducer as ovaldef} from './ovaldefs';
+import {reducer as permission} from './permissions';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -67,6 +68,7 @@ const entitiesReducer = combineReducers({
   nvts,
   os,
   ovaldef,
+  permission,
 });
 
 export default entitiesReducer;
