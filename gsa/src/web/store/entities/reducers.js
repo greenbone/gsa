@@ -42,6 +42,7 @@ import {reducer as group} from './groups';
 import {reducer as host} from './hosts';
 import {reducer as note} from './notes';
 import {reducer as nvts} from './nvts';
+import {reducer as os} from './os';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -63,6 +64,7 @@ const entitiesReducer = combineReducers({
   host,
   note,
   nvts,
+  os,
 });
 
 export default entitiesReducer;
