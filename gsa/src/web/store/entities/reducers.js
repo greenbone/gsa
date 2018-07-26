@@ -37,6 +37,7 @@ import {reducer as note} from './notes';
 import {reducer as nvt} from './nvts';
 import {reducer as operatingsystem} from './operatingsystems';
 import {reducer as ovaldef} from './ovaldefs';
+import {reducer as override} from './overrides';
 import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
@@ -68,6 +69,7 @@ const entitiesReducer = combineReducers({
   nvt,
   operatingsystem,
   ovaldef,
+  override,
   permission,
   portlist,
   reportformat,
