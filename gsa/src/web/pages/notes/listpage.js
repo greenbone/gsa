@@ -30,6 +30,7 @@ import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 import IconDivider from 'web/components/layout/icondivider';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -45,27 +46,24 @@ import NoteComponent from './component';
 
 import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="notes"
-        title={_('Help: Notes')}
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onNoteCreateClick,
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="notes"
+      title={_('Help: Notes')}
+    />
+    {capabilities.mayCreate('note') &&
+      <NewIcon
+        title={_('New Note')}
+        onClick={onNoteCreateClick}
       />
-      {capabilities.mayCreate('note') &&
-        <NewIcon
-          title={_('New Note')}
-          onClick={onNoteCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
