@@ -778,6 +778,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/certbund.js
      ${GSA_SRC_DIR}/src/web/store/entities/cpes.js
      ${GSA_SRC_DIR}/src/web/store/entities/credentials.js
+     ${GSA_SRC_DIR}/src/web/store/entities/cves.js
      ${GSA_SRC_DIR}/src/web/store/entities/filters.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js

@@ -36,6 +36,7 @@ import {reducer as task} from './tasks';
 import {reducer as agent} from './agents';
 import {reducer as certbund} from './certbund';
 import {reducer as cpe} from './cpes';
+import {reducer as cve} from './cves';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -51,6 +52,7 @@ const entitiesReducer = combineReducers({
   agent,
   certbund,
   cpe,
+  cve,
 });
 
 export default entitiesReducer;
