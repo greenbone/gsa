@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -41,9 +42,10 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 import RoleComponent from './component';
 import Table, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = ({
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onRoleCreateClick,
-}, {capabilities}) => (
+}) => (
   <IconDivider>
     <ManualIcon
       page="gui_administration"
@@ -57,14 +59,10 @@ const ToolBarIcons = ({
       />
     }
   </IconDivider>
-);
+));
 
 ToolBarIcons.propTypes = {
   onRoleCreateClick: PropTypes.func.isRequired,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const RolesFilterDialog = createFilterDialog({
