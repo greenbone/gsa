@@ -40,6 +40,7 @@ import {reducer as cve} from './cves';
 import {reducer as dfncert} from './dfncerts';
 import {reducer as group} from './groups';
 import {reducer as host} from './hosts';
+import {reducer as note} from './notes';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -59,6 +60,7 @@ const entitiesReducer = combineReducers({
   dfncert,
   group,
   host,
+  note,
 });
 
 export default entitiesReducer;
