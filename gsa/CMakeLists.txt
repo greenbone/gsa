@@ -785,7 +785,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/hosts.js
      ${GSA_SRC_DIR}/src/web/store/entities/notes.js
      ${GSA_SRC_DIR}/src/web/store/entities/nvts.js
-     ${GSA_SRC_DIR}/src/web/store/entities/os.js
+     ${GSA_SRC_DIR}/src/web/store/entities/operatingsystems.js
      ${GSA_SRC_DIR}/src/web/store/entities/ovaldefs.js
      ${GSA_SRC_DIR}/src/web/store/entities/permissions.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
