@@ -39,29 +39,32 @@ import OvaldefsTable from './table';
 
 import OvaldefDashboard, {OVALDEF_DASHBOARD_ID} from './dashboard';
 
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="oval"
+    title={_('Help: OVAL Definitions')}
+  />
+);
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="oval"
-      title={_('Help: OVAL Definitions')}
-    />
-  );
-};
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={OvaldefDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={OVALDEF_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={OvaldefFilterDialog}
+    filtersFilter={OVALDEFS_FILTER_FILTER}
+    sectionIcon="ovaldef.svg"
+    table={OvaldefsTable}
+    title={_('OVAL Definitions')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('ovaldef', {
-  createFilterType: 'info',
-  dashboard2: OvaldefDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={OVALDEF_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: OvaldefFilterDialog,
-  filtersFilter: OVALDEFS_FILTER_FILTER,
-  sectionIcon: 'ovaldef.svg',
-  table: OvaldefsTable,
-  title: _('OVAL Definitions'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
