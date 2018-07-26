@@ -97,6 +97,7 @@ const RolesPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={RolesFilterDialog}
+      filtersFilter={ROLES_FILTER_FILTER}
       sectionIcon="role.svg"
       table={Table}
       title={_('Roles')}
@@ -122,7 +123,6 @@ RolesPage.propTypes = {
 };
 
 export default withEntitiesContainer('role', {
-  filtersFilter: ROLES_FILTER_FILTER,
 })(RolesPage);
 
 // vim: set ts=2 sw=2 tw=80:
