@@ -38,6 +38,7 @@ import {reducer as certbund} from './certbund';
 import {reducer as cpe} from './cpes';
 import {reducer as cve} from './cves';
 import {reducer as dfncert} from './dfncerts';
+import {reducer as group} from './groups';
 
 const entitiesReducer = combineReducers({
   alert,
@@ -55,6 +56,7 @@ const entitiesReducer = combineReducers({
   cpe,
   cve,
   dfncert,
+  group,
 });
 
 export default entitiesReducer;
