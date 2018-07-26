@@ -112,6 +112,7 @@ const ScanConfigsPage = ({
       <EntitiesPage
         {...props}
         filterEditDialog={ScanConfigFilterDialog}
+        filtersFilter={SCANCONFIGS_FILTER_FILTER}
         sectionIcon="config.svg"
         table={Table}
         title={_('Scan Configs')}
@@ -136,7 +137,6 @@ ScanConfigsPage.propTypes = {
 
 export default withEntitiesContainer('scanconfig', {
   entitiesSelector,
-  filtersFilter: SCANCONFIGS_FILTER_FILTER,
   loadEntities,
 })(ScanConfigsPage);
 

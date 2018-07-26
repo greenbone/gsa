@@ -40,8 +40,7 @@ import {isDefined} from 'gmp/utils/identity';
 const withEntitiesContainer = (gmpname, {
   entitiesSelector,
   loadEntities,
-  filtersFilter,
-} = {}) => Component => {
+}) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
       {({notify}) => (
@@ -53,7 +52,6 @@ const withEntitiesContainer = (gmpname, {
           {pageProps => (
             <Component
               {...pageProps}
-              filtersFilter={filtersFilter}
             />
           )}
         </EntitiesContainer>

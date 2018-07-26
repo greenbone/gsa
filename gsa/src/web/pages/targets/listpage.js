@@ -95,6 +95,7 @@ const TargetsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={TargetsFilterDialog}
+      filtersFilter={TARGETS_FILTER_FILTER}
       sectionIcon="target.svg"
       table={TargetsTable}
       title={_('Targets')}
@@ -121,7 +122,6 @@ TargetsPage.propTypes = {
 
 export default withEntitiesContainer('target', {
   entitiesSelector,
-  filtersFilter: TARGETS_FILTER_FILTER,
   loadEntities,
 })(TargetsPage);
 

@@ -109,6 +109,7 @@ const ScannersPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ScannersFilterDialog}
+      filtersFilter={SCANNERS_FILTER_FILTER}
       sectionIcon="scanner.svg"
       table={ScannersTable}
       title={_('Scanners')}
@@ -138,7 +139,6 @@ ScannersPage.propTypes = {
 
 export default withEntitiesContainer('scanner', {
   entitiesSelector,
-  filtersFilter: SCANNERS_FILTER_FILTER,
   loadEntities,
 })(ScannersPage);
 

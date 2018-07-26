@@ -61,6 +61,7 @@ const Page = props => (
       <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
     )}
     filterEditDialog={CertBundFilterDialog}
+    filtersFilter={CERTBUND_FILTER_FILTER}
     sectionIcon="cert_bund_adv.svg"
     table={CertBundTable}
     title={_('CERT-Bund Advisories')}
@@ -70,7 +71,6 @@ const Page = props => (
 
 export default withEntitiesContainer('certbund', {
   entitiesSelector,
-  filtersFilter: CERTBUND_FILTER_FILTER,
   loadEntities,
 })(Page);
 

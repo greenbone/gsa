@@ -109,6 +109,7 @@ const TagsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={TagsFilterDialog}
+      filterFilter={TAGS_FILTER_FILTER}
       sectionIcon="tag.svg"
       table={TagsTable}
       tags={false}
@@ -137,7 +138,6 @@ TagsPage.propTypes = {
 };
 
 export default withEntitiesContainer('tag', {
-  filterFilter: TAGS_FILTER_FILTER,
 })(TagsPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -103,6 +103,7 @@ const ReportFormatsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ReportFormatsFilterDialog}
+      filtersFilter={REPORT_FORMATS_FILTER_FILTER}
       sectionIcon="report_format.svg"
       table={ReportFormatsTable}
       title={_('Report Formats')}
@@ -129,7 +130,6 @@ ReportFormatsPage.propTypes = {
 
 export default withEntitiesContainer('reportformat', {
   entitiesSelector,
-  filtersFilter: REPORT_FORMATS_FILTER_FILTER,
   loadEntities,
 })(ReportFormatsPage);
 

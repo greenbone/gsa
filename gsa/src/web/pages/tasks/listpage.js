@@ -161,6 +161,7 @@ const Page = ({
           <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
         )}
         filterEditDialog={TaskFilterDialog}
+        filtersFilter={TASKS_FILTER_FILTER}
         sectionIcon="task.svg"
         table={Table}
         title={_('Tasks')}
@@ -192,7 +193,6 @@ Page.propTypes = {
 
 export default withEntitiesContainer('task', {
   entitiesSelector,
-  filtersFilter: TASKS_FILTER_FILTER,
   loadEntities,
 })(Page);
 

@@ -105,6 +105,7 @@ const AlertsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={AlertFilterDialog}
+      filtersFilter={ALERTS_FILTER_FILTER}
       sectionIcon="alert.svg"
       table={AlertTable}
       title={_('Alerts')}
@@ -135,7 +136,6 @@ AlertsPage.propTypes = {
 
 export default withEntitiesContainer('alert', {
   entitiesSelector,
-  filtersFilter: ALERTS_FILTER_FILTER,
   loadEntities,
 })(AlertsPage);
 

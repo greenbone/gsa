@@ -63,6 +63,7 @@ const Page = props => (
       <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
     )}
     filterEditDialog={FilterDialog}
+    filtersFilter={DFNCERT_FILTER_FILTER}
     sectionIcon="dfn_cert_adv.svg"
     table={DfnCertTable}
     title={_('DFN-CERT Advisories')}
@@ -72,7 +73,6 @@ const Page = props => (
 
 export default withEntitiesContainer('dfncert', {
   entitiesSelector,
-  filtersFilter: DFNCERT_FILTER_FILTER,
   loadEntities,
 })(Page);
 

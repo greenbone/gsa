@@ -60,6 +60,7 @@ const Page = props => (
       <DashboardControls dashboardId={NVTS_DASHBOARD_ID} />
     )}
     filterEditDialog={NvtsFilterDialog}
+    filtersFilter={NVTS_FILTER_FILTER}
     sectionIcon="nvt.svg"
     table={NvtsTable}
     title={_('NVTs')}
@@ -69,7 +70,6 @@ const Page = props => (
 
 export default withEntitiesContainer('nvt', {
   entitiesSelector,
-  filtersFilter: NVTS_FILTER_FILTER,
   loadEntities,
 })(Page);
 

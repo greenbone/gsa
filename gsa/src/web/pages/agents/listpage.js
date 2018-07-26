@@ -106,6 +106,7 @@ const AgentsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={AgentsFilterDialog}
+      filtersFilter={AGENTS_FILTER_FILTER}
       sectionIcon="agent.svg"
       table={AgentsTable}
       title={_('Agents')}
@@ -135,7 +136,6 @@ AgentsPage.propTypes = {
 
 export default withEntitiesContainer('agent', {
   entitiesSelector,
-  filtersFilter: AGENTS_FILTER_FILTER,
   loadEntities,
 })(AgentsPage);
 

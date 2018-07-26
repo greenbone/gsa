@@ -107,6 +107,7 @@ const Page = ({
           <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
         )}
         filterEditDialog={HostsFilterDialog}
+        filtersFilter={HOSTS_FILTER_FILTER}
         sectionIcon="host.svg"
         table={HostsTable}
         title={_('Hosts')}
@@ -131,7 +132,6 @@ Page.propTypes = {
 
 export default withEntitiesContainer('host', {
   entitiesSelector,
-  filtersFilter: HOSTS_FILTER_FILTER,
   loadEntities,
 })(Page);
 

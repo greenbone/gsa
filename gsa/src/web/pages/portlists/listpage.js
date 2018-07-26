@@ -106,6 +106,7 @@ const PortListsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={PortListsFilterDialog}
+      filtersFilter={PORTLISTS_FILTER_FILTER}
       sectionIcon="port_list.svg"
       table={PortListsTable}
       title={_('Portlists')}
@@ -133,7 +134,6 @@ PortListsPage.propTypes = {
 
 export default withEntitiesContainer('portlist', {
   entitiesSelector,
-  filtersFilter: PORTLISTS_FILTER_FILTER,
   loadEntities,
 })(PortListsPage);
 

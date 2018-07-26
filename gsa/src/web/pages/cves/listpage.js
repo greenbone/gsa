@@ -61,6 +61,7 @@ const Page = props => (
       <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
     )}
     filterEditDialog={CveFilterDialog}
+    filtersFilter={CVES_FILTER_FILTER}
     sectionIcon="cve.svg"
     table={CvesTable}
     title={_('CVEs')}
@@ -70,7 +71,6 @@ const Page = props => (
 
 export default withEntitiesContainer('cve', {
   entitiesSelector,
-  filtersFilter: CVES_FILTER_FILTER,
   loadEntities,
 })(Page);
 

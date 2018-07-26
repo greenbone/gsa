@@ -100,6 +100,7 @@ const SchedulesPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ScheduleFilterDialog}
+      filtersFilter={SCHEDULES_FILTER_FILTER}
       sectionIcon="schedule.svg"
       table={SchedulesTable}
       title={_('Schedules')}
@@ -126,7 +127,6 @@ SchedulesPage.propTypes = {
 
 export default withEntitiesContainer('schedule', {
   entitiesSelector,
-  filtersFilter: SCHEDULES_FILTER_FILTER,
   loadEntities,
 })(SchedulesPage);
 

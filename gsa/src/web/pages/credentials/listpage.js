@@ -103,6 +103,7 @@ const CredentialsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={CredentialsFilterDialog}
+      filtersFilter={CREDENTIALS_FILTER_FILTER}
       sectionIcon="credential.svg"
       table={CredentialsTable}
       title={_('Credentials')}
@@ -130,7 +131,6 @@ CredentialsPage.propTypes = {
 
 export default withEntitiesContainer('credential', {
   entitiesSelector,
-  filtersFilter: CREDENTIALS_FILTER_FILTER,
   loadEntities,
 })(CredentialsPage);
 

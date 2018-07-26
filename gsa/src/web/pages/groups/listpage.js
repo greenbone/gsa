@@ -99,6 +99,7 @@ const GroupsPage = ({
       <EntitiesPage
         {...props}
         filterEditDialog={GroupsFilterDialog}
+        filtersFilter={GROUPS_FILTER_FILTER}
         sectionIcon="group.svg"
         table={Table}
         title={_('Groups')}
@@ -125,7 +126,6 @@ GroupsPage.propTypes = {
 
 export default withEntitiesContainer('group', {
   entitiesSelector,
-  filtersFilter: GROUPS_FILTER_FILTER,
   loadEntities,
 })(GroupsPage);
 
