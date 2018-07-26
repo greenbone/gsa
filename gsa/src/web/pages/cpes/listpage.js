@@ -28,11 +28,16 @@ import _ from 'gmp/locale';
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/cpes';
 
 import CpeFilterDialog from './filterdialog';
 import CpesTable from './table';
@@ -64,7 +69,9 @@ const Page = props => (
 );
 
 export default withEntitiesContainer('cpe', {
+  entitiesSelector,
   filtersFilter: CPES_FILTER_FILTER,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
