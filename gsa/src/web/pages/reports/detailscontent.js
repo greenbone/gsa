@@ -282,7 +282,7 @@ UserTags.propTypes = {
 
 const PageContent = ({
   activeTab,
-  entity = {},
+  entity,
   filter,
   filters,
   loading = true,
@@ -291,6 +291,7 @@ const PageContent = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
+  updating = false,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -311,7 +312,7 @@ const PageContent = ({
 
   const {
     report = {},
-  } = entity;
+  } = entity || {};
 
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
@@ -330,6 +331,9 @@ const PageContent = ({
     timestamp,
     scan_run_status,
   } = report;
+
+  const hasReport = isDefined(entity);
+  loading = loading && (!hasReport || updating);
 
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
@@ -366,7 +370,7 @@ const PageContent = ({
       img="report.svg"
       title={header_title}
     >
-      {!loading &&
+      {hasReport &&
         <EntityInfo
           entity={entity}
         />
@@ -679,6 +683,7 @@ PageContent.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  updating: PropTypes.bool,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
