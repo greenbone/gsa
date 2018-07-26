@@ -41,28 +41,32 @@ import DfnCertTable from './table';
 
 import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="id15"
-      title={_('Help: DFN-CERT Advisories')}
-    />
-  );
-};
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="id15"
+    title={_('Help: DFN-CERT Advisories')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={DfnCertDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={FilterDialog}
+    sectionIcon="dfn_cert_adv.svg"
+    table={DfnCertTable}
+    title={_('DFN-CERT Advisories')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('dfncert', {
-  createFilterType: 'info',
-  dashboard2: DfnCertDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: FilterDialog,
   filtersFilter: DFNCERT_FILTER_FILTER,
-  sectionIcon: 'dfn_cert_adv.svg',
-  table: DfnCertTable,
-  title: _('DFN-CERT Advisories'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
