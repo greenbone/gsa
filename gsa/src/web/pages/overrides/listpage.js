@@ -31,7 +31,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -39,6 +39,11 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/overrides';
 
 import FilterDialog from './filterdialog';
 import OverridesTable from './table';
@@ -127,6 +132,8 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('override', {
+  entitiesSelector,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
