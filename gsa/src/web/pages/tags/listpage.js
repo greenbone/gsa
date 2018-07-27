@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 import {TAGS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilties from 'web/utils/withCapabilities';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -55,7 +55,7 @@ export const SORT_FIELDS = [
   ['modified', _('Modified'), '8%'],
 ];
 
-const ToolBarIcons = withCapabilties(({
+const ToolBarIcons = withCapabilities(({
   capabilities,
   onTagCreateClick,
 }) => (
