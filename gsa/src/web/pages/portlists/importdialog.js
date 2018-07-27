@@ -35,14 +35,12 @@ import FormGroup from '../../components/form/formgroup.js';
 import Layout from '../../components/layout/layout.js';
 
 const ImportDialog = ({
-  visible = true,
   onClose,
   onSave,
 }) => {
   return (
     <SaveDialog
       buttonTitle={_('Import')}
-      visible={visible}
       title={_('Import Port List')}
       onClose={onClose}
       onSave={onSave}
@@ -70,7 +68,6 @@ const ImportDialog = ({
 };
 
 ImportDialog.propTypes = {
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
