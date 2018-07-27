@@ -31,6 +31,7 @@ import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
+import withGmp from 'web/utils/withGmp';
 
 import DetailsBlock from '../../entity/block.js';
 import EntityPage from '../../entity/page.js';
@@ -311,7 +312,7 @@ class Page extends React.Component {
   }
 
   handleDownload(result) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     const {onError, onDownloaded} = this.props;
     return gmp.result.export(result).then(response => {
@@ -438,9 +439,11 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-Page.contextTypes = {
+Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+Page = withGmp(Page);
 
 const ResultPage = props => (
   <EntityContainer
