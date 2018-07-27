@@ -527,6 +527,7 @@ const PageContent = ({
                     hasTarget={!isContainer}
                     progress={task.progress}
                     results={results.entities}
+                    status={status}
                     onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                     onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}

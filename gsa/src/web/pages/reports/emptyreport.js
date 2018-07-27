@@ -24,6 +24,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isActive} from 'gmp/models/task';
+
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -37,9 +39,11 @@ const EmptyReport = ({
   capabilities,
   hasTarget = false,
   progress,
+  status,
   onTargetEditClick,
 }) => {
   const may_edit_target = capabilities.mayEdit('target');
+  const isActiveReport = hasTarget && isActive(status);
   return (
     <Divider
       flex="column"
@@ -53,7 +57,15 @@ const EmptyReport = ({
         }
       />
       <Divider wrap>
-        {progress === 1 &&
+        {!isActiveReport &&
+          <ReportPanel
+            icon="task.svg"
+            title={_('The scan did not collect any results')}
+          >
+            {_('If the scan got interrupted you can try to re-start the task.')}
+          </ReportPanel>
+        }
+        {isActiveReport && progress === 1 &&
           <ReportPanel
             icon="refresh.svg"
             title={_('The scan just started and no results have arrived yet')}
@@ -61,7 +73,7 @@ const EmptyReport = ({
             {_('Just wait for results to arrive.')}
           </ReportPanel>
         }
-        {progress > 1 &&
+        {isActiveReport && progress > 1 &&
           <ReportPanel
             icon="refresh.svg"
             title={
@@ -92,6 +104,7 @@ EmptyReport.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   hasTarget: PropTypes.bool,
   progress: PropTypes.numberOrNumberString,
+  status: PropTypes.string.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
