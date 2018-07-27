@@ -31,7 +31,7 @@ import _ from 'gmp/locale';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
+import {first, map} from 'gmp/utils/array';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -45,23 +45,22 @@ import {
   SNMP_PRIVACY_ALGORITHM_DES,
 } from 'gmp/models/credential';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Checkbox from '../../components/form/checkbox.js';
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import PasswordField from '../../components/form/passwordfield.js';
-import Radio from '../../components/form/radio.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
-import {first} from 'gmp/utils/array.js';
+import Checkbox from 'web/components/form/checkbox';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
 const type_names = {
   up: _('Username + Password'),
