@@ -193,7 +193,6 @@ const TaskDialog = ({
   targets,
   task,
   title = _('New Task'),
-  visible = true,
   onAlertsChange,
   onClose,
   onNewAlertClick,
@@ -258,7 +257,6 @@ const TaskDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -589,7 +587,6 @@ TaskDialog.propTypes = {
   targets: PropTypes.array,
   task: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func.isRequired,
