@@ -209,7 +209,6 @@ class Page extends React.Component {
           <ImportReportDialog
             task_id={task_id}
             tasks={tasks}
-            visible={importDialogVisible}
             onNewContainerTaskClick={this.openCreateTaskDialog}
             onClose={this.closeImportDialog}
             onSave={this.handleDialogSave}
