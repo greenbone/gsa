@@ -23,7 +23,9 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+
+import withGmp from 'web/utils/withGmp';
 
 class Task extends React.Component {
 
@@ -33,7 +35,7 @@ class Task extends React.Component {
   }
 
   componentDidMount() {
-    this.context.gmp.task.get(this.props.params).then(task => {
+    this.props.gmp.task.get(this.props.params).then(task => {
       this.setState({task: task});
     });
   }
@@ -47,10 +49,10 @@ class Task extends React.Component {
   }
 }
 
-Task.contextTypes = {
+Task.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default Task;
+export default withGmp(Task);
 
 // vim: set ts=2 sw=2 tw=80:
