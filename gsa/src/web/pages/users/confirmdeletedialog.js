@@ -45,7 +45,6 @@ const ConfirmDeleteDialog = ({
     title,
     username,
     users,
-    visible,
     onClose,
     onSave,
   }) => {
@@ -85,7 +84,6 @@ const ConfirmDeleteDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('Delete')}
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -126,7 +124,6 @@ ConfirmDeleteDialog.propTypes = {
   title: PropTypes.string.isRequired,
   username: PropTypes.string,
   users: PropTypes.array.isRequired,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
