@@ -36,20 +36,20 @@ import {
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_PASSWORD,
   AUTH_METHOD_RADIUS,
-} from 'gmp/models/user.js';
+} from 'gmp/models/user';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import PasswordField from '../../components/form/passwordfield.js';
-import Radio from '../../components/form/radio.js';
-import MultiSelect from '../../components/form/multiselect.js';
-import TextField from '../../components/form/textfield.js';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import Radio from 'web/components/form/radio';
+import MultiSelect from 'web/components/form/multiselect';
+import TextField from 'web/components/form/textfield';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 class Dialog extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -72,7 +72,6 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
       settings,
       title = _('New User'),
       user,
-      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -109,7 +108,6 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -359,7 +357,6 @@ Dialog.propTypes = {
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
   user: PropTypes.model,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

@@ -27,23 +27,23 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
-import {renderSelectItems, UNSET_VALUE} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import NewIcon from '../../components/icon/newicon.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import {
   snmp_credential_filter,
@@ -53,7 +53,7 @@ import {
   SNMP_CREDENTIAL_TYPES,
   SSH_CREDENTIAL_TYPES,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential.js';
+} from 'gmp/models/credential';
 
 const DEFAULT_PORT = 22;
 
@@ -127,7 +127,6 @@ const TargetDialog = ({
   target_source = 'manual',
   target_exclude_source = 'manual',
   title = _('New Target'),
-  visible = true,
   onClose,
   onNewCredentialsClick,
   onNewPortListClick,
@@ -170,7 +169,6 @@ const TargetDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={uncontrolledValues}
       values={controlledValues}
@@ -495,7 +493,6 @@ TargetDialog.propTypes = {
     'manual', 'file', 'asset_hosts',
   ]),
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onEsxiCredentialChange: PropTypes.func.isRequired,
   onNewCredentialsClick: PropTypes.func.isRequired,

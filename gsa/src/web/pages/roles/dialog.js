@@ -29,27 +29,27 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
-import PropTypes from '../../utils/proptypes.js';
-import {permissionDescription} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Button from '../../components/form/button.js';
-import FormGroup from '../../components/form/formgroup.js';
-import MultiSelect from '../../components/form/multiselect.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
+import Button from 'web/components/form/button';
+import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import TrashIcon from '../../components/icon/trashicon.js';
+import TrashIcon from 'web/components/icon/trashicon';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Table from '../../components/table/table.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableRow from '../../components/table/row.js';
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
 const DEFAULTS = {name: _('Unnamed')};
 
@@ -63,7 +63,6 @@ const Dialog = ({
     permission_name,
     role,
     title = _('New Role'),
-    visible = true,
     onClose,
     onCreatePermission,
     onCreateSuperPermission,
@@ -99,7 +98,6 @@ const Dialog = ({
   return (
     <SaveDialog
       externalError={externalError}
-      visible={visible}
       title={title}
       onClose={onClose}
       onExternalErrorSet={onExternalErrorSet}
@@ -260,7 +258,6 @@ Dialog.propTypes = {
   role: PropTypes.model,
   title: PropTypes.string,
   users: PropTypes.array,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,

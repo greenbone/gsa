@@ -53,27 +53,27 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from 'gmp/models/scanconfig';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import MultiSelect from '../../components/form/multiselect.js';
-import Select from '../../components/form/select.js';
-import Spinner from '../../components/form/spinner.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Checkbox from '../../components/form/checkbox.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
-import TextField from '../../components/form/textfield.js';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import Checkbox from 'web/components/form/checkbox';
+import YesNoRadio from 'web/components/form/yesnoradio';
+import TextField from 'web/components/form/textfield';
 
-import NewIcon from '../../components/icon/newicon.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
-import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
+import AddResultsToAssetsGroup from './addresultstoassetsgroup';
+import AutoDeleteReportsGroup from './autodeletereportsgroup';
 
 const log = logger.getLogger('web.tasks.dialog');
 
@@ -193,7 +193,6 @@ const TaskDialog = ({
   targets,
   task,
   title = _('New Task'),
-  visible = true,
   onAlertsChange,
   onClose,
   onNewAlertClick,
@@ -258,7 +257,6 @@ const TaskDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -589,7 +587,6 @@ TaskDialog.propTypes = {
   targets: PropTypes.array,
   task: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onNewAlertClick: PropTypes.func.isRequired,
