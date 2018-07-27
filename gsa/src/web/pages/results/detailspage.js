@@ -29,46 +29,47 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import DetailsBlock from '../../entity/block.js';
-import EntityPage from '../../entity/page.js';
-import Note from '../../entity/note.js';
-import Override from '../../entity/override.js';
-import EntityContainer from '../../entity/container.js';
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import Note from 'web/entity/note';
+import Override from 'web/entity/override';
+import EntityContainer from 'web/entity/container';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import InnerLink from '../../components/link/innerlink.js';
+import DetailsLink from 'web/components/link/detailslink';
+import InnerLink from 'web/components/link/innerlink';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import NoteComponent from '../notes/component.js';
+import NoteComponent from '../notes/component';
 
-import OverrideComponent from '../overrides/component.js';
+import OverrideComponent from '../overrides/component';
 
-import ResultDetails from './details.js';
+import ResultDetails from './details';
 
 let ToolBarIcons = ({
   capabilities,
@@ -311,7 +312,7 @@ class Page extends React.Component {
   }
 
   handleDownload(result) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     const {onError, onDownloaded} = this.props;
     return gmp.result.export(result).then(response => {
@@ -438,9 +439,11 @@ Page.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-Page.contextTypes = {
+Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+Page = withGmp(Page);
 
 const ResultPage = props => (
   <EntityContainer

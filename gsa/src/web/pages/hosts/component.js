@@ -30,13 +30,15 @@ import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype';
+import SelectionType from 'web/utils/selectiontype';
 
-import Wrapper from '../../components/layout/wrapper';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component';
+import EntityComponent from 'web/entity/component';
+
+import withGmp from 'web/utils/withGmp';
 
 import TargetComponent from '../targets/component';
 
@@ -58,8 +60,7 @@ class HostComponent extends React.Component {
   }
 
   handleIdentifierDelete(identifier) {
-    const {onIdentifierDeleted, onIdentifierDeleteError} = this.props;
-    const {gmp} = this.context;
+    const {gmp, onIdentifierDeleted, onIdentifierDeleteError} = this.props;
     return gmp.host.deleteIdentifier(identifier).then(
       onIdentifierDeleted, onIdentifierDeleteError);
   }
@@ -200,9 +201,11 @@ HostComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-HostComponent.contextTypes = {
+HostComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+HostComponent = withGmp(HostComponent);
 
 const HostWithTargetComponent = ({
   onTargetCreated,

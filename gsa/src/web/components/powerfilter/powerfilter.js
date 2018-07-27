@@ -32,23 +32,24 @@ import logger from 'gmp/log';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
-import Select from '../form/select.js';
-import TextField from '../form/textfield.js';
+import Select from '../form/select';
+import TextField from '../form/textfield';
 
-import DeleteIcon from '../icon/deleteicon.js';
-import EditIcon from '../icon/editicon.js';
-import Icon from '../icon/icon.js';
-import ManualIcon from '../icon/manualicon.js';
-import NewIcon from '../icon/newicon.js';
+import DeleteIcon from '../icon/deleteicon';
+import EditIcon from '../icon/editicon';
+import Icon from '../icon/icon';
+import ManualIcon from '../icon/manualicon';
+import NewIcon from '../icon/newicon';
 
-import Divider from '../layout/divider.js';
-import IconDivider from '../layout/icondivider.js';
-import Layout from '../layout/layout.js';
+import Divider from '../layout/divider';
+import IconDivider from '../layout/icondivider';
+import Layout from '../layout/layout';
 
-import Filter from 'gmp/models/filter.js';
+import Filter from 'gmp/models/filter';
 
 const log = logger.getLogger('web.powerfilter');
 
@@ -156,8 +157,12 @@ class PowerFilter extends React.Component {
 
   createFilter(filter) {
     const {filtername = ''} = this.state;
-    const {createFilterType, onError, onFilterCreated} = this.props;
-    const {gmp} = this.context;
+    const {
+      createFilterType,
+      gmp,
+      onError,
+      onFilterCreated,
+    } = this.props;
 
     gmp.filter.create({
       term: filter.toFilterString(),
@@ -323,10 +328,13 @@ PowerFilter.propTypes = {
 };
 
 PowerFilter.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default PowerFilter;
+PowerFilter.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:

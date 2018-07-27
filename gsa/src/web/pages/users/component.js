@@ -27,13 +27,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import UserDialog from './dialog.js';
+import UserDialog from './dialog';
 
 class UserComponent extends React.Component {
 
@@ -49,7 +50,7 @@ class UserComponent extends React.Component {
   }
 
   openUserDialog(user) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.groups.getAll({
       filter: 'permission=modify_group', //  list only groups current user may modify
@@ -201,10 +202,10 @@ UserComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-UserComponent.contextTypes = {
+UserComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default UserComponent;
+export default withGmp(UserComponent);
 
 // vim: set ts=2 sw=2 tw=80:
