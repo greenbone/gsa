@@ -41,13 +41,11 @@ const DEFAULTS = {name: '127.0.0.1', comment: ''};
 const HostsDialog = ({
     host,
     title = _('New Host'),
-    visible,
     onClose,
     onSave,
   }) => {
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -95,7 +93,6 @@ HostsDialog.propTypes = {
   host: PropTypes.model,
   name: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
