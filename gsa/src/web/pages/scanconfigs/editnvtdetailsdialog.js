@@ -77,7 +77,6 @@ class EditDialog extends React.Component {
       manual_timeout = '',
       preference_values,
       title,
-      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -94,7 +93,6 @@ class EditDialog extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -327,7 +325,6 @@ EditDialog.propTypes = {
   preference_values: PropTypes.object.isRequired,
   timeout: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
