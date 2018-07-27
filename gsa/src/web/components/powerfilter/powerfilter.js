@@ -34,6 +34,7 @@ import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import {renderSelectItems} from '../../utils/render.js';
+import withGmp from 'web/utils/withGmp';
 
 import Select from '../form/select.js';
 import TextField from '../form/textfield.js';
@@ -156,8 +157,12 @@ class PowerFilter extends React.Component {
 
   createFilter(filter) {
     const {filtername = ''} = this.state;
-    const {createFilterType, onError, onFilterCreated} = this.props;
-    const {gmp} = this.context;
+    const {
+      createFilterType,
+      gmp,
+      onError,
+      onFilterCreated,
+    } = this.props;
 
     gmp.filter.create({
       term: filter.toFilterString(),
@@ -323,10 +328,13 @@ PowerFilter.propTypes = {
 };
 
 PowerFilter.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
   capabilities: PropTypes.capabilities.isRequired,
 };
 
-export default PowerFilter;
+PowerFilter.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:
