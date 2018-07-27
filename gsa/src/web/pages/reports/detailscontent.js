@@ -91,6 +91,7 @@ import {
   ports_sort_functions,
   tls_certificates_sort_functions,
 } from './sort.js';
+import {TASK_STATUS} from 'gmp/models/task.js';
 
 const TabTitleCounts = glamorous.span({
   fontSize: '0.7em',
@@ -338,8 +339,8 @@ const PageContent = ({
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
 
-  const status = isDefined(task.isContainer) && task.isContainer() ?
-    _('Container') : scan_run_status;
+  const isContainer = isDefined(task.isContainer) && task.isContainer();
+  const status = isContainer ? TASK_STATUS.container : scan_run_status;
 
   const header_title = (
     <Divider>
@@ -520,11 +521,12 @@ const PageContent = ({
                 </TabPanel>
                 <TabPanel>
                   <ResultsTab
+                    counts={results.counts}
                     delta={delta}
                     filter={filter}
-                    results={results.entities}
-                    counts={results.counts}
+                    hasTarget={!isContainer}
                     progress={task.progress}
+                    results={results.entities}
                     onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                     onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}

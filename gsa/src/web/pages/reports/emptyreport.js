@@ -35,6 +35,7 @@ import ReportPanel from './reportpanel.js';
 
 const EmptyReport = ({
   capabilities,
+  hasTarget = false,
   progress,
   onTargetEditClick,
 }) => {
@@ -70,7 +71,7 @@ const EmptyReport = ({
             {_('Just wait for results to arrive.')}
           </ReportPanel>
         }
-        {progress < 1 &&
+        {progress < 1 && hasTarget &&
           <ReportPanel
             icon="target.svg"
             title={_('The target hosts could be regarded dead')}
@@ -89,6 +90,7 @@ const EmptyReport = ({
 
 EmptyReport.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
+  hasTarget: PropTypes.bool,
   progress: PropTypes.numberOrNumberString,
   onTargetEditClick: PropTypes.func.isRequired,
 };
