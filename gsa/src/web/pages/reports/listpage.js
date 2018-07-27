@@ -36,7 +36,7 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -46,6 +46,11 @@ import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/reports';
 
 import ReportFilterDialog from './filterdialog';
 import ImportReportDialog from './importdialog';
@@ -238,6 +243,8 @@ Page.propTypes = {
 export default compose(
   withGmp,
   withEntitiesContainer('report', {
+    entitiesSelector,
+    loadEntities,
   }),
 )(Page);
 
