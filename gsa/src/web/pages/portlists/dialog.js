@@ -59,7 +59,6 @@ const PortListsDialog = ({
   port_range = 'T:1-5,7,9,U:1-3,5,7,9',
   port_ranges = [],
   title = _('New Port List'),
-  visible = true,
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
@@ -88,7 +87,6 @@ const PortListsDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -187,7 +185,6 @@ PortListsDialog.propTypes = {
   port_range: PropTypes.string,
   port_ranges: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
   onNewPortRangeClick: PropTypes.func,
