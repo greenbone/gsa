@@ -26,33 +26,27 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
-import PropTypes from '../../utils/proptypes.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 const ConfirmDeleteDialog = ({
-    deleteUsers,
-    id,
-    inheritor_id,
-    title,
-    username,
-    users,
-    onClose,
-    onSave,
-  }) => {
-
-  let headline = '';
-
-  if (isDefined(username)) {
-    headline = _('User {{username}} will be deleted.', {username});
+  deleteUsers = [],
+  inheritorId = '--',
+  title,
+  inheritorUsers,
+  onClose,
+  onSave,
+}) => {
+  let headline;
+  if (deleteUsers.length === 1) {
+    headline = _('User {{name}} will be deleted.', {name: deleteUsers[0].name});
   }
   else if (deleteUsers.length > 1) {
     headline = _('{{count}} users will be deleted',
@@ -64,22 +58,18 @@ const ConfirmDeleteDialog = ({
 
   const data = {
     deleteUsers,
-    id,
-    inheritor_id,
-    username,
+    inheritorId,
   };
 
-  const inheritingUserOptions = map(users, user => ({
-    label: user.name,
-    value: user.id,
-  }));
-  inheritingUserOptions.unshift({
-    label: '--',
-    value: '--',
+  const inheritingUserItems = [{
+      label: '--',
+      value: '--',
     }, {
-    label: _('Current User'),
-    value: 'self,',
-  });
+      label: _('Current User'),
+      value: 'self,',
+    },
+    ...renderSelectItems(inheritorUsers),
+  ];
 
   return (
     <SaveDialog
@@ -104,9 +94,9 @@ const ConfirmDeleteDialog = ({
               title={_('Inheriting user')}
             >
               <Select
-                name="inheritor_id"
-                items={inheritingUserOptions}
-                value={state.inheritor_id}
+                name="inheritorId"
+                items={inheritingUserItems}
+                value={state.inheritorId}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -118,12 +108,10 @@ const ConfirmDeleteDialog = ({
 };
 
 ConfirmDeleteDialog.propTypes = {
-  deleteUsers: PropTypes.array,
-  id: PropTypes.string,
-  inheritor_id: PropTypes.id,
+  deleteUsers: PropTypes.array.isRequired,
+  inheritorId: PropTypes.id,
+  inheritorUsers: PropTypes.array,
   title: PropTypes.string.isRequired,
-  username: PropTypes.string,
-  users: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
