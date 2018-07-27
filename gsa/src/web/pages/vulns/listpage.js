@@ -30,11 +30,16 @@ import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import Layout from 'web/components/layout/layout';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/vulns';
 
 import VulnsFilterDialog from './filterdialog';
 import VulnsTable from './table';
@@ -68,4 +73,6 @@ const Page = props => (
 );
 
 export default withEntitiesContainer('vuln', {
+  entitiesSelector,
+  loadEntities,
 })(Page);
