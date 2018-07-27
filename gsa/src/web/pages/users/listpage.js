@@ -24,9 +24,11 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
-import {USERS_FILTER_FILTER} from 'gmp/models/filter';
+import {USERS_FILTER_FILTER, ALL_FILTER} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -96,71 +98,62 @@ class UsersPage extends React.Component {
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 
-  handleDeleteUser({deleteUsers, id, inheritor_id}) {
+  handleDeleteUser({deleteUsers, inheritorId}) {
     const {gmp, onChanged} = this.props;
 
-    if (inheritor_id === '--') {
-      inheritor_id = undefined;
+    if (inheritorId === '--') {
+      inheritorId = undefined;
     }
 
-    if (isDefined(id)) {
-      return gmp.user.delete({id, inheritor_id}).then(() => onChanged());
+    if (deleteUsers.length === 1) {
+      const {id} = deleteUsers[0]; // eslint-disable-line prefer-destructuring
+      return gmp.user.delete({id, inheritor_id: inheritorId}).then(onChanged);
     }
 
-    return gmp.users.delete(deleteUsers, {inheritor_id})
-      .then(() => onChanged());
+    return gmp.users.delete(deleteUsers, {inheritor_id: inheritorId})
+      .then(onChanged);
   }
 
   openConfirmDeleteDialog(user) {
-    const {gmp} = this.props;
+    const {loadAll, gmp} = this.props;
 
-    gmp.users.getAll().then(response => {
-      let {data: users} = response;
+    loadAll();
 
-      if (isDefined(user)) {
-        users = users.filter(luser => luser.id !== user.id);
+    if (isDefined(user)) {
+      this.setState({
+        confirmDeleteDialogVisible: true,
+        id: user.id,
+        deleteUsers: [user],
+        title: _('Confirm deletion of user {{name}}', user),
+      });
 
-        this.setState({
-          confirmDeleteDialogVisible: true,
-          id: user.id,
-          username: user.name,
-          users,
-          title: _('Confirm deletion of user {{name}}', user),
-        });
+    }
+    else {
+      const {selectionType} = this.props;
+      let promise;
 
+      if (selectionType === SelectionType.SELECTION_USER) {
+        const {entitiesSelected} = this.props;
+        promise = Promise.resolve([...entitiesSelected]);
+      }
+      else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+        const {entities} = this.props;
+        promise = Promise.resolve(entities);
       }
       else {
-        const {selectionType} = this.props;
-        let promise;
-
-        if (selectionType === SelectionType.SELECTION_USER) {
-          const {entitiesSelected} = this.props;
-          promise = Promise.resolve([...entitiesSelected]);
-        }
-        else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-          const {entities} = this.props;
-          promise = Promise.resolve(entities);
-        }
-        else {
-          const {filter} = this.props;
-          promise = gmp.users.get({filter: filter.all()})
-            .then(resp => resp.data);
-        }
-
-        promise.then(deleteUsers => {
-          const ids = deleteUsers.map(luser => luser.id);
-
-          users = users.filter(luser => !ids.includes(luser.id));
-
-          this.setState({
-            confirmDeleteDialogVisible: true,
-            users,
-            deleteUsers,
-            title: _('Confirm deletion of users'),
-          });
-        });
+        const {filter} = this.props;
+        // TODO these users should be loaded from the store too
+        promise = gmp.users.getAll({filter}).then(resp => resp.data);
       }
-    });
+
+      promise.then(deleteUsers => {
+        this.setState({
+          confirmDeleteDialogVisible: true,
+          deleteUsers,
+          title: _('Confirm deletion of users'),
+        });
+      });
+    }
   }
 
   closeConfirmDeleteDialog() {
@@ -169,6 +162,7 @@ class UsersPage extends React.Component {
 
   render() {
     const {
+      allUsers = [],
       onChanged,
       onDownloaded,
       onError,
@@ -176,13 +170,14 @@ class UsersPage extends React.Component {
     } = this.props;
 
     const {
-      id,
       confirmDeleteDialogVisible,
-      deleteUsers = {},
+      deleteUsers = [],
       title,
-      username,
-      users,
     } = this.state;
+
+    const deleteUserIds = deleteUsers.map(luser => luser.id);
+    const inheritorUsers = allUsers.filter(
+      user => !deleteUserIds.includes(user.id));
 
     return (
       <React.Fragment>
@@ -226,10 +221,8 @@ class UsersPage extends React.Component {
         {confirmDeleteDialogVisible &&
           <ConfirmDeleteDialog
             deleteUsers={deleteUsers}
-            id={id}
             title={title}
-            username={username}
-            users={users}
+            inheritorUsers={inheritorUsers}
             onClose={this.closeConfirmDeleteDialog}
             onSave={this.handleDeleteUser}
           />
@@ -240,15 +233,28 @@ class UsersPage extends React.Component {
 }
 
 UsersPage.propTypes = {
+  allUsers: PropTypes.array,
   entities: PropTypes.array,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  loadAll: PropTypes.func.isRequired,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = state => {
+  const selector = entitiesSelector(state);
+  return {
+    allUsers: selector.getEntities(ALL_FILTER),
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadAll: () => dispatch(loadEntities({gmp, filter: ALL_FILTER})),
+});
 
 export default compose(
   withGmp,
@@ -256,6 +262,7 @@ export default compose(
     entitiesSelector,
     loadEntities,
   }),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UsersPage);
 
 // vim: set ts=2 sw=2 tw=80:
