@@ -26,31 +26,31 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {USERS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose.js';
-import withCapabilities from '../../utils/withCapabilities.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Wrapper from '../../components/layout/wrapper.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Wrapper from 'web/components/layout/wrapper';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import {USERS_FILTER_FILTER} from 'gmp/models/filter.js';
-
-import ConfirmDeleteDialog from './confirmdeletedialog.js';
-import UserComponent from './component.js';
-import UsersTable, {SORT_FIELDS} from './table.js';
+import ConfirmDeleteDialog from './confirmdeletedialog';
+import UserComponent from './component';
+import UsersTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
