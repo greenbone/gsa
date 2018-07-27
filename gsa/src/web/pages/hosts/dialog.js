@@ -27,14 +27,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
 const DEFAULTS = {name: '127.0.0.1', comment: ''};
 
