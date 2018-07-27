@@ -38,18 +38,18 @@ import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import Select from '../form/select';
-import TextField from '../form/textfield';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import DeleteIcon from '../icon/deleteicon';
-import EditIcon from '../icon/editicon';
-import Icon from '../icon/icon';
-import ManualIcon from '../icon/manualicon';
-import NewIcon from '../icon/newicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import EditIcon from 'web/components/icon/editicon';
+import Icon from 'web/components/icon/icon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../layout/divider';
-import IconDivider from '../layout/icondivider';
-import Layout from '../layout/layout';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
 import Filter from 'gmp/models/filter';
 
