@@ -160,7 +160,6 @@ class EditDialogComponent extends React.Component {
       nvts,
       selected,
       title,
-      visible = true,
       onClose,
       onEditNvtDetailsClick,
       onSave,
@@ -175,7 +174,6 @@ class EditDialogComponent extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -272,7 +270,6 @@ EditDialogComponent.propTypes = {
   nvts: PropTypes.array.isRequired,
   selected: PropTypes.object.isRequired,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onEditNvtDetailsClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
