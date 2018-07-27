@@ -31,20 +31,20 @@ import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import PropTypes from '../utils/proptypes.js';
-import withGmp from '../utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import MenuBar from '../components/bar/menubar.js';
+import MenuBar from 'web/components/bar/menubar';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import StickyContainer from '../components/sticky/container.js';
+import StickyContainer from 'web/components/sticky/container';
 
-import CapabilitiesProvider from '../components/provider/capabilitiesprovider.js'; // eslint-disable-line max-len
+import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider'; // eslint-disable-line max-len
 
-import Footer from '../components/structure/footer.js';
-import Header from '../components/structure/header.js';
-import Main from '../components/structure/main.js';
+import Footer from 'web/components/structure/footer';
+import Header from 'web/components/structure/header';
+import Main from 'web/components/structure/main';
 
 const log = logger.getLogger('web.page');
 
