@@ -28,11 +28,16 @@ import _ from 'gmp/locale';
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/secinfo';
 
 import SecInfoFilterDialog from './filterdialog';
 import SecInfosTable from './table';
@@ -68,6 +73,8 @@ const Page = props => (
 );
 
 export default withEntitiesContainer('secinfo', {
+  entitiesSelector,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
