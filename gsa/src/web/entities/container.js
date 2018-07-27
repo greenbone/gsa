@@ -36,25 +36,13 @@ import {
   pluralizeType,
 } from 'gmp/utils/entitytype';
 
-import CancelToken from 'gmp/cancel';
-
 import Filter from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import compose from '../utils/compose.js';
 import PropTypes from '../utils/proptypes.js';
 
 import SelectionType from '../utils/selectiontype.js';
-
-import withCache from '../utils/withCache.js';
-import withGmp from '../utils/withGmp.js';
-
-import withDownload from '../components/form/withDownload.js';
-
-import Wrapper from '../components/layout/wrapper.js';
-
-import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import SortBy from '../components/sortby/sortby.js';
 
@@ -78,9 +66,7 @@ class EntitiesContainer extends React.Component {
     super(...args);
 
     this.state = {
-      loading: false,
-      updating: false,
-      selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
+      selectionType: SelectionType.SELECTION_PAGE_CONTENTS,
       tags: [],
       tagDialogVisible: false,
       tagsDialogVisible: false,
@@ -88,12 +74,12 @@ class EntitiesContainer extends React.Component {
 
     const {gmpname, gmp, notify} = this.props;
 
-    const entities_command_name = pluralizeType(gmpname);
+    const entitiesCommandName = pluralizeType(gmpname);
 
-    this.entities_command = gmp[entities_command_name];
+    this.entitiesCommand = gmp[entitiesCommandName];
 
-    this.notifyTimer = notify(`${entities_command_name}.timer`);
-    this.notifyChanged = notify(`${entities_command_name}.changed`);
+    this.notifyTimer = notify(`${entitiesCommandName}.timer`);
+    this.notifyChanged = notify(`${entitiesCommandName}.changed`);
 
     this.handleChanged = this.handleChanged.bind(this);
     this.handleCreateTag = this.handleCreateTag.bind(this);
@@ -120,107 +106,61 @@ class EntitiesContainer extends React.Component {
     this.closeTagsDialog = this.closeTagsDialog.bind(this);
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (isDefined(props.entities)) {
+      // update only if new entities are available to avoid having no entities
+      // when the filter changes
+      return {
+        entities: props.entities,
+        entitiesCounts: props.entitiesCounts,
+        loadedFilter: props.loadedFilter,
+      };
+    }
+    return null;
+  };
+
   componentDidMount() {
     const {filter} = this.props.location.query;
-    this.updateFilter(filter, true); // use data from cache and reload afterwards
+
+    if (isDefined(filter)) {
+      // use filter from url
+      this.updateFilter(filter);
+    }
+    else {
+      // use last filter
+      this.load({filter: this.props.filter});
+    }
   }
 
   componentWillUnmount() {
-    this.cancelLoading();
+    this.clearTimer(); // remove possible running timer
   }
 
-  componentWillReceiveProps(next) {
-    if (isDefined(next.location) && isDefined(next.location.query) &&
-      next.location.query.filter !== this.props.location.query.filter) {
-      const {filter} = next.location.query;
-      this.updateFilter(filter);
-    }
-  }
-
-  updateFilter(filterstring, reload = false) {
+  updateFilter(filterstring) {
     const filter = isDefined(filterstring) ? Filter.fromString(filterstring) :
       undefined;
 
-    this.load({filter, reload});
+    this.load({filter});
   }
 
   load(options = {}) {
-    const {entities_command} = this;
-    const {filter, force = false, reload = false} = options;
-    const {cache, extraLoadParams = {}} = this.props;
-    const {loaded_filter} = this.state;
-
-    this.cancelLoading();
-
-    if (isDefined(loaded_filter) &&
-      isDefined(filter) && !loaded_filter.equals(filter)) {
-      this.setState({
-        loading: true,
-        updating: true,
-      });
-    }
-    else {
-      this.setState({loading: true});
-    }
-
-    const token = new CancelToken(cancel => this.cancel = cancel);
+    const {filter} = options;
+    const {
+      updateFilter,
+      loadEntities,
+    } = this.props;
 
     log.debug('Loading', options);
 
-    entities_command.get({filter, ...extraLoadParams}, {
-      cache,
-      cancel_token: token,
-      force,
-    })
-      .then(response => {
-        const {data: entities, meta} = response;
-        const {filter: loaded_filter, counts: entitiesCounts} = meta; // eslint-disable-line no-shadow
+    this.clearTimer();
 
-        this.cancel = undefined;
-
-        let refresh = false;
-
-        const reverse_field = loaded_filter.get('sort-reverse');
-        const reverse = isDefined(reverse_field);
-        const field = reverse ? reverse_field : loaded_filter.get('sort');
-
-        log.debug('Loaded entities', response);
-
-        this.setState({
-          entities,
-          entitiesCounts,
-          filter,
-          loaded_filter,
-          loading: false,
-          sortBy: field,
-          sortDir: reverse ? SortBy.DESC : SortBy.ASC,
-          updating: false,
-        });
-
-        if (meta.fromcache && (meta.dirty || reload)) {
-          log.debug('Forcing reload of entities', meta.dirty, reload);
-          refresh = true;
-        }
-
-        this.startTimer(refresh);
-      }, error => {
-        if (isDefined(error.isCancel) && error.isCancel()) {
-          return;
-        }
-        this.setState({loading: false});
-        this.handleError(error);
-        return Promise.reject(error);
-      });
+    updateFilter(filter);
+    loadEntities(filter).then(() => this.startTimer(false));
   }
 
-  reload({invalidate = false} = {}) {
-    if (invalidate) {
-      const {cache} = this.props;
-      log.debug('Marking cache as dirty', cache);
-      cache.invalidate();
-    }
+  reload() {
     // reload data from backend
-    this.load({filter: this.state.loaded_filter, force: true});
+    this.load({filter: this.state.loadedFilter});
   }
 
   getRefreshInterval() {
@@ -252,74 +192,76 @@ class EntitiesContainer extends React.Component {
     this.notifyTimer();
   }
 
-  cancelLastRequest() {
-    if (isDefined(this.cancel)) {
-      this.cancel();
-    }
-  }
-
-  cancelLoading() {
-    this.cancelLastRequest();
-    this.clearTimer(); // remove possible running timer
-  }
-
   handleChanged() {
     this.reload();
     this.notifyChanged();
   }
 
-  handleSelectionTypeChange(selection_type) {
+  handleSelectionTypeChange(selectionType) {
     let selected;
 
-    if (selection_type === SelectionType.SELECTION_USER) {
+    if (selectionType === SelectionType.SELECTION_USER) {
       selected = new Set();
     }
     else {
       selected = undefined;
     }
 
-    this.setState({selection_type, selected});
+    this.setState({selectionType, selected});
   }
 
   handleDownloadBulk(filename = 'export.xml') {
-    const {entities_command} = this;
-    const {selected, selection_type, loaded_filter} = this.state;
+    const {entitiesCommand} = this;
+    const {
+      selected,
+      selectionType,
+    } = this.state;
+    const {
+      loadedFilter,
+      onDownload,
+    } = this.props;
+
     let promise;
 
-    if (selection_type === SelectionType.SELECTION_USER) {
-      promise = entities_command.export(selected);
+    if (selectionType === SelectionType.SELECTION_USER) {
+      promise = entitiesCommand.export(selected);
     }
-    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entities_command.exportByFilter(loaded_filter);
+    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      promise = entitiesCommand.exportByFilter(loadedFilter);
     }
     else {
-      promise = entities_command.exportByFilter(loaded_filter.all());
+      promise = entitiesCommand.exportByFilter(loadedFilter.all());
     }
 
     promise.then(response => {
       const {data} = response;
-      const {onDownload} = this.props;
       onDownload({filename, data});
     }, this.handleError);
   }
 
   handleDeleteBulk() {
-    const {entities_command} = this;
-    const {selected, selection_type, loaded_filter} = this.state;
+    const {entitiesCommand} = this;
+    const {
+      selected,
+      selectionType,
+    } = this.state;
+    const {
+      loadedFilter,
+    } = this.props;
     let promise;
 
-    if (selection_type === SelectionType.SELECTION_USER) {
-      promise = entities_command.delete(selected);
+    if (selectionType === SelectionType.SELECTION_USER) {
+      promise = entitiesCommand.delete(selected);
     }
-    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
-      promise = entities_command.deleteByFilter(loaded_filter);
+    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      promise = entitiesCommand.deleteByFilter(loadedFilter);
     }
     else {
-      promise = entities_command.deleteByFilter(loaded_filter.all());
+      promise = entitiesCommand.deleteByFilter(loadedFilter.all());
     }
 
     promise.then(deleted => {
-      this.reload({invalidate: true});
+      this.reload();
       log.debug('successfully deleted entities', deleted);
     }, this.handleError);
   }
@@ -341,14 +283,14 @@ class EntitiesContainer extends React.Component {
   }
 
   handleSortChange(field) {
-    const {loaded_filter} = this.state;
+    const {loadedFilter} = this.props;
 
     let sort = 'sort';
-    const sort_field = loaded_filter.getSortBy();
+    const sortField = loadedFilter.getSortBy();
 
-    const filter = loaded_filter.first();
+    const filter = loadedFilter.first();
 
-    if (sort_field && sort_field === field) {
+    if (sortField && sortField === field) {
       sort = filter.getSortOrder() === 'sort' ? 'sort-reverse' : 'sort';
     }
 
@@ -364,25 +306,25 @@ class EntitiesContainer extends React.Component {
   }
 
   handleFirst() {
-    const {loaded_filter: filter} = this.state;
+    const {loadedFilter: filter} = this.props;
 
     this.load({filter: filter.first()});
   }
 
   handleNext() {
-    const {loaded_filter: filter} = this.state;
+    const {loadedFilter: filter} = this.props;
 
     this.load({filter: filter.next()});
   }
 
   handlePrevious() {
-    const {loaded_filter: filter} = this.state;
+    const {loadedFilter: filter} = this.props;
 
     this.load({filter: filter.previous()});
   }
 
   handleLast() {
-    const {loaded_filter: filter, entitiesCounts: counts} = this.state;
+    const {loadedFilter: filter, entitiesCounts: counts} = this.state;
 
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
@@ -422,18 +364,17 @@ class EntitiesContainer extends React.Component {
     const {gmp} = this.props;
     const {tags} = this.state;
 
-    return gmp.tag.create(data).then(response => {
-      return gmp.tag.get(response.data);
-    })
-    .then(response => {
-      this.setState({
-        tag: response.data,
-        tags: [
-          ...tags,
-          response.data,
-        ],
+    return gmp.tag.create(data)
+      .then(response => gmp.tag.get(response.data))
+      .then(response => {
+        this.setState({
+          tag: response.data,
+          tags: [
+            ...tags,
+            response.data,
+          ],
+        });
       });
-    });
   }
 
   handleTagChange(id) {
@@ -452,11 +393,13 @@ class EntitiesContainer extends React.Component {
     name,
     value = '',
   }) {
-    const {gmp} = this.props;
     const {
-      selection_type: selectionType,
+      gmp,
+      loadedFilter,
+    } = this.props;
+    const {
+      selectionType,
       selected,
-      loaded_filter,
       entities = [],
     } = this.state;
 
@@ -469,10 +412,10 @@ class EntitiesContainer extends React.Component {
       filter = undefined;
     }
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      filter = loaded_filter;
+      filter = loadedFilter;
     }
     else {
-      filter = loaded_filter.all();
+      filter = loadedFilter.all();
     }
 
     return gmp.tag.save({
@@ -516,17 +459,17 @@ class EntitiesContainer extends React.Component {
 
   getMultiTagEntitiesCount() {
     const {
+      selectionType,
+      selected,
       entities,
       entitiesCounts,
-      selection_type,
-      selected,
     } = this.state;
 
-    if (selection_type === SelectionType.SELECTION_USER) {
+    if (selectionType === SelectionType.SELECTION_USER) {
       return selected.size;
     }
 
-    if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       return entities.length;
     }
 
@@ -537,23 +480,23 @@ class EntitiesContainer extends React.Component {
     const {
       entities,
       entitiesCounts,
-      loaded_filter,
-      loading,
+      loadedFilter,
+      multiTagEntitiesCount,
       selected,
-      selection_type,
-      sortBy,
-      sortDir,
+      selectionType,
       tag = {},
       tags,
       tagDialogVisible,
       tagsDialogVisible,
-      updating,
-      multiTagEntitiesCount,
     } = this.state;
     const {
+      children,
+      isLoading,
+      filter,
       onDownload,
       showErrorMessage,
       showSuccessMessage,
+      ...props
     } = this.props;
 
     let entitiesType;
@@ -564,57 +507,67 @@ class EntitiesContainer extends React.Component {
     }
 
     let title;
-    if (selection_type === SelectionType.SELECTION_USER) {
+    if (selectionType === SelectionType.SELECTION_USER) {
       title = 'Add Tag to Selection';
     }
-    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       title = 'Add Tag to Page Contents';
     }
     else {
       title = 'Add Tag to All Filtered';
     }
-    const Component = this.props.component;
-    const other = excludeObjectProps(this.props, exclude_props);
 
+    const other = excludeObjectProps(props, exclude_props);
+
+    const reverseField = isDefined(loadedFilter) ?
+      loadedFilter.get('sort-reverse') : undefined;
+    const reverse = isDefined(reverseField);
+    const sortBy = reverse || !isDefined(loadedFilter) ? reverseField :
+      loadedFilter.get('sort');
+    const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
+    const isUpdating = isDefined(loadedFilter) && isDefined(filter) &&
+      !loadedFilter.equals(filter);
     return (
-      <Wrapper>
-        <Component
-          createFilterType={this.name}
-          {...other}
-          loading={loading}
-          entities={entities}
-          entitiesCounts={entitiesCounts}
-          entitiesSelected={selected}
-          filter={loaded_filter}
-          selectionType={selection_type}
-          sortBy={sortBy}
-          sortDir={sortDir}
-          onChanged={this.handleChanged}
-          onDownloaded={onDownload}
-          onError={this.handleError}
-          onFilterChanged={this.handleFilterChanged}
-          onFilterReset={this.handleFilterReset}
-          onSortChange={this.handleSortChange}
-          onSelectionTypeChange={this.handleSelectionTypeChange}
-          onDownloadBulk={this.handleDownloadBulk}
-          onDeleteBulk={this.handleDeleteBulk}
-          onTagsBulk={this.openTagsDialog}
-          onEntitySelected={this.handleSelected}
-          onEntityDeselected={this.handleDeselected}
-          onFilterCreated={this.handleFilterCreated}
-          onFirstClick={this.handleFirst}
-          onLastClick={this.handleLast}
-          onNextClick={this.handleNext}
-          onPreviousClick={this.handlePrevious}
-          showError={showErrorMessage}
-          showSuccess={showSuccessMessage}
-          updating={updating}
-        />
+      <React.Fragment>
+        {children({
+          ...other,
+          createFilterType: this.name,
+          entities,
+          entitiesCounts,
+          entitiesSelected: selected,
+          filter: loadedFilter,
+          isLoading,
+          isUpdating,
+          loading: isLoading, // TODO convert list pages to use isLoading and remove me
+          selectionType: selectionType,
+          sortBy,
+          sortDir,
+          updating: isUpdating, // TODO remove after list pages are converted to use isUpdating
+          onChanged: this.handleChanged,
+          onDownloaded: onDownload,
+          onError: this.handleError,
+          onFilterChanged: this.handleFilterChanged,
+          onFilterReset: this.handleFilterReset,
+          onSortChange: this.handleSortChange,
+          onSelectionTypeChange: this.handleSelectionTypeChange,
+          onDownloadBulk: this.handleDownloadBulk,
+          onDeleteBulk: this.handleDeleteBulk,
+          onTagsBulk: this.openTagsDialog,
+          onEntitySelected: this.handleSelected,
+          onEntityDeselected: this.handleDeselected,
+          onFilterCreated: this.handleFilterCreated,
+          onFirstClick: this.handleFirst,
+          onLastClick: this.handleLast,
+          onNextClick: this.handleNext,
+          onPreviousClick: this.handlePrevious,
+          showError: showErrorMessage,
+          showSuccess: showSuccessMessage,
+        })}
         {tagsDialogVisible &&
           <TagsDialog
             comment={tag.comment}
             entitiesCount={multiTagEntitiesCount}
-            filter={loaded_filter}
+            filter={loadedFilter}
             name={tag.name}
             tagId={tag.id}
             tags={tags}
@@ -636,34 +589,30 @@ class EntitiesContainer extends React.Component {
             onSave={this.handleCreateTag}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
-
 }
 
 EntitiesContainer.propTypes = {
-  cache: PropTypes.cache.isRequired,
-  component: PropTypes.component.isRequired,
+  children: PropTypes.func.isRequired,
   entities: PropTypes.array,
+  entitiesCounts: PropTypes.counts,
   extraLoadParams: PropTypes.object,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  loadEntities: PropTypes.func.isRequired,
+  loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
   router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  updateFilter: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
 };
-
-EntitiesContainer = compose(
-  withGmp,
-  withCache(),
-  withDialogNotification,
-  withDownload,
-)(EntitiesContainer);
 
 export default EntitiesContainer;
 

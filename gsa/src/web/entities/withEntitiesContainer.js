@@ -33,7 +33,7 @@ import withGmp from 'web/utils/withGmp';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import EntitiesContainer from './container2';
+import EntitiesContainer from './container';
 import {pageFilter} from 'web/store/pages/actions';
 import {isDefined} from 'gmp/utils/identity';
 
