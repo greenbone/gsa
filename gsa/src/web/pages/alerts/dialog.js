@@ -291,7 +291,6 @@ class AlertDialog extends React.Component {
       capabilities,
       credentials,
       title = _('New Alert'),
-      visible = true,
       report_formats,
       method_data_scp_credential,
       method_data_smb_credential,
@@ -382,7 +381,6 @@ class AlertDialog extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         defaultValues={data}
         values={controlledValues}
@@ -765,7 +763,6 @@ AlertDialog.propTypes = {
   secinfo_filters: PropTypes.array,
   tasks: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewScpCredentialClick: PropTypes.func.isRequired,
   onNewSmbCredentialClick: PropTypes.func.isRequired,
