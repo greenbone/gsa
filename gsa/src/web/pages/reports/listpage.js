@@ -42,7 +42,6 @@ import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 
 import IconDivider from 'web/components/layout/icondivider';
-import Wrapper from 'web/components/layout/wrapper';
 
 import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
@@ -188,7 +187,7 @@ class Page extends React.Component {
     } = this.state;
 
     return (
-      <Wrapper>
+      <React.Fragment>
         <EntitiesPage
           {...this.props}
           {...this.state}
@@ -213,7 +212,7 @@ class Page extends React.Component {
             onSave={this.handleCreateContainerTask}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
