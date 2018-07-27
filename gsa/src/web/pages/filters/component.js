@@ -29,14 +29,14 @@ import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilties from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import FilterDialog from './dialog.js';
+import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
   ['agent', _('Agent')],
@@ -223,4 +223,4 @@ FilterComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withCapabilties(FilterComponent);
+export default withCapabilities(FilterComponent);
