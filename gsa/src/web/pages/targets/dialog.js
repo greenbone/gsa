@@ -127,7 +127,6 @@ const TargetDialog = ({
   target_source = 'manual',
   target_exclude_source = 'manual',
   title = _('New Target'),
-  visible = true,
   onClose,
   onNewCredentialsClick,
   onNewPortListClick,
@@ -170,7 +169,6 @@ const TargetDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={uncontrolledValues}
       values={controlledValues}
@@ -495,7 +493,6 @@ TargetDialog.propTypes = {
     'manual', 'file', 'asset_hosts',
   ]),
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onEsxiCredentialChange: PropTypes.func.isRequired,
   onNewCredentialsClick: PropTypes.func.isRequired,
