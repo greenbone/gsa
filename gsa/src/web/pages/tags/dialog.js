@@ -194,7 +194,6 @@ class TagDialog extends React.Component {
       resource_types = [],
       title = _('New Tag'),
       value = '',
-      visible = true,
       onClose,
       onSave,
       ...options
@@ -222,7 +221,6 @@ class TagDialog extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -328,7 +326,6 @@ TagDialog.propTypes = {
   tag: PropTypes.model,
   title: PropTypes.string,
   value: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
