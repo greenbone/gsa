@@ -31,38 +31,38 @@ import {map} from 'gmp/utils/array';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Checkbox from '../../components/form/checkbox.js';
-import {noop_convert} from '../../components/form/form.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import TextField from '../../components/form/textfield.js';
-import Select from '../../components/form/select.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import Checkbox from 'web/components/form/checkbox';
+import {noop_convert} from 'web/components/form/form';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import EditIcon from '../../components/icon/editicon.js';
+import EditIcon from 'web/components/icon/editicon';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Section from '../../components/section/section.js';
+import Section from 'web/components/section/section';
 
-import Table from '../../components/table/table.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableRow from '../../components/table/row.js';
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
-import Trend from './trend.js';
+import Trend from './trend';
 
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from 'gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig';
 
 class NvtPreferenceDisplay extends React.Component {
 
