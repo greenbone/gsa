@@ -144,7 +144,6 @@ const PermissionDialog = ({
   title = _('New Permission'),
   userId,
   users = [],
-  visible,
   onClose,
   onSave,
 }) => {
@@ -177,7 +176,6 @@ const PermissionDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -360,7 +358,6 @@ PermissionDialog.propTypes = {
   title: PropTypes.string,
   userId: PropTypes.id,
   users: PropTypes.array,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
