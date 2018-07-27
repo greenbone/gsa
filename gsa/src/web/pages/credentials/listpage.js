@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -103,6 +103,7 @@ const CredentialsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={CredentialsFilterDialog}
+      filtersFilter={CREDENTIALS_FILTER_FILTER}
       sectionIcon="credential.svg"
       table={CredentialsTable}
       title={_('Credentials')}
@@ -130,7 +131,6 @@ CredentialsPage.propTypes = {
 
 export default withEntitiesContainer('credential', {
   entitiesSelector,
-  filtersFilter: CREDENTIALS_FILTER_FILTER,
   loadEntities,
 })(CredentialsPage);
 

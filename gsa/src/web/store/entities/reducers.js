@@ -34,9 +34,10 @@ import {reducer as filter} from './filters';
 import {reducer as group} from './groups';
 import {reducer as host} from './hosts';
 import {reducer as note} from './notes';
-import {reducer as nvts} from './nvts';
-import {reducer as os} from './os';
+import {reducer as nvt} from './nvts';
+import {reducer as operatingsystem} from './operatingsystems';
 import {reducer as ovaldef} from './ovaldefs';
+import {reducer as override} from './overrides';
 import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
@@ -65,9 +66,10 @@ const entitiesReducer = combineReducers({
   group,
   host,
   note,
-  nvts,
-  os,
+  nvt,
+  operatingsystem,
   ovaldef,
+  override,
   permission,
   portlist,
   reportformat,

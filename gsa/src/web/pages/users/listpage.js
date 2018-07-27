@@ -24,54 +24,58 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
+
+import {USERS_FILTER_FILTER, ALL_FILTER} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose.js';
-import withCapabilities from '../../utils/withCapabilities.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Wrapper from '../../components/layout/wrapper.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import {USERS_FILTER_FILTER} from 'gmp/models/filter.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/users';
 
-import ConfirmDeleteDialog from './confirmdeletedialog.js';
-import UserComponent from './component.js';
-import UsersTable, {SORT_FIELDS} from './table.js';
+import ConfirmDeleteDialog from './confirmdeletedialog';
+import UserComponent from './component';
+import UsersTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
   onUserCreateClick,
-}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="gui_administration"
-        anchor="user-management"
-        title={_('Help: Users')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="user-management"
+      title={_('Help: Users')}
+    />
+    {capabilities.mayCreate('user') &&
+      <NewIcon
+        title={_('New User')}
+        onClick={onUserCreateClick}
       />
-      {capabilities.mayCreate('user') &&
-        <NewIcon
-          title={_('New User')}
-          onClick={onUserCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-});
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onUserCreateClick: PropTypes.func.isRequired,
@@ -94,71 +98,62 @@ class UsersPage extends React.Component {
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 
-  handleDeleteUser({deleteUsers, id, inheritor_id}) {
+  handleDeleteUser({deleteUsers, inheritorId}) {
     const {gmp, onChanged} = this.props;
 
-    if (inheritor_id === '--') {
-      inheritor_id = undefined;
+    if (inheritorId === '--') {
+      inheritorId = undefined;
     }
 
-    if (isDefined(id)) {
-      return gmp.user.delete({id, inheritor_id}).then(() => onChanged());
+    if (deleteUsers.length === 1) {
+      const {id} = deleteUsers[0]; // eslint-disable-line prefer-destructuring
+      return gmp.user.delete({id, inheritorId}).then(onChanged);
     }
 
-    return gmp.users.delete(deleteUsers, {inheritor_id})
-      .then(() => onChanged());
+    return gmp.users.delete(deleteUsers, {inheritor_id: inheritorId})
+      .then(onChanged);
   }
 
   openConfirmDeleteDialog(user) {
-    const {gmp} = this.props;
+    const {loadAll, gmp} = this.props;
 
-    gmp.users.getAll().then(response => {
-      let {data: users} = response;
+    loadAll();
 
-      if (isDefined(user)) {
-        users = users.filter(luser => luser.id !== user.id);
+    if (isDefined(user)) {
+      this.setState({
+        confirmDeleteDialogVisible: true,
+        id: user.id,
+        deleteUsers: [user],
+        title: _('Confirm deletion of user {{name}}', user),
+      });
 
-        this.setState({
-          confirmDeleteDialogVisible: true,
-          id: user.id,
-          username: user.name,
-          users,
-          title: _('Confirm deletion of user {{name}}', user),
-        });
+    }
+    else {
+      const {selectionType} = this.props;
+      let promise;
 
+      if (selectionType === SelectionType.SELECTION_USER) {
+        const {entitiesSelected} = this.props;
+        promise = Promise.resolve([...entitiesSelected]);
+      }
+      else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+        const {entities} = this.props;
+        promise = Promise.resolve(entities);
       }
       else {
-        const {selectionType} = this.props;
-        let promise;
-
-        if (selectionType === SelectionType.SELECTION_USER) {
-          const {entitiesSelected} = this.props;
-          promise = Promise.resolve([...entitiesSelected]);
-        }
-        else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-          const {entities} = this.props;
-          promise = Promise.resolve(entities);
-        }
-        else {
-          const {filter} = this.props;
-          promise = gmp.users.get({filter: filter.all()})
-            .then(resp => resp.data);
-        }
-
-        promise.then(deleteUsers => {
-          const ids = deleteUsers.map(luser => luser.id);
-
-          users = users.filter(luser => !ids.includes(luser.id));
-
-          this.setState({
-            confirmDeleteDialogVisible: true,
-            users,
-            deleteUsers,
-            title: _('Confirm deletion of users'),
-          });
-        });
+        const {filter} = this.props;
+        // TODO these users should be loaded from the store too
+        promise = gmp.users.getAll({filter}).then(resp => resp.data);
       }
-    });
+
+      promise.then(deleteUsers => {
+        this.setState({
+          confirmDeleteDialogVisible: true,
+          deleteUsers,
+          title: _('Confirm deletion of users'),
+        });
+      });
+    }
   }
 
   closeConfirmDeleteDialog() {
@@ -167,6 +162,7 @@ class UsersPage extends React.Component {
 
   render() {
     const {
+      allUsers = [],
       onChanged,
       onDownloaded,
       onError,
@@ -174,16 +170,17 @@ class UsersPage extends React.Component {
     } = this.props;
 
     const {
-      id,
       confirmDeleteDialogVisible,
-      deleteUsers = {},
+      deleteUsers = [],
       title,
-      username,
-      users,
     } = this.state;
 
+    const deleteUserIds = deleteUsers.map(luser => luser.id);
+    const inheritorUsers = allUsers.filter(
+      user => !deleteUserIds.includes(user.id));
+
     return (
-      <Wrapper>
+      <React.Fragment>
         <UserComponent
           onCreated={onChanged}
           onSaved={onChanged}
@@ -203,6 +200,7 @@ class UsersPage extends React.Component {
           <EntitiesPage
             {...props}
             filterEditDialog={UsersFilterDialog}
+            filtersFilter={USERS_FILTER_FILTER}
             sectionIcon="user.svg"
             table={UsersTable}
             title={_('Users')}
@@ -223,35 +221,48 @@ class UsersPage extends React.Component {
         {confirmDeleteDialogVisible &&
           <ConfirmDeleteDialog
             deleteUsers={deleteUsers}
-            id={id}
             title={title}
-            username={username}
-            users={users}
+            inheritorUsers={inheritorUsers}
             onClose={this.closeConfirmDeleteDialog}
             onSave={this.handleDeleteUser}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
 
 UsersPage.propTypes = {
+  allUsers: PropTypes.array,
   entities: PropTypes.array,
   entitiesSelected: PropTypes.set,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  loadAll: PropTypes.func.isRequired,
   selectionType: PropTypes.string.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = state => {
+  const selector = entitiesSelector(state);
+  return {
+    allUsers: selector.getEntities(ALL_FILTER),
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadAll: () => dispatch(loadEntities({gmp, filter: ALL_FILTER})),
+});
+
 export default compose(
   withGmp,
   withEntitiesContainer('user', {
-    filtersFilter: USERS_FILTER_FILTER,
+    entitiesSelector,
+    loadEntities,
   }),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UsersPage);
 
 // vim: set ts=2 sw=2 tw=80:

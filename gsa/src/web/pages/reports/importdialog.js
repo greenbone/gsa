@@ -47,7 +47,6 @@ const ImportDialog = ({
   newContainerTask = true,
   task_id,
   tasks,
-  visible = true,
   onClose,
   onNewContainerTaskClick,
   onSave,
@@ -56,7 +55,6 @@ const ImportDialog = ({
   return (
     <SaveDialog
       buttonTitle={_('Import')}
-      visible={visible}
       title={_('Import Report')}
       onClose={onClose}
       onSave={onSave}
@@ -114,13 +112,11 @@ ImportDialog.propTypes = {
   task_id: PropTypes.id,
   tasks: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onNewContainerTaskClick: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onTaskChange: PropTypes.func,
 };
-
 
 export default ImportDialog;
 

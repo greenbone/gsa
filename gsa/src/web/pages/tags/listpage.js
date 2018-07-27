@@ -26,21 +26,26 @@ import _ from 'gmp/locale';
 
 import {TAGS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilties from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilties from 'web/utils/withCapabilities';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import TagComponent from './component.js';
-import TagsTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/tags';
+
+import TagComponent from './component';
+import TagsTable from './table';
 
 export const SORT_FIELDS = [
   ['name', _('Name'), '30%'],
@@ -109,6 +114,7 @@ const TagsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={TagsFilterDialog}
+      filterFilter={TAGS_FILTER_FILTER}
       sectionIcon="tag.svg"
       table={TagsTable}
       tags={false}
@@ -137,7 +143,8 @@ TagsPage.propTypes = {
 };
 
 export default withEntitiesContainer('tag', {
-  filterFilter: TAGS_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(TagsPage);
 
 // vim: set ts=2 sw=2 tw=80:

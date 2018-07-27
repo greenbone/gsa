@@ -24,49 +24,50 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {GROUPS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {GROUPS_FILTER_FILTER} from 'gmp/models/filter.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import GroupComponent from './component.js';
-import Table, {SORT_FIELDS} from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/groups';
 
-const ToolBarIcons = ({
+import GroupComponent from './component';
+import Table, {SORT_FIELDS} from './table';
+
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onGroupCreateClick,
-}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="gui_administration"
-        anchor="groups"
-        title={_('Help: Groups')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="groups"
+      title={_('Help: Groups')}
+    />
+    {capabilities.mayCreate('group') &&
+      <NewIcon
+        title={_('New Group')}
+        onClick={onGroupCreateClick}
       />
-      {capabilities.mayCreate('group') &&
-        <NewIcon
-          title={_('New Group')}
-          onClick={onGroupCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onGroupCreateClick: PropTypes.func.isRequired,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const GroupsFilterDialog = createFilterDialog({sortFields: SORT_FIELDS});
@@ -98,6 +99,7 @@ const GroupsPage = ({
       <EntitiesPage
         {...props}
         filterEditDialog={GroupsFilterDialog}
+        filtersFilter={GROUPS_FILTER_FILTER}
         sectionIcon="group.svg"
         table={Table}
         title={_('Groups')}
@@ -123,7 +125,8 @@ GroupsPage.propTypes = {
 };
 
 export default withEntitiesContainer('group', {
-  filtersFilter: GROUPS_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(GroupsPage);
 
 // vim: set ts=2 sw=2 tw=80:

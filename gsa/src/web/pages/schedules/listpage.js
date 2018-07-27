@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -100,6 +100,7 @@ const SchedulesPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ScheduleFilterDialog}
+      filtersFilter={SCHEDULES_FILTER_FILTER}
       sectionIcon="schedule.svg"
       table={SchedulesTable}
       title={_('Schedules')}
@@ -126,7 +127,6 @@ SchedulesPage.propTypes = {
 
 export default withEntitiesContainer('schedule', {
   entitiesSelector,
-  filtersFilter: SCHEDULES_FILTER_FILTER,
   loadEntities,
 })(SchedulesPage);
 

@@ -20,10 +20,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {testAll} from '../utils/testing';
+import {createAll} from './utils/main';
 
-import * as funcs from '../os';
+const {
+  loadEntities,
+  loadEntity,
+  reducer,
+  selector,
+  entitiesActions,
+  entityActions,
+} = createAll('override');
 
-testAll('os', funcs);
+export {
+  loadEntities,
+  loadEntity,
+  reducer,
+  selector,
+  entitiesActions,
+  entityActions,
+};
 
 // vim: set ts=2 sw=2 tw=80:

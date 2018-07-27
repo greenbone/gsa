@@ -51,7 +51,6 @@ const ContainerTaskDialog = ({
   name,
   task,
   title = _('New Container Task'),
-  visible = true,
   onClose,
   onSave,
 }) => {
@@ -68,14 +67,13 @@ const ContainerTaskDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       defaultValues={data}
       onClose={onClose}
       onSave={onSave}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
         return (
@@ -131,7 +129,6 @@ ContainerTaskDialog.propTypes = {
   name: PropTypes.string,
   task: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

@@ -25,43 +25,54 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import Layout from 'web/components/layout/layout';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import {VULNS_FILTER_FILTER} from 'gmp/models/filter.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import VulnsFilterDialog from './filterdialog.js';
-import VulnsTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/vulns';
+
+import VulnsFilterDialog from './filterdialog';
+import VulnsTable from './table';
 
 import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = () => {
-  return (
-    <Layout flex box>
-      <ManualIcon
-        page="search"
-        anchor="vulnerabilities"
-        title={_('Vulnerabilities')}
-      />
-    </Layout>
-  );
-};
+const ToolBarIcons = () => (
+  <Layout>
+    <ManualIcon
+      page="search"
+      anchor="vulnerabilities"
+      title={_('Vulnerabilities')}
+    />
+  </Layout>
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    dashboard2={VulnerabilitiesDashboard}
+    filterEditDialog={VulnsFilterDialog}
+    filtersFilter={VULNS_FILTER_FILTER}
+    table={VulnsTable}
+    title={_('Vulnerabilities')}
+    sectionIcon="vulnerability.svg"
+    toolBarIcons={ToolBarIcons}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
+    )}
+  />
+);
 
 export default withEntitiesContainer('vuln', {
-  dashboard2: VulnerabilitiesDashboard,
-  filterEditDialog: VulnsFilterDialog,
-  filtersFilter: VULNS_FILTER_FILTER,
-  table: VulnsTable,
-  title: _('Vulnerabilities'),
-  sectionIcon: 'vulnerability.svg',
-  toolBarIcons: ToolBarIcons,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
-  ),
-})(EntitiesPage);
+  entitiesSelector,
+  loadEntities,
+})(Page);

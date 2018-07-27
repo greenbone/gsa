@@ -32,7 +32,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -106,6 +106,7 @@ const PortListsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={PortListsFilterDialog}
+      filtersFilter={PORTLISTS_FILTER_FILTER}
       sectionIcon="port_list.svg"
       table={PortListsTable}
       title={_('Portlists')}
@@ -133,7 +134,6 @@ PortListsPage.propTypes = {
 
 export default withEntitiesContainer('portlist', {
   entitiesSelector,
-  filtersFilter: PORTLISTS_FILTER_FILTER,
   loadEntities,
 })(PortListsPage);
 

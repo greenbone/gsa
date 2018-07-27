@@ -27,43 +27,54 @@ import _ from 'gmp/locale';
 
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import SecInfoFilterDialog from './filterdialog.js';
-import SecInfosTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/secinfo';
+
+import SecInfoFilterDialog from './filterdialog';
+import SecInfosTable from './table';
 
 import {
   SecInfoDashboard,
   SECINFO_DASHBOARD_ID,
-} from './dashboard/index.js';
+} from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="secinfo-management"
-      title={_('Help: All SecInfo Information')}
-    />
-  );
-};
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="secinfo-management"
+    title={_('Help: All SecInfo Information')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={SecInfoDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={SecInfoFilterDialog}
+    filtersFilter={SECINFO_FILTER_FILTER}
+    sectionIcon="allinfo.svg"
+    table={SecInfosTable}
+    title={_('All SecInfo Information')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('secinfo', {
-  createFilterType: 'info',
-  dashboard2: SecInfoDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: SecInfoFilterDialog,
-  filtersFilter: SECINFO_FILTER_FILTER,
-  sectionIcon: 'allinfo.svg',
-  table: SecInfosTable,
-  title: _('All SecInfo Information'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+  entitiesSelector,
+  loadEntities,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

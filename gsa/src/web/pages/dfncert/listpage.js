@@ -27,42 +27,53 @@ import _ from 'gmp/locale';
 
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
+import DashboardControls from 'web/components/dashboard/controls';
+
+import ManualIcon from 'web/components/icon/manualicon';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/dfncerts';
+
  // DFN-CERT uses same filter dialog as CERT-Bund
-import FilterDialog from '../certbund/filterdialog.js';
+import FilterDialog from '../certbund/filterdialog';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import DfnCertTable from './table';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="id15"
+    title={_('Help: DFN-CERT Advisories')}
+  />
+);
 
-import DfnCertTable from './table.js';
-
-import DfnCertDashboard, {DFNCERT_DASHBOARD_ID} from './dashboard/index.js';
-
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="id15"
-      title={_('Help: DFN-CERT Advisories')}
-    />
-  );
-};
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={DfnCertDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={FilterDialog}
+    filtersFilter={DFNCERT_FILTER_FILTER}
+    sectionIcon="dfn_cert_adv.svg"
+    table={DfnCertTable}
+    title={_('DFN-CERT Advisories')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('dfncert', {
-  createFilterType: 'info',
-  dashboard2: DfnCertDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: FilterDialog,
-  filtersFilter: DFNCERT_FILTER_FILTER,
-  sectionIcon: 'dfn_cert_adv.svg',
-  table: DfnCertTable,
-  title: _('DFN-CERT Advisories'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+  entitiesSelector,
+  loadEntities,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

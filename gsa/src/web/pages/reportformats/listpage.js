@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -103,6 +103,7 @@ const ReportFormatsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ReportFormatsFilterDialog}
+      filtersFilter={REPORT_FORMATS_FILTER_FILTER}
       sectionIcon="report_format.svg"
       table={ReportFormatsTable}
       title={_('Report Formats')}
@@ -129,7 +130,6 @@ ReportFormatsPage.propTypes = {
 
 export default withEntitiesContainer('reportformat', {
   entitiesSelector,
-  filtersFilter: REPORT_FORMATS_FILTER_FILTER,
   loadEntities,
 })(ReportFormatsPage);
 

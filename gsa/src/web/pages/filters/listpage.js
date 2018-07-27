@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -100,6 +100,7 @@ const FiltersPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={FiltersFilterDialog}
+      filtersFilter={FILTERS_FILTER_FILTER}
       sectionIcon="filter.svg"
       table={FiltersTable}
       title={_('Filters')}
@@ -126,7 +127,6 @@ FiltersPage.propTypes = {
 
 export default withEntitiesContainer('filter', {
   entitiesSelector,
-  filtersFilter: FILTERS_FILTER_FILTER,
   loadEntities,
 })(FiltersPage);
 

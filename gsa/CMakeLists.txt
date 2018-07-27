@@ -340,7 +340,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/table/table.js
      ${GSA_SRC_DIR}/src/web/entities/actions.js
      ${GSA_SRC_DIR}/src/web/entities/container.js
-     ${GSA_SRC_DIR}/src/web/entities/container2.js
      ${GSA_SRC_DIR}/src/web/entities/entitynametabledata.js
      ${GSA_SRC_DIR}/src/web/entities/footer.js
      ${GSA_SRC_DIR}/src/web/entities/header.js
@@ -350,7 +349,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/table.js
      ${GSA_SRC_DIR}/src/web/entities/tagsdialog.js
      ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer.js
-     ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer2.js
      ${GSA_SRC_DIR}/src/web/entities/withRowDetails.js
      ${GSA_SRC_DIR}/src/web/entity/block.js
      ${GSA_SRC_DIR}/src/web/entity/box.js
@@ -528,17 +526,17 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/qoddisplay.js
      ${GSA_SRC_DIR}/src/web/pages/nvts/dashboard/qodtypedisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/component.js
-     ${GSA_SRC_DIR}/src/web/pages/os/detailspage.js
-     ${GSA_SRC_DIR}/src/web/pages/os/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/os/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/os/row.js
-     ${GSA_SRC_DIR}/src/web/pages/os/table.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/severityclassdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/os/dashboard/vulnscoredisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/component.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/filterdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/row.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/table.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/cvssdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/index.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/loaders.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/severityclassdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/vulnscoredisplay.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/details.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js
@@ -785,8 +783,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/hosts.js
      ${GSA_SRC_DIR}/src/web/store/entities/notes.js
      ${GSA_SRC_DIR}/src/web/store/entities/nvts.js
-     ${GSA_SRC_DIR}/src/web/store/entities/os.js
+     ${GSA_SRC_DIR}/src/web/store/entities/operatingsystems.js
      ${GSA_SRC_DIR}/src/web/store/entities/ovaldefs.js
+     ${GSA_SRC_DIR}/src/web/store/entities/overrides.js
      ${GSA_SRC_DIR}/src/web/store/entities/permissions.js
      ${GSA_SRC_DIR}/src/web/store/entities/portlists.js
      ${GSA_SRC_DIR}/src/web/store/entities/reducers.js

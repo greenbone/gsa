@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -106,6 +106,7 @@ const AgentsPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={AgentsFilterDialog}
+      filtersFilter={AGENTS_FILTER_FILTER}
       sectionIcon="agent.svg"
       table={AgentsTable}
       title={_('Agents')}
@@ -135,7 +136,6 @@ AgentsPage.propTypes = {
 
 export default withEntitiesContainer('agent', {
   entitiesSelector,
-  filtersFilter: AGENTS_FILTER_FILTER,
   loadEntities,
 })(AgentsPage);
 

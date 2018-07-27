@@ -25,47 +25,50 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import FilterDialog from './filterdialog.js';
-import NotesTable from './table.js';
-import NoteComponent from './component.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import {NOTES_FILTER_FILTER} from 'gmp/models/filter.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/notes';
 
-import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard/index.js';
+import FilterDialog from './filterdialog';
+import NotesTable from './table';
+import NoteComponent from './component';
 
-const ToolBarIcons = ({onNoteCreateClick}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="notes"
-        title={_('Help: Notes')}
+import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
+
+const ToolBarIcons = withCapabilities(({
+  capabilities,
+  onNoteCreateClick,
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="notes"
+      title={_('Help: Notes')}
+    />
+    {capabilities.mayCreate('note') &&
+      <NewIcon
+        title={_('New Note')}
+        onClick={onNoteCreateClick}
       />
-      {capabilities.mayCreate('note') &&
-        <NewIcon
-          title={_('New Note')}
-          onClick={onNoteCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
@@ -96,7 +99,12 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard2={NotesDashboard}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={NOTES_DASHBOARD_ID} />
+        )}
         filterEditDialog={FilterDialog}
+        filtersFilter={NOTES_FILTER_FILTER}
         sectionIcon="note.svg"
         table={NotesTable}
         title={_('Notes')}
@@ -119,12 +127,8 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('note', {
-  dashboard2: NotesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={NOTES_DASHBOARD_ID}/>
-  ),
-  extraLoadParams: {details: 1},
-  filtersFilter: NOTES_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -27,27 +27,31 @@ import _ from 'gmp/locale';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import {goto_details} from '../../entity/component.js';
+import {goto_details} from 'web/entity/component';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import HostsFilterDialog from './filterdialog.js';
-import HostsTable from './table.js';
-import HostComponent from './component.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/hosts';
+
+import HostsFilterDialog from './filterdialog';
+import HostsTable from './table';
+import HostComponent from './component';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
-
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -103,6 +107,7 @@ const Page = ({
           <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
         )}
         filterEditDialog={HostsFilterDialog}
+        filtersFilter={HOSTS_FILTER_FILTER}
         sectionIcon="host.svg"
         table={HostsTable}
         title={_('Hosts')}
@@ -126,7 +131,8 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('host', {
-  filtersFilter: HOSTS_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

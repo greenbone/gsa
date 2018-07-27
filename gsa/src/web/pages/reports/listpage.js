@@ -26,31 +26,37 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
-import PropTypes from '../../utils/proptypes.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Wrapper from '../../components/layout/wrapper.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
+import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
-import ReportFilterDialog from './filterdialog.js';
-import ImportReportDialog from './importdialog.js';
-import ReportsTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/reports';
+
+import ReportFilterDialog from './filterdialog';
+import ImportReportDialog from './importdialog';
+import ReportsTable from './table';
 
 import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
-
-import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
@@ -107,7 +113,7 @@ class Page extends React.Component {
   }
 
   loadTasks() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.tasks.get()
       .then(response => {
         const {data: tasks} = response;
@@ -133,13 +139,12 @@ class Page extends React.Component {
   }
 
   handleDialogSave(data) {
-    const {gmp} = this.context;
-    const {onChanged, onError} = this.props;
+    const {gmp, onChanged, onError} = this.props;
     return gmp.report.import(data).then(onChanged, onError);
   }
 
   handleCreateContainerTask(data) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     let task_id;
     return gmp.task.createContainer(data)
       .then(response => {
@@ -170,8 +175,7 @@ class Page extends React.Component {
   }
 
   handleReportDeleteClick(report) {
-    const {gmp} = this.context;
-    const {onChanged, onError} = this.props;
+    const {gmp, onChanged, onError} = this.props;
     return gmp.report.delete(report).then(onChanged, onError);
   }
 
@@ -188,10 +192,20 @@ class Page extends React.Component {
     } = this.state;
 
     return (
-      <Wrapper>
+      <React.Fragment>
         <EntitiesPage
           {...this.props}
           {...this.state}
+          dashboard2={ReportsDashboard}
+          dashboardControls={() => (
+            <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+          )}
+          filtersFilter={REPORTS_FILTER_FILTER}
+          filterEditDialog={ReportFilterDialog}
+          table={ReportsTable}
+          toolBarIcons={ToolBarIcons}
+          title={_('Reports')}
+          sectionIcon="report.svg"
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
@@ -200,7 +214,6 @@ class Page extends React.Component {
           <ImportReportDialog
             task_id={task_id}
             tasks={tasks}
-            visible={importDialogVisible}
             onNewContainerTaskClick={this.openCreateTaskDialog}
             onClose={this.closeImportDialog}
             onSave={this.handleDialogSave}
@@ -213,34 +226,26 @@ class Page extends React.Component {
             onSave={this.handleCreateContainerTask}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
 
 Page.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   router: PropTypes.object.isRequired,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withEntitiesContainer('report', {
-  filtersFilter: REPORTS_FILTER_FILTER,
-  dashboard2: ReportsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
-  ),
-  title: _('Reports'),
-  sectionIcon: 'report.svg',
-  filterEditDialog: ReportFilterDialog,
-  toolBarIcons: ToolBarIcons,
-  table: ReportsTable,
-})(Page);
+export default compose(
+  withGmp,
+  withEntitiesContainer('report', {
+    entitiesSelector,
+    loadEntities,
+  }),
+)(Page);
 
 // vim: set ts=2 sw=2 tw=80:

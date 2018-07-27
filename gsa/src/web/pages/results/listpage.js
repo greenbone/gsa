@@ -25,47 +25,56 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import Layout from 'web/components/layout/layout';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ResultsFilterDialog from './filterdialog.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import ResultsTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/results';
 
+import ResultsFilterDialog from './filterdialog';
+import ResultsTable from './table';
 import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter.js';
+const ToolBarIcons = () => (
+  <Layout>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="results"
+      title={_('Help: Results')}
+    />
+  </Layout>
+);
 
-const ToolBarIcons = props => {
-  return (
-    <Layout flex box>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="results"
-        title={_('Help: Results')}
-      />
-    </Layout>
-  );
-};
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    filtersFilter={RESULTS_FILTER_FILTER}
+    dashboard2={ResultsDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
+    )}
+    title={_('Results')}
+    sectionIcon="result.svg"
+    toolBarIcons={ToolBarIcons}
+    table={ResultsTable}
+    filterEditDialog={ResultsFilterDialog}
+  />
+);
 
 export default withEntitiesContainer('result', {
-  filtersFilter: RESULTS_FILTER_FILTER,
-  dashboard2: ResultsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
-  ),
-  title: _('Results'),
-  sectionIcon: 'result.svg',
-  toolBarIcons: ToolBarIcons,
-  table: ResultsTable,
-  filterEditDialog: ResultsFilterDialog,
-})(EntitiesPage);
+  entitiesSelector,
+  loadEntities,
+})(Page);
 
 // export default ResultsPage;
 

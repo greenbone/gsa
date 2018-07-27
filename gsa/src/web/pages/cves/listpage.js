@@ -27,40 +27,51 @@ import _ from 'gmp/locale';
 
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import CveFilterDialog from './filterdialog.js';
-import CvesTable from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/cves';
 
-import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard/index.js';
+import CveFilterDialog from './filterdialog';
+import CvesTable from './table';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="cve"
-      title={_('Help: CVEs')}
-    />
-  );
-};
+import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
+
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="cve"
+    title={_('Help: CVEs')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={CvesDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={CveFilterDialog}
+    filtersFilter={CVES_FILTER_FILTER}
+    sectionIcon="cve.svg"
+    table={CvesTable}
+    title={_('CVEs')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('cve', {
-  createFilterType: 'info',
-  dashboard2: CvesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: CveFilterDialog,
-  filtersFilter: CVES_FILTER_FILTER,
-  sectionIcon: 'cve.svg',
-  table: CvesTable,
-  title: _('CVEs'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+  entitiesSelector,
+  loadEntities,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

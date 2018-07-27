@@ -25,50 +25,51 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import DashboardControls from '../../components/dashboard/controls';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import FilterDialog from './filterdialog.js';
-import OverridesTable from './table.js';
-import OverrideComponent from './component.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard/index.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/overrides';
 
-import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter.js';
+import FilterDialog from './filterdialog';
+import OverridesTable from './table';
+import OverrideComponent from './component';
 
-const ToolBarIcons = ({
+import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
+
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onOverrideCreateClick,
-}, {capabilities}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="vulnerabilitymanagement"
-        anchor="overrides-and-false-positives"
-        title={_('Help: Overrides')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="vulnerabilitymanagement"
+      anchor="overrides-and-false-positives"
+      title={_('Help: Overrides')}
+    />
+
+    {capabilities.mayCreate('override') &&
+      <NewIcon
+        title={_('New Override')}
+        onClick={onOverrideCreateClick}
       />
-
-      {capabilities.mayCreate('override') &&
-        <NewIcon
-          title={_('New Override')}
-          onClick={onOverrideCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
@@ -100,7 +101,12 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard2={OverridesDashboard}
+        dashboardControls={() => (
+          <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID}/>
+        )}
         filterEditDialog={FilterDialog}
+        filtersFilter={OVERRIDES_FILTER_FILTER}
         sectionIcon="override.svg"
         table={OverridesTable}
         title={_('Overrides')}
@@ -126,12 +132,8 @@ Page.propTypes = {
 };
 
 export default withEntitiesContainer('override', {
-  dashboard2: OverridesDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID}/>
-  ),
-  extraLoadParams: {details: 1},
-  filtersFilter: OVERRIDES_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,26 +24,33 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import NewIcon from '../../components/icon/newicon.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {ROLES_FILTER_FILTER} from 'gmp/models/filter.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import RoleComponent from './component.js';
-import Table, {SORT_FIELDS} from './table.js';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/roles';
 
-const ToolBarIcons = ({
+import RoleComponent from './component';
+import Table, {SORT_FIELDS} from './table';
+
+const ToolBarIcons = withCapabilities(({
+  capabilities,
   onRoleCreateClick,
-}, {capabilities}) => (
+}) => (
   <IconDivider>
     <ManualIcon
       page="gui_administration"
@@ -57,14 +64,10 @@ const ToolBarIcons = ({
       />
     }
   </IconDivider>
-);
+));
 
 ToolBarIcons.propTypes = {
   onRoleCreateClick: PropTypes.func.isRequired,
-};
-
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const RolesFilterDialog = createFilterDialog({
@@ -97,6 +100,7 @@ const RolesPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={RolesFilterDialog}
+      filtersFilter={ROLES_FILTER_FILTER}
       sectionIcon="role.svg"
       table={Table}
       title={_('Roles')}
@@ -122,7 +126,8 @@ RolesPage.propTypes = {
 };
 
 export default withEntitiesContainer('role', {
-  filtersFilter: ROLES_FILTER_FILTER,
+  entitiesSelector,
+  loadEntities,
 })(RolesPage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -61,6 +61,7 @@ const Page = props => (
       <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
     )}
     filterEditDialog={CpeFilterDialog}
+    filtersFilter={CPES_FILTER_FILTER}
     sectionIcon="cpe.svg"
     table={CpesTable}
     title={_('CPEs')}
@@ -70,7 +71,6 @@ const Page = props => (
 
 export default withEntitiesContainer('cpe', {
   entitiesSelector,
-  filtersFilter: CPES_FILTER_FILTER,
   loadEntities,
 })(Page);
 

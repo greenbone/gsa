@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page.js';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -109,6 +109,7 @@ const ScannersPage = ({
     <EntitiesPage
       {...props}
       filterEditDialog={ScannersFilterDialog}
+      filtersFilter={SCANNERS_FILTER_FILTER}
       sectionIcon="scanner.svg"
       table={ScannersTable}
       title={_('Scanners')}
@@ -138,7 +139,6 @@ ScannersPage.propTypes = {
 
 export default withEntitiesContainer('scanner', {
   entitiesSelector,
-  filtersFilter: SCANNERS_FILTER_FILTER,
   loadEntities,
 })(ScannersPage);
 

@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -112,6 +112,7 @@ const ScanConfigsPage = ({
       <EntitiesPage
         {...props}
         filterEditDialog={ScanConfigFilterDialog}
+        filtersFilter={SCANCONFIGS_FILTER_FILTER}
         sectionIcon="config.svg"
         table={Table}
         title={_('Scan Configs')}
@@ -136,7 +137,6 @@ ScanConfigsPage.propTypes = {
 
 export default withEntitiesContainer('scanconfig', {
   entitiesSelector,
-  filtersFilter: SCANCONFIGS_FILTER_FILTER,
   loadEntities,
 })(ScanConfigsPage);
 
