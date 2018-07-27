@@ -27,14 +27,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import UserDialog from './dialog.js';
+import UserDialog from './dialog';
 
 class UserComponent extends React.Component {
 
