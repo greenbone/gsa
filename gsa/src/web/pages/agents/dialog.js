@@ -27,22 +27,21 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const DEFAULTS = {name: _('Unnamed')};
 
 const AgentDialog = ({
     agent,
     title = _('New Agent'),
-    visible = true,
     onClose,
     onSave,
   }) => {
@@ -51,7 +50,6 @@ const AgentDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -114,7 +112,6 @@ const AgentDialog = ({
 AgentDialog.propTypes = {
   agent: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

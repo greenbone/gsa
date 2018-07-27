@@ -25,24 +25,22 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 const ImportDialog = ({
-  visible = true,
   onClose,
   onSave,
 }) => {
   return (
     <SaveDialog
       buttonTitle={_('Import')}
-      visible={visible}
       title={_('Import Port List')}
       onClose={onClose}
       onSave={onSave}
@@ -70,7 +68,6 @@ const ImportDialog = ({
 };
 
 ImportDialog.propTypes = {
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

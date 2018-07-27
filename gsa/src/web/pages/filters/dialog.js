@@ -25,15 +25,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import Select from '../../components/form/select.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
 
 const FilterDialog = ({
   comment = '',
@@ -43,7 +43,6 @@ const FilterDialog = ({
   title = _('New Filter'),
   type,
   types,
-  visible = true,
   onClose,
   onSave,
 }) => {
@@ -55,7 +54,6 @@ const FilterDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -130,7 +128,6 @@ FilterDialog.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   types: PropTypes.array.isRequired,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
