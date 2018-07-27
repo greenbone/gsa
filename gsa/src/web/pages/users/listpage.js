@@ -55,23 +55,21 @@ import UsersTable, {SORT_FIELDS} from './table';
 const ToolBarIcons = withCapabilities(({
   capabilities,
   onUserCreateClick,
-}) => {
-  return (
-    <IconDivider>
-      <ManualIcon
-        page="gui_administration"
-        anchor="user-management"
-        title={_('Help: Users')}
+}) => (
+  <IconDivider>
+    <ManualIcon
+      page="gui_administration"
+      anchor="user-management"
+      title={_('Help: Users')}
+    />
+    {capabilities.mayCreate('user') &&
+      <NewIcon
+        title={_('New User')}
+        onClick={onUserCreateClick}
       />
-      {capabilities.mayCreate('user') &&
-        <NewIcon
-          title={_('New User')}
-          onClick={onUserCreateClick}
-        />
-      }
-    </IconDivider>
-  );
-});
+    }
+  </IconDivider>
+));
 
 ToolBarIcons.propTypes = {
   onUserCreateClick: PropTypes.func.isRequired,
