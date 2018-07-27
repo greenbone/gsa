@@ -51,7 +51,6 @@ const Dialog = ({
     scanner_id,
     scanners = [],
     title = _('New Scan Config'),
-    visible = true,
     onClose,
     onSave,
   }) => {
@@ -65,7 +64,6 @@ const Dialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -150,7 +148,6 @@ Dialog.propTypes = {
   scanner_id: PropTypes.id,
   scanners: PropTypes.array,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
