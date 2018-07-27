@@ -495,7 +495,6 @@ const EditDialog = ({
   select,
   title,
   trend,
-  visible = true,
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
@@ -518,7 +517,6 @@ const EditDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -613,7 +611,6 @@ EditDialog.propTypes = {
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
   trend: PropTypes.object,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
