@@ -212,7 +212,6 @@ class Dialog extends React.Component {
       preferences,
       reportformat,
       title = _('Import Report Format'),
-      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -220,7 +219,6 @@ class Dialog extends React.Component {
     if (isDefined(reportformat)) {
       return (
         <SaveDialog
-          visible={visible}
           title={title}
           onClose={onClose}
           onSave={onSave}
@@ -304,7 +302,6 @@ class Dialog extends React.Component {
     }
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -340,7 +337,6 @@ Dialog.propTypes = {
   reportformat: PropTypes.model,
   summary: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
