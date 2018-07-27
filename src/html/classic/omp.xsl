@@ -14859,7 +14859,7 @@ should not have received it.
                 </tr>
                 <xsl:variable name="host_count">
                   <xsl:choose>
-                    <xsl:when test="/envelope/params/host_count = 0">
+                    <xsl:when test="not (/envelope/params/host_count != 0)">
                       <xsl:value-of select="count (/envelope/params/_param[substring (name, 1, 13) = 'bulk_selected'])"/>
                     </xsl:when>
                     <xsl:otherwise>
