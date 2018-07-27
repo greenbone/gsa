@@ -25,15 +25,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import Select from '../../components/form/select.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
 
 const FilterDialog = ({
   comment = '',
