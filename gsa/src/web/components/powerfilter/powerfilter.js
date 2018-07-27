@@ -32,8 +32,10 @@ import logger from 'gmp/log';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import Select from '../form/select';
@@ -217,9 +219,17 @@ class PowerFilter extends React.Component {
   }
 
   render() {
-    const {capabilities} = this.context;
-    const {userfilter = '', filter, filtername = ''} = this.state;
-    const {filters, onEditClick, onResetClick} = this.props;
+    const {
+      userfilter = '',
+      filter,
+      filtername = '',
+    } = this.state;
+    const {
+      capabilities,
+      filters,
+      onEditClick,
+      onResetClick,
+    } = this.props;
     const namedfilterid = isDefined(filter) && isDefined(filter.id) ?
       filter.id : DEFAULT_FILTER_ID;
 
@@ -327,14 +337,14 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-PowerFilter.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
 PowerFilter.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withGmp(PowerFilter);
+export default compose(
+  withCapabilities,
+  withGmp,
+)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:
