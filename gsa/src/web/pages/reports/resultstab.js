@@ -37,8 +37,10 @@ const ResultsTab = ({
   counts,
   delta = false,
   filter,
-  results,
+  hasTarget,
   progress,
+  results,
+  status,
   onFilterAddLogLevelClick,
   onFilterDecreaseMinQoDClick,
   onFilterEditClick,
@@ -50,6 +52,8 @@ const ResultsTab = ({
     if (counts.all === 0) {
       return (
         <EmptyReport
+          hasTarget={hasTarget}
+          status={status}
           progress={progress}
           onTargetEditClick={onTargetEditClick}
         />
@@ -91,8 +95,10 @@ ResultsTab.propTypes = {
   counts: PropTypes.counts.isRequired,
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
+  hasTarget: PropTypes.bool,
   progress: PropTypes.number.isRequired,
   results: PropTypes.array.isRequired,
+  status: PropTypes.string.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,

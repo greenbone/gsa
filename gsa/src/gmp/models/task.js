@@ -85,17 +85,19 @@ export const getTranslatableTaskStatus = status => {
   return TASK_STATUS_TRANSLATIONS[status];
 };
 
+export const isActive = status => status === TASK_STATUS.running ||
+  status === TASK_STATUS.stoprequested ||
+  status === TASK_STATUS.deleterequested ||
+  status === TASK_STATUS.ultimatedeleterequested ||
+  status === TASK_STATUS.resumerequested ||
+  status === TASK_STATUS.requested;
+
 class Task extends Model {
 
   static entity_type = 'task';
 
   isActive() {
-    return this.status === TASK_STATUS.running ||
-      this.status === TASK_STATUS.stoprequested ||
-      this.status === TASK_STATUS.deleterequested ||
-      this.status === TASK_STATUS.ultimatedeleterequested ||
-      this.status === TASK_STATUS.resumerequested ||
-      this.status === TASK_STATUS.requested;
+    return isActive(this.status);
   }
 
   isRunning() {
