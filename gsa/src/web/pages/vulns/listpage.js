@@ -41,27 +41,31 @@ import VulnsTable from './table';
 
 import VulnerabilitiesDashboard, {VULNS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = () => {
-  return (
-    <Layout flex box>
-      <ManualIcon
-        page="search"
-        anchor="vulnerabilities"
-        title={_('Vulnerabilities')}
-      />
-    </Layout>
-  );
-};
+const ToolBarIcons = () => (
+  <Layout>
+    <ManualIcon
+      page="search"
+      anchor="vulnerabilities"
+      title={_('Vulnerabilities')}
+    />
+  </Layout>
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    dashboard2={VulnerabilitiesDashboard}
+    filterEditDialog={VulnsFilterDialog}
+    filtersFilter={VULNS_FILTER_FILTER}
+    table={VulnsTable}
+    title={_('Vulnerabilities')}
+    sectionIcon="vulnerability.svg"
+    toolBarIcons={ToolBarIcons}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
+    )}
+  />
+);
 
 export default withEntitiesContainer('vuln', {
-  dashboard2: VulnerabilitiesDashboard,
-  filterEditDialog: VulnsFilterDialog,
-  filtersFilter: VULNS_FILTER_FILTER,
-  table: VulnsTable,
-  title: _('Vulnerabilities'),
-  sectionIcon: 'vulnerability.svg',
-  toolBarIcons: ToolBarIcons,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
-  ),
-})(EntitiesPage);
+})(Page);
