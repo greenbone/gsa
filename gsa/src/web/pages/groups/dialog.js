@@ -47,7 +47,6 @@ const Dialog = ({
     grant_full,
     group,
     title = _('New Group'),
-    visible = true,
     onClose,
     onSave,
   }) => {
@@ -60,7 +59,6 @@ const Dialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -138,7 +136,6 @@ Dialog.propTypes = {
   grant_full: PropTypes.oneOf(['0', '1']),
   group: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
