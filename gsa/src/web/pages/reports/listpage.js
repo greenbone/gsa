@@ -26,31 +26,31 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Wrapper from '../../components/layout/wrapper.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Wrapper from 'web/components/layout/wrapper';
 
-import ContainerTaskDialog from '../../pages/tasks/containerdialog.js';
+import ContainerTaskDialog from 'web/pages/tasks/containerdialog';
 
-import ReportFilterDialog from './filterdialog.js';
-import ImportReportDialog from './importdialog.js';
-import ReportsTable from './table.js';
+import ReportFilterDialog from './filterdialog';
+import ImportReportDialog from './importdialog';
+import ReportsTable from './table';
 
 import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
-
-import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter.js';
 
 const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
