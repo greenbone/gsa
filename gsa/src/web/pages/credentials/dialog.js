@@ -99,7 +99,6 @@ class CredentialsDialog extends React.Component {
       credential,
       title = _('New Credential'),
       types = [],
-      visible = true,
       allow_insecure = NO_VALUE,
       auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
       autogenerate = NO_VALUE,
@@ -157,7 +156,6 @@ class CredentialsDialog extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -447,7 +445,6 @@ CredentialsDialog.propTypes = {
   types: PropTypes.arrayOf(
     pwtypes
   ),
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
