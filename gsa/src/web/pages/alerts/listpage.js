@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities.js';
 
 import EntitiesPage from 'web/entities/page.js';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2.js';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer.js';
 
 import ManualIcon from 'web/components/icon/manualicon.js';
 import NewIcon from 'web/components/icon/newicon.js';

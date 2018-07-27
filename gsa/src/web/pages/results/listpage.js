@@ -30,7 +30,7 @@ import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import Layout from 'web/components/layout/layout';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 

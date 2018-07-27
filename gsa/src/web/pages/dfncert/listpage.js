@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 

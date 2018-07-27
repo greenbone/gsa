@@ -40,7 +40,7 @@ import withGmp from 'web/utils/withGmp';
 import SelectionType from 'web/utils/selectiontype';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';

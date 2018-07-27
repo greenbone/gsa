@@ -33,7 +33,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import {goto_details} from 'web/entity/component';
 
