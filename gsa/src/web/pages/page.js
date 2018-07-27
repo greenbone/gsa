@@ -32,6 +32,7 @@ import {isDefined} from 'gmp/utils/identity';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import PropTypes from '../utils/proptypes.js';
+import withGmp from '../utils/withGmp';
 
 import MenuBar from '../components/bar/menubar.js';
 
@@ -60,7 +61,7 @@ class Page extends React.Component {
   }
 
   componentDidMount() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
 
     gmp.user.currentCapabilities().then(response => {
       const capabilities = response.data;
@@ -105,10 +106,10 @@ class Page extends React.Component {
   }
 }
 
-Page.contextTypes = {
+Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default Page;
+export default withGmp(Page);
 
 // vim: set ts=2 sw=2 tw=80:
