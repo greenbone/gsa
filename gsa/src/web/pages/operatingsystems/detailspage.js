@@ -29,7 +29,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import EntityPage from 'web/entity/page';
+import EntityPage, {Col} from 'web/entity/page';
 import EntityContainer, {
   permissions_resource_loader,
 } from 'web/entity/container';
@@ -63,8 +63,6 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-import {Col} from 'web/entity/page';
 
 import OsComponent from './component';
 
