@@ -38,7 +38,7 @@ import withGmp from 'web/utils/withGmp';
 import SelectionType from 'web/utils/selectiontype';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -47,6 +47,11 @@ import IconDivider from 'web/components/layout/icondivider';
 import Wrapper from 'web/components/layout/wrapper';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/users';
 
 import ConfirmDeleteDialog from './confirmdeletedialog';
 import UserComponent from './component';
@@ -249,6 +254,8 @@ UsersPage.propTypes = {
 export default compose(
   withGmp,
   withEntitiesContainer('user', {
+    entitiesSelector,
+    loadEntities,
   }),
 )(UsersPage);
 
