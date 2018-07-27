@@ -40,9 +40,9 @@ import EntityComponent from 'web/entity/component';
 
 import withGmp from 'web/utils/withGmp';
 
-import TargetComponent from '../targets/component';
+import TargetComponent from 'web/pages/targets/component';
 
-import HostDialog from './dialog';
+import HostDialog from 'web/pages/hosts/dialog';
 
 class HostComponent extends React.Component {
 
@@ -186,6 +186,7 @@ class HostComponent extends React.Component {
 HostComponent.propTypes = {
   children: PropTypes.func.isRequired,
   createtarget: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   selectionType: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
@@ -199,10 +200,6 @@ HostComponent.propTypes = {
   onIdentifierDeleted: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-};
-
-HostComponent.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
 };
 
 HostComponent = withGmp(HostComponent);
