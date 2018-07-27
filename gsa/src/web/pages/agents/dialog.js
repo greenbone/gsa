@@ -42,7 +42,6 @@ const DEFAULTS = {name: _('Unnamed')};
 const AgentDialog = ({
     agent,
     title = _('New Agent'),
-    visible = true,
     onClose,
     onSave,
   }) => {
@@ -51,7 +50,6 @@ const AgentDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -114,7 +112,6 @@ const AgentDialog = ({
 AgentDialog.propTypes = {
   agent: PropTypes.model,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
