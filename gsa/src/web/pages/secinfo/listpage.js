@@ -27,20 +27,20 @@ import _ from 'gmp/locale';
 
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from '../../entities/page.js';
-import withEntitiesContainer from '../../entities/withEntitiesContainer.js';
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import DashboardControls from '../../components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import SecInfoFilterDialog from './filterdialog.js';
-import SecInfosTable from './table.js';
+import SecInfoFilterDialog from './filterdialog';
+import SecInfosTable from './table';
 
 import {
   SecInfoDashboard,
   SECINFO_DASHBOARD_ID,
-} from './dashboard/index.js';
+} from './dashboard';
 
 const ToolBarIcons = props => {
   return (
