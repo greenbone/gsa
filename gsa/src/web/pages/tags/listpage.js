@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer2';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -38,6 +38,11 @@ import NewIcon from 'web/components/icon/newicon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/tags';
 
 import TagComponent from './component';
 import TagsTable from './table';
@@ -138,6 +143,8 @@ TagsPage.propTypes = {
 };
 
 export default withEntitiesContainer('tag', {
+  entitiesSelector,
+  loadEntities,
 })(TagsPage);
 
 // vim: set ts=2 sw=2 tw=80:
