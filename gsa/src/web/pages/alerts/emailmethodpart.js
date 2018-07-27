@@ -26,20 +26,20 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withCapabilities from '../../utils/withCapabilities.js';
-import withPrefix from '../../utils/withPrefix.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+import withPrefix from 'web/utils/withPrefix';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Select from '../../components/form/select.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextArea from '../../components/form/textarea.js';
-import TextField from '../../components/form/textfield.js';
-import Radio from '../../components/form/radio.js';
+import Select from 'web/components/form/select';
+import FormGroup from 'web/components/form/formgroup';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
 
 const EmailMethodPart = ({
     capabilities,
