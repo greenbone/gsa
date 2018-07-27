@@ -42,28 +42,32 @@ import {
   SECINFO_DASHBOARD_ID,
 } from './dashboard';
 
-const ToolBarIcons = props => {
-  return (
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="secinfo-management"
-      title={_('Help: All SecInfo Information')}
-    />
-  );
-};
+const ToolBarIcons = () => (
+  <ManualIcon
+    page="vulnerabilitymanagement"
+    anchor="secinfo-management"
+    title={_('Help: All SecInfo Information')}
+  />
+);
+
+const Page = props => (
+  <EntitiesPage
+    {...props}
+    createFilterType="info"
+    dashboard2={SecInfoDashboard}
+    dashboardControls={() => (
+      <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
+    )}
+    filterEditDialog={SecInfoFilterDialog}
+    filtersFilter={SECINFO_FILTER_FILTER}
+    sectionIcon="allinfo.svg"
+    table={SecInfosTable}
+    title={_('All SecInfo Information')}
+    toolBarIcons={ToolBarIcons}
+  />
+);
 
 export default withEntitiesContainer('secinfo', {
-  createFilterType: 'info',
-  dashboard2: SecInfoDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
-  ),
-  filterEditDialog: SecInfoFilterDialog,
-  filtersFilter: SECINFO_FILTER_FILTER,
-  sectionIcon: 'allinfo.svg',
-  table: SecInfosTable,
-  title: _('All SecInfo Information'),
-  toolBarIcons: ToolBarIcons,
-})(EntitiesPage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
