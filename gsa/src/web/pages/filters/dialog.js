@@ -43,7 +43,6 @@ const FilterDialog = ({
   title = _('New Filter'),
   type,
   types,
-  visible = true,
   onClose,
   onSave,
 }) => {
@@ -55,7 +54,6 @@ const FilterDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -130,7 +128,6 @@ FilterDialog.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   types: PropTypes.array.isRequired,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
