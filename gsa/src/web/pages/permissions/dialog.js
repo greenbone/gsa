@@ -29,23 +29,23 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import {
   permissionDescription,
   renderSelectItems,
-} from '../../utils/render.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
-import Model from 'gmp/model.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+import Model from 'gmp/model';
 
 const NEED_RESOURCE_ID = [
   'Super',
@@ -144,7 +144,6 @@ const PermissionDialog = ({
   title = _('New Permission'),
   userId,
   users = [],
-  visible,
   onClose,
   onSave,
 }) => {
@@ -177,7 +176,6 @@ const PermissionDialog = ({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -360,7 +358,6 @@ PermissionDialog.propTypes = {
   title: PropTypes.string,
   userId: PropTypes.id,
   users: PropTypes.array,
-  visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

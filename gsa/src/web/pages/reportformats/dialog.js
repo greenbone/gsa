@@ -29,27 +29,27 @@ import _ from 'gmp/locale';
 import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Spinner from '../../components/form/spinner.js';
-import TextArea from '../../components/form/textarea.js';
-import TextField from '../../components/form/textfield.js';
-import MultiSelect from '../../components/form/multiselect.js';
-import Select from '../../components/form/select.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Table from '../../components/table/table.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableRow from '../../components/table/row.js';
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
 const ReportFormatListParam = ({
     formats,
@@ -212,7 +212,6 @@ class Dialog extends React.Component {
       preferences,
       reportformat,
       title = _('Import Report Format'),
-      visible = true,
       onClose,
       onSave,
     } = this.props;
@@ -220,7 +219,6 @@ class Dialog extends React.Component {
     if (isDefined(reportformat)) {
       return (
         <SaveDialog
-          visible={visible}
           title={title}
           onClose={onClose}
           onSave={onSave}
@@ -304,7 +302,6 @@ class Dialog extends React.Component {
     }
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -340,7 +337,6 @@ Dialog.propTypes = {
   reportformat: PropTypes.model,
   summary: PropTypes.string,
   title: PropTypes.string,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
