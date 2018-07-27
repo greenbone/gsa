@@ -56,9 +56,7 @@ class IconComponent extends React.Component {
   handleClick() {
     const {value, onClick} = this.props;
 
-    if (onClick) {
-      onClick(value);
-    }
+    onClick(value);
   }
 
   render() {
@@ -73,7 +71,7 @@ class IconComponent extends React.Component {
     return (
       <StyledIcon
         {...other}
-        onClick={this.handleClick}
+        onClick={isDefined(onClick) ? this.handleClick : undefined}
       >
         {isDefined(to) ?
           <Anchor
