@@ -30,13 +30,13 @@ import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype';
+import SelectionType from 'web/utils/selectiontype';
 
-import Wrapper from '../../components/layout/wrapper';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component';
+import EntityComponent from 'web/entity/component';
 
 import withGmp from 'web/utils/withGmp';
 
