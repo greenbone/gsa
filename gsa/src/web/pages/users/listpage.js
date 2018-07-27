@@ -44,7 +44,6 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
-import Wrapper from 'web/components/layout/wrapper';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
@@ -186,7 +185,7 @@ class UsersPage extends React.Component {
     } = this.state;
 
     return (
-      <Wrapper>
+      <React.Fragment>
         <UserComponent
           onCreated={onChanged}
           onSaved={onChanged}
@@ -235,7 +234,7 @@ class UsersPage extends React.Component {
             onSave={this.handleDeleteUser}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
