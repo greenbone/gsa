@@ -63,7 +63,6 @@ const Dialog = ({
     permission_name,
     role,
     title = _('New Role'),
-    visible = true,
     onClose,
     onCreatePermission,
     onCreateSuperPermission,
@@ -99,7 +98,6 @@ const Dialog = ({
   return (
     <SaveDialog
       externalError={externalError}
-      visible={visible}
       title={title}
       onClose={onClose}
       onExternalErrorSet={onExternalErrorSet}
@@ -260,7 +258,6 @@ Dialog.propTypes = {
   role: PropTypes.model,
   title: PropTypes.string,
   users: PropTypes.array,
-  visible: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,
