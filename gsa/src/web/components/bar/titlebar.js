@@ -37,6 +37,7 @@ import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
 import Theme from 'web/utils/theme';
+import withGmp from 'web/utils/withGmp';
 
 const LogoutLink = glamorous.a({
   color: Theme.darkGray,
@@ -99,7 +100,8 @@ class Titlebar extends React.Component {
   }
 
   handleLogout(event) {
-    const {router, gmp} = this.context;
+    const {router} = this.context;
+    const {gmp} = this.props;
 
     event.preventDefault();
 
@@ -110,7 +112,7 @@ class Titlebar extends React.Component {
 
 
   render() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return (
       <TitlebarLayout
         flex
@@ -141,10 +143,13 @@ class Titlebar extends React.Component {
 }
 
 Titlebar.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
   router: PropTypes.object.isRequired,
 };
 
-export default Titlebar;
+Titlebar.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:
