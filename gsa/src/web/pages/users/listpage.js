@@ -201,6 +201,7 @@ class UsersPage extends React.Component {
           <EntitiesPage
             {...props}
             filterEditDialog={UsersFilterDialog}
+            filtersFilter={USERS_FILTER_FILTER}
             sectionIcon="user.svg"
             table={UsersTable}
             title={_('Users')}
@@ -248,7 +249,6 @@ UsersPage.propTypes = {
 export default compose(
   withGmp,
   withEntitiesContainer('user', {
-    filtersFilter: USERS_FILTER_FILTER,
   }),
 )(UsersPage);
 
