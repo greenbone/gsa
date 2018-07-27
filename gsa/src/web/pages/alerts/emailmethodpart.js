@@ -26,12 +26,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
-
+import compose from '../../utils/compose.js';
 import PropTypes from '../../utils/proptypes.js';
 import {renderSelectItems} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 import withPrefix from '../../utils/withPrefix.js';
+
+import Divider from '../../components/layout/divider.js';
+import Layout from '../../components/layout/layout.js';
 
 import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
@@ -40,6 +42,7 @@ import TextField from '../../components/form/textfield.js';
 import Radio from '../../components/form/radio.js';
 
 const EmailMethodPart = ({
+    capabilities,
     fromAddress,
     isTaskEvent,
     message,
@@ -52,7 +55,7 @@ const EmailMethodPart = ({
     subject,
     toAddress,
     onChange,
-  }, {capabilities}) => {
+  }) => {
 
   const reportFormatItems = renderSelectItems(
     reportFormats.filter(format =>
@@ -171,6 +174,7 @@ const EmailMethodPart = ({
 };
 
 EmailMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   fromAddress: PropTypes.string.isRequired,
   isTaskEvent: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
@@ -185,10 +189,9 @@ EmailMethodPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-EmailMethodPart.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withPrefix(EmailMethodPart);
+export default compose(
+  withCapabilities,
+  withPrefix,
+)(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:
