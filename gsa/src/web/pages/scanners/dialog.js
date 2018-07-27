@@ -159,7 +159,6 @@ class ScannerDialog extends React.Component {
       port = '9391',
       title = _('New Scanner'),
       type = OSP_SCANNER_TYPE,
-      visible = true,
       which_cert,
       onClose,
       onCredentialChange,
@@ -186,7 +185,6 @@ class ScannerDialog extends React.Component {
 
     return (
       <SaveDialog
-        visible={visible}
         title={title}
         onClose={onClose}
         onSave={onSave}
@@ -338,7 +336,6 @@ ScannerDialog.propTypes = {
   scanner: PropTypes.model,
   title: PropTypes.string,
   type: PropTypes.oneOf(scanner_types),
-  visible: PropTypes.bool,
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),
