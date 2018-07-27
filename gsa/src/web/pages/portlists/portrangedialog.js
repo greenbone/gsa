@@ -27,15 +27,15 @@ import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import TextField from '../../components/form/textfield.js';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 const PortRangeDialog = ({
   id,
