@@ -29,16 +29,16 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Checkbox from '../../components/form/checkbox.js';
-import FormGroup from '../../components/form/formgroup.js';
-import MultiSelect from '../../components/form/multiselect.js';
-import TextField from '../../components/form/textfield.js';
+import Checkbox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
+import MultiSelect from 'web/components/form/multiselect';
+import TextField from 'web/components/form/textfield';
 
 const DEFAULTS = {name: _('Unnamed'), users: []};
 
