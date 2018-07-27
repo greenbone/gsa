@@ -37,19 +37,19 @@ import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import MultiSelect from '../../components/form/multiselect.js';
-import Select from '../../components/form/select.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import MultiSelect from 'web/components/form/multiselect';
+import Select from 'web/components/form/select';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 const Divider = glamorous.div({
   margin: '0 5px',
