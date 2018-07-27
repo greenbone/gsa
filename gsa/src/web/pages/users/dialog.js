@@ -39,6 +39,7 @@ import {
 } from 'gmp/models/user';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -59,6 +60,7 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
       access_hosts = '',
       access_ifaces = '',
       auth_method = AUTH_METHOD_PASSWORD,
+      capabilities,
       comment = '',
       groups,
       group_ids = [],
@@ -93,7 +95,6 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
       roles,
     };
 
-    const {capabilities} = this.context;
     const is_edit = isDefined(user);
 
     const rolesOptions = map(roles, role => ({
@@ -337,6 +338,7 @@ Dialog.propTypes = {
     AUTH_METHOD_PASSWORD,
     AUTH_METHOD_RADIUS,
   ]),
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   group_ids: PropTypes.array,
   groups: PropTypes.array,
@@ -361,10 +363,6 @@ Dialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-Dialog.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default Dialog;
+export default withCapabilities(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:
