@@ -107,7 +107,7 @@ class UsersPage extends React.Component {
 
     if (deleteUsers.length === 1) {
       const {id} = deleteUsers[0]; // eslint-disable-line prefer-destructuring
-      return gmp.user.delete({id, inheritor_id: inheritorId}).then(onChanged);
+      return gmp.user.delete({id, inheritorId}).then(onChanged);
     }
 
     return gmp.users.delete(deleteUsers, {inheritor_id: inheritorId})
