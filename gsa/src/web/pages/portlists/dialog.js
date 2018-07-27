@@ -29,23 +29,23 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import TextField from '../../components/form/textfield.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
 
-import NewIcon from '../../components/icon/newicon.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import Section from '../../components/section/section.js';
+import Section from 'web/components/section/section';
 
-import PortRangesTable from './portrangestable.js';
+import PortRangesTable from './portrangestable';
 
 const FROM_FILE = YES_VALUE;
 const NOT_FROM_FILE = NO_VALUE;
