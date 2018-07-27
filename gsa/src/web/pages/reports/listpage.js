@@ -31,7 +31,9 @@ import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -106,7 +108,7 @@ class Page extends React.Component {
   }
 
   loadTasks() {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     return gmp.tasks.get()
       .then(response => {
         const {data: tasks} = response;
@@ -132,13 +134,12 @@ class Page extends React.Component {
   }
 
   handleDialogSave(data) {
-    const {gmp} = this.context;
-    const {onChanged, onError} = this.props;
+    const {gmp, onChanged, onError} = this.props;
     return gmp.report.import(data).then(onChanged, onError);
   }
 
   handleCreateContainerTask(data) {
-    const {gmp} = this.context;
+    const {gmp} = this.props;
     let task_id;
     return gmp.task.createContainer(data)
       .then(response => {
@@ -169,8 +170,7 @@ class Page extends React.Component {
   }
 
   handleReportDeleteClick(report) {
-    const {gmp} = this.context;
-    const {onChanged, onError} = this.props;
+    const {gmp, onChanged, onError} = this.props;
     return gmp.report.delete(report).then(onChanged, onError);
   }
 
@@ -219,27 +219,27 @@ class Page extends React.Component {
 
 Page.propTypes = {
   filter: PropTypes.filter,
+  gmp: PropTypes.gmp.isRequired,
   router: PropTypes.object.isRequired,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 
-Page.contextTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withEntitiesContainer('report', {
-  filtersFilter: REPORTS_FILTER_FILTER,
-  dashboard2: ReportsDashboard,
-  dashboardControls: () => (
-    <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
-  ),
-  title: _('Reports'),
-  sectionIcon: 'report.svg',
-  filterEditDialog: ReportFilterDialog,
-  toolBarIcons: ToolBarIcons,
-  table: ReportsTable,
-})(Page);
+export default compose(
+  withGmp,
+  withEntitiesContainer('report', {
+    filtersFilter: REPORTS_FILTER_FILTER,
+    dashboard2: ReportsDashboard,
+    dashboardControls: () => (
+      <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+    ),
+    title: _('Reports'),
+    sectionIcon: 'report.svg',
+    filterEditDialog: ReportFilterDialog,
+    toolBarIcons: ToolBarIcons,
+    table: ReportsTable,
+  }),
+)(Page);
 
 // vim: set ts=2 sw=2 tw=80:
