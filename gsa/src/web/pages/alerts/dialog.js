@@ -51,40 +51,40 @@ import {
   DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import SaveDialog from '../../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Select from '../../components/form/select.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import Radio from '../../components/form/radio.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import Select from 'web/components/form/select';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import HttpMethodPart from './httpmethodpart.js';
-import ScpMethodPart from './scpmethodpart.js';
-import EmailMethodPart from './emailmethodpart.js';
-import SendMethodPart from './sendmethodpart.js';
-import StartTaskMethodPart from './starttaskmethodpart.js';
-import SmbMethodPart from './smbmethodpart.js';
-import SnmpMethodPart from './snmpmethodpart.js';
-import SourcefireMethodPart from './sourcefiremethodpart.js';
-import TippingPontMethodPart from './tippingpointmethodpart.js';
-import VeriniceMethodPart from './verinicemethodpart.js';
+import HttpMethodPart from './httpmethodpart';
+import ScpMethodPart from './scpmethodpart';
+import EmailMethodPart from './emailmethodpart';
+import SendMethodPart from './sendmethodpart';
+import StartTaskMethodPart from './starttaskmethodpart';
+import SmbMethodPart from './smbmethodpart';
+import SnmpMethodPart from './snmpmethodpart';
+import SourcefireMethodPart from './sourcefiremethodpart';
+import TippingPontMethodPart from './tippingpointmethodpart';
+import VeriniceMethodPart from './verinicemethodpart';
 
-import TaskEventPart from './taskeventpart.js';
-import SecInfoEventPart from './secinfoeventpart.js';
+import TaskEventPart from './taskeventpart';
+import SecInfoEventPart from './secinfoeventpart';
 
-import SeverityLeastConditionPart from './severityleastconditionpart.js';
-import SeverityChangedConditionPart from './severitychangedconditionpart.js';
-import FilterCountLeastConditionPart from './filtercountleastconditionpart.js';
+import SeverityLeastConditionPart from './severityleastconditionpart';
+import SeverityChangedConditionPart from './severitychangedconditionpart';
+import FilterCountLeastConditionPart from './filtercountleastconditionpart';
 import FilterCountChangedConditionPart from
-  './filtercountchangedconditionpart.js';
+  './filtercountchangedconditionpart';
 
 export const DEFAULT_DEFENSE_CENTER_PORT = '8307';
 export const DEFAULT_DIRECTION = 'changed';
