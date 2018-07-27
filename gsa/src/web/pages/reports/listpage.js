@@ -191,6 +191,16 @@ class Page extends React.Component {
         <EntitiesPage
           {...this.props}
           {...this.state}
+          dashboard2={ReportsDashboard}
+          dashboardControls={() => (
+            <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+          )}
+          filtersFilter={REPORTS_FILTER_FILTER}
+          filterEditDialog={ReportFilterDialog}
+          table={ReportsTable}
+          toolBarIcons={ToolBarIcons}
+          title={_('Reports')}
+          sectionIcon="report.svg"
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}
@@ -229,16 +239,6 @@ Page.propTypes = {
 export default compose(
   withGmp,
   withEntitiesContainer('report', {
-    filtersFilter: REPORTS_FILTER_FILTER,
-    dashboard2: ReportsDashboard,
-    dashboardControls: () => (
-      <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
-    ),
-    title: _('Reports'),
-    sectionIcon: 'report.svg',
-    filterEditDialog: ReportFilterDialog,
-    toolBarIcons: ToolBarIcons,
-    table: ReportsTable,
   }),
 )(Page);
 
