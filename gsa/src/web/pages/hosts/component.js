@@ -38,6 +38,8 @@ import Wrapper from '../../components/layout/wrapper';
 
 import EntityComponent from '../../entity/component';
 
+import withGmp from 'web/utils/withGmp';
+
 import TargetComponent from '../targets/component';
 
 import HostDialog from './dialog';
@@ -58,8 +60,7 @@ class HostComponent extends React.Component {
   }
 
   handleIdentifierDelete(identifier) {
-    const {onIdentifierDeleted, onIdentifierDeleteError} = this.props;
-    const {gmp} = this.context;
+    const {gmp, onIdentifierDeleted, onIdentifierDeleteError} = this.props;
     return gmp.host.deleteIdentifier(identifier).then(
       onIdentifierDeleted, onIdentifierDeleteError);
   }
@@ -200,9 +201,11 @@ HostComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-HostComponent.contextTypes = {
+HostComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
+
+HostComponent = withGmp(HostComponent);
 
 const HostWithTargetComponent = ({
   onTargetCreated,
