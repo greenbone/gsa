@@ -23,19 +23,23 @@
 
 import React from 'react';
 
+import {withRouter} from 'react-router';
+
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
 
-import GBIcon from '../icon/greenboneicon.js';
-import Icon from '../icon/icon.js';
+import GBIcon from 'web/components/icon/greenboneicon';
+import Icon from 'web/components/icon/icon';
 
-import Divider from '../layout/divider.js';
-import Layout from '../layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Link from '../link/link.js';
+import Link from 'web/components/link/link';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
@@ -100,8 +104,7 @@ class Titlebar extends React.Component {
   }
 
   handleLogout(event) {
-    const {router} = this.context;
-    const {gmp} = this.props;
+    const {gmp, router} = this.props;
 
     event.preventDefault();
 
@@ -142,14 +145,14 @@ class Titlebar extends React.Component {
   }
 }
 
-Titlebar.contextTypes = {
+Titlebar.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
   router: PropTypes.object.isRequired,
 };
 
-Titlebar.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(Titlebar);
+export default compose(
+  withGmp,
+  withRouter,
+)(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

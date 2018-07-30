@@ -27,7 +27,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
-import withCapabilties from '../utils/withCapabilities.js';
+import withCapabilities from '../utils/withCapabilities.js';
 
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
@@ -89,6 +89,6 @@ EntityLink.propTypes = {
   textOnly: PropTypes.bool,
 };
 
-export default withCapabilties(EntityLink);
+export default withCapabilities(EntityLink);
 
 // vim: set ts=2 sw=2 tw=80:

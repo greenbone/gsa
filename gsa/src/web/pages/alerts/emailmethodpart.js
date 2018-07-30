@@ -26,20 +26,23 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+import withPrefix from 'web/utils/withPrefix';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withPrefix from '../../utils/withPrefix.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Select from '../../components/form/select.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextArea from '../../components/form/textarea.js';
-import TextField from '../../components/form/textfield.js';
-import Radio from '../../components/form/radio.js';
+import Select from 'web/components/form/select';
+import FormGroup from 'web/components/form/formgroup';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
 
 const EmailMethodPart = ({
+    capabilities,
     fromAddress,
     isTaskEvent,
     message,
@@ -52,7 +55,7 @@ const EmailMethodPart = ({
     subject,
     toAddress,
     onChange,
-  }, {capabilities}) => {
+  }) => {
 
   const reportFormatItems = renderSelectItems(
     reportFormats.filter(format =>
@@ -171,6 +174,7 @@ const EmailMethodPart = ({
 };
 
 EmailMethodPart.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   fromAddress: PropTypes.string.isRequired,
   isTaskEvent: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
@@ -185,10 +189,9 @@ EmailMethodPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-EmailMethodPart.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withPrefix(EmailMethodPart);
+export default compose(
+  withCapabilities,
+  withPrefix,
+)(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

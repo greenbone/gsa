@@ -25,9 +25,10 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Link from './link.js';
+import Link from 'web/components/link/link';
 
 const types = {
   os: 'operatingsystem',
@@ -42,11 +43,12 @@ const checkType = type => {
 };
 
 const DetailsLink = ({
+  capabilities,
   id,
   type,
   textOnly = false,
   ...props
-}, {capabilities}) => {
+}) => {
 
   textOnly = textOnly || !capabilities.mayAccess(type);
 
@@ -59,16 +61,13 @@ const DetailsLink = ({
   );
 };
 
-DetailsLink.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
 DetailsLink.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };
 
-export default DetailsLink;
+export default withCapabilities(DetailsLink);
 
 // vim: set ts=2 sw=2 tw=80:
