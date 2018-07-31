@@ -74,7 +74,7 @@ const ToolBarIcons = ({
   onTargetDeleteClick,
   onTargetDownloadClick,
   onTargetEditClick,
-}, {capabilities}) => {
+}) => {
   return (
     <Divider margin="10px">
       <IconDivider>
