@@ -37,7 +37,7 @@ import Resizer from './resizer.js';
 
 const DEFAULT_DIALOG_WIDTH = '800px';
 const DEFAULT_DIALOG_HEIGHT = undefined; // use auto height by default
-const DEFAULT_DIALOG_MAX_HEIGHT = '550px';
+const DEFAULT_DIALOG_MAX_HEIGHT = '400px';
 const DEFAULT_DIALOG_MIN_HEIGHT = 250;
 const DEFAULT_DIALOG_MIN_WIDTH = 450;
 
