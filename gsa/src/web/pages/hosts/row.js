@@ -28,28 +28,28 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../../utils/compose';
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EditIcon from '../../entity/icon/editicon.js';
-import DeleteIcon from '../../entity/icon/deleteicon.js';
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import EditIcon from 'web/entity/icon/editicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import Comment from '../../components/comment/comment.js';
+import Comment from 'web/components/comment/comment';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import NewIcon from '../../components/icon/newicon.js';
-import OsIcon from '../../components/icon/osicon.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import NewIcon from 'web/components/icon/newicon';
+import OsIcon from 'web/components/icon/osicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 const Actions = ({
     capabilities,
