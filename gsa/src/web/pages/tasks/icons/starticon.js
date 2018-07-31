@@ -24,15 +24,17 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from '../../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 const StartIcon = ({
+  capabilities,
   task,
   size,
   onClick,
-}, {capabilities}) => {
+}) => {
 
   if (task.isRunning() || task.isContainer()) {
     return null;
@@ -69,15 +71,12 @@ const StartIcon = ({
 };
 
 StartIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-StartIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default StartIcon;
+export default withCapabilities(StartIcon);
 
 // vim: set ts=2 sw=2 tw=80:
