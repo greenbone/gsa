@@ -99,7 +99,7 @@ const ToolBarIcons = ({
   onTaskStartClick,
   onTaskStopClick,
   onTaskResumeClick,
-}, {capabilities}) => {
+}) => {
 
   const notes_count = isDefined(notes) ? notes.counts.length : undefined;
   const override_count = isDefined(overrides) ? overrides.counts.length :
