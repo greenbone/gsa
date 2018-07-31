@@ -26,30 +26,32 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent, renderYesNo} from '../../utils/render.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent, renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import Icon from '../../components/icon/icon.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import Condition from './condition.js';
-import Event from './event.js';
-import Method from './method.js';
+import Condition from './condition';
+import Event from './event';
+import Method from './method';
 
 const Actions = ({
   entity,
@@ -124,12 +126,11 @@ const render_filter = (filter, caps, links = true) => {
 
 const Row = ({
   actions,
+  capabilities,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}, {
-  capabilities,
 }) => {
   return (
     <TableRow>
@@ -165,15 +166,15 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default compose(
+  withEntityRow(withEntityActions(Actions)),
+  withCapabilities,
+)(Row);
 
 // vim: set ts=2 sw=2 tw=80:

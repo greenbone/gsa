@@ -28,6 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -43,9 +44,10 @@ import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
 const TargetDetails = ({
+  capabilities,
   entity,
   links = true,
-}, {capabilities}) => {
+}) => {
   const {
     alive_tests,
     esxi_credential,
@@ -255,15 +257,12 @@ const TargetDetails = ({
   );
 };
 
-TargetDetails.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
 TargetDetails.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 
-export default TargetDetails;
+export default withCapabilities(TargetDetails);
 
 // vim: set ts=2 sw=2 tw=80:

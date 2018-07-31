@@ -31,58 +31,58 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderYesNo} from '../../utils/render.js';
-import withComponentDefaults from '../../utils/withComponentDefaults.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import EntityPage from '../../entity/page.js';
-import EntityPermissions from '../../entity/permissions.js';
+import EntityPage from 'web/entity/page';
+import EntityPermissions from 'web/entity/permissions';
 import EntityContainer, {
   loader,
   permissions_resource_loader,
-} from '../../entity/container.js';
-import {goto_details, goto_list} from '../../entity/component.js';
+} from 'web/entity/container';
+import {goto_details, goto_list} from 'web/entity/component';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import Badge from '../../components/badge/badge.js';
+import Badge from 'web/components/badge/badge';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import ImportReportIcon from './icons/importreporticon.js';
-import NewIconMenu from './icons/newiconmenu.js';
-import ResumeIcon from './icons/resumeicon.js';
-import ScheduleIcon from './icons/scheduleicon.js';
-import StartIcon from './icons/starticon.js';
-import StopIcon from './icons/stopicon.js';
+import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
+import NewIconMenu from 'web/pages/tasks/icons/newiconmenu';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
 
-import TaskDetails from './details.js';
-import TaskStatus from './status.js';
-import TaskComponent from './component.js';
+import TaskDetails from 'web/pages/tasks/details';
+import TaskStatus from 'web/pages/tasks/status';
+import TaskComponent from 'web/pages/tasks/component';
 
 const ToolBarIcons = ({
   entity,
@@ -99,7 +99,7 @@ const ToolBarIcons = ({
   onTaskStartClick,
   onTaskStopClick,
   onTaskResumeClick,
-}, {capabilities}) => {
+}) => {
 
   const notes_count = isDefined(notes) ? notes.counts.length : undefined;
   const override_count = isDefined(overrides) ? overrides.counts.length :

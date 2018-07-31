@@ -26,23 +26,23 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import {withEntityActions} from '../../entities/actions.js';
+import {withEntityActions} from 'web/entities/actions';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import ExportIcon from '../../components/icon/exporticon.js';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import ImportReportIcon from './icons/importreporticon.js';
-import ResumeIcon from './icons/resumeicon.js';
-import ScheduleIcon from './icons/scheduleicon.js';
-import StartIcon from './icons/starticon.js';
-import StopIcon from './icons/stopicon.js';
+import ImportReportIcon from 'web/pages/tasks/icons/importreporticon';
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 const Actions = ({
     entity,
@@ -55,7 +55,7 @@ const Actions = ({
     onTaskResumeClick,
     onTaskStartClick,
     onTaskStopClick,
-  }, {capabilities}) => {
+  }) => {
   return (
     <IconDivider
       align={['center', 'center']}
@@ -110,10 +110,6 @@ Actions.propTypes = {
   onTaskResumeClick: PropTypes.func.isRequired,
   onTaskStartClick: PropTypes.func.isRequired,
   onTaskStopClick: PropTypes.func.isRequired,
-};
-
-Actions.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityActions(Actions);
