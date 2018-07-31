@@ -30,6 +30,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import SeverityBar from '../../components/bar/severitybar.js';
 
@@ -79,7 +80,7 @@ const ToolBarIcons = ({
   onHostDeleteClick,
   onHostDownloadClick,
   onHostEditClick,
-}, {capabilities}) => {
+}) => {
   return (
     <Divider margin="10px">
       <IconDivider>
