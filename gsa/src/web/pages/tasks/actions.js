@@ -55,7 +55,7 @@ const Actions = ({
     onTaskResumeClick,
     onTaskStartClick,
     onTaskStopClick,
-  }, {capabilities}) => {
+  }) => {
   return (
     <IconDivider
       align={['center', 'center']}
@@ -110,10 +110,6 @@ Actions.propTypes = {
   onTaskResumeClick: PropTypes.func.isRequired,
   onTaskStartClick: PropTypes.func.isRequired,
   onTaskStopClick: PropTypes.func.isRequired,
-};
-
-Actions.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 export default withEntityActions(Actions);
