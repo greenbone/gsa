@@ -26,6 +26,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import compose from '../../utils/compose.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 import PropTypes from '../../utils/proptypes.js';
 import {renderComponent, renderYesNo} from '../../utils/render.js';
 
@@ -124,12 +126,11 @@ const render_filter = (filter, caps, links = true) => {
 
 const Row = ({
   actions,
+  capabilities,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}, {
-  capabilities,
 }) => {
   return (
     <TableRow>
@@ -165,15 +166,15 @@ const Row = ({
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default compose(
+  withEntityRow(withEntityActions(Actions)),
+  withCapabilities,
+)(Row);
 
 // vim: set ts=2 sw=2 tw=80:
