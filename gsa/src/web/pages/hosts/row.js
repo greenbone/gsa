@@ -28,8 +28,10 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import compose from '../../utils/compose';
 import PropTypes from '../../utils/proptypes.js';
 import {renderComponent} from '../../utils/render.js';
+import withCapabilities from '../../utils/withCapabilities.js';
 
 import EditIcon from '../../entity/icon/editicon.js';
 import DeleteIcon from '../../entity/icon/deleteicon.js';
@@ -50,12 +52,13 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const Actions = ({
+    capabilities,
     entity,
     onTargetCreateFromHostClick,
     onHostEditClick,
     onHostDeleteClick,
     onHostDownloadClick,
-  }, {capabilities}) => {
+  }) => {
 
   let new_title;
   const can_create_target = capabilities.mayCreate('target');
@@ -98,15 +101,12 @@ const Actions = ({
 };
 
 Actions.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model,
   onHostDeleteClick: PropTypes.func,
   onHostDownloadClick: PropTypes.func,
   onHostEditClick: PropTypes.func,
   onTargetCreateFromHostClick: PropTypes.func,
-};
-
-Actions.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
 };
 
 const Row = ({
@@ -164,6 +164,9 @@ Row.propTypes = {
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default compose(
+  withEntityRow(withEntityActions(Actions)),
+  withCapabilities,
+)(Row);
 
 // vim: set ts=2 sw=2 tw=80:
