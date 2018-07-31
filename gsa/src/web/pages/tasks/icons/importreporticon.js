@@ -24,15 +24,17 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from '../../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 const ImportIcon = ({
+  capabilities,
   size,
   task,
   onClick,
-}, {capabilities}) => {
+}) => {
 
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;
@@ -51,15 +53,12 @@ const ImportIcon = ({
 };
 
 ImportIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-ImportIcon.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default ImportIcon;
+export default withCapabilities(ImportIcon);
 
 // vim: set ts=2 sw=2 tw=80:
