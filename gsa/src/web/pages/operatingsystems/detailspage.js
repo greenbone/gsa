@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import EntityPage, {Col} from 'web/entity/page';
 import EntityContainer, {
@@ -66,12 +67,13 @@ import TableRow from 'web/components/table/row';
 
 import OsComponent from './component';
 
-const ToolBarIcons = ({
+let ToolBarIcons = ({
+  capabilities,
   entity,
   links = true,
   onOperatingSystemDeleteClick,
   onOperatingSystemDownloadClick,
-}, {capabilities}) => {
+}) => {
   const {hosts} = entity;
   return (
     <Divider margin="10px">
@@ -126,15 +128,14 @@ const ToolBarIcons = ({
 };
 
 ToolBarIcons.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onOperatingSystemDeleteClick: PropTypes.func.isRequired,
   onOperatingSystemDownloadClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
+ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity}) => {
   const {
