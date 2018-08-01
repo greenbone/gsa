@@ -391,6 +391,7 @@ class StartPage extends React.Component {
                         <Dashboard
                           {...settings}
                           id={id}
+                          isLoading={false}
                           items={rows}
                           loadSettings={this.handleLoadDashboardSettings}
                           saveSettings={this.handleSaveDashboardSettings}
