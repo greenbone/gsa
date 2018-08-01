@@ -112,7 +112,7 @@ class EntityContainer extends React.Component {
   }
 
   componentDidMount() {
-    const {id} = this.props.params;
+    const {id} = this.props.match.params;
     this.load(id);
   }
 
@@ -121,9 +121,9 @@ class EntityContainer extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    const {id} = this.props.params;
-    if (id !== next.params.id) {
-      this.load(next.params.id);
+    const {id} = this.props.match.params;
+    if (id !== next.match.params.id) {
+      this.load(next.match.params.id);
     }
   }
 
@@ -285,8 +285,8 @@ EntityContainer.propTypes = {
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
   loaders: PropTypes.array,
+  match: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
-  params: PropTypes.object.isRequired,
   resourceType: PropTypes.string,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

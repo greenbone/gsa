@@ -26,7 +26,7 @@ import React from 'react';
 
 import glamorous from 'glamorous';
 
-import {Link as RLink} from 'react-router';
+import {Link as RLink} from 'react-router-dom';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 

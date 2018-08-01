@@ -24,7 +24,7 @@ import 'core-js/fn/object/values';
 
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
@@ -136,9 +136,9 @@ export class HostsTopologyDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {router} = this.props;
+    const {history} = this.props;
 
-    router.push(`/host/${data.id}`);
+    history.push(`/host/${data.id}`);
   }
 
   render() {
@@ -176,7 +176,7 @@ export class HostsTopologyDisplay extends React.Component {
 
 HostsTopologyDisplay.propTypes = {
   filter: PropTypes.filter,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const DISPLAY_ID = 'host-by-topology';

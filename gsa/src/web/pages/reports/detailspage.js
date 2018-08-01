@@ -95,7 +95,7 @@ class ReportDetails extends React.Component {
   }
 
   componentDidMount() {
-    const {id, deltaid} = this.props.params;
+    const {id, deltaid} = this.props.match.params;
     const {filter} = this.props.location.query;
 
     this.loadInternal({
@@ -114,8 +114,8 @@ class ReportDetails extends React.Component {
   }
 
   componentWillReceiveProps(next) {
-    const {id: old_id, deltaid: old_deltaid} = this.props.params;
-    const {id: next_id, deltaid: next_deltaid} = next.params;
+    const {id: old_id, deltaid: old_deltaid} = this.props.match.params;
+    const {id: next_id, deltaid: next_deltaid} = next.match.params;
 
     let next_filter;
     let old_filter;
@@ -501,6 +501,8 @@ class ReportDetails extends React.Component {
 ReportDetails.propTypes = {
   cache: PropTypes.cache.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

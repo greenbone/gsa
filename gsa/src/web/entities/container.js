@@ -341,13 +341,13 @@ class EntitiesContainer extends React.Component {
   }
 
   handleFilterReset() {
-    const {router, location} = this.props;
+    const {history, location} = this.props;
     const query = {...location.query};
 
     // remove filter param from url
     delete query.filter;
 
-    router.push({pathname: location.pathname, query});
+    history.push({pathname: location.pathname, query});
 
     this.load();
   }
@@ -602,11 +602,11 @@ EntitiesContainer.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   gmpname: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   loadEntities: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
-  router: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
