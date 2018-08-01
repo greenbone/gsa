@@ -87,6 +87,14 @@ const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
     row.map(item => createItem({name: item}))));
 
+const filterItems = (items, allowed) => items.map(row => {
+  const {items: rowItems = []} = row;
+  return {
+    ...row,
+    items: rowItems.filter(item => isDefined(allowed[item.name])),
+  };
+});
+
 export class Dashboard extends React.Component {
 
   static propTypes = {
@@ -173,7 +181,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    const {
+    let {
       items,
     } = this.state;
     const {
@@ -200,9 +208,10 @@ export class Dashboard extends React.Component {
     }
 
     const other = excludeObjectProps(props, ownPropNames);
+    items = isDefined(items) ? filterItems(items, this.components) : [];
     return (
       <Grid
-        items={isDefined(items) ? items : []}
+        items={items}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
@@ -217,7 +226,7 @@ export class Dashboard extends React.Component {
         }) => {
           const {name, filterId} = itemProps;
           const Component = this.components[name];
-          return isDefined(Component) ? (
+          return (
             <Component
               {...other}
               dragHandleProps={dragHandleProps}
@@ -228,7 +237,7 @@ export class Dashboard extends React.Component {
               onChanged={update}
               onRemoveClick={remove}
             />
-          ) : null;
+          );
         }}
       </Grid>
     );
