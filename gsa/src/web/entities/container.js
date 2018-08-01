@@ -127,11 +127,11 @@ class EntitiesContainer extends React.Component {
 
     if (isDefined(filter)) {
       // use filter from url
-      this.updateFilter(filter);
+      this.load(Filter.fromString(filter));
     }
     else {
       // use last filter
-      this.load({filter: this.props.filter});
+      this.load(this.props.filter);
     }
   }
 
@@ -139,21 +139,13 @@ class EntitiesContainer extends React.Component {
     this.clearTimer(); // remove possible running timer
   }
 
-  updateFilter(filterstring) {
-    const filter = isDefined(filterstring) ? Filter.fromString(filterstring) :
-      undefined;
-
-    this.load({filter});
-  }
-
-  load(options = {}) {
-    const {filter} = options;
+  load(filter) {
     const {
       updateFilter,
       loadEntities,
     } = this.props;
 
-    log.debug('Loading', options);
+    log.debug('Loading', {filter});
 
     this.clearTimer();
 
@@ -163,7 +155,7 @@ class EntitiesContainer extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load({filter: this.state.loadedFilter});
+    this.load(this.state.loadedFilter);
   }
 
   getRefreshInterval() {
@@ -299,7 +291,7 @@ class EntitiesContainer extends React.Component {
 
     filter.set(sort, field);
 
-    this.load({filter});
+    this.load(filter);
   }
 
   handleError(error) {
@@ -311,19 +303,19 @@ class EntitiesContainer extends React.Component {
   handleFirst() {
     const {loadedFilter: filter} = this.props;
 
-    this.load({filter: filter.first()});
+    this.load(filter.first());
   }
 
   handleNext() {
     const {loadedFilter: filter} = this.props;
 
-    this.load({filter: filter.next()});
+    this.load(filter.next());
   }
 
   handlePrevious() {
     const {loadedFilter: filter} = this.props;
 
-    this.load({filter: filter.previous()});
+    this.load(filter.previous());
   }
 
   handleLast() {
@@ -332,15 +324,15 @@ class EntitiesContainer extends React.Component {
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
 
-    this.load({filter: filter.first(last)});
+    this.load(filter.first(last));
   }
 
   handleFilterCreated(filter) {
-    this.load({filter});
+    this.load(filter);
   }
 
   handleFilterChanged(filter) {
-    this.load({filter});
+    this.load(filter);
   }
 
   handleFilterReset() {
