@@ -94,6 +94,8 @@ const gchar *user_get_password_warning (user_t *user);
 
 const gchar *user_get_capabilities (user_t *user);
 
+const time_t user_get_session_timeout (user_t *user);
+
 
 int user_logout (user_t *user);
 

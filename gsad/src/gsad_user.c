@@ -232,6 +232,12 @@ user_get_guest (user_t *user)
   return user->guest;
 }
 
+const time_t
+user_get_session_timeout (user_t *user)
+{
+  return user->time + (get_session_timeout () * 60);
+}
+
 /**
  * @brief Set timezone of user.
  *
