@@ -140,12 +140,12 @@ class Titlebar extends React.Component {
           }
           {gmp.isLoggedIn() ?
             <Divider>
-              <span>Logged in as </span>
+              <span>{_('Logged in as ')}</span>
               <UserLink to="usersettings">
                 <b>{gmp.username}</b>
               </UserLink>
               <span> | </span>
-              <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
+              <LogoutLink onClick={this.handleLogout}>{_('Logout')}</LogoutLink>
             </Divider> :
             <Greenbone/>
           }
