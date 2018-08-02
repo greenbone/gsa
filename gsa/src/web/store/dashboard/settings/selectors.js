@@ -52,7 +52,7 @@ class DashboardSetting {
   }
 
   getIsLoading() {
-    return isDefined(this.state) ? this.state.isLoading : false;
+    return isDefined(this.state) ? !!this.state.isLoading : false;
   }
 
 }
