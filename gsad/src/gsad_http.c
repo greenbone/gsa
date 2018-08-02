@@ -664,7 +664,13 @@ handler_send_reauthentication (http_connection_t *connection,
         msg = "";
     }
 
-  return handler_send_login_page (connection, http_status_code, msg, NULL);
+  cmd_response_data_t *response_data = cmd_response_data_new ();
+  cmd_response_data_set_status_code (response_data, http_status_code);
+
+  gchar *xml = gsad_message(NULL, "Authentication required",
+                            __FUNCTION__, __LINE__, msg, response_data);
+
+  return handler_create_response (connection, xml, response_data, REMOVE_SID);
 }
 
 /**
