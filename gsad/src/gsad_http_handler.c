@@ -539,12 +539,14 @@ handle_logout (http_connection_t *connection,
 {
   user_t * user = (user_t *)data;
 
-  user_logout (user);
+  if (user != NULL)
+    {
+      user_logout (user);
 
-  g_debug ("Logged out user %s\n", user_get_username(user));
+      g_debug ("Logged out user %s\n", user_get_username(user));
 
-  user_free (user);
-
+      user_free (user);
+    }
   return send_response (connection,
                         "",
                         MHD_HTTP_OK,
@@ -797,7 +799,7 @@ init_http_handlers()
   http_handler_t *system_report_url_handler =
       url_handler_new ("^/system_report/.+$", system_report_handler);
 
-  http_handler_t *logout_handler = http_handler_new (handle_setup_user);
+  http_handler_t *logout_handler = http_handler_new (handle_get_user);
   http_handler_add(logout_handler, http_handler_new (handle_logout));
   http_handler_t *logout_url_handler = url_handler_new ("^/logout/?$",
                                                         logout_handler);
