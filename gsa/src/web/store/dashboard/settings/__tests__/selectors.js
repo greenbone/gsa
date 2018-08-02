@@ -58,7 +58,7 @@ describe('dashboard settings selector init tests', () => {
     const selector = getDashboardSettings(rootState);
 
     expect(selector.getById('a')).toBeUndefined();
-    expect(selector.getIsLoading()).toBeUndefined();
+    expect(selector.getIsLoading()).toBe(false);
     expect(selector.getError()).toBeUndefined();
     expect(selector.getDefaultsById('a')).toEqual({});
     expect(selector.hasSettings('a')).toBe(false);
