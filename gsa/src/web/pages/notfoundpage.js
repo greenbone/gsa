@@ -35,7 +35,7 @@ const PageNotFound = () => (
   >
     <h1>{_('Page Not Found.')}</h1>
     <GBIcon size="large"/>
-    <p>We are sorry. The page you have requested could not be found.</p>
+    <p>{_('We are sorry. The page you have requested could not be found.')}</p>
   </Divider>
 );
 
