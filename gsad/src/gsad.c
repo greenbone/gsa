@@ -470,6 +470,7 @@ init_validator ()
                          "|(move_task)"
                          "|(new_alert)"
                          "|(new_task)"
+                         "|(renew_session)"
                          "|(report_alert)"
                          "|(restore)"
                          "|(resume_task)"
@@ -1559,6 +1560,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (import_report)
   ELSE (import_report_format)
   ELSE (move_task)
+  ELSE (renew_session)
   ELSE (report_alert)
   ELSE (restore)
   ELSE (resume_task)
