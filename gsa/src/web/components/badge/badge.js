@@ -56,7 +56,7 @@ const BadgeIcon = glamorous.span({
   zIndex: Theme.Layers.higher,
 },
   ({
-    backgroundColor = '#99CE48',
+    backgroundColor = Theme.green,
     color = 'white',
     position = 'bottom',
     radius = 8,
