@@ -1428,17 +1428,10 @@ exec_gmp_post (http_connection_t *con,
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
-  caller = params_value (con_info->params, "caller");
-  if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
-    {
-      g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
-      caller = NULL;
-    }
-
   language = user_get_language(user) ?: con_info->language ?:
     DEFAULT_GSAD_LANGUAGE;
 
-  credentials = credentials_new (user, language, caller);
+  credentials = credentials_new (user, language);
 
   credentials_start_cmd (credentials);
 

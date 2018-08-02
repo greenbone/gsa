@@ -493,13 +493,6 @@ handle_setup_credentials (http_connection_t *connection,
 
   get_client_address (connection, client_address);
 
-  gchar *caller = reconstruct_url (connection, url);
-  if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
-    {
-      g_free (caller);
-      caller = NULL;
-    }
-
   gchar *language = g_strdup (user_get_language (user));
 
   if (!language)
@@ -517,11 +510,11 @@ handle_setup_credentials (http_connection_t *connection,
           return MHD_YES;
         }
       language = accept_language_to_env_fmt (accept_language);
-      credentials = credentials_new (user, language, caller);
+      credentials = credentials_new (user, language);
     }
   else
     {
-      credentials = credentials_new (user, language, caller);
+      credentials = credentials_new (user, language);
     }
 
   user_free (user);
