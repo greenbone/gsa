@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import glamorous from 'glamorous';
 
@@ -105,9 +105,9 @@ export class OsVulnScoreDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {router} = this.props;
+    const {history} = this.props;
 
-    router.push(`/operatingsystem/${data.id}`);
+    history.push(`/operatingsystem/${data.id}`);
   }
 
   render() {
@@ -148,7 +148,7 @@ export class OsVulnScoreDisplay extends React.Component {
 
 OsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 OsVulnScoreDisplay.displayId = 'os-by-most-vulnerable';

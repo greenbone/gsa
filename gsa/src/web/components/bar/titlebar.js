@@ -23,12 +23,11 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
-
 
 import GBIcon from 'web/components/icon/greenboneicon';
 import Icon from 'web/components/icon/icon';
@@ -104,12 +103,12 @@ class Titlebar extends React.Component {
   }
 
   handleLogout(event) {
-    const {gmp, router} = this.props;
+    const {gmp, history} = this.props;
 
     event.preventDefault();
 
     gmp.logout().then(() => {
-      router.push('/login?type=logout');
+      history.push('/login?type=logout');
     });
   }
 
@@ -147,7 +146,7 @@ class Titlebar extends React.Component {
 
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default compose(

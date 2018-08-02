@@ -163,8 +163,8 @@ class Page extends React.Component {
     const {selectedDeltaReport} = this.state;
 
     if (isDefined(selectedDeltaReport)) {
-      const {router} = this.props;
-      router.push('/report/delta/' + selectedDeltaReport.id + '/' +
+      const {history} = this.props;
+      history.push('/report/delta/' + selectedDeltaReport.id + '/' +
         report.id);
     }
     else {
@@ -234,7 +234,7 @@ class Page extends React.Component {
 Page.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,

@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -61,27 +61,32 @@ class Unauthorized extends React.Component {
   }
 
   toLoginPage() {
-    const {gmp, router} = this.props;
+    const {gmp, history} = this.props;
 
     gmp.logout();
 
-    router.replace({
-      pathname: '/login',
-      state: {
-        next: this.props.location.pathname,
-      },
+    history.replace('/login', {
+      next: this.props.location.pathname,
     });
   }
 
   render() {
-    return this.props.children;
+    const {gmp} = this.props;
+
+    if (gmp.isLoggedIn()) {
+      return this.props.children;
+    }
+
+    this.toLoginPage();
+
+    return null;
   }
 }
 
 Unauthorized.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  router: PropTypes.object.isRequired,
 };
 
 export default compose(

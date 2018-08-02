@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import glamorous from 'glamorous';
 
@@ -104,9 +104,9 @@ export class HostsVulnScoreDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {router} = this.props;
+    const {history} = this.props;
 
-    router.push(`/host/${data.id}`);
+    history.push(`/host/${data.id}`);
   }
 
   render() {
@@ -147,7 +147,7 @@ export class HostsVulnScoreDisplay extends React.Component {
 
 HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
 };
 

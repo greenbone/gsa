@@ -29,13 +29,13 @@ import PropTypes from '../utils/proptypes.js';
 import withGmp from '../utils/withGmp.js';
 
 export const goto_details = (type, props) => ({data}) => {
-  const {router} = props;
-  return router.push('/' + type + '/' + data.id);
+  const {history} = props;
+  return history.push('/' + type + '/' + data.id);
 };
 
 export const goto_list = (type, props) => () => {
-  const {router} = props;
-  return router.push('/' + type);
+  const {history} = props;
+  return history.push('/' + type);
 };
 
 class EntityComponent extends React.Component {

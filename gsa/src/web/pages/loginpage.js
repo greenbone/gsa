@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import glamorous from 'glamorous';
 
@@ -253,16 +253,16 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(username, password) {
-    const {router, gmp} = this.props;
+    const {history, gmp} = this.props;
 
     gmp.login(username, password).then(token => {
       const {location} = this.props;
       if (location && location.state && location.state.next &&
           location.state.next !== location.pathname) {
-        router.replace(location.state.next);
+        history.replace(location.state.next);
       }
       else {
-        router.replace('/');
+        history.replace('/');
       }
     }, rej => {
       log.error(rej);
@@ -317,7 +317,8 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 export default compose(
