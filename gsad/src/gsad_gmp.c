@@ -23869,6 +23869,24 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   return html;
 }
 
+char *
+renew_session_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                   params_t *params, cmd_response_data_t* response_data)
+{
+  gchar * html;
+  gchar * message;
+  user_t * user = credentials_get_user (credentials);
+
+  user_renew_session (user);
+  session_add_user (user_get_token(user), user);
+
+  message = g_strdup_printf ("%ld", user_get_session_timeout (user));
+
+  html = action_result (connection, credentials, params, response_data,
+                        "renew_session", message, NULL, NULL);
+  g_free (message);
+  return html;
+}
 
 
 /* Manager communication. */
