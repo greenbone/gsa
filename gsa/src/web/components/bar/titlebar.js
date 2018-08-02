@@ -25,7 +25,7 @@ import React from 'react';
 
 import {withRouter} from 'react-router-dom';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -42,23 +42,25 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
-const LogoutLink = glamorous.a({
-  color: Theme.darkGray,
-  cursor: 'pointer',
-  '&:link, &:hover': {
-    color: Theme.darkGray,
-  },
-});
+const TITLE_BAR_HEIGHT = '42px';
+
+const LogoutLink = styled.a`
+  color: ${Theme.darkGray};
+  cursor: pointer;
+  &:link, &:hover, &:active, &:visited{
+    color: ${Theme.darkGray};
+  };
+`;
 
 const UserLink = LogoutLink.withComponent(Link);
 
-const GreenboneIcon = glamorous(GBIcon)({
-  width: '40px',
-  height: '40px',
-  marginRight: '4px',
-  paddingTop: '1px',
-  paddingBottom: '1px',
-});
+const GreenboneIcon = styled(GBIcon)`
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+`;
 
 const GsaIconComponent = props => (
   <Icon
@@ -69,11 +71,11 @@ const GsaIconComponent = props => (
   />
 );
 
-const GsaIcon = glamorous(GsaIconComponent)({
-  height: '40px',
-  paddingTop: '1px',
-  paddingBottom: '1px',
-});
+const GsaIcon = styled(GsaIconComponent)`
+  height: 40px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+`;
 
 const Greenbone = () => {
   return (
@@ -85,14 +87,20 @@ const Greenbone = () => {
 
 };
 
-const TitlebarLayout = glamorous(Layout)(
-  'titlebar',
-  {
-    height: '40px',
-    backgroundColor: '#99CE48',
-    padding: '0px 5px 0px 5px',
-  },
-);
+const TitlebarLayout = styled(Layout)`
+  height: ${TITLE_BAR_HEIGHT};
+  background-color: ${Theme.green};
+  padding: 0px 5px 0px 5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: ${Theme.Layers.menu};
+`;
+
+const TitlebarPlaceholder = styled.div`
+  height: ${TITLE_BAR_HEIGHT}
+`;
 
 class Titlebar extends React.Component {
 
@@ -116,30 +124,33 @@ class Titlebar extends React.Component {
   render() {
     const {gmp} = this.props;
     return (
-      <TitlebarLayout
-        flex
-        align={['space-between', 'center']}
-      >
-        {gmp.isLoggedIn() &&
-          <Link
-            to="/"
-            title={_('Dashboard')}
-          >
+      <React.Fragment>
+        <TitlebarPlaceholder/>
+        <TitlebarLayout
+          flex
+          align={['space-between', 'center']}
+        >
+          {gmp.isLoggedIn() &&
+            <Link
+              to="/"
+              title={_('Dashboard')}
+            >
+              <Greenbone/>
+            </Link>
+          }
+          {gmp.isLoggedIn() ?
+            <Divider>
+              <span>Logged in as </span>
+              <UserLink to="usersettings">
+                <b>{gmp.username}</b>
+              </UserLink>
+              <span> | </span>
+              <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
+            </Divider> :
             <Greenbone/>
-          </Link>
-        }
-        {gmp.isLoggedIn() ?
-          <Divider>
-            <span>Logged in as </span>
-            <UserLink to="usersettings">
-              <b>{gmp.username}</b>
-            </UserLink>
-            <span> | </span>
-            <LogoutLink onClick={this.handleLogout}>Logout</LogoutLink>
-          </Divider> :
-          <Greenbone/>
-        }
-      </TitlebarLayout>
+          }
+        </TitlebarLayout>
+      </React.Fragment>
     );
   }
 }
