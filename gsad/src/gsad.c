@@ -1341,7 +1341,7 @@ exec_gmp_post (http_connection_t *con,
     }
 
 
-  if (cmd && !strcmp (cmd, "login"))
+  if (str_equal (cmd, "login"))
     {
       return login (con, con_info->params, response_data, client_address);
     }
