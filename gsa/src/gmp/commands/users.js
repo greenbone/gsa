@@ -21,6 +21,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'moment';
+
 import logger from '../log';
 
 import registerCommand from '../command';
@@ -35,6 +37,8 @@ import User, {
   AUTH_METHOD_RADIUS,
 } from '../models/user';
 import Settings from '../models/settings';
+
+import {parseInt} from '../parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -258,6 +262,17 @@ class UserCommand extends EntityCommand {
       'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.secInfoFilter,
       /* eslint-enable max-len */
       auto_cache_rebuild: data.autoCacheRebuild,
+    });
+  }
+
+  renewSession() {
+    return this.httpPost({
+      cmd: 'renew_session',
+    }).then(response => {
+      const {data} = response;
+      const {action_result} = data;
+      const seconds = parseInt(action_result.message);
+      return response.setData(moment.unix(seconds));
     });
   }
 
