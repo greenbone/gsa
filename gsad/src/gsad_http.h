@@ -157,10 +157,6 @@ int handler_send_response (http_connection_t *connection,
 int handler_send_not_found (http_connection_t *connection,
                             const gchar *url);
 
-int handler_send_login_page(http_connection_t *connection,
-                            int http_status_code, const gchar *message,
-                            const gchar *url);
-
 /**
  * @brief Content types.
  */
@@ -242,8 +238,5 @@ int params_append_mhd (params_t *params, const char *name, const char *filename,
 
 char * gsad_message (credentials_t *, const char *, const char *, int,
                      const char *, cmd_response_data_t *);
-
-gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
-                  const gchar *, const gchar *);
 
 #endif /* _GSAD_HTTP_H */
