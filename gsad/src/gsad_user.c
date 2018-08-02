@@ -447,8 +447,6 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
         }
       else
         {
-          // renew session time
-          user_renew_session (user);
           session_add_user (user->token, user);
 
           *user_return = user;
