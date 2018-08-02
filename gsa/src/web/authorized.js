@@ -30,7 +30,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-class Unauthorized extends React.Component {
+class Authorized extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -40,6 +40,8 @@ class Unauthorized extends React.Component {
 
   componentDidMount() {
     const {gmp} = this.props;
+
+    this.responseError = this.responseError.bind(this);
 
     this.unsubscribe = gmp.addHttpErrorHandler(this.responseError);
   }
@@ -83,7 +85,7 @@ class Unauthorized extends React.Component {
   }
 }
 
-Unauthorized.propTypes = {
+Authorized.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
@@ -92,6 +94,6 @@ Unauthorized.propTypes = {
 export default compose(
   withGmp,
   withRouter,
-)(Unauthorized);
+)(Authorized);
 
 // vim: set ts=2 sw=2 tw=80:
