@@ -408,6 +408,17 @@ get_user_from_connection (http_connection_t *connection, user_t **user)
 }
 
 int
+handle_get_user (http_connection_t *connection,
+                 const char *method, const char *url,
+                 gsad_connection_info_t *con_info,
+                 http_handler_t *handler, void *data)
+{
+  user_t *user = NULL;
+  get_user_from_connection (connection, &user);
+  return http_handler_next (connection, method, url, con_info, handler, user);
+}
+
+int
 handle_setup_user (http_connection_t *connection,
                    const char *method, const char *url,
                    gsad_connection_info_t *con_info,
