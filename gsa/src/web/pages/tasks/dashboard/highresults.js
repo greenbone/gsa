@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {withRouter} from 'react-router';
+import {withRouter} from 'react-router-dom';
 
 import {format as d3format} from 'd3-format';
 
@@ -92,9 +92,9 @@ export class TasksHighResultsDisplay extends React.Component {
   }
 
   handleDataClick(data) {
-    const {router} = this.props;
+    const {history} = this.props;
 
-    router.push(`/task/${data.id}`);
+    history.push(`/task/${data.id}`);
   }
 
   render() {
@@ -132,7 +132,7 @@ export class TasksHighResultsDisplay extends React.Component {
 
 TasksHighResultsDisplay.propTypes = {
   filter: PropTypes.filter,
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 TasksHighResultsDisplay = compose(

@@ -24,28 +24,20 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../components/layout/layout.js';
+import GBIcon from 'web/components/icon/greenboneicon';
+import Divider from 'web/components/layout/divider';
 
-import Footer from '../components/structure/footer.js';
-import Header from '../components/structure/header.js';
-import Main from '../components/structure/main.js';
-
-const PageNotFound = () => {
-  return (
-    <Layout flex="column" style={{height: '100%'}}>
-      <Header/>
-      <Main
-        flex
-        align={['center', 'center']}
-        grow="1"
-        style={{height: '100%'}}
-      >
-        <h1>{_('Page Not Found.')}</h1>
-      </Main>
-      <Footer/>
-    </Layout>
-  );
-};
+const PageNotFound = () => (
+  <Divider
+    flex="column"
+    align={['center', 'center']}
+    grow
+  >
+    <h1>{_('Page Not Found.')}</h1>
+    <GBIcon size="large"/>
+    <p>We are sorry. The page you have requested could not be found.</p>
+  </Divider>
+);
 
 export default PageNotFound;
 
