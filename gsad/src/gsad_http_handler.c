@@ -368,6 +368,46 @@ handle_invalid_method (http_connection_t *connection,
 }
 
 int
+get_user_from_connection (http_connection_t *connection, user_t **user)
+{
+
+  const gchar *cookie;
+  const gchar *token;
+  gchar client_address[INET6_ADDRSTRLEN];
+  int ret;
+
+  token = MHD_lookup_connection_value (connection,
+                                       MHD_GET_ARGUMENT_KIND,
+                                       "token");
+  if (token == NULL)
+    {
+      return USER_BAD_MISSING_TOKEN;
+    }
+
+  if (openvas_validate (http_validator, "token", token))
+    {
+      return USER_BAD_MISSING_TOKEN;
+    }
+
+  cookie = MHD_lookup_connection_value (connection,
+                                        MHD_COOKIE_KIND,
+                                        SID_COOKIE_NAME);
+
+  if (openvas_validate (http_validator, "token", cookie))
+    {
+      return USER_BAD_MISSING_COOKIE;
+    }
+
+  ret = get_client_address (connection, client_address);
+  if (ret == 1)
+    {
+      return USER_IP_ADDRESS_MISSMATCH;
+    }
+
+  return user_find (cookie, token, client_address, user);
+}
+
+int
 handle_setup_user (http_connection_t *connection,
                    const char *method, const char *url,
                    gsad_connection_info_t *con_info,
@@ -375,66 +415,11 @@ handle_setup_user (http_connection_t *connection,
 {
   int ret;
   int http_response_code = MHD_HTTP_OK;
-  char *res;
-  const char *cookie;
-  char client_address[INET6_ADDRSTRLEN];
-  const char *token;
   authentication_reason_t auth_reason;
 
   user_t *user;
-  cmd_response_data_t *response_data;
 
-  token = MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
-                                       "token");
-
-  if (token == NULL)
-    {
-      g_debug ("%s: Missing token in arguments", __FUNCTION__);
-      cookie = NULL;
-      ret = USER_BAD_MISSING_TOKEN;
-    }
-  else
-    {
-      if (openvas_validate (http_validator, "token", token))
-        token = NULL;
-
-      cookie = MHD_lookup_connection_value (connection,
-                                            MHD_COOKIE_KIND,
-                                            SID_COOKIE_NAME);
-      if (openvas_validate (http_validator, "token", cookie))
-        cookie = NULL;
-
-      get_client_address (connection, client_address);
-      ret = get_client_address (connection, client_address);
-      if (ret == 1)
-        {
-          send_response (connection,
-                         UTF8_ERROR_PAGE ("'X-Real-IP' header"),
-                         MHD_HTTP_BAD_REQUEST, NULL,
-                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-          return MHD_YES;
-        }
-
-      ret = user_find (cookie, token, client_address, &user);
-    }
-
-
-  if (ret == USER_BAD_TOKEN)
-    {
-      response_data = cmd_response_data_new ();
-
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-
-      res = gsad_message (NULL,
-                          "Internal error", __FUNCTION__, __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: Bad token.",
-                          response_data);
-      return handler_create_response (connection,
-                                      res,
-                                      response_data,
-                                      REMOVE_SID);
-    }
+  ret = get_user_from_connection (connection, &user);
 
   if (ret == USER_GUEST_LOGIN_FAILED
       || ret == USER_GMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
