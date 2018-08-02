@@ -201,10 +201,10 @@ class Http {
   }
 
   handleResponseError(resolve, reject, xhr, options) {
-    let promise = Promise.resolve(xhr);
+    let promise = Promise.reject(xhr);
 
     for (const interceptor of this.errorHandlers) {
-      promise = promise.then(interceptor);
+      promise = promise.catch(interceptor);
     }
 
     promise.catch(request => {
