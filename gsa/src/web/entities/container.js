@@ -114,9 +114,12 @@ class EntitiesContainer extends React.Component {
         entities: props.entities,
         entitiesCounts: props.entitiesCounts,
         loadedFilter: props.loadedFilter,
+        isUpdating: false,
       };
     }
-    return null;
+    return {
+      isUpdating: true,
+    };
   };
 
   componentDidMount() {
@@ -480,6 +483,7 @@ class EntitiesContainer extends React.Component {
     const {
       entities,
       entitiesCounts,
+      isUpdating,
       loadedFilter,
       multiTagEntitiesCount,
       selected,
@@ -525,8 +529,6 @@ class EntitiesContainer extends React.Component {
     const sortBy = reverse || !isDefined(loadedFilter) ? reverseField :
       loadedFilter.get('sort');
     const sortDir = reverse ? SortBy.DESC : SortBy.ASC;
-    const isUpdating = isDefined(loadedFilter) && isDefined(filter) &&
-      !loadedFilter.equals(filter);
     return (
       <React.Fragment>
         {children({
