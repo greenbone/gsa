@@ -99,4 +99,6 @@ const time_t user_get_session_timeout (user_t *user);
 
 int user_logout (user_t *user);
 
+void user_renew_session (user_t *user);
+
 #endif /* _GSAD_USER_H_ */
