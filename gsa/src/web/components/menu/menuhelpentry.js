@@ -23,11 +23,17 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import PropTypes from '../../utils/proptypes.js';
 
 import ManualLink from '../link/manuallink.js';
 
 import MenuEntry from './menuentry.js';
+
+const StyledManualLink = styled(ManualLink)`
+  height: 100%;
+`;
 
 const MenuHelpEntry = ({
   title,
@@ -37,12 +43,12 @@ const MenuHelpEntry = ({
     {...props}
     caps="help"
   >
-    <ManualLink
+    <StyledManualLink
       page="index"
       title={title}
     >
       {title}
-    </ManualLink>
+    </StyledManualLink>
   </MenuEntry>
 );
 

@@ -22,21 +22,32 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import {hasValue} from 'gmp/utils/identity';
+
+import {StyledMenuEntry} from 'web/components/menu/menu';
+
+const MSection = styled.ul`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  border-top: 1px solid #b0b0b0;
+  padding: 0;
+`;
 
 const MenuSection = ({
   children,
 }) => (
-  <ul className="menu-section">
+  <MSection>
     {React.Children.map(children, child => hasValue(child) ? (
-      <li className="menu-entry">
+      <StyledMenuEntry>
         {child}
-      </li>
+      </StyledMenuEntry>
     ) : child)}
-  </ul>
+  </MSection>
 );
 
 export default MenuSection;
 
 // vim: set ts=2 sw=2 tw=80:
-

@@ -50,6 +50,7 @@ const Theme = {
   darkGreen: '#519032',
 
   Layers: {
+    menu: 600,
     aboveAll: 500,
     onTop: 100,
     belowAll: -100,
