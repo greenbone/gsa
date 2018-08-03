@@ -27,7 +27,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import EditIcon from 'web/components/icon/editicon';
@@ -79,6 +79,11 @@ import {
   selector as targetsSelector,
 } from 'web/store/entities/targets';
 
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {
+  getUserSettingsDefaults,
+} from 'web/store/usersettings/defaults/selectors';
+
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -95,12 +100,6 @@ import {
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import {loadFunc} from 'web/store/usersettings/actions';
-import {
-  getIsLoading,
-  getData,
-  getUserSettings,
-} from 'web/store/usersettings/selectors';
 import {loadTimezone} from 'web/store/usersettings/timezone/actions';
 import {getTimezone} from 'web/store/usersettings/timezone/selectors';
 
@@ -819,263 +818,152 @@ UserSettings.propTypes = {
 };
 
 const mapStateToProps = rootState => {
-  const state = getUserSettings(rootState);
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
 
-  let userInterfaceLanguage;
-  let rowsPerPage;
-  let detailsExportFileName;
-  let listExportFileName;
-  let reportExportFileName;
-  let maxRowsPerPage;
-  let autoCacheRebuild;
+  const userInterfaceLanguage = userDefaultsSelector.getByName(
+    'userinterfacelanguage');
+  const rowsPerPage = userDefaultsSelector.getByName('rowsperpage');
+  const detailsExportFileName = userDefaultsSelector.getByName(
+    'detailsexportfilename');
+  const listExportFileName = userDefaultsSelector.getByName(
+    'listexportfilename');
+  const reportExportFileName = userDefaultsSelector.getByName(
+    'reportexportfilename');
+  const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage');
+  const autoCacheRebuild = userDefaultsSelector.getByName(
+    'autocacherebuild');
 
-  let severityClass;
-  let defaultSeverity;
-  let dynamicSeverity;
+  const severityClass = userDefaultsSelector.getByName('severityclass');
+  const defaultSeverity = userDefaultsSelector.getByName('defaultseverity');
+  const dynamicSeverity = userDefaultsSelector.getByName('dynamicseverity');
 
-  let defaultAlertId;
-  let defaultEsxiCredentialId;
-  let defaultOspScanConfigId;
-  let defaultOspScannerId;
-  let defaultOpenvasScanConfigId;
-  let defaultOpenvasScannerId;
-  let defaultPortListId;
-  let defaultReportFormatId;
-  let defaultSmbCredentialId;
-  let defaultSnmpCredentialId;
-  let defaultSshCredentialId;
-  let defaultScheduleId;
-  let defaultTargetId;
+  const defaultAlertId = userDefaultsSelector.getValueByName('defaultalert');
+  const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
+    'defaultesxicredential');
+  const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
+    'defaultospscanconfig');
+  const defaultOspScannerId = userDefaultsSelector.getValueByName(
+    'defaultospscanner');
+  const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
+    'defaultopenvasscanconfig');
+  const defaultOpenvasScannerId = userDefaultsSelector.getValueByName(
+    'defaultopenvasscanner');
 
-  let agentsFilterId;
-  let alertsFilterId;
-  let assetsFilterId;
-  let configsFilterId;
-  let credentialsFilterId;
-  let filtersFilterId;
-  let notesFilterId;
-  let overridesFilterId;
-  let permissionsFilterId;
-  let portListsFilterId;
-  let reportsFilterId;
-  let reportFormatsFilterId;
-  let resultsFilterId;
-  let rolesFilterId;
-  let schedulesFilterId;
-  let tagsFilterId;
-  let targetsFilterId;
-  let tasksFilterId;
-  let cpeFilterId;
-  let cveFilterId;
-  let certBundFilterId;
-  let dfnCertFilterId;
-  let nvtFilterId;
-  let ovalFilterId;
-  let secInfoFilterId;
+  const defaultPortListId = userDefaultsSelector.getValueByName(
+    'defaultportlist');
+  const defaultReportFormatId = userDefaultsSelector.getValueByName(
+    'defaultreportformat');
+  const defaultSmbCredentialId = userDefaultsSelector.getValueByName(
+    'defaultsmbcredential');
+  const defaultSnmpCredentialId = userDefaultsSelector.getValueByName(
+    'defaultsnmpcredential');
+  const defaultSshCredentialId = userDefaultsSelector.getValueByName(
+    'defaultsshcredential');
+  const defaultScheduleId = userDefaultsSelector.getValueByName(
+      'defaultschedule');
+  const defaultTargetId = userDefaultsSelector.getValueByName('defaulttarget');
 
-  // get IDs of settings values
-  if (isDefined(state) && hasValue(getData(state))) {
+  const agentsFilterId = userDefaultsSelector.getValueByName('agentsfilter');
+  const alertsFilterId = userDefaultsSelector.getValueByName('alertsfilter');
+  const assetsFilterId = userDefaultsSelector.getValueByName('assetsfilter');
+  const configsFilterId = userDefaultsSelector.getValueByName('configsfilter');
+  const credentialsFilterId = userDefaultsSelector.getValueByName(
+    'credentialsfilter');
+  const filtersFilterId = userDefaultsSelector.getValueByName('filtersfilter');
+  const notesFilterId = userDefaultsSelector.getValueByName('notesfilter');
+  const overridesFilterId = userDefaultsSelector.getValueByName(
+    'overridesfilter');
+  const permissionsFilterId = userDefaultsSelector.getValueByName(
+    'permissionsfilter');
+  const portListsFilterId = userDefaultsSelector.getValueByName(
+    'portlistsfilter');
 
-    userInterfaceLanguage =
-      isDefined(getData(state).userinterfacelanguage) ?
-      getData(state).userinterfacelanguage : undefined;
-    rowsPerPage =
-      isDefined(getData(state).rowsperpage) ?
-      getData(state).rowsperpage : undefined;
-    detailsExportFileName =
-      isDefined(getData(state).detailsexportfilename) ?
-      getData(state).detailsexportfilename : undefined;
-    listExportFileName =
-      isDefined(getData(state).listexportfilename) ?
-      getData(state).listexportfilename : undefined;
-    reportExportFileName =
-      isDefined(getData(state).reportexportfilename) ?
-      getData(state).reportexportfilename : undefined;
-    maxRowsPerPage =
-      isDefined(getData(state).maxrowsperpage) ?
-      getData(state).maxrowsperpage : undefined;
-    autoCacheRebuild =
-      isDefined(getData(state).autocacherebuild) ?
-      getData(state).autocacherebuild : undefined;
+  const reportsFilterId = userDefaultsSelector.getValueByName(
+    'reportsfilter');
+  const reportFormatsFilterId = userDefaultsSelector.getValueByName(
+    'reportformatsfilter');
+  const resultsFilterId = userDefaultsSelector.getValueByName('resultsfilter');
+  const rolesFilterId = userDefaultsSelector.getValueByName('rolesfilter');
+  const schedulesFilterId = userDefaultsSelector.getValueByName(
+    'schedulesfilter');
+  const tagsFilterId = userDefaultsSelector.getValueByName('tagsfilter');
 
-    severityClass =
-      isDefined(getData(state).severityclass) ?
-      getData(state).severityclass : undefined;
-    defaultSeverity =
-      isDefined(getData(state).defaultseverity) ?
-      getData(state).defaultseverity : undefined;
-    dynamicSeverity =
-      isDefined(getData(state).dynamicseverity) ?
-      getData(state).dynamicseverity : undefined;
+  const targetsFilterId = userDefaultsSelector.getValueByName('targetsfilter');
+  const tasksFilterId = userDefaultsSelector.getValueByName('tasksfilter');
+  const cpeFilterId = userDefaultsSelector.getValueByName('cpefilter');
+  const cveFilterId = userDefaultsSelector.getValueByName('cvefilter');
+  const certBundFilterId = userDefaultsSelector.getValueByName(
+    'certbundfilter');
+  const dfnCertFilterId = userDefaultsSelector.getValueByName('dfncertfilter');
+  const nvtFilterId = userDefaultsSelector.getValueByName('nvtfilter');
+  const ovalFilterId = userDefaultsSelector.getValueByName('ovalfilter');
+  const secInfoFilterId = userDefaultsSelector.getValueByName(
+    'allsecinfofilter');
 
-    defaultAlertId = isDefined(getData(state).defaultalert) ?
-      getData(state).defaultalert.value : undefined;
-    defaultEsxiCredentialId = isDefined(getData(state).defaultesxicredential) ?
-      getData(state).defaultesxicredential.value : undefined;
-    defaultOspScanConfigId = isDefined(getData(state).defaultospscanconfig) ?
-      getData(state).defaultospscanconfig.value : undefined;
-    defaultOspScannerId = isDefined(getData(state).defaultospscanner) ?
-      getData(state).defaultospscanner.value : undefined;
-    defaultOpenvasScanConfigId =
-      isDefined(getData(state).defaultopenvasscanconfig) ?
-      getData(state).defaultopenvasscanconfig.value : undefined;
-    defaultOpenvasScannerId = isDefined(getData(state).defaultopenvasscanner) ?
-      getData(state).defaultopenvasscanner.value : undefined;
-    defaultPortListId = isDefined(getData(state).defaultportlist) ?
-      getData(state).defaultportlist.value : undefined;
-    defaultReportFormatId = isDefined(getData(state).defaultreportformat) ?
-      getData(state).defaultreportformat.value : undefined;
-    defaultSmbCredentialId = isDefined(getData(state).defaultsmbcredential) ?
-      getData(state).defaultsmbcredential.value : undefined;
-    defaultSnmpCredentialId = isDefined(getData(state).defaultsnmpcredential) ?
-      getData(state).defaultsnmpcredential.value : undefined;
-    defaultSshCredentialId = isDefined(getData(state).defaultsshcredential) ?
-      getData(state).defaultsshcredential.value : undefined;
-    defaultScheduleId = isDefined(getData(state).defaultschedule) ?
-      getData(state).defaultschedule.value : undefined;
-    defaultTargetId = isDefined(getData(state).defaulttarget) ?
-      getData(state).defaulttarget.value : undefined;
+  const alertsSel = alertsSelector(rootState);
+  const credentialsSel = credentialsSelector(rootState);
+  const filtersSel = filtersSelector(rootState);
+  const portListsSel = portListsSelector(rootState);
+  const reportFormatsSel = reportFormatsSelector(rootState);
+  const scannersSel = scannersSelector(rootState);
+  const scanConfigsSel = scanConfigsSelector(rootState);
+  const schedulesSel = schedulesSelector(rootState);
+  const targetsSel = targetsSelector(rootState);
 
-    agentsFilterId = isDefined(getData(state).agentsfilter) ?
-      getData(state).agentsfilter.value : undefined;
-    alertsFilterId = isDefined(getData(state).alertsfilter) ?
-      getData(state).alertsfilter.value : undefined;
-    assetsFilterId = isDefined(getData(state).assetsfilter) ?
-      getData(state).assetsfilter.value : undefined;
-    configsFilterId = isDefined(getData(state).configsfilter) ?
-      getData(state).configsfilter.value : undefined;
-    credentialsFilterId = isDefined(getData(state).credentialsfilter) ?
-      getData(state).credentialsfilter.value : undefined;
-    filtersFilterId = isDefined(getData(state).filtersfilter) ?
-      getData(state).filtersfilter.value : undefined;
-    notesFilterId = isDefined(getData(state).notesfilter) ?
-      getData(state).notesfilter.value : undefined;
-    overridesFilterId = isDefined(getData(state).overridesfilter) ?
-      getData(state).overridesfilter.value : undefined;
-    permissionsFilterId = isDefined(getData(state).permissionsfilter) ?
-      getData(state).permissionsfilter.value : undefined;
-    portListsFilterId = isDefined(getData(state).portlistsfilter) ?
-      getData(state).portlistsfilter.value : undefined;
-    reportsFilterId = isDefined(getData(state).reportsfilter) ?
-      getData(state).reportsfilter.value : undefined;
-    reportFormatsFilterId = isDefined(getData(state).reportformatsfilter) ?
-      getData(state).reportformatsfilter.value : undefined;
-    resultsFilterId = isDefined(getData(state).resultsfilter) ?
-      getData(state).resultsfilter.value : undefined;
-    rolesFilterId = isDefined(getData(state).rolesfilter) ?
-      getData(state).rolesfilter.value : undefined;
-    schedulesFilterId = isDefined(getData(state).schedulesfilter) ?
-      getData(state).schedulesfilter.value : undefined;
-    tagsFilterId = isDefined(getData(state).tagsfilter) ?
-      getData(state).tagsfilter.value : undefined;
-    targetsFilterId = isDefined(getData(state).targetsfilter) ?
-      getData(state).targetsfilter.value : undefined;
-    tasksFilterId = isDefined(getData(state).tasksfilter) ?
-      getData(state).tasksfilter.value : undefined;
-    cpeFilterId = isDefined(getData(state).cpefilter) ?
-      getData(state).cpefilter.value : undefined;
-    cveFilterId = isDefined(getData(state).cvefilter) ?
-      getData(state).cvefilter.value : undefined;
-    certBundFilterId = isDefined(getData(state).certbundfilter) ?
-      getData(state).certbundfilter.value : undefined;
-    dfnCertFilterId = isDefined(getData(state).dfncertfilter) ?
-      getData(state).dfncertfilter.value : undefined;
-    nvtFilterId = isDefined(getData(state).nvtfilter) ?
-      getData(state).nvtfilter.value : undefined;
-    ovalFilterId = isDefined(getData(state).ovalfilter) ?
-      getData(state).ovalfilter.value : undefined;
-    secInfoFilterId = isDefined(getData(state).allsecinfofilter) ?
-      getData(state).allsecinfofilter.value : undefined;
-
-  }
   // select entities with these IDs
-  const defaultAlert =
-    alertsSelector(rootState).getEntity(defaultAlertId);
-  const defaultEsxiCredential =
-    credentialsSelector(rootState).getEntity(defaultEsxiCredentialId);
-  const defaultOspScanConfig =
-    scanConfigsSelector(rootState).getEntity(defaultOspScanConfigId);
-  const defaultOspScanner =
-    scannersSelector(rootState).getEntity(defaultOspScannerId);
-  const defaultOpenvasScanConfig =
-    scanConfigsSelector(rootState).getEntity(defaultOpenvasScanConfigId);
-  const defaultOpenvasScanner =
-    scannersSelector(rootState).getEntity(defaultOpenvasScannerId);
-  const defaultPortList =
-    portListsSelector(rootState).getEntity(defaultPortListId);
-  const defaultReportFormat =
-    reportFormatsSelector(rootState).getEntity(defaultReportFormatId);
-  const defaultSmbCredential =
-    credentialsSelector(rootState).getEntity(defaultSmbCredentialId);
-  const defaultSnmpCredential =
-    credentialsSelector(rootState).getEntity(defaultSnmpCredentialId);
-  const defaultSshCredential =
-    credentialsSelector(rootState).getEntity(defaultSshCredentialId);
-  const defaultSchedule =
-    schedulesSelector(rootState).getEntity(defaultScheduleId);
-  const defaultTarget =
-    targetsSelector(rootState).getEntity(defaultTargetId);
-  const agentsFilter =
-    filtersSelector(rootState).getEntity(agentsFilterId);
-  const alertsFilter =
-    filtersSelector(rootState).getEntity(alertsFilterId);
-  const assetsFilter =
-    filtersSelector(rootState).getEntity(assetsFilterId);
-  const configsFilter =
-    filtersSelector(rootState).getEntity(configsFilterId);
-  const credentialsFilter =
-    filtersSelector(rootState).getEntity(credentialsFilterId);
-  const filtersFilter =
-    filtersSelector(rootState).getEntity(filtersFilterId);
-  const notesFilter =
-    filtersSelector(rootState).getEntity(notesFilterId);
-  const overridesFilter =
-    filtersSelector(rootState).getEntity(overridesFilterId);
-  const permissionsFilter =
-    filtersSelector(rootState).getEntity(permissionsFilterId);
-  const portListsFilter =
-    filtersSelector(rootState).getEntity(portListsFilterId);
-  const reportsFilter =
-    filtersSelector(rootState).getEntity(reportsFilterId);
-  const reportFormatsFilter =
-    filtersSelector(rootState).getEntity(reportFormatsFilterId);
-  const resultsFilter =
-    filtersSelector(rootState).getEntity(resultsFilterId);
-  const rolesFilter =
-    filtersSelector(rootState).getEntity(rolesFilterId);
-  const schedulesFilter =
-    filtersSelector(rootState).getEntity(schedulesFilterId);
-  const tagsFilter =
-    filtersSelector(rootState).getEntity(tagsFilterId);
-  const targetsFilter =
-    filtersSelector(rootState).getEntity(targetsFilterId);
-  const tasksFilter =
-    filtersSelector(rootState).getEntity(tasksFilterId);
-  const cpeFilter =
-    filtersSelector(rootState).getEntity(cpeFilterId);
-  const cveFilter =
-    filtersSelector(rootState).getEntity(cveFilterId);
-  const certBundFilter =
-    filtersSelector(rootState).getEntity(certBundFilterId);
-  const dfnCertFilter =
-    filtersSelector(rootState).getEntity(dfnCertFilterId);
-  const nvtFilter =
-    filtersSelector(rootState).getEntity(nvtFilterId);
-  const ovalFilter =
-    filtersSelector(rootState).getEntity(ovalFilterId);
-  const secInfoFilter =
-    filtersSelector(rootState).getEntity(secInfoFilterId);
+  const defaultAlert = alertsSel.getEntity(defaultAlertId);
+  const defaultEsxiCredential = credentialsSel.getEntity(
+    defaultEsxiCredentialId);
+  const defaultOspScanConfig = scanConfigsSel.getEntity(
+    defaultOspScanConfigId);
+  const defaultOspScanner = scannersSel.getEntity(defaultOspScannerId);
+  const defaultOpenvasScanConfig = scanConfigsSel.getEntity(
+    defaultOpenvasScanConfigId);
+  const defaultOpenvasScanner = scannersSel.getEntity(defaultOpenvasScannerId);
+  const defaultPortList = portListsSel.getEntity(defaultPortListId);
+  const defaultReportFormat = reportFormatsSel.getEntity(defaultReportFormatId);
+  const defaultSmbCredential = credentialsSel.getEntity(defaultSmbCredentialId);
+  const defaultSnmpCredential = credentialsSel.getEntity(
+    defaultSnmpCredentialId);
+  const defaultSshCredential = credentialsSel.getEntity(defaultSshCredentialId);
+  const defaultSchedule = schedulesSel.getEntity(defaultScheduleId);
+  const defaultTarget = targetsSel.getEntity(defaultTargetId);
+  const agentsFilter = filtersSel.getEntity(agentsFilterId);
+  const alertsFilter = filtersSel.getEntity(alertsFilterId);
+  const assetsFilter = filtersSel.getEntity(assetsFilterId);
+  const configsFilter = filtersSel.getEntity(configsFilterId);
+  const credentialsFilter = filtersSel.getEntity(credentialsFilterId);
+  const filtersFilter = filtersSel.getEntity(filtersFilterId);
+  const notesFilter = filtersSel.getEntity(notesFilterId);
+  const overridesFilter = filtersSel.getEntity(overridesFilterId);
+  const permissionsFilter = filtersSel.getEntity(permissionsFilterId);
+  const portListsFilter = filtersSel.getEntity(portListsFilterId);
+  const reportsFilter = filtersSel.getEntity(reportsFilterId);
+  const reportFormatsFilter = filtersSel.getEntity(reportFormatsFilterId);
+  const resultsFilter = filtersSel.getEntity(resultsFilterId);
+  const rolesFilter = filtersSel.getEntity(rolesFilterId);
+  const schedulesFilter = filtersSel.getEntity(schedulesFilterId);
+  const tagsFilter = filtersSel.getEntity(tagsFilterId);
+  const targetsFilter = filtersSel.getEntity(targetsFilterId);
+  const tasksFilter = filtersSel.getEntity(tasksFilterId);
+  const cpeFilter = filtersSel.getEntity(cpeFilterId);
+  const cveFilter = filtersSel.getEntity(cveFilterId);
+  const certBundFilter = filtersSel.getEntity(certBundFilterId);
+  const dfnCertFilter = filtersSel.getEntity(dfnCertFilterId);
+  const nvtFilter = filtersSel.getEntity(nvtFilterId);
+  const ovalFilter = filtersSel.getEntity(ovalFilterId);
+  const secInfoFilter = filtersSel.getEntity(secInfoFilterId);
 
   return {
-    alerts: alertsSelector(rootState).getEntities(),
-    credentials: credentialsSelector(rootState).getEntities(),
-    filters: filtersSelector(rootState).getEntities(),
-    portlists: portListsSelector(rootState).getEntities(),
-    reportformats: reportFormatsSelector(rootState).getEntities(),
-    scanconfigs: scanConfigsSelector(rootState).getEntities(),
-    scanners: scannersSelector(rootState).getEntities(),
-    schedules: schedulesSelector(rootState).getEntities(),
-    targets: targetsSelector(rootState).getEntities(),
+    alerts: alertsSel.getEntities(),
+    credentials: credentialsSel.getEntities(),
+    filters: filtersSel.getEntities(),
+    portlists: portListsSel.getEntities(),
+    reportformats: reportFormatsSel.getEntities(),
+    scanconfigs: scanConfigsSel.getEntities(),
+    scanners: scannersSel.getEntities(),
+    schedules: schedulesSel.getEntities(),
+    targets: targetsSel.getEntities(),
     timezone: getTimezone(rootState),
     userInterfaceLanguage,
     rowsPerPage,
@@ -1086,7 +974,7 @@ const mapStateToProps = rootState => {
     severityClass,
     defaultSeverity,
     dynamicSeverity,
-    isLoading: getIsLoading(state),
+    isLoading: userDefaultsSelector.isLoading(),
     defaultAlert,
     defaultEsxiCredential,
     defaultOspScanConfig,
@@ -1138,7 +1026,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadScanConfigs: () => dispatch(loadScanConfigs({gmp})),
   loadScanners: () => dispatch(loadScanners({gmp})),
   loadSchedules: () => dispatch(loadSchedules({gmp})),
-  loadSettings: () => dispatch(loadFunc({gmp})),
+  loadSettings: () => dispatch(loadUserSettingDefaults({gmp})),
   loadTargets: () => dispatch(loadTargets({gmp})),
   loadTimezone: () => dispatch(loadTimezone({gmp})),
   loadAlert: id => dispatch(loadAlert({gmp, id})),
