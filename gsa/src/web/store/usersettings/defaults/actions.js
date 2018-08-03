@@ -2,6 +2,7 @@
  *
  * Authors:
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,45 +21,45 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {getUserSettingsDefaults} from './selectors';
 
-import {getIsLoading} from './selectors';
+export const USER_SETTINGS_DEFAULTS_LOADING_REQUEST =
+  'USER_SETTINGS_DEFAULTS_LOADING_REQUEST';
+export const USER_SETTINGS_DEFAULTS_LOADING_SUCCESS =
+  'USER_SETTINGS_DEFAULTS_LOADING_SUCCESS';
+export const USER_SETTINGS_DEFAULTS_LOADING_ERROR =
+  'USER_SETTINGS_DEFAULTS_LOADING_ERROR';
 
-export const SET_LANGUAGE = 'SET_LANGUAGE';
-export const USER_SETTINGS_LOADING_REQUEST = 'USER_SETTINGS_LOADING_REQUEST';
-export const USER_SETTINGS_LOADING_SUCCESS = 'USER_SETTINGS_LOADING_SUCCESS';
-export const USER_SETTINGS_LOADING_ERROR = 'USER_SETTINGS_LOADING_ERROR';
+export const loadingActions = {
+  request: () => ({
+    type: USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
+  }),
+  success: data => ({
+    type: USER_SETTINGS_DEFAULTS_LOADING_SUCCESS,
+    data,
+  }),
+  error: err => ({
+    type: USER_SETTINGS_DEFAULTS_LOADING_ERROR,
+    error: err,
+  }),
+};
 
-export const setLanguage = language => ({
-  type: SET_LANGUAGE,
-  data: language,
-});
+export const loadUserSettingDefaults = ({gmp}) => (dispatch, getState) => {
+  const rootState = getState();
+  const selector = getUserSettingsDefaults(rootState);
 
-const requestUserData = () => ({
-  type: USER_SETTINGS_LOADING_REQUEST,
-});
-
-const receivedUserData = data => ({
-  type: USER_SETTINGS_LOADING_SUCCESS,
-  data,
-});
-
-const receivedUserDataError = error => ({
-  type: USER_SETTINGS_LOADING_ERROR,
-  error,
-});
-
-export const loadFunc = ({gmp}) => (dispatch, getState) => {
-  if (getIsLoading()) {
+  if (selector.isLoading()) {
     // we are already loading data
     return Promise.resolve();
   }
 
-  dispatch(requestUserData());
+  dispatch(loadingActions.request());
 
   return gmp.user.currentSettings().then(
-    response => dispatch(receivedUserData(response.data._settings)),
-    error => dispatch(receivedUserDataError(error)),
+    response => dispatch(loadingActions.success(response.data)),
+    err => dispatch(loadingActions.error(err)),
   );
 };
 
 // vim: set ts=2 sw=2 two=80:
+
