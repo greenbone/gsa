@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -23,115 +24,92 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes.js';
+import Theme from 'web/utils/theme.js';
 
-import Link from '../link/link.js';
+import Link from 'web/components/link/link.js';
 
-const DefaultEntry = glamorous.div('menu-default-entry', {
-  display: 'flex',
-  justifyContent: 'center',
-  flexGrow: '1',
+const StyledMenu = styled.li`
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  margin: 1px;
+  height: 35px;
 
-  '& a, & a:hover, & a:focus, & a:link': {
-    color: '#FFFFFF',
-    display: 'block',
-    height: '35px',
-    lineHeight: '35px',
-    fontSize: '10px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  &:hover {
+    border-bottom: 3px solid ${Theme.green};
+  };
 
-  '.menu:hover & a': {
-    color: '#393637',
-  },
-});
+  & a {
+    display: flex;
+    flex-grow: 1;
+    align-items: center; ${''/* center text vertically*/}
+  };
 
-const MenuPoint = glamorous.li('menu-point', {
-  background: "url('/img/style/menu_pointy.png') no-repeat",
-  display: 'block',
-  height: '15px',
-  marginTop: '-14px',
-  marginLeft: '25px',
-});
+  & a, & a:hover, & a:focus, & a:link {
+    text-decoration: none;
+  };
+`;
 
-const StyledMenuEntry = glamorous.li('menu-entry', {
-  '& a': {
-    color: '#3A3A3A',
-  },
-  '&:last-child, &:last-child .menu-entry:last-child': {
-    borderBottomRightRadius: '8px',
-    borderBottomLeftRadius: '8px',
-  },
-  '& a, & a:hover, & a:focus, & a:link': {
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
+const DefaultEntry = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
 
-  '& > .menu-section': {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: '1',
-    borderTop: '1px solid #b0b0b0',
-  },
-});
+  & a, & a:hover, & a:focus, & a:link {
+    color: ${Theme.white};
+    display: block;
+    height: 35px;
+    line-height: 35px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+  };
+`;
 
-const MenuList = glamorous.ul('menu-list', {
-  width: '255px',
-  zIndex: Theme.Layers.onTop,
-  position: 'absolute',
-  display: 'none',
-  background: '#FAFAFA',
-  border: '1px solid #3A3A3A',
-  borderRadius: '0px 0px 8px 8px',
+export const StyledMenuEntry = styled.li`
+  display: flex;
+  list-style: none;
+  background: ${Theme.white};
+  text-indent: 12px;
+  text-align: left;
+  color: ${Theme.darkGray};
+  min-height: 22px;
+  font-size: 10px;
+  font-weight: bold;
 
-  '& .menu-entry': {
-    display: 'flex',
-    alignItems: 'stretch',
-    textIndent: '12px',
-    textAlign: 'left',
-    color: '#3A3A3A',
-    minHeight: '22px',
-    fontSize: '10px',
-    fontWeight: 'bold',
-    width: '100%',
-    backgroundColor: 'white',
-  },
-  '& .menu-entry:hover': {
-    background: '#99CE48',
-  },
-});
+  & a {
+    color: ${Theme.darkGray};
+  };
 
-const StyledMenu = glamorous.li('menu', {
-  flexGrow: '1',
-  flexShrink: '1',
-  height: '35px',
+  & a:hover {
+    color: ${Theme.white};
+    background: ${Theme.green};
+  }
+`;
 
-  '&:hover': {
-    backgroundColor: '#99ce48',
-  },
+const MenuList = styled.ul`
+  width: 255px;
+  z-index: ${Theme.Layers.menu};
+  position: absolute;
+  display: none;
+  background: ${Theme.green};
+  border-top: 1px solid ${Theme.mediumGray};
+  border-left: 1px solid ${Theme.mediumGray};
+  border-right: 1px solid ${Theme.mediumGray};
+  border-bottom: 1px solid ${Theme.mediumGray};
+  list-style: none;
+  padding-left: 0px;
+  margin-left: -1px;
 
-  '&:hover > .menu-list': {
-    display: 'block',
-  },
-
-  '& a': {
-    display: 'flex',
-    flexGrow: 1,
-    alignItems: 'center', // center text vertically
-  },
-
-  '& a, & a:hover, & a:focus, & a:link': {
-    background: 'none',
-    textDecoration: 'none',
-    color: '#3A3A3A',
-  },
-});
+  ${StyledMenu}:hover & {
+    display: block;
+  }
+`;
 
 const Menu = ({
   children,
@@ -161,7 +139,6 @@ const Menu = ({
       </DefaultEntry>
       {isDefined(children) && children.length > 0 &&
         <MenuList>
-          <MenuPoint/>
           {menuentries}
         </MenuList>
       }
