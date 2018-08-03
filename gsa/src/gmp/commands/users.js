@@ -82,17 +82,17 @@ class UserCommand extends EntityCommand {
       cmd: 'get_my_settings',
     }, options
     ).then(response => {
-      const settings = new Settings();
+      const settings = {};
       const {data} = response;
       forEach(data.get_my_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
         const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
-        settings.set(keyName, {
+        settings[keyName] = {
             id: setting._id,
             comment: setting.comment === '(null)' ? undefined : setting.comment,
             name: setting.name,
             value: setting.value,
-        });
+        };
       });
       return response.setData(settings);
     });

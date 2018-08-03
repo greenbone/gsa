@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -22,13 +22,34 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-export const getIsLoading = state =>
-  isDefined(state) ? state.isLoading : false;
+class UserSettingsDefaultsSelector {
+  constructor(state = {}) {
+    this.state = state;
+  }
 
-export const getUserSettings = rootState => {
-  return rootState.userSettings;
+  isLoading() {
+    return !!this.state.isLoading;
+  }
+
+  getByName(name) {
+    return isDefined(this.state.byName) ? this.state.byName[name] : undefined;
+  }
+
+  getValueByName(name) {
+    const {byName = {}} = this.state;
+    const setting = byName[name];
+    return isDefined(setting) ? setting.value : undefined;
+  }
+
+  getError() {
+    return this.state.error;
+  }
+}
+
+export const getUserSettingsDefaults = rootState => {
+  const {userSettings = {}} = rootState;
+  const {defaults} = userSettings;
+  return new UserSettingsDefaultsSelector(defaults);
 };
-export const getData = state =>
-  isDefined(state) ? state.data : undefined;
 
 // vim: set ts=2 sw=2 tw=80:
