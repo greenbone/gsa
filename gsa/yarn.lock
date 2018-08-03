@@ -4709,7 +4709,7 @@ is-plain-obj@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
 
-is-plain-object@^2.0.1, is-plain-object@^2.0.4:
+is-plain-object@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-2.0.4.tgz#2c163b3fafb1b606d9d17928f05c2a1c38e07677"
   dependencies:
@@ -8119,15 +8119,14 @@ style-loader@^0.20.3:
     loader-utils "^1.1.0"
     schema-utils "^0.4.5"
 
-styled-components@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.3.3.tgz#09e702055ab11f7a8eab8229b1c0d0b855095686"
+styled-components@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-3.4.0.tgz#d256fb4667e6c115a7ed61ab78f120283b43dd00"
   dependencies:
     buffer "^5.0.3"
     css-to-react-native "^2.0.3"
     fbjs "^0.8.16"
     hoist-non-react-statics "^2.5.0"
-    is-plain-object "^2.0.1"
     prop-types "^15.5.4"
     react-is "^16.3.1"
     stylis "^3.5.0"
