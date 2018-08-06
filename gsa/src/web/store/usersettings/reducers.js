@@ -20,35 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {combineReducers} from 'web/store/utils';
 
-import {
-  USER_SETTINGS_LOADING_REQUEST,
-  USER_SETTINGS_LOADING_SUCCESS,
-  USER_SETTINGS_LOADING_ERROR,
-} from './actions';
+import defaults from './defaults/reducers';
 
-const userSettings = (state = {}, action) => {
-  switch (action.type) {
-    case USER_SETTINGS_LOADING_REQUEST:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case USER_SETTINGS_LOADING_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        data: action.data,
-      };
-    case USER_SETTINGS_LOADING_ERROR:
-      return {
-        ...state,
-        isLoading: false,
-        error: action.error,
-      };
-    default:
-      return state;
-  }
-};
+const userSettings = combineReducers({
+  defaults,
+});
 
 export default userSettings;

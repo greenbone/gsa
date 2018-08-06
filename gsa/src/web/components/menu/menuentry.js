@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -34,9 +34,9 @@ import Layout from '../layout/layout.js';
 
 import Link from '../link/link.js';
 
-const StyledLink = glamorous(Link)({
-  height: '100%',
-});
+const StyledLink = styled(Link)`
+  height: 100%;
+`;
 
 const MenuEntry = ({
   children,

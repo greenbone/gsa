@@ -23,7 +23,7 @@
 
 import {isDefined, isString} from './utils/identity';
 
-const GREENBONE_GREEN = '#99CE48';
+const GREENBONE_GREEN = '#66c430';
 
 const LogLevels = {
   trace: 0,
