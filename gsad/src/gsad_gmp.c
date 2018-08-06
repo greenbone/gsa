@@ -463,8 +463,6 @@ envelope_gmp (gvm_connection_t *connection,
   assert (credentials);
 
   user_t *user = credentials_get_user (credentials);
-  const gchar *caller = credentials_get_caller (credentials);
-  const gchar *current_page = credentials_get_current_page (credentials);
   const gchar *timezone = user_get_timezone (user);
   const gchar *pw_warning = user_get_password_warning (user);
 
@@ -478,8 +476,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<version>%s</version>"
                                  "<vendor_version>%s</vendor_version>"
                                  "<token>%s</token>"
-                                 "<caller>%s</caller>"
-                                 "<current_page>%s</current_page>"
                                  "<time>%s</time>"
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
@@ -492,12 +488,6 @@ envelope_gmp (gvm_connection_t *connection,
                                  GSAD_VERSION,
                                  vendor_version_get (),
                                  user_get_token(user),
-                                 caller ? caller : "",
-                                 current_page
-                                   ? current_page
-                                   : (caller
-                                       ? caller
-                                       : ""),
                                  ctime_now,
                                  timezone ? timezone : "",
                                  user_get_username (user),
@@ -24162,7 +24152,7 @@ login (http_connection_t *con,
                      login ?: "",
                      client_address);
 
-          credentials = credentials_new (user, language, NULL);
+          credentials = credentials_new (user, language);
 
           char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
 

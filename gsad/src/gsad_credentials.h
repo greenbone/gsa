@@ -32,14 +32,11 @@
 typedef struct credentials credentials_t;
 
 credentials_t *credentials_new (user_t *user,
-                                const gchar *language,
-                                const gchar *caller);
+                                const gchar *language);
 
 void credentials_free (credentials_t *creds);
 
 user_t *credentials_get_user (credentials_t *creds);
-
-const gchar *credentials_get_caller (credentials_t *creds);
 
 const gchar *credentials_get_current_page (credentials_t *creds);
 

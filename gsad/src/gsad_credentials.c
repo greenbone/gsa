@@ -34,23 +34,19 @@
 struct credentials
 {
   struct timeval cmd_start; ///< Seconds since command page handler started.
-  gchar *caller;            ///< Caller URL, for POST relogin.
-  gchar *current_page;      ///< Current page URL, for refresh.
   gchar *language;          ///< Language for this request
   user_t *user;             ///< Current user
 };
 
 credentials_t *
 credentials_new (user_t *user,
-                 const gchar *language,
-                 const gchar *caller)
+                 const gchar *language)
 {
   credentials_t *credentials;
 
   credentials = g_malloc0 (sizeof (credentials_t));
   credentials->user = user_copy (user);
   credentials->language = g_strdup (language);
-  credentials->caller = g_strdup (caller);
 
   return credentials;
 }
@@ -61,8 +57,6 @@ credentials_free (credentials_t *creds)
   if (!creds)
     return;
 
-  g_free (creds->caller);
-  g_free (creds->current_page);
   g_free (creds->language);
 
   user_free (creds->user);
@@ -74,18 +68,6 @@ user_t *
 credentials_get_user (credentials_t *cred)
 {
   return cred->user;
-}
-
-const gchar *
-credentials_get_caller (credentials_t *cred)
-{
-  return cred->caller;
-}
-
-const gchar *
-credentials_get_current_page (credentials_t *cred)
-{
-  return cred->current_page;
 }
 
 const gchar *
