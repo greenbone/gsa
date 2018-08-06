@@ -51,6 +51,8 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
+
 import Section from 'web/components/section/section';
 
 import Tab from 'web/components/tab/tab';
@@ -388,16 +390,21 @@ class StartPage extends React.Component {
                       <TabPanel
                         key={id}
                       >
-                        <Dashboard
-                          {...settings}
-                          id={id}
-                          isLoading={false}
-                          items={rows}
-                          loadSettings={this.handleLoadDashboardSettings}
-                          saveSettings={this.handleSaveDashboardSettings}
-                          onNewDisplay={this.handleAddNewDisplay}
-                          onResetDashboard={this.handleResetDashboard}
-                        />
+                        <SubscriptionProvider>
+                          {({notify}) => (
+                            <Dashboard
+                              {...settings}
+                              id={id}
+                              isLoading={false}
+                              items={rows}
+                              loadSettings={this.handleLoadDashboardSettings}
+                              notify={notify}
+                              saveSettings={this.handleSaveDashboardSettings}
+                              onNewDisplay={this.handleAddNewDisplay}
+                              onResetDashboard={this.handleResetDashboard}
+                            />
+                          )}
+                        </SubscriptionProvider>
                       </TabPanel>
                     );
                   })}
