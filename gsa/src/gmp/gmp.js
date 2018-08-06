@@ -78,8 +78,8 @@ class Gmp {
   constructor(options = {}) {
     const {
       autorefresh,
-      protocol,
-      server,
+      protocol = global.location.host,
+      server = global.location.host,
       storage = localStorage,
       manualurl,
       protocoldocurl,
@@ -92,8 +92,8 @@ class Gmp {
 
     this.storage = storage;
 
-    this.server = isDefined(server) ? server : window.location.host;
-    this.protocol = isDefined(protocol) ? protocol : window.location.protocol;
+    this.server = server;
+    this.protocol = protocol;
 
     this.http = new GmpHttp(this.server, this.protocol, httpoptions);
 
