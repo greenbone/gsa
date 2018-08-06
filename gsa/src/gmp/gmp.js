@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
 
 import {isDefined} from './utils/identity';
 import {isEmpty} from './utils/string';
@@ -88,8 +89,6 @@ class Gmp {
 
     log.debug('Using gmp options', options);
 
-    this._commands = {};
-
     this.storage = storage;
 
     this.server = server;
@@ -109,15 +108,16 @@ class Gmp {
 
     this.globals = {manualurl, protocoldocurl};
 
-    const commands = getCommands();
-    for (const name in commands) { // eslint-disable-line guard-for-in
-      const cmd = commands[name];
-      const instance = new cmd.clazz(this.http, ...cmd.options);
-      this._commands[name] = instance;
+    this._initCommands();
+  }
+
+  _initCommands() {
+    for (const [name, cmd] of Object.entries(getCommands())) {
+      const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {
         get: function() {
-          return this._commands[name];
+          return instance;
         },
       });
     }
