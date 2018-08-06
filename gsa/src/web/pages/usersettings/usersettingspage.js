@@ -25,8 +25,12 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
+import {setLanguage} from 'gmp/locale/lang';
+
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -227,11 +231,14 @@ class UserSettings extends React.Component {
 
   handleSaveSettings(data) {
     const {gmp} = this.props;
-    return gmp.user.saveSettings(data)
-      .then(() => {
-        this.props.loadSettings();
-        this.props.loadTimezone();
-      });
+    const {userInterfaceLanguage} = data;
+    return gmp.user.saveSettings(data).then(() => {
+      if (isDefined(userInterfaceLanguage)) {
+        setLanguage(userInterfaceLanguage);
+      }
+      this.props.loadSettings();
+      this.props.loadTimezone();
+    });
   }
 
   handleValueChange(value, name) {
