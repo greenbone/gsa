@@ -56,7 +56,7 @@ const ManualLink = ({
   searchTerm,
   ...props
 }) => {
-  const {manualurl} = gmp.globals;
+  const {manualurl} = gmp.settings;
 
   let url = manualurl;
   if (!url.endsWith('/')) {

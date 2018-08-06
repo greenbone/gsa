@@ -77,7 +77,7 @@ class ScheduleComponent extends React.Component {
       });
     }
     else {
-      const {timezone} = gmp.globals;
+      const {timezone} = gmp.settings;
       this.setState({
         comment: undefined,
         dialogVisible: true,

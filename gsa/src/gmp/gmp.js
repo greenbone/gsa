@@ -74,39 +74,77 @@ import LoginCommand from './commands/login.js';
 
 const log = logger.getLogger('gmp');
 
+const set = (storage, name, value) => {
+  if (isDefined(value)) {
+    storage.setItem(name, value);
+  }
+  else {
+    storage.removeItem(name);
+  }
+};
+
+class GmpSettings {
+  constructor(storage = localStorage, options = {}) {
+    const {
+      autorefresh,
+      manualurl,
+      protocol = global.location.host,
+      protocoldocurl,
+      server = global.location.host,
+      token,
+      timeout,
+      timezone,
+      username,
+    } = {...options, ...storage};
+    this.storage = storage;
+
+    this.autorefresh = autorefresh;
+    this.manualurl = manualurl;
+    this.protocol = protocol;
+    this.protocoldocurl = protocoldocurl;
+    this.server = server;
+    this.token = token;
+    this.timezone = timezone;
+    this.timeout = timeout;
+    this.username = username;
+  }
+
+  save() {
+    set(this.storage, 'token', this.token);
+    set(this.storage, 'timeout', this.timeout);
+    set(this.storage, 'username', this.username);
+  }
+}
+
 class Gmp {
 
   constructor(options = {}) {
     const {
       autorefresh,
-      protocol = global.location.host,
-      server = global.location.host,
+      protocol,
+      server,
       storage = localStorage,
       manualurl,
       protocoldocurl,
-      ...httpoptions
+      timeout,
     } = options;
 
     log.debug('Using gmp options', options);
 
-    this.storage = storage;
+    this.settings = new GmpSettings(storage, {
+      autorefresh,
+      manualurl,
+      protocol,
+      protocoldocurl,
+      server,
+      timeout,
+    });
 
-    this.server = server;
-    this.protocol = protocol;
-
-    this.http = new GmpHttp(this.server, this.protocol, httpoptions);
+    this.http = new GmpHttp(this.settings);
 
     this._login = new LoginCommand(this.http);
 
-    this._autorefresh = autorefresh;
-
     this._logoutListeners = [];
-
-    if (this.storage.token) {
-      this.token = this.storage.token;
-    }
-
-    this.globals = {manualurl, protocoldocurl};
 
     this._initCommands();
   }
@@ -125,14 +163,21 @@ class Gmp {
 
   login(username, password) {
     return this._login.login(username, password).then(login => {
-      this.token = login.token;
+      const {
+        token,
+        timezone,
+      } = login;
 
-      delete login.token;
+      this.settings.username = username;
+      this.settings.timezone = timezone;
+      this.settings.token = token;
+      this.settings.save();
 
-      this.username = username;
-      this.globals = login;
-
-      return this.token;
+      return {
+        username,
+        token,
+        timezone,
+      };
     });
   }
 
@@ -146,12 +191,12 @@ class Gmp {
         args,
         transform: DefaultTransform,
       }).then(xhr => {
-          this.token = undefined;
+          this.clearToken();
           log.debug('Logged out successfully');
           return xhr;
         })
         .catch(err => {
-          this.token = undefined;
+          this.clearToken();
           log.error('Error on logout', err);
         });
 
@@ -177,7 +222,8 @@ class Gmp {
   }
 
   buildUrl(path, params, anchor) {
-    let url = buildServerUrl(this.server, path, this.protocol);
+    let url = buildServerUrl(this.settings.server, path,
+      this.settings.protocol);
 
     if (isDefined(params)) {
       url += '?' + buildUrlParams(params);
@@ -189,49 +235,21 @@ class Gmp {
     return url;
   }
 
-  get token() {
-    return this.http.token;
+  clearToken() {
+    this.settings.token = undefined;
+    this.settings.save();
   }
 
-  set token(token) {
-    if (isDefined(token)) {
-      this.storage.token = token;
-    }
-    else {
-      delete this.storage.token;
-    }
-    this.http.token = token;
+  get token() {
+    return this.settings.token;
   }
 
   get username() {
-    return this.storage.username;
-  }
-
-  set username(value) {
-    this.storage.username = value;
-  }
-
-  get globals() {
-    if (isDefined(this.storage.globals)) {
-      return JSON.parse(this.storage.globals);
-    }
-    return {};
-  }
-
-  set globals(values) {
-    if (isDefined(values)) {
-      const {globals} = this;
-      this.storage.globals = JSON.stringify({...globals, ...values});
-    }
-    else {
-      this.storage.removeItem('globals');
-    }
+    return this.settings.username;
   }
 
   get autorefresh() {
-    return isDefined(this._autorefresh) ?
-      this._autorefresh :
-      this.globals.autorefresh;
+    return this.settings.autorefresh;
   }
 
   addHttpErrorHandler(handler) {

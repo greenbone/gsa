@@ -27,17 +27,19 @@ import X2JsTransform from './transform/x2js.js';
 
 class GmpHttp extends Http {
 
-  constructor(server, protocol, options) {
+  constructor(settings) {
+    const {server, protocol, timeout} = settings;
     const url = buildServerUrl(server, 'gmp', protocol);
-    super(url, {...options, transform: X2JsTransform});
+    super(url, {timeout, transform: X2JsTransform});
+    this.settings = settings;
   }
 
-  get token() {
-    return this.params.token;
-  }
-
-  set token(token) {
-    this.params.token = token;
+  getParams() {
+    const params = super.getParams();
+    return {
+      ...params,
+      token: this.settings.token,
+    };
   }
 
 }
