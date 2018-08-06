@@ -38,8 +38,6 @@ import MenuBar from 'web/components/bar/menubar';
 
 import Layout from 'web/components/layout/layout';
 
-import StickyContainer from 'web/components/sticky/container';
-
 import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider'; // eslint-disable-line max-len
 
 import Footer from 'web/components/structure/footer';
@@ -93,13 +91,11 @@ class Page extends React.Component {
           align={['start', 'stretch']}
         >
           <Header/>
-          <StickyContainer>
-            <MenuBar/>
-            <Main>
-              {children}
-            </Main>
-            <Footer/>
-          </StickyContainer>
+          <MenuBar/>
+          <Main>
+            {children}
+          </Main>
+          <Footer/>
         </StyledLayout>
       </CapabilitiesProvider>
     );

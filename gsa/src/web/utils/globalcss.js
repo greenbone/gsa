@@ -26,7 +26,7 @@ import {css as glamorcss} from 'glamor';
 
 import Theme from './theme';
 
-const css = styles => {
+const css = (styles = {}) => {
   for (const [name, style] of Object.entries(styles)) {
     glamorcss.global(name, style);
   }

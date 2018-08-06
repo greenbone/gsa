@@ -51,11 +51,7 @@ const store = configureStore();
 
 window.gmp = gmp;
 
-globalcss({
-  'html, body, #app, #app > div': {
-    height: '100%',
-  },
-});
+globalcss();
 
 class App extends React.Component {
 
