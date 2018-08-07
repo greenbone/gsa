@@ -72,6 +72,8 @@ import DefaultTransform from './http/transform/default';
 import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
+import {setLocale} from './locale/lang';
+
 const log = logger.getLogger('gmp');
 
 const set = (storage, name, value) => {
@@ -266,6 +268,12 @@ class Gmp {
 
   clearToken() {
     this.settings.token = undefined;
+  }
+
+  setLocale(lang) {
+    this.settings.locale = lang;
+    setLocale(lang);
+    return this;
   }
 
   get autorefresh() {
