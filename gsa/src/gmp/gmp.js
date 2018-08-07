@@ -87,7 +87,7 @@ class GmpSettings {
   constructor(storage = localStorage, options = {}) {
     const {
       autorefresh,
-      i18n,
+      locale,
       manualurl,
       protocol = global.location.host,
       protocoldocurl,
@@ -100,7 +100,7 @@ class GmpSettings {
     this.storage = storage;
 
     this.autorefresh = autorefresh;
-    this.i18n = i18n;
+    this.locale = locale;
     this.manualurl = manualurl;
     this.protocol = protocol;
     this.protocoldocurl = protocoldocurl;
@@ -135,12 +135,12 @@ class GmpSettings {
     return this.storage.username;
   }
 
-  set i18n(value) {
-    set(this.storage, 'i18n', value);
+  set locale(value) {
+    set(this.storage, 'locale', value);
   }
 
-  get i18n() {
-    return this.storage.i18n;
+  get locale() {
+    return this.storage.locale;
   }
 }
 
@@ -200,7 +200,7 @@ class Gmp {
       this.settings.username = username;
       this.settings.timezone = timezone;
       this.settings.token = token;
-      this.settings.i18n = i18n;
+      this.settings.locale = i18n;
 
       return {
         username,
