@@ -87,6 +87,7 @@ class GmpSettings {
   constructor(storage = localStorage, options = {}) {
     const {
       autorefresh,
+      i18n,
       manualurl,
       protocol = global.location.host,
       protocoldocurl,
@@ -99,6 +100,7 @@ class GmpSettings {
     this.storage = storage;
 
     this.autorefresh = autorefresh;
+    this.i18n = i18n;
     this.manualurl = manualurl;
     this.protocol = protocol;
     this.protocoldocurl = protocoldocurl;
@@ -166,11 +168,13 @@ class Gmp {
       const {
         token,
         timezone,
+        i18n,
       } = login;
 
       this.settings.username = username;
       this.settings.timezone = timezone;
       this.settings.token = token;
+      this.settings.i18n = i18n;
       this.settings.save();
 
       return {
