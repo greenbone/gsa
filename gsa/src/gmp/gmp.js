@@ -240,7 +240,7 @@ class Gmp {
   }
 
   isLoggedIn() {
-    return !isEmpty(this.token);
+    return !isEmpty(this.settings.token);
   }
 
   subscribeToLogout(listener) {
@@ -266,15 +266,6 @@ class Gmp {
 
   clearToken() {
     this.settings.token = undefined;
-    this.settings.save();
-  }
-
-  get token() {
-    return this.settings.token;
-  }
-
-  get username() {
-    return this.settings.username;
   }
 
   get autorefresh() {

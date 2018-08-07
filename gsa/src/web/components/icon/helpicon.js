@@ -41,7 +41,7 @@ const HelpIcon = ({
   ...other
 }) => {
   const params = {
-    token: gmp.token,
+    token: gmp.settings.token,
   };
 
   const path = 'help/' + page + '.html';

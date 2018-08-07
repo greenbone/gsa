@@ -142,7 +142,7 @@ class Titlebar extends React.Component {
             <Divider>
               <span>{_('Logged in as ')}</span>
               <UserLink to="usersettings">
-                <b>{gmp.username}</b>
+                <b>{gmp.settings.username}</b>
               </UserLink>
               <span> | </span>
               <LogoutLink onClick={this.handleLogout}>{_('Logout')}</LogoutLink>

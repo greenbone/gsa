@@ -28,7 +28,7 @@ import PropTypes from './proptypes.js';
 export const withUserName = Component => {
   const UserNameWrapper = (props, {gmp}) => (
     <Component
-      userName={gmp.username}
+      userName={gmp.settings.username}
       {...props}
     />
   );
