@@ -111,10 +111,36 @@ class GmpSettings {
     this.username = username;
   }
 
-  save() {
-    set(this.storage, 'token', this.token);
-    set(this.storage, 'timeout', this.timeout);
-    set(this.storage, 'username', this.username);
+  set token(value) {
+    set(this.storage, 'token', value);
+  }
+
+  get token() {
+    return this.storage.token;
+  }
+
+  set timeout(value) {
+    set(this.storage, 'timeout', value);
+  }
+
+  get timeout() {
+    return this.storage.timeout;
+  }
+
+  set username(value) {
+    set(this.storage, 'username', value);
+  }
+
+  get username() {
+    return this.storage.username;
+  }
+
+  set i18n(value) {
+    set(this.storage, 'i18n', value);
+  }
+
+  get i18n() {
+    return this.storage.i18n;
   }
 }
 
@@ -175,7 +201,6 @@ class Gmp {
       this.settings.timezone = timezone;
       this.settings.token = token;
       this.settings.i18n = i18n;
-      this.settings.save();
 
       return {
         username,
