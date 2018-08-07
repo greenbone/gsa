@@ -73,6 +73,7 @@ import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
 import {setLocale} from './locale/lang';
+import {BROWSER_LANGUAGE} from './locale/detector';
 
 const log = logger.getLogger('gmp');
 
@@ -205,6 +206,7 @@ class Gmp {
       this.settings.locale = i18n;
 
       return {
+        locale: i18n === BROWSER_LANGUAGE ? undefined : i18n,
         username,
         token,
         timezone,
