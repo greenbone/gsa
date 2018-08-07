@@ -24,8 +24,6 @@ import BrowserDetector from 'i18next-browser-languagedetector';
 
 import logger from '../log';
 
-import {LANGUAGE_KEY} from './store';
-
 const log = logger.getLogger('gmp.locale.detector');
 
 const DEFAULT_OPTIONS = {
@@ -33,7 +31,7 @@ const DEFAULT_OPTIONS = {
     order: ['querystring', 'localStorage', 'navigator'],
     // use url?lang=de as querystring
     lookupQuerystring: 'lang',
-    lookupLocalStorage: LANGUAGE_KEY,
+    lookupLocalStorage: 'i18n',
     // don't let BrowserDetector set language in localStorage
     // we want to be able to use navigator instead of localStorage always
     caches: [],
