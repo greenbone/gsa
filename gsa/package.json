@@ -41,7 +41,6 @@
     "history": "^4.7.2",
     "hoist-non-react-statics": "^2.5.5",
     "i18next": "^11.3.3",
-    "i18next-browser-languagedetector": "^2.2.0",
     "i18next-xhr-backend": "1.5.1",
     "ical.js": "^1.2.2",
     "moment": "^2.22.2",
