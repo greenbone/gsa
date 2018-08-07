@@ -26,16 +26,14 @@ import {isDefined, isString, isJsDate} from '../utils/identity';
 
 import {parseDate} from '../parser';
 
-import {setLocale, isDate} from '../models/date';
-
-import {subscribe} from './lang';
+import {setLocale as setMomentLocale, isDate} from '../models/date';
 
 const log = logger.getLogger('gmp.locale.date');
 
-subscribe(lang => {
+export const setLocale = lang => {
   log.debug('Setting date locale to', lang);
-  setLocale(lang);
-});
+  setMomentLocale(lang);
+};
 
 const dateFormat = (date, format) => {
   if (!isDefined(date)) {
