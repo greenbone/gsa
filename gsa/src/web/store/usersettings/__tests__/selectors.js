@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {getTimezone, getLocale} from '../selectors';
+import {getTimezone, getLocale, getUsername} from '../selectors';
 
 const createRootState = state => ({
   userSettings: state,
@@ -46,5 +46,15 @@ describe('settings selectors tests', () => {
   test('should return locale', () => {
     const state = createRootState({locale: 'de'});
     expect(getLocale(state)).toEqual('de');
+  });
+
+  test('should return undefined username for empty state', () => {
+    const state = createRootState({});
+    expect(getUsername(state)).toBeUndefined();
+  });
+
+  test('should return username', () => {
+    const state = createRootState({username: 'foo'});
+    expect(getUsername(state)).toEqual('foo');
   });
 });

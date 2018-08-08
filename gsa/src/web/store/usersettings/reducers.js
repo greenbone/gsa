@@ -28,6 +28,7 @@ import defaults from './defaults/reducers';
 import {
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_LOCALE,
+  USER_SETTINGS_SET_USERNAME,
 } from 'web/store/usersettings/actions';
 
 export const timezone = (state, action) => {
@@ -48,10 +49,20 @@ export const locale = (state, action) => {
   }
 };
 
+export const username = (state, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_SET_USERNAME:
+      return action.username;
+    default:
+      return state;
+  }
+};
+
 const userSettings = combineReducers({
   defaults,
   locale,
   timezone,
+  username,
 });
 
 export default userSettings;

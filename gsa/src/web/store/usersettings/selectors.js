@@ -24,4 +24,6 @@ export const getTimezone = rootState => rootState.userSettings.timezone;
 
 export const getLocale = rootState => rootState.userSettings.locale;
 
+export const getUsername = rootState => rootState.userSettings.username;
+
 // vim: set ts=2 sw=2 tw=80:
