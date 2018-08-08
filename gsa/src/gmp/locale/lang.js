@@ -33,6 +33,7 @@ import Detector from './detector';
 const log = logger.getLogger('gmp.locale.lang');
 
 let languageChangelisteners = [];
+let lastLanguage;
 
 const notifyLanguageChangeListeners = (lang, initial = false) => {
   for (const listener of languageChangelisteners) {
@@ -62,6 +63,8 @@ i18next
      * errors can be debugged here */
 
     const lang = getLocale();
+
+    lastLanguage = lang;
 
     setDateLocale(lang);
 
@@ -103,11 +106,15 @@ export const setLocale = lang => {
     else {
       lang = getLocale();
 
-      log.debug('Language changed to', lang);
+      if (lastLanguage !== lang) {
+        log.debug('Language changed to', lang);
 
-      setDateLocale(lang);
+        lastLanguage = lang;
 
-      notifyLanguageChangeListeners(lang);
+        setDateLocale(lang);
+
+        notifyLanguageChangeListeners(lang);
+      }
     }
   });
 };
