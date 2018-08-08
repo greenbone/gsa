@@ -45,8 +45,8 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout.js';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import HelpIcon from 'web/components/icon/helpicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -68,9 +68,10 @@ const ToolBarIcons = ({
 }) => (
   <Divider margin="10px">
     <IconDivider>
-      <HelpIcon
-        page="filter_details"
-        title={_('Help: Filter Details')}
+      <ManualIcon
+        page="search"
+        searchTerm="filter"
+        title={_('Help: Filters')}
       />
       <ListIcon
         title={_('Filter List')}
