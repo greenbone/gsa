@@ -21,8 +21,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-export const USER_SETTINGS_SET_TIMEZONE = 'SETTINGS_SET_TIMEZONE';
-export const USER_SETTINGS_SET_LOCALE = 'SETTINGS_SET_LOCALE';
+export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
+export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
