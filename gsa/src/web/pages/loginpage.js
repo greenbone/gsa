@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {withRouter} from 'react-router-dom';
 
 import glamorous from 'glamorous';
@@ -54,6 +56,7 @@ import Layout from 'web/components/layout/layout';
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
+import {updateTimezone} from 'web/store/usersettings/actions';
 
 const log = logger.getLogger('web.login');
 
@@ -256,10 +259,14 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(username, password) {
-    const {history, gmp} = this.props;
+    const {gmp} = this.props;
 
-    gmp.login(username, password).then(token => {
-      const {location} = this.props;
+    gmp.login(username, password).then(data => {
+      const {
+        locale,
+        timezone,
+      } = data;
+      const {location, history} = this.props;
       if (location && location.state && location.state.next &&
           location.state.next !== location.pathname) {
         history.replace(location.state.next);
@@ -267,6 +274,8 @@ class LoginPage extends React.Component {
       else {
         history.replace('/');
       }
+      this.props.setTimezone(timezone);
+      this.props.setLocale(locale);
     }, rej => {
       log.error(rej);
       this.setState({error: rej});
@@ -315,11 +324,19 @@ LoginPage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  setLocale: PropTypes.func.isRequired,
+  setTimezone: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
+  setLocale: locale => gmp.setLocale(locale),
+});
 
 export default compose(
   withRouter,
   withGmp,
+  connect(null, mapDispatchToProps),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:
