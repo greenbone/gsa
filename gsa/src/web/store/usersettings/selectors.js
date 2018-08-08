@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,34 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const getTimezone = rootState => rootState.userSettings.timezone;
 
-import {getTimezone, getIsLoading} from './selectors';
+export const getLocale = rootState => rootState.userSettings.locale;
 
-export const TIMEZONE_LOADING_REQUEST = 'TIMEZONE_LOADING_REQUEST';
-export const TIMEZONE_LOADING_SUCCESS = 'TIMEZONE_LOADING_SUCCESS';
-
-const requestTimezone = () => ({
-  type: TIMEZONE_LOADING_REQUEST,
-});
-
-const receivedTimezone = value => ({
-  type: TIMEZONE_LOADING_SUCCESS,
-  value,
-});
-
-export const loadTimezone = ({gmp}) => (dispatch, getState) => {
-  const rootState = getState();
-  const state = getTimezone(rootState);
-
-  if (getIsLoading(state)) {
-    // we are already loading data
-    return Promise.resolve();
-  }
-
-  dispatch(requestTimezone());
-
-  const {timezone} = gmp.globals;
-  dispatch(receivedTimezone(timezone));
-};
-
-// vim: set ts=2 sw=2 two=80:
+// vim: set ts=2 sw=2 tw=80:

@@ -2,7 +2,6 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -21,31 +20,44 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {combineReducers} from 'redux';
+import {
+  setLocale,
+  setTimezone,
+  updateTimezone,
+  USER_SETTINGS_SET_LOCALE,
+  USER_SETTINGS_SET_TIMEZONE,
+} from '../actions';
 
-import dashboardData from './dashboard/data/reducers';
-import dashboardSettings from './dashboard/settings/reducers';
-import userSettings from './usersettings/reducers';
-import pages from './pages/reducers';
+describe('settings actions tests', () => {
 
-import entities from './entities/reducers';
-import {CLEAR_STORE} from 'web/store/actions';
+  test('should create a setLocale action', () => {
+     expect(setLocale('de')).toEqual({
+       type: USER_SETTINGS_SET_LOCALE,
+       locale: 'de',
+     });
+  });
 
-const rootReducer = combineReducers({
-  dashboardData,
-  dashboardSettings,
-  entities,
-  userSettings,
-  pages,
+  test('should create a setTimezone action', () => {
+    expect(setTimezone('cet')).toEqual({
+      type: USER_SETTINGS_SET_TIMEZONE,
+      timezone: 'cet',
+    });
+  });
+
+  test('should update timezone', () => {
+    const dispatch = jest.fn();
+    const gmp = {
+      setTimezone: jest.fn(),
+    };
+    return updateTimezone({gmp, timezone: 'cet'})(dispatch).then(() => {
+      expect(dispatch).toBeCalledWith({
+        type: USER_SETTINGS_SET_TIMEZONE,
+        timezone: 'cet',
+      });
+      expect(gmp.setTimezone).toBeCalledWith('cet');
+    });
+  });
+
 });
-
-const clearStoreReducer = (state = {}, action) => {
-  if (action.type === CLEAR_STORE) {
-    state = {};
-  }
-  return rootReducer(state, action);
-};
-
-export default clearStoreReducer;
 
 // vim: set ts=2 sw=2 tw=80:

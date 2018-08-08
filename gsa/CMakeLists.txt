@@ -810,10 +810,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/reducers.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/actions.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/utils.js
      ${GSA_SRC_DIR}/src/web/authorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js

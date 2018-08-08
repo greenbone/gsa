@@ -20,13 +20,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
+import {getTimezone, getLocale} from '../selectors';
 
-export const getIsLoading = state =>
-  isDefined(state) ? state.isLoading : false;
+const createRootState = state => ({
+  userSettings: state,
+});
 
-export const getTimezone = rootState => {
-  return rootState.timezone;
-};
+describe('settings selectors tests', () => {
 
-// vim: set ts=2 sw=2 tw=80:
+  test('should return undefined timezone for empty state', () => {
+    const state = createRootState({});
+    expect(getTimezone(state)).toBeUndefined();
+  });
+
+  test('should return timezone', () => {
+    const state = createRootState({timezone: 'cet'});
+    expect(getTimezone(state)).toEqual('cet');
+  });
+
+  test('should return undefined locale for empty state', () => {
+    const state = createRootState({});
+    expect(getLocale(state)).toBeUndefined();
+  });
+
+  test('should return locale', () => {
+    const state = createRootState({locale: 'de'});
+    expect(getLocale(state)).toEqual('de');
+  });
+});

@@ -2,6 +2,7 @@
  *
  * Authors:
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,34 +21,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const USER_SETTINGS_SET_TIMEZONE = 'SETTINGS_SET_TIMEZONE';
+export const USER_SETTINGS_SET_LOCALE = 'SETTINGS_SET_LOCALE';
 
-import {
-  TIMEZONE_LOADING_REQUEST,
-  TIMEZONE_LOADING_SUCCESS,
-} from './actions';
+export const setTimezone = timezone => ({
+  type: USER_SETTINGS_SET_TIMEZONE,
+  timezone,
+});
 
-const initialState = {
-  value: null,
-  isLoading: false,
-  error: null,
+export const setLocale = locale => ({
+  type: USER_SETTINGS_SET_LOCALE,
+  locale,
+});
+
+export const updateTimezone = ({
+  gmp,
+  timezone,
+}) => dispatch => {
+  gmp.setTimezone(timezone);
+  return Promise.resolve(dispatch(setTimezone(timezone)));
 };
 
-const timezone = (state = initialState, action) => {
-  switch (action.type) {
-    case TIMEZONE_LOADING_REQUEST:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case TIMEZONE_LOADING_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        value: action.value,
-      };
-    default:
-      return state;
-  }
-};
-
-export default timezone;
+// vim: set ts=2 sw=2 two=80:
