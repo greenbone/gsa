@@ -48,7 +48,7 @@ import Layout from 'web/components/layout/layout';
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
-import {updateTimezone} from 'web/store/usersettings/actions';
+import {updateTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import LoginForm from './loginform';
 
@@ -114,6 +114,7 @@ class LoginPage extends React.Component {
         locale,
         timezone,
       } = data;
+
       const {location, history} = this.props;
       if (location && location.state && location.state.next &&
           location.state.next !== location.pathname) {
@@ -122,8 +123,10 @@ class LoginPage extends React.Component {
       else {
         history.replace('/');
       }
+
       this.props.setTimezone(timezone);
       this.props.setLocale(locale);
+      this.props.setUsername(username);
     }, rej => {
       log.error(rej);
       this.setState({error: rej});
@@ -174,11 +177,13 @@ LoginPage.propTypes = {
   location: PropTypes.object.isRequired,
   setLocale: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
+  setUsername: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
   setLocale: locale => gmp.setLocale(locale),
+  setUsername: username => dispatch(setUsername(username)),
 });
 
 export default compose(
