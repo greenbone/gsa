@@ -278,6 +278,11 @@ class Gmp {
     return this;
   }
 
+  setTimezone(timezone) {
+    this.settings.timezone = timezone;
+    return this;
+  }
+
   get autorefresh() {
     return this.settings.autorefresh;
   }
