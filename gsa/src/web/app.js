@@ -27,7 +27,7 @@ import {Provider as StoreProvider} from 'react-redux';
 
 import Gmp from 'gmp';
 import CacheFactory from 'gmp/cache';
-import {subscribe} from 'gmp/locale/lang';
+import {onLanguageChange} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import CacheFactoryProvider from './components/provider/cachefactoryprovider';
@@ -63,7 +63,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.unsubscribeFromLanguageChange = subscribe(this.renderOnLanguageChange);
+    this.unsubscribeFromLanguageChange = onLanguageChange(
+      this.renderOnLanguageChange);
     this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
   }
 

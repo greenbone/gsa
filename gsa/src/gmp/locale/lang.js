@@ -32,10 +32,10 @@ import Detector from './detector';
 
 const log = logger.getLogger('gmp.locale.lang');
 
-let listeners = [];
+let languageChangelisteners = [];
 
-const notifyListeners = lang => {
-  for (const listener of listeners) {
+const notifyLanguageChangeListeners = lang => {
+  for (const listener of languageChangelisteners) {
     listener(lang);
   }
 };
@@ -65,7 +65,7 @@ i18next
 
     setDateLocale(lang);
 
-    notifyListeners(lang);
+    notifyLanguageChangeListeners(lang);
   });
 
 /**
@@ -75,10 +75,11 @@ i18next
  *
  * @returns {Function} Unsubscribe function
  */
-export const subscribe = listener => {
-  listeners.push(listener);
+export const onLanguageChange = listener => {
+  languageChangelisteners.push(listener);
 
-  return () => listeners = listeners.filter(l => l !== listener);
+  return () => languageChangelisteners = languageChangelisteners.filter(
+    l => l !== listener);
 };
 
 /**
@@ -106,7 +107,7 @@ export const setLocale = lang => {
 
       setDateLocale(lang);
 
-      notifyListeners(lang);
+      notifyLanguageChangeListeners(lang);
     }
   });
 };
