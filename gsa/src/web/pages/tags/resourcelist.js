@@ -29,14 +29,15 @@ import styled from 'styled-components';
 import Filter from 'gmp/models/filter';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
-import PropTypes from 'web/utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import ListIcon from 'web/components/icon/listicon.js';
+import ListIcon from 'web/components/icon/listicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
+import Loading from 'web/components/loading/loading';
 
 const MAX_RESOURCES = 40;
 
@@ -71,7 +72,10 @@ class ResourceList extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {res: []};
+    this.state = {
+      isLoading: true,
+      res: [],
+    };
   }
 
   componentDidMount() {
@@ -79,37 +83,46 @@ class ResourceList extends React.Component {
     const {id, resource_type} = entity || {};
     const filter = 'tag_id="' + id + '" rows=' + MAX_RESOURCES;
     gmp[pluralizeType(normalizeType(resource_type))].get({filter})
-    .then(resources => this.setState({res: resources.data}));
+    .then(resources =>
+      this.setState({
+        isLoading: false,
+        res: resources.data,
+      }));
   }
 
   render() {
     const {entity} = this.props;
     const {id, resource_count, resource_type} = entity;
-    const {res} = this.state;
+    const {isLoading, res} = this.state;
     const showNotification = resource_count > MAX_RESOURCES;
 
     return (
-      <Layout flex="column">
-        {showNotification &&
-          <Notification
-            id={id}
-            resourceType={resource_type}
-          />
+      <React.Fragment>
+        {isLoading ?
+          <Loading/> :
+          <Layout flex="column">
+            {showNotification &&
+              <Notification
+                id={id}
+                resourceType={resource_type}
+              />
+            }
+            <Spacer/>
+            <ul>
+              {res.map(resource =>
+                (<li key={resource.id}>
+                  <DetailsLink
+                    id={resource.id}
+                    type={normalizeType(resource_type)}
+                  >
+                    {resource.name}
+                  </DetailsLink>
+                </li>)
+              )}
+            </ul>
+          </Layout>
         }
-        <Spacer/>
-        <ul>
-          {res.map(resource =>
-            (<li key={resource.id}>
-              <DetailsLink
-                id={resource.id}
-                type={normalizeType(resource_type)}
-              >
-                {resource.name}
-              </DetailsLink>
-            </li>)
-          )}
-        </ul>
-      </Layout>
+      </React.Fragment>
     );
   };
 }
