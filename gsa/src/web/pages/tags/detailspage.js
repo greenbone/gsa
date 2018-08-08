@@ -27,11 +27,7 @@ import _ from 'gmp/locale';
 
 import glamorous from 'glamorous';
 
-import Filter from 'gmp/models/filter';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilties from '../../utils/withCapabilities.js';
@@ -57,8 +53,6 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 
 import Layout from '../../components/layout/layout.js';
 
-import DetailsLink from '../../components/link/detailslink.js';
-
 import Tab from '../../components/tab/tab.js';
 import TabLayout from '../../components/tab/tablayout.js';
 import TabList from '../../components/tab/tablist.js';
@@ -66,10 +60,9 @@ import TabPanel from '../../components/tab/tabpanel.js';
 import TabPanels from '../../components/tab/tabpanels.js';
 import Tabs from '../../components/tab/tabs.js';
 
+import ResourceList from './resourcelist';
 import TagComponent from './component.js';
 import TagDetails from './details.js';
-
-const MAX_RESOURCES = 40;
 
 const TabTitleCount = glamorous.span({
   fontSize: '0.7em',
@@ -172,59 +165,6 @@ ToolBarIcons.propTypes = {
   onTagDownloadClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
   onTagEnableClick: PropTypes.func.isRequired,
-};
-
-const Spacer = glamorous.div({
-  height: '12px',
-});
-
-const Notification = ({id, resourceType}) => {
-  const filter = Filter.fromString('tag_id=' + id);
-  return (
-    <Divider>
-      {_('Listing only the first {{num}} items. ', {num: MAX_RESOURCES})}
-      {_('To see all assigned resources click here:')}
-      <ListIcon
-        title={_('List Items')}
-        filter={filter}
-        page={pluralizeType(normalizeType(resourceType))}
-      />
-    </Divider>
-  );
-};
-
-Notification.propTypes = {
-  id: PropTypes.string.isRequired,
-  resourceType: PropTypes.string.isRequired,
-};
-
-const ResourceList = (entity = {}) => {
-  const {id, resources = [], resource_type} = entity.entity || {};
-  const showNotification = resources.length > MAX_RESOURCES;
-  const res = resources.slice(0, MAX_RESOURCES);
-  return (
-    <Layout flex="column">
-      {showNotification &&
-        <Notification
-          id={id}
-          resourceType={resource_type}
-        />
-      }
-      <Spacer/>
-      <ul>
-        {res.map(resource =>
-          (<li key={resource.id}>
-            <DetailsLink
-              id={resource.id}
-              type={resource_type}
-            >
-              {resource.name}
-            </DetailsLink>
-          </li>)
-        )}
-      </ul>
-    </Layout>
-  );
 };
 
 const Page = ({
