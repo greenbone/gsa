@@ -36,23 +36,24 @@ import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Layout from '../components/layout/layout.js';
-
-import PropTypes from '../utils/proptypes.js';
-import compose from '../utils/compose';
-import withGmp from '../utils/withGmp';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 import Theme from 'web/utils/theme';
 
-import FormGroup from '../components/form/formgroup.js';
-import PasswordField from '../components/form/passwordfield.js';
-import SubmitButton from '../components/form/submitbutton.js';
-import TextField from '../components/form/textfield.js';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import SubmitButton from 'web/components/form/submitbutton';
+import TextField from 'web/components/form/textfield';
 
-import GBIcon from '../components/icon/greenboneicon.js';
-import Icon from '../components/icon/icon.js';
+import GBIcon from 'web/components/icon/greenboneicon';
+import Icon from 'web/components/icon/icon';
 
-import Footer from '../components/structure/footer.js';
-import Header from '../components/structure/header.js';
+import Layout from 'web/components/layout/layout';
+
+import Footer from 'web/components/structure/footer';
+import Header from 'web/components/structure/header';
+
 
 const log = logger.getLogger('web.login');
 
