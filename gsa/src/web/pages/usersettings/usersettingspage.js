@@ -27,7 +27,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-import {setLanguage} from 'gmp/locale/lang';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
@@ -88,13 +87,16 @@ import {
   getUserSettingsDefaults,
 } from 'web/store/usersettings/defaults/selectors';
 
+import {getTimezone} from 'web/store/usersettings/selectors';
+import {updateTimezone} from 'web/store/usersettings/actions';
+
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import compose from 'web/utils/compose';
-import Languages from 'web/utils/languages';
+import Languages, {BROWSER_LANGUAGE} from 'web/utils/languages';
 import PropTypes from 'web/utils/proptypes';
 import {
   SEVERITY_CLASS_NIST,
@@ -103,9 +105,6 @@ import {
 } from 'web/utils/severity';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
-import {loadTimezone} from 'web/store/usersettings/timezone/actions';
-import {getTimezone} from 'web/store/usersettings/timezone/selectors';
 
 import SettingsDialog from './dialog';
 
@@ -196,7 +195,6 @@ class UserSettings extends React.Component {
 
   componentDidMount() {
     this.props.loadSettings();
-    this.props.loadTimezone();
     this.loadEntities();
   }
 
@@ -231,13 +229,16 @@ class UserSettings extends React.Component {
 
   handleSaveSettings(data) {
     const {gmp} = this.props;
-    const {userInterfaceLanguage} = data;
+    const {
+      userInterfaceLanguage = BROWSER_LANGUAGE,
+      timezone,
+    } = data;
     return gmp.user.saveSettings(data).then(() => {
-      if (isDefined(userInterfaceLanguage)) {
-        setLanguage(userInterfaceLanguage);
-      }
+      this.props.setLocale(userInterfaceLanguage === BROWSER_LANGUAGE ?
+        undefined : userInterfaceLanguage);
+      this.props.setTimezone(timezone);
+
       this.props.loadSettings();
-      this.props.loadTimezone();
     });
   }
 
@@ -334,7 +335,7 @@ class UserSettings extends React.Component {
                   {_('Timezone')}
                 </TableData>
                 <TableData>
-                  {timezone.value}
+                  {timezone}
                 </TableData>
               </TableRow>
               <TableRow>
@@ -689,7 +690,7 @@ class UserSettings extends React.Component {
             reportFormats={reportformats}
             schedules={schedules}
             targets={targets}
-            timezone={timezone.value}
+            timezone={timezone}
             userInterfaceLanguage={userInterfaceLanguage.value}
             rowsPerPage={rowsPerPage.value}
             maxRowsPerPage={maxRowsPerPage.value}
@@ -815,12 +816,14 @@ UserSettings.propTypes = {
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.object,
   secInfoFilter: PropTypes.object,
+  setLocale: PropTypes.func.isRequired,
+  setTimezone: PropTypes.func.isRequired,
   severityClass: PropTypes.object,
   tagsFilter: PropTypes.object,
   targets: PropTypes.array,
   targetsFilter: PropTypes.object,
   tasksFilter: PropTypes.object,
-  timezone: PropTypes.object,
+  timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.object,
 };
 
@@ -1035,8 +1038,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSchedules: () => dispatch(loadSchedules({gmp})),
   loadSettings: () => dispatch(loadUserSettingDefaults({gmp})),
   loadTargets: () => dispatch(loadTargets({gmp})),
-  loadTimezone: () => dispatch(loadTimezone({gmp})),
   loadAlert: id => dispatch(loadAlert({gmp, id})),
+  setLocale: locale => gmp.setLocale(locale),
+  setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
 });
 
 export default compose(
