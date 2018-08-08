@@ -30,10 +30,10 @@ import CacheFactory from 'gmp/cache';
 import {onLanguageChange} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
-import CacheFactoryProvider from './components/provider/cachefactoryprovider';
-import GmpProvider from './components/provider/gmpprovider';
+import CacheFactoryProvider from 'web/components/provider/cachefactoryprovider';
+import GmpProvider from 'web/components/provider/gmpprovider';
 
-import globalcss from './utils/globalcss';
+import globalcss from 'web/utils/globalcss';
 
 import configureStore from './store';
 
