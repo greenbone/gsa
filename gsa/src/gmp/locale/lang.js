@@ -34,9 +34,9 @@ const log = logger.getLogger('gmp.locale.lang');
 
 let languageChangelisteners = [];
 
-const notifyLanguageChangeListeners = lang => {
+const notifyLanguageChangeListeners = (lang, initial = false) => {
   for (const listener of languageChangelisteners) {
-    listener(lang);
+    listener(lang, initial);
   }
 };
 
@@ -65,7 +65,7 @@ i18next
 
     setDateLocale(lang);
 
-    notifyLanguageChangeListeners(lang);
+    notifyLanguageChangeListeners(lang, true);
   });
 
 /**
