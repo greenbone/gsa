@@ -83,7 +83,7 @@ const TabTitle = ({title, count}) => (
 );
 
 TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
+  count: PropTypes.numberOrNumberString.isRequired,
   title: PropTypes.string.isRequired,
 };
 
