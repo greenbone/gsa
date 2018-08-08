@@ -130,6 +130,14 @@ class GmpSettings {
     return this.storage.timeout;
   }
 
+  set timezone(value) {
+    set(this.storage, 'timezone', value);
+  }
+
+  get timezone() {
+    return this.storage.timezone;
+  }
+
   set username(value) {
     set(this.storage, 'username', value);
   }
