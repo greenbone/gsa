@@ -27,6 +27,7 @@ import withLayout from '../layout/withLayout.js';
 const Main = glamorous.main({
   padding: '5px 10px',
   height: '100%',
+  paddingBottom: '20px',
 });
 
 Main.displayName = 'Main';

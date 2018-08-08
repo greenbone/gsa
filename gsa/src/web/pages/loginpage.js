@@ -53,7 +53,6 @@ import Icon from '../components/icon/icon.js';
 
 import Footer from '../components/structure/footer.js';
 import Header from '../components/structure/header.js';
-import Main from '../components/structure/main.js';
 
 const log = logger.getLogger('web.login');
 
@@ -61,7 +60,6 @@ const panelcss = {
   marginTop: '5px',
   marginBottom: '5px',
   paddingBottom: '10px',
-  width: '380px',
   fontSize: '9pt',
 };
 
@@ -74,6 +72,12 @@ const LoginPanel = glamorous(Layout)(
   'login-panel',
   panelcss,
 );
+
+const Div = glamorous.div({
+  display: 'flex',
+  flexDirection: 'row',
+  margin: '0 auto',
+});
 
 const Error = glamorous.p(
   'error',
@@ -126,7 +130,7 @@ class LoginForm extends React.Component {
     const {username, password} = this.state;
     const protocol_insecure = window.location.protocol !== 'https:';
     return (
-      <Layout flex="column" shrink="0">
+      <React.Fragment>
         {protocol_insecure &&
           <Panel>
             <Error>{_('Warning: Connection unencrypted')}</Error>
@@ -141,13 +145,8 @@ class LoginForm extends React.Component {
           flex="column"
           align="space-around"
         >
-          <Layout
-            flex="column"
-            align="space-around"
-            grow="1"
-            width="380px"
-          >
-            <Layout flex="row">
+          <Layout flex="row">
+            <Div>
               <StyledIcon img="login-label.png" size="default"/>
               <Layout flex="column">
                 <FormGroup title={_('Username')} titleSize="4">
@@ -180,7 +179,7 @@ class LoginForm extends React.Component {
                   />
                 </FormGroup>
               </Layout>
-            </Layout>
+            </Div>
           </Layout>
         </LoginPanel>
         {isDefined(error) &&
@@ -188,7 +187,7 @@ class LoginForm extends React.Component {
             <Error>{error}</Error>
           </Panel>
         }
-      </Layout>
+      </React.Fragment>
     );
   }
 }
@@ -199,40 +198,43 @@ LoginForm.propTypes = {
 };
 
 const GreenboneIcon = glamorous(GBIcon)({
-  minWidth: '60px',
-  width: '100%',
-  minHeight: '60px',
-  height: '100%', // for IE11 fix
-  maxHeight: '315px',
-  margin: '40px 0px',
-});
-
-const LoginMain = glamorous(Main)({
-  background: '#fefefe',
-  height: '100%',
+  width: '30vh',
+  margin: '30px auto',
+  position: 'sticky',
 });
 
 const LoginLayout = glamorous(Layout)({
   height: '100%',
+  width: '420px',
+  margin: '0 auto',
+  padding: '20px 20px 0px 20px',
+});
+
+const StyledLayout = glamorous(Layout)({
+  flexDirection: 'column',
+  height: '100vh',
 });
 
 const LoginHeader = glamorous(Header)({
-  color: '#393637',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
 });
 
 const StyledIcon = glamorous(Icon)({
   height: '95px',
-  marginTop: '-7px',
-});
-
-const StyledLayout = glamorous(Layout)({
-  margin: '0 auto',
-  height: '100%',
+  marginLeft: '5px',
 });
 
 const MenuSpacer = glamorous.div({
-  minHeight: '35px',
   background: '#393637',
+  position: 'absolute',
+  top: '42px',
+  left: 0,
+  right: 0,
+  height: '35px',
+  zIndex: '500',
 });
 
 const Wrapper = glamorous.div({
@@ -290,27 +292,20 @@ class LoginPage extends React.Component {
     }
 
     return (
-      <LoginLayout flex="column" className="login">
+      <StyledLayout>
         <LoginHeader/>
         <MenuSpacer/>
-        <LoginMain>
-          <StyledLayout
-            flex="column"
-            align={['start', 'center']}
-            grow="1"
-            position="relative"
-          >
-            <GreenboneIcon/>
-            <Wrapper>
-              <LoginForm
-                error={message}
-                onSubmit={this.handleSubmit}
-              />
-            </Wrapper>
-          </StyledLayout>
-        </LoginMain>
+        <LoginLayout flex="column" className="login">
+          <GreenboneIcon/>
+          <Wrapper>
+            <LoginForm
+              error={message}
+              onSubmit={this.handleSubmit}
+            />
+          </Wrapper>
+        </LoginLayout>
         <Footer/>
-      </LoginLayout>
+      </StyledLayout>
     );
   }
 }

@@ -32,10 +32,17 @@ const Link = glamorous(ExternalLink)({
 });
 
 const Footer = glamorous.footer({
+  position: 'fixed',
+  bottom: 0,
+  right: 0,
+  left: 0,
+  padding: '2px',
+  backgroundColor: 'white',
   fontSize: '10px',
   textAlign: 'right',
   color: '#787878',
-  margin: '10px 5px',
+  marginTop: '10px',
+  paddingRight: '5px',
 });
 
 const GreenboneFooter = () => {
