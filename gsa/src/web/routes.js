@@ -34,7 +34,6 @@ import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 
 import AssetsPage from './pages/assets/page';
-import LoginPage from './pages/loginpage';
 import Page from './pages/page';
 import PageNotFound from './pages/notfoundpage';
 import ScansPage from './pages/scans/page';
@@ -66,6 +65,7 @@ import GroupDetailsPage from './pages/groups/detailspage';
 import HostsPage from './pages/hosts/listpage';
 import HostDetailsPage from './pages/hosts/detailspage';
 import LdapPage from './pages/ldap/ldappage';
+import LoginPage from './pages/login/loginpage';
 import NotesPage from './pages/notes/listpage';
 import NoteDetailsPage from './pages/notes/detailspage';
 import NvtsPage from './pages/nvts/listpage';
