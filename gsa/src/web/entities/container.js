@@ -414,7 +414,7 @@ class EntitiesContainer extends React.Component {
       resource_ids = map(selected, res => res.id);
       filter = undefined;
     }
-    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       filter = loadedFilter;
     }
     else {
