@@ -34,6 +34,8 @@ import LocaleObserver from 'web/components/observer/localeobserver';
 import CacheFactoryProvider from 'web/components/provider/cachefactoryprovider';
 import GmpProvider from 'web/components/provider/gmpprovider';
 
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
+
 import globalcss from 'web/utils/globalcss';
 
 import configureStore from './store';
@@ -54,6 +56,11 @@ window.gmp = gmp;
 
 globalcss();
 
+const initStore = () => {
+  store.dispatch(setTimezone(gmp.settings.timezone));
+  store.dispatch(setUsername(gmp.settings.username));
+};
+
 class App extends React.Component {
 
   constructor(props) {
@@ -64,6 +71,8 @@ class App extends React.Component {
 
   componentDidMount() {
     this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
+
+    initStore();
   }
 
   componentWillUnmount() {
