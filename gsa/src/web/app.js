@@ -27,8 +27,9 @@ import {Provider as StoreProvider} from 'react-redux';
 
 import Gmp from 'gmp';
 import CacheFactory from 'gmp/cache';
-import {onLanguageChange} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
+
+import LocaleObserver from 'web/components/observer/localeobserver';
 
 import CacheFactoryProvider from 'web/components/provider/cachefactoryprovider';
 import GmpProvider from 'web/components/provider/gmpprovider';
@@ -58,28 +59,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentDidMount() {
-    this.unsubscribeFromLanguageChange = onLanguageChange(
-      this.renderOnLanguageChange);
     this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
   }
 
   componentWillUnmount() {
-    if (isDefined(this.unsubscribeFromLanguageChange)) {
-      this.unsubscribeFromLanguageChange();
-    }
-
     if (isDefined(this.unsubscribeFromLogout)) {
       this.unsubscribeFromLogout();
     }
-  }
-
-  renderOnLanguageChange() {
-    this.forceUpdate();
   }
 
   handleLogout() {
@@ -94,7 +84,9 @@ class App extends React.Component {
       <GmpProvider gmp={gmp}>
         <CacheFactoryProvider caches={caches}>
           <StoreProvider store={store}>
-            <Routes />
+            <LocaleObserver>
+              <Routes />
+            </LocaleObserver>
           </StoreProvider>
         </CacheFactoryProvider>
       </GmpProvider>
