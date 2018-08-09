@@ -200,6 +200,7 @@ class EntitiesPage extends React.Component {
       onError,
       onFilterChanged,
       onFilterCreated,
+      onFilterRemoved,
       onFilterReset,
     } = this.props;
 
@@ -225,6 +226,7 @@ class EntitiesPage extends React.Component {
           onEditClick={handler}
           onError={onError}
           onFilterCreated={onFilterCreated}
+          onRemoveClick={onFilterRemoved}
           onResetClick={onFilterReset}
           onUpdate={onFilterChanged}
         />
@@ -309,6 +311,7 @@ EntitiesPage.propTypes = {
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
+  onFilterRemoved: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
 };
 
