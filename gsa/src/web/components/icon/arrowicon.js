@@ -23,23 +23,24 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import withIconSize from './withIconSize';
+import withIconSize from 'web/components/icon/withIconSize';
 
-const Styled = glamorous.span('arrow-icon', {
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  outline: 'none',
-  margin: '1px',
-  userSelect: 'none',
-}, ({disabled}) => disabled ? {cursor: 'not-allowed'} : null);
+const Styled = styled.span`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  margin: 1px;
+  userSelect: none;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}
+`;
 
 const ArrowIcon = ({
   down = false,
