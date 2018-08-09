@@ -36,7 +36,7 @@ import {
   pluralizeType,
 } from 'gmp/utils/entitytype';
 
-import Filter from 'gmp/models/filter';
+import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -97,6 +97,7 @@ class EntitiesContainer extends React.Component {
     this.handleTimer = this.handleTimer.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterChanged = this.handleFilterChanged.bind(this);
+    this.handleFilterRemoved = this.handleFilterRemoved.bind(this);
     this.handleFilterReset = this.handleFilterReset.bind(this);
     this.handleAddMultiTag = this.handleAddMultiTag.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
@@ -339,6 +340,10 @@ class EntitiesContainer extends React.Component {
     this.load(filter);
   }
 
+  handleFilterRemoved() {
+    this.load(RESET_FILTER);
+  }
+
   handleFilterReset() {
     const {history, location} = this.props;
     const query = {...location.query};
@@ -545,6 +550,7 @@ class EntitiesContainer extends React.Component {
           onDownloaded: onDownload,
           onError: this.handleError,
           onFilterChanged: this.handleFilterChanged,
+          onFilterRemoved: this.handleFilterRemoved,
           onFilterReset: this.handleFilterReset,
           onSortChange: this.handleSortChange,
           onSelectionTypeChange: this.handleSelectionTypeChange,
