@@ -477,6 +477,7 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<time>%s</time>"
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
+                                 "<session>%ld</session>"
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
@@ -489,6 +490,7 @@ envelope_gmp (gvm_connection_t *connection,
                                  ctime_now,
                                  timezone ? timezone : "",
                                  user_get_username (user),
+                                 user_get_session_timeout (user),
                                  user_get_role (user),
                                  user_get_severity (user),
                                  credentials_get_language (credentials),
