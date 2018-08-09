@@ -29,6 +29,8 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import Filter, {RESET_FILTER} from 'gmp/models/filter';
+
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 
@@ -50,8 +52,6 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
-import Filter from 'gmp/models/filter';
 
 const log = logger.getLogger('web.powerfilter');
 
@@ -140,8 +140,10 @@ class PowerFilter extends React.Component {
   handleNamedFilterChange(value) {
     const {filters} = this.props;
 
-    const filter = filters.find(f => f.id === value);
-
+    let filter = filters.find(f => f.id === value);
+    if (!isDefined(filter)) {
+      filter = RESET_FILTER;
+    }
     this.updateFilter(filter);
   }
 
