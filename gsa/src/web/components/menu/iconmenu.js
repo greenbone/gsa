@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -22,74 +23,71 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes.js';
+import Theme from 'web/utils/theme.js';
 
-import Icon from '../icon/icon.js';
+import Icon from 'web/components/icon/icon.js';
 
-const IconMenu = glamorous.span('icon-menu', {
-  display: 'inline-flex',
-  flexDirection: 'column',
-});
+const IconMenu = styled.span`
+  display: inline-flex;
+  flex-direction: column;
+`;
 
-const Div = glamorous.div({
-  position: 'relative',
-  display: 'none',
+const Div = styled.div`
+  position: relative;
+  display: none;
 
-  '.icon-menu:hover &': {
-    display: 'block',
-  },
-});
+  ${IconMenu}:hover & {
+    display: block;
+  };
+`;
 
-const List = glamorous.ul({
-  position: 'absolute',
-  margin: 0,
-  padding: 0,
-  left: 0,
-  top: 0,
-  zIndex: Theme.Layers.onTop,
-  listStyle: 'none',
-  fontSize: '10px',
-  width: '255px',
-});
+const List = styled.ul`
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  top: 0;
+  z-index: ${Theme.Layers.onTop};
+  list-style: none;
+  font-size: 10px;
+  width: 255px;
+`;
 
-const Entry = glamorous.li('menu-entry', {
-  height: '22px',
-  width: '255px',
-  borderLeft: '1px solid #3A3A3A',
-  borderRight: '1px solid #3A3A3A',
-  display: 'flex',
-  alignItems: 'stretch',
-  backgroundColor: '#FFFFFF',
-  fontWeight: 'bold',
-  textIndent: '12px',
-  textAlign: 'left',
+const Entry = styled.li`
+  height: 22px;
+  width: 255px;
+  border-left: 1px solid ${Theme.darkGray};
+  border-right: 1px solid ${Theme.darkGray};
+  display: flex;
+  align-items: stretch;
+  background-color: ${Theme.white};
+  font-weight: bold;
+  text-indent: 12px;
+  text-align: left;
 
-  '&:first-child': {
-    borderTopLeftRadius: '0px',
-    borderTopRightRadius: '8px',
-    borderTop: '1px solid #3A3A3A',
-  },
-  '&:last-child': {
-    borderBottomRightRadius: '8px',
-    borderBottomLeftRadius: '8px',
-    borderBottom: '1px solid #3A3A3A',
-  },
-  '&:hover': {
-    background: '#99CE48',
-  },
+  &:first-child {
+    border-top: 1px solid ${Theme.darkGray};
+  };
+  &:last-child {
+    border-bottom: 1px solid ${Theme.darkGray};
+  };
+  &:hover {
+    background: ${Theme.green};
+    color: ${Theme.white};
+  };
 
-  '& div': {
-    display: 'flex',
-    alignItems: 'center',
-    flexGrow: 1,
-    cursor: 'pointer',
-  },
-});
+  & div {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    cursor: pointer;
+  };
+`;
 
 const IconMenuContainer = ({
   children,
