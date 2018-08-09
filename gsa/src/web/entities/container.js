@@ -117,8 +117,12 @@ class EntitiesContainer extends React.Component {
         isUpdating: false,
       };
     }
+    // entities are not in store and are currently loaded
+    // use filter as loadedFilter to show current user filter and not the last
+    // loaded filter
     return {
       isUpdating: true,
+      loadedFilter: props.filter,
     };
   };
 
