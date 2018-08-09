@@ -78,15 +78,12 @@ const GsaIcon = styled(GsaIconComponent)`
   padding-bottom: 1px;
 `;
 
-const Greenbone = () => {
-  return (
-    <Layout flex>
-      <GreenboneIcon/>
-      <GsaIcon/>
-    </Layout>
-  );
-
-};
+const Greenbone = () => (
+  <Layout>
+    <GreenboneIcon/>
+    <GsaIcon/>
+  </Layout>
+);
 
 const TitlebarLayout = styled(Layout)`
   height: ${TITLE_BAR_HEIGHT};
