@@ -26,7 +26,9 @@ import React from 'react';
 import {Provider as StoreProvider} from 'react-redux';
 
 import Gmp from 'gmp';
+
 import CacheFactory from 'gmp/cache';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
@@ -57,8 +59,14 @@ window.gmp = gmp;
 globalcss();
 
 const initStore = () => {
-  store.dispatch(setTimezone(gmp.settings.timezone));
-  store.dispatch(setUsername(gmp.settings.username));
+  const {timezone, username} = gmp.settings;
+
+  if (isDefined(timezone)) {
+    store.dispatch(setTimezone(timezone));
+  }
+  if (isDefined(username)) {
+    store.dispatch(setUsername(username));
+  }
 };
 
 class App extends React.Component {
