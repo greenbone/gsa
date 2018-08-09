@@ -28,6 +28,7 @@ import styled from 'styled-components';
 
 import Filter from 'gmp/models/filter';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -80,15 +81,17 @@ class ResourceList extends React.Component {
 
   componentDidMount() {
     const {gmp, entity} = this.props;
-    const {id, resourceType} = entity;
-    const filter = 'tag_id="' + id + '" rows=' + MAX_RESOURCES;
-    gmp[pluralizeType(resourceType)].get({filter})
-      .then(resources =>
-        this.setState({
-          isLoading: false,
-          res: resources.data,
-        })
-      );
+    if (isDefined(entity)) {
+      const {id, resourceType} = entity;
+      const filter = 'tag_id="' + id + '" rows=' + MAX_RESOURCES;
+      gmp[pluralizeType(resourceType)].get({filter})
+        .then(resources =>
+          this.setState({
+            isLoading: false,
+            res: resources.data,
+          })
+        );
+    }
   }
 
   render() {
