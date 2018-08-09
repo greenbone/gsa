@@ -22,10 +22,12 @@
  */
 import {
   setLocale,
+  setSessionTimeout,
   setTimezone,
   setUsername,
   updateTimezone,
   USER_SETTINGS_SET_LOCALE,
+  USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_USERNAME,
 } from '../actions';
@@ -50,6 +52,13 @@ describe('settings actions tests', () => {
     expect(setUsername('foo')).toEqual({
       type: USER_SETTINGS_SET_USERNAME,
       username: 'foo',
+    });
+  });
+
+  test('should create a setSessionTimeout action', () => {
+    expect(setSessionTimeout('12345')).toEqual({
+      type: USER_SETTINGS_SET_SESSION_TIMEOUT,
+      timeout: '12345',
     });
   });
 

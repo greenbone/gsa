@@ -29,6 +29,7 @@ import {
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_LOCALE,
   USER_SETTINGS_SET_USERNAME,
+  USER_SETTINGS_SET_SESSION_TIMEOUT,
 } from 'web/store/usersettings/actions';
 
 export const timezone = (state, action) => {
@@ -49,6 +50,15 @@ export const locale = (state, action) => {
   }
 };
 
+export const sessionTimeout = (state, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_SET_SESSION_TIMEOUT:
+      return action.timeout;
+    default:
+      return state;
+  }
+};
+
 export const username = (state, action) => {
   switch (action.type) {
     case USER_SETTINGS_SET_USERNAME:
@@ -61,6 +71,7 @@ export const username = (state, action) => {
 const userSettings = combineReducers({
   defaults,
   locale,
+  sessionTimeout,
   timezone,
   username,
 });
