@@ -270,7 +270,7 @@ class EntitiesTable extends React.Component {
         {footnote ?
           <Layout flex align="space-between">
             <FootNote>
-              {_('(Applied filter: {{filter}})', {filter: filterstring})}
+              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
             </FootNote>
             {pagination}
           </Layout> :
