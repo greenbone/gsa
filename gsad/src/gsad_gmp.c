@@ -24138,7 +24138,8 @@ login (http_connection_t *con,
 
           credentials = credentials_new (user, language);
 
-          char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
+          gchar *data = envelope_gmp (NULL, credentials, params, NULL,
+                                      response_data);
 
           ret = handler_create_response (con, data, response_data,
                                          user_get_cookie(user));
