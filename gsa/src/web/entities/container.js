@@ -154,7 +154,7 @@ class EntitiesContainer extends React.Component {
     this.clearTimer();
 
     updateFilter(filter);
-    loadEntities(filter).then(() => this.startTimer(false));
+    loadEntities(filter).then(() => this.startTimer());
   }
 
   reload() {
@@ -167,8 +167,8 @@ class EntitiesContainer extends React.Component {
     return gmp.autorefresh * 1000;
   }
 
-  startTimer(immediate = false) {
-    const refresh = immediate ? 0 : this.getRefreshInterval();
+  startTimer() {
+    const refresh = this.getRefreshInterval();
     if (refresh >= 0) {
       this.timer = window.setTimeout(this.handleTimer, refresh);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
