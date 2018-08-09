@@ -732,6 +732,8 @@ export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 
+export const RESET_FILTER = Filter.fromString('first=1');
+
 export default Filter;
 
 // vim: set ts=2 sw=2 tw=80:
