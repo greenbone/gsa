@@ -160,7 +160,7 @@ class EntityContainer extends React.Component {
   }
 
   reload() {
-    const {id} = this.props.params;
+    const {id} = this.props.match.params;
     this.load(id);
   }
 
