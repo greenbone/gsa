@@ -1482,8 +1482,12 @@ exec_gmp_post (http_connection_t *con,
       return handler_create_response (con, res, response_data, NULL);
     }
 
-  /* Handle the usual commands. */
+  /* always renew session for http post */
+  user_renew_session (user);
+  session_add_user (user_get_token(user), user);
 
+  /* Handle the usual commands. */
+  if (0) {}
   ELSE (bulk_delete)
   ELSE (bulk_export)
   ELSE (clone)
