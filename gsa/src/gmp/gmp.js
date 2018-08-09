@@ -131,6 +131,7 @@ class Gmp {
         token,
         timezone,
         locale,
+        sessionTimeout,
       } = login;
 
       this.settings.username = username;
@@ -143,6 +144,7 @@ class Gmp {
         username,
         token,
         timezone,
+        sessionTimeout,
       };
     });
   }
