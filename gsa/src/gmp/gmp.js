@@ -99,7 +99,7 @@ class GmpSettings {
       timeout,
       timezone,
       username,
-    } = {...options, ...storage};
+    } = {...storage, ...options};
     this.storage = storage;
 
     this.autorefresh = autorefresh;
