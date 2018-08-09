@@ -131,23 +131,25 @@ class Titlebar extends React.Component {
       <React.Fragment>
         <TitlebarPlaceholder/>
         <TitlebarLayout>
-          {gmp.isLoggedIn() &&
-            <Link
-              to="/"
-              title={_('Dashboard')}
-            >
-              <Greenbone/>
-            </Link>
-          }
           {gmp.isLoggedIn() ?
-            <Divider>
-              <span>{_('Logged in as ')}</span>
-              <UserLink to="usersettings">
-                <b>{username}</b>
-              </UserLink>
-              <span> | </span>
-              <LogoutLink onClick={this.handleLogout}>{_('Logout')}</LogoutLink>
-            </Divider> :
+            <React.Fragment>
+              <Link
+                to="/"
+                title={_('Dashboard')}
+              >
+                <Greenbone/>
+              </Link>
+              <Divider>
+                <span>{_('Logged in as ')}</span>
+                <UserLink to="usersettings">
+                  <b>{username}</b>
+                </UserLink>
+                <span> | </span>
+                <LogoutLink onClick={this.handleLogout}>
+                  {_('Logout')}
+                </LogoutLink>
+              </Divider>
+            </React.Fragment> :
             <Greenbone/>
           }
         </TitlebarLayout>
