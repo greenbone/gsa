@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -22,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -30,13 +31,13 @@ import PropTypes from 'web/utils/proptypes';
 
 import Img from 'web/components/img/img';
 
-import withIconSize from './withIconSize';
+import withIconSize from 'web/components/icon/withIconSize';
 
-const Anchor = glamorous.a({
-  display: 'flex',
-});
+const Anchor = styled.a`
+  display: flex;
+`;
 
-const StyledIcon = glamorous.span(
+const StyledIcon = styled.span(
   ({onClick}) => isDefined(onClick) ? {
     cursor: 'pointer',
     '@media print': {
