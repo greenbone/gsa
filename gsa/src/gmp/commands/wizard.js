@@ -117,7 +117,6 @@ class WizardCommand extends HttpCommand {
         });
 
       settings.client_address = data.client_address;
-      settings.timezone = data.timezone;
 
       return response.setData(settings);
     });
@@ -146,7 +145,6 @@ class WizardCommand extends HttpCommand {
         task => new Task(task))
         .filter(task => !task.isContainer());
 
-      settings.timezone = data.timezone;
       return response.setData(settings);
     });
   }
