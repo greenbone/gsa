@@ -162,7 +162,7 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
+  username: PropTypes.string,
 };
 
 export default compose(
