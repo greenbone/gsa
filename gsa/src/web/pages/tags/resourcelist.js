@@ -80,21 +80,22 @@ class ResourceList extends React.Component {
 
   componentDidMount() {
     const {gmp, entity} = this.props;
-    const {id, resource_type} = entity || {};
+    const {id, resourceType} = entity;
     const filter = 'tag_id="' + id + '" rows=' + MAX_RESOURCES;
-    gmp[pluralizeType(normalizeType(resource_type))].get({filter})
-    .then(resources =>
-      this.setState({
-        isLoading: false,
-        res: resources.data,
-      }));
+    gmp[pluralizeType(resourceType)].get({filter})
+      .then(resources =>
+        this.setState({
+          isLoading: false,
+          res: resources.data,
+        })
+      );
   }
 
   render() {
     const {entity} = this.props;
-    const {id, resource_count, resource_type} = entity;
+    const {id, resourceCount, resourceType} = entity;
     const {isLoading, res} = this.state;
-    const showNotification = resource_count > MAX_RESOURCES;
+    const showNotification = resourceCount > MAX_RESOURCES;
 
     return (
       <React.Fragment>
@@ -104,7 +105,7 @@ class ResourceList extends React.Component {
             {showNotification &&
               <Notification
                 id={id}
-                resourceType={resource_type}
+                resourceType={resourceType}
               />
             }
             <Spacer/>
@@ -113,7 +114,7 @@ class ResourceList extends React.Component {
                 (<li key={resource.id}>
                   <DetailsLink
                     id={resource.id}
-                    type={normalizeType(resource_type)}
+                    type={resourceType}
                   >
                     {resource.name}
                   </DetailsLink>

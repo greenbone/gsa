@@ -229,7 +229,7 @@ const Page = ({
             entity,
             ...other
           }) => {
-            const {resource_count} = entity;
+            const {resourceCount} = entity;
 
             return (
               <Layout grow="1" flex="column">
@@ -248,7 +248,7 @@ const Page = ({
                     <Tab>
                       <TabTitle
                         title={_('Assigned Items')}
-                        count={resource_count}
+                        count={resourceCount}
                       />
                     </Tab>
                     {isDefined(permissionsComponent) &&

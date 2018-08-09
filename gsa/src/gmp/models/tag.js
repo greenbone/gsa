@@ -24,6 +24,7 @@
 
 import Model from '../model.js';
 
+import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
 class Tag extends Model {
@@ -33,11 +34,11 @@ class Tag extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
     if (isDefined(elem.resources)) {
-      ret.resource_type = elem.resources.type;
-      ret.resource_count = elem.resources.count.total;
+      ret.resourceType = normalizeType(elem.resources.type);
+      ret.resourceCount = elem.resources.count.total;
     }
     else {
-      ret.resource_count = 0;
+      ret.resourceCount = 0;
     }
     return ret;
   }

@@ -185,7 +185,7 @@ class TagComponent extends React.Component {
       .then(tag => gmp.tag.save({
         ...tag,
         resource_id: entity.id,
-        resource_type: tag.resource_type,
+        resource_type: tag.resourceType,
         resources_action: 'remove',
       }))
       .then(onRemoved, onRemoveError);

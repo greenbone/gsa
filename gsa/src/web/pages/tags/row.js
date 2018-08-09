@@ -140,7 +140,7 @@ const Row = ({
   }, {
     capabilities,
   }) => {
-  const {resource_count, resource_type} = entity;
+  const {resourceCount, resourceType} = entity;
   return (
     <TableRow>
       <EntityNameTableData
@@ -157,10 +157,10 @@ const Row = ({
         {renderYesNo(entity.isActive())}
       </TableData>
       <TableData>
-        {typeName(resource_type)}
+        {typeName(resourceType)}
       </TableData>
       <TableData>
-        {resource_count}
+        {resourceCount}
       </TableData>
       <TableData>
         {shortDate(entity.modificationTime)}
