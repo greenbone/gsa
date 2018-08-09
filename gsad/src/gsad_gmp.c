@@ -441,7 +441,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         HTTP request params
+ * @param[in]  params         HTTP request params (UNUSED)
  * @param[in]  xml            XML string.  Freed before exit.
  * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
@@ -453,11 +453,9 @@ envelope_gmp (gvm_connection_t *connection,
               cmd_response_data_t *response_data)
 {
   time_t now;
-  gchar *res, *name;
+  gchar *res;
   GString *string;
   char ctime_now[200];
-  params_iterator_t iter;
-  param_t *param;
   struct timeval tv;
 
   assert (credentials);
@@ -511,40 +509,6 @@ envelope_gmp (gvm_connection_t *connection,
       g_string_append (string, warning_elem);
       g_free (warning_elem);
     }
-
-  g_string_append (string, "<params>");
-  params_iterator_init (&iter, params);
-  while (params_iterator_next (&iter, &name, &param))
-    {
-      if (name && strcmp (name, ""))
-        {
-          if ((name[strlen (name) - 1] == ':') && param->values)
-            {
-              gchar *child_name;
-              params_iterator_t children_iter;
-              param_t *child_param;
-
-              params_iterator_init (&children_iter, param->values);
-              while (params_iterator_next (&children_iter, &child_name,
-                                           &child_param))
-                if (child_param->value
-                    && child_param->valid
-                    && child_param->valid_utf8)
-                  xml_string_append (string,
-                                     "<_param>"
-                                     "<name>%s%s</name><value>%s</value>"
-                                     "</_param>",
-                                     name, child_name, child_param->value);
-            }
-
-          if (param->value && param->valid && param->valid_utf8
-              && strcmp (name, "xml_file") && strcmp (name, "installer"))
-            xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
-        }
-      else
-        g_warning ("%s: Param without name found", __FUNCTION__);
-    }
-  g_string_append (string, "</params>");
 
   g_string_append_printf (string,
                           "<capabilities>%s</capabilities>"
