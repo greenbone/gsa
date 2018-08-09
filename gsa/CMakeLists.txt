@@ -114,7 +114,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/locale/detector.js
      ${GSA_SRC_DIR}/src/gmp/locale/lang.js
      ${GSA_SRC_DIR}/src/gmp/locale/index.js
-     ${GSA_SRC_DIR}/src/gmp/locale/store.js
      ${GSA_SRC_DIR}/src/gmp/log.js
      ${GSA_SRC_DIR}/src/gmp/model.js
      ${GSA_SRC_DIR}/src/gmp/models/actionresult.js
@@ -252,7 +251,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/helpicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
@@ -289,6 +287,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/menu/menusection.js
      ${GSA_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${GSA_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
+     ${GSA_SRC_DIR}/src/web/components/observer/localeobserver.js
      ${GSA_SRC_DIR}/src/web/components/pagination/pagination.js
      ${GSA_SRC_DIR}/src/web/components/panel/infopanel.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
@@ -489,7 +488,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/topologydisplay.js
      ${GSA_SRC_DIR}/src/web/pages/hosts/dashboard/vulnscoredisplay.js
      ${GSA_SRC_DIR}/src/web/pages/ldap/ldappage.js
-     ${GSA_SRC_DIR}/src/web/pages/loginpage.js
+     ${GSA_SRC_DIR}/src/web/pages/login/loginform.js
+     ${GSA_SRC_DIR}/src/web/pages/login/loginpage.js
      ${GSA_SRC_DIR}/src/web/pages/notes/component.js
      ${GSA_SRC_DIR}/src/web/pages/notes/details.js
      ${GSA_SRC_DIR}/src/web/pages/notes/detailspage.js
@@ -811,10 +811,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/reducers.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/defaults/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/actions.js
      ${GSA_SRC_DIR}/src/web/store/usersettings/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/actions.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/usersettings/timezone/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/usersettings/selectors.js
      ${GSA_SRC_DIR}/src/web/store/utils.js
      ${GSA_SRC_DIR}/src/web/authorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js

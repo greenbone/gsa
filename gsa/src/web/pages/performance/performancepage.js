@@ -131,7 +131,7 @@ const ReportImage = ({
 }) => {
   const params = {
     slaveId,
-    token: gmp.token,
+    token: gmp.settings.token,
   };
 
   if (isDefined(duration)) {

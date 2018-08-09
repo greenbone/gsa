@@ -25,7 +25,6 @@ import {combineReducers} from 'redux';
 
 import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
-import timezone from './usersettings/timezone/reducers';
 import userSettings from './usersettings/reducers';
 import pages from './pages/reducers';
 
@@ -36,7 +35,6 @@ const rootReducer = combineReducers({
   dashboardData,
   dashboardSettings,
   entities,
-  timezone,
   userSettings,
   pages,
 });

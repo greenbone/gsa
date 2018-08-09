@@ -2,6 +2,7 @@
  *
  * Authors:
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -24,8 +25,44 @@ import {combineReducers} from 'web/store/utils';
 
 import defaults from './defaults/reducers';
 
+import {
+  USER_SETTINGS_SET_TIMEZONE,
+  USER_SETTINGS_SET_LOCALE,
+  USER_SETTINGS_SET_USERNAME,
+} from 'web/store/usersettings/actions';
+
+export const timezone = (state, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_SET_TIMEZONE:
+      return action.timezone;
+    default:
+      return state;
+  }
+};
+
+export const locale = (state, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_SET_LOCALE:
+      return action.locale;
+    default:
+      return state;
+  }
+};
+
+export const username = (state, action) => {
+  switch (action.type) {
+    case USER_SETTINGS_SET_USERNAME:
+      return action.username;
+    default:
+      return state;
+  }
+};
+
 const userSettings = combineReducers({
   defaults,
+  locale,
+  timezone,
+  username,
 });
 
 export default userSettings;

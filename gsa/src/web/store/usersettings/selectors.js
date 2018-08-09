@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
+ * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,34 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const getTimezone = rootState => rootState.userSettings.timezone;
 
-import {
-  TIMEZONE_LOADING_REQUEST,
-  TIMEZONE_LOADING_SUCCESS,
-} from './actions';
+export const getLocale = rootState => rootState.userSettings.locale;
 
-const initialState = {
-  value: null,
-  isLoading: false,
-  error: null,
-};
+export const getUsername = rootState => rootState.userSettings.username;
 
-const timezone = (state = initialState, action) => {
-  switch (action.type) {
-    case TIMEZONE_LOADING_REQUEST:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case TIMEZONE_LOADING_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        value: action.value,
-      };
-    default:
-      return state;
-  }
-};
-
-export default timezone;
+// vim: set ts=2 sw=2 tw=80:

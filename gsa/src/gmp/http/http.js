@@ -91,6 +91,10 @@ class Http {
     return formdata;
   }
 
+  getParams() {
+    return this.params;
+  }
+
   request(method, {
     args,
     data,
@@ -107,7 +111,7 @@ class Http {
     method = method.toUpperCase();
 
     if (args) {
-      url += '?' + buildUrlParams({...this.params, ...args});
+      url += '?' + buildUrlParams({...this.getParams(), ...args});
     }
 
     if (method === 'GET' && isDefined(cache) && cache.has(url) && !force) {
@@ -126,7 +130,7 @@ class Http {
     }
 
     if (data && (method === 'POST' || method === 'PUT')) {
-      formdata = this._createFormData({...this.params, ...data});
+      formdata = this._createFormData({...this.getParams(), ...data});
     }
 
     let xhr;

@@ -27,86 +27,97 @@ import logger from '../log';
 
 import {isDefined} from '../utils/identity';
 
+import {setLocale as setDateLocale} from './date';
 import Detector from './detector';
-import LanguageStore from './store';
 
 const log = logger.getLogger('gmp.locale.lang');
 
-let listeners = [];
+let languageChangelisteners = [];
+let lastLanguage;
 
-const notifyListeners = lang => {
-  for (const listener of listeners) {
-    listener(lang);
+const notifyLanguageChangeListeners = (lang, initial = false) => {
+  for (const listener of languageChangelisteners) {
+    listener(lang, initial);
   }
+};
+
+const I18N_OPTIONS = {
+  storage: global.localStorage,
+  nsSeparator: false, // don't use a namespace separator in keys
+  keySeparator: false, // don't use a key separator in keys
+  fallbackLng: 'en',
+  ns: ['gsa'], // use gsa as namespace
+  defaultNS: 'gsa',
+  fallbackNS: 'gsa',
+  backend: {
+    loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
+  },
 };
 
 i18next
   .use(XHRBackend) // use ajax backend
   .use(Detector) // use own detector for language detection
-  .init({
-    nsSeparator: false, // don't use a namespace separator in keys
-    keySeparator: false, // don't use a key separator in keys
-    fallbackLng: 'en',
-    ns: ['gsa'], // use gsa as namespace
-    defaultNS: 'gsa',
-    fallbackNS: 'gsa',
-    backend: {
-      loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
-    },
-  }, function(err, t) { // eslint-disable-line
+  .init(I18N_OPTIONS, () => {
 
     /* keep quiet if translations have not be found.
      * errors can be debugged here */
 
-    notifyListeners(getLanguage());
+    const lang = getLocale();
+
+    lastLanguage = lang;
+
+    setDateLocale(lang);
+
+    notifyLanguageChangeListeners(lang, true);
   });
 
 /**
- * Subscribe to get notified about language changes
+ * Subscribe to get notified about locale changes
  *
  * @param {Function} listener Function to get called when language changes
  *
  * @returns {Function} Unsubscribe function
  */
-export const subscribe = listener => {
-  listeners.push(listener);
+export const onLanguageChange = listener => {
+  languageChangelisteners.push(listener);
 
-  return () => listeners = listeners.filter(l => l !== listener);
+  return () => languageChangelisteners = languageChangelisteners.filter(
+    l => l !== listener);
 };
 
 /**
- * Get the current used language
+ * Get the current used locale
  *
  * @returns {String} Language code of the current used language
  */
-export const getLanguage = () => i18next.language;
+export const getLocale = () => i18next.language;
 
 /**
- * Change the current used language
+ * Change the current used locale
  *
  * @param {String} lang Language (code) to be set. Pass undefined
  *                      to start automatic detection.
- * @returns undefined
  */
-export const setLanguage = lang => i18next.changeLanguage(lang, err => {
-  if (isDefined(err)) {
-    log.error('Could not set language to', lang, err);
-  }
-  else {
-    log.debug('Language changed to', getLanguage());
-
-    if (isDefined(lang)) {
-      // store set language
-      LanguageStore.set(lang);
+export const setLocale = lang => {
+  i18next.changeLanguage(lang, err => {
+    if (isDefined(err)) {
+      log.error('Could not set language to', lang, err);
     }
     else {
-      // auto detection case. delete previous value from store
-      LanguageStore.delete();
-    }
+      lang = getLocale();
 
-    notifyListeners(lang);
-  }
-});
+      if (lastLanguage !== lang) {
+        log.debug('Language changed to', lang);
+
+        lastLanguage = lang;
+
+        setDateLocale(lang);
+
+        notifyLanguageChangeListeners(lang);
+      }
+    }
+  });
+};
 
 export const translate = (key, options) => i18next.t(key, options);
 

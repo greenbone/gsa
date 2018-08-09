@@ -20,38 +20,82 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import BrowserDetector from 'i18next-browser-languagedetector';
-
 import logger from '../log';
-
-import {LANGUAGE_KEY} from './store';
+import {isArray, isDefined} from '../utils/identity';
 
 const log = logger.getLogger('gmp.locale.detector');
 
-const DEFAULT_OPTIONS = {
-    // use url querystring and browser settings for language detection
-    order: ['querystring', 'localStorage', 'navigator'],
-    // use url?lang=de as querystring
-    lookupQuerystring: 'lang',
-    lookupLocalStorage: LANGUAGE_KEY,
-    // don't let BrowserDetector set language in localStorage
-    // we want to be able to use navigator instead of localStorage always
-    caches: [],
+export const BROWSER_LANGUAGE = 'Browser Language';
+
+const detectLanguageFromStorage = options => options.storage.locale;
+
+const detectLanguageFromNavigator = () => {
+  if (typeof navigator !== 'undefined') {
+    if (navigator.languages) {
+      return [...navigator.languages];
+    }
+    if (navigator.language) {
+      return navigator.language;
+    }
+    if (navigator.userLanguage) {
+      return navigator.userLanguage;
+    }
+  }
+
+  return undefined;
 };
 
-class LanguageDetector extends BrowserDetector {
+class LanguageDetector {
 
   static type = 'languageDetector';
 
-  constructor(services, options) {
-    super(services, {...DEFAULT_OPTIONS, ...options});
+  init(services, options = {}, i18nOptions = {}) {
+    this.services = services;
+    this.options = {
+      ...i18nOptions,
+      ...options,
+    };
   }
 
   detect(...options) {
-    const lang = super.detect(...options);
+    const detectors = [detectLanguageFromStorage, detectLanguageFromNavigator];
+    let detected = [];
+
+    for (const detector of detectors) {
+      const lookup = detector(this.options);
+      if (isArray(lookup)) {
+        detected = [
+          ...detected,
+          ...lookup,
+        ];
+      }
+      else {
+        detected.push(lookup);
+      }
+    }
+
+    detected = detected.filter(l => isDefined(l) && l !== BROWSER_LANGUAGE);
+
+    let lang;
+    for (const l of detected) {
+      const cleaned = this.services.languageUtils.formatLanguageCode(l);
+      if (this.services.languageUtils.isWhitelisted(cleaned)) {
+        lang = cleaned;
+        break;
+      }
+    }
+
+    if (!isDefined(lang)) {
+      const {fallbackLng} = this.options;
+      lang = isArray(fallbackLng) ? fallbackLng[0] : fallbackLng;
+    }
 
     log.debug('Detected language', lang);
     return lang;
+  }
+
+  cacheUserLanguage() {
+    // don't cache anything
   }
 }
 

@@ -1,6 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
@@ -20,13 +21,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
+export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
+export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
+export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 
-export const getIsLoading = state =>
-  isDefined(state) ? state.isLoading : false;
+export const setTimezone = timezone => ({
+  type: USER_SETTINGS_SET_TIMEZONE,
+  timezone,
+});
 
-export const getTimezone = rootState => {
-  return rootState.timezone;
+export const setLocale = locale => ({
+  type: USER_SETTINGS_SET_LOCALE,
+  locale,
+});
+
+export const setUsername = username => ({
+  type: USER_SETTINGS_SET_USERNAME,
+  username,
+});
+
+export const updateTimezone = ({
+  gmp,
+  timezone,
+}) => dispatch => {
+  gmp.setTimezone(timezone);
+  return Promise.resolve(dispatch(setTimezone(timezone)));
 };
 
-// vim: set ts=2 sw=2 tw=80:
+// vim: set ts=2 sw=2 two=80:

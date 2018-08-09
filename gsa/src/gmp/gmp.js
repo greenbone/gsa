@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
 
 import {isDefined} from './utils/identity';
 import {isEmpty} from './utils/string';
@@ -71,7 +72,88 @@ import DefaultTransform from './http/transform/default';
 import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
+import {setLocale} from './locale/lang';
+import {BROWSER_LANGUAGE} from './locale/detector';
+
 const log = logger.getLogger('gmp');
+
+const set = (storage, name, value) => {
+  if (isDefined(value)) {
+    storage.setItem(name, value);
+  }
+  else {
+    storage.removeItem(name);
+  }
+};
+
+class GmpSettings {
+  constructor(storage = localStorage, options = {}) {
+    const {
+      autorefresh,
+      locale,
+      manualurl,
+      protocol = global.location.host,
+      protocoldocurl,
+      server = global.location.host,
+      token,
+      timeout,
+      timezone,
+      username,
+    } = {...options, ...storage};
+    this.storage = storage;
+
+    this.autorefresh = autorefresh;
+    this.locale = locale;
+    this.manualurl = manualurl;
+    this.protocol = protocol;
+    this.protocoldocurl = protocoldocurl;
+    this.server = server;
+    this.token = token;
+    this.timezone = timezone;
+    this.timeout = timeout;
+    this.username = username;
+  }
+
+  set token(value) {
+    set(this.storage, 'token', value);
+  }
+
+  get token() {
+    return this.storage.token;
+  }
+
+  set timeout(value) {
+    set(this.storage, 'timeout', value);
+  }
+
+  get timeout() {
+    return this.storage.timeout;
+  }
+
+  set timezone(value) {
+    set(this.storage, 'timezone', value);
+  }
+
+  get timezone() {
+    return this.storage.timezone;
+  }
+
+  set username(value) {
+    set(this.storage, 'username', value);
+  }
+
+  get username() {
+    return this.storage.username;
+  }
+
+  set locale(value) {
+    set(this.storage, 'locale', value);
+  }
+
+  get locale() {
+    return this.storage.locale;
+  }
+}
 
 class Gmp {
 
@@ -83,41 +165,36 @@ class Gmp {
       storage = localStorage,
       manualurl,
       protocoldocurl,
-      ...httpoptions
+      timeout,
     } = options;
 
     log.debug('Using gmp options', options);
 
-    this._commands = {};
+    this.settings = new GmpSettings(storage, {
+      autorefresh,
+      manualurl,
+      protocol,
+      protocoldocurl,
+      server,
+      timeout,
+    });
 
-    this.storage = storage;
-
-    this.server = isDefined(server) ? server : window.location.host;
-    this.protocol = isDefined(protocol) ? protocol : window.location.protocol;
-
-    this.http = new GmpHttp(this.server, this.protocol, httpoptions);
+    this.http = new GmpHttp(this.settings);
 
     this._login = new LoginCommand(this.http);
 
-    this._autorefresh = autorefresh;
-
     this._logoutListeners = [];
 
-    if (this.storage.token) {
-      this.token = this.storage.token;
-    }
+    this._initCommands();
+  }
 
-    this.globals = {manualurl, protocoldocurl};
-
-    const commands = getCommands();
-    for (const name in commands) { // eslint-disable-line guard-for-in
-      const cmd = commands[name];
-      const instance = new cmd.clazz(this.http, ...cmd.options);
-      this._commands[name] = instance;
+  _initCommands() {
+    for (const [name, cmd] of Object.entries(getCommands())) {
+      const instance = new cmd(this.http);
 
       Object.defineProperty(this, name, {
         get: function() {
-          return this._commands[name];
+          return instance;
         },
       });
     }
@@ -125,33 +202,42 @@ class Gmp {
 
   login(username, password) {
     return this._login.login(username, password).then(login => {
-      this.token = login.token;
+      const {
+        token,
+        timezone,
+        i18n,
+      } = login;
 
-      delete login.token;
+      this.settings.username = username;
+      this.settings.timezone = timezone;
+      this.settings.token = token;
+      this.settings.locale = i18n;
 
-      this.username = username;
-      this.globals = login;
-
-      return this.token;
+      return {
+        locale: i18n === BROWSER_LANGUAGE ? undefined : i18n,
+        username,
+        token,
+        timezone,
+      };
     });
   }
 
   logout() {
     if (this.isLoggedIn()) {
       const url = this.buildUrl('logout');
-      const args = {token: this.token};
+      const args = {token: this.settings.token};
 
       const promise = this.http.request('get', {
         url,
         args,
         transform: DefaultTransform,
       }).then(xhr => {
-          this.token = undefined;
+          this.clearToken();
           log.debug('Logged out successfully');
           return xhr;
         })
         .catch(err => {
-          this.token = undefined;
+          this.clearToken();
           log.error('Error on logout', err);
         });
 
@@ -166,7 +252,7 @@ class Gmp {
   }
 
   isLoggedIn() {
-    return !isEmpty(this.token);
+    return !isEmpty(this.settings.token);
   }
 
   subscribeToLogout(listener) {
@@ -177,7 +263,8 @@ class Gmp {
   }
 
   buildUrl(path, params, anchor) {
-    let url = buildServerUrl(this.server, path, this.protocol);
+    let url = buildServerUrl(this.settings.server, path,
+      this.settings.protocol);
 
     if (isDefined(params)) {
       url += '?' + buildUrlParams(params);
@@ -189,49 +276,23 @@ class Gmp {
     return url;
   }
 
-  get token() {
-    return this.http.token;
+  clearToken() {
+    this.settings.token = undefined;
   }
 
-  set token(token) {
-    if (isDefined(token)) {
-      this.storage.token = token;
-    }
-    else {
-      delete this.storage.token;
-    }
-    this.http.token = token;
+  setLocale(lang) {
+    this.settings.locale = lang;
+    setLocale(lang);
+    return this;
   }
 
-  get username() {
-    return this.storage.username;
-  }
-
-  set username(value) {
-    this.storage.username = value;
-  }
-
-  get globals() {
-    if (isDefined(this.storage.globals)) {
-      return JSON.parse(this.storage.globals);
-    }
-    return {};
-  }
-
-  set globals(values) {
-    if (isDefined(values)) {
-      const {globals} = this;
-      this.storage.globals = JSON.stringify({...globals, ...values});
-    }
-    else {
-      this.storage.removeItem('globals');
-    }
+  setTimezone(timezone) {
+    this.settings.timezone = timezone;
+    return this;
   }
 
   get autorefresh() {
-    return isDefined(this._autorefresh) ?
-      this._autorefresh :
-      this.globals.autorefresh;
+    return this.settings.autorefresh;
   }
 
   addHttpErrorHandler(handler) {

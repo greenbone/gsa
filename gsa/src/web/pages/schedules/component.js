@@ -23,18 +23,19 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import {getTimezone} from 'web/store/usersettings/selectors';
 
-import EntityComponent from '../../entity/component.js';
+import PropTypes from 'web/utils/proptypes';
 
-import ScheduleDialog from './dialog.js';
+import ScheduleDialog from './dialog';
 
 class ScheduleComponent extends React.Component {
 
@@ -48,7 +49,7 @@ class ScheduleComponent extends React.Component {
   }
 
   openScheduleDialog(schedule) {
-    const {gmp} = this.props;
+    const {timezone} = this.props;
 
     if (isDefined(schedule)) {
       const {event} = schedule;
@@ -77,7 +78,6 @@ class ScheduleComponent extends React.Component {
       });
     }
     else {
-      const {timezone} = gmp.globals;
       this.setState({
         comment: undefined,
         dialogVisible: true,
@@ -137,7 +137,7 @@ class ScheduleComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openScheduleDialog,
@@ -150,7 +150,7 @@ class ScheduleComponent extends React.Component {
                 onSave={save}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
@@ -159,7 +159,7 @@ class ScheduleComponent extends React.Component {
 
 ScheduleComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
+  timezone: PropTypes.string.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -172,6 +172,8 @@ ScheduleComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(ScheduleComponent);
+export default connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(ScheduleComponent);
 
 // vim: set ts=2 sw=2 tw=80:

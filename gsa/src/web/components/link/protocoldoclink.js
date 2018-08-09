@@ -32,7 +32,7 @@ const ProtocolDocLink = ({
   gmp,
   title,
 }) => {
-  const {protocoldocurl} = gmp.globals;
+  const {protocoldocurl} = gmp.settings;
 
   return (
     <BlankLink

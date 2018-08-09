@@ -35,7 +35,7 @@ import IconSizeProvider from 'web/components/provider/iconsizeprovider';
 import Powerfilter from 'web/components/powerfilter/powerfilter';
 
 const fakegmp = {
-  globals: {
+  settings: {
     manualurl: 'http://example.com',
   },
 };

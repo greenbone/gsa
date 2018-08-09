@@ -27,13 +27,16 @@ import {Provider as StoreProvider} from 'react-redux';
 
 import Gmp from 'gmp';
 import CacheFactory from 'gmp/cache';
-import {subscribe} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
-import CacheFactoryProvider from './components/provider/cachefactoryprovider';
-import GmpProvider from './components/provider/gmpprovider';
+import LocaleObserver from 'web/components/observer/localeobserver';
 
-import globalcss from './utils/globalcss';
+import CacheFactoryProvider from 'web/components/provider/cachefactoryprovider';
+import GmpProvider from 'web/components/provider/gmpprovider';
+
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
+
+import globalcss from 'web/utils/globalcss';
 
 import configureStore from './store';
 
@@ -53,32 +56,29 @@ window.gmp = gmp;
 
 globalcss();
 
+const initStore = () => {
+  store.dispatch(setTimezone(gmp.settings.timezone));
+  store.dispatch(setUsername(gmp.settings.username));
+};
+
 class App extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.renderOnLanguageChange = this.renderOnLanguageChange.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentDidMount() {
-    this.unsubscribeFromLanguageChange = subscribe(this.renderOnLanguageChange);
     this.unsubscribeFromLogout = gmp.subscribeToLogout(this.handleLogout);
+
+    initStore();
   }
 
   componentWillUnmount() {
-    if (isDefined(this.unsubscribeFromLanguageChange)) {
-      this.unsubscribeFromLanguageChange();
-    }
-
     if (isDefined(this.unsubscribeFromLogout)) {
       this.unsubscribeFromLogout();
     }
-  }
-
-  renderOnLanguageChange() {
-    this.forceUpdate();
   }
 
   handleLogout() {
@@ -93,7 +93,9 @@ class App extends React.Component {
       <GmpProvider gmp={gmp}>
         <CacheFactoryProvider caches={caches}>
           <StoreProvider store={store}>
-            <Routes />
+            <LocaleObserver>
+              <Routes />
+            </LocaleObserver>
           </StoreProvider>
         </CacheFactoryProvider>
       </GmpProvider>

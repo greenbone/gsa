@@ -21,8 +21,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -40,30 +41,32 @@ import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
-} from 'gmp/models/scanconfig.js';
+} from 'gmp/models/scanconfig';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
-} from 'gmp/models/scanner.js';
+} from 'gmp/models/scanner';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities';
-import withGmp from '../../utils/withGmp';
-import compose from '../../utils/compose';
-import {UNSET_VALUE} from '../../utils/render';
+import {getTimezone} from 'web/store/usersettings/selectors';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
+import {UNSET_VALUE} from 'web/utils/render';
 
-import EntityComponent from '../../entity/component.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import ImportReportDialog from '../reports/importdialog.js';
+import EntityComponent from 'web/entity/component';
 
-import AdvancedTaskWizard from '../../wizard/advancedtaskwizard.js';
-import ModifyTaskWizard from '../../wizard/modifytaskwizard.js';
-import TaskWizard from '../../wizard/taskwizard.js';
+import ImportReportDialog from 'web/pages/reports/importdialog';
 
-import TaskDialogContainer from './dialogcontainer.js';
-import ContainerTaskDialog from './containerdialog.js';
+import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
+import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
+import TaskWizard from 'web/wizard/taskwizard';
+
+import TaskDialogContainer from './dialogcontainer';
+import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.tasks.component');
 
@@ -392,7 +395,10 @@ class TaskComponent extends React.Component {
   }
 
   openAdvancedTaskWizard() {
-    const {gmp} = this.props;
+    const {
+      gmp,
+      timezone,
+    } = this.props;
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -411,7 +417,7 @@ class TaskComponent extends React.Component {
       const esxi_credential = selectSaveId(credentials,
         settings.get('Default ESXi Credential').value, '');
 
-      const now = date().tz(settings.timezone);
+      const now = date().tz(timezone);
 
       this.setState({
         advancedTaskWizardVisible: true,
@@ -430,7 +436,7 @@ class TaskComponent extends React.Component {
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
-        start_timezone: settings.timezone,
+        start_timezone: timezone,
       });
     });
   }
@@ -440,11 +446,14 @@ class TaskComponent extends React.Component {
   }
 
   openModifyTaskWizard() {
-    const {gmp} = this.props;
+    const {
+      gmp,
+      timezone,
+    } = this.props;
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
-      const now = date().tz(settings.timezone);
+      const now = date().tz(timezone);
 
       this.setState({
         modifyTaskWizardVisible: true,
@@ -454,7 +463,7 @@ class TaskComponent extends React.Component {
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
-        start_timezone: settings.timezone,
+        start_timezone: timezone,
       });
     });
   }
@@ -678,6 +687,7 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -711,4 +721,7 @@ TaskComponent.propTypes = {
 export default compose(
   withGmp,
   withCapabilities,
+  connect(rootState => ({
+    timezone: getTimezone(rootState),
+  })),
 )(TaskComponent);

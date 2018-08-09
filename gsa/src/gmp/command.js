@@ -22,8 +22,8 @@
  */
 const COMMANDS = {};
 
-const registerCommand = (name, clazz, ...options) => {
-  COMMANDS[name] = {clazz, options};
+const registerCommand = (name, clazz) => {
+  COMMANDS[name] = clazz;
 };
 
 export const getCommands = () => COMMANDS;

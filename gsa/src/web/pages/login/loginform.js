@@ -21,73 +21,53 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
-
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
 
-import Layout from '../components/layout/layout.js';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import SubmitButton from 'web/components/form/submitbutton';
+import TextField from 'web/components/form/textfield';
 
-import PropTypes from '../utils/proptypes.js';
-import compose from '../utils/compose';
-import withGmp from '../utils/withGmp';
+import Icon from 'web/components/icon/icon';
+
+import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import FormGroup from '../components/form/formgroup.js';
-import PasswordField from '../components/form/passwordfield.js';
-import SubmitButton from '../components/form/submitbutton.js';
-import TextField from '../components/form/textfield.js';
+const Panel = styled.div`
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-bottom: 10px;
+  font-size: 9pt;
+`;
 
-import GBIcon from '../components/icon/greenboneicon.js';
-import Icon from '../components/icon/icon.js';
+const LoginPanel = Panel.withComponent(Layout);
 
-import Footer from '../components/structure/footer.js';
-import Header from '../components/structure/header.js';
+const Div = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+`;
 
-const log = logger.getLogger('web.login');
+const Error = styled.p`
+  color: ${Theme.warningRed};
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+`;
 
-const panelcss = {
-  marginTop: '5px',
-  marginBottom: '5px',
-  paddingBottom: '10px',
-  fontSize: '9pt',
-};
-
-const Panel = glamorous.div(
-  'login-panel',
-  panelcss,
-);
-
-const LoginPanel = glamorous(Layout)(
-  'login-panel',
-  panelcss,
-);
-
-const Div = glamorous.div({
-  display: 'flex',
-  flexDirection: 'row',
-  margin: '0 auto',
-});
-
-const Error = glamorous.p(
-  'error',
-  {
-    color: Theme.warningRed,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    margin: '10px',
-  }
-);
+const StyledIcon = styled(Icon)`
+  height: 95px;
+  margin-left: 5px;
+`;
 
 class LoginForm extends React.Component {
 
@@ -197,128 +177,6 @@ LoginForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-const GreenboneIcon = glamorous(GBIcon)({
-  width: '30vh',
-  margin: '30px auto',
-  position: 'sticky',
-});
-
-const LoginLayout = glamorous(Layout)({
-  height: '100%',
-  width: '420px',
-  margin: '0 auto',
-  padding: '20px 20px 0px 20px',
-});
-
-const StyledLayout = glamorous(Layout)({
-  flexDirection: 'column',
-  height: '100vh',
-});
-
-const LoginHeader = glamorous(Header)({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-});
-
-const StyledIcon = glamorous(Icon)({
-  height: '95px',
-  marginLeft: '5px',
-});
-
-const MenuSpacer = glamorous.div({
-  background: '#393637',
-  position: 'absolute',
-  top: '42px',
-  left: 0,
-  right: 0,
-  height: '35px',
-  zIndex: '500',
-});
-
-const Wrapper = glamorous.div({
-    border: '1px solid #ddd',
-    padding: '10px',
-});
-
-class LoginPage extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      error: false,
-    };
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(username, password) {
-    const {history, gmp} = this.props;
-
-    gmp.login(username, password).then(token => {
-      const {location} = this.props;
-      if (location && location.state && location.state.next &&
-          location.state.next !== location.pathname) {
-        history.replace(location.state.next);
-      }
-      else {
-        history.replace('/');
-      }
-    }, rej => {
-      log.error(rej);
-      this.setState({error: rej});
-    });
-  }
-
-  componentWillMount() {
-    // reset token
-    const {gmp} = this.props;
-    gmp.token = undefined;
-  }
-
-  render() {
-    const {error} = this.state;
-    let message;
-
-    if (error) {
-      if (isEmpty(error.message)) {
-        message = _('Unknown error on login');
-      }
-      else {
-        message = error.message;
-      }
-    }
-
-    return (
-      <StyledLayout>
-        <LoginHeader/>
-        <MenuSpacer/>
-        <LoginLayout flex="column" className="login">
-          <GreenboneIcon/>
-          <Wrapper>
-            <LoginForm
-              error={message}
-              onSubmit={this.handleSubmit}
-            />
-          </Wrapper>
-        </LoginLayout>
-        <Footer/>
-      </StyledLayout>
-    );
-  }
-}
-
-LoginPage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-};
-
-export default compose(
-  withRouter,
-  withGmp,
-)(LoginPage);
+export default LoginForm;
 
 // vim: set ts=2 sw=2 tw=80:
