@@ -29,8 +29,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
@@ -139,7 +137,7 @@ class ScheduleComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openScheduleDialog,
@@ -152,7 +150,7 @@ class ScheduleComponent extends React.Component {
                 onSave={save}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
