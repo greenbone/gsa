@@ -160,7 +160,7 @@ class EntitiesContainer extends React.Component {
 
   reload() {
     // reload data from backend
-    this.load(this.state.loadedFilter);
+    this.load(this.props.filter);
   }
 
   getRefreshInterval() {
