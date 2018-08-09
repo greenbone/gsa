@@ -228,6 +228,7 @@ class PowerFilter extends React.Component {
       capabilities,
       filters,
       onEditClick,
+      onRemoveClick,
       onResetClick,
     } = this.props;
     const namedfilterid = isDefined(filter) && isDefined(filter.id) ?
@@ -266,10 +267,18 @@ class PowerFilter extends React.Component {
                 onClick={this.handleUpdateFilter}
               />
 
-              {onResetClick &&
+              {onRemoveClick &&
                 <DeleteIcon
-                  img="delete.svg"
-                  title={_('Reset Filter')}
+                  img="first.svg"
+                  title={_('Remove Filter')}
+                  active={isDefined(filter)}
+                  onClick={isDefined(filter) ? onRemoveClick : undefined}
+                />
+              }
+              {onResetClick &&
+                <Icon
+                  img="first.svg"
+                  title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onResetClick : undefined}
                 />
@@ -333,6 +342,7 @@ PowerFilter.propTypes = {
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,
+  onRemoveClick: PropTypes.func,
   onResetClick: PropTypes.func,
   onUpdate: PropTypes.func,
 };
