@@ -20,26 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {connect} from 'react-redux';
 
-import React from 'react';
+import {getUsername} from 'web/store/usersettings/selectors.js';
 
-import PropTypes from './proptypes.js';
+const withUsername = Component => connect(rootState => ({
+  username: getUsername(rootState),
+}))(Component);
 
-export const withUserName = Component => {
-  const UserNameWrapper = (props, {gmp}) => (
-    <Component
-      userName={gmp.settings.username}
-      {...props}
-    />
-  );
-
-  UserNameWrapper.contextTypes = {
-    gmp: PropTypes.gmp.isRequired,
-  };
-
-  return UserNameWrapper;
-};
-
-export default withUserName;
+export default withUsername;
 
 // vim: set ts=2 sw=2 tw=80:

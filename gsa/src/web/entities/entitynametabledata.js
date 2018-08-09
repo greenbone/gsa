@@ -28,7 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
+import withUsername from 'web/utils/withUserName';
 
 import Comment from 'web/components/comment/comment';
 
@@ -46,7 +46,7 @@ const EntityNameTableData = ({
   entity,
   links = true,
   displayName,
-  userName,
+  username,
   type = getEntityType(entity),
   children,
   onToggleDetailsClick,
@@ -76,7 +76,7 @@ const EntityNameTableData = ({
       <ObserverIcon
         displayName={displayName}
         entity={entity}
-        userName={userName}
+        userName={username}
       />
     </Layout>
     {isDefined(entity.comment) &&
@@ -91,10 +91,10 @@ EntityNameTableData.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   type: PropTypes.string,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func,
 };
 
-export default withUserName(EntityNameTableData);
+export default withUsername(EntityNameTableData);
 
 // vim: set ts=2 sw=2 tw=80:

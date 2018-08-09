@@ -41,6 +41,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
+import withUsername from 'web/utils/withUserName';
 
 const TITLE_BAR_HEIGHT = '42px';
 
@@ -122,7 +123,10 @@ class Titlebar extends React.Component {
 
 
   render() {
-    const {gmp} = this.props;
+    const {
+      gmp,
+      username,
+    } = this.props;
     return (
       <React.Fragment>
         <TitlebarPlaceholder/>
@@ -142,7 +146,7 @@ class Titlebar extends React.Component {
             <Divider>
               <span>{_('Logged in as ')}</span>
               <UserLink to="usersettings">
-                <b>{gmp.settings.username}</b>
+                <b>{username}</b>
               </UserLink>
               <span> | </span>
               <LogoutLink onClick={this.handleLogout}>{_('Logout')}</LogoutLink>
@@ -158,11 +162,13 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default compose(
   withGmp,
   withRouter,
+  withUsername,
 )(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

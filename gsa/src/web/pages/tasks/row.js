@@ -109,7 +109,7 @@ const Row = ({
   entity,
   links = true,
   actions,
-  userName,
+  username,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -158,7 +158,7 @@ const Row = ({
             <ObserverIcon
               displayName={_('Task')}
               entity={entity}
-              userName={userName}
+              userName={username}
             />
             {isDefined(observers) && observers.length > 0 &&
               <Icon
@@ -206,7 +206,7 @@ Row.propTypes = {
   actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  userName: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
