@@ -271,7 +271,6 @@ class PowerFilter extends React.Component {
 
               {onRemoveClick &&
                 <DeleteIcon
-                  img="first.svg"
                   title={_('Remove Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onRemoveClick : undefined}
