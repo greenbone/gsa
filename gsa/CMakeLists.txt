@@ -697,6 +697,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tags/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/tags/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/tags/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/tags/resourcelist.js
      ${GSA_SRC_DIR}/src/web/pages/tags/row.js
      ${GSA_SRC_DIR}/src/web/pages/tags/table.js
      ${GSA_SRC_DIR}/src/web/pages/targets/component.js

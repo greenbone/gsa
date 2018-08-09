@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import {withRouter} from 'react-router-dom';
+
 import logger from 'gmp/log';
 
 import CancelToken from 'gmp/cancel';
@@ -297,6 +299,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
+  withRouter,
 )(EntityContainer);
 
 // vim: set ts=2 sw=2 tw=80:
