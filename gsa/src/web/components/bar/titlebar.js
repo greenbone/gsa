@@ -78,17 +78,17 @@ const GsaIcon = styled(GsaIconComponent)`
   padding-bottom: 1px;
 `;
 
-const Greenbone = () => {
-  return (
-    <Layout flex>
-      <GreenboneIcon/>
-      <GsaIcon/>
-    </Layout>
-  );
+const Greenbone = () => (
+  <Layout>
+    <GreenboneIcon/>
+    <GsaIcon/>
+  </Layout>
+);
 
-};
-
-const TitlebarLayout = styled(Layout)`
+const TitlebarLayout = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: ${TITLE_BAR_HEIGHT};
   background-color: ${Theme.green};
   padding: 0px 5px 0px 5px;
@@ -130,27 +130,26 @@ class Titlebar extends React.Component {
     return (
       <React.Fragment>
         <TitlebarPlaceholder/>
-        <TitlebarLayout
-          flex
-          align={['space-between', 'center']}
-        >
-          {gmp.isLoggedIn() &&
-            <Link
-              to="/"
-              title={_('Dashboard')}
-            >
-              <Greenbone/>
-            </Link>
-          }
+        <TitlebarLayout>
           {gmp.isLoggedIn() ?
-            <Divider>
-              <span>{_('Logged in as ')}</span>
-              <UserLink to="usersettings">
-                <b>{username}</b>
-              </UserLink>
-              <span> | </span>
-              <LogoutLink onClick={this.handleLogout}>{_('Logout')}</LogoutLink>
-            </Divider> :
+            <React.Fragment>
+              <Link
+                to="/"
+                title={_('Dashboard')}
+              >
+                <Greenbone/>
+              </Link>
+              <Divider>
+                <span>{_('Logged in as ')}</span>
+                <UserLink to="usersettings">
+                  <b>{username}</b>
+                </UserLink>
+                <span> | </span>
+                <LogoutLink onClick={this.handleLogout}>
+                  {_('Logout')}
+                </LogoutLink>
+              </Divider>
+            </React.Fragment> :
             <Greenbone/>
           }
         </TitlebarLayout>
@@ -162,7 +161,7 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
+  username: PropTypes.string,
 };
 
 export default compose(
