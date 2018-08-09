@@ -20,6 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {parseInt} from 'gmp/parser';
+
+import moment from 'gmp/models/date';
+
+import {isDefined} from 'gmp/utils/identity';
 
 class Login {
 
@@ -33,6 +38,11 @@ class Login {
     this.token = elem.token;
     this.vendorVersion = elem.vendor_version;
     this.version = elem.version;
+
+    const unixSeconds = parseInt(elem.session);
+
+    this.sessionTimeout = isDefined(unixSeconds) ?
+      moment.unix(unixSeconds) : undefined;
   }
 }
 
