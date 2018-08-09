@@ -21,8 +21,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import moment from 'moment';
-
 import logger from '../log';
 
 import registerCommand from '../command';
@@ -31,6 +29,9 @@ import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
 import Capabilities from '../capabilities/capabilities';
+
+import moment from '../models/date';
+
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
