@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -21,18 +22,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-const FootNote = glamorous(Layout)(
-  'footnote',
-  {
-    fontSize: '10px',
-    color: '#787878',
-    textAlign: 'left',
-  },
-);
+import Theme from 'web/utils/theme';
+
+const FootNote = styled(Layout)`
+  font-size: 10px;
+  color: ${Theme.mediumGray};
+  text-align: left;
+`;
 
 export default FootNote;
 
