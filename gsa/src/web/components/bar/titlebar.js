@@ -85,7 +85,10 @@ const Greenbone = () => (
   </Layout>
 );
 
-const TitlebarLayout = styled(Layout)`
+const TitlebarLayout = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   height: ${TITLE_BAR_HEIGHT};
   background-color: ${Theme.green};
   padding: 0px 5px 0px 5px;
@@ -127,10 +130,7 @@ class Titlebar extends React.Component {
     return (
       <React.Fragment>
         <TitlebarPlaceholder/>
-        <TitlebarLayout
-          flex
-          align={['space-between', 'center']}
-        >
+        <TitlebarLayout>
           {gmp.isLoggedIn() &&
             <Link
               to="/"
