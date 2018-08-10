@@ -26,12 +26,15 @@ import {connect} from 'react-redux';
 
 import styled from 'styled-components';
 
-import {getUsername} from 'web/store/usersettings/selectors';
+import _ from 'gmp/locale';
+
+import {getUsername, getSessionTimeout} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import Link from './link';
+import {longDate} from 'gmp/locale/date';
 
 const StyledLink = styled(Link)`
   color: ${Theme.darkGray};
@@ -43,18 +46,25 @@ const StyledLink = styled(Link)`
 `;
 
 const UserLink = ({
+  sessionTimeout,
   username,
 }) => (
-  <StyledLink to="usersettings">
+  <StyledLink
+    to="usersettings"
+    title={_('Your session will end at {{date}}',
+      {date: longDate(sessionTimeout)})}
+  >
     {username}
   </StyledLink>
 );
 
 UserLink.propTypes = {
+  sessionTimeout: PropTypes.date.isRequired,
   username: PropTypes.string.isRequired,
 };
 
 export default connect(rootState => ({
+  sessionTimeout: getSessionTimeout(rootState),
   username: getUsername(rootState),
 }))(UserLink);
 
