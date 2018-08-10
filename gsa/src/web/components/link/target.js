@@ -21,9 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Theme from '../../utils/theme';
+import Theme from 'web/utils/theme';
 
 /**
 * Can be used as link anchor. Offsets the target so that it doesn't hide
@@ -31,16 +31,16 @@ import Theme from '../../utils/theme';
 *
 * @module components/link/target.js
 *
-* @exports {glamorous}
+* @exports {Target}
 */
 
-const Target = glamorous.div({
-  content: '',
-  display: 'block',
-  height: '35px',
-  zIndex: Theme.Layers.belowAll,
-  margin: '-35px 0 0 0',
-  position: 'relative', // needs to be set for z-index to work in Firefox
-});
+const Target = styled.div`
+  content: '';
+  display: block;
+  height: 35px;
+  z-index: ${Theme.Layers.belowAll};
+  margin: -35px 0 0 0;
+  position: relative; ${''/* needs to be set for z-index to work in Firefox */}
+`;
 
 export default Target;

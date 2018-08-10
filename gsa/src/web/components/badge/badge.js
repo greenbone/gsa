@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,53 +24,43 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-const BadgeContainer = glamorous.div({
-  position: 'relative',
-  display: 'inline-flex',
-},
-  ({margin}) => ({marginRight: margin}),
-);
+const BadgeContainer = styled.div`
+  position: relative;
+  display: inline-flex;
+  margin-right: ${props => props.margin}px;
+`;
 
 BadgeContainer.displayName = 'BadgeContainer';
 
-const BadgeIcon = glamorous.span({
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  alignContent: 'center',
-  alignItems: 'center',
-  position: 'absolute',
-  fontSize: '10px',
-  backgroundColor: 'red',
-  fontWeight: 'bold',
-  borderRadius: '10px',
-  minWidth: '10px',
-  padding: '3px 5px',
-  zIndex: Theme.Layers.higher,
-},
-  ({
-    backgroundColor = Theme.green,
-    color = 'white',
-    position = 'bottom',
-    radius = 8,
-    margin = 8,
-  }) => {
-    return {
-      right: -margin,
-      color: color,
-      backgroundColor,
-      [position]: -radius,
-    };
-  },
-);
+const BadgeIcon = styled.span`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  position: absolute;
+  font-size: 10px;
+  background-color: red;
+  font-weight: bold;
+  border-radius: 10px;
+  min-width: 10px;
+  padding: 3px 5px;
+  z-index: ${Theme.Layers.higher};
+  background-color: ${props => isDefined(props.backgroundColor) ?
+    props.backgroundColor :
+    Theme.green};
+  color: ${({color = Theme.white}) => color};
+  ${({position = 'bottom'}) => position}: ${({radius = 8}) => -radius}px;
+  right: ${({margin = 8}) => -margin}px;
+`;
 
 BadgeIcon.displayName = 'BadgeIcon';
 

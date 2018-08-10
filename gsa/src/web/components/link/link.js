@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {Link as RLink} from 'react-router-dom';
 
@@ -106,12 +106,9 @@ Link.propTypes = {
   to: PropTypes.string.isRequired,
 };
 
-Link = glamorous(
-  withTextOnly(Link),
-  {displayName: 'Link'},
-)({
-  display: 'inline-flex',
-});
+Link = styled(withTextOnly(Link))`
+  display: inline-flex;
+`;
 
 export default Link;
 

@@ -22,16 +22,16 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes';
 
-const Container = glamorous.div('autosize-container', {
-  overflow: 'hidden',
-});
+const Container = styled.div`
+  overflow: hidden;
+`;
 
 /**
  * Component to provide width and height props to a children function
