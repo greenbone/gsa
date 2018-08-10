@@ -83,6 +83,7 @@ export const StyledMenuEntry = styled.li`
   font-weight: bold;
 
   & a {
+    line-height: 22px;
     color: ${Theme.darkGray};
   };
 
