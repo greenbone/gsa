@@ -61,6 +61,8 @@ import EntityComponent from 'web/entity/component';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
 import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
 import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
 import TaskWizard from 'web/wizard/taskwizard';
@@ -129,6 +131,10 @@ class TaskComponent extends React.Component {
     this.closeTaskDialog = this.closeTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
     this.closeTaskWizard = this.closeTaskWizard.bind(this);
+  }
+
+  renewSession() {
+    this.props.renewSessionTimeout();
   }
 
   handleSaveContainerTask(data) {
@@ -210,10 +216,12 @@ class TaskComponent extends React.Component {
       title: task ? _('Edit Container Task {{name}}', task) :
         _('New Container Task'),
     });
+    this.renewSession();
   }
 
   closeContainerTaskDialog() {
     this.setState({containerTaskDialogVisible: false});
+    this.renewSession();
   }
 
   openTaskDialog(task) {
@@ -223,10 +231,12 @@ class TaskComponent extends React.Component {
     else {
       this.openStandardTaskDialog(task);
     }
+    this.renewSession();
   }
 
   closeTaskDialog() {
     this.setState({taskDialogVisible: false});
+    this.renewSession();
   }
 
   openStandardTaskDialog(task) {
@@ -365,10 +375,12 @@ class TaskComponent extends React.Component {
       task_id: task.id,
       tasks: [task],
     });
+    this.renewSession();
   }
 
   closeReportImportDialog() {
     this.setState({reportImportDialogVisible: false});
+    this.renewSession();
   }
 
   openTaskWizard() {
@@ -388,10 +400,12 @@ class TaskComponent extends React.Component {
         scanner_id: settings.get('Default OpenVAS Scanner').value,
       });
     });
+    this.renewSession();
   }
 
   closeTaskWizard() {
     this.setState({taskWizardVisible: false});
+    this.renewSession();
   }
 
   openAdvancedTaskWizard() {
@@ -439,10 +453,12 @@ class TaskComponent extends React.Component {
         start_timezone: timezone,
       });
     });
+    this.renewSession();
   }
 
   closeAdvancedTaskWizard() {
     this.setState({advancedTaskWizardVisible: false});
+    this.renewSession();
   }
 
   openModifyTaskWizard() {
@@ -466,10 +482,12 @@ class TaskComponent extends React.Component {
         start_timezone: timezone,
       });
     });
+    this.renewSession();
   }
 
   closeModifyTaskWizard() {
     this.setState({modifyTaskWizardVisible: false});
+    this.renewSession();
   }
 
   render() {
@@ -687,6 +705,7 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
@@ -723,5 +742,7 @@ export default compose(
   withCapabilities,
   connect(rootState => ({
     timezone: getTimezone(rootState),
+  }), (dispatch, {gmp}) => ({
+    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
   })),
 )(TaskComponent);
