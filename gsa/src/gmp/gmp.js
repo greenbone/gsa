@@ -87,7 +87,7 @@ class Gmp {
       autorefresh,
       protocol,
       server,
-      storage = global.localStorage,
+      storage,
       manualurl,
       protocoldocurl,
       timeout,
