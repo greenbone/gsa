@@ -65,6 +65,8 @@ class Authorized extends React.Component {
   toLoginPage() {
     const {gmp, history} = this.props;
 
+    gmp.clearToken(); // ensure gmp.isLoggedIn returns false
+
     history.replace('/login', {
       next: this.props.location.pathname,
     });
