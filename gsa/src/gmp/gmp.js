@@ -75,85 +75,10 @@ import LoginCommand from './commands/login.js';
 import {setLocale} from './locale/lang';
 import {BROWSER_LANGUAGE} from './locale/detector';
 
+import GmpSettings from './gmpsettings';
+
 const log = logger.getLogger('gmp');
 
-const set = (storage, name, value) => {
-  if (isDefined(value)) {
-    storage.setItem(name, value);
-  }
-  else {
-    storage.removeItem(name);
-  }
-};
-
-class GmpSettings {
-  constructor(storage = localStorage, options = {}) {
-    const {
-      autorefresh,
-      locale,
-      manualurl,
-      protocol = global.location.host,
-      protocoldocurl,
-      server = global.location.host,
-      token,
-      timeout,
-      timezone,
-      username,
-    } = {...options, ...storage};
-    this.storage = storage;
-
-    this.autorefresh = autorefresh;
-    this.locale = locale;
-    this.manualurl = manualurl;
-    this.protocol = protocol;
-    this.protocoldocurl = protocoldocurl;
-    this.server = server;
-    this.token = token;
-    this.timezone = timezone;
-    this.timeout = timeout;
-    this.username = username;
-  }
-
-  set token(value) {
-    set(this.storage, 'token', value);
-  }
-
-  get token() {
-    return this.storage.token;
-  }
-
-  set timeout(value) {
-    set(this.storage, 'timeout', value);
-  }
-
-  get timeout() {
-    return this.storage.timeout;
-  }
-
-  set timezone(value) {
-    set(this.storage, 'timezone', value);
-  }
-
-  get timezone() {
-    return this.storage.timezone;
-  }
-
-  set username(value) {
-    set(this.storage, 'username', value);
-  }
-
-  get username() {
-    return this.storage.username;
-  }
-
-  set locale(value) {
-    set(this.storage, 'locale', value);
-  }
-
-  get locale() {
-    return this.storage.locale;
-  }
-}
 
 class Gmp {
 
@@ -162,7 +87,7 @@ class Gmp {
       autorefresh,
       protocol,
       server,
-      storage = localStorage,
+      storage,
       manualurl,
       protocoldocurl,
       timeout,
