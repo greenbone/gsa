@@ -37,7 +37,7 @@ class GmpSettings {
       autorefresh,
       locale,
       manualurl,
-      protocol = global.location.host,
+      protocol = global.location.protocol,
       protocoldocurl,
       server = global.location.host,
       token,
