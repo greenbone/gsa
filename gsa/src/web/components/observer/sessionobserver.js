@@ -28,7 +28,7 @@ import {withRouter} from 'react-router-dom';
 
 import Logger from 'gmp/log';
 
-import {setSessionTimeout} from 'web/store/usersettings/actions';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -61,23 +61,15 @@ class SessionObserver extends React.Component {
   componentDidMount() {
     // init session timeout in store
     // this is necessary for page reloads
-    this.renewSession();
+    this.props.renewSessionTimeout();
   }
 
   componentDidUpdate() {
     if (this.state.locationHasChanged) {
       log.debug('Location has changed. Renewing session.');
 
-      this.renewSession();
+      this.props.renewSessionTimeout();
     }
-  }
-
-  renewSession() {
-    const {gmp} = this.props;
-
-    gmp.user.renewSession().then(response => {
-      this.props.setSessionTimeout(response.data);
-    });
   }
 
   render() {
@@ -88,13 +80,15 @@ class SessionObserver extends React.Component {
 SessionObserver.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   location: PropTypes.object.isRequired,
-  setSessionTimeout: PropTypes.func.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
 };
 
 export default compose(
   withGmp,
   withRouter,
-  connect(undefined, {setSessionTimeout}),
+  connect(undefined, (dispatch, {gmp}) => ({
+    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
+  })),
 )(SessionObserver);
 
 // vim: set ts=2 sw=2 tw=80:
