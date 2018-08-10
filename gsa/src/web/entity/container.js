@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {withRouter} from 'react-router-dom';
 
 import logger from 'gmp/log';
@@ -31,15 +33,17 @@ import CancelToken from 'gmp/cancel';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../utils/compose.js';
-import PropTypes from '../utils/proptypes.js';
-import withGmp from '../utils/withGmp.js';
+import withDownload from 'web/components/form/withDownload';
 
-import withDownload from '../components/form/withDownload.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import withDialogNotification from '../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import TagsHandler from './tagshandler.js';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
+
+import TagsHandler from './tagshandler';
 
 const log = logger.getLogger('web.entity.container');
 
@@ -192,6 +196,7 @@ class EntityContainer extends React.Component {
 
   handleChanged() {
     this.reload();
+    this.props.renewSessionTimeout();
   }
 
   getRefreshInterval() {
@@ -289,6 +294,7 @@ EntityContainer.propTypes = {
   loaders: PropTypes.array,
   match: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
   resourceType: PropTypes.string,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -300,6 +306,9 @@ export default compose(
   withDialogNotification,
   withDownload,
   withRouter,
+  connect(undefined, (dispatch, {gmp}) => ({
+    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
+  }))
 )(EntityContainer);
 
 // vim: set ts=2 sw=2 tw=80:
