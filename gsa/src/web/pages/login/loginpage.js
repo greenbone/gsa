@@ -139,7 +139,7 @@ class LoginPage extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // reset token
     const {gmp} = this.props;
     gmp.clearToken();
