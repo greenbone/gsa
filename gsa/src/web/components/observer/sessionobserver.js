@@ -36,6 +36,9 @@ import withGmp from 'web/utils/withGmp';
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
+const locationChanged = (loc, prevLoc) =>
+  loc.pathname !== prevLoc.pathname || loc.search !== prevLoc.search;
+
 class SessionObserver extends React.Component {
 
   constructor(...args) {
@@ -47,7 +50,7 @@ class SessionObserver extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.location !== state.location) {
+    if (locationChanged(props.location, state.location)) {
       return {
         location: props.location,
         locationHasChanged: true,
