@@ -49,6 +49,7 @@ import SortBy from '../components/sortby/sortby.js';
 import TagDialog from '../pages/tags/dialog.js';
 
 import TagsDialog from './tagsdialog.js';
+import {debounce} from 'gmp/utils/event.js';
 
 const log = logger.getLogger('web.entities.container');
 
@@ -105,6 +106,8 @@ class EntitiesContainer extends React.Component {
     this.closeTagDialog = this.closeTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
     this.closeTagsDialog = this.closeTagsDialog.bind(this);
+
+    this.renewSession = debounce(this.renewSession.bind(this), 500);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -142,6 +145,10 @@ class EntitiesContainer extends React.Component {
 
   componentWillUnmount() {
     this.clearTimer(); // remove possible running timer
+  }
+
+  renewSession() {
+    this.props.renewSessionTimeout();
   }
 
   load(filter) {
@@ -195,6 +202,7 @@ class EntitiesContainer extends React.Component {
   handleChanged() {
     this.reload();
     this.notifyChanged();
+    this.renewSession();
   }
 
   handleSelectionTypeChange(selectionType) {
@@ -208,6 +216,7 @@ class EntitiesContainer extends React.Component {
     }
 
     this.setState({selectionType, selected});
+    this.renewSession();
   }
 
   handleDownloadBulk(filename = 'export.xml') {
@@ -232,6 +241,8 @@ class EntitiesContainer extends React.Component {
     else {
       promise = entitiesCommand.exportByFilter(loadedFilter.all());
     }
+
+    this.renewSession();
 
     promise.then(response => {
       const {data} = response;
@@ -260,6 +271,8 @@ class EntitiesContainer extends React.Component {
       promise = entitiesCommand.deleteByFilter(loadedFilter.all());
     }
 
+    this.renewSession();
+
     promise.then(deleted => {
       this.reload();
       log.debug('successfully deleted entities', deleted);
@@ -272,6 +285,8 @@ class EntitiesContainer extends React.Component {
     selected.add(entity);
 
     this.setState({selected});
+
+    this.renewSession();
   }
 
   handleDeselected(entity) {
@@ -280,6 +295,8 @@ class EntitiesContainer extends React.Component {
     selected.delete(entity);
 
     this.setState({selected});
+
+    this.renewSession();
   }
 
   handleSortChange(field) {
@@ -296,7 +313,7 @@ class EntitiesContainer extends React.Component {
 
     filter.set(sort, field);
 
-    this.load(filter);
+    this.changeFilter(filter);
   }
 
   handleError(error) {
@@ -305,22 +322,27 @@ class EntitiesContainer extends React.Component {
     showError(error);
   }
 
+  changeFilter(filter) {
+    this.load(filter);
+    this.renewSession();
+  }
+
   handleFirst() {
     const {loadedFilter: filter} = this.props;
 
-    this.load(filter.first());
+    this.changeFilter(filter.first());
   }
 
   handleNext() {
     const {loadedFilter: filter} = this.props;
 
-    this.load(filter.next());
+    this.changeFilter(filter.next());
   }
 
   handlePrevious() {
     const {loadedFilter: filter} = this.props;
 
-    this.load(filter.previous());
+    this.changeFilter(filter.previous());
   }
 
   handleLast() {
@@ -329,19 +351,19 @@ class EntitiesContainer extends React.Component {
     const last = Math.floor((counts.filtered - 1) / counts.rows) *
       counts.rows + 1;
 
-    this.load(filter.first(last));
+    this.changeFilter(filter.first(last));
   }
 
   handleFilterCreated(filter) {
-    this.load(filter);
+    this.changeFilter(filter);
   }
 
   handleFilterChanged(filter) {
-    this.load(filter);
+    this.changeFilter(filter);
   }
 
   handleFilterRemoved() {
-    this.load(RESET_FILTER);
+    this.changeFilter(RESET_FILTER);
   }
 
   handleFilterReset() {
@@ -353,20 +375,24 @@ class EntitiesContainer extends React.Component {
 
     history.push({pathname: location.pathname, query});
 
-    this.load();
+    this.changeFilter();
   }
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
+    this.renewSession();
   }
 
   closeTagDialog() {
     this.setState({tagDialogVisible: false});
+    this.renewSession();
   }
 
   handleCreateTag(data) {
     const {gmp} = this.props;
     const {tags} = this.state;
+
+    this.renewSession();
 
     return gmp.tag.create(data)
       .then(response => gmp.tag.get(response.data))
@@ -383,6 +409,8 @@ class EntitiesContainer extends React.Component {
 
   handleTagChange(id) {
     const {gmp} = this.props;
+
+    this.renewSession();
 
     gmp.tag.get({id}).then(response => {
       this.setState({
@@ -422,6 +450,8 @@ class EntitiesContainer extends React.Component {
       filter = loadedFilter.all();
     }
 
+    this.renewSession();
+
     return gmp.tag.save({
       active: YES_VALUE,
       comment,
@@ -441,10 +471,12 @@ class EntitiesContainer extends React.Component {
       tagsDialogVisible: true,
       multiTagEntitiesCount: this.getMultiTagEntitiesCount(),
     });
+    this.renewSession();
   }
 
   closeTagsDialog() {
     this.setState({tagsDialogVisible: false});
+    this.renewSession();
   }
 
   getTagsByType() {
@@ -611,6 +643,7 @@ EntitiesContainer.propTypes = {
   loadEntities: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
