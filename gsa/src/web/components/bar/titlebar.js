@@ -36,12 +36,12 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
+import UserLink from 'web/components/link/userlink';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
-import withUsername from 'web/utils/withUserName';
 
 const TITLE_BAR_HEIGHT = '42px';
 
@@ -52,8 +52,6 @@ const LogoutLink = styled.a`
     color: ${Theme.darkGray};
   };
 `;
-
-const UserLink = LogoutLink.withComponent(Link);
 
 const GreenboneIcon = styled(GBIcon)`
   width: 40px;
@@ -121,12 +119,8 @@ class Titlebar extends React.Component {
     });
   }
 
-
   render() {
-    const {
-      gmp,
-      username,
-    } = this.props;
+    const {gmp} = this.props;
     return (
       <React.Fragment>
         <TitlebarPlaceholder/>
@@ -141,9 +135,7 @@ class Titlebar extends React.Component {
               </Link>
               <Divider>
                 <span>{_('Logged in as ')}</span>
-                <UserLink to="usersettings">
-                  <b>{username}</b>
-                </UserLink>
+                <UserLink/>
                 <span> | </span>
                 <LogoutLink onClick={this.handleLogout}>
                   {_('Logout')}
@@ -161,13 +153,11 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
-  username: PropTypes.string,
 };
 
 export default compose(
   withGmp,
   withRouter,
-  withUsername,
 )(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:
