@@ -177,8 +177,8 @@ class EntitiesContainer extends React.Component {
 
   startTimer() {
     const refresh = this.getRefreshInterval();
-    if (refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh);
+    if (refresh > 0) {
+      this.timer = global.setTimeout(this.handleTimer, refresh);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
         refresh, 'milliseconds');
     }
@@ -187,7 +187,7 @@ class EntitiesContainer extends React.Component {
   clearTimer() {
     if (isDefined(this.timer)) {
       log.debug('Clearing reload timer with id', this.timer);
-      window.clearTimeout(this.timer);
+      global.clearTimeout(this.timer);
     }
   }
 
