@@ -51,6 +51,7 @@ import NewIcon from '../icon/newicon';
 import Icon from '../icon/icon';
 
 import {getDisplay} from './registry';
+import {renewSessionTimeout} from 'web/store/usersettings/actions.js';
 
 export class DashboardControls extends React.Component {
 
@@ -74,14 +75,17 @@ export class DashboardControls extends React.Component {
     } = this.props;
 
     onResetClick(dashboardId);
+    this.renewSession();
   }
 
   handleNewClick() {
     this.setState({showNewDialog: true});
+    this.renewSession();
   }
 
   handleNewDialoClose() {
     this.setState({showNewDialog: false});
+    this.renewSession();
   }
 
   handleNewDisplay({displayId}) {
@@ -92,7 +96,13 @@ export class DashboardControls extends React.Component {
 
     if (isDefined(onNewDisplay)) {
       onNewDisplay(dashboardId, displayId);
+
+      this.renewSession();
     }
+  }
+
+  renewSession() {
+    this.props.renewSessionTimeout();
   }
 
   render() {
@@ -160,6 +170,7 @@ DashboardControls.propTypes = {
   canAdd: PropTypes.bool.isRequired,
   dashboardId: PropTypes.id.isRequired,
   displayIds: PropTypes.arrayOf(PropTypes.string),
+  renewSessionTimeout: PropTypes.func.isRequired,
   onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
 };
@@ -174,9 +185,10 @@ const mapStateToProps = (rootState, {dashboardId}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onResetClick: (...args) => dispatch(resetSettings(ownProps)(...args)),
-  onNewDisplay: (...args) => dispatch(addDisplay(ownProps)(...args)),
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onResetClick: (...args) => dispatch(resetSettings({gmp})(...args)),
+  onNewDisplay: (...args) => dispatch(addDisplay({gmp})(...args)),
+  renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
 });
 
 export default compose(
