@@ -130,19 +130,21 @@ class Gmp {
       const {
         token,
         timezone,
-        i18n,
+        locale,
+        sessionTimeout,
       } = login;
 
       this.settings.username = username;
       this.settings.timezone = timezone;
       this.settings.token = token;
-      this.settings.locale = i18n;
+      this.settings.locale = locale;
 
       return {
-        locale: i18n === BROWSER_LANGUAGE ? undefined : i18n,
+        locale: locale === BROWSER_LANGUAGE ? undefined : locale,
         username,
         token,
         timezone,
+        sessionTimeout,
       };
     });
   }

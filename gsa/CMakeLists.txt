@@ -281,6 +281,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/link/manuallink.js
      ${GSA_SRC_DIR}/src/web/components/link/protocoldoclink.js
      ${GSA_SRC_DIR}/src/web/components/link/target.js
+     ${GSA_SRC_DIR}/src/web/components/link/userlink.js
      ${GSA_SRC_DIR}/src/web/components/menu/iconmenu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menu.js
      ${GSA_SRC_DIR}/src/web/components/menu/menuentry.js
@@ -289,6 +290,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/notification/dialognotification.js
      ${GSA_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${GSA_SRC_DIR}/src/web/components/observer/localeobserver.js
+     ${GSA_SRC_DIR}/src/web/components/observer/sessionobserver.js
      ${GSA_SRC_DIR}/src/web/components/pagination/pagination.js
      ${GSA_SRC_DIR}/src/web/components/panel/infopanel.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js

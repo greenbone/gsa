@@ -604,6 +604,9 @@ char * export_assets_gmp (gvm_connection_t *, credentials_t *, params_t *,
 char * get_assets_chart_gmp (gvm_connection_t *, credentials_t *,
                              params_t *, cmd_response_data_t*);
 
+char * renew_session_gmp (gvm_connection_t *, credentials_t *,
+                          params_t *, cmd_response_data_t*);
+
 int login (http_connection_t *con, params_t *params,
            cmd_response_data_t *response_data, const char *client_address);
 

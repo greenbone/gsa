@@ -48,7 +48,11 @@ import Layout from 'web/components/layout/layout';
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
-import {updateTimezone, setUsername} from 'web/store/usersettings/actions';
+import {
+  setSessionTimeout,
+  setUsername,
+  updateTimezone,
+} from 'web/store/usersettings/actions';
 
 import LoginForm from './loginform';
 
@@ -113,6 +117,7 @@ class LoginPage extends React.Component {
       const {
         locale,
         timezone,
+        sessionTimeout,
       } = data;
 
       const {location, history} = this.props;
@@ -126,6 +131,7 @@ class LoginPage extends React.Component {
 
       this.props.setTimezone(timezone);
       this.props.setLocale(locale);
+      this.props.setSessionTimeout(sessionTimeout);
       this.props.setUsername(username);
     }, rej => {
       log.error(rej);
@@ -133,7 +139,7 @@ class LoginPage extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // reset token
     const {gmp} = this.props;
     gmp.clearToken();
@@ -176,6 +182,7 @@ LoginPage.propTypes = {
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   setLocale: PropTypes.func.isRequired,
+  setSessionTimeout: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
   setUsername: PropTypes.func.isRequired,
 };
@@ -183,6 +190,7 @@ LoginPage.propTypes = {
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
   setLocale: locale => gmp.setLocale(locale),
+  setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
   setUsername: username => dispatch(setUsername(username)),
 });
 

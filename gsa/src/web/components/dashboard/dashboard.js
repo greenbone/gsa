@@ -56,6 +56,7 @@ import withGmp from '../../utils/withGmp';
 import compose from '../../utils/compose';
 
 import {getDisplay} from './registry';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -108,6 +109,7 @@ export class Dashboard extends React.Component {
     maxItemsPerRow: PropTypes.number,
     maxRows: PropTypes.number,
     permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
+    renewSessionTimeout: PropTypes.func.isRequired,
     saveSettings: PropTypes.func.isRequired,
     onFilterChanged: PropTypes.func,
   }
@@ -178,6 +180,7 @@ export class Dashboard extends React.Component {
     const {id} = this.props;
 
     this.props.saveSettings(id, {rows: items});
+    this.props.renewSessionTimeout();
   }
 
   render() {
@@ -265,11 +268,12 @@ const mapStateToProps = (rootState, {id}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) =>
-    dispatch(loadSettings(ownProps)(id, defaults)),
+    dispatch(loadSettings({gmp})(id, defaults)),
   saveSettings: (id, settings) =>
-    dispatch(saveSettings(ownProps)(id, settings)),
+    dispatch(saveSettings({gmp})(id, settings)),
+  renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
 });
 
 export default compose(

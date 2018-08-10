@@ -20,8 +20,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {setTimezone, setLocale, setUsername} from '../actions';
-import {timezone, locale, username} from '../reducers';
+import {
+  setLocale,
+  setSessionTimeout,
+  setTimezone,
+  setUsername,
+} from '../actions';
+import {
+  locale,
+  sessionTimeout,
+  timezone,
+  username,
+} from '../reducers';
 
 describe('settings reducers tests', () => {
 
@@ -73,6 +83,23 @@ describe('settings reducers tests', () => {
     test('should override username in state', () => {
       const action = setUsername('foo');
       expect(username('bar', action)).toEqual('foo');
+    });
+  });
+
+  describe('sessionTimeout reducer tests', () => {
+
+    test('should create initial state', () => {
+      expect(sessionTimeout(undefined, {})).toBeUndefined();
+    });
+
+    test('should reduce username action', () => {
+      const action = setSessionTimeout('1234');
+      expect(sessionTimeout(undefined, action)).toEqual('1234');
+    });
+
+    test('should override username in state', () => {
+      const action = setSessionTimeout('1234');
+      expect(sessionTimeout('54321', action)).toEqual('1234');
     });
   });
 });

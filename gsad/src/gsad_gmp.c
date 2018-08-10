@@ -441,7 +441,7 @@ filter_exists (gvm_connection_t *connection, const char *filt_id)
  *
  * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
- * @param[in]  params         HTTP request params
+ * @param[in]  params         HTTP request params (UNUSED)
  * @param[in]  xml            XML string.  Freed before exit.
  * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
@@ -453,11 +453,9 @@ envelope_gmp (gvm_connection_t *connection,
               cmd_response_data_t *response_data)
 {
   time_t now;
-  gchar *res, *name;
+  gchar *res;
   GString *string;
   char ctime_now[200];
-  params_iterator_t iter;
-  param_t *param;
   struct timeval tv;
 
   assert (credentials);
@@ -479,6 +477,7 @@ envelope_gmp (gvm_connection_t *connection,
                                  "<time>%s</time>"
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
+                                 "<session>%ld</session>"
                                  "<role>%s</role>"
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
@@ -491,6 +490,7 @@ envelope_gmp (gvm_connection_t *connection,
                                  ctime_now,
                                  timezone ? timezone : "",
                                  user_get_username (user),
+                                 user_get_session_timeout (user),
                                  user_get_role (user),
                                  user_get_severity (user),
                                  credentials_get_language (credentials),
@@ -511,40 +511,6 @@ envelope_gmp (gvm_connection_t *connection,
       g_string_append (string, warning_elem);
       g_free (warning_elem);
     }
-
-  g_string_append (string, "<params>");
-  params_iterator_init (&iter, params);
-  while (params_iterator_next (&iter, &name, &param))
-    {
-      if (name && strcmp (name, ""))
-        {
-          if ((name[strlen (name) - 1] == ':') && param->values)
-            {
-              gchar *child_name;
-              params_iterator_t children_iter;
-              param_t *child_param;
-
-              params_iterator_init (&children_iter, param->values);
-              while (params_iterator_next (&children_iter, &child_name,
-                                           &child_param))
-                if (child_param->value
-                    && child_param->valid
-                    && child_param->valid_utf8)
-                  xml_string_append (string,
-                                     "<_param>"
-                                     "<name>%s%s</name><value>%s</value>"
-                                     "</_param>",
-                                     name, child_name, child_param->value);
-            }
-
-          if (param->value && param->valid && param->valid_utf8
-              && strcmp (name, "xml_file") && strcmp (name, "installer"))
-            xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
-        }
-      else
-        g_warning ("%s: Param without name found", __FUNCTION__);
-    }
-  g_string_append (string, "</params>");
 
   g_string_append_printf (string,
                           "<capabilities>%s</capabilities>"
@@ -23869,6 +23835,24 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   return html;
 }
 
+char *
+renew_session_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                   params_t *params, cmd_response_data_t* response_data)
+{
+  gchar * html;
+  gchar * message;
+  user_t * user = credentials_get_user (credentials);
+
+  user_renew_session (user);
+  session_add_user (user_get_token(user), user);
+
+  message = g_strdup_printf ("%ld", user_get_session_timeout (user));
+
+  html = action_result (connection, credentials, params, response_data,
+                        "renew_session", message, NULL, NULL);
+  g_free (message);
+  return html;
+}
 
 
 /* Manager communication. */
@@ -24154,7 +24138,8 @@ login (http_connection_t *con,
 
           credentials = credentials_new (user, language);
 
-          char *data = envelope_gmp (NULL, credentials, params, g_strdup(""), response_data);
+          gchar *data = envelope_gmp (NULL, credentials, params, NULL,
+                                      response_data);
 
           ret = handler_create_response (con, data, response_data,
                                          user_get_cookie(user));

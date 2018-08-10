@@ -470,6 +470,7 @@ init_validator ()
                          "|(move_task)"
                          "|(new_alert)"
                          "|(new_task)"
+                         "|(renew_session)"
                          "|(report_alert)"
                          "|(restore)"
                          "|(resume_task)"
@@ -1481,8 +1482,12 @@ exec_gmp_post (http_connection_t *con,
       return handler_create_response (con, res, response_data, NULL);
     }
 
-  /* Handle the usual commands. */
+  /* always renew session for http post */
+  user_renew_session (user);
+  session_add_user (user_get_token(user), user);
 
+  /* Handle the usual commands. */
+  if (0) {}
   ELSE (bulk_delete)
   ELSE (bulk_export)
   ELSE (clone)
@@ -1559,6 +1564,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (import_report)
   ELSE (import_report_format)
   ELSE (move_task)
+  ELSE (renew_session)
   ELSE (report_alert)
   ELSE (restore)
   ELSE (resume_task)

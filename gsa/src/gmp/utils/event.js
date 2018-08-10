@@ -46,8 +46,8 @@ export const KeyCode = {
  * Group multiple sequential calls in a single one
  *
  * @param {Function} func      Function to call
- * @param {Number}   wait      Wait time until no more calls to the wrapper
- *                             function are fired
+ * @param {Number}   wait      Wait time in ms until no more calls to the
+ *                             wrapper function are fired
  * @param {Boolean}  immediate Call func initially
  *
  * @returns {Function} Wrapper function

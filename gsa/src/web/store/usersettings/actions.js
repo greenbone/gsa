@@ -24,6 +24,8 @@
 export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
 export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
+export const USER_SETTINGS_SET_SESSION_TIMEOUT =
+  'USER_SETTINGS_SET_SESSION_TIMEOUT';
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
@@ -39,6 +41,15 @@ export const setUsername = username => ({
   type: USER_SETTINGS_SET_USERNAME,
   username,
 });
+
+export const setSessionTimeout = timeout => ({
+  type: USER_SETTINGS_SET_SESSION_TIMEOUT,
+  timeout,
+});
+
+export const renewSessionTimeout = ({gmp}) => dispatch =>
+  gmp.user.renewSession().then(response =>
+    dispatch(setSessionTimeout(response.data)));
 
 export const updateTimezone = ({
   gmp,

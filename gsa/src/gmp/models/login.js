@@ -20,19 +20,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {parseInt} from 'gmp/parser';
+
+import moment from 'gmp/models/date';
+
+import {isDefined} from 'gmp/utils/identity';
 
 class Login {
 
   constructor(elem) {
-    this.client_address = elem.client_address;
+    this.clientAddress = elem.client_address;
     this.guest = elem.guest;
-    this.i18n = elem.i18n;
+    this.locale = elem.i18n;
     this.role = elem.role;
     this.severity = elem.severity;
     this.timezone = elem.timezone;
     this.token = elem.token;
-    this.vendor_version = elem.vendor_version;
+    this.vendorVersion = elem.vendor_version;
     this.version = elem.version;
+
+    const unixSeconds = parseInt(elem.session);
+
+    this.sessionTimeout = isDefined(unixSeconds) ?
+      moment.unix(unixSeconds) : undefined;
   }
 }
 

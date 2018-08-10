@@ -232,6 +232,12 @@ user_get_guest (user_t *user)
   return user->guest;
 }
 
+const time_t
+user_get_session_timeout (user_t *user)
+{
+  return user->time + (get_session_timeout () * 60);
+}
+
 /**
  * @brief Set timezone of user.
  *
@@ -434,15 +440,13 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
         }
 
       /* Verify that the user address matches the client's address. */
-      else if (!str_equal (address, user->address))
+      else if (address == NULL || !str_equal (address, user->address))
         {
           user_free (user);
           return USER_IP_ADDRESS_MISSMATCH;
         }
       else
         {
-          // renew session time
-          user_renew_session (user);
           session_add_user (user->token, user);
 
           *user_return = user;

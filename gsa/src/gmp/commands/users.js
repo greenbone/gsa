@@ -29,12 +29,17 @@ import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
 
 import Capabilities from '../capabilities/capabilities';
+
+import moment from '../models/date';
+
 import User, {
   AUTH_METHOD_LDAP,
   AUTH_METHOD_NEW_PASSWORD,
   AUTH_METHOD_RADIUS,
 } from '../models/user';
 import Settings from '../models/settings';
+
+import {parseInt} from '../parser';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -258,6 +263,17 @@ class UserCommand extends EntityCommand {
       'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.secInfoFilter,
       /* eslint-enable max-len */
       auto_cache_rebuild: data.autoCacheRebuild,
+    });
+  }
+
+  renewSession() {
+    return this.httpPost({
+      cmd: 'renew_session',
+    }).then(response => {
+      const {data} = response;
+      const {action_result} = data;
+      const seconds = parseInt(action_result.message);
+      return response.setData(moment.unix(seconds));
     });
   }
 

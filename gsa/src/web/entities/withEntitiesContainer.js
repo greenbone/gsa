@@ -24,18 +24,20 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import getPage from 'web/store/pages/selectors';
+import {isDefined} from 'gmp/utils/identity';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
-
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import EntitiesContainer from './container';
+import getPage from 'web/store/pages/selectors';
 import {pageFilter} from 'web/store/pages/actions';
-import {isDefined} from 'gmp/utils/identity';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
+
+import EntitiesContainer from './container';
 
 const withEntitiesContainer = (gmpname, {
   entitiesSelector,
@@ -76,6 +78,7 @@ const withEntitiesContainer = (gmpname, {
   const mapDispatchToProps = (dispatch, {gmp}) => ({
     loadEntities: filter => dispatch(loadEntities({gmp, filter})),
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
+    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
   });
 
   EntitiesContainerWrapper = compose(

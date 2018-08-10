@@ -20,12 +20,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import moment from 'gmp/models/date';
+
 import {
   setLocale,
+  setSessionTimeout,
   setTimezone,
   setUsername,
+  renewSessionTimeout,
   updateTimezone,
   USER_SETTINGS_SET_LOCALE,
+  USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_TIMEZONE,
   USER_SETTINGS_SET_USERNAME,
 } from '../actions';
@@ -53,6 +58,13 @@ describe('settings actions tests', () => {
     });
   });
 
+  test('should create a setSessionTimeout action', () => {
+    expect(setSessionTimeout('12345')).toEqual({
+      type: USER_SETTINGS_SET_SESSION_TIMEOUT,
+      timeout: '12345',
+    });
+  });
+
   test('should update timezone', () => {
     const dispatch = jest.fn();
     const gmp = {
@@ -64,6 +76,28 @@ describe('settings actions tests', () => {
         timezone: 'cet',
       });
       expect(gmp.setTimezone).toBeCalledWith('cet');
+    });
+  });
+
+  test('should renew the session timeout', () => {
+    const dispatch = jest.fn();
+    const sessionTimeout = moment().add(1, 'day');
+
+    const renewSession = jest.fn().mockReturnValue(Promise.resolve({
+      data: sessionTimeout,
+    }));
+
+    const gmp = {
+      user: {
+        renewSession,
+      },
+    };
+    return renewSessionTimeout({gmp})(dispatch).then(() => {
+      expect(dispatch).toBeCalledWith({
+        type: USER_SETTINGS_SET_SESSION_TIMEOUT,
+        timeout: sessionTimeout,
+      });
+      expect(renewSession).toBeCalled();
     });
   });
 
