@@ -65,11 +65,11 @@ class Authorized extends React.Component {
   toLoginPage() {
     const {gmp, history} = this.props;
 
-    gmp.logout();
-
     history.replace('/login', {
       next: this.props.location.pathname,
     });
+
+    gmp.logout();
   }
 
   render() {
