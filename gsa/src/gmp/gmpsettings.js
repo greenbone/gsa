@@ -67,14 +67,6 @@ class GmpSettings {
     return this.storage.token;
   }
 
-  set timeout(value) {
-    set(this.storage, 'timeout', value);
-  }
-
-  get timeout() {
-    return this.storage.timeout;
-  }
-
   set timezone(value) {
     set(this.storage, 'timezone', value);
   }
