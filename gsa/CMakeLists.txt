@@ -101,6 +101,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/users.js
      ${GSA_SRC_DIR}/src/gmp/commands/vulns.js
      ${GSA_SRC_DIR}/src/gmp/gmp.js
+     ${GSA_SRC_DIR}/src/gmp/gmpsettings.js
      ${GSA_SRC_DIR}/src/gmp/http/gmp.js
      ${GSA_SRC_DIR}/src/gmp/http/http.js
      ${GSA_SRC_DIR}/src/gmp/http/rejection.js
