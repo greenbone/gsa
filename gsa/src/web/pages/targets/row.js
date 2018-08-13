@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -32,7 +33,9 @@ import PropTypes from 'web/utils/proptypes';
 import {renderComponent} from 'web/utils/render';
 
 import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
+import {withEntityRow} from 'web/entities/row';
+
+import EntityNameTableData from 'web/entities/entitynametabledata.js';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -135,14 +138,13 @@ const Row = ({
 }) => {
   return (
     <TableRow>
-      <TableData>
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
-          {entity.name}
-        </RowDetailsToggle>
-      </TableData>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="target"
+        displayName={_('Target')}
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
       <TableData>
         {shorten(entity.hosts.join(', '), 500)}
       </TableData>
