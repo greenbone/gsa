@@ -138,8 +138,7 @@ class TagComponent extends React.Component {
           resourceType,
           value,
         } = response.data;
-        const filter = 'rows=0 tag_id="' + id; /* rows=0 is needed, as otherwise
-          the default filter will be applied (rows=10) */
+        const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
         gmp[pluralizeType(resourceType)].get({filter})
           .then(resp => {
             const resources = resp.data;
@@ -156,7 +155,7 @@ class TagComponent extends React.Component {
                 first(resource_types, [])[0],
               resource_types,
               resources_action:
-                resourceCount < SELECT_MAX_RESOURCES ? undefined : 'add',
+                resourceCount <= SELECT_MAX_RESOURCES ? undefined : 'add',
               title: _('Edit Tag {{name}}', {name: shorten(name)}),
               value,
               ...options,
