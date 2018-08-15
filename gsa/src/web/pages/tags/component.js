@@ -33,16 +33,16 @@ import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose';
-import withGmp from '../../utils/withGmp.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import TagDialog from './dialog.js';
+import TagDialog from 'web/apges/tags/dialog';
 
 const TYPES = [
   'agent',
