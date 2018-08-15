@@ -51,6 +51,8 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 
 import Layout from 'web/components/layout/layout';
 
+import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
+
 const Divider = glamorous.div({
   margin: '0 5px',
 });
@@ -191,6 +193,7 @@ class TagDialog extends React.Component {
       comment = '',
       fixed = false,
       name = _('default:unnamed'),
+      resourceCount,
       resource_types = [],
       title = _('New Tag'),
       value = '',
@@ -213,6 +216,7 @@ class TagDialog extends React.Component {
     };
 
     const typeIsChosen = isDefined(this.state.resourceType);
+    const showResourceSelection = resourceCount < SELECT_MAX_RESOURCES;
 
     const controlledData = {
       resource_ids: this.state.resourceIdsSelected,
@@ -265,39 +269,48 @@ class TagDialog extends React.Component {
                 />
               </FormGroup>
 
-              <FormGroup title={_('Resource Type')}>
-                <Select
-                  name="resource_type"
-                  items={resourceTypesOptions}
-                  value={this.state.resourceType}
-                  disabled={fixed || resourceTypesOptions.length === 0}
-                  onChange={type => this.handleResourceTypeChange(
-                    type, onValueChange)}
-                />
-              </FormGroup>
-
-              <FormGroup title={_('Resources')}>
-                <ScrollableContent>
-                  <MultiSelect
-                    name="resource_ids"
-                    items={renderSelectItems(this.state.resourceOptions)}
-                    value={this.state.resourceIdsSelected}
-                    disabled={!typeIsChosen || fixed ||
-                      resourceTypesOptions.length === 0}
-                    onChange={ids => this.handleIdChange(ids, onValueChange)}
+              {showResourceSelection &&
+                <FormGroup title={_('Resource Type')}>
+                  <Select
+                    name="resource_type"
+                    items={resourceTypesOptions}
+                    value={this.state.resourceType}
+                    disabled={fixed || resourceTypesOptions.length === 0}
+                    onChange={type => this.handleResourceTypeChange(
+                      type, onValueChange)}
                   />
-                </ScrollableContent>
-                <Divider>
-                  {_('or add by ID:')}
-                </Divider>
-                <TextField
-                  name="resource_id_text"
-                  value={this.state.resourceIdText}
-                  grow="1"
-                  disabled={!typeIsChosen || fixed}
-                  onChange={id => this.handleIdChangeByText(id, onValueChange)}
-                />
-              </FormGroup>
+                </FormGroup>
+              }
+              {showResourceSelection &&
+                <FormGroup title={_('Resources')}>
+                  <ScrollableContent>
+                    <MultiSelect
+                      name="resource_ids"
+                      items={renderSelectItems(this.state.resourceOptions)}
+                      value={this.state.resourceIdsSelected}
+                      disabled={!typeIsChosen || fixed ||
+                        resourceTypesOptions.length === 0}
+                      onChange={ids => this.handleIdChange(ids, onValueChange)}
+                    />
+                  </ScrollableContent>
+                  <Divider>
+                    {_('or add by ID:')}
+                  </Divider>
+                  <TextField
+                    name="resource_id_text"
+                    value={this.state.resourceIdText}
+                    grow="1"
+                    disabled={!typeIsChosen || fixed}
+                    onChange={id =>
+                      this.handleIdChangeByText(id, onValueChange)}
+                  />
+                </FormGroup>
+              }
+              {!showResourceSelection &&
+                <FormGroup title={_('Resources')}>
+                  <span>{_('Too many resources to list.')}</span>
+                </FormGroup>
+              }
               <FormGroup title={_('Active')}>
                 <YesNoRadio
                   name="active"
@@ -320,6 +333,7 @@ TagDialog.propTypes = {
   fixed: PropTypes.bool,
   gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string,
+  resourceCount: PropTypes.number.isRequired,
   resource_ids: PropTypes.arrayOf(PropTypes.id),
   resource_type: PropTypes.string,
   resource_types: PropTypes.array.isRequired,
