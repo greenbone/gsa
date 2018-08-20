@@ -146,7 +146,9 @@ class PortListComponent extends React.Component {
       onImported,
       onImportError,
     } = this.props;
-    return gmp.portlist.import(data).then(onImported, onImportError);
+    return gmp.portlist.import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeImportDialog());
   }
 
   handleSavePortList(save, data) {
@@ -174,7 +176,9 @@ class PortListComponent extends React.Component {
           .filter(prange => prange !== range)
       )
     )];
-    return Promise.all(promises).then(() => save(data));
+    return Promise.all(promises)
+      .then(() => save(data))
+      .then(() => this.closePortListDialog());
   }
 
   handleTmpAddPortRange(values) {
@@ -234,6 +238,7 @@ class PortListComponent extends React.Component {
         newRange,
       ],
     });
+    this.closeNewPortRangeDialog();
   }
 
   handleTmpDeletePortRange(port_range) {
