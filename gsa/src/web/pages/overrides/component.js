@@ -264,7 +264,7 @@ class OverrideComponent extends React.Component {
                 text={text}
                 title={title}
                 onClose={this.closeOverrideDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeOverrideDialog())}
                 {...initial}
               />
             }
