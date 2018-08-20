@@ -199,6 +199,7 @@ class TargetComponent extends React.Component {
         const {data: credential} = response;
 
         credential_id = credential.id;
+        this.closeCredentialsDialog();
         return this.loadCredentials();
       })
       .then(credentials => {
@@ -217,6 +218,7 @@ class TargetComponent extends React.Component {
       .then(response => {
         const {data: portlist} = response;
         port_list_id = portlist.id;
+        this.closePortListDialog();
         return this.loadPortLists();
       })
       .then(port_lists => {
@@ -346,7 +348,7 @@ class TargetComponent extends React.Component {
                 onSshCredentialChange={this.handleSshCredentialChange}
                 onEsxiCredentialChange={this.handleEsxiCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeTargetDialog())}
               />
             }
             {credentialsDialogVisible &&
