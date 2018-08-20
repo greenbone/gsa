@@ -32,14 +32,14 @@ import {
   ALL_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import CredentialsDialog from './dialog.js';
+import CredentialsDialog from './dialog';
 
 class CredentialsComponent extends React.Component {
 
