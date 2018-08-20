@@ -47,7 +47,6 @@ class SaveDialogContent extends React.Component {
     };
 
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
   }
 
@@ -67,28 +66,14 @@ class SaveDialogContent extends React.Component {
       const promise = onSave(state);
       if (isDefined(promise)) {
         this.setState({loading: true});
-        promise.then(
-          () => this.handleClose(),
-          error => this.setError(error)
-        );
-      }
-      else {
-        this.handleClose();
+
+        promise.catch(error => this.setError(error));
       }
     }
   }
 
   handleErrorClose() {
     this.setState({error: undefined});
-  }
-
-  handleClose() {
-    const {close} = this.props;
-    this.setState({
-      error: undefined,
-      loading: false,
-    });
-    close();
   }
 
   setError(error) {
@@ -102,6 +87,7 @@ class SaveDialogContent extends React.Component {
     const {
       buttonTitle,
       children,
+      close,
       defaultValues,
       moveProps,
       heightProps,
@@ -122,7 +108,7 @@ class SaveDialogContent extends React.Component {
             <DialogContent>
               <DialogTitle
                 title={title}
-                onCloseClick={this.handleClose}
+                onCloseClick={close}
                 {...moveProps}
               />
               {error &&
