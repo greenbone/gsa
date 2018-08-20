@@ -75,6 +75,7 @@ if (GETTEXT_FOUND)
     MAKE_TRANSLATION (ru)
     MAKE_TRANSLATION (tr)
     MAKE_TRANSLATION (zh_CN)
+    MAKE_TRANSLATION (ja)
 
     # Installed files
     add_custom_target (gettext-mo
@@ -86,6 +87,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ru/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tr/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh_CN/gsad_xsl.mo
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ja/gsad_xsl.mo
                        COMMENT "Created translation .mo files")
 
     add_custom_target (gettext-json
@@ -97,6 +99,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-tr.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ja.json
                        COMMENT "Created translation .json files")
 
     # Merged .po files
@@ -114,6 +117,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ru-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-tr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ja-merged.po
                        COMMENT "Merged translation .po files for JS")
 
     add_custom_target (gettext-xsl-merge
@@ -125,6 +129,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ru-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-tr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ja-merged.po
                        COMMENT "Merged translation .po files for XSL")
 
     # Template (.pot) files
