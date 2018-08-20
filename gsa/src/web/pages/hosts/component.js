@@ -173,7 +173,7 @@ class HostComponent extends React.Component {
                 host={host}
                 title={title}
                 onClose={this.closeHostDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeHostDialog())}
               />
             }
           </Wrapper>
