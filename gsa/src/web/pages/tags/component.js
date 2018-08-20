@@ -29,20 +29,23 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose';
-import withGmp from '../../utils/withGmp.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import TagDialog from './dialog.js';
+import TagDialog from 'web/pages/tags/dialog';
+
+export const SELECT_MAX_RESOURCES = 200; // concerns items in TagDialog's Select
+export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab
 
 const TYPES = [
   'agent',
@@ -131,26 +134,33 @@ class TagComponent extends React.Component {
           comment,
           id,
           name,
-          resources,
-          resource_type,
+          resourceCount,
+          resourceType,
           value,
         } = response.data;
-
-        this.setState({
-          active,
-          comment,
-          dialogVisible: true,
-          id,
-          name,
-          resource_ids: resources.map(res => res.id),
-          resource_type: isDefined(resource_type) ?
-            resource_type :
-            first(resource_types, [])[0],
-          resource_types,
-          title: _('Edit Tag {{name}}', {name: shorten(name)}),
-          value,
-          ...options,
-        });
+        const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
+        gmp[pluralizeType(resourceType)].get({filter})
+          .then(resp => {
+            const resources = resp.data;
+            this.setState({
+              active,
+              comment,
+              dialogVisible: true,
+              id,
+              name,
+              resourceCount,
+              resource_ids: resources.map(res => res.id),
+              resource_type: isDefined(resourceType) ?
+                resourceType :
+                first(resource_types, [])[0],
+              resource_types,
+              resources_action:
+                resourceCount <= SELECT_MAX_RESOURCES ? undefined : 'add',
+              title: _('Edit Tag {{name}}', {name: shorten(name)}),
+              value,
+              ...options,
+            });
+          });
       });
     }
     else {
@@ -158,6 +168,7 @@ class TagComponent extends React.Component {
         active: undefined,
         comment: undefined,
         name: undefined,
+        resourceCount: 0,
         resource_ids: [],
         resource_type: undefined,
         resource_types,
@@ -214,6 +225,7 @@ class TagComponent extends React.Component {
       resource_ids,
       resource_type,
       resource_types = [],
+      resourceCount,
       dialogVisible,
       title,
       value,
@@ -257,6 +269,7 @@ class TagComponent extends React.Component {
                 resource_ids={resource_ids}
                 resource_type={resource_type}
                 resource_types={resource_types}
+                resourceCount={resourceCount}
                 title={title}
                 value={value}
                 onClose={this.closeTagDialog}

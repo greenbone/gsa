@@ -40,7 +40,7 @@ import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
 import Loading from 'web/components/loading/loading';
 
-const MAX_RESOURCES = 40;
+import {MAX_RESOURCES} from 'web/pages/tags/component';
 
 const Spacer = styled.div`
   height: 12px,
