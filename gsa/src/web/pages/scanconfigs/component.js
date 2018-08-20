@@ -150,31 +150,39 @@ class ScanConfigComponent extends React.Component {
 
   handleImportConfig(data) {
     const {gmp, onImported, onImportError} = this.props;
-    return gmp.scanconfig.import(data).then(onImported, onImportError);
+    return gmp.scanconfig.import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeImportDialog());
   }
 
   handleSaveConfigFamily(data) {
     const {gmp} = this.props;
-    return gmp.scanconfig.saveScanConfigFamily(data).then(() => {
-      return this.loadEditScanConfigSettings(data.config);
-    }).then(state => this.setState({...state}));
+    return gmp.scanconfig.saveScanConfigFamily(data)
+      .then(() => {
+        return this.loadEditScanConfigSettings(data.config);
+      })
+      .then(state => {
+        this.closeEditConfigFamilyDialog();
+        this.setState({...state});
+      });
   }
 
   handleSaveConfigNvt(values) {
     const {gmp} = this.props;
-    return gmp.scanconfig.saveScanConfigNvt(values).then(response => {
+    return gmp.scanconfig.saveScanConfigNvt(values)
+      .then(response => {
+        // update nvt timeouts in nvt family dialog
+        this.loadEditScanConfigFamilySettings(
+          values.config, values.family_name).then(state => {
+            this.setState({state});
+          });
 
-      // update nvt timeouts in nvt family dialog
-      this.loadEditScanConfigFamilySettings(
-        values.config, values.family_name).then(state => {
+        // update nvt preference values in edit dialog
+        this.loadEditScanConfigSettings(values.config).then(state => {
           this.setState({state});
         });
-
-      // update nvt preference values in edit dialog
-      this.loadEditScanConfigSettings(values.config).then(state => {
-        this.setState({state});
-      });
-    });
+      })
+      .then(() => this.closeEditNvtDetailsDialog());
   }
 
   loadScanners(dialog) {
@@ -389,7 +397,8 @@ class ScanConfigComponent extends React.Component {
                   scanner_id={scanner_id}
                   scanners={scanners}
                   onClose={this.closeCreateConfigDialog}
-                  onSave={save}
+                  onSave={
+                    d => save(d).then(() => this.closeCreateConfigDialog())}
                 />
               }
               {editConfigDialogVisible &&
@@ -408,7 +417,7 @@ class ScanConfigComponent extends React.Component {
                   onClose={this.closeEditConfigDialog}
                   onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={save}
+                  onSave={d => save(d).then(() => this.closeEditConfigDialog())}
                 />
               }
             </Wrapper>
