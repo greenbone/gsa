@@ -219,7 +219,7 @@ class NoteComponent extends React.Component {
                 text={text}
                 title={title}
                 onClose={this.closeNoteDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeNoteDialog())}
                 {...initial}
               />
             }
