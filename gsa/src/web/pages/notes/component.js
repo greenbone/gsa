@@ -45,8 +45,6 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import NoteDialog from './dialog';
@@ -194,7 +192,7 @@ class NoteComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCreateNoteDialog,
@@ -223,7 +221,7 @@ class NoteComponent extends React.Component {
                 {...initial}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
