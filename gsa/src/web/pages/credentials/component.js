@@ -162,7 +162,7 @@ class CredentialsComponent extends React.Component {
                 {...dialogProps}
                 visible={dialogVisible}
                 onClose={this.closeCredentialDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeCredentialDialog())}
               />
             }
           </Wrapper>
