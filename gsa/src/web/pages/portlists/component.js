@@ -34,8 +34,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
@@ -302,7 +300,7 @@ class PortListComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openPortListDialog,
@@ -337,7 +335,7 @@ class PortListComponent extends React.Component {
                 onSave={this.handleTmpAddPortRange}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
