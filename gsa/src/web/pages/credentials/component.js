@@ -35,8 +35,6 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import CredentialsDialog from './dialog';
@@ -149,7 +147,7 @@ class CredentialsComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCredentialsDialog,
@@ -165,7 +163,7 @@ class CredentialsComponent extends React.Component {
                 onSave={d => save(d).then(() => this.closeCredentialDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
