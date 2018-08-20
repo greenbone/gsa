@@ -61,6 +61,7 @@ if (GETTEXT_FOUND)
     MAKE_TRANSLATION (ru)
     MAKE_TRANSLATION (tr)
     MAKE_TRANSLATION (zh_CN)
+    MAKE_TRANSLATION (ja)
 
     # Installed files
     add_custom_target (gettext-json
@@ -72,6 +73,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${GSA_LOCALE_DIR}/gsa-ru.json
                        DEPENDS ${GSA_LOCALE_DIR}/gsa-tr.json
                        DEPENDS ${GSA_LOCALE_DIR}/gsa-zh_CN.json
+                       DEPENDS ${GSA_LOCALE_DIR}/gsa-ja.json
                        COMMENT "Created translation .json files")
 
     # Merged .po files
@@ -88,6 +90,7 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-ru-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-tr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-zh_CN-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsa-ja-merged.po
                        COMMENT "Merged translation .po files for JS")
 
     # Template (.pot) files
