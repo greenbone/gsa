@@ -332,7 +332,7 @@ const TargetDialog = ({
                     onChange={onPortListChange}
                   />
                   {!state.in_use &&
-                    <Layout box flex>
+                    <Layout>
                       <NewIcon
                         title={_('Create a new port list')}
                         onClick={onNewPortListClick}
