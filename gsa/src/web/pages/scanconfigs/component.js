@@ -30,22 +30,22 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty, shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser.js';
+import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner.js';
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import EditConfigFamilyDialog from './editconfigfamilydialog.js';
-import EditScanConfigDialog from './editdialog.js';
-import EditNvtDetailsDialog from './editnvtdetailsdialog.js';
-import ImportDialog from './importdialog.js';
-import ScanConfigDialog from './dialog.js';
+import EditConfigFamilyDialog from './editconfigfamilydialog';
+import EditScanConfigDialog from './editdialog';
+import EditNvtDetailsDialog from './editnvtdetailsdialog';
+import ImportDialog from './importdialog';
+import ScanConfigDialog from './dialog';
 
 class ScanConfigComponent extends React.Component {
 
