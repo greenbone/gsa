@@ -45,21 +45,21 @@ import {
   ACTIVE_YES_UNTIL_VALUE,
 } from 'gmp/models/override';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
   HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
-} from '../../utils/severity';
+} from 'web/utils/severity';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import OverrideDialog from './dialog.js';
+import OverrideDialog from './dialog';
 
 const SEVERITIES_LIST = [
   HIGH_VALUE,
