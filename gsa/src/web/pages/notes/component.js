@@ -26,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {hasId} from 'gmp/utils/id';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
@@ -41,15 +42,14 @@ import {
   ANY,
 } from 'gmp/models/override';
 
-import PropTypes from '../../utils/proptypes';
-import withGmp from '../../utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component';
+import EntityComponent from 'web/entity/component';
 
 import NoteDialog from './dialog';
-import {hasId} from 'gmp/utils/id';
 
 class NoteComponent extends React.Component {
 
