@@ -55,8 +55,6 @@ import {
   LOW_VALUE,
 } from 'web/utils/severity';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import OverrideDialog from './dialog';
@@ -234,7 +232,7 @@ class OverrideComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCreateOverrideDialog,
@@ -268,7 +266,7 @@ class OverrideComponent extends React.Component {
                 {...initial}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
