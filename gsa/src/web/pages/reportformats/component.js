@@ -109,11 +109,15 @@ class ReportFormatComponent extends React.Component {
     const {gmp} = this.props;
     if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
-      return gmp.reportformat.save(data).then(onSaved, onSaveError);
+      return gmp.reportformat.save(data)
+        .then(onSaved, onSaveError)
+        .then(() => this.closeReportFormatDialog());
     }
 
     const {onImported, onImportError} = this.props;
-    return gmp.reportformat.import(data).then(onImported, onImportError);
+    return gmp.reportformat.import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeReportFormatDialog());
   }
 
   render() {
