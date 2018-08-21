@@ -138,7 +138,7 @@ class AgentComponent extends React.Component {
                 agent={agent}
                 title={title}
                 onClose={this.closeAgentDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeAgentDialog())}
               />
             }
           </React.Fragment>
