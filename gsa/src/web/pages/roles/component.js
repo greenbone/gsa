@@ -49,7 +49,7 @@ class RoleComponent extends React.Component {
     this.handleCreateSuperPermission =
       this.handleCreateSuperPermission.bind(this);
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
-    this.handleErrorWasSent = this.handleErrorWasSent.bind(this);
+    this.handleErrorClose = this.handleErrorClose.bind(this);
 
     this.closeRoleDialog = this.closeRoleDialog.bind(this);
     this.openRoleDialog = this.openRoleDialog.bind(this);
@@ -132,8 +132,12 @@ class RoleComponent extends React.Component {
       .delete({id: permission_id}), role_id);
   }
 
-  handleErrorWasSent() {
+  handleErrorClose() {
     this.setState({error: undefined});
+  }
+
+  setError(error) {
+    this.setState({error: error.message});
   }
 
   loadSettings(promise, role_id) {
@@ -149,7 +153,7 @@ class RoleComponent extends React.Component {
           permission_name: first(settings.all_permissions).name,
         });
       }).catch(error => {
-        this.setState({error});
+        this.setError(error);
       });
   }
 
@@ -210,18 +214,19 @@ class RoleComponent extends React.Component {
                 all_users={allUsers}
                 all_groups={allGroups}
                 all_permissions={allPermissions}
-                externalError={error}
+                error={error}
                 group_id={groupId}
                 permission_name={permissionName}
                 permissions={permissions}
                 role={role}
                 title={title}
                 onClose={this.closeRoleDialog}
-                onSave={d => save(d).then(() => this.closeRoleDialog())}
+                onSave={d => save(d).then(() => this.closeRoleDialog())
+                  .catch(e => this.setError(e))}
                 onCreatePermission={this.handleCreatePermission}
                 onCreateSuperPermission={this.handleCreateSuperPermission}
                 onDeletePermission={this.handleDeletePermission}
-                onExternalErrorSet={this.handleErrorWasSent}
+                onErrorClose={this.handleErrorClose}
               />
             }
           </React.Fragment>
