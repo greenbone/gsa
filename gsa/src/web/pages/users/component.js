@@ -176,7 +176,7 @@ class UserComponent extends React.Component {
                 title={title}
                 user={user}
                 onClose={this.closeUserDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeUserDialog())}
               />
             }
           </React.Fragment>
