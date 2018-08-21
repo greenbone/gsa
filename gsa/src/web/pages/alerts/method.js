@@ -156,12 +156,12 @@ const Method = ({
     if (isDefined(data.scp_path)) {
       url += ':' + data.scp_path.value;
     }
-    return _('SCP to {{url}}', {url});
+    return _('SCP to {{- url}}', {url});
   }
 
   if (method.type === METHOD_TYPE_SEND) {
     url += method.data.send_host.value + ':' + method.data.send_port.value;
-    return _('Send to {{url}}', {url});
+    return _('Send to {{- url}}', {url});
   }
 
   if (method.type === METHOD_TYPE_SYSLOG &&
@@ -304,7 +304,7 @@ const Method = ({
     const {data = {}} = method;
 
     if (isDefined(data.URL) && isDefined(data.URL.value)) {
-      return _('HTTP GET request to URL {{url}}', {url: data.URL.value});
+      return _('HTTP GET request to URL {{- url}}', {url: data.URL.value});
     }
 
     return _('HTTP GET request');
