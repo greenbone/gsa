@@ -68,7 +68,11 @@ import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
 import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
 import TaskWizard from 'web/wizard/taskwizard';
 
-import TaskDialogContainer from './dialogcontainer';
+import ScheduleComponent from '../schedules/component.js';
+import AlertComponent from '../alerts/component.js';
+import TargetComponent from '../targets/component';
+
+import TaskDialog from './dialog.js';
 import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.tasks.component');
@@ -138,10 +142,30 @@ class TaskComponent extends React.Component {
     this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
     this.handleCloseTaskWizard = this.handleCloseTaskWizard.bind(this);
+
+    this.handleAlertsChange = this.handleAlertsChange.bind(this);
+    this.handleTargetChange = this.handleTargetChange.bind(this);
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
+
+    this.handleAlertCreated = this.handleAlertCreated.bind(this);
+    this.handleTargetCreated = this.handleTargetCreated.bind(this);
+    this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
   }
 
   renewSession() {
     this.props.renewSessionTimeout();
+  }
+
+  handleTargetChange(target_id) {
+    this.setState({target_id});
+  }
+
+  handleAlertsChange(alert_ids) {
+    this.setState({alert_ids});
+  }
+
+  handleScheduleChange(schedule_id) {
+    this.setState({schedule_id});
   }
 
   handleTaskStart(task) {
@@ -165,6 +189,45 @@ class TaskComponent extends React.Component {
   handleTaskWizardNewClick() {
     this.openTaskDialog();
     this.closeTaskWizard();
+  }
+
+  handleAlertCreated(resp) {
+    const {data} = resp;
+    const {alert_ids} = this.state;
+
+    const {gmp} = this.props;
+    gmp.alerts.getAll().then(response => {
+      const {data: alerts} = response;
+
+      this.setState({alerts, alert_ids: [...alert_ids, data.id]});
+    });
+  }
+
+  handleScheduleCreated(resp) {
+    const {data} = resp;
+    const {gmp} = this.props;
+
+    return gmp.schedules.getAll().then(response => {
+      const {data: schedules} = response;
+
+      this.setState({
+        schedules,
+        schedule_id: data.id,
+      });
+    });
+  }
+
+  handleTargetCreated(resp) {
+    const {data} = resp;
+    const {gmp} = this.props;
+
+    gmp.targets.getAll().then(reponse => {
+      const {data: alltargets} = reponse;
+
+      log.debug('adding target to task dialog', alltargets, data.id);
+
+      this.setState({targets: alltargets, target_id: data.id});
+    });
   }
 
   openContainerTaskDialog(task) {
@@ -238,9 +301,11 @@ class TaskComponent extends React.Component {
 
         const sorted_scan_configs = sort_scan_configs(scan_configs);
 
-        const schedule_id = capabilities.mayAccess('schedules') &&
-          isDefined(task.schedule) ?
-            task.schedule.id : UNSET_VALUE;
+        const canAccessSchedules = capabilities.mayAccess('schedules') &&
+          isDefined(task.schedule);
+        const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
+        const schedule_periods = canAccessSchedules ? task.schedule_periods :
+          undefined;
 
         const data = {};
         if (task.isChangeable()) {
@@ -283,11 +348,11 @@ class TaskComponent extends React.Component {
           scan_configs: sorted_scan_configs,
           scanners,
           schedule_id,
+          schedule_periods,
           schedules,
           source_iface: task.source_iface,
           targets,
           task,
-          ...data,
           title: _('Edit Task {{name}}', task),
         });
       });
@@ -343,6 +408,7 @@ class TaskComponent extends React.Component {
           scanners,
           scanner_id,
           schedule_id,
+          schedule_periods: undefined,
           schedules,
           source_iface: undefined,
           tag_id: first(tags).id,
@@ -561,8 +627,11 @@ class TaskComponent extends React.Component {
       credentials,
       esxi_credential,
       hosts,
+      hosts_ordering,
       id,
       in_assets,
+      max_checks,
+      max_hosts,
       min_qod,
       modifyTaskWizardVisible,
       name,
@@ -571,17 +640,21 @@ class TaskComponent extends React.Component {
       reschedule,
       scan_configs,
       scanner_id,
-      scanner_type,
       scanners,
       schedule_id,
+      schedule_periods,
       schedules,
       slave_id,
+      source_iface,
       ssh_credential,
       smb_credential,
       start_date,
       start_minute,
       start_hour,
       start_timezone,
+      tag_id,
+      tags,
+      target_id,
       target_hosts,
       targets,
       task_id,
@@ -591,7 +664,6 @@ class TaskComponent extends React.Component {
       taskDialogVisible,
       taskWizardVisible,
       title = _('Edit Task {{name}}', task),
-      ...data
     } = this.state;
 
     return (
@@ -629,32 +701,66 @@ class TaskComponent extends React.Component {
               })}
 
               {taskDialogVisible &&
-                <TaskDialogContainer
-                  alert_ids={alert_ids}
-                  alerts={alerts}
-                  alterable={alterable}
-                  apply_overrides={apply_overrides}
-                  auto_delete={auto_delete}
-                  auto_delete_data={auto_delete_data}
-                  comment={comment}
-                  config_id={config_id}
-                  id={id}
-                  in_assets={in_assets}
-                  min_qod={min_qod}
-                  name={name}
-                  scan_configs={scan_configs}
-                  scanner_type={scanner_type}
-                  scanners={scanners}
-                  scanner_id={scanner_id}
-                  schedule_id={schedule_id}
-                  schedules={schedules}
-                  targets={targets}
-                  task={task}
-                  title={title}
-                  {...data}
-                  onClose={this.handleCloseTaskDialog}
-                  onSave={d => save(d).then(() => this.closeTaskDialog())}
-                />
+                <TargetComponent
+                  onCreated={this.handleTargetCreated}
+                >
+                  {({create: createtarget}) => (
+                    <AlertComponent
+                      onCreated={this.handleAlertCreated}
+                    >
+                      {({
+                        create: createalert,
+                      }) => (
+                        <ScheduleComponent
+                          onCreated={this.handleScheduleCreated}
+                        >
+                          {({
+                            create: createschedule,
+                          }) => (
+                            <TaskDialog
+                              alerts={alerts}
+                              alert_ids={alert_ids}
+                              alterable={alterable}
+                              apply_overrides={apply_overrides}
+                              auto_delete={auto_delete}
+                              auto_delete_data={auto_delete_data}
+                              comment={comment}
+                              config_id={config_id}
+                              hosts_ordering={hosts_ordering}
+                              in_assets={in_assets}
+                              max_checks={max_checks}
+                              max_hosts={max_hosts}
+                              min_qod={min_qod}
+                              name={name}
+                              scan_configs={scan_configs}
+                              scanner_id={scanner_id}
+                              scanners={scanners}
+                              schedule_id={schedule_id}
+                              schedule_periods={schedule_periods}
+                              schedules={schedules}
+                              source_iface={source_iface}
+                              tag_id={tag_id}
+                              tags={tags}
+                              target_id={target_id}
+                              targets={targets}
+                              task={task}
+                              title={title}
+                              onAlertsChange={this.handleAlertsChange}
+                              onNewAlertClick={createalert}
+                              onNewTargetClick={createtarget}
+                              onNewScheduleClick={createschedule}
+                              onScheduleChange={this.handleScheduleChange}
+                              onTargetChange={this.handleTargetChange}
+                              onClose={this.handleCloseTaskDialog}
+                              onSave={d => save(d).then(
+                                () => this.closeTaskDialog())}
+                            />
+                          )}
+                        </ScheduleComponent>
+                      )}
+                    </AlertComponent>
+                  )}
+                </TargetComponent>
               }
             </Wrapper>
           )}
