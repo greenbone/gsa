@@ -38,16 +38,16 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import Wrapper from 'web/components/layout/wrapper';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import CredentialsDialog from '../credentials/dialog.js';
+import CredentialsDialog from '../credentials/dialog';
 
-import ScannerDialog from './dialog.js';
+import ScannerDialog from './dialog';
 
 class ScannerComponent extends React.Component {
 
