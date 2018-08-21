@@ -38,8 +38,6 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import TagDialog from 'web/pages/tags/dialog';
@@ -250,7 +248,7 @@ class TagComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               add: this.handleAddTag,
@@ -277,7 +275,7 @@ class TagComponent extends React.Component {
                 {...options}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
