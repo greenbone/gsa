@@ -32,8 +32,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import ReportFormatDialog from './dialog';
 
 class ReportFormatComponent extends React.Component {
@@ -146,7 +144,7 @@ class ReportFormatComponent extends React.Component {
         onDownloadError={onDownloadError}
       >
         {other => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               import: this.openReportFormatDialog,
@@ -161,7 +159,7 @@ class ReportFormatComponent extends React.Component {
                 onSave={this.handleSave}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
