@@ -25,6 +25,7 @@ import _ from 'gmp/locale';
 import {isDefined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
+import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
@@ -94,7 +95,7 @@ export const isActive = status => status === TASK_STATUS.running ||
 
 class Task extends Model {
 
-  static entity_type = 'task';
+  static entityType = 'task';
 
   isActive() {
     return isActive(this.status);
@@ -167,11 +168,10 @@ class Task extends Model {
     ];
     models.forEach(item => {
       const name = item;
-      const model = Model;
 
       const data = elem[name];
       if (isDefined(data) && !isEmpty(data._id)) {
-        elem[name] = new model(data, name);
+        elem[name] = new Model(data, normalizeType(name));
       }
       else {
         delete elem[name];

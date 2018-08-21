@@ -81,7 +81,7 @@ export const CERTIFICATE_STATUS_EXPIRED = 'expired';
 
 class Credential extends Model {
 
-  static entity_type = 'credential';
+  static entityType = 'credential';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

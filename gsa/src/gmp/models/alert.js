@@ -82,7 +82,7 @@ const create_values = data => {
 
 class Alert extends Model {
 
-  static entity_type = 'alert';
+  static entityType = 'alert';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

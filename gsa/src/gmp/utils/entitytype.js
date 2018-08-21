@@ -24,16 +24,7 @@ import _ from '../locale';
 
 import {isDefined} from './identity';
 
-export const getEntityType = (model = {}) => {
-  const {entity_type: entityType} = model;
-  if (entityType === 'info' && isDefined(model.info_type)) {
-    return model.info_type;
-  }
-  if (entityType === 'asset' && isDefined(model.asset_type)) {
-    return model.asset_type;
-  }
-  return entityType;
-};
+export const getEntityType = (model = {}) => model.entityType;
 
 export const pluralizeType = type => type[type.length - 1] === 's' ||
   type === 'info' ? type : type + 's';

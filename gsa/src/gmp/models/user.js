@@ -38,7 +38,7 @@ export const ACCESS_DENY_ALL = '1';
 
 class User extends Model {
 
-  static entity_type = 'user';
+  static entityType = 'user';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

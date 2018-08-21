@@ -32,7 +32,7 @@ import ReportReport from './report/report';
 
 class Report extends Model {
 
-  static entity_type = 'report';
+  static entityType = 'report';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);
@@ -53,7 +53,7 @@ class Report extends Model {
       copy.report = new ReportReport(report);
     }
 
-    copy.report_format = new Model(report_format, 'report_format');
+    copy.report_format = new Model(report_format, 'reportformat');
     copy.task = new Model(task, 'task');
 
     if (isDefined(severity)) {

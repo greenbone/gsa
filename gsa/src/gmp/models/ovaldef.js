@@ -74,7 +74,7 @@ class Criteria {
 
 class Ovaldef extends Info {
 
-  static info_type = 'ovaldef';
+  static entityType = 'ovaldef';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'ovaldef');

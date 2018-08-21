@@ -29,7 +29,7 @@ import Info from './info';
 
 class DfnCertAdv extends Info {
 
-  static info_type = 'dfn_cert_adv';
+  static entityType = 'dfncert';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'dfn_cert_adv');

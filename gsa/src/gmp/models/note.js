@@ -42,7 +42,7 @@ export const NOTE_INACTIVE_VALUE = '-1';
 
 class Note extends Model {
 
-  static entity_type = 'note';
+  static entityType = 'note';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

@@ -25,7 +25,7 @@ import {parseCsv} from '../parser';
 import Model from '../model';
 
 class Role extends Model {
-  static entity_type = 'role';
+  static entityType = 'role';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

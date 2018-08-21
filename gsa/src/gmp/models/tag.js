@@ -28,10 +28,11 @@ import Model from '../model';
 
 class Tag extends Model {
 
-  static entity_type = 'tag';
+  static entityType = 'tag';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
+
     if (isDefined(elem.resources)) {
       ret.resourceType = normalizeType(elem.resources.type);
       ret.resourceCount = elem.resources.count.total;

@@ -28,7 +28,7 @@ import Model from '../model';
 import {parseInt} from '../parser';
 
 class PortRange extends Model {
-  static entity_type = 'port_range';
+  static entityType = 'portrange';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
@@ -39,10 +39,11 @@ class PortRange extends Model {
 
 class PortList extends Model {
 
-  static entity_type = 'port_list';
+  static entityType = 'portlist';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
+
     const ranges = isDefined(ret.port_ranges) ?
       ret.port_ranges.port_range : [];
 

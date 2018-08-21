@@ -33,7 +33,7 @@ describe('getEntityType function tests', () => {
   });
 
   test('should return entity type of object', () => {
-    const model = {entity_type: 'foo'};
+    const model = {entityType: 'foo'};
 
     expect(getEntityType(model)).toEqual('foo');
   });

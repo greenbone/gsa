@@ -45,7 +45,7 @@ export const parse_count = count => {
 
 class ScanConfig extends Model {
 
-  static entity_type = 'config'; // TODO should be scan_config in future
+  static entityType = 'scanconfig';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

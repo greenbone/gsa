@@ -28,7 +28,7 @@ import Model from '../model';
 
 class Permission extends Model {
 
-  static entity_type = 'permission';
+  static entityType = 'permission';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

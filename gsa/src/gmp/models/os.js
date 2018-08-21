@@ -25,7 +25,7 @@ import {parseSeverity} from '../parser';
 
 class OperatingSystem extends Asset {
 
-  static asset_type = 'os';
+  static entityType = 'operatingsystem';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

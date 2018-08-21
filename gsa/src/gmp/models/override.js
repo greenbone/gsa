@@ -57,7 +57,7 @@ export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
 
-  static entity_type = 'override';
+  static entityType = 'override';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

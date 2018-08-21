@@ -39,7 +39,7 @@ export const TARGET_CREDENTIAL_NAMES = [
 
 class Target extends Model {
 
-  static entity_type = 'target';
+  static entityType = 'target';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

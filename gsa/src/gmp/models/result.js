@@ -52,7 +52,7 @@ export class Delta {
 
 class Result extends Model {
 
-  static entity_type = 'result';
+  static entityType = 'result';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);

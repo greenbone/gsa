@@ -31,7 +31,7 @@ import {parseSeverity} from '../parser';
 
 class Cpe extends Info {
 
-  static info_type = 'cpe';
+  static entityType = 'cpe';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cpe');

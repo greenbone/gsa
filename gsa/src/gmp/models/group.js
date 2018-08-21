@@ -26,7 +26,7 @@ import Model from '../model';
 
 class Group extends Model {
 
-  static entity_type = 'group';
+  static entityType = 'group';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

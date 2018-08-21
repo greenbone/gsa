@@ -54,7 +54,7 @@ const rename_props = (obj, rename = {}) => {
 
 class Cve extends Info {
 
-  static info_type = 'cve';
+  static entityType = 'cve';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cve');

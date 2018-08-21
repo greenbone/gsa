@@ -64,7 +64,7 @@ class Param {
 
 class ReportFormat extends Model {
 
-  static entity_type = 'report_format';
+  static entityType = 'reportformat';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

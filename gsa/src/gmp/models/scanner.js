@@ -76,7 +76,7 @@ const parse_scanner_info = (info = {}) => {
 
 class Scanner extends Model {
 
-  static entity_type = 'scanner';
+  static entityType = 'scanner';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
@@ -121,7 +121,7 @@ class Scanner extends Model {
     }
     else {
       ret.configs = map(ret.configs.config,
-        config => new Model(config, 'config'));
+        config => new Model(config, 'scanconfig'));
     }
 
     if (isDefined(ret.info)) {
