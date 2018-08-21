@@ -127,6 +127,7 @@ class AlertComponent extends React.Component {
     gmp.credential.create(credentialdata)
       .then(response => {
         credential_id = response.data.id;
+        this.closeCredentialDialog();
       })
       .then(() => gmp.credentials.getAll())
       .then(response => {
@@ -675,7 +676,7 @@ class AlertComponent extends React.Component {
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeAlertDialog())}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
