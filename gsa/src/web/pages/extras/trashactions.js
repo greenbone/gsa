@@ -36,7 +36,7 @@ import TableData from 'web/components/table/data';
 
 import PropTypes from 'web/utils/proptypes';
 
-const check_by_type = {
+const getRestorableDeletableForEntityType = {
   agent: entity => {
     return {restorable: true, deletable: true};
   },
@@ -123,14 +123,14 @@ const check_by_type = {
 
 const isAbleToRestoreAndDelete = entity => {
   const entityType = getEntityType(entity);
-  const canRestoreAndDelete = check_by_type[entityType];
+  const canRestoreAndDelete = getRestorableDeletableForEntityType[entityType];
 
   return isDefined(canRestoreAndDelete) ?
     canRestoreAndDelete(entity) :
     {restorable: false, deletable: false};
 };
 
-const get_restore_delete_props = (
+const getRestoreDeleteProps = (
   entity,
   onEntityRestore,
   onEntityDelete,
@@ -172,7 +172,7 @@ const TrashActions = ({
   onEntityRestore,
 }) => {
   const {restoreprops, deleteprops} =
-    get_restore_delete_props(entity, onEntityRestore, onEntityDelete);
+    getRestoreDeleteProps(entity, onEntityRestore, onEntityDelete);
   return (
     <TableData>
       <IconDivider
