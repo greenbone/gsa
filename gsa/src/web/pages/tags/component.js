@@ -271,7 +271,7 @@ class TagComponent extends React.Component {
                 title={title}
                 value={value}
                 onClose={this.closeTagDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeTagDialog())}
                 {...options}
               />
             }
