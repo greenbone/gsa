@@ -26,9 +26,9 @@ import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parseFloat, parseSeverity} from '../parser.js';
+import {parseFloat, parseSeverity} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 export const TAG_NA = 'N/A';
 

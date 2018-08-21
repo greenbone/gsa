@@ -20,13 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import Model from '../model.js';
-
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
-import {parseInt} from '../parser.js';
+import Model from '../model';
+
+import {parseInt} from '../parser';
 
 class PortRange extends Model {
   static entity_type = 'port_range';

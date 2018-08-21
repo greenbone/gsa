@@ -28,9 +28,9 @@ import {
 } from '../utils/array';
 import {isEmpty} from '../utils/string';
 
-import {parseInt} from '../parser.js';
+import {parseInt} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =

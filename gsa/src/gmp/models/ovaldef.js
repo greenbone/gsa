@@ -28,7 +28,7 @@ import {isEmpty} from '../utils/string';
 
 import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 class Criteria {
 

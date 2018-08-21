@@ -24,7 +24,7 @@
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model.js';
+import Model from '../model';
 
 class Permission extends Model {
 

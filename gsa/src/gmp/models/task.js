@@ -33,13 +33,13 @@ import {
   parseDuration,
   NO_VALUE,
   YES_VALUE,
-} from '../parser.js';
+} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Report from './report.js';
-import Schedule from './schedule.js';
-import Scanner from './scanner.js';
+import Report from './report';
+import Schedule from './schedule';
+import Scanner from './scanner';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';

@@ -31,9 +31,9 @@ import {
   parseCvssBaseVector,
   parseDate,
   setProperties,
-} from '../parser.js';
+} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 const delete_empty = (obj, props) => {
   for (const prop of props) {

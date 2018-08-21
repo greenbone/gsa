@@ -23,9 +23,9 @@
 import {isDefined} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 
-import {parseSeverity} from '../parser.js';
+import {parseSeverity} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 class DfnCertAdv extends Info {
 

@@ -26,7 +26,7 @@ import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Model from '../model.js';
-import {parseCsv} from 'gmp/parser';
+import {parseCsv} from '../parser';
 
 export const AUTH_METHOD_PASSWORD = 'password';
 export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';

@@ -26,11 +26,11 @@ import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parseInt, parseYesNo, parseDate} from '../parser.js';
+import {parseInt, parseYesNo, parseDate} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Credential from './credential.js';
+import Credential from './credential';
 
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;

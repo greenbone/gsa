@@ -30,9 +30,9 @@ import {
   parseSeverity,
   parseYesNo,
   setProperties,
-} from '../parser.js';
+} from '../parser';
 
-import Asset from './asset.js';
+import Asset from './asset';
 
 const get_identifier = (identifiers, name) => identifiers.filter(
   identifier => identifier.name === name)[0];

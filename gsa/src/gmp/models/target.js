@@ -20,16 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import Model from '../model.js';
+import Model from '../model';
 
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parseInt, parseYesNo, parseCsv} from '../parser.js';
+import {parseInt, parseYesNo, parseCsv} from '../parser';
 
-import PortList from './portlist.js';
+import PortList from './portlist';
 
 export const TARGET_CREDENTIAL_NAMES = [
   'smb_credential',

@@ -25,9 +25,9 @@ import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import Info from './info.js';
+import Info from './info';
 
-import {parseSeverity} from '../parser.js';
+import {parseSeverity} from '../parser';
 
 class Cpe extends Info {
 
