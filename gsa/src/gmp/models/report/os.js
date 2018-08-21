@@ -23,7 +23,7 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Asset from 'gmp/models/os.js';
+import Asset from 'gmp/models/os';
 
 class OperatingSystem extends Asset {
 

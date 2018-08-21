@@ -23,9 +23,9 @@
 import {isDefined} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
-import {parseProgress} from '../../parser.js';
+import {parseProgress} from '../../parser';
 
-import Model from '../../model.js';
+import Model from '../../model';
 
 /*
  * Use own task model for reports to avoid cyclic dependencies
