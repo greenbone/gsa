@@ -35,21 +35,20 @@ import {
   typeName,
   pluralizeType,
 } from 'gmp/utils/entitytype';
+import {debounce} from 'gmp/utils/event';
 
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
-import SelectionType from '../utils/selectiontype.js';
+import SortBy from 'web/components/sortby/sortby';
 
-import SortBy from '../components/sortby/sortby.js';
+import TagDialog from 'web/pages/tags/dialog';
 
-import TagDialog from '../pages/tags/dialog.js';
-
-import TagsDialog from './tagsdialog.js';
-import {debounce} from 'gmp/utils/event.js';
+import TagsDialog from './tagsdialog';
 
 const log = logger.getLogger('web.entities.container');
 
