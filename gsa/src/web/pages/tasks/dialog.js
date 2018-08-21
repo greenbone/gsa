@@ -47,7 +47,6 @@ import {
 } from 'gmp/models/scanner';
 
 import {
-  EMPTY_SCAN_CONFIG_ID,
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
@@ -216,10 +215,7 @@ const TaskDialog = ({
     scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
   const openvas_scan_config_items = renderSelectItems(
-    scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
-      // Skip the "empty" config
-      return config.id !== EMPTY_SCAN_CONFIG_ID;
-    }));
+    scan_configs[OPENVAS_SCAN_CONFIG_TYPE]);
 
   const alert_items = renderSelectItems(alerts);
 
