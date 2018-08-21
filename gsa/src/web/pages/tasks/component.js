@@ -41,6 +41,7 @@ import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
   OPENVAS_SCAN_CONFIG_TYPE,
   OSP_SCAN_CONFIG_TYPE,
+  filterEmptyScanConfig,
 } from 'gmp/models/scanconfig';
 
 import {
@@ -72,11 +73,13 @@ import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.tasks.component');
 
-const sort_scan_configs = scan_configs => {
+const sort_scan_configs = (scan_configs = []) => {
   const sorted_scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
     [OSP_SCAN_CONFIG_TYPE]: [],
   };
+
+  scan_configs = scan_configs.filter(filterEmptyScanConfig);
 
   forEach(scan_configs, config => {
     const type = config.scan_config_type;
