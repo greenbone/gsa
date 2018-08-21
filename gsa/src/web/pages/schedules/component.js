@@ -147,7 +147,7 @@ class ScheduleComponent extends React.Component {
               <ScheduleDialog
                 {...dialogProps}
                 onClose={this.closeScheduleDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeScheduleDialog())}
               />
             }
           </React.Fragment>
