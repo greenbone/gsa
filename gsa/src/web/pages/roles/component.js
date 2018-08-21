@@ -33,8 +33,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import RoleDialog from './dialog.js';
 
 class RoleComponent extends React.Component {
@@ -201,7 +199,7 @@ class RoleComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openRoleDialog,
@@ -226,7 +224,7 @@ class RoleComponent extends React.Component {
                 onExternalErrorSet={this.handleErrorWasSent}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
