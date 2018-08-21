@@ -24,7 +24,12 @@ import Model from 'gmp/model';
 import Nvt from 'gmp/models/nvt';
 import Host from 'gmp/models/host';
 
-import {getEntityType, pluralizeType, normalizeType} from '../entitytype';
+import {
+  getEntityType,
+  pluralizeType,
+  normalizeType,
+  apiType,
+} from '../entitytype';
 
 describe('getEntityType function tests', () => {
 
@@ -102,5 +107,30 @@ describe('normalizeType function tests', () => {
 
 });
 
+describe('apiType function tests', () => {
+
+  test('should convert entity types', () => {
+    expect(apiType('operatingsystem')).toEqual('os');
+    expect(apiType('certbund')).toEqual('cert_bund_adv');
+    expect(apiType('dfncert')).toEqual('dfn_cert_adv');
+    expect(apiType('portlist')).toEqual('port_list');
+    expect(apiType('portrange')).toEqual('port_range');
+    expect(apiType('reportformat')).toEqual('report_format');
+    expect(apiType('scanconfig')).toEqual('config');
+    expect(apiType('vulnerability')).toEqual('vuln');
+  });
+
+  test('should pass through already converted types', () => {
+    expect(apiType('task')).toEqual('task');
+    expect(apiType('target')).toEqual('target');
+    expect(apiType('report_format')).toEqual('report_format');
+    expect(apiType('config')).toEqual('config');
+  });
+
+  test('should pass through unkown types', () => {
+    expect(apiType('foo')).toEqual('foo');
+  });
+
+});
 
 // vim: set ts=2 sw=2 tw=80:
