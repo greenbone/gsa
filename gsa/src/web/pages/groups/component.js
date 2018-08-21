@@ -32,8 +32,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import GroupDialog from './dialog';
 
 class GroupComponent extends React.Component {
@@ -120,7 +118,7 @@ class GroupComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openGroupDialog,
@@ -135,7 +133,7 @@ class GroupComponent extends React.Component {
                 onSave={save}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
