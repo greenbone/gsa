@@ -23,10 +23,8 @@
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseSeverity} from 'gmp/parser';
-import Asset from 'gmp/models/asset';
-class App extends Asset {
 
-  static asset_type = 'app';
+class App {
 
   addHost(host) {
     if (!(host.ip in this.hosts.hosts_by_ip)) {
