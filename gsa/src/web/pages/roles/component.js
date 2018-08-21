@@ -217,7 +217,7 @@ class RoleComponent extends React.Component {
                 role={role}
                 title={title}
                 onClose={this.closeRoleDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeRoleDialog())}
                 onCreatePermission={this.handleCreatePermission}
                 onCreateSuperPermission={this.handleCreateSuperPermission}
                 onDeletePermission={this.handleDeletePermission}
