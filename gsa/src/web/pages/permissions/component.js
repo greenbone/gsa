@@ -36,8 +36,6 @@ import PropTypes from 'web/utils/proptypes.js';
 import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from '../../entity/component';
 
 import PermissionDialog from './dialog';
@@ -220,7 +218,7 @@ class PermissionsComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openPermissionDialog,
@@ -247,7 +245,7 @@ class PermissionsComponent extends React.Component {
                 onSave={save}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
