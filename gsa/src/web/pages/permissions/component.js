@@ -242,7 +242,7 @@ class PermissionsComponent extends React.Component {
                 userId={userId}
                 users={users}
                 onClose={this.closePermissionDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closePermissionDialog())}
               />
             }
           </React.Fragment>
