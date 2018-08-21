@@ -41,8 +41,6 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import CredentialsDialog from '../credentials/dialog';
@@ -246,7 +244,7 @@ class ScannerComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openScannerDialog,
@@ -281,7 +279,7 @@ class ScannerComponent extends React.Component {
                 onSave={this.handleCreateCredential}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
