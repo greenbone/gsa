@@ -121,6 +121,14 @@ const check_by_type = {
   },
 };
 
+const isAbleToRestoreAndDelete = entity => {
+  const entityType = getEntityType(entity);
+  const canRestoreAndDelete = check_by_type[entityType];
+
+  return isDefined(canRestoreAndDelete) ?
+    canRestoreAndDelete(entity) :
+    {restorable: false, deletable: false};
+};
 
 const get_restore_delete_props = (
   entity,
@@ -129,9 +137,7 @@ const get_restore_delete_props = (
 ) => {
   let restoreprops;
   let deleteprops;
-  const entityType = getEntityType(entity);
-  const can_restore_and_delete = check_by_type[entityType];
-  const {restorable, deletable} = can_restore_and_delete(entity);
+  const {restorable, deletable} = isAbleToRestoreAndDelete(entity);
 
   if (restorable) {
     restoreprops = {
