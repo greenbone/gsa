@@ -130,7 +130,7 @@ class GroupComponent extends React.Component {
                 group={group}
                 title={title}
                 onClose={this.closeGroupDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeGroupDialog())}
               />
             }
           </React.Fragment>
