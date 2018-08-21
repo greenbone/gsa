@@ -220,7 +220,7 @@ class PortListComponent extends React.Component {
 
     const newRange = {
       end: values.port_range_end,
-      entity_type: 'port_range',
+      entityType: 'portrange',
       id: values.id,
       protocol_type: values.port_type,
       start: values.port_range_start,
