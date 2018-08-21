@@ -32,8 +32,6 @@ import {shorten} from 'gmp/utils/string';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import AgentDialog from './dialog.js';
@@ -127,7 +125,7 @@ class AgentComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openAgentDialog,
@@ -143,7 +141,7 @@ class AgentComponent extends React.Component {
                 onSave={save}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
