@@ -33,7 +33,7 @@ import Model from '../../model';
 
 class ReportTask extends Model {
 
-  static entity_type = 'task';
+  static entityType = 'task';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);

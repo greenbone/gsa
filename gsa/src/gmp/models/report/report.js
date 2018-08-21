@@ -46,7 +46,7 @@ import {
 
 class ReportReport extends Model {
 
-  static entity_type = 'report';
+  static entityType = 'report';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);
