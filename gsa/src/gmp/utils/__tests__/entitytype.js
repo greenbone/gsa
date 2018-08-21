@@ -44,28 +44,16 @@ describe('getEntityType function tests', () => {
     expect(getEntityType(model)).toEqual('foo');
   });
 
-  test('should return info type for info models', () => {
+  test('should return entity type for info models', () => {
     const model = new Nvt({});
 
     expect(getEntityType(model)).toEqual('nvt');
   });
 
-  test('should return asset type for asset models', () => {
+  test('should return entity type for asset models', () => {
     const model = new Host({});
 
     expect(getEntityType(model)).toEqual('host');
-  });
-
-  test('should return info if not info_type is defined', () => {
-    const model = new Model({}, 'info');
-
-    expect(getEntityType(model)).toEqual('info');
-  });
-
-  test('should return asset if not asset_type is defined', () => {
-    const model = new Model({}, 'asset');
-
-    expect(getEntityType(model)).toEqual('asset');
   });
 
 });
