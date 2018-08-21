@@ -160,12 +160,13 @@ class ScannerComponent extends React.Component {
         credential = response.data;
       })
       .then(() => gmp.credentials.getAll())
-      .then(response =>
+      .then(response => {
         this.setState({
           credentials: response.data,
           credential_id: credential.id,
-        })
-      );
+        });
+        this.closeCredentialsDialog();
+      });
   }
 
   handleCredentialChange(credential_id) {
@@ -268,7 +269,7 @@ class ScannerComponent extends React.Component {
                 onClose={this.closeScannerDialog}
                 onCredentialChange={this.handleCredentialChange}
                 onNewCredentialClick={this.openCredentialsDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeScannerDialog())}
                 onScannerTypeChange={this.handleScannerTypeChange}
               />
             }
