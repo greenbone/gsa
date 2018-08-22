@@ -98,22 +98,6 @@ const filterItems = (items, allowed) => items.map(row => {
 
 export class Dashboard extends React.Component {
 
-  static propTypes = {
-    defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-    error: PropTypes.toString,
-    filter: PropTypes.filter,
-    id: PropTypes.id.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    items: itemsPropType,
-    loadSettings: PropTypes.func.isRequired,
-    maxItemsPerRow: PropTypes.number,
-    maxRows: PropTypes.number,
-    permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
-    renewSessionTimeout: PropTypes.func.isRequired,
-    saveSettings: PropTypes.func.isRequired,
-    onFilterChanged: PropTypes.func,
-  }
-
   constructor(...args) {
     super(...args);
 
@@ -246,6 +230,23 @@ export class Dashboard extends React.Component {
     );
   }
 }
+
+Dashboard.propTypes = {
+  defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  error: PropTypes.toString,
+  filter: PropTypes.filter,
+  id: PropTypes.id.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  items: itemsPropType,
+  loadSettings: PropTypes.func.isRequired,
+  maxItemsPerRow: PropTypes.number,
+  maxRows: PropTypes.number,
+  permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
+  saveSettings: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
+};
+
 
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
