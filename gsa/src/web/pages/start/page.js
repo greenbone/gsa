@@ -407,9 +407,8 @@ class StartPage extends React.Component {
                               items={rows}
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
-                              renewSessionTimeout={
-                                this.props.renewSessionTimeout}
                               saveSettings={this.handleSaveDashboardSettings}
+                              onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
                             />
