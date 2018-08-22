@@ -97,8 +97,14 @@ class AssetsDashboard extends React.Component {
   }
 
   render() {
+    const {
+      gmp,
+      notify,
+      ...props
+    } = this.props;
     return (
       <Dashboard
+        {...props}
         showFilterSelection
         showFilterString
         id={ASSETS_DASHBOARD_ID}

@@ -22,16 +22,26 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import DashboardControls from 'web/components/dashboard/controls.js';
 
 import Section from 'web/components/section/section.js';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
 import ScansDashboard, {SCANS_DASHBOARD_ID} from './dashboard.js';
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider.js'; // eslint-disable-line
 
-const ScansPage = () => (
+const ScansPage = ({
+  onInteraction,
+}) => (
   <SubscriptionProvider>
     {({notify}) => (
       <Section
@@ -40,17 +50,30 @@ const ScansPage = () => (
         extra={
           <DashboardControls
             dashboardId={SCANS_DASHBOARD_ID}
+            onInteraction={onInteraction}
           />
         }
       >
         <ScansDashboard
           notify={notify}
+          onInteraction={onInteraction}
         />
       </Section>
     )}
   </SubscriptionProvider>
 );
 
-export default ScansPage;
+ScansPage.propTypes = {
+  onInteraction: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout({gmp})),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(ScansPage);
 
 // vim: set ts=2 sw=2 tw=80:
