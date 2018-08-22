@@ -46,7 +46,6 @@ const ImportDialog = ({
       onSave={onSave}
     >
       {({
-        data: state,
         onValueChange,
       }) => {
         return (

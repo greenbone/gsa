@@ -305,10 +305,9 @@ class Dialog extends React.Component {
         title={title}
         onClose={onClose}
         onSave={onSave}
-        initialData={{}}
       >
         {({
-          data: state,
+          values: state,
           onValueChange,
         }) => {
 

@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import State from '../../utils/state.js';
-import PropTypes, {deprecated} from '../../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
@@ -129,7 +129,6 @@ class SaveDialogContent extends React.Component {
                 {...heightProps}
               >
                 {children({
-                  data: state, // TODO should be removed in future. savedialogs should switch to use values
                   values: childValues,
                   onValueChange,
                 })}
@@ -164,8 +163,7 @@ SaveDialogContent.propTypes = {
 const SaveDialog = ({
   buttonTitle = _('Save'),
   children,
-  initialData,
-  defaultValues = initialData,
+  defaultValues,
   error,
   minHeight,
   minWidth,
@@ -211,8 +209,6 @@ SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
   defaultValues: PropTypes.object, // default values for uncontrolled values
   error: PropTypes.string, // for errors controlled from parent (onErrorClose must be used if set)
-  initialData:
-    deprecated(PropTypes.object, 'Please use \'defaultValues\' instead.'), // should not be used anymore. use defaultValues instead.
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
   title: PropTypes.string.isRequired,
