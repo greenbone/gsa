@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cpes';
 
+import PropTypes from 'web/utils/proptypes';
+
 import CpeFilterDialog from './filterdialog';
 import CpesTable from './table';
 
@@ -52,22 +54,44 @@ const ToolBarIcons = props => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={CpesDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={CPES_DASHBOARD_ID}/>
+    dashboard={() => (
+      <CpesDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={CPES_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={CpeFilterDialog}
     filtersFilter={CPES_FILTER_FILTER}
     sectionIcon="cpe.svg"
     table={CpesTable}
     title={_('CPEs')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('cpe', {
   entitiesSelector,

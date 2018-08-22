@@ -27,8 +27,6 @@ import _ from 'gmp/locale';
 
 import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import Layout from 'web/components/layout/layout';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
@@ -36,10 +34,14 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 
+import Layout from 'web/components/layout/layout';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/results';
+
+import PropTypes from 'web/utils/proptypes';
 
 import ResultsFilterDialog from './filterdialog';
 import ResultsTable from './table';
@@ -55,21 +57,43 @@ const ToolBarIcons = () => (
   </Layout>
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
-    filtersFilter={RESULTS_FILTER_FILTER}
-    dashboard2={ResultsDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={RESULTS_DASHBOARD_ID} />
+    dashboard={() => (
+      <ResultsDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
-    title={_('Results')}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={RESULTS_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
+    filtersFilter={RESULTS_FILTER_FILTER}
+    filterEditDialog={ResultsFilterDialog}
     sectionIcon="result.svg"
+    title={_('Results')}
     toolBarIcons={ToolBarIcons}
     table={ResultsTable}
-    filterEditDialog={ResultsFilterDialog}
+    onFilterChanged={onFilterChanged}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('result', {
   entitiesSelector,

@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {OsCvssDisplay, OsCvssTableDisplay} from './cvssdisplay';
@@ -48,13 +46,10 @@ export const OS_DISPLAYS = [
   OsVulnScoreTableDisplay.displayId,
 ];
 
-const OsDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const OsDashboard = props => (
   <Dashboard
+    {...props}
     id={OS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={OS_DISPLAYS}
     defaultContent={[
       [
@@ -63,14 +58,8 @@ const OsDashboard = ({
         OsCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-OsDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default OsDashboard;
 

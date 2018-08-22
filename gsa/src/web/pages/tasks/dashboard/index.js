@@ -22,8 +22,6 @@
  */
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {TasksStatusDisplay, TasksStatusTableDisplay} from './statusdisplay';
@@ -65,13 +63,10 @@ export const TASKS_DISPLAYS = [
   TasksMostHighResultsTableDisplay.displayId,
 ];
 
-const TaskDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const TaskDashboard = props => (
   <Dashboard
+    {...props}
     id={TASK_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={TASKS_DISPLAYS}
     defaultContent={[
       [
@@ -80,14 +75,8 @@ const TaskDashboard = ({
         TasksStatusDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-TaskDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default TaskDashboard;
 

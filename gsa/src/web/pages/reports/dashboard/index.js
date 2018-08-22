@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {ReportsCvssDisplay, ReportsCvssTableDisplay} from './cvssdisplay';
@@ -48,13 +46,10 @@ export const REPORTS_DISPLAYS = [
   ReportsSeverityTableDisplay.displayId,
 ];
 
-const ReportsDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const ReportsDashboard = props => (
   <Dashboard
+    {...props}
     id={REPORTS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={REPORTS_DISPLAYS}
     defaultContent={[
       [
@@ -63,14 +58,8 @@ const ReportsDashboard = ({
         ReportsCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-ReportsDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default ReportsDashboard;
 

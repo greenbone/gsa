@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
@@ -51,13 +49,10 @@ export const OVERRIDES_DISPLAYS = [
   OverridesWordCloudTableDisplay.displayId,
 ];
 
-const OverridesDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const OverridesDashboard = props => (
   <Dashboard
+    {...props}
     id={OVERRIDES_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={OVERRIDES_DISPLAYS}
     defaultContent={[
       [
@@ -66,14 +61,8 @@ const OverridesDashboard = ({
         OverridesWordCloudDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-OverridesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default OverridesDashboard;
 

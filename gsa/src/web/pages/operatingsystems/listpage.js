@@ -60,9 +60,12 @@ const ToolBarIcons = () => (
 );
 
 const Page = ({
+  filter,
   onChanged,
   onDownloaded,
   onError,
+  onFilterChanged,
+  onInteraction,
   ...props
 }) => (
   <OsComponent
@@ -85,12 +88,20 @@ const Page = ({
       <EntitiesPage
         {...props}
         createFilterType="os"
-        dashboard2={dashboardProps => (
-          <OsDashboard {...dashboardProps} />
+        dashboard={() => (
+          <OsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={OS_DASHBOARD_ID} />
+          <DashboardControls
+            dashboardId={OS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
         )}
+        filter={filter}
         filtersFilter={OS_FILTER_FILTER}
         filterEditDialog={OsFilterDialog}
         sectionIcon="os.svg"
@@ -98,6 +109,7 @@ const Page = ({
         title={_('Operating Systems')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
+        onFilterChanged={onFilterChanged}
         onOsCloneClick={clone}
         onOsCreateClick={create}
         onOsDeleteClick={delete_func}
@@ -109,9 +121,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('operatingsystem', {

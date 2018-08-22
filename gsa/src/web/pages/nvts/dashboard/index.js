@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {NvtsCvssDisplay, NvtsCvssTableDisplay} from './cvssdisplay';
@@ -54,13 +52,10 @@ export const NVTS_DISPLAYS = [
   NvtsQodTypeTableDisplay.displayId,
 ];
 
-const NvtsDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const NvtsDashboard = props => (
   <Dashboard
+    {...props}
     id={NVTS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={NVTS_DISPLAYS}
     defaultContent={[
       [
@@ -69,14 +64,8 @@ const NvtsDashboard = ({
         NvtsFamilyDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-NvtsDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default NvtsDashboard;
 

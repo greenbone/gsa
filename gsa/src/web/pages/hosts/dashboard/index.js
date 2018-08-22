@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {HostsCvssDisplay, HostsCvssTableDisplay} from './cvssdisplay';
@@ -62,13 +60,10 @@ export const HOSTS_DISPLAYS = [
   HostsVulnScoreTableDisplay.displayId,
 ];
 
-const HostsDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const HostsDashboard = props => (
   <Dashboard
+    {...props}
     id={HOSTS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={HOSTS_DISPLAYS}
     defaultContent={[
       [
@@ -77,14 +72,8 @@ const HostsDashboard = ({
         HostsModifiedDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-HostsDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default HostsDashboard;
 

@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
@@ -48,13 +46,10 @@ export const NOTES_DISPLAYS = [
   NotesWordCloudTableDisplay.displayId,
 ];
 
-const NotesDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const NotesDashboard = props => (
   <Dashboard
+    {...props}
     id={NOTES_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={NOTES_DISPLAYS}
     defaultContent={[
       [
@@ -63,14 +58,8 @@ const NotesDashboard = ({
         NotesWordCloudDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-NotesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default NotesDashboard;
 

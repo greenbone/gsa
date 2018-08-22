@@ -110,6 +110,9 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
   onChanged,
   onDownloaded,
   onError,
@@ -154,12 +157,20 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard2={dashboardProps => (
-          <TaskDashboard {...dashboardProps} />
+        dashboard={() => (
+          <TaskDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
+          <DashboardControls
+            dashboardId={TASK_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
         )}
+        filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
         sectionIcon="task.svg"
@@ -168,6 +179,7 @@ const Page = ({
         toolBarIcons={ToolBarIcons}
         onContainerTaskCreateClick={createcontainer}
         onError={onError}
+        onFilterChanged={onFilterChanged}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -186,9 +198,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('task', {

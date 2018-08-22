@@ -196,6 +196,11 @@ class Page extends React.Component {
 
   render() {
     const {
+      filter,
+      onFilterChanged,
+      onInteraction,
+    } = this.props;
+    const {
       containerTaskDialogVisible,
       importDialogVisible,
       task_id,
@@ -207,9 +212,18 @@ class Page extends React.Component {
         <EntitiesPage
           {...this.props}
           {...this.state}
-          dashboard2={ReportsDashboard}
+          dashboard={() => (
+            <ReportsDashboard
+              filter={filter}
+              onFilterChanged={onFilterChanged}
+              onInteraction={onInteraction}
+            />
+          )}
           dashboardControls={() => (
-            <DashboardControls dashboardId={REPORTS_DASHBOARD_ID} />
+            <DashboardControls
+              dashboardId={REPORTS_DASHBOARD_ID}
+              onInteraction={onInteraction}
+            />
           )}
           filtersFilter={REPORTS_FILTER_FILTER}
           filterEditDialog={ReportFilterDialog}
@@ -249,6 +263,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default compose(

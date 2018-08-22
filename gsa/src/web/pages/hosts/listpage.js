@@ -78,9 +78,12 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  filter,
   onChanged,
   onDownloaded,
   onError,
+  onFilterChanged,
+  onInteraction,
   ...props
 }) => (
   <HostComponent
@@ -102,10 +105,20 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard2={HostsDashboard}
-        dashboardControls={() => (
-          <DashboardControls dashboardId={HOSTS_DASHBOARD_ID} />
+        dashboard={() => (
+          <HostsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={HOSTS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
         filterEditDialog={HostsFilterDialog}
         filtersFilter={HOSTS_FILTER_FILTER}
         sectionIcon="host.svg"
@@ -117,6 +130,7 @@ const Page = ({
         onHostDeleteClick={delete_func}
         onHostDownloadClick={download}
         onHostEditClick={edit}
+        onFilterChanged={onFilterChanged}
         onTargetCreateFromSelection={createtargetfromselection}
         onTargetCreateFromHostClick={createtargetfromhost}
       />
@@ -125,9 +139,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('host', {
