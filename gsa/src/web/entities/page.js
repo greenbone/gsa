@@ -98,10 +98,19 @@ class EntitiesPage extends React.Component {
 
   handleFilterEditClick() {
     this.setState({showFilterDialog: true});
+    this.handleInteraction();
   }
 
   handleFilterDialogCloseClick() {
     this.setState({showFilterDialog: false});
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   renderSection() {
@@ -304,6 +313,7 @@ EntitiesPage.propTypes = {
   onFilterCreated: PropTypes.func.isRequired,
   onFilterRemoved: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
 };
 
 export const createEntitiesPage = (options = {}) => {

@@ -110,6 +110,7 @@ const Page = ({
         toolBarIcons={ToolBarIcons}
         onError={onError}
         onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onOsCloneClick={clone}
         onOsCreateClick={create}
         onOsDeleteClick={delete_func}

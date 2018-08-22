@@ -86,6 +86,7 @@ const Page = ({
     title={_('DFN-CERT Advisories')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

@@ -124,6 +124,7 @@ const Page = ({
         toolBarIcons={ToolBarIcons}
         onError={onError}
         onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onNoteCloneClick={clone}
         onNoteCreateClick={create}
         onNoteDeleteClick={delete_func}

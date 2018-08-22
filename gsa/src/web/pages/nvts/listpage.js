@@ -83,6 +83,7 @@ const Page = ({
     title={_('NVTs')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

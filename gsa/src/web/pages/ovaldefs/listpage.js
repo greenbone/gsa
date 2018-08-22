@@ -84,6 +84,7 @@ const Page = ({
     title={_('OVAL Definitions')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

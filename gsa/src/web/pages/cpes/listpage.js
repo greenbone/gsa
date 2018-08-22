@@ -84,6 +84,7 @@ const Page = ({
     title={_('CPEs')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

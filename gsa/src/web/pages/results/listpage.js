@@ -86,6 +86,7 @@ const Page = ({
     toolBarIcons={ToolBarIcons}
     table={ResultsTable}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

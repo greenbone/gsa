@@ -128,6 +128,7 @@ const Page = ({
         onDownloaded={onDownloaded}
         onError={onError}
         onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onOverrideCloneClick={clone}
         onOverrideCreateClick={create}
         onOverrideDeleteClick={delete_func}

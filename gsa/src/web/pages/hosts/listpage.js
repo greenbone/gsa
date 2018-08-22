@@ -130,6 +130,7 @@ const Page = ({
         onHostDeleteClick={delete_func}
         onHostDownloadClick={download}
         onHostEditClick={edit}
+        onInteraction={onInteraction}
         onFilterChanged={onFilterChanged}
         onTargetCreateFromSelection={createtargetfromselection}
         onTargetCreateFromHostClick={createtargetfromhost}

@@ -84,6 +84,7 @@ const Page = ({
     title={_('CVEs')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

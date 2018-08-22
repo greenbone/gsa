@@ -87,6 +87,7 @@ const Page = ({
     sectionIcon="vulnerability.svg"
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

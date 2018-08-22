@@ -84,6 +84,7 @@ const Page = ({
     title={_('CERT-Bund Advisories')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

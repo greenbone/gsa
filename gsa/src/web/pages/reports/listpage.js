@@ -231,6 +231,7 @@ class Page extends React.Component {
           toolBarIcons={ToolBarIcons}
           title={_('Reports')}
           sectionIcon="report.svg"
+          onInteraction={onInteraction}
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}
           onReportDeleteClick={this.handleReportDeleteClick}

@@ -87,6 +87,7 @@ const Page = ({
     title={_('All SecInfo Information')}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
 

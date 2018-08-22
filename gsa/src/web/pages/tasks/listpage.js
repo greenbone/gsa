@@ -181,6 +181,7 @@ const Page = ({
         onContainerTaskCreateClick={createcontainer}
         onError={onError}
         onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onModifyTaskWizardClick={modifytaskwizard}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
