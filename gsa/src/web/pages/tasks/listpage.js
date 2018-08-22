@@ -177,9 +177,11 @@ const Page = ({
         table={Table}
         title={_('Tasks')}
         toolBarIcons={ToolBarIcons}
+        onAdvancedTaskWizardClick={advancedtaskwizard}
         onContainerTaskCreateClick={createcontainer}
         onError={onError}
         onFilterChanged={onFilterChanged}
+        onModifyTaskWizardClick={modifytaskwizard}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -189,8 +191,6 @@ const Page = ({
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        onAdvancedTaskWizardClick={advancedtaskwizard}
-        onModifyTaskWizardClick={modifytaskwizard}
         onTaskWizardClick={taskwizard}
       />
     )}
