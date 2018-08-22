@@ -105,6 +105,7 @@ class EntitiesContainer extends React.Component {
     this.handleCloseTagDialog = this.handleCloseTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
     this.handleCloseTagsDialog = this.handleCloseTagsDialog.bind(this);
+    this.handleInteraction = this.handleInteraction.bind(this);
 
     this.renewSession = debounce(this.renewSession.bind(this), 500);
   }
@@ -487,6 +488,10 @@ class EntitiesContainer extends React.Component {
     this.renewSession();
   }
 
+  handleInteraction() {
+    this.renewSession();
+  }
+
   getTagsByType() {
     const {gmp} = this.props;
     const {entities} = this.state;
@@ -598,6 +603,7 @@ class EntitiesContainer extends React.Component {
           onFilterRemoved: this.handleFilterRemoved,
           onFilterReset: this.handleFilterReset,
           onFirstClick: this.handleFirst,
+          onInteraction: this.handleInteraction,
           onLastClick: this.handleLast,
           onNextClick: this.handleNext,
           onPreviousClick: this.handlePrevious,
