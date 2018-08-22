@@ -51,6 +51,8 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import Loading from 'web/components/loading/loading';
+
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
 import Section from 'web/components/section/section';
@@ -65,7 +67,6 @@ import Tabs from 'web/components/tab/tabs';
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog from './newdashboarddialog';
-import Loading from '../../components/loading/loading';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
