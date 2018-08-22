@@ -49,7 +49,6 @@ import {loadEntities, selector} from 'web/store/entities/filters';
 const exclude_props = [
   'children',
   'dashboard',
-  'dashboard2',
   'dashboardControls',
   'filterEditDialog',
   'filters',
@@ -108,13 +107,10 @@ class EntitiesPage extends React.Component {
   renderSection() {
     const {
       entities,
-      filter,
       loading,
       sectionIcon,
-      dashboard2,
-      dashboard = dashboard2,
+      dashboard,
       dashboardControls,
-      onFilterChanged,
     } = this.props;
 
     let {
@@ -143,7 +139,7 @@ class EntitiesPage extends React.Component {
           grow="1"
         >
           {isDefined(dashboard) &&
-            dashboard({filter, onFilterChanged})
+            dashboard()
           }
           {loading && !isDefined(entities) ?
             this.renderLoading() :
@@ -288,7 +284,6 @@ class EntitiesPage extends React.Component {
 EntitiesPage.propTypes = {
   createFilterType: PropTypes.string,
   dashboard: PropTypes.func,
-  dashboard2: PropTypes.func,
   dashboardControls: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
