@@ -43,6 +43,7 @@ import {
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
 
@@ -406,6 +407,8 @@ class StartPage extends React.Component {
                               items={rows}
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
+                              renewSessionTimeout={
+                                this.props.renewSessionTimeout}
                               saveSettings={this.handleSaveDashboardSettings}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
@@ -445,6 +448,7 @@ StartPage.propTypes = {
   defaults: PropTypes.object,
   isLoading: PropTypes.bool,
   loadSettings: PropTypes.func.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
 };
 
@@ -484,11 +488,12 @@ const mapStateToProps = rootState => {
   return props;
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) =>
-    dispatch(loadSettings(ownProps)(id, defaults)),
+    dispatch(loadSettings({gmp})(id, defaults)),
   saveSettings: (id, settings) =>
-    dispatch(saveSettings(ownProps)(id, settings)),
+    dispatch(saveSettings({gmp})(id, settings)),
+  renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
 });
 
 export default compose(
