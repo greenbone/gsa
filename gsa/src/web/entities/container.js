@@ -202,7 +202,6 @@ class EntitiesContainer extends React.Component {
   handleChanged() {
     this.reload();
     this.notifyChanged();
-    this.renewSession();
   }
 
   handleSelectionTypeChange(selectionType) {
