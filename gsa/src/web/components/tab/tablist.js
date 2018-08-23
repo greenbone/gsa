@@ -27,8 +27,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 import Layout from '../layout/layout.js';
 
-import Tab from './tab.js';
-
 const TabList = ({
   active = 0,
   children,
@@ -36,7 +34,7 @@ const TabList = ({
   ...props
 }) => {
   children = React.Children.map(children, (child, index) => {
-    if (child !== null && child.type === Tab) {
+    if (child !== null) {
       return React.cloneElement(child, {
         isActive: active === index,
         onActivate: () => onActivateTab(index),
