@@ -119,26 +119,26 @@ const Page = ({
   ...props
 }) => (
   <TaskComponent
+    onAdvancedTaskWizardSaved={onChanged}
     onCloned={onChanged}
     onCloneError={onError}
+    onContainerSaved={onChanged}
     onCreated={onChanged}
     onContainerCreated={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onModifyTaskWizardSaved={onChanged}
+    onReportImported={onChanged}
+    onResumed={onChanged}
+    onResumeError={onError}
     onSaved={onChanged}
     onStarted={onChanged}
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onAdvancedTaskWizardSaved={onChanged}
-    onModifyTaskWizardSaved={onChanged}
     onTaskWizardSaved={onChanged}
-    onContainerSaved={onChanged}
-    onReportImported={onChanged}
   >
     {({
       clone,
