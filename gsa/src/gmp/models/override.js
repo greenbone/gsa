@@ -24,17 +24,17 @@ import {isDefined, isModelElement} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
-import List from '../list.js';
-import Model from '../model.js';
+import List from '../list';
+import Model from '../model';
 import {
   parseCsv,
   parseSeverity,
   parseText,
   parseYesNo,
   YES_VALUE,
-} from '../parser.js';
+} from '../parser';
 
-import Nvt from './nvt.js';
+import Nvt from './nvt';
 
 export const MANUAL = '1';
 export const ANY = '0';
@@ -57,7 +57,7 @@ export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
 
-  static entity_type = 'override';
+  static entityType = 'override';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

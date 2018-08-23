@@ -22,9 +22,9 @@
  */
 import {isDefined} from '../../utils/identity';
 
-import {setProperties, parseSeverity} from '../../parser.js';
+import {setProperties, parseSeverity} from '../../parser';
 
-import Nvt from '../nvt.js';
+import Nvt from '../nvt';
 
 class ReportCve {
 

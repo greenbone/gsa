@@ -20,16 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseSeverity} from 'gmp/parser.js';
+import {parseSeverity} from 'gmp/parser';
 
-import Asset from 'gmp/models/asset.js';
-
-class App extends Asset {
-
-  static asset_type = 'app';
+class App {
 
   addHost(host) {
     if (!(host.ip in this.hosts.hosts_by_ip)) {

@@ -25,11 +25,11 @@ import {isEmpty} from '../../utils/string';
 
 import {parseSeverity, parseDate} from '../../parser';
 
-import {parseFilter} from '../../collection/parser.js';
+import {parseFilter} from '../../collection/parser';
 
-import Model from '../../model.js';
+import Model from '../../model';
 
-import ReportTask from './task.js';
+import ReportTask from './task';
 
 import {
   parse_apps,
@@ -42,11 +42,11 @@ import {
   parse_results,
   parse_tls_certificates,
   parse_vulnerabilities,
-} from './parser.js';
+} from './parser';
 
 class ReportReport extends Model {
 
-  static entity_type = 'report';
+  static entityType = 'report';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);

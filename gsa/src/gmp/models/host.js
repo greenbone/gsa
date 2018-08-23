@@ -30,9 +30,9 @@ import {
   parseSeverity,
   parseYesNo,
   setProperties,
-} from '../parser.js';
+} from '../parser';
 
-import Asset from './asset.js';
+import Asset from './asset';
 
 const get_identifier = (identifiers, name) => identifiers.filter(
   identifier => identifier.name === name)[0];
@@ -62,7 +62,7 @@ class Identifier {
 
 class Host extends Asset {
 
-  static asset_type = 'host';
+  static entityType = 'host';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

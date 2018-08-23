@@ -24,11 +24,11 @@
 import {isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model from '../model.js';
+import Model from '../model';
 
 class Permission extends Model {
 
-  static entity_type = 'permission';
+  static entityType = 'permission';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

@@ -50,7 +50,7 @@ export const secinfo_type = (type, unknown = _('N/A')) => {
 
 class SecInfo extends Info {
 
-  static info_type = 'allinfo';
+  static entityType = 'allinfo';
 
   parseProperties(elem) {
     let ret = super.parseProperties(elem);

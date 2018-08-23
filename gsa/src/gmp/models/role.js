@@ -20,13 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {parseCsv} from '../parser';
 
-import {parseCsv} from '../parser.js';
-
-import Model from '../model.js';
+import Model from '../model';
 
 class Role extends Model {
-  static entity_type = 'role';
+  static entityType = 'role';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

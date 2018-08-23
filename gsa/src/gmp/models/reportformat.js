@@ -26,7 +26,7 @@ import {isEmpty} from '../utils/string';
 
 import {parseDate, parseYesNo, YES_VALUE} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
 const get_value = val => {
   return isObject(val) ? val.__text : val;
@@ -64,7 +64,7 @@ class Param {
 
 class ReportFormat extends Model {
 
-  static entity_type = 'report_format';
+  static entityType = 'reportformat';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

@@ -24,14 +24,14 @@
 import {isDefined, isString} from '../utils/identity';
 import {forEach} from '../utils/array';
 
-import Model from '../model.js';
-import {parseSeverity, parseQod} from '../parser.js';
+import Model from '../model';
+import {parseSeverity, parseQod} from '../parser';
 
-import Nvt from './nvt.js';
+import Nvt from './nvt';
 
-import {parse_notes} from './note.js';
+import {parse_notes} from './note';
 
-import {parse_overrides} from './override.js';
+import {parse_overrides} from './override';
 
 export class Delta {
 
@@ -52,7 +52,7 @@ export class Delta {
 
 class Result extends Model {
 
-  static entity_type = 'result';
+  static entityType = 'result';
 
   parseProperties(elem) {
     const copy = super.parseProperties(elem);
