@@ -42,7 +42,7 @@ export const UNKNOWN_FILTER_ID = '0';
  */
 class Filter extends Model {
 
-  static entity_type = 'filter';
+  static entityType = 'filter';
 
   get length() {
     return this.terms.length;

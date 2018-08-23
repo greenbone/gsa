@@ -27,20 +27,10 @@ import Model from '../model.js';
 
 class Info extends Model {
 
-  static info_type = 'unknown';
-  static entity_type = 'info';
+  static entityType = 'info';
 
-  constructor(elem, info_type) {
-    super(elem);
-
-    if (!isDefined(this.info_type)) { // only overwrite if not already set
-      this.info_type = isDefined(info_type) ? info_type :
-        this.constructor.info_type;
-    }
-  }
-
-  parseProperties(elem, info_type) {
-    const info_elem = elem[info_type];
+  parseProperties(elem, infoType) {
+    const info_elem = elem[infoType];
 
     if (isDefined(info_elem)) { // elem is an info element content is in its child
       elem = {
@@ -48,7 +38,7 @@ class Info extends Model {
         ...info_elem,
       };
 
-      delete elem[info_type];
+      delete elem[infoType];
     }
 
     return super.parseProperties(elem);
