@@ -35,21 +35,20 @@ import {
   typeName,
   pluralizeType,
 } from 'gmp/utils/entitytype';
+import {debounce} from 'gmp/utils/event';
 
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
-import SelectionType from '../utils/selectiontype.js';
+import SortBy from 'web/components/sortby/sortby';
 
-import SortBy from '../components/sortby/sortby.js';
+import TagDialog from 'web/pages/tags/dialog';
 
-import TagDialog from '../pages/tags/dialog.js';
-
-import TagsDialog from './tagsdialog.js';
-import {debounce} from 'gmp/utils/event.js';
+import TagsDialog from './tagsdialog';
 
 const log = logger.getLogger('web.entities.container');
 
@@ -103,9 +102,9 @@ class EntitiesContainer extends React.Component {
     this.handleAddMultiTag = this.handleAddMultiTag.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.openTagDialog = this.openTagDialog.bind(this);
-    this.closeTagDialog = this.closeTagDialog.bind(this);
+    this.handleCloseTagDialog = this.handleCloseTagDialog.bind(this);
     this.openTagsDialog = this.openTagsDialog.bind(this);
-    this.closeTagsDialog = this.closeTagsDialog.bind(this);
+    this.handleCloseTagsDialog = this.handleCloseTagsDialog.bind(this);
 
     this.renewSession = debounce(this.renewSession.bind(this), 500);
   }
@@ -385,6 +384,10 @@ class EntitiesContainer extends React.Component {
 
   closeTagDialog() {
     this.setState({tagDialogVisible: false});
+  }
+
+  handleCloseTagDialog() {
+    this.closeTagDialog();
     this.renewSession();
   }
 
@@ -397,6 +400,7 @@ class EntitiesContainer extends React.Component {
     return gmp.tag.create(data)
       .then(response => gmp.tag.get(response.data))
       .then(response => {
+        this.closeTagDialog();
         this.setState({
           tag: response.data,
           tags: [
@@ -462,7 +466,7 @@ class EntitiesContainer extends React.Component {
       resource_type: entitiesType,
       resources_action: 'add',
       value,
-    });
+    }).then(() => this.closeTagsDialog());
   }
 
   openTagsDialog() {
@@ -476,6 +480,10 @@ class EntitiesContainer extends React.Component {
 
   closeTagsDialog() {
     this.setState({tagsDialogVisible: false});
+  }
+
+  handleCloseTagsDialog() {
+    this.closeTagsDialog();
     this.renewSession();
   }
 
@@ -609,7 +617,7 @@ class EntitiesContainer extends React.Component {
             tags={tags}
             title={title}
             value={tag.value}
-            onClose={this.closeTagsDialog}
+            onClose={this.handleCloseTagsDialog}
             onSave={this.handleAddMultiTag}
             onNewTagClick={this.openTagDialog}
             onTagChanged={this.handleTagChange}
@@ -621,7 +629,7 @@ class EntitiesContainer extends React.Component {
             resources={selected}
             resource_type={entitiesType}
             resource_types={resourceTypes}
-            onClose={this.closeTagDialog}
+            onClose={this.handleCloseTagDialog}
             onSave={this.handleCreateTag}
           />
         }

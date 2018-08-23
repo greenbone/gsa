@@ -27,14 +27,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
-
-import GroupDialog from './dialog.js';
+import GroupDialog from './dialog';
 
 class GroupComponent extends React.Component {
 
@@ -120,7 +118,7 @@ class GroupComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openGroupDialog,
@@ -132,10 +130,10 @@ class GroupComponent extends React.Component {
                 group={group}
                 title={title}
                 onClose={this.closeGroupDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeGroupDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

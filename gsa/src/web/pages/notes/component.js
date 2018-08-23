@@ -26,6 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {hasId} from 'gmp/utils/id';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
@@ -41,15 +42,12 @@ import {
   ANY,
 } from 'gmp/models/override';
 
-import PropTypes from '../../utils/proptypes';
-import withGmp from '../../utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper';
-
-import EntityComponent from '../../entity/component';
+import EntityComponent from 'web/entity/component';
 
 import NoteDialog from './dialog';
-import {hasId} from 'gmp/utils/id';
 
 class NoteComponent extends React.Component {
 
@@ -194,7 +192,7 @@ class NoteComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCreateNoteDialog,
@@ -219,11 +217,11 @@ class NoteComponent extends React.Component {
                 text={text}
                 title={title}
                 onClose={this.closeNoteDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeNoteDialog())}
                 {...initial}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

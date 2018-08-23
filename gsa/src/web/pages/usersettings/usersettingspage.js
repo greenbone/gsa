@@ -234,6 +234,7 @@ class UserSettings extends React.Component {
       timezone,
     } = data;
     return gmp.user.saveSettings(data).then(() => {
+      this.closeDialog();
       this.props.setLocale(userInterfaceLanguage === BROWSER_LANGUAGE ?
         undefined : userInterfaceLanguage);
       this.props.setTimezone(timezone);

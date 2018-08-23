@@ -32,14 +32,12 @@ import {
   ALL_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from 'web/entity/component';
 
-import EntityComponent from '../../entity/component.js';
-
-import CredentialsDialog from './dialog.js';
+import CredentialsDialog from './dialog';
 
 class CredentialsComponent extends React.Component {
 
@@ -149,7 +147,7 @@ class CredentialsComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCredentialsDialog,
@@ -162,10 +160,10 @@ class CredentialsComponent extends React.Component {
                 {...dialogProps}
                 visible={dialogVisible}
                 onClose={this.closeCredentialDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeCredentialDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

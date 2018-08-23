@@ -34,8 +34,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
@@ -146,7 +144,9 @@ class PortListComponent extends React.Component {
       onImported,
       onImportError,
     } = this.props;
-    return gmp.portlist.import(data).then(onImported, onImportError);
+    return gmp.portlist.import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeImportDialog());
   }
 
   handleSavePortList(save, data) {
@@ -174,7 +174,9 @@ class PortListComponent extends React.Component {
           .filter(prange => prange !== range)
       )
     )];
-    return Promise.all(promises).then(() => save(data));
+    return Promise.all(promises)
+      .then(() => save(data))
+      .then(() => this.closePortListDialog());
   }
 
   handleTmpAddPortRange(values) {
@@ -234,6 +236,7 @@ class PortListComponent extends React.Component {
         newRange,
       ],
     });
+    this.closeNewPortRangeDialog();
   }
 
   handleTmpDeletePortRange(port_range) {
@@ -297,7 +300,7 @@ class PortListComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openPortListDialog,
@@ -332,7 +335,7 @@ class PortListComponent extends React.Component {
                 onSave={this.handleTmpAddPortRange}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

@@ -32,16 +32,16 @@ import {shorten} from 'gmp/utils/string';
 
 import {parseYesNo, NO_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import FootNote from '../../components/footnote/footnote.js';
+import FootNote from 'web/components/footnote/footnote';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import CredentialsDialog from '../credentials/dialog.js';
+import CredentialsDialog from '../credentials/dialog';
 
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,
@@ -61,7 +61,7 @@ import AlertDialog, {
   NOTICE_ATTACH,
   SECINFO_SUBJECT,
   TASK_SUBJECT,
-} from './dialog.js';
+} from './dialog';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -127,6 +127,7 @@ class AlertComponent extends React.Component {
     gmp.credential.create(credentialdata)
       .then(response => {
         credential_id = response.data.id;
+        this.closeCredentialDialog();
       })
       .then(() => gmp.credentials.getAll())
       .then(response => {
@@ -675,7 +676,7 @@ class AlertComponent extends React.Component {
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeAlertDialog())}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}

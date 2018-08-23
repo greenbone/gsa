@@ -27,14 +27,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import Wrapper from '../../components/layout/wrapper.js';
-
-import ReportFormatDialog from './dialog.js';
+import ReportFormatDialog from './dialog';
 
 class ReportFormatComponent extends React.Component {
 
@@ -111,11 +109,15 @@ class ReportFormatComponent extends React.Component {
     const {gmp} = this.props;
     if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
-      return gmp.reportformat.save(data).then(onSaved, onSaveError);
+      return gmp.reportformat.save(data)
+        .then(onSaved, onSaveError)
+        .then(() => this.closeReportFormatDialog());
     }
 
     const {onImported, onImportError} = this.props;
-    return gmp.reportformat.import(data).then(onImported, onImportError);
+    return gmp.reportformat.import(data)
+      .then(onImported, onImportError)
+      .then(() => this.closeReportFormatDialog());
   }
 
   render() {
@@ -146,7 +148,7 @@ class ReportFormatComponent extends React.Component {
         onDownloadError={onDownloadError}
       >
         {other => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               import: this.openReportFormatDialog,
@@ -161,7 +163,7 @@ class ReportFormatComponent extends React.Component {
                 onSave={this.handleSave}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

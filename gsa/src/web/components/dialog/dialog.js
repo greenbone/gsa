@@ -80,8 +80,6 @@ class Dialog extends React.Component {
   handleClose() {
     const {onClose} = this.props;
 
-    this.setState(this.defaultState());
-
     if (onClose) {
       onClose();
     }
