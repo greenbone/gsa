@@ -23,7 +23,7 @@
 import 'core-js/fn/string/starts-with';
 
 import {isDefined, isString} from '../utils/identity';
-import {isEmpty} from '../utils/string';
+import {isEmpty, split} from '../utils/string';
 import {map} from '../utils/array';
 
 import {parseFloat, parseSeverity} from '../parser';
@@ -38,7 +38,7 @@ const parse_tags = tags => {
   if (tags) {
     const splited = tags.split('|');
     for (const t of splited) {
-      const [key, value] = t.split('=');
+      const [key, value] = split(t, '=', 1);
       newtags[key] = value;
     }
   }
