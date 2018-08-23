@@ -49,13 +49,12 @@ const HostsDialog = ({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      initialData={{...DEFAULTS, ...host}}
+      defaultValues={{...DEFAULTS, ...host}}
     >
       {({
-        data: state,
+        values: state,
         onValueChange,
       }) => {
-
         return (
           <Layout flex="column">
 
