@@ -54,22 +54,22 @@ import TableRow from 'web/components/table/row';
 const DEFAULTS = {name: _('Unnamed')};
 
 const Dialog = ({
-    all_groups,
-    all_permissions,
-    all_users,
-    externalError,
-    group_id,
-    permissions,
-    permission_name,
-    role,
-    title = _('New Role'),
-    onClose,
-    onCreatePermission,
-    onCreateSuperPermission,
-    onDeletePermission,
-    onExternalErrorSet,
-    onSave,
-  }) => {
+  all_groups,
+  all_permissions,
+  all_users,
+  error,
+  group_id,
+  permissions,
+  permission_name,
+  role,
+  title = _('New Role'),
+  onClose,
+  onCreatePermission,
+  onCreateSuperPermission,
+  onDeletePermission,
+  onErrorClose,
+  onSave,
+}) => {
 
   const is_edit = isDefined(role);
   const has_groups = isDefined(all_groups) && all_groups.length > 0;
@@ -97,10 +97,10 @@ const Dialog = ({
 
   return (
     <SaveDialog
-      externalError={externalError}
+      error={error}
       title={title}
       onClose={onClose}
-      onExternalErrorSet={onExternalErrorSet}
+      onErrorClose={onErrorClose}
       onSave={onSave}
       defaultValues={{
         ...DEFAULTS,
@@ -111,7 +111,6 @@ const Dialog = ({
         values: state,
         onValueChange,
       }) => {
-
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -251,7 +250,7 @@ Dialog.propTypes = {
   all_groups: PropTypes.array,
   all_permissions: PropTypes.array,
   all_users: PropTypes.array,
-  externalError: PropTypes.object,
+  error: PropTypes.string,
   group_id: PropTypes.id,
   permission_name: PropTypes.string,
   permissions: PropTypes.array,
@@ -262,7 +261,7 @@ Dialog.propTypes = {
   onCreatePermission: PropTypes.func.isRequired,
   onCreateSuperPermission: PropTypes.func.isRequired,
   onDeletePermission: PropTypes.func.isRequired,
-  onExternalErrorSet: PropTypes.func,
+  onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 

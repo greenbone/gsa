@@ -64,8 +64,12 @@ class FilterSelection extends React.Component {
     this.props.loadFilters();
   }
 
-  handleCloseDialog() {
+  closeDialog() {
     this.setState({showDialog: false});
+  }
+
+  handleCloseDialog() {
+    this.closeDialog();
   }
 
   handleOpenDialog() {
@@ -74,7 +78,8 @@ class FilterSelection extends React.Component {
 
   handleSaveDialog({filterId}) {
     const {onChanged} = this.props;
-    this.setState({showDialog: false});
+
+    this.closeDialog();
 
     if (isDefined(onChanged)) {
       onChanged({

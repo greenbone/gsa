@@ -111,8 +111,8 @@ const TargetDialog = ({
   comment = '',
   credentials = [],
   esxi_credential_id = UNSET_VALUE,
-  exclude_hosts,
-  hosts,
+  exclude_hosts = '',
+  hosts = '',
   hosts_count,
   in_use = false,
   name = _('Unnamed'),
@@ -332,7 +332,7 @@ const TargetDialog = ({
                     onChange={onPortListChange}
                   />
                   {!state.in_use &&
-                    <Layout box flex>
+                    <Layout>
                       <NewIcon
                         title={_('Create a new port list')}
                         onClick={onNewPortListClick}

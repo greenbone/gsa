@@ -29,12 +29,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
-
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
 import AgentDialog from './dialog.js';
 
@@ -127,7 +125,7 @@ class AgentComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openAgentDialog,
@@ -140,10 +138,10 @@ class AgentComponent extends React.Component {
                 agent={agent}
                 title={title}
                 onClose={this.closeAgentDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeAgentDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

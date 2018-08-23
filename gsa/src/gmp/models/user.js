@@ -26,7 +26,7 @@ import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
 import Model from '../model.js';
-import {parseCsv} from 'gmp/parser';
+import {parseCsv} from '../parser';
 
 export const AUTH_METHOD_PASSWORD = 'password';
 export const AUTH_METHOD_NEW_PASSWORD = 'newpassword';
@@ -38,7 +38,7 @@ export const ACCESS_DENY_ALL = '1';
 
 class User extends Model {
 
-  static entity_type = 'user';
+  static entityType = 'user';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);

@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import {isDefined} from '../../utils/identity';
 
-import {parseInt} from '../../parser.js';
+import {parseInt} from '../../parser';
 
 class TLSCertificate {
 

@@ -45,21 +45,19 @@ import {
   ACTIVE_YES_UNTIL_VALUE,
 } from 'gmp/models/override';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
   HIGH_VALUE,
   MEDIUM_VALUE,
   LOW_VALUE,
-} from '../../utils/severity';
+} from 'web/utils/severity';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from 'web/entity/component';
 
-import EntityComponent from '../../entity/component.js';
-
-import OverrideDialog from './dialog.js';
+import OverrideDialog from './dialog';
 
 const SEVERITIES_LIST = [
   HIGH_VALUE,
@@ -234,7 +232,7 @@ class OverrideComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCreateOverrideDialog,
@@ -264,11 +262,11 @@ class OverrideComponent extends React.Component {
                 text={text}
                 title={title}
                 onClose={this.closeOverrideDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeOverrideDialog())}
                 {...initial}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

@@ -37,12 +37,12 @@ import Capabilities from './capabilities/capabilities.js';
 
 class Model {
 
-  static entity_type = 'unknown';
+  static entityType = 'unknown';
 
   constructor(element, type) {
     this.init();
 
-    this.entity_type = isDefined(type) ? type : this.constructor.entity_type;
+    this.entityType = isDefined(type) ? type : this.constructor.entityType;
 
     if (element) {
       this.updateFromElement(element);

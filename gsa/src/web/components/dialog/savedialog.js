@@ -28,7 +28,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import State from '../../utils/state.js';
-import PropTypes, {deprecated} from '../../utils/proptypes.js';
+import PropTypes from '../../utils/proptypes.js';
 
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
@@ -47,17 +47,18 @@ class SaveDialogContent extends React.Component {
     };
 
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
   }
 
-  componentWillReceiveProps(next) {
-    const {externalError} = next;
-    if (isDefined(externalError)) {
-      const {onExternalErrorSet} = this.props;
-      this.setError(externalError);
-      onExternalErrorSet();
+  static getDerivedStateFromProps(props, state) {
+    if (props.error !== state.prevError) {
+      return {
+        error: props.error,
+        prevError: props.error,
+        loading: false,
+      };
     }
+    return null;
   }
 
   handleSaveClick(state) {
@@ -67,28 +68,20 @@ class SaveDialogContent extends React.Component {
       const promise = onSave(state);
       if (isDefined(promise)) {
         this.setState({loading: true});
-        promise.then(
-          () => this.handleClose(),
-          error => this.setError(error)
-        );
-      }
-      else {
-        this.handleClose();
+
+        promise.catch(error => this.setError(error));
       }
     }
   }
 
   handleErrorClose() {
-    this.setState({error: undefined});
-  }
-
-  handleClose() {
-    const {close} = this.props;
-    this.setState({
-      error: undefined,
-      loading: false,
-    });
-    close();
+    const {onErrorClose} = this.props;
+    if (isDefined(onErrorClose)) {
+      onErrorClose();
+    }
+    else {
+      this.setState({error: undefined});
+    }
   }
 
   setError(error) {
@@ -102,6 +95,7 @@ class SaveDialogContent extends React.Component {
     const {
       buttonTitle,
       children,
+      close,
       defaultValues,
       moveProps,
       heightProps,
@@ -122,7 +116,7 @@ class SaveDialogContent extends React.Component {
             <DialogContent>
               <DialogTitle
                 title={title}
-                onCloseClick={this.handleClose}
+                onCloseClick={close}
                 {...moveProps}
               />
               {error &&
@@ -135,7 +129,6 @@ class SaveDialogContent extends React.Component {
                 {...heightProps}
               >
                 {children({
-                  data: state, // TODO should be removed in future. savedialogs should switch to use values
                   values: childValues,
                   onValueChange,
                 })}
@@ -157,12 +150,12 @@ SaveDialogContent.propTypes = {
   buttonTitle: PropTypes.string,
   close: PropTypes.func.isRequired,
   defaultValues: PropTypes.object,
-  externalError: PropTypes.object,
+  error: PropTypes.string,
   heightProps: PropTypes.object,
   moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
   values: PropTypes.object,
-  onExternalErrorSet: PropTypes.func,
+  onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
@@ -170,16 +163,15 @@ SaveDialogContent.propTypes = {
 const SaveDialog = ({
   buttonTitle = _('Save'),
   children,
-  initialData,
-  defaultValues = initialData,
-  externalError,
+  defaultValues,
+  error,
   minHeight,
   minWidth,
   title,
   values,
   width,
   onClose,
-  onExternalErrorSet,
+  onErrorClose,
   onSave,
 }) => {
   return (
@@ -198,12 +190,12 @@ const SaveDialog = ({
           buttonTitle={buttonTitle}
           close={close}
           defaultValues={defaultValues}
-          externalError={externalError}
+          error={error}
           moveProps={moveProps}
           heightProps={heightProps}
           title={title}
           values={values}
-          onErrorSent={onExternalErrorSet}
+          onErrorClose={onErrorClose}
           onSave={onSave}
         >
           {children}
@@ -216,16 +208,14 @@ const SaveDialog = ({
 SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
   defaultValues: PropTypes.object, // default values for uncontrolled values
-  externalError: PropTypes.object, // for errors from outside SaveDialog
-  initialData:
-    deprecated(PropTypes.object, 'Please use \'defaultValues\' instead.'), // should not be used anymore. use defaultValues instead.
+  error: PropTypes.string, // for errors controlled from parent (onErrorClose must be used if set)
   minHeight: PropTypes.numberOrNumberString,
   minWidth: PropTypes.numberOrNumberString,
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  onExternalErrorSet: PropTypes.func,
+  onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
 

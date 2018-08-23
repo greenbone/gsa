@@ -28,12 +28,10 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import EntityComponent from '../../entity/component.js';
-
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from 'web/entity/component';
 
 import RoleDialog from './dialog.js';
 
@@ -51,7 +49,7 @@ class RoleComponent extends React.Component {
     this.handleCreateSuperPermission =
       this.handleCreateSuperPermission.bind(this);
     this.handleDeletePermission = this.handleDeletePermission.bind(this);
-    this.handleErrorWasSent = this.handleErrorWasSent.bind(this);
+    this.handleErrorClose = this.handleErrorClose.bind(this);
 
     this.closeRoleDialog = this.closeRoleDialog.bind(this);
     this.openRoleDialog = this.openRoleDialog.bind(this);
@@ -134,8 +132,12 @@ class RoleComponent extends React.Component {
       .delete({id: permission_id}), role_id);
   }
 
-  handleErrorWasSent() {
+  handleErrorClose() {
     this.setState({error: undefined});
+  }
+
+  setError(error) {
+    this.setState({error: error.message});
   }
 
   loadSettings(promise, role_id) {
@@ -151,7 +153,7 @@ class RoleComponent extends React.Component {
           permission_name: first(settings.all_permissions).name,
         });
       }).catch(error => {
-        this.setState({error});
+        this.setError(error);
       });
   }
 
@@ -201,7 +203,7 @@ class RoleComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openRoleDialog,
@@ -212,21 +214,22 @@ class RoleComponent extends React.Component {
                 all_users={allUsers}
                 all_groups={allGroups}
                 all_permissions={allPermissions}
-                externalError={error}
+                error={error}
                 group_id={groupId}
                 permission_name={permissionName}
                 permissions={permissions}
                 role={role}
                 title={title}
                 onClose={this.closeRoleDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeRoleDialog())
+                  .catch(e => this.setError(e))}
                 onCreatePermission={this.handleCreatePermission}
                 onCreateSuperPermission={this.handleCreateSuperPermission}
                 onDeletePermission={this.handleDeletePermission}
-                onExternalErrorSet={this.handleErrorWasSent}
+                onErrorClose={this.handleErrorClose}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

@@ -32,8 +32,6 @@ import withGmp from 'web/utils/withGmp';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import UserDialog from './dialog';
 
 class UserComponent extends React.Component {
@@ -155,7 +153,7 @@ class UserComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openUserDialog,
@@ -178,10 +176,10 @@ class UserComponent extends React.Component {
                 title={title}
                 user={user}
                 onClose={this.closeUserDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeUserDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

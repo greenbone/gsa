@@ -337,20 +337,17 @@ class PowerFilter extends React.Component {
 }
 
 PowerFilter.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   createFilterType: PropTypes.string,
   filter: PropTypes.filter,
   filters: PropTypes.array,
+  gmp: PropTypes.gmp.isRequired,
   onEditClick: PropTypes.func,
   onError: PropTypes.func,
   onFilterCreated: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onResetClick: PropTypes.func,
   onUpdate: PropTypes.func,
-};
-
-PowerFilter.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  gmp: PropTypes.gmp.isRequired,
 };
 
 export default compose(

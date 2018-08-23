@@ -28,9 +28,9 @@ import {
 } from '../utils/array';
 import {isEmpty} from '../utils/string';
 
-import {parseInt} from '../parser.js';
+import {parseInt} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =
@@ -43,9 +43,12 @@ export const parse_count = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
+export const filterEmptyScanConfig = config =>
+  config.id !== EMPTY_SCAN_CONFIG_ID;
+
 class ScanConfig extends Model {
 
-  static entity_type = 'config'; // TODO should be scan_config in future
+  static entityType = 'scanconfig';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
