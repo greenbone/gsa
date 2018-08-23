@@ -75,18 +75,18 @@ class TagsHandler extends React.Component {
       <TagComponent
         onAdded={onChanged}
         onAddError={onError}
-        onEnabled={onChanged}
-        onEnableError={onError}
-        onDisabled={onChanged}
-        onDisableError={onError}
+        onCreated={onChanged}
+        onCreateError={onError}
         onDeleted={onChanged}
         onDeleteError={onError}
+        onDisabled={onChanged}
+        onDisableError={onError}
+        onEnabled={onChanged}
+        onEnableError={onError}
         onRemoved={onChanged}
         onRemoveError={onError}
         onSaved={onChanged}
         onSaveError={onError}
-        onCreated={onChanged}
-        onCreateError={onError}
       >{({
           add,
           create,
