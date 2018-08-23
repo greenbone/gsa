@@ -23,11 +23,7 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Asset from 'gmp/models/os.js';
-
-class OperatingSystem extends Asset {
-
-  static asset_type = 'os';
+class OperatingSystem {
 
   addHost(host) {
     if (!(host.ip in this.hosts.hosts_by_ip)) {

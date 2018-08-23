@@ -20,24 +20,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import {isDefined} from '../utils/identity';
-
-import Model from '../model.js';
+import Model from '../model';
 
 class Asset extends Model {
 
-  static asset_type = 'unknown';
-  static entity_type = 'asset';
+  static entityType = 'asset';
 
-  constructor(elem, asset_type) {
-    super(elem);
-
-    if (!isDefined(this.asset_type)) { // only overwrite if not already set
-      this.asset_type = isDefined(asset_type) ? asset_type :
-        this.constructor.asset_type;
-    }
-  }
 }
 
 export default Asset;

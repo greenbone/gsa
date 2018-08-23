@@ -29,7 +29,7 @@ import Info from './info';
 
 class CertBundAdv extends Info {
 
-  static info_type = 'cert_bund_adv';
+  static entityType = 'certbund';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cert_bund_adv');

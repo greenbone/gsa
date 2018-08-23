@@ -24,16 +24,7 @@ import _ from '../locale';
 
 import {isDefined} from './identity';
 
-export const getEntityType = (model = {}) => {
-  const {entity_type: entityType} = model;
-  if (entityType === 'info' && isDefined(model.info_type)) {
-    return model.info_type;
-  }
-  if (entityType === 'asset' && isDefined(model.asset_type)) {
-    return model.asset_type;
-  }
-  return entityType;
-};
+export const getEntityType = (model = {}) => model.entityType;
 
 export const pluralizeType = type => type[type.length - 1] === 's' ||
   type === 'info' ? type : type + 's';
@@ -46,6 +37,7 @@ const TYPES = {
   port_list: 'portlist',
   port_range: 'portrange',
   report_format: 'reportformat',
+  vuln: 'vulnerability',
 };
 
 export const normalizeType = type => {
@@ -86,7 +78,7 @@ const ENTITY_TYPES = {
   target: _('Target'),
   task: _('Task'),
   user: _('User'),
-  vuln: _('Vulnerability'),
+  vulnerability: _('Vulnerability'),
 };
 
 
@@ -104,6 +96,7 @@ const CMD_TYPES = {
   portlist: 'port_list',
   portrange: 'port_range',
   reportformat: 'report_format',
+  vulnerability: 'vuln',
 };
 
 /**

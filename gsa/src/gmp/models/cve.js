@@ -31,9 +31,9 @@ import {
   parseCvssBaseVector,
   parseDate,
   setProperties,
-} from '../parser.js';
+} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 const delete_empty = (obj, props) => {
   for (const prop of props) {
@@ -54,7 +54,7 @@ const rename_props = (obj, rename = {}) => {
 
 class Cve extends Info {
 
-  static info_type = 'cve';
+  static entityType = 'cve';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'cve');

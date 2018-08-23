@@ -25,6 +25,7 @@ import _ from 'gmp/locale';
 import {isDefined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
+import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
@@ -33,13 +34,13 @@ import {
   parseDuration,
   NO_VALUE,
   YES_VALUE,
-} from '../parser.js';
+} from '../parser';
 
-import Model from '../model.js';
+import Model from '../model';
 
-import Report from './report.js';
-import Schedule from './schedule.js';
-import Scanner from './scanner.js';
+import Report from './report';
+import Schedule from './schedule';
+import Scanner from './scanner';
 
 export const AUTO_DELETE_KEEP = 'keep';
 export const AUTO_DELETE_NO = 'no';
@@ -94,7 +95,7 @@ export const isActive = status => status === TASK_STATUS.running ||
 
 class Task extends Model {
 
-  static entity_type = 'task';
+  static entityType = 'task';
 
   isActive() {
     return isActive(this.status);
@@ -167,11 +168,10 @@ class Task extends Model {
     ];
     models.forEach(item => {
       const name = item;
-      const model = Model;
 
       const data = elem[name];
       if (isDefined(data) && !isEmpty(data._id)) {
-        elem[name] = new model(data, name);
+        elem[name] = new Model(data, normalizeType(name));
       }
       else {
         delete elem[name];

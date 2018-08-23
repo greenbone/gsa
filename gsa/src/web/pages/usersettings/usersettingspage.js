@@ -28,6 +28,8 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
+
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -964,13 +966,18 @@ const mapStateToProps = rootState => {
   const ovalFilter = filtersSel.getEntity(ovalFilterId);
   const secInfoFilter = filtersSel.getEntity(secInfoFilterId);
 
+  let scanconfigs = scanConfigsSel.getEntities();
+  if (isDefined(scanconfigs)) {
+    scanconfigs = scanconfigs.filter(filterEmptyScanConfig);
+  }
+
   return {
     alerts: alertsSel.getEntities(),
     credentials: credentialsSel.getEntities(),
     filters: filtersSel.getEntities(),
     portlists: portListsSel.getEntities(),
     reportformats: reportFormatsSel.getEntities(),
-    scanconfigs: scanConfigsSel.getEntities(),
+    scanconfigs,
     scanners: scannersSel.getEntities(),
     schedules: schedulesSel.getEntities(),
     targets: targetsSel.getEntities(),

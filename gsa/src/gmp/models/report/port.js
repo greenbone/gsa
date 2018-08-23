@@ -24,7 +24,7 @@ import 'core-js/fn/string/includes';
 
 import {isDefined} from '../../utils/identity';
 
-import {setProperties, parseInt, parseSeverity} from '../../parser.js';
+import {setProperties, parseInt, parseSeverity} from '../../parser';
 
 class ReportPort {
 

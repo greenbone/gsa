@@ -26,9 +26,9 @@ import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 
-import {parseFloat, parseSeverity} from '../parser.js';
+import {parseFloat, parseSeverity} from '../parser';
 
-import Info from './info.js';
+import Info from './info';
 
 export const TAG_NA = 'N/A';
 
@@ -55,7 +55,7 @@ const parse_ids = (ids, no) => {
 
 class Nvt extends Info {
 
-  static info_type = 'nvt';
+  static entityType = 'nvt';
 
   parseProperties(elem) {
     const ret = super.parseProperties(elem, 'nvt');
