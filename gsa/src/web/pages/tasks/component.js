@@ -626,6 +626,7 @@ class TaskComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -696,6 +697,7 @@ class TaskComponent extends React.Component {
           onDeleteError={onDeleteError}
           onDownloaded={onDownloaded}
           onDownloadError={onDownloadError}
+          onInteraction={onInteraction}
           onSaved={onSaved}
           onSaveError={onSaveError}
         >
