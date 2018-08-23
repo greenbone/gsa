@@ -129,6 +129,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onModifyTaskWizardSaved={onChanged}
     onReportImported={onChanged}
     onResumed={onChanged}
