@@ -178,12 +178,16 @@ class StartPage extends React.Component {
     this.setState({showConfirmRemoveDialog: false});
   }
 
+  closeNewDashboardDialog() {
+    this.setState({showNewDashboardDialog: false});
+  }
+
   handleOpenNewDashboardDialog() {
     this.setState({showNewDashboardDialog: true});
   }
 
   handleNewDashboardDialogClose() {
-    this.setState({showNewDashboardDialog: false});
+    this.closeNewDashboardDialog();
   }
 
   handleActivateTab(tab) {
@@ -278,6 +282,8 @@ class StartPage extends React.Component {
         },
       },
     });
+
+    this.closeNewDashboardDialog();
 
     // change to new dashboard tab
     this.setState({activeTab: dashboards.length});

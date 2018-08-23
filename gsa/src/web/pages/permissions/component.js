@@ -26,21 +26,19 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {getEntityType} from 'gmp/utils/entitytype';
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {selectSaveId} from 'gmp/utils/id';
 
-import PropTypes from '../../utils/proptypes.js';
-import compose from '../../utils/compose.js';
-import withGmp from '../../utils/withGmp.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes.js';
+import withGmp from 'web/utils/withGmp';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from '../../entity/component';
 
-import EntityComponent from '../../entity/component.js';
-
-import PermissionDialog from './dialog.js';
-import {getEntityType} from 'gmp/utils/entitytype.js';
+import PermissionDialog from './dialog';
 
 class PermissionsComponent extends React.Component {
 
@@ -220,7 +218,7 @@ class PermissionsComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openPermissionDialog,
@@ -244,10 +242,10 @@ class PermissionsComponent extends React.Component {
                 userId={userId}
                 users={users}
                 onClose={this.closePermissionDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closePermissionDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

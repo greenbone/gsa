@@ -119,40 +119,26 @@ class TaskComponent extends React.Component {
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
-    this.closeAdvancedTaskWizard = this.closeAdvancedTaskWizard.bind(this);
+    this.handleCloseAdvancedTaskWizard =
+      this.handleCloseAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
-    this.closeContainerTaskDialog = this.closeContainerTaskDialog.bind(this);
+    this.handleCloseContainerTaskDialog =
+      this.handleCloseContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
-    this.closeReportImportDialog = this.closeReportImportDialog.bind(this);
+    this.handleCloseReportImportDialog =
+      this.handleCloseReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
-    this.closeModifyTaskWizard = this.closeModifyTaskWizard.bind(this);
+    this.handleCloseModifyTaskWizard =
+      this.handleCloseModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
-    this.closeTaskDialog = this.closeTaskDialog.bind(this);
+    this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
     this.openTaskWizard = this.openTaskWizard.bind(this);
-    this.closeTaskWizard = this.closeTaskWizard.bind(this);
+    this.handleCloseTaskWizard = this.handleCloseTaskWizard.bind(this);
   }
 
   renewSession() {
     this.props.renewSessionTimeout();
-  }
-
-  handleSaveContainerTask(data) {
-    if (isDefined(data.id)) {
-      const {onContainerSaved, onContainerSaveError} = this.props;
-      return this.cmd.saveContainer(data).then(onContainerSaved,
-        onContainerSaveError);
-    }
-
-    const {onContainerCreated, onContainerCreateError} = this.props;
-    return this.cmd.createContainer(data).then(onContainerCreated,
-      onContainerCreateError);
-  }
-
-  handleReportImport(data) {
-    const {onReportImported, onReportImportError, gmp} = this.props;
-
-    return gmp.report.import(data).then(onReportImported, onReportImportError);
   }
 
   handleTaskStart(task) {
@@ -171,31 +157,6 @@ class TaskComponent extends React.Component {
     const {onResumed, onResumeError} = this.props;
 
     return this.cmd.resume(task).then(onResumed, onResumeError);
-  }
-
-  handleSaveTaskWizard(data) {
-    const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
-
-    return gmp.wizard.runQuickFirstScan(data).then(onTaskWizardSaved,
-      onTaskWizardError);
-  }
-
-  handleSaveAdvancedTaskWizard(data) {
-    const {
-      gmp,
-      onAdvancedTaskWizardSaved,
-      onAdvancedTaskWizardError,
-    } = this.props;
-
-    return gmp.wizard.runQuickTask(data).then(onAdvancedTaskWizardSaved,
-      onAdvancedTaskWizardError);
-  }
-
-  handleSaveModifyTaskWizard(data) {
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
-
-    return gmp.wizard.runModifyTask(data).then(onModifyTaskWizardSaved,
-      onModifyTaskWizardError);
   }
 
   handleTaskWizardNewClick() {
@@ -219,10 +180,29 @@ class TaskComponent extends React.Component {
     this.renewSession();
   }
 
-  closeContainerTaskDialog() {
+  closeContainerDialog() {
     this.setState({containerTaskDialogVisible: false});
+  }
+
+  handleCloseContainerTaskDialog() {
+    this.closeContainerDialog();
     this.renewSession();
   }
+
+  handleSaveContainerTask(data) {
+    if (isDefined(data.id)) {
+      const {onContainerSaved, onContainerSaveError} = this.props;
+      return this.cmd.saveContainer(data)
+        .then(onContainerSaved, onContainerSaveError)
+        .then(() => this.closeContainerDialog());
+    }
+
+    const {onContainerCreated, onContainerCreateError} = this.props;
+    return this.cmd.createContainer(data)
+      .then(onContainerCreated, onContainerCreateError)
+      .then(() => this.closeContainerDialog());
+  }
+
 
   openTaskDialog(task) {
     if (isDefined(task) && task.isContainer()) {
@@ -236,6 +216,10 @@ class TaskComponent extends React.Component {
 
   closeTaskDialog() {
     this.setState({taskDialogVisible: false});
+  }
+
+  handleCloseTaskDialog() {
+    this.closeTaskDialog();
     this.renewSession();
   }
 
@@ -369,20 +353,6 @@ class TaskComponent extends React.Component {
     }
   }
 
-  openReportImportDialog(task) {
-    this.setState({
-      reportImportDialogVisible: true,
-      task_id: task.id,
-      tasks: [task],
-    });
-    this.renewSession();
-  }
-
-  closeReportImportDialog() {
-    this.setState({reportImportDialogVisible: false});
-    this.renewSession();
-  }
-
   openTaskWizard() {
     const {gmp} = this.props;
 
@@ -405,8 +375,21 @@ class TaskComponent extends React.Component {
 
   closeTaskWizard() {
     this.setState({taskWizardVisible: false});
+  }
+
+  handleCloseTaskWizard() {
+    this.closeTaskWizard();
     this.renewSession();
   }
+
+  handleSaveTaskWizard(data) {
+    const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
+
+    return gmp.wizard.runQuickFirstScan(data)
+      .then(onTaskWizardSaved, onTaskWizardError)
+      .then(() => this.closeTaskWizard());
+  }
+
 
   openAdvancedTaskWizard() {
     const {
@@ -458,8 +441,25 @@ class TaskComponent extends React.Component {
 
   closeAdvancedTaskWizard() {
     this.setState({advancedTaskWizardVisible: false});
+  }
+
+  handleCloseAdvancedTaskWizard() {
+    this.closeAdvancedTaskWizard();
     this.renewSession();
   }
+
+  handleSaveAdvancedTaskWizard(data) {
+    const {
+      gmp,
+      onAdvancedTaskWizardSaved,
+      onAdvancedTaskWizardError,
+    } = this.props;
+
+    return gmp.wizard.runQuickTask(data)
+      .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
+      .then(() => this.closeAdvancedTaskWizard());
+  }
+
 
   openModifyTaskWizard() {
     const {
@@ -487,7 +487,45 @@ class TaskComponent extends React.Component {
 
   closeModifyTaskWizard() {
     this.setState({modifyTaskWizardVisible: false});
+  }
+
+  handleCloseModifyTaskWizard() {
+    this.closeModifyTaskWizard();
     this.renewSession();
+  }
+
+  handleSaveModifyTaskWizard(data) {
+    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
+
+    return gmp.wizard.runModifyTask(data)
+      .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
+      .then(() => this.closeModifyTaskWizard());
+  }
+
+  openReportImportDialog(task) {
+    this.setState({
+      reportImportDialogVisible: true,
+      task_id: task.id,
+      tasks: [task],
+    });
+    this.renewSession();
+  }
+
+  closeReportImportDialog() {
+    this.setState({reportImportDialogVisible: false});
+  }
+
+  handleCloseReportImportDialog() {
+    this.closeReportImportDialog();
+    this.renewSession();
+  }
+
+  handleReportImport(data) {
+    const {onReportImported, onReportImportError, gmp} = this.props;
+
+    return gmp.report.import(data)
+      .then(onReportImported, onReportImportError)
+      .then(() => this.closeReportImportDialog());
   }
 
   render() {
@@ -611,8 +649,8 @@ class TaskComponent extends React.Component {
                   task={task}
                   title={title}
                   {...data}
-                  onClose={this.closeTaskDialog}
-                  onSave={save}
+                  onClose={this.handleCloseTaskDialog}
+                  onSave={d => save(d).then(() => this.closeTaskDialog())}
                 />
               }
             </Wrapper>
@@ -629,7 +667,7 @@ class TaskComponent extends React.Component {
             auto_delete={auto_delete}
             auto_delete_data={auto_delete_data}
             title={title}
-            onClose={this.closeContainerTaskDialog}
+            onClose={this.handleCloseContainerTaskDialog}
             onSave={this.handleSaveContainerTask}
           />
         }
@@ -644,7 +682,7 @@ class TaskComponent extends React.Component {
             smb_credential={smb_credential}
             esxi_credential={esxi_credential}
             scanner_id={scanner_id}
-            onClose={this.closeTaskWizard}
+            onClose={this.handleCloseTaskWizard}
             onSave={this.handleSaveTaskWizard}
             onNewClick={this.handleTaskWizardNewClick}
           />
@@ -668,7 +706,7 @@ class TaskComponent extends React.Component {
             start_minute={start_minute}
             start_hour={start_hour}
             start_timezone={start_timezone}
-            onClose={this.closeAdvancedTaskWizard}
+            onClose={this.handleCloseAdvancedTaskWizard}
             onSave={this.handleSaveAdvancedTaskWizard}
           />
         }
@@ -682,7 +720,7 @@ class TaskComponent extends React.Component {
             start_minute={start_minute}
             start_hour={start_hour}
             start_timezone={start_timezone}
-            onClose={this.closeModifyTaskWizard}
+            onClose={this.handleCloseModifyTaskWizard}
             onSave={this.handleSaveModifyTaskWizard}
           />
         }
@@ -692,7 +730,7 @@ class TaskComponent extends React.Component {
             newContainerTask={false}
             task_id={task_id}
             tasks={tasks}
-            onClose={this.closeReportImportDialog}
+            onClose={this.handleCloseReportImportDialog}
             onSave={this.handleReportImport}
           />
         }

@@ -83,8 +83,12 @@ export class DashboardControls extends React.Component {
     this.renewSession();
   }
 
-  handleNewDialoClose() {
+  closeNewDialog() {
     this.setState({showNewDialog: false});
+  }
+
+  handleNewDialoClose() {
+    this.closeNewDialog();
     this.renewSession();
   }
 
@@ -95,6 +99,8 @@ export class DashboardControls extends React.Component {
     } = this.props;
 
     if (isDefined(onNewDisplay)) {
+      this.closeNewDialog();
+
       onNewDisplay(dashboardId, displayId);
 
       this.renewSession();

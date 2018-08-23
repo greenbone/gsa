@@ -34,8 +34,6 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import withGmp from 'web/utils/withGmp';
@@ -159,7 +157,7 @@ class HostComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openHostDialog,
@@ -173,10 +171,10 @@ class HostComponent extends React.Component {
                 host={host}
                 title={title}
                 onClose={this.closeHostDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeHostDialog())}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

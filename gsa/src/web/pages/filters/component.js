@@ -197,7 +197,7 @@ class FilterComponent extends React.Component {
                 type={type}
                 types={types}
                 onClose={this.closeFilterDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeFilterDialog())}
               />
             }
           </Wrapper>

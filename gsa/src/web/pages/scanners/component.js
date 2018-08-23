@@ -38,16 +38,14 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Wrapper from '../../components/layout/wrapper.js';
+import EntityComponent from 'web/entity/component';
 
-import EntityComponent from '../../entity/component.js';
+import CredentialsDialog from '../credentials/dialog';
 
-import CredentialsDialog from '../credentials/dialog.js';
-
-import ScannerDialog from './dialog.js';
+import ScannerDialog from './dialog';
 
 class ScannerComponent extends React.Component {
 
@@ -162,12 +160,13 @@ class ScannerComponent extends React.Component {
         credential = response.data;
       })
       .then(() => gmp.credentials.getAll())
-      .then(response =>
+      .then(response => {
         this.setState({
           credentials: response.data,
           credential_id: credential.id,
-        })
-      );
+        });
+        this.closeCredentialsDialog();
+      });
   }
 
   handleCredentialChange(credential_id) {
@@ -246,7 +245,7 @@ class ScannerComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openScannerDialog,
@@ -270,7 +269,7 @@ class ScannerComponent extends React.Component {
                 onClose={this.closeScannerDialog}
                 onCredentialChange={this.handleCredentialChange}
                 onNewCredentialClick={this.openCredentialsDialog}
-                onSave={save}
+                onSave={d => save(d).then(() => this.closeScannerDialog())}
                 onScannerTypeChange={this.handleScannerTypeChange}
               />
             }
@@ -281,7 +280,7 @@ class ScannerComponent extends React.Component {
                 onSave={this.handleCreateCredential}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
