@@ -394,19 +394,19 @@ const Page = ({
     onCloneError={onError}
     onCreated={goto_details('task', props)}
     onContainerCreated={goto_details('task', props)}
+    onContainerSaved={onChanged}
     onDeleted={goto_list('tasks', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onReportImported={onChanged}
+    onResumed={onChanged}
+    onResumeError={onError}
     onSaved={onChanged}
     onStarted={onChanged}
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onContainerSaved={onChanged}
-    onReportImported={onChanged}
   >
     {({
       clone,
