@@ -723,7 +723,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/dashboard/statusdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/details.js
-     ${GSA_SRC_DIR}/src/web/pages/tasks/dialogcontainer.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/filterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/icons/importreporticon.js

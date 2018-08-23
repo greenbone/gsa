@@ -43,6 +43,9 @@ export const parse_count = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
+export const filterEmptyScanConfig = config =>
+  config.id !== EMPTY_SCAN_CONFIG_ID;
+
 class ScanConfig extends Model {
 
   static entityType = 'scanconfig';
