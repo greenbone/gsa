@@ -52,18 +52,26 @@ class EntityComponent extends React.Component {
   handleEntityDelete(entity) {
     const {onDeleted, onDeleteError, gmp, name} = this.props;
     const cmd = gmp[name];
+
+    this.handleInteraction();
+
     return cmd.delete(entity).then(onDeleted, onDeleteError);
   }
 
   handleEntityClone(entity) {
     const {onCloned, onCloneError, gmp, name} = this.props;
     const cmd = gmp[name];
+
+    this.handleInteraction();
+
     return cmd.clone(entity).then(onCloned, onCloneError);
   }
 
   handleEntitySave(data) {
     const {gmp, name} = this.props;
     const cmd = gmp[name];
+
+    this.handleInteraction();
 
     if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
@@ -78,12 +86,21 @@ class EntityComponent extends React.Component {
     const {onDownloaded, onDownloadError, gmp, name} = this.props;
     const cmd = gmp[name];
 
+    this.handleInteraction();
+
     const promise = cmd.export(entity).then(response => {
       const filename = name + '-' + entity.id + '.xml';
       return {filename, data: response.data};
     });
 
     return promise.then(onDownloaded, onDownloadError);
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -111,6 +128,7 @@ EntityComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
