@@ -427,8 +427,11 @@ const Page = ({
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
-        onError={onError}
         onContainerTaskCreateClick={createcontainer}
+        onError={onError}
+        onPermissionChanged={onChanged}
+        onPermissionDownloaded={onDownloaded}
+        onPermissionDownloadError={onError}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -438,9 +441,6 @@ const Page = ({
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
