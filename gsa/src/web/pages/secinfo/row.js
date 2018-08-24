@@ -40,7 +40,7 @@ import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
 
-import {secInfoTypeName} from 'gmp/models/secinfo.js';
+import {secInfoTypeName, secInfoType} from 'gmp/models/secinfo.js';
 
 const Row = ({
   entity,
@@ -64,7 +64,7 @@ const Row = ({
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
-          {secInfoTypeName(entity.info_type)}
+          {secInfoTypeName(secInfoType(entity))}
         </TableData>
         <TableData>
           {longDate(entity.creationTime)}

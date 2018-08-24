@@ -48,6 +48,8 @@ export const secInfoTypeName = (type, unknown = _('N/A')) => {
   }
 };
 
+export const secInfoType = entity => entity.info_type;
+
 class SecInfo extends Info {
 
   static entityType = 'allinfo';
