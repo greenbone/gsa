@@ -57,6 +57,7 @@ import EntityComponent from 'web/entity/component';
 import EntityContainer from 'web/entity/container';
 import {InfoLayout} from 'web/entity/info';
 import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -215,6 +216,13 @@ const CvePage = props => (
       onChanged,
       onDownloaded,
       onError,
+      onTagAddClick,
+      onTagCreateClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagRemoveClick,
       ...cprops
     }) => (
       <EntityComponent
@@ -238,7 +246,6 @@ const CvePage = props => (
           >
             {({
               activeTab = 0,
-              tagsComponent,
               onActivateTab,
               entity,
               ...other
@@ -271,7 +278,16 @@ const CvePage = props => (
                         />
                       </TabPanel>
                       <TabPanel>
-                        {tagsComponent}
+                        <EntityTags
+                          entity={entity}
+                          onTagAddClick={onTagAddClick}
+                          onTagDeleteClick={onTagDeleteClick}
+                          onTagDisableClick={onTagDisableClick}
+                          onTagEditClick={onTagEditClick}
+                          onTagEnableClick={onTagEnableClick}
+                          onTagCreateClick={onTagCreateClick}
+                          onTagRemoveClick={onTagRemoveClick}
+                        />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>

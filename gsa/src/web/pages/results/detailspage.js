@@ -59,6 +59,7 @@ import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntityContainer from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -341,7 +342,18 @@ class Page extends React.Component {
   }
 
   render() {
-    const {onChanged} = this.props;
+    const {
+      onChanged,
+      onDownloaded,
+      onError,
+      onTagAddClick,
+      onTagCreateClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagRemoveClick,
+    } = this.props;
     return (
       <NoteComponent
         onCreated={onChanged}
@@ -362,6 +374,9 @@ class Page extends React.Component {
                 onOverrideCreateClick={
                   result => this.openDialog(result, createoverride)}
                 onResultDownloadClick={this.handleDownload}
+                onPermissionChanged={onChanged}
+                onPermissionDownloaded={onDownloaded}
+                onPermissionDownloadError={onError}
               >
                 {({
                   activeTab = 0,
@@ -398,7 +413,16 @@ class Page extends React.Component {
                             />
                           </TabPanel>
                           <TabPanel>
-                            {tagsComponent}
+                            <EntityTags
+                              entity={entity}
+                              onTagAddClick={onTagAddClick}
+                              onTagDeleteClick={onTagDeleteClick}
+                              onTagDisableClick={onTagDisableClick}
+                              onTagEditClick={onTagEditClick}
+                              onTagEnableClick={onTagEnableClick}
+                              onTagCreateClick={onTagCreateClick}
+                              onTagRemoveClick={onTagRemoveClick}
+                            />
                           </TabPanel>
                         </TabPanels>
                       </Tabs>
@@ -415,13 +439,17 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-};
-
-Page.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 Page = withGmp(Page);
@@ -431,7 +459,7 @@ const ResultPage = props => (
     {...props}
     name="result"
   >
-    {cprops => <Page {...cprops} />}
+    {cprops => <Page {...props} {...cprops} />}
   </EntityContainer>
 );
 

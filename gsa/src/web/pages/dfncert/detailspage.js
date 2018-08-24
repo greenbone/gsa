@@ -50,6 +50,7 @@ import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import EntityContainer from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -164,6 +165,13 @@ const DfnCertAdvPage = props => (
       onChanged,
       onDownloaded,
       onError,
+      onTagAddClick,
+      onTagCreateClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagRemoveClick,
       ...cprops
     }) => (
       <EntityComponent
@@ -183,7 +191,6 @@ const DfnCertAdvPage = props => (
           >
             {({
               activeTab = 0,
-              tagsComponent,
               onActivateTab,
               entity,
               ...other
@@ -216,7 +223,16 @@ const DfnCertAdvPage = props => (
                         />
                       </TabPanel>
                       <TabPanel>
-                        {tagsComponent}
+                        <EntityTags
+                          entity={entity}
+                          onTagAddClick={onTagAddClick}
+                          onTagDeleteClick={onTagDeleteClick}
+                          onTagDisableClick={onTagDisableClick}
+                          onTagEditClick={onTagEditClick}
+                          onTagEnableClick={onTagEnableClick}
+                          onTagCreateClick={onTagCreateClick}
+                          onTagRemoveClick={onTagRemoveClick}
+                        />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>

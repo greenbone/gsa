@@ -53,6 +53,7 @@ import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import EntityContainer from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -228,6 +229,13 @@ const CertBundAdvPage = props => (
       onChanged,
       onDownloaded,
       onError,
+      onTagAddClick,
+      onTagCreateClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagRemoveClick,
       ...cprops
     }) => (
       <EntityComponent
@@ -247,7 +255,6 @@ const CertBundAdvPage = props => (
           >
             {({
               activeTab = 0,
-              tagsComponent,
               onActivateTab,
               entity,
               ...other
@@ -280,7 +287,16 @@ const CertBundAdvPage = props => (
                         />
                       </TabPanel>
                       <TabPanel>
-                        {tagsComponent}
+                        <EntityTags
+                          entity={entity}
+                          onTagAddClick={onTagAddClick}
+                          onTagDeleteClick={onTagDeleteClick}
+                          onTagDisableClick={onTagDisableClick}
+                          onTagEditClick={onTagEditClick}
+                          onTagEnableClick={onTagEnableClick}
+                          onTagCreateClick={onTagCreateClick}
+                          onTagRemoveClick={onTagRemoveClick}
+                        />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>

@@ -51,6 +51,7 @@ import Override from 'web/entity/override';
 import EntityPage from 'web/entity/page';
 import EntityContainer, {loader} from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -232,6 +233,13 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => (
   <NvtComponent
@@ -263,7 +271,6 @@ const Page = ({
           activeTab = 0,
           permissionsComponent,
           permissionsTitle,
-          tagsComponent,
           onActivateTab,
           entity,
           ...other
@@ -296,7 +303,16 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {tagsComponent}
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
@@ -312,6 +328,13 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 const nvt_id_filter = id => 'nvt_id=' + id;
