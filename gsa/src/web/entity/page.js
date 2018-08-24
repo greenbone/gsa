@@ -116,14 +116,6 @@ class EntityPage extends React.Component {
       section_title = title + ': ' + entity.name;
     }
 
-    const {userTags} = entity;
-    const tagsTitle = (
-      <TabTitle
-        title={_('User Tags')}
-        count={userTags.length}
-      />
-    );
-
     let hasPermissions = false;
     if (isDefined(permissions)) {
       hasPermissions = isDefined(permissions.entities);
@@ -148,7 +140,6 @@ class EntityPage extends React.Component {
           activeTab,
           entity,
           tagsComponent: TagsComponent ? this.renderUserTags() : undefined,
-          tagsTitle,
           permissionsComponent: PermissionsComponent ?
             this.renderPermissions() : undefined,
           permissionsTitle,
