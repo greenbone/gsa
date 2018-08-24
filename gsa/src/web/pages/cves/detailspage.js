@@ -26,41 +26,41 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
 
-import DetailsBlock from '../../entity/block.js';
-import EntityPage from '../../entity/page.js';
-import EntityComponent from '../../entity/component.js';
-import EntityContainer from '../../entity/container.js';
-import {InfoLayout} from '../../entity/info.js';
-import EntitiesTab from 'web/entity/tab.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import CertLink from 'web/components/link/certlink';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import CertLink from '../../components/link/certlink.js';
-import DetailsLink from '../../components/link/detailslink.js';
+import Table from 'web/components/table/stripedtable';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import EntityComponent from 'web/entity/component';
+import EntityContainer from 'web/entity/container';
+import {InfoLayout} from 'web/entity/info';
+import EntitiesTab from 'web/entity/tab';
 
-import Table from '../../components/table/stripedtable.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import PropTypes from 'web/utils/proptypes';
 
-import CveDetails from './details.js';
+import CveDetails from './details';
 
 const ToolBarIcons = ({
   entity,

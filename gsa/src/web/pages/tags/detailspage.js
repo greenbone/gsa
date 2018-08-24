@@ -25,15 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilties from 'web/utils/withCapabilities';
-
-import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
-import {goto_details, goto_list} from 'web/entity/component';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -41,11 +32,6 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -56,10 +42,24 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
-import ResourceList from 'web/pages/tags/resourcelist';
-import TagComponent from 'web/pages/tags/component';
-import TagDetails from 'web/pages/tags/details';
+import EntityPage from 'web/entity/page';
+import EntityContainer, {
+  permissions_resource_loader,
+} from 'web/entity/container';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilties from 'web/utils/withCapabilities';
+
+import ResourceList from './resourcelist';
+import TagComponent from './component';
+import TagDetails from './details';
 
 const ToolBarIcons = withCapabilties(({
   capabilities,

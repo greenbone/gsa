@@ -27,37 +27,37 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import DetailsBlock from '../../entity/block.js';
-import Note from '../../entity/note.js';
-import Override from '../../entity/override.js';
-import EntityPage from '../../entity/page.js';
-import EntityContainer, {loader} from '../../entity/container.js';
-import EntitiesTab from 'web/entity/tab.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import Link from 'web/components/link/link';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Link from '../../components/link/link.js';
+import DetailsBlock from 'web/entity/block';
+import Note from 'web/entity/note';
+import Override from 'web/entity/override';
+import EntityPage from 'web/entity/page';
+import EntityContainer, {loader} from 'web/entity/container';
+import EntitiesTab from 'web/entity/tab';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import NvtComponent from './component.js';
-import NvtDetails from './details.js';
-import Preferences from './preferences.js';
+import NvtComponent from './component';
+import NvtDetails from './details';
+import Preferences from './preferences';
 
 let ToolBarIcons = ({
   capabilities,

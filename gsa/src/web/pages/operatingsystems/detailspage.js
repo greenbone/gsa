@@ -25,16 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityPage, {Col} from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
-import {goto_list} from 'web/entity/component';
-import EntitiesTab from 'web/entity/tab';
-
 import Badge from 'web/components/badge/badge';
 
 import SeverityBar from 'web/components/bar/severitybar';
@@ -63,6 +53,16 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import EntityPage, {Col} from 'web/entity/page';
+import EntityContainer, {
+  permissions_resource_loader,
+} from 'web/entity/container';
+import {goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import OsComponent from './component';
 

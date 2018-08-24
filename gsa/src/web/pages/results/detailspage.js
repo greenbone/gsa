@@ -27,16 +27,6 @@ import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
-import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
-import Note from 'web/entity/note';
-import Override from 'web/entity/override';
-import EntityContainer from 'web/entity/container';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -63,12 +53,22 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import Note from 'web/entity/note';
+import Override from 'web/entity/override';
+import EntityContainer from 'web/entity/container';
+import EntitiesTab from 'web/entity/tab';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
+
 import NoteComponent from '../notes/component';
 
 import OverrideComponent from '../overrides/component';
 
 import ResultDetails from './details';
-import EntitiesTab from 'web/entity/tab';
 
 let ToolBarIcons = ({
   capabilities,
