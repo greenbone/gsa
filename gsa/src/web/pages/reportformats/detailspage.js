@@ -27,8 +27,6 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 import withCapabilities from '../../utils/withCapabilities.js';
 
@@ -303,16 +301,12 @@ const Page = ({
                       count={paramsCount}
                     />
                   </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <Tab>
+                    {tagsTitle}
+                  </Tab>
+                  <Tab>
+                    {permissionsTitle}
+                  </Tab>
                 </TabList>
               </TabLayout>
 
@@ -327,16 +321,12 @@ const Page = ({
                   <TabPanel>
                     <Parameters entity={entity}/>
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    {tagsComponent}
+                  </TabPanel>
+                  <TabPanel>
+                    {permissionsComponent}
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>

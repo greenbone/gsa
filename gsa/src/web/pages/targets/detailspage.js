@@ -228,16 +228,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      {tabsTitle}
+                    </Tab>
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
                   </TabList>
                 </TabLayout>
 
@@ -248,16 +244,12 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>

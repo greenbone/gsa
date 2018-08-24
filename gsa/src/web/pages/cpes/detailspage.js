@@ -26,8 +26,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
@@ -197,14 +195,11 @@ const CpePage = props => (
             title={_('CPE')}
             detailsComponent={Details}
             infoComponent={EntityInfo}
-            permissionsComponent={false}
             toolBarIcons={ToolBarIcons}
             onCpeDownloadClick={download}
           >
             {({
               activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
               tagsComponent,
               tagsTitle,
               onActivateTab,
@@ -225,16 +220,9 @@ const CpePage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
+                      <Tab>
+                        {tagsTitle}
+                      </Tab>
                     </TabList>
                   </TabLayout>
 
@@ -245,16 +233,9 @@ const CpePage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
+                      <TabPanel>
+                        {tagsComponent}
+                      </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>

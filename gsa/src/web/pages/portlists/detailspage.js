@@ -27,8 +27,6 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
@@ -256,16 +254,12 @@ const Page = ({
                       count={portRangesCount}
                     />
                   </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <Tab>
+                    {tagsTitle}
+                  </Tab>
+                  <Tab>
+                    {permissionsTitle}
+                  </Tab>
                 </TabList>
               </TabLayout>
 
@@ -280,16 +274,12 @@ const Page = ({
                   <TabPanel>
                     <PortRanges entity={entity}/>
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    {tagsComponent}
+                  </TabPanel>
+                  <TabPanel>
+                    {permissionsComponent}
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>

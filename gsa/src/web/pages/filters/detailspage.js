@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 
 import EntityPage from 'web/entity/page';
@@ -178,16 +176,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
                   </TabList>
                 </TabLayout>
 
@@ -198,16 +192,12 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>

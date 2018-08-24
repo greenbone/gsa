@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import EntityPage from '../../entity/page.js';
@@ -139,7 +137,6 @@ const Page = ({
         <EntityPage
           {...props}
           detailsComponent={PermissionDetails}
-          permissionsComponent={false}
           sectionIcon="permission.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Permission')}
@@ -152,8 +149,6 @@ const Page = ({
         >
           {({
             activeTab = 0,
-            permissionsComponent,
-            permissionsTitle,
             tagsComponent,
             tagsTitle,
             onActivateTab,
@@ -174,16 +169,9 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
                   </TabList>
                 </TabLayout>
 
@@ -194,16 +182,9 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>

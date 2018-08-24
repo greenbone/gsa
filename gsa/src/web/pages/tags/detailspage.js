@@ -27,8 +27,6 @@ import _ from 'gmp/locale';
 
 import glamorous from 'glamorous';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
@@ -251,11 +249,9 @@ const Page = ({
                         count={resourceCount}
                       />
                     </Tab>
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
                   </TabList>
                 </TabLayout>
 
@@ -269,11 +265,9 @@ const Page = ({
                     <TabPanel>
                       <ResourceList entity={entity}/>
                     </TabPanel>
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>

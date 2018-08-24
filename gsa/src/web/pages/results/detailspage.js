@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
 import PropTypes from 'web/utils/proptypes';
@@ -358,7 +356,6 @@ class Page extends React.Component {
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
                 detailsComponent={Details}
-                permissionsComponent={false}
                 onNoteCreateClick={
                   result => this.openDialog(result, createnote)}
                 onOverrideCreateClick={
@@ -367,8 +364,6 @@ class Page extends React.Component {
               >
                 {({
                   activeTab = 0,
-                  permissionsComponent,
-                  permissionsTitle,
                   tagsComponent,
                   tagsTitle,
                   onActivateTab,
@@ -389,16 +384,9 @@ class Page extends React.Component {
                           <Tab>
                             {_('Information')}
                           </Tab>
-                          {isDefined(tagsComponent) &&
-                            <Tab>
-                              {tagsTitle}
-                            </Tab>
-                          }
-                          {isDefined(permissionsComponent) &&
-                            <Tab>
-                              {permissionsTitle}
-                            </Tab>
-                          }
+                          <Tab>
+                            {tagsTitle}
+                          </Tab>
                         </TabList>
                       </TabLayout>
 
@@ -409,16 +397,9 @@ class Page extends React.Component {
                               entity={entity}
                             />
                           </TabPanel>
-                          {isDefined(tagsComponent) &&
-                            <TabPanel>
-                              {tagsComponent}
-                            </TabPanel>
-                          }
-                          {isDefined(permissionsComponent) &&
-                            <TabPanel>
-                              {permissionsComponent}
-                            </TabPanel>
-                          }
+                          <TabPanel>
+                            {tagsComponent}
+                          </TabPanel>
                         </TabPanels>
                       </Tabs>
                     </Layout>

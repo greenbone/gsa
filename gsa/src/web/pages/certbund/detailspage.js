@@ -27,8 +27,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from '../../utils/proptypes.js';
 
 import DetailsBlock from '../../entity/block.js';
@@ -243,14 +241,11 @@ const CertBundAdvPage = props => (
             sectionIcon="cert_bund_adv.svg"
             title={_('CERT-Bund Advisory')}
             detailsComponent={Details}
-            permissionsComponent={false}
             toolBarIcons={ToolBarIcons}
             onCertBundAdvDownloadClick={download}
           >
             {({
               activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
               tagsComponent,
               tagsTitle,
               onActivateTab,
@@ -271,16 +266,9 @@ const CertBundAdvPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
+                      <Tab>
+                        {tagsTitle}
+                      </Tab>
                     </TabList>
                   </TabLayout>
 
@@ -291,16 +279,9 @@ const CertBundAdvPage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
+                      <TabPanel>
+                        {tagsComponent}
+                      </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>

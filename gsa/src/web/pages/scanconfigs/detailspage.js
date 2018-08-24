@@ -27,8 +27,6 @@ import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -441,16 +439,12 @@ const Page = ({
                         count={nvtPrefsCount}
                       />
                     </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <Tab>
+                      {tagsTitle}
+                    </Tab>
+                    <Tab>
+                      {permissionsTitle}
+                    </Tab>
                   </TabList>
                 </TabLayout>
 
@@ -470,16 +464,12 @@ const Page = ({
                     <TabPanel>
                       <NvtPreferences entity={entity}/>
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      {tagsComponent}
+                    </TabPanel>
+                    <TabPanel>
+                      {permissionsComponent}
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>

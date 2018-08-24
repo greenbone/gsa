@@ -177,14 +177,11 @@ const DfnCertAdvPage = props => (
             sectionIcon="dfn_cert_adv.svg"
             title={_('DFN-CERT Advisory')}
             detailsComponent={Details}
-            permissionsComponent={false}
             toolBarIcons={ToolBarIcons}
             onDfnCertAdvDownloadClick={download}
           >
             {({
               activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
               tagsComponent,
               tagsTitle,
               onActivateTab,
@@ -205,16 +202,9 @@ const DfnCertAdvPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
+                      <Tab>
+                        {tagsTitle}
+                      </Tab>
                     </TabList>
                   </TabLayout>
 
@@ -225,16 +215,9 @@ const DfnCertAdvPage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
+                      <TabPanel>
+                        {tagsComponent}
+                      </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>

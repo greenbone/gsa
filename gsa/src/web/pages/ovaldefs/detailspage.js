@@ -362,7 +362,6 @@ const OvaldefPage = props => (
             sectionIcon="ovaldef.svg"
             title={_('OVAL Definition')}
             detailsComponent={Details}
-            permissionsComponent={false}
             toolBarIcons={ToolBarIcons}
             onOvaldefDownloadClick={download}
             onPermissionChanged={onChanged}
@@ -371,8 +370,6 @@ const OvaldefPage = props => (
           >
             {({
               activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
               tagsComponent,
               tagsTitle,
               onActivateTab,
@@ -393,16 +390,9 @@ const OvaldefPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
+                      <Tab>
+                        {tagsTitle}
+                      </Tab>
                     </TabList>
                   </TabLayout>
 
@@ -413,16 +403,9 @@ const OvaldefPage = props => (
                           entity={entity}
                         />
                       </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
+                      <TabPanel>
+                        {tagsComponent}
+                      </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
