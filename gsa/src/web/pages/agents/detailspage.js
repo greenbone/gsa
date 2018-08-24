@@ -195,57 +195,55 @@ const Page = ({
           onActivateTab,
           entity,
           ...other
-        }) => {
-          return (
-            <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
+        }) => (
+          <Layout grow="1" flex="column">
+            <TabLayout
+              grow="1"
+              align={['start', 'end']}
+            >
+              <TabList
+                active={activeTab}
+                align={['start', 'stretch']}
+                onActivateTab={onActivateTab}
               >
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={onActivateTab}
-                >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
-                  <Tab>
-                    {permissionsTitle}
-                  </Tab>
-                </TabList>
-              </TabLayout>
+                <Tab>
+                  {_('Information')}
+                </Tab>
+                <EntitiesTab entities={entity.userTags}>
+                  {_('User Tags')}
+                </EntitiesTab>
+                <Tab>
+                  {permissionsTitle}
+                </Tab>
+              </TabList>
+            </TabLayout>
 
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  <TabPanel>
-                    <AgentDetails
-                      entity={entity}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onTagAddClick={onTagAddClick}
-                      onTagDeleteClick={onTagDeleteClick}
-                      onTagDisableClick={onTagDisableClick}
-                      onTagEditClick={onTagEditClick}
-                      onTagEnableClick={onTagEnableClick}
-                      onTagCreateClick={onTagCreateClick}
-                      onTagRemoveClick={onTagRemoveClick}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    {permissionsComponent}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Layout>
-          );
-        }}
+            <Tabs active={activeTab}>
+              <TabPanels>
+                <TabPanel>
+                  <AgentDetails
+                    entity={entity}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <EntityTags
+                    entity={entity}
+                    onTagAddClick={onTagAddClick}
+                    onTagDeleteClick={onTagDeleteClick}
+                    onTagDisableClick={onTagDisableClick}
+                    onTagEditClick={onTagEditClick}
+                    onTagEnableClick={onTagEnableClick}
+                    onTagCreateClick={onTagCreateClick}
+                    onTagRemoveClick={onTagRemoveClick}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  {permissionsComponent}
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Layout>
+        )}
       </EntityPage>
     )}
   </AgentComponent>
