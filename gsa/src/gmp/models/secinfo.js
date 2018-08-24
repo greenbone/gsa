@@ -26,7 +26,7 @@ import {isDefined} from '../utils/identity';
 
 import Info from './info';
 
-export const secinfo_type = (type, unknown = _('N/A')) => {
+export const secInfoTypeName = (type, unknown = _('N/A')) => {
   if (!isDefined(type)) {
     return unknown;
   }
