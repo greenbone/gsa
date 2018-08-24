@@ -41,7 +41,6 @@ import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
 import EntityPermissions from './permissions.js';
-import EntityTags from './tags.js';
 
 export const Col = glamorous.col(
   ({width}) => ({width})
@@ -99,7 +98,6 @@ class EntityPage extends React.Component {
       sectionIcon,
       permissionsComponent: PermissionsComponent = EntityPermissions,
       sectionComponent: SectionComponent = Section,
-      tagsComponent: TagsComponent = EntityTags,
       title,
       permissions,
       ...other
@@ -139,7 +137,6 @@ class EntityPage extends React.Component {
           ...other,
           activeTab,
           entity,
-          tagsComponent: TagsComponent ? this.renderUserTags() : undefined,
           permissionsComponent: PermissionsComponent ?
             this.renderPermissions() : undefined,
           permissionsTitle,
@@ -167,36 +164,6 @@ class EntityPage extends React.Component {
           entity={entity}
         />
       </Layout>
-    );
-  }
-
-  renderUserTags() {
-    const {
-      entity,
-      tagsComponent: TagsComponent = EntityTags,
-      onTagAddClick,
-      onTagDeleteClick,
-      onTagDisableClick,
-      onTagEditClick,
-      onTagEnableClick,
-      onTagCreateClick,
-      onTagRemoveClick,
-    } = this.props;
-    if (TagsComponent === false) {
-      return null;
-    }
-
-    return (
-      <TagsComponent
-        entity={entity}
-        onTagAddClick={onTagAddClick}
-        onTagDeleteClick={onTagDeleteClick}
-        onTagDisableClick={onTagDisableClick}
-        onTagEditClick={onTagEditClick}
-        onTagEnableClick={onTagEnableClick}
-        onTagCreateClick={onTagCreateClick}
-        onTagRemoveClick={onTagRemoveClick}
-      />
     );
   }
 
@@ -264,19 +231,11 @@ EntityPage.propTypes = {
   permissionsComponent: PropTypes.componentOrFalse,
   sectionComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
-  tagsComponent: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
   onPermissionChanged: PropTypes.func,
   onPermissionDownloadError: PropTypes.func,
   onPermissionDownloaded: PropTypes.func,
-  onTagAddClick: PropTypes.func.isRequired,
-  onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
-  onTagDisableClick: PropTypes.func.isRequired,
-  onTagEditClick: PropTypes.func.isRequired,
-  onTagEnableClick: PropTypes.func.isRequired,
-  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 export default EntityPage;
