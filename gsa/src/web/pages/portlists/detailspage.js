@@ -23,8 +23,6 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -49,6 +47,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
+import EntitiesTab from 'web/entity/tab';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -58,22 +57,6 @@ import TrashIcon from '../../entity/icon/trashicon.js';
 import PortListComponent from './component.js';
 import PortListDetails from './details.js';
 import PortRangesTable from './portrangestable.js';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 const ToolBarIcons = ({
   entity,
@@ -224,16 +207,10 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
         }) => {
-          const {
-            port_ranges = [],
-          } = entity;
-          const portRangesCount = port_ranges.length;
-
           return (
             <Layout grow="1" flex="column">
               <TabLayout
@@ -248,15 +225,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    <TabTitle
-                      title={_('Port Ranges')}
-                      count={portRangesCount}
-                    />
-                  </Tab>
-                  <Tab>
-                    {tagsTitle}
-                  </Tab>
+                  <EntitiesTab entities={entity.port_ranges}>
+                    {_('Port Ranges')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                   <Tab>
                     {permissionsTitle}
                   </Tab>

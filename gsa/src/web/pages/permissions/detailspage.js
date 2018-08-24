@@ -30,6 +30,7 @@ import PropTypes from '../../utils/proptypes.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
+import EntitiesTab from 'web/entity/tab';
 
 import CloneIcon from '../../entity/icon/cloneicon.js';
 import CreateIcon from '../../entity/icon/createicon.js';
@@ -150,7 +151,6 @@ const Page = ({
           {({
             activeTab = 0,
             tagsComponent,
-            tagsTitle,
             onActivateTab,
             entity,
             ...other
@@ -169,9 +169,9 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
                   </TabList>
                 </TabLayout>
 

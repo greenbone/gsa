@@ -33,6 +33,7 @@ import EntityPage from '../../entity/page.js';
 import EntityComponent from '../../entity/component.js';
 import EntityContainer from '../../entity/container.js';
 import {InfoLayout} from '../../entity/info.js';
+import EntitiesTab from 'web/entity/tab.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -238,7 +239,6 @@ const CvePage = props => (
             {({
               activeTab = 0,
               tagsComponent,
-              tagsTitle,
               onActivateTab,
               entity,
               ...other
@@ -257,9 +257,9 @@ const CvePage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
                     </TabList>
                   </TabLayout>
 

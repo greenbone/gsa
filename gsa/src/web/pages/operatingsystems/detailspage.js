@@ -33,6 +33,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from 'web/entity/container';
 import {goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
 
 import Badge from 'web/components/badge/badge';
 
@@ -231,7 +232,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
@@ -250,9 +250,9 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    {tagsTitle}
-                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                   <Tab>
                     {permissionsTitle}
                   </Tab>

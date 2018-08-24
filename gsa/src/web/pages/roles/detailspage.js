@@ -23,8 +23,6 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -68,22 +66,7 @@ import TableRow from '../../components/table/row.js';
 
 import RoleComponent from './component.js';
 import RoleDetails from './details.js';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
+import EntitiesTab from 'web/entity/tab.js';
 
 const ToolBarIcons = ({
   entity,
@@ -212,7 +195,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  general_permissions,
+  general_permissions = {entities: []},
   ...props
 }) => (
   <RoleComponent
@@ -255,14 +238,10 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
         }) => {
-          const genPermsCount = isDefined(general_permissions) ?
-            general_permissions.entities.length : 0;
-
           return (
             <Layout grow="1" flex="column">
               <TabLayout
@@ -277,15 +256,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    <TabTitle
-                      title={_('General Command Permissions')}
-                      count={genPermsCount}
-                    />
-                  </Tab>
-                  <Tab>
-                    {tagsTitle}
-                  </Tab>
+                  <EntitiesTab entities={general_permissions.entities}>
+                    {_('General Command Permissions')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                   <Tab>
                     {permissionsTitle}
                   </Tab>
@@ -302,8 +278,7 @@ const Page = ({
                   </TabPanel>
                   <TabPanel>
                     <GeneralPermissions
-                      permissions={isDefined(general_permissions) ?
-                        general_permissions.entities : []}
+                      permissions={general_permissions.entities}
                     />
                   </TabPanel>
                   <TabPanel>

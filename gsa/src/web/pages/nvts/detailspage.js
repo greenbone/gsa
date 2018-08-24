@@ -35,6 +35,7 @@ import Note from '../../entity/note.js';
 import Override from '../../entity/override.js';
 import EntityPage from '../../entity/page.js';
 import EntityContainer, {loader} from '../../entity/container.js';
+import EntitiesTab from 'web/entity/tab.js';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import ManualIcon from '../../components/icon/manualicon.js';
@@ -263,7 +264,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
@@ -282,9 +282,9 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    {tagsTitle}
-                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 

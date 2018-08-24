@@ -23,8 +23,6 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -35,6 +33,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
+import EntitiesTab from 'web/entity/tab';
 
 import ExportIcon from '../../components/icon/exporticon.js';
 import CloneIcon from '../../entity/icon/cloneicon.js';
@@ -66,22 +65,6 @@ import TableRow from '../../components/table/row.js';
 
 import ReportFormatComponent from './component.js';
 import ReportFormatDetails from './details.js';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -271,16 +254,10 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
         }) => {
-          const {
-            params = [],
-          } = entity;
-          const paramsCount = params.length;
-
           return (
             <Layout grow="1" flex="column">
               <TabLayout
@@ -295,15 +272,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    <TabTitle
-                      title={_('Parameters')}
-                      count={paramsCount}
-                    />
-                  </Tab>
-                  <Tab>
-                    {tagsTitle}
-                  </Tab>
+                  <EntitiesTab entities={entity.params}>
+                    {_('Parameters')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                   <Tab>
                     {permissionsTitle}
                   </Tab>

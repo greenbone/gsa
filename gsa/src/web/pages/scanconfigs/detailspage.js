@@ -23,8 +23,6 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
@@ -60,6 +58,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -69,22 +68,6 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
 import Trend from './trend';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -394,19 +377,13 @@ const Page = ({
             permissionsComponent,
             permissionsTitle,
             tagsComponent,
-            tagsTitle,
             onActivateTab,
             entity,
             ...other
           }) => {
             const {
-              family_list = [],
               preferences,
             } = entity;
-            const nvtFamiliesCount = family_list.length;
-            const nvtPrefsCount = preferences.nvt.length;
-            const scannerPrefsCount = preferences.scanner.length;
-
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -421,27 +398,18 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('Scanner Preferences')}
-                        count={scannerPrefsCount}
-                      />
-                    </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('NVT Families')}
-                        count={nvtFamiliesCount}
-                      />
-                    </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('NVT Preferences')}
-                        count={nvtPrefsCount}
-                      />
-                    </Tab>
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
+                    <EntitiesTab entities={preferences.scanner}>
+                      {_('Scanner Preferences')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={entity.family_list}>
+                      {_('NVT Families')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={preferences.nvt}>
+                      {_('NVT Preferences')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
                     <Tab>
                       {permissionsTitle}
                     </Tab>

@@ -25,8 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import glamorous from 'glamorous';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilties from 'web/utils/withCapabilities';
 
@@ -61,22 +59,7 @@ import Tabs from 'web/components/tab/tabs';
 import ResourceList from 'web/pages/tags/resourcelist';
 import TagComponent from 'web/pages/tags/component';
 import TagDetails from 'web/pages/tags/details';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.numberOrNumberString.isRequired,
-  title: PropTypes.string.isRequired,
-};
+import EntitiesTab from 'web/entity/tab';
 
 const ToolBarIcons = withCapabilties(({
   capabilities,
@@ -222,13 +205,10 @@ const Page = ({
             permissionsComponent,
             permissionsTitle,
             resourcesComponent,
-            tagsTitle,
             onActivateTab,
             entity,
             ...other
           }) => {
-            const {resourceCount} = entity;
-
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -243,12 +223,9 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('Assigned Items')}
-                        count={resourceCount}
-                      />
-                    </Tab>
+                    <EntitiesTab entities={entity.resouceCount}>
+                      {_('Assigned Items')}
+                    </EntitiesTab>
                     <Tab>
                       {permissionsTitle}
                     </Tab>

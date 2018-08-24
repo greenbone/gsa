@@ -83,6 +83,7 @@ import StopIcon from 'web/pages/tasks/icons/stopicon';
 import TaskDetails from 'web/pages/tasks/details';
 import TaskStatus from 'web/pages/tasks/status';
 import TaskComponent from 'web/pages/tasks/component';
+import EntitiesTab from 'web/entity/tab';
 
 const ToolBarIcons = ({
   entity,
@@ -424,7 +425,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           tagsComponent,
-          tagsTitle,
           onActivateTab,
           entity,
           ...other
@@ -443,9 +443,9 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    {tabsTitle}
-                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                   <Tab>
                     {permissionsTitle}
                   </Tab>

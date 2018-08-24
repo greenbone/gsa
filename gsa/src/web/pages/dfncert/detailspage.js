@@ -53,6 +53,7 @@ import DetailsLink from '../../components/link/detailslink.js';
 import ExternalLink from '../../components/link/externallink.js';
 
 import DfnCertAdvDetails from './details.js';
+import EntitiesTab from 'web/entity/tab.js';
 
 const ToolBarIcons = ({
   entity,
@@ -183,7 +184,6 @@ const DfnCertAdvPage = props => (
             {({
               activeTab = 0,
               tagsComponent,
-              tagsTitle,
               onActivateTab,
               entity,
               ...other
@@ -202,9 +202,9 @@ const DfnCertAdvPage = props => (
                       <Tab>
                         {_('Information')}
                       </Tab>
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
+                      <EntitiesTab entities={entity.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
                     </TabList>
                   </TabLayout>
 

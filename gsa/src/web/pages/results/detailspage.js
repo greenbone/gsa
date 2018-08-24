@@ -68,6 +68,7 @@ import NoteComponent from '../notes/component';
 import OverrideComponent from '../overrides/component';
 
 import ResultDetails from './details';
+import EntitiesTab from 'web/entity/tab';
 
 let ToolBarIcons = ({
   capabilities,
@@ -365,7 +366,6 @@ class Page extends React.Component {
                 {({
                   activeTab = 0,
                   tagsComponent,
-                  tagsTitle,
                   onActivateTab,
                   entity,
                   ...other
@@ -384,9 +384,9 @@ class Page extends React.Component {
                           <Tab>
                             {_('Information')}
                           </Tab>
-                          <Tab>
-                            {tagsTitle}
-                          </Tab>
+                          <EntitiesTab entities={entity.userTags}>
+                            {_('User Tags')}
+                          </EntitiesTab>
                         </TabList>
                       </TabLayout>
 

@@ -63,6 +63,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -327,7 +328,6 @@ const Page = ({
             permissionsComponent,
             permissionsTitle,
             tagsComponent,
-            tagsTitle,
             onActivateTab,
             entity,
             ...other
@@ -346,9 +346,9 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
                     <Tab>
                       {permissionsTitle}
                     </Tab>

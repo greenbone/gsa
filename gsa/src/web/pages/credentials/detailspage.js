@@ -67,6 +67,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from '../../entity/container.js';
 import {goto_details, goto_list} from '../../entity/component.js';
+import EntitiesTab from 'web/entity/tab';
 
 import CredentialDetails from './details.js';
 import CredentialComponent from './component.js';
@@ -265,7 +266,6 @@ const Page = ({
             permissionsComponent,
             permissionsTitle,
             tagsComponent,
-            tagsTitle,
             onActivateTab,
             entity,
             ...other
@@ -284,9 +284,9 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
                     <Tab>
                       {permissionsTitle}
                     </Tab>
