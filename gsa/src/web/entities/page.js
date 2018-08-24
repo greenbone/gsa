@@ -37,7 +37,6 @@ import withGmp from 'web/utils/withGmp';
 import Toolbar from '../components/bar/toolbar.js';
 
 import Layout from '../components/layout/layout.js';
-import Wrapper from '../components/layout/wrapper.js';
 
 import Loading from '../components/loading/loading.js';
 
@@ -280,11 +279,11 @@ class EntitiesPage extends React.Component {
 
   render() {
     return (
-      <Wrapper>
+      <Layout grow="1" flex="column">
         {this.renderToolbar()}
         {this.renderSection()}
         {this.renderDialogs()}
-      </Wrapper>
+      </Layout>
     );
   }
 }
