@@ -134,6 +134,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  entity,
   onChanged,
   onDownloaded,
   onError,
@@ -172,6 +173,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="agent.svg"
         toolBarIcons={ToolBarIcons}
         title={_('Agent')}
@@ -192,8 +194,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => (
           <Layout grow="1" flex="column">
             <TabLayout
@@ -249,6 +249,7 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

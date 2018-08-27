@@ -160,6 +160,7 @@ PortRanges.propTypes = {
 };
 
 const Page = ({
+  entity,
   onError,
   onChanged,
   onDownloaded,
@@ -192,6 +193,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="port_list.svg"
         title={_('Port List')}
         toolBarIcons={ToolBarIcons}
@@ -214,8 +216,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -280,6 +280,7 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

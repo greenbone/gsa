@@ -162,6 +162,7 @@ const DfnCertAdvPage = props => (
     resourceType="dfn_cert_adv"
   >
     {({
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -183,6 +184,7 @@ const DfnCertAdvPage = props => (
           <EntityPage
             {...props}
             {...cprops}
+            entity={entity}
             sectionIcon="dfn_cert_adv.svg"
             title={_('DFN-CERT Advisory')}
             toolBarIcons={ToolBarIcons}
@@ -191,8 +193,6 @@ const DfnCertAdvPage = props => (
             {({
               activeTab = 0,
               onActivateTab,
-              entity,
-              ...other
             }) => {
               return (
                 <Layout grow="1" flex="column">

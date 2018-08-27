@@ -226,6 +226,7 @@ const CertBundAdvPage = props => (
     resourceType="cert_bund_adv"
   >
     {({
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -247,6 +248,7 @@ const CertBundAdvPage = props => (
           <EntityPage
             {...props}
             {...cprops}
+            entity={entity}
             sectionIcon="cert_bund_adv.svg"
             title={_('CERT-Bund Advisory')}
             toolBarIcons={ToolBarIcons}
@@ -255,8 +257,6 @@ const CertBundAdvPage = props => (
             {({
               activeTab = 0,
               onActivateTab,
-              entity,
-              ...other
             }) => {
               return (
                 <Layout grow="1" flex="column">

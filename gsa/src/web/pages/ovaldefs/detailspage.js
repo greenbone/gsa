@@ -347,6 +347,7 @@ const OvaldefPage = props => (
     name="ovaldef"
   >
     {({
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -368,6 +369,7 @@ const OvaldefPage = props => (
           <EntityPage
             {...props}
             {...cprops}
+            entity={entity}
             sectionIcon="ovaldef.svg"
             title={_('OVAL Definition')}
             toolBarIcons={ToolBarIcons}
@@ -379,8 +381,6 @@ const OvaldefPage = props => (
             {({
               activeTab = 0,
               onActivateTab,
-              entity,
-              ...other
             }) => {
               return (
                 <Layout grow="1" flex="column">

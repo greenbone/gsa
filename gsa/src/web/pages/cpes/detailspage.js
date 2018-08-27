@@ -179,6 +179,7 @@ const CpePage = props => (
     name="cpe"
   >
     {({
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -200,6 +201,7 @@ const CpePage = props => (
           <EntityPage
             {...props}
             {...cprops}
+            entity={entity}
             sectionIcon="cpe.svg"
             title={_('CPE')}
             infoComponent={EntityInfo}
@@ -209,8 +211,6 @@ const CpePage = props => (
             {({
               activeTab = 0,
               onActivateTab,
-              entity,
-              ...other
             }) => {
               return (
                 <Layout grow="1" flex="column">

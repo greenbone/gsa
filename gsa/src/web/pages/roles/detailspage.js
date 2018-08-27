@@ -193,6 +193,8 @@ GeneralPermissions.propTypes = {
 };
 
 const Page = ({
+  entity,
+  links = true,
   onChanged,
   onDownloaded,
   onError,
@@ -226,6 +228,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="role.svg"
         title={_('Role')}
         toolBarIcons={ToolBarIcons}
@@ -241,12 +244,9 @@ const Page = ({
       >
         {({
           activeTab = 0,
-          links = true,
           permissionsComponent,
           permissionsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -313,7 +313,9 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
   general_permissions: PropTypes.object,
+  links: PropTypes.bool,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

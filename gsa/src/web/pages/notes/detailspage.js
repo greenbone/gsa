@@ -188,6 +188,7 @@ Details.propTypes = {
 };
 
 const Page = ({
+  entity,
   onChanged,
   onDownloaded,
   onError,
@@ -220,6 +221,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="note.svg"
         title={_('Note')}
         toolBarIcons={ToolBarIcons}
@@ -241,8 +243,6 @@ const Page = ({
           permissionsComponent,
           permissionsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -300,6 +300,7 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

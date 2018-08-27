@@ -343,6 +343,7 @@ class Page extends React.Component {
 
   render() {
     const {
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -365,6 +366,7 @@ class Page extends React.Component {
             {({create: createoverride}) => (
               <EntityPage
                 {...this.props}
+                entity={entity}
                 sectionIcon="result.svg"
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
@@ -379,10 +381,7 @@ class Page extends React.Component {
               >
                 {({
                   activeTab = 0,
-                  tagsComponent,
                   onActivateTab,
-                  entity,
-                  ...other
                 }) => {
                   return (
                     <Layout grow="1" flex="column">
@@ -438,6 +437,7 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
+  entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
