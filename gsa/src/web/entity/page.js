@@ -99,7 +99,6 @@ class EntityPage extends React.Component {
       sectionComponent: SectionComponent = Section,
       title,
       permissions,
-      ...other
     } = this.props;
 
     const {activeTab} = this.state;
@@ -133,9 +132,7 @@ class EntityPage extends React.Component {
         extra={this.renderInfo()}
       >
         {children({
-          ...other,
           activeTab,
-          entity,
           permissionsComponent: PermissionsComponent ?
             this.renderPermissions() : undefined,
           permissionsTitle,
