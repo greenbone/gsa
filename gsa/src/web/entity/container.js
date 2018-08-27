@@ -126,10 +126,10 @@ class EntityContainer extends React.Component {
     this.cancelLoading();
   }
 
-  componentWillReceiveProps(next) {
+  componentDidUpdate() {
     const {id} = this.props.match.params;
-    if (id !== next.match.params.id) {
-      this.load(next.match.params.id);
+    if (id !== this.state.id) {
+      this.load(id);
     }
   }
 
@@ -149,7 +149,10 @@ class EntityContainer extends React.Component {
     const promises = all_loaders.map(loader_func =>
       loader_func.call(this, id, token));
 
-    this.setState({loading: true});
+    this.setState({
+      id,
+      loading: true,
+    });
 
     Promise.all(promises)
       .then(values => {
