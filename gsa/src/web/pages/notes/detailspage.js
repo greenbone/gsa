@@ -222,7 +222,6 @@ const Page = ({
         {...props}
         sectionIcon="note.svg"
         title={_('Note')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
         onDownloaded={onDownloaded}

@@ -225,7 +225,6 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
-        detailsComponent={Details}
         sectionIcon="os.svg"
         title={_('Operating System')}
         toolBarIcons={ToolBarIcons}

@@ -145,7 +145,6 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={PermissionDetails}
           sectionIcon="permission.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Permission')}

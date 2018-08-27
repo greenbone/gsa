@@ -370,7 +370,6 @@ const OvaldefPage = props => (
             {...cprops}
             sectionIcon="ovaldef.svg"
             title={_('OVAL Definition')}
-            detailsComponent={Details}
             toolBarIcons={ToolBarIcons}
             onOvaldefDownloadClick={download}
             onPermissionChanged={onChanged}

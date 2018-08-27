@@ -410,7 +410,6 @@ const Page = ({
         sectionIcon="task.svg"
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
-        detailsComponent={Details}
         permissionsComponent={TaskPermissions}
         onChanged={onChanged}
         onError={onError}

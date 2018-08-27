@@ -222,7 +222,6 @@ const Page = ({
         {...props}
         sectionIcon="override.svg"
         title={_('Override')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
         onDownloaded={onDownloaded}

@@ -198,7 +198,6 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={Details}
           permissionsComponent={TargetPermissions}
           sectionIcon="target.svg"
           toolBarIcons={ToolBarIcons}

@@ -202,7 +202,6 @@ const CpePage = props => (
             {...cprops}
             sectionIcon="cpe.svg"
             title={_('CPE')}
-            detailsComponent={Details}
             infoComponent={EntityInfo}
             toolBarIcons={ToolBarIcons}
             onCpeDownloadClick={download}

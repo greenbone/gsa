@@ -148,7 +148,6 @@ const Page = ({
         {...props}
         sectionIcon="group.svg"
         title={_('Group')}
-        detailsComponent={GroupDetails}
         toolBarIcons={ToolBarIcons}
         onGroupCloneClick={clone}
         onGroupCreateClick={create}

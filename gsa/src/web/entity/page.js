@@ -92,7 +92,6 @@ class EntityPage extends React.Component {
 
   renderSection() {
     const {
-      detailsComponent: Details,
       children,
       entity,
       sectionIcon,
@@ -223,7 +222,6 @@ class EntityPage extends React.Component {
 }
 
 EntityPage.propTypes = {
-  detailsComponent: PropTypes.component.isRequired,
   entity: PropTypes.model,
   infoComponent: PropTypes.componentOrFalse,
   loading: PropTypes.bool,

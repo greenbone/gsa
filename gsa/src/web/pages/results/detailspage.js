@@ -368,7 +368,6 @@ class Page extends React.Component {
                 sectionIcon="result.svg"
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
-                detailsComponent={Details}
                 onNoteCreateClick={
                   result => this.openDialog(result, createnote)}
                 onOverrideCreateClick={

@@ -254,7 +254,6 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
-        detailsComponent={Details}
         permissionsComponent={false}
         toolBarIcons={ToolBarIcons}
         title={_('NVT')}

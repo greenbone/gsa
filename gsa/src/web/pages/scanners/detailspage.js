@@ -193,7 +193,6 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
-        detailsComponent={ScannerDetails}
         sectionIcon="scanner.svg"
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}

@@ -365,7 +365,6 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={Details}
           sectionIcon="config.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}

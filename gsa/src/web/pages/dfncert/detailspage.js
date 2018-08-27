@@ -185,7 +185,6 @@ const DfnCertAdvPage = props => (
             {...cprops}
             sectionIcon="dfn_cert_adv.svg"
             title={_('DFN-CERT Advisory')}
-            detailsComponent={Details}
             toolBarIcons={ToolBarIcons}
             onDfnCertAdvDownloadClick={download}
           >

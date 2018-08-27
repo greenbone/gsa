@@ -147,7 +147,6 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={FilterDetails}
           sectionIcon="filter.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Filter')}

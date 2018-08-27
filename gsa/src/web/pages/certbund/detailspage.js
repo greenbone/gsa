@@ -249,7 +249,6 @@ const CertBundAdvPage = props => (
             {...cprops}
             sectionIcon="cert_bund_adv.svg"
             title={_('CERT-Bund Advisory')}
-            detailsComponent={Details}
             toolBarIcons={ToolBarIcons}
             onCertBundAdvDownloadClick={download}
           >

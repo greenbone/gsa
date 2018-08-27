@@ -243,7 +243,6 @@ const Page = ({
         {...props}
         sectionIcon="report_format.svg"
         title={_('Report Format')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onReportFormatCloneClick={clone}
         onReportFormatImportClick={import_func}

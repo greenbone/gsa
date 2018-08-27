@@ -148,7 +148,6 @@ const Page = ({
         {...props}
         sectionIcon="schedule.svg"
         title={_('Schedule')}
-        detailsComponent={ScheduleDetails}
         toolBarIcons={ToolBarIcons}
         onScheduleCloneClick={clone}
         onScheduleCreateClick={create}

@@ -194,7 +194,6 @@ const Page = ({
         {...props}
         sectionIcon="port_list.svg"
         title={_('Port List')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
         onDownloaded={onDownloaded}

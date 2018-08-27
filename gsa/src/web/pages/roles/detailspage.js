@@ -228,7 +228,6 @@ const Page = ({
         {...props}
         sectionIcon="role.svg"
         title={_('Role')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onRoleCloneClick={clone}
         onRoleCreateClick={create}

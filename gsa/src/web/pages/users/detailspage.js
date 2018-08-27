@@ -148,7 +148,6 @@ const Page = ({
         {...props}
         sectionIcon="user.svg"
         title={_('User')}
-        detailsComponent={UserDetails}
         toolBarIcons={ToolBarIcons}
         onUserCloneClick={clone}
         onUserCreateClick={create}

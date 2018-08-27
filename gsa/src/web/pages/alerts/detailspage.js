@@ -148,7 +148,6 @@ const Page = ({
         {...props}
         sectionIcon="alert.svg"
         title={_('Alert')}
-        detailsComponent={AlertDetails}
         toolBarIcons={ToolBarIcons}
         onAlertCloneClick={clone}
         onAlertCreateClick={create}

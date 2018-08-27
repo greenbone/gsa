@@ -254,7 +254,6 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={Details}
           sectionIcon="credential.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Credential')}
