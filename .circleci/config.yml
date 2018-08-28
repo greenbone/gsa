@@ -28,6 +28,26 @@ jobs:
           working_directory: ~/gsa/gsa
           name: Submit test coverage to codecov.io
           command: bash <(curl -s https://codecov.io/bash)
+  js_lint:
+    working_directory: ~/gsa
+    docker:
+      - image: circleci/node:6
+        environment:
+          ENV: CI
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "./gsa/yarn.lock"  }}
+            - v1-deps
+      - run:
+          working_directory: ~/gsa/gsa
+          name: Linting JavaScript files
+          command: yarn lint
+      - save_cache:
+          key: v1-deps-{{ checksum "./gsa/yarn.lock"  }}
+          paths:
+            - ./gsa/node_modules
   build_gsad:
     docker:
       - image: greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
@@ -66,4 +86,5 @@ workflows:
     jobs:
       - build_gsad
       - build_gsa
+      - js_lint
       - js_test
