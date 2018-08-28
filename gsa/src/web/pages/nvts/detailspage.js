@@ -256,7 +256,6 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        permissionsComponent={false}
         toolBarIcons={ToolBarIcons}
         title={_('NVT')}
         sectionIcon="nvt.svg"
@@ -264,9 +263,6 @@ const Page = ({
         onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
         onNvtDownloadClick={download}
         onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,

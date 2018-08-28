@@ -345,8 +345,6 @@ class Page extends React.Component {
     const {
       entity,
       onChanged,
-      onDownloaded,
-      onError,
       onTagAddClick,
       onTagCreateClick,
       onTagDeleteClick,
@@ -375,9 +373,6 @@ class Page extends React.Component {
                 onOverrideCreateClick={
                   result => this.openDialog(result, createoverride)}
                 onResultDownloadClick={this.handleDownload}
-                onPermissionChanged={onChanged}
-                onPermissionDownloaded={onDownloaded}
-                onPermissionDownloadError={onError}
               >
                 {({
                   activeTab = 0,

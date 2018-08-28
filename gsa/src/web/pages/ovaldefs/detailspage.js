@@ -374,9 +374,6 @@ const OvaldefPage = props => (
             title={_('OVAL Definition')}
             toolBarIcons={ToolBarIcons}
             onOvaldefDownloadClick={download}
-            onPermissionChanged={onChanged}
-            onPermissionDownloaded={onDownloaded}
-            onPermissionDownloadError={onError}
           >
             {({
               activeTab = 0,
