@@ -213,6 +213,7 @@ const CvePage = props => (
     name="cve"
   >
     {({
+      entity,
       onChanged,
       onDownloaded,
       onError,
@@ -234,6 +235,7 @@ const CvePage = props => (
           <EntityPage
             {...props}
             {...cprops}
+            entity={entity}
             sectionIcon="cve.svg"
             title={_('CVE')}
             detailsComponent={Details}
@@ -247,8 +249,6 @@ const CvePage = props => (
             {({
               activeTab = 0,
               onActivateTab,
-              entity,
-              ...other
             }) => {
               return (
                 <Layout grow="1" flex="column">

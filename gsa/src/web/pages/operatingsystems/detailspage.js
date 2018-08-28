@@ -59,6 +59,7 @@ import EntityContainer, {
   permissions_resource_loader,
 } from 'web/entity/container';
 import {goto_list} from 'web/entity/component';
+import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 
@@ -202,6 +203,7 @@ Details.propTypes = {
 
 const Page = ({
   entity,
+  permissions = [],
   onDownloaded,
   onChanged,
   onTagAddClick,
@@ -238,8 +240,6 @@ const Page = ({
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
           onActivateTab,
         }) => {
           return (
@@ -259,9 +259,9 @@ const Page = ({
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
-                  <Tab>
-                    {permissionsTitle}
-                  </Tab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -285,7 +285,13 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {permissionsComponent}
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
@@ -299,6 +305,7 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

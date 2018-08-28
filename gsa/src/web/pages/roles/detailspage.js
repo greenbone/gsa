@@ -68,6 +68,7 @@ import {permissionDescription} from 'web/utils/render';
 
 import RoleComponent from './component';
 import RoleDetails from './details';
+import EntityPermissions from 'web/entity/permissions';
 
 const ToolBarIcons = ({
   entity,
@@ -195,6 +196,7 @@ GeneralPermissions.propTypes = {
 const Page = ({
   entity,
   links = true,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
@@ -238,14 +240,9 @@ const Page = ({
         onRoleDownloadClick={download}
         onRoleEditClick={edit}
         onRoleSaveClick={save}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
           onActivateTab,
         }) => {
           return (
@@ -262,15 +259,15 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <EntitiesTab entities={general_permissions.entities}>
+                  <EntitiesTab entities={general_permissions}>
                     {_('General Command Permissions')}
                   </EntitiesTab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
-                  <Tab>
-                    {permissionsTitle}
-                  </Tab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -284,7 +281,7 @@ const Page = ({
                   </TabPanel>
                   <TabPanel>
                     <GeneralPermissions
-                      permissions={general_permissions.entities}
+                      permissions={general_permissions}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -300,7 +297,13 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {permissionsComponent}
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
@@ -314,8 +317,9 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
-  general_permissions: PropTypes.object,
+  general_permissions: PropTypes.array,
   links: PropTypes.bool,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,

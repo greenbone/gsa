@@ -363,6 +363,7 @@ Details.propTypes = {
 
 const Page = ({
   entity,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
@@ -412,7 +413,6 @@ const Page = ({
         sectionIcon="task.svg"
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
-        permissionsComponent={TaskPermissions}
         onChanged={onChanged}
         onError={onError}
         onContainerTaskCreateClick={createcontainer}
@@ -431,8 +431,6 @@ const Page = ({
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
           onActivateTab,
         }) => {
           return (
@@ -452,9 +450,9 @@ const Page = ({
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
-                  <Tab>
-                    {permissionsTitle}
-                  </Tab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -478,7 +476,13 @@ const Page = ({
                     />
                   </TabPanel>
                   <TabPanel>
-                    {permissionsComponent}
+                    <TaskPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
                   </TabPanel>
                 </TabPanels>
               </Tabs>
@@ -492,6 +496,7 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
