@@ -78,7 +78,7 @@ SectionElements.propTypes = {
   onPermissionCreateClick: PropTypes.func.isRequired,
 };
 
-class EntityPermissions extends React.Component {
+class Permissions extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -237,7 +237,7 @@ class EntityPermissions extends React.Component {
   }
 }
 
-EntityPermissions.propTypes = {
+Permissions.propTypes = {
   entity: PropTypes.model.isRequired,
   gmp: PropTypes.gmp.isRequired,
   permissions: PropTypes.array,
@@ -249,9 +249,9 @@ EntityPermissions.propTypes = {
   onPermissionEditClick: PropTypes.func.isRequired,
 };
 
-EntityPermissions = withGmp(EntityPermissions);
+Permissions = withGmp(Permissions);
 
-const Permissions = ({
+const EntityPermissions = ({
   onChanged,
   onDownloaded,
   onError,
@@ -274,7 +274,7 @@ const Permissions = ({
       download,
       edit,
     }) => (
-      <EntityPermissions
+      <Permissions
         {...props}
         onChanged={onChanged}
         onPermissionCreateClick={create}
@@ -287,12 +287,12 @@ const Permissions = ({
   </PermissionComponent>
 );
 
-Permissions.propTypes = {
+EntityPermissions.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
-export default Permissions;
+export default EntityPermissions;
 
 // vim: set ts=2 sw=2 tw=80:
