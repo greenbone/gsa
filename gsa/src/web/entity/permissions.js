@@ -157,7 +157,9 @@ class EntityPermissions extends React.Component {
 
   handleMultipleSave(data) {
     const {gmp, onChanged} = this.props;
-    return gmp.permissions.create(data).then(onChanged);
+    return gmp.permissions.create(data)
+      .then(onChanged)
+      .then(() => this.closeMultiplePermissionDialog());
   }
 
   render() {
