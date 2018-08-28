@@ -61,7 +61,6 @@ const MultiplePermissionDialog = withCapabilities(({
   title = _('Create Multiple Permissions'),
   userId,
   users = [],
-  visible = true,
   onClose,
   onSave,
 }) => {
@@ -105,7 +104,6 @@ const MultiplePermissionDialog = withCapabilities(({
 
   return (
     <SaveDialog
-      visible={visible}
       title={title}
       onClose={onClose}
       onSave={onSave}
