@@ -66,20 +66,19 @@ const MultiplePermissionDialog = withCapabilities(({
 }) => {
   const hasRelated = related.length > 0;
 
-  const data = {
-    entityName,
-    entityType,
+  const defaultValues = {
     groupId,
-    groups,
-    id,
     includeRelated,
     permission,
-    related,
     roleId,
-    roles,
     subjectType,
     userId,
-    users,
+  };
+
+  const values = {
+    id,
+    entityType,
+    related,
   };
 
   const includeRelatedItems = [];
@@ -107,7 +106,8 @@ const MultiplePermissionDialog = withCapabilities(({
       title={title}
       onClose={onClose}
       onSave={onSave}
-      defaultValues={data}
+      defaultValues={defaultValues}
+      values={values}
     >
       {({
         values: state,
@@ -203,7 +203,7 @@ const MultiplePermissionDialog = withCapabilities(({
             >
               <Divider>
                 <span>{typeName(getEntityType(state))}</span>
-                <i>{state.entityName}</i>
+                <i>{entityName}</i>
                 <Select
                   name="includeRelated"
                   value={state.includeRelated}
