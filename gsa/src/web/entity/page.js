@@ -40,7 +40,6 @@ import Loading from '../components/loading/loading.js';
 import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
-import EntityPermissions from './permissions.js';
 
 export const Col = glamorous.col(
   ({width}) => ({width})
@@ -95,10 +94,8 @@ class EntityPage extends React.Component {
       children,
       entity,
       sectionIcon,
-      permissionsComponent: PermissionsComponent = EntityPermissions,
       sectionComponent: SectionComponent = Section,
       title,
-      permissions,
     } = this.props;
 
     const {activeTab} = this.state;
@@ -112,18 +109,6 @@ class EntityPage extends React.Component {
       section_title = title + ': ' + entity.name;
     }
 
-    let hasPermissions = false;
-    if (isDefined(permissions)) {
-      hasPermissions = isDefined(permissions.entities);
-    }
-    const permissionsCount = hasPermissions ? permissions.entities.length : 0;
-    const permissionsTitle = (
-      <TabTitle
-        title={_('Permissions')}
-        count={permissionsCount}
-      />
-    );
-
     return (
       <SectionComponent
         title={section_title}
@@ -133,9 +118,6 @@ class EntityPage extends React.Component {
       >
         {children({
           activeTab,
-          permissionsComponent: PermissionsComponent ?
-            this.renderPermissions() : undefined,
-          permissionsTitle,
           onActivateTab: this.handleActivateTab,
         })}
       </SectionComponent>
@@ -160,31 +142,6 @@ class EntityPage extends React.Component {
           entity={entity}
         />
       </Layout>
-    );
-  }
-
-  renderPermissions() {
-    const {
-      entity,
-      permissions,
-      permissionsComponent: PermissionsComponent = EntityPermissions,
-      onPermissionChanged,
-      onPermissionDownloaded,
-      onPermissionDownloadError,
-    } = this.props;
-
-    if (PermissionsComponent === false) {
-      return null;
-    }
-
-    return (
-      <PermissionsComponent
-        entity={entity}
-        permissions={isDefined(permissions) ? permissions.entities : undefined}
-        onChanged={onPermissionChanged}
-        onDownloaded={onPermissionDownloaded}
-        onError={onPermissionDownloadError}
-      />
     );
   }
 
@@ -222,15 +179,10 @@ EntityPage.propTypes = {
   entity: PropTypes.model,
   infoComponent: PropTypes.componentOrFalse,
   loading: PropTypes.bool,
-  permissions: PropTypes.object,
-  permissionsComponent: PropTypes.componentOrFalse,
   sectionComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
-  onPermissionChanged: PropTypes.func,
-  onPermissionDownloadError: PropTypes.func,
-  onPermissionDownloaded: PropTypes.func,
 };
 
 export default EntityPage;
