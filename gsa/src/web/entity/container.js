@@ -59,13 +59,10 @@ export const loader = (type, filter_func, name = type) =>
 
       log.debug('Loaded', name, response);
 
-      const {meta} = response;
+      const {meta, data} = response;
 
       this.setState({
-        [name]: {
-          counts: meta.counts,
-          entities: response.data,
-        },
+        [name]: data,
       });
 
       if (meta.fromcache && meta.dirty) {
