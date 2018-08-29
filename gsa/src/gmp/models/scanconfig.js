@@ -46,6 +46,11 @@ export const parse_count = count => {
 export const filterEmptyScanConfig = config =>
   config.id !== EMPTY_SCAN_CONFIG_ID;
 
+export const openVasScanConfigsFilter = config =>
+  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE;
+export const ospScanConfigsFilter = config =>
+  config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
+
 class ScanConfig extends Model {
 
   static entityType = 'scanconfig';

@@ -28,7 +28,16 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
+import {ALL_FILTER} from 'gmp/models/filter';
+import {
+  filterEmptyScanConfig,
+  openVasScanConfigsFilter,
+  ospScanConfigsFilter,
+} from 'gmp/models/scanconfig';
+import {
+  openVasScannersFilter,
+  ospScannersFilter,
+} from 'gmp/models/scanner';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
@@ -258,8 +267,8 @@ class UserSettings extends React.Component {
       filters,
       alerts,
       credentials,
-      scanconfigs,
-      scanners,
+      scanconfigs = [],
+      scanners = [],
       portlists,
       reportformats,
       schedules,
@@ -319,6 +328,12 @@ class UserSettings extends React.Component {
     if (isLoading) {
       return <Loading/>;
     };
+
+    const openVasScanConfigs = scanconfigs.filter(openVasScanConfigsFilter);
+    const ospScanConfigs = scanconfigs.filter(ospScanConfigsFilter);
+    const openVasScanners = scanners.filter(openVasScannersFilter);
+    const ospScanners = scanners.filter(ospScannersFilter);
+
     return (
       <Layout flex="column">
         <ToolBarIcons
@@ -687,8 +702,10 @@ class UserSettings extends React.Component {
             alerts={alerts}
             filters={filters}
             credentials={credentials}
-            scanConfigs={scanconfigs}
-            scanners={scanners}
+            openVasScanConfigs={openVasScanConfigs}
+            ospScanConfigs={ospScanConfigs}
+            openVasScanners={openVasScanners}
+            ospScanners={ospScanners}
             portLists={portlists}
             reportFormats={reportformats}
             schedules={schedules}
@@ -966,21 +983,21 @@ const mapStateToProps = rootState => {
   const ovalFilter = filtersSel.getEntity(ovalFilterId);
   const secInfoFilter = filtersSel.getEntity(secInfoFilterId);
 
-  let scanconfigs = scanConfigsSel.getEntities();
+  let scanconfigs = scanConfigsSel.getEntities(ALL_FILTER);
   if (isDefined(scanconfigs)) {
     scanconfigs = scanconfigs.filter(filterEmptyScanConfig);
   }
 
   return {
-    alerts: alertsSel.getEntities(),
-    credentials: credentialsSel.getEntities(),
-    filters: filtersSel.getEntities(),
-    portlists: portListsSel.getEntities(),
-    reportformats: reportFormatsSel.getEntities(),
+    alerts: alertsSel.getEntities(ALL_FILTER),
+    credentials: credentialsSel.getEntities(ALL_FILTER),
+    filters: filtersSel.getEntities(ALL_FILTER),
+    portlists: portListsSel.getEntities(ALL_FILTER),
+    reportformats: reportFormatsSel.getEntities(ALL_FILTER),
     scanconfigs,
-    scanners: scannersSel.getEntities(),
-    schedules: schedulesSel.getEntities(),
-    targets: targetsSel.getEntities(),
+    scanners: scannersSel.getEntities(ALL_FILTER),
+    schedules: schedulesSel.getEntities(ALL_FILTER),
+    targets: targetsSel.getEntities(ALL_FILTER),
     timezone: getTimezone(rootState),
     userInterfaceLanguage,
     rowsPerPage,
@@ -1035,16 +1052,18 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts({gmp})),
-  loadCredentials: () => dispatch(loadCredentials({gmp})),
-  loadFilters: () => dispatch(loadFilters({gmp})),
-  loadPortLists: () => dispatch(loadPortLists({gmp})),
-  loadReportFormats: () => dispatch(loadReportFormats({gmp})),
-  loadScanConfigs: () => dispatch(loadScanConfigs({gmp})),
-  loadScanners: () => dispatch(loadScanners({gmp})),
-  loadSchedules: () => dispatch(loadSchedules({gmp})),
-  loadSettings: () => dispatch(loadUserSettingDefaults({gmp})),
-  loadTargets: () => dispatch(loadTargets({gmp})),
+  loadAlerts: () => dispatch(loadAlerts({gmp, filter: ALL_FILTER})),
+  loadCredentials: () => dispatch(loadCredentials({gmp, filter: ALL_FILTER})),
+  loadFilters: () => dispatch(loadFilters({gmp, filter: ALL_FILTER})),
+  loadPortLists: () => dispatch(loadPortLists({gmp, filter: ALL_FILTER})),
+  loadReportFormats: () =>
+    dispatch(loadReportFormats({gmp, filter: ALL_FILTER})),
+  loadScanConfigs: () => dispatch(loadScanConfigs({gmp, filter: ALL_FILTER})),
+  loadScanners: () => dispatch(loadScanners({gmp, filter: ALL_FILTER})),
+  loadSchedules: () => dispatch(loadSchedules({gmp, filter: ALL_FILTER})),
+  loadSettings: () =>
+    dispatch(loadUserSettingDefaults({gmp, filter: ALL_FILTER})),
+  loadTargets: () => dispatch(loadTargets({gmp, filter: ALL_FILTER})),
   loadAlert: id => dispatch(loadAlert({gmp, id})),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
