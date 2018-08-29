@@ -218,7 +218,7 @@ describe('entities actions tests', () => {
       expect(loadEntities).toBeDefined();
       expect(isFunction(loadEntities)).toBe(true);
 
-      return loadEntities({gmp})(dispatch, getState).then(() => {
+      return loadEntities(gmp)()(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalled();
@@ -269,16 +269,12 @@ describe('entities actions tests', () => {
         entityType: 'foo',
       });
 
-      const props = {
-        gmp,
-        filter: 'myfilter',
-        other: 3,
-      };
+      const filter = 'myfilter';
 
       expect(loadEntities).toBeDefined();
       expect(isFunction(loadEntities)).toBe(true);
 
-      return loadEntities(props)(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalledWith('myfilter');
@@ -327,16 +323,12 @@ describe('entities actions tests', () => {
         entityType: 'foo',
       });
 
-      const props = {
-        gmp,
-        filter: 'myfilter',
-        other: 3,
-      };
+      const filter = 'myfilter';
 
       expect(loadEntities).toBeDefined();
       expect(isFunction(loadEntities)).toBe(true);
 
-      return loadEntities(props)(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntities).toBeCalledWith('myfilter');

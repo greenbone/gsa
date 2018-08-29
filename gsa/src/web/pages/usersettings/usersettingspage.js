@@ -1052,17 +1052,16 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts({gmp, filter: ALL_FILTER})),
-  loadCredentials: () => dispatch(loadCredentials({gmp, filter: ALL_FILTER})),
-  loadFilters: () => dispatch(loadFilters({gmp, filter: ALL_FILTER})),
-  loadPortLists: () => dispatch(loadPortLists({gmp, filter: ALL_FILTER})),
-  loadReportFormats: () =>
-    dispatch(loadReportFormats({gmp, filter: ALL_FILTER})),
-  loadScanConfigs: () => dispatch(loadScanConfigs({gmp, filter: ALL_FILTER})),
-  loadScanners: () => dispatch(loadScanners({gmp, filter: ALL_FILTER})),
-  loadSchedules: () => dispatch(loadSchedules({gmp, filter: ALL_FILTER})),
+  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+  loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
+  loadFilters: () => dispatch(loadFilters(gmp)(ALL_FILTER)),
+  loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
+  loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
+  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
+  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)(ALL_FILTER)),
-  loadTargets: () => dispatch(loadTargets({gmp, filter: ALL_FILTER})),
+  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),

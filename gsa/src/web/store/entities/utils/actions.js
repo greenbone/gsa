@@ -77,7 +77,7 @@ export const createLoadEntities = ({
   selector,
   actions,
   entityType,
-}) => ({gmp, filter, ...props}) => (dispatch, getState) => {
+}) => gmp => filter => (dispatch, getState) => {
   const rootState = getState();
   const state = selector(rootState);
 

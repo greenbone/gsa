@@ -243,16 +243,10 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      const props = {
-        gmp,
-        filter,
-        other: 3,
-      };
-
       expect(loadEntities).toBeDefined();
       expect(isFunction(loadEntities)).toBe(true);
 
-      return loadEntities(props)(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -296,7 +290,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(get).not.toBeCalled();
@@ -327,7 +321,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
