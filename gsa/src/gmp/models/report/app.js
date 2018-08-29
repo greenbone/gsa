@@ -22,9 +22,14 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseSeverity} from 'gmp/parser';
+import {parseSeverity, setProperties} from 'gmp/parser';
 
 class App {
+
+  constructor(elem) {
+    const properties = this.parseProperties(elem);
+    setProperties(properties, this);
+  }
 
   addHost(host) {
     if (!(host.ip in this.hosts.hosts_by_ip)) {

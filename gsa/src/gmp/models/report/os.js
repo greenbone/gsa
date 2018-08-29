@@ -20,10 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import {isDefined} from 'gmp/utils/identity';
 
+import {setProperties} from 'gmp/parser';
+
 class OperatingSystem {
+
+  constructor(elem) {
+    const properties = this.parseProperties(elem);
+    setProperties(properties, this);
+  }
 
   addHost(host) {
     if (!(host.ip in this.hosts.hosts_by_ip)) {

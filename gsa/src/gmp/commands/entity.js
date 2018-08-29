@@ -29,7 +29,7 @@ import DefaultTransform from '../http/transform/default.js';
 
 import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp.js';
 
-const log = logger.getLogger('gmp.commands.entities');
+const log = logger.getLogger('gmp.commands.entity');
 
 class EntityCommand extends GmpCommand {
 
