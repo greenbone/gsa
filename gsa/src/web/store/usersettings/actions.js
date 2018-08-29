@@ -51,10 +51,7 @@ export const renewSessionTimeout = ({gmp}) => dispatch =>
   gmp.user.renewSession().then(response =>
     dispatch(setSessionTimeout(response.data)));
 
-export const updateTimezone = ({
-  gmp,
-  timezone,
-}) => dispatch => {
+export const updateTimezone = gmp => timezone => dispatch => {
   gmp.setTimezone(timezone);
   return Promise.resolve(dispatch(setTimezone(timezone)));
 };

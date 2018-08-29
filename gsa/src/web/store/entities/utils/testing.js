@@ -243,16 +243,10 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      const props = {
-        gmp,
-        filter,
-        other: 3,
-      };
-
       expect(loadEntities).toBeDefined();
       expect(isFunction(loadEntities)).toBe(true);
 
-      return loadEntities(props)(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -296,7 +290,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(get).not.toBeCalled();
@@ -327,7 +321,7 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       };
 
-      return loadEntities({gmp, filter})(dispatch, getState).then(() => {
+      return loadEntities(gmp)(filter)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({filter});
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -482,16 +476,10 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       };
 
-      const props = {
-        id,
-        gmp,
-        other: 3,
-      };
-
       expect(loadEntity).toBeDefined();
       expect(isFunction(loadEntity)).toBe(true);
 
-      return loadEntity(props)(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({id});
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -533,7 +521,7 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       };
 
-      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(get).not.toBeCalled();
@@ -564,7 +552,7 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       };
 
-      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(get).toBeCalledWith({id});
         expect(dispatch).toHaveBeenCalledTimes(2);

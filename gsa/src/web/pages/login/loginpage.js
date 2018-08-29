@@ -188,7 +188,7 @@ LoginPage.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
+  setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
   setLocale: locale => gmp.setLocale(locale),
   setSessionTimeout: timeout => dispatch(setSessionTimeout(timeout)),
   setUsername: username => dispatch(setUsername(username)),
