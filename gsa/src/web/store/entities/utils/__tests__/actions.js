@@ -391,7 +391,7 @@ describe('entities actions tests', () => {
       expect(loadEntity).toBeDefined();
       expect(isFunction(loadEntity)).toBe(true);
 
-      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntity).toBeCalledWith(id);
@@ -441,7 +441,7 @@ describe('entities actions tests', () => {
       expect(loadEntity).toBeDefined();
       expect(isFunction(loadEntity)).toBe(true);
 
-      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntity).toBeCalledWith(id);
@@ -493,7 +493,7 @@ describe('entities actions tests', () => {
       expect(loadEntity).toBeDefined();
       expect(isFunction(loadEntity)).toBe(true);
 
-      return loadEntity({gmp, id})(dispatch, getState).then(() => {
+      return loadEntity(gmp)(id)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(selector).toBeCalledWith({foo: 'bar'});
         expect(isLoadingEntity).toBeCalledWith(id);

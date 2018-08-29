@@ -102,7 +102,7 @@ export const createLoadEntity = ({
   selector,
   actions,
   entityType,
-}) => ({gmp, id}) => (dispatch, getState) => {
+}) => gmp => id => (dispatch, getState) => {
     const rootState = getState();
     const state = selector(rootState);
 

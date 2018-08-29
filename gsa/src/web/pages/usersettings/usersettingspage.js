@@ -1064,7 +1064,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: () =>
     dispatch(loadUserSettingDefaults({gmp, filter: ALL_FILTER})),
   loadTargets: () => dispatch(loadTargets({gmp, filter: ALL_FILTER})),
-  loadAlert: id => dispatch(loadAlert({gmp, id})),
+  loadAlert: id => dispatch(loadAlert(gmp)(id)),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
 });

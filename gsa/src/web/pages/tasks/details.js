@@ -395,7 +395,7 @@ const mapStateToProps = (rootState, {entity = {}}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSchedule: id => dispatch(loadSchedule({id, gmp})),
+  loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
 });
 
 export default compose(
