@@ -81,7 +81,7 @@ describe('UserSettings Defaults action tests', () => {
 
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
-      return loadUserSettingDefaults({gmp})(dispatch, getState).then(() => {
+      return loadUserSettingDefaults(gmp)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(dispatch).not.toBeCalled();
         expect(currentSettings).not.toBeCalled();
@@ -110,7 +110,7 @@ describe('UserSettings Defaults action tests', () => {
 
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
-      return loadUserSettingDefaults({gmp})(dispatch, getState).then(() => {
+      return loadUserSettingDefaults(gmp)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(currentSettings).toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);
@@ -145,7 +145,7 @@ describe('UserSettings Defaults action tests', () => {
 
       expect(isFunction(loadUserSettingDefaults)).toBe(true);
 
-      return loadUserSettingDefaults({gmp})(dispatch, getState).then(() => {
+      return loadUserSettingDefaults(gmp)(dispatch, getState).then(() => {
         expect(getState).toBeCalled();
         expect(currentSettings).toBeCalled();
         expect(dispatch).toHaveBeenCalledTimes(2);

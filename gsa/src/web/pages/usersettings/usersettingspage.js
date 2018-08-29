@@ -1061,8 +1061,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadScanConfigs: () => dispatch(loadScanConfigs({gmp, filter: ALL_FILTER})),
   loadScanners: () => dispatch(loadScanners({gmp, filter: ALL_FILTER})),
   loadSchedules: () => dispatch(loadSchedules({gmp, filter: ALL_FILTER})),
-  loadSettings: () =>
-    dispatch(loadUserSettingDefaults({gmp, filter: ALL_FILTER})),
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)(ALL_FILTER)),
   loadTargets: () => dispatch(loadTargets({gmp, filter: ALL_FILTER})),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
   setLocale: locale => gmp.setLocale(locale),

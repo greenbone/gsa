@@ -44,7 +44,7 @@ export const loadingActions = {
   }),
 };
 
-export const loadUserSettingDefaults = ({gmp}) => (dispatch, getState) => {
+export const loadUserSettingDefaults = gmp => (dispatch, getState) => {
   const rootState = getState();
   const selector = getUserSettingsDefaults(rootState);
 
