@@ -26,7 +26,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {getEntityType, normalizeType} from 'gmp/utils/entitytype';
+import {secInfoType} from 'gmp/models/secinfo';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -113,14 +113,12 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const details_page = entity => normalizeType(getEntityType(entity));
-
 export default createEntitiesTable({
   body: false,
   emptyTitle: _('No SecInfo Information available'),
   row: Row,
   header: withEntitiesHeader(true)(Header),
-  rowDetails: withRowDetails(details_page)(SecinfoDetails),
+  rowDetails: withRowDetails(secInfoType)(SecinfoDetails),
   footer: createEntitiesFooter({
     span: 10,
     download: 'secinfo.xml',

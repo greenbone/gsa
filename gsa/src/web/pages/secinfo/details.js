@@ -20,8 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
+
+import {secInfoType} from 'gmp/models/secinfo';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -33,7 +34,7 @@ import NvtDetails from '../nvts/details.js';
 import OvalDefDetails from '../ovaldefs/details.js';
 
 const SecinfoDetails = props => {
-  switch (props.entity.info_type) {
+  switch (secInfoType(props.entity)) {
     case 'nvt':
       return <NvtDetails {...props}/>;
     case 'cpe':

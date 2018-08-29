@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {secinfo_type} from 'gmp/models/secinfo';
+import {secInfoTypeName} from 'gmp/models/secinfo';
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -35,12 +35,12 @@ const Event = ({
   event,
 }) => {
   if (event.type === EVENT_TYPE_NEW_SECINFO) {
-    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
     return _('New {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
   if (event.type === EVENT_TYPE_UPDATED_SECINFO) {
-    const type = secinfo_type(event.data.secinfo_type.value, _('SecInfo'));
+    const type = secInfoTypeName(event.data.secinfo_type.value, _('SecInfo'));
     return _('Updated {{secinfo_type}} arrived', {secinfo_type: type});
   }
 
