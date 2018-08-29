@@ -65,7 +65,7 @@
   "scripts": {
     "test": "NODE_PATH=src react-scripts test --env=jsdom",
     "test:coverage": "NODE_PATH=src react-scripts test --env=jsdom --coverage --maxWorkers 2",
-    "lint": "NODE_PATH=src eslint src",
+    "lint": "NODE_PATH=src eslint --max-warnings 0 src",
     "start": "NODE_PATH=src react-scripts start",
     "build": "NODE_PATH=src react-scripts build",
     "eject": "NODE_PATH=src react-scripts eject",
