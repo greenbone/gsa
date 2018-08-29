@@ -1066,7 +1066,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadTargets: () => dispatch(loadTargets({gmp, filter: ALL_FILTER})),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
   setLocale: locale => gmp.setLocale(locale),
-  setTimezone: timezone => dispatch(updateTimezone({gmp, timezone})),
+  setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
 });
 
 export default compose(

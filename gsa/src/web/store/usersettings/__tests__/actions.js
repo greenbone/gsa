@@ -70,7 +70,7 @@ describe('settings actions tests', () => {
     const gmp = {
       setTimezone: jest.fn(),
     };
-    return updateTimezone({gmp, timezone: 'cet'})(dispatch).then(() => {
+    return updateTimezone(gmp)('cet')(dispatch).then(() => {
       expect(dispatch).toBeCalledWith({
         type: USER_SETTINGS_SET_TIMEZONE,
         timezone: 'cet',
