@@ -54,8 +54,10 @@ let UserSettingsDialog = ({
     alerts,
     credentials,
     filters,
-    scanConfigs,
-    scanners,
+    openVasScanConfigs,
+    ospScanConfigs,
+    openVasScanners,
+    ospScanners,
     portLists,
     reportFormats,
     schedules,
@@ -215,8 +217,10 @@ let UserSettingsDialog = ({
                 <DefaultsPart
                   alerts={alerts}
                   credentials={credentials}
-                  scanConfigs={scanConfigs}
-                  scanners={scanners}
+                  openVasScanConfigs={openVasScanConfigs}
+                  ospScanConfigs={ospScanConfigs}
+                  openVasScanners={openVasScanners}
+                  ospScanners={ospScanners}
                   portLists={portLists}
                   reportFormats={reportFormats}
                   schedules={schedules}
@@ -316,6 +320,10 @@ UserSettingsDialog.propTypes = {
   maxRowsPerPage: PropTypes.string,
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
+  openVasScanConfigs: PropTypes.array,
+  openVasScanners: PropTypes.array,
+  ospScanConfigs: PropTypes.array,
+  ospScanners: PropTypes.array,
   ovalFilter: PropTypes.string,
   overridesFilter: PropTypes.string,
   permissionsFilter: PropTypes.string,
@@ -328,8 +336,6 @@ UserSettingsDialog.propTypes = {
   resultsFilter: PropTypes.string,
   rolesFilter: PropTypes.string,
   rowsPerPage: PropTypes.string,
-  scanConfigs: PropTypes.array,
-  scanners: PropTypes.array,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.string,
   secInfoFilter: PropTypes.string,

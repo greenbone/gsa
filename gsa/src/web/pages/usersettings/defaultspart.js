@@ -35,8 +35,10 @@ import withCapabilities from 'web/utils/withCapabilities';
 const DefaultsPart = ({
   alerts,
   credentials,
-  scanConfigs,
-  scanners,
+  openVasScanConfigs,
+  ospScanConfigs,
+  openVasScanners,
+  ospScanners,
   portLists,
   reportFormats,
   schedules,
@@ -84,7 +86,7 @@ const DefaultsPart = ({
           <Select
             name="defaultOspScanConfig"
             value={defaultOspScanConfig}
-            items={renderSelectItems(scanConfigs, UNSET_VALUE)}
+            items={renderSelectItems(ospScanConfigs, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -94,7 +96,7 @@ const DefaultsPart = ({
           <Select
             name="defaultOspScanner"
             value={defaultOspScanner}
-            items={renderSelectItems(scanners, UNSET_VALUE)}
+            items={renderSelectItems(ospScanners, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -104,7 +106,7 @@ const DefaultsPart = ({
           <Select
             name="defaultOpenvasScanConfig"
             value={defaultOpenvasScanConfig}
-            items={renderSelectItems(scanConfigs, UNSET_VALUE)}
+            items={renderSelectItems(openVasScanConfigs, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -114,7 +116,7 @@ const DefaultsPart = ({
           <Select
             name="defaultOpenvasScanner"
             value={defaultOpenvasScanner}
-            items={renderSelectItems(scanners, UNSET_VALUE)}
+            items={renderSelectItems(openVasScanners, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -210,10 +212,12 @@ DefaultsPart.propTypes = {
   defaultSnmpCredential: PropTypes.string,
   defaultSshCredential: PropTypes.string,
   defaultTarget: PropTypes.string,
+  openVasScanConfigs: PropTypes.array,
+  openVasScanners: PropTypes.array,
+  ospScanConfigs: PropTypes.array,
+  ospScanners: PropTypes.array,
   portLists: PropTypes.array,
   reportFormats: PropTypes.array,
-  scanConfigs: PropTypes.array,
-  scanners: PropTypes.array,
   schedules: PropTypes.array,
   targets: PropTypes.array,
   onChange: PropTypes.func,

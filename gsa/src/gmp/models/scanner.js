@@ -44,6 +44,11 @@ export const PARAM_TYPE_OVALDEF_FILE = 'osp_ovaldef_file';
 export const PARAM_TYPE_SELECTION = 'osp_selection';
 export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
+export const openVasScannersFilter = config =>
+  config.scanner_type === OPENVAS_SCANNER_TYPE;
+export const ospScannersFilter = config =>
+  config.scanner_type === OSP_SCANNER_TYPE;
+
 export function scanner_type_name(scanner_type) {
   scanner_type = parseInt(scanner_type);
   if (scanner_type === OSP_SCANNER_TYPE) {
