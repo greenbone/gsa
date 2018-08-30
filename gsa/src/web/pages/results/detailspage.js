@@ -27,6 +27,8 @@ import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -118,7 +120,7 @@ let ToolBarIcons = ({
       }
     </IconDivider>
     <IconDivider>
-      {capabilities.mayAccess('tasks') &&
+      {capabilities.mayAccess('tasks') && isDefined(entity.task) &&
         <DetailsLink
           type="task"
           id={entity.task.id}
@@ -129,7 +131,7 @@ let ToolBarIcons = ({
           />
         </DetailsLink>
       }
-      {capabilities.mayAccess('reports') &&
+      {capabilities.mayAccess('reports') && isDefined(entity.report) &&
         <DetailsLink
           type="report"
           id={entity.report.id}
