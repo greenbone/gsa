@@ -25,7 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import Filter from 'gmp/models/filter';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -49,9 +49,24 @@ import DetailsBlock from 'web/entity/block';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntityPage from 'web/entity/page';
-import EntityContainer, {loader} from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
+
+import {
+  selector as notesSelector,
+  loadEntities as loadNotes,
+} from 'web/store/entities/notes';
+
+import {
+  selector as nvtsSelector,
+  loadEntity,
+} from 'web/store/entities/nvts';
+
+import {
+  selector as overridesSelector,
+  loadEntities as loadOverrides,
+} from 'web/store/entities/overrides';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -231,6 +246,8 @@ const open_dialog = (nvt, func) => {
 
 const Page = ({
   entity,
+  notes,
+  overrides,
   onChanged,
   onDownloaded,
   onError,
@@ -292,6 +309,8 @@ const Page = ({
                 <TabPanels>
                   <TabPanel>
                     <Details
+                      notes={notes}
+                      overrides={overrides}
                       entity={entity}
                     />
                   </TabPanel>
@@ -319,6 +338,8 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
+  notes: PropTypes.array,
+  overrides: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
@@ -331,32 +352,32 @@ Page.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const nvt_id_filter = id => 'nvt_id=' + id;
+const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();
 
-const NvtPage = props => (
-  <EntityContainer
-    {...props}
-    name="nvt"
-    loaders={[
-      loader('notes', nvt_id_filter),
-      loader('overrides', nvt_id_filter),
-    ]}
-  >
-    {({
-      notes,
-      overrides,
-      ...cprops
-    }) => (
-      <Page
-        {...props}
-        {...cprops}
-        notes={isDefined(notes) ? notes.entities : undefined}
-        overrides={isDefined(overrides) ? overrides.entities : undefined}
-      />
-    )}
-  </EntityContainer>
-);
+const mapStateToProps = (rootState, {id}) => {
+  const notesSel = notesSelector(rootState);
+  const overridesSel = overridesSelector(rootState);
+  return {
+    notes: notesSel.getEntities(nvtIdFilter(id)),
+    overrides: overridesSel.getEntities(nvtIdFilter(id)),
+  };
+};
 
-export default NvtPage;
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadNotesFunc = loadNotes(gmp);
+  const loadOverridesFunc = loadOverrides(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadNotesFunc(nvtIdFilter(id)));
+    dispatch(loadOverridesFunc(nvtIdFilter(id)));
+  };
+};
+
+export default withEntityContainer('task', {
+  load,
+  entitySelector: nvtsSelector,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

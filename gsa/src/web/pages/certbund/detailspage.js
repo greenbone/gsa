@@ -51,9 +51,14 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
-import EntityContainer from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
+
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/certbund';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -219,96 +224,104 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const CertBundAdvPage = props => (
-  <EntityContainer
-    {...props}
+const CertBundAdvPage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
+  ...props
+}) => (
+  <EntityComponent
     name="certbund"
-    resourceType="cert_bund_adv"
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
-    {({
-      entity,
-      onChanged,
-      onDownloaded,
-      onError,
-      onTagAddClick,
-      onTagCreateClick,
-      onTagDeleteClick,
-      onTagDisableClick,
-      onTagEditClick,
-      onTagEnableClick,
-      onTagRemoveClick,
-      ...cprops
-    }) => (
-      <EntityComponent
-        name="certbund"
-        onDownloaded={onDownloaded}
-        onDownloadError={onError}
+    {({download}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon="cert_bund_adv.svg"
+        title={_('CERT-Bund Advisory')}
+        toolBarIcons={ToolBarIcons}
+        onCertBundAdvDownloadClick={download}
       >
-        {({download}) => (
-          <EntityPage
-            {...props}
-            {...cprops}
-            entity={entity}
-            sectionIcon="cert_bund_adv.svg"
-            title={_('CERT-Bund Advisory')}
-            toolBarIcons={ToolBarIcons}
-            onCertBundAdvDownloadClick={download}
-          >
-            {({
-              activeTab = 0,
-              onActivateTab,
-            }) => {
-              return (
-                <Layout grow="1" flex="column">
-                  <TabLayout
-                    grow="1"
-                    align={['start', 'end']}
-                  >
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>
-                        {_('Information')}
-                      </Tab>
-                      <EntitiesTab entities={entity.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
+        {({
+          activeTab = 0,
+          onActivateTab,
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                </TabList>
+              </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details
-                          entity={entity}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={entity}
-                          onTagAddClick={onTagAddClick}
-                          onTagDeleteClick={onTagDeleteClick}
-                          onTagDisableClick={onTagDisableClick}
-                          onTagEditClick={onTagEditClick}
-                          onTagEnableClick={onTagEnableClick}
-                          onTagCreateClick={onTagCreateClick}
-                          onTagRemoveClick={onTagRemoveClick}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-              );
-            }}
-          </EntityPage>
-        )}
-      </EntityComponent>
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
-  </EntityContainer>
+  </EntityComponent>
 );
 
-export default CertBundAdvPage;
+CertBundAdvPage.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
+};
+
+export default withEntityContainer('certbund', {
+  load: loadEntity,
+  entitySelector: selector,
+})(CertBundAdvPage);
 
 // vim: set ts=2 sw=2 tw=80:

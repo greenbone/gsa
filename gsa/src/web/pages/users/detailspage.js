@@ -46,13 +46,23 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
 import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  permissions_subject_loader,
-} from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsSubjectFilter,
+} from 'web/entity/withEntityContainer';
+
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/users';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -240,18 +250,26 @@ Page.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const UserPage = props => (
-  <EntityContainer
-    {...props}
-    name="user"
-    loaders={[
-      permissions_subject_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id)));
+  };
+};
 
-export default UserPage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),
+  };
+};
+
+export default withEntityContainer('user', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

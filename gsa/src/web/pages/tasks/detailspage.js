@@ -27,6 +27,8 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
+import Filter from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
@@ -59,17 +61,33 @@ import TableRow from 'web/components/table/row';
 
 import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import EntityContainer, {
-  loader,
-  permissions_resource_loader,
-} from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {
+  selector as notesSelector,
+  loadEntities as loadNotes,
+} from 'web/store/entities/notes';
+import {
+  selector as overridesSelector,
+  loadEntities as loadOverrides,
+} from 'web/store/entities/overrides';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+import {
+  selector as taskSelector,
+  loadEntity as loadTask,
+} from 'web/store/entities/tasks';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -89,8 +107,8 @@ import TaskComponent from './component';
 const ToolBarIcons = ({
   entity,
   links,
-  notes,
-  overrides,
+  notes = [],
+  overrides = [],
   onTaskDeleteClick,
   onTaskCloneClick,
   onTaskDownloadClick,
@@ -102,11 +120,6 @@ const ToolBarIcons = ({
   onTaskStopClick,
   onTaskResumeClick,
 }) => {
-
-  const notes_count = isDefined(notes) ? notes.counts.length : undefined;
-  const override_count = isDefined(overrides) ? overrides.counts.length :
-    undefined;
-
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -251,7 +264,7 @@ const ToolBarIcons = ({
 
         <IconDivider>
           <Badge
-            content={notes_count}
+            content={notes.length}
           >
             <Link
               to="notes"
@@ -265,7 +278,7 @@ const ToolBarIcons = ({
           </Badge>
 
           <Badge
-            content={override_count}
+            content={overrides.length}
           >
             <Link
               to="overrides"
@@ -287,8 +300,8 @@ const ToolBarIcons = ({
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  notes: PropTypes.object,
-  overrides: PropTypes.object,
+  notes: PropTypes.array,
+  overrides: PropTypes.array,
   onContainerTaskCreateClick: PropTypes.func.isRequired,
   onReportImportClick: PropTypes.func.isRequired,
   onTaskCloneClick: PropTypes.func.isRequired,
@@ -544,22 +557,36 @@ const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const task_id_filter = id => 'task_id=' + id;
+const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
 
-const TaskPage = props => (
-  <EntityContainer
-    {...props}
-    name="task"
-    loaders={[
-      loader('notes', task_id_filter),
-      loader('overrides', task_id_filter),
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const mapStateToProps = (rootState, {id}) => {
+  const permSel = permissionsSelector(rootState);
+  const notesSel = notesSelector(rootState);
+  const overridesSel = overridesSelector(rootState);
+  return {
+    notes: notesSel.getEntities(taskIdFilter(id)),
+    overrides: overridesSel.getEntities(taskIdFilter(id)),
+    permissions: permSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
 
-export default TaskPage;
+const load = gmp => {
+  const loadTaskFunc = loadTask(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  const loadNotesFunc = loadNotes(gmp);
+  const loadOverridesFunc = loadOverrides(gmp);
+  return id => dispatch => {
+    dispatch(loadTaskFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+    dispatch(loadNotesFunc(taskIdFilter(id)));
+    dispatch(loadOverridesFunc(taskIdFilter(id)));
+  };
+};
+
+export default withEntityContainer('task', {
+  load,
+  entitySelector: taskSelector,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

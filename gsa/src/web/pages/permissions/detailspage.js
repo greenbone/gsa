@@ -41,15 +41,20 @@ import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
 
 import EntityPage from 'web/entity/page';
-import EntityContainer from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -225,15 +230,9 @@ Page.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const PermissionPage = props => (
-  <EntityContainer
-    {...props}
-    name="permission"
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
-
-export default PermissionPage;
+export default withEntityContainer('permission', {
+  load: loadEntity,
+  entitySelector: selector,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

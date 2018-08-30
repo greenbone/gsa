@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import Filter from 'gmp/models/filter';
+
 import EntityNameTableData from 'web/entities/entitynametabledata';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -50,18 +52,27 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  loader,
-  permissions_subject_loader,
-} from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsSubjectFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/roles';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
 import {permissionDescription} from 'web/utils/render';
@@ -195,6 +206,7 @@ GeneralPermissions.propTypes = {
 
 const Page = ({
   entity,
+  generalPermissions = [],
   links = true,
   permissions = [],
   onChanged,
@@ -207,7 +219,6 @@ const Page = ({
   onTagEditClick,
   onTagEnableClick,
   onTagRemoveClick,
-  general_permissions = {entities: []},
   ...props
 }) => (
   <RoleComponent
@@ -259,7 +270,7 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <EntitiesTab entities={general_permissions}>
+                  <EntitiesTab entities={generalPermissions}>
                     {_('General Command Permissions')}
                   </EntitiesTab>
                   <EntitiesTab entities={entity.userTags}>
@@ -281,7 +292,7 @@ const Page = ({
                   </TabPanel>
                   <TabPanel>
                     <GeneralPermissions
-                      permissions={general_permissions}
+                      permissions={generalPermissions}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -317,7 +328,7 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
-  general_permissions: PropTypes.array,
+  generalPermissions: PropTypes.array,
   links: PropTypes.bool,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
@@ -332,22 +343,32 @@ Page.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const general_permissions_loader = loader('permissions',
-  id => 'subject_uuid=' + id, 'general_permissions');
+const generalPermissionsFilter = id =>
+  Filter.fromString('subject_uuid=' + id).all();
 
-const RolePage = props => (
-  <EntityContainer
-    {...props}
-    name="role"
-    loaders={[
-      general_permissions_loader,
-      permissions_subject_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id)));
+    dispatch(loadPermissionsFunc(generalPermissionsFilter(id)));
+  };
+};
 
-export default RolePage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),
+    generalPermissions: permissionsSel.getEntities(
+      generalPermissionsFilter(id)),
+  };
+};
+
+export default withEntityContainer('role', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

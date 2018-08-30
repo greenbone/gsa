@@ -57,13 +57,17 @@ import DetailsBlock from 'web/entity/block';
 import EntityPage from 'web/entity/page';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
-import EntityContainer from 'web/entity/container';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
+
+import {
+  loadEntity,
+  selector,
+} from 'web/store/entities/results';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
 
 import NoteComponent from '../notes/component';
 
@@ -446,17 +450,9 @@ Page.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-Page = withGmp(Page);
-
-const ResultPage = props => (
-  <EntityContainer
-    {...props}
-    name="result"
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
-
-export default ResultPage;
+export default withEntityContainer('result', {
+  entitySelector: selector,
+  load: loadEntity,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
