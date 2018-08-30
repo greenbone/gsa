@@ -130,13 +130,13 @@ class EntityPage extends React.Component {
   render() {
     const {
       entity,
-      loading,
+      isLoading = true,
     } = this.props;
 
     if (!isDefined(entity)) {
-      if (loading) {
+      if (isLoading) {
         return (
-          <Loading loading={loading}/>
+          <Loading />
         );
       }
       return null;
@@ -160,7 +160,7 @@ class EntityPage extends React.Component {
 EntityPage.propTypes = {
   entity: PropTypes.model,
   infoComponent: PropTypes.componentOrFalse,
-  loading: PropTypes.bool,
+  isLoading: PropTypes.bool,
   sectionComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
   title: PropTypes.string,
