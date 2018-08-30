@@ -29,44 +29,57 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {renderYesNo} from '../../utils/render.js';
-import PropTypes from '../../utils/proptypes.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import EntityPage from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
-import EntityPage from '../../entity/page.js';
-import EntityContainer, {
-  permissions_resource_loader,
-} from '../../entity/container.js';
-import {goto_details, goto_list} from '../../entity/component.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import CreateIcon from '../../entity/icon/createicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import {
+  selector as notesSelector,
+  loadEntity,
+} from 'web/store/entities/notes';
 
-import NoteDetails from './details.js';
-import NoteComponent from './component.js';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import {renderYesNo} from 'web/utils/render';
+import PropTypes from 'web/utils/proptypes';
+
+import NoteDetails from './details';
+import NoteComponent from './component';
 
 const ToolBarIcons = ({
   entity,
@@ -186,9 +199,18 @@ Details.propTypes = {
 };
 
 const Page = ({
+  permissions = [],
+  entity,
   onChanged,
   onDownloaded,
   onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => (
   <NoteComponent
@@ -211,9 +233,9 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="note.svg"
         title={_('Note')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
         onDownloaded={onDownloaded}
@@ -224,19 +246,10 @@ const Page = ({
         onNoteDownloadClick={download}
         onNoteEditClick={edit}
         onNoteSaveClick={save}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
-          tagsComponent,
-          tagsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -252,16 +265,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -272,16 +281,27 @@ const Page = ({
                       entity={entity}
                     />
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>
@@ -293,23 +313,40 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const NotePage = props => (
-  <EntityContainer
-    {...props}
-    name="note"
-    loaders={[
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+  };
+};
 
-export default NotePage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('note', {
+  entitySelector: notesSelector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

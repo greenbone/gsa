@@ -25,21 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
-import {goto_details, goto_list} from 'web/entity/component';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout.js';
@@ -54,6 +39,32 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+
+import EntityPage from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/filters';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import PropTypes from 'web/utils/proptypes';
 
 import FilterDetails from './details';
 import FilterComponent from './component';
@@ -114,9 +125,18 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  entity,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => {
   return (
@@ -140,7 +160,7 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={FilterDetails}
+          entity={entity}
           sectionIcon="filter.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Filter')}
@@ -150,19 +170,10 @@ const Page = ({
           onFilterDownloadClick={download}
           onFilterEditClick={edit}
           onFilterSaveClick={save}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
         >
           {({
             activeTab = 0,
-            permissionsComponent,
-            permissionsTitle,
-            tagsComponent,
-            tagsTitle,
             onActivateTab,
-            entity,
-            ...other
           }) => {
             return (
               <Layout grow="1" flex="column">
@@ -178,16 +189,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
                   </TabList>
                 </TabLayout>
 
@@ -198,16 +205,27 @@ const Page = ({
                         entity={entity}
                       />
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onTagAddClick={onTagAddClick}
+                        onTagDeleteClick={onTagDeleteClick}
+                        onTagDisableClick={onTagDisableClick}
+                        onTagEditClick={onTagEditClick}
+                        onTagEnableClick={onTagEnableClick}
+                        onTagCreateClick={onTagCreateClick}
+                        onTagRemoveClick={onTagRemoveClick}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                      />
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>
@@ -220,23 +238,40 @@ const Page = ({
 };
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const FilterPage = props => (
-  <EntityContainer
-    {...props}
-    name="filter"
-    loaders={[
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+  };
+};
 
-export default FilterPage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('filter', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

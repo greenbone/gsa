@@ -25,17 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityPage, {Col} from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
-import {goto_list} from 'web/entity/component';
-
 import Badge from 'web/components/badge/badge';
 
 import SeverityBar from 'web/components/bar/severitybar';
@@ -64,6 +53,28 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import EntityPage, {Col} from 'web/entity/page';
+import {goto_list} from 'web/entity/component';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
+
+import {
+  selector as osSelector,
+  loadEntity,
+} from 'web/store/entities/operatingsystems';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import OsComponent from './component';
 
@@ -201,8 +212,17 @@ Details.propTypes = {
 };
 
 const Page = ({
+  entity,
+  permissions = [],
   onDownloaded,
   onChanged,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   onError,
   ...props
 }) => (
@@ -218,7 +238,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
-        detailsComponent={Details}
+        entity={entity}
         sectionIcon="os.svg"
         title={_('Operating System')}
         toolBarIcons={ToolBarIcons}
@@ -230,13 +250,7 @@ const Page = ({
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
-          tagsComponent,
-          tagsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -252,16 +266,12 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -272,16 +282,27 @@ const Page = ({
                       entity={entity}
                     />
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>
@@ -293,26 +314,40 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const HostPage = props => (
-  <EntityContainer
-    {...props}
-    name="operatingsystem"
-    resourceType="os"
-    loaders={[
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => (
-      <Page {...props} {...cprops} />
-    )}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+  };
+};
 
-export default HostPage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('operatingsystem', {
+  entitySelector: osSelector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

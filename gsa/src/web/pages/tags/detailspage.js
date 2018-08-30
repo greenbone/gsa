@@ -25,19 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import glamorous from 'glamorous';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilties from 'web/utils/withCapabilities';
-
-import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
-import {goto_details, goto_list} from 'web/entity/component';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -45,11 +32,6 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import CreateIcon from 'web/entity/icon/createicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -60,25 +42,35 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
-import ResourceList from 'web/pages/tags/resourcelist';
-import TagComponent from 'web/pages/tags/component';
-import TagDetails from 'web/pages/tags/details';
+import EntityPage from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/tags';
 
-TabTitle.propTypes = {
-  count: PropTypes.numberOrNumberString.isRequired,
-  title: PropTypes.string.isRequired,
-};
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilties from 'web/utils/withCapabilities';
+
+import ResourceList from './resourcelist';
+import TagComponent from './component';
+import TagDetails from './details';
+import EntityPermissions from 'web/entity/permissions';
 
 const ToolBarIcons = withCapabilties(({
   capabilities,
@@ -168,6 +160,8 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  entity,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
@@ -201,10 +195,9 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={TagDetails}
+          entity={entity}
           sectionIcon="tag.svg"
           toolBarIcons={ToolBarIcons}
-          tagsComponent={false}
           title={_('Tag')}
           onTagCloneClick={clone}
           onTagCreateClick={create}
@@ -215,22 +208,11 @@ const Page = ({
           onTagEnableClick={enable}
           onTagDisableClick={disable}
           onTagRemoveClick={remove}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
         >
           {({
             activeTab = 0,
-            permissionsComponent,
-            permissionsTitle,
-            resourcesComponent,
-            tagsTitle,
             onActivateTab,
-            entity,
-            ...other
           }) => {
-            const {resourceCount} = entity;
-
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -245,17 +227,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('Assigned Items')}
-                        count={resourceCount}
-                      />
-                    </Tab>
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <EntitiesTab count={entity.resourceCount}>
+                      {_('Assigned Items')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
                   </TabList>
                 </TabLayout>
 
@@ -269,11 +246,15 @@ const Page = ({
                     <TabPanel>
                       <ResourceList entity={entity}/>
                     </TabPanel>
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                      />
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>
@@ -286,23 +267,33 @@ const Page = ({
 };
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
-const TagsPage = props => (
-  <EntityContainer
-    {...props}
-    name="tag"
-    loaders={[
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+  };
+};
 
-export default TagsPage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('tag', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -27,32 +27,39 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
 
-import DetailsBlock from '../../entity/block.js';
-import EntityPage from '../../entity/page.js';
-import EntityComponent from '../../entity/component.js';
-import EntityContainer from '../../entity/container.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import DetailsLink from 'web/components/link/detailslink';
+import ExternalLink from 'web/components/link/externallink';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import EntityComponent from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import ExternalLink from '../../components/link/externallink.js';
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/dfncerts';
 
-import DfnCertAdvDetails from './details.js';
+import PropTypes from 'web/utils/proptypes';
+
+import DfnCertAdvDetails from './details';
 
 const ToolBarIcons = ({
   entity,
@@ -153,100 +160,104 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const DfnCertAdvPage = props => (
-  <EntityContainer
-    {...props}
+const DfnCertAdvPage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
+  ...props
+}) => (
+  <EntityComponent
     name="dfncert"
-    resourceType="dfn_cert_adv"
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
-    {({
-      onChanged,
-      onDownloaded,
-      onError,
-      ...cprops
-    }) => (
-      <EntityComponent
-        name="dfncert"
-        onDownloaded={onDownloaded}
-        onDownloadError={onError}
+    {({download}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon="dfn_cert_adv.svg"
+        title={_('DFN-CERT Advisory')}
+        toolBarIcons={ToolBarIcons}
+        onDfnCertAdvDownloadClick={download}
       >
-        {({download}) => (
-          <EntityPage
-            {...props}
-            {...cprops}
-            sectionIcon="dfn_cert_adv.svg"
-            title={_('DFN-CERT Advisory')}
-            detailsComponent={Details}
-            permissionsComponent={false}
-            toolBarIcons={ToolBarIcons}
-            onDfnCertAdvDownloadClick={download}
-          >
-            {({
-              activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
-              tagsComponent,
-              tagsTitle,
-              onActivateTab,
-              entity,
-              ...other
-            }) => {
-              return (
-                <Layout grow="1" flex="column">
-                  <TabLayout
-                    grow="1"
-                    align={['start', 'end']}
-                  >
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>
-                        {_('Information')}
-                      </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
-                    </TabList>
-                  </TabLayout>
+        {({
+          activeTab = 0,
+          onActivateTab,
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                </TabList>
+              </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details
-                          entity={entity}
-                        />
-                      </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-              );
-            }}
-          </EntityPage>
-        )}
-      </EntityComponent>
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
-  </EntityContainer>
+  </EntityComponent>
 );
 
-export default DfnCertAdvPage;
+DfnCertAdvPage.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
+};
+
+export default withEntityContainer('dfncert', {
+  load: loadEntity,
+  entitySelector: selector,
+})(DfnCertAdvPage);
 
 // vim: set ts=2 sw=2 tw=80:

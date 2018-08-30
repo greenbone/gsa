@@ -23,9 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
-import _ from 'gmp/locale';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -40,28 +38,10 @@ import Loading from '../components/loading/loading.js';
 import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
-import EntityPermissions from './permissions.js';
-import EntityTags from './tags.js';
 
-export const Col = glamorous.col(
-  ({width}) => ({width})
-);
-
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
+export const Col = styled.col`
+  width: ${props => props.width};
+`;
 
 class EntityPage extends React.Component {
 
@@ -93,16 +73,11 @@ class EntityPage extends React.Component {
 
   renderSection() {
     const {
-      detailsComponent: Details,
       children,
       entity,
       sectionIcon,
-      permissionsComponent: PermissionsComponent = EntityPermissions,
       sectionComponent: SectionComponent = Section,
-      tagsComponent: TagsComponent = EntityTags,
       title,
-      permissions,
-      ...other
     } = this.props;
 
     const {activeTab} = this.state;
@@ -116,26 +91,6 @@ class EntityPage extends React.Component {
       section_title = title + ': ' + entity.name;
     }
 
-    const {userTags} = entity;
-    const tagsTitle = (
-      <TabTitle
-        title={_('User Tags')}
-        count={userTags.length}
-      />
-    );
-
-    let hasPermissions = false;
-    if (isDefined(permissions)) {
-      hasPermissions = isDefined(permissions.entities);
-    }
-    const permissionsCount = hasPermissions ? permissions.entities.length : 0;
-    const permissionsTitle = (
-      <TabTitle
-        title={_('Permissions')}
-        count={permissionsCount}
-      />
-    );
-
     return (
       <SectionComponent
         title={section_title}
@@ -144,14 +99,7 @@ class EntityPage extends React.Component {
         extra={this.renderInfo()}
       >
         {children({
-          ...other,
           activeTab,
-          entity,
-          tagsComponent: TagsComponent ? this.renderUserTags() : undefined,
-          tagsTitle,
-          permissionsComponent: PermissionsComponent ?
-            this.renderPermissions() : undefined,
-          permissionsTitle,
           onActivateTab: this.handleActivateTab,
         })}
       </SectionComponent>
@@ -179,71 +127,16 @@ class EntityPage extends React.Component {
     );
   }
 
-  renderUserTags() {
-    const {
-      entity,
-      tagsComponent: TagsComponent = EntityTags,
-      onTagAddClick,
-      onTagDeleteClick,
-      onTagDisableClick,
-      onTagEditClick,
-      onTagEnableClick,
-      onTagCreateClick,
-      onTagRemoveClick,
-    } = this.props;
-    if (TagsComponent === false) {
-      return null;
-    }
-
-    return (
-      <TagsComponent
-        entity={entity}
-        onTagAddClick={onTagAddClick}
-        onTagDeleteClick={onTagDeleteClick}
-        onTagDisableClick={onTagDisableClick}
-        onTagEditClick={onTagEditClick}
-        onTagEnableClick={onTagEnableClick}
-        onTagCreateClick={onTagCreateClick}
-        onTagRemoveClick={onTagRemoveClick}
-      />
-    );
-  }
-
-  renderPermissions() {
-    const {
-      entity,
-      permissions,
-      permissionsComponent: PermissionsComponent = EntityPermissions,
-      onPermissionChanged,
-      onPermissionDownloaded,
-      onPermissionDownloadError,
-    } = this.props;
-
-    if (PermissionsComponent === false) {
-      return null;
-    }
-
-    return (
-      <PermissionsComponent
-        entity={entity}
-        permissions={isDefined(permissions) ? permissions.entities : undefined}
-        onChanged={onPermissionChanged}
-        onDownloaded={onPermissionDownloaded}
-        onError={onPermissionDownloadError}
-      />
-    );
-  }
-
   render() {
     const {
       entity,
-      loading,
+      isLoading = true,
     } = this.props;
 
     if (!isDefined(entity)) {
-      if (loading) {
+      if (isLoading) {
         return (
-          <Loading loading={loading}/>
+          <Loading />
         );
       }
       return null;
@@ -265,27 +158,13 @@ class EntityPage extends React.Component {
 }
 
 EntityPage.propTypes = {
-  detailsComponent: PropTypes.component.isRequired,
   entity: PropTypes.model,
   infoComponent: PropTypes.componentOrFalse,
-  loading: PropTypes.bool,
-  permissions: PropTypes.object,
-  permissionsComponent: PropTypes.componentOrFalse,
+  isLoading: PropTypes.bool,
   sectionComponent: PropTypes.componentOrFalse,
   sectionIcon: PropTypes.icon,
-  tagsComponent: PropTypes.componentOrFalse,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
-  onPermissionChanged: PropTypes.func,
-  onPermissionDownloadError: PropTypes.func,
-  onPermissionDownloaded: PropTypes.func,
-  onTagAddClick: PropTypes.func.isRequired,
-  onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
-  onTagDisableClick: PropTypes.func.isRequired,
-  onTagEditClick: PropTypes.func.isRequired,
-  onTagEnableClick: PropTypes.func.isRequired,
-  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 export default EntityPage;

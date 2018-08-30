@@ -56,13 +56,12 @@ class TagsHandler extends React.Component {
   openCreateTagDialog(entity, create) {
     const {
       resourceType = getEntityType(entity),
-      name = resourceType,
     } = this.props;
     create({
       fixed: true,
       resource_ids: [entity.id],
       resource_type: resourceType,
-      name: _('{{type}}:unnamed', {type: name}),
+      name: _('{{type}}:unnamed', {type: resourceType}),
     });
   }
 
@@ -113,7 +112,6 @@ class TagsHandler extends React.Component {
 
 TagsHandler.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  name: PropTypes.string,
   resourceType: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
