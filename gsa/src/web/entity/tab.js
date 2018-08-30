@@ -38,18 +38,20 @@ const TabTitleCounts = styled.span`
 const EntitiesTab = ({
   children,
   entities = [],
+  count = entities.length,
   ...props
 }) => (
   <Tab {...props}>
     <Layout flex="column" align={['center', 'center']}>
       <span>{children}</span>
-      <TabTitleCounts>(<i>{(entities.length)}</i>)</TabTitleCounts>
+      <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
     </Layout>
   </Tab>
 );
 
 EntitiesTab.propTypes = {
-  entities: PropTypes.array.isRequired,
+  count: PropTypes.number,
+  entities: PropTypes.array,
 };
 
 export default EntitiesTab;
