@@ -23,14 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -58,35 +51,35 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
 import EntityPage from 'web/entity/page';
-import EntityContainer, {
-  permissions_resource_loader,
-} from 'web/entity/container';
 import {goto_details, goto_list} from 'web/entity/component';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/scanconfigs';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
 import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
 import Trend from './trend';
-
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -347,9 +340,18 @@ Details.propTypes = {
 };
 
 const Page = ({
+  entity,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => {
 
@@ -376,7 +378,7 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={Details}
+          entity={entity}
           sectionIcon="config.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
@@ -387,28 +389,14 @@ const Page = ({
           onScanConfigEditClick={edit}
           onScanConfigSaveClick={save}
           onScanConfigImportClick={import_func}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
         >
           {({
             activeTab = 0,
-            permissionsComponent,
-            permissionsTitle,
-            tagsComponent,
-            tagsTitle,
             onActivateTab,
-            entity,
-            ...other
           }) => {
             const {
-              family_list = [],
               preferences,
             } = entity;
-            const nvtFamiliesCount = family_list.length;
-            const nvtPrefsCount = preferences.nvt.length;
-            const scannerPrefsCount = preferences.scanner.length;
-
             return (
               <Layout grow="1" flex="column">
                 <TabLayout
@@ -423,34 +411,21 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('Scanner Preferences')}
-                        count={scannerPrefsCount}
-                      />
-                    </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('NVT Families')}
-                        count={nvtFamiliesCount}
-                      />
-                    </Tab>
-                    <Tab>
-                      <TabTitle
-                        title={_('NVT Preferences')}
-                        count={nvtPrefsCount}
-                      />
-                    </Tab>
-                    {isDefined(tagsComponent) &&
-                      <Tab>
-                        {tagsTitle}
-                      </Tab>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <Tab>
-                        {permissionsTitle}
-                      </Tab>
-                    }
+                    <EntitiesTab entities={preferences.scanner}>
+                      {_('Scanner Preferences')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={entity.family_list}>
+                      {_('NVT Families')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={preferences.nvt}>
+                      {_('NVT Preferences')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
                   </TabList>
                 </TabLayout>
 
@@ -470,16 +445,27 @@ const Page = ({
                     <TabPanel>
                       <NvtPreferences entity={entity}/>
                     </TabPanel>
-                    {isDefined(tagsComponent) &&
-                      <TabPanel>
-                        {tagsComponent}
-                      </TabPanel>
-                    }
-                    {isDefined(permissionsComponent) &&
-                      <TabPanel>
-                        {permissionsComponent}
-                      </TabPanel>
-                    }
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onTagAddClick={onTagAddClick}
+                        onTagDeleteClick={onTagDeleteClick}
+                        onTagDisableClick={onTagDisableClick}
+                        onTagEditClick={onTagEditClick}
+                        onTagEnableClick={onTagEnableClick}
+                        onTagCreateClick={onTagCreateClick}
+                        onTagRemoveClick={onTagRemoveClick}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                      />
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </Layout>
@@ -492,24 +478,40 @@ const Page = ({
 };
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const ScanConfigPage = props => (
-  <EntityContainer
-    {...props}
-    name="scanconfig"
-    resourceType="config"
-    loaders={[
-      permissions_resource_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
+  };
+};
 
-export default ScanConfigPage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('scanconfig', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,69 +23,63 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import Filter from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import {permissionDescription} from '../../utils/render.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
 
-import EntityPage from '../../entity/page.js';
-import EntityContainer, {
-  loader,
-  permissions_subject_loader,
-} from '../../entity/container.js';
-import {goto_details, goto_list} from '../../entity/component.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import CreateIcon from '../../entity/icon/createicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import Table from 'web/components/table/stripedtable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import EntityPage from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer, {
+  permissionsSubjectFilter,
+} from 'web/entity/withEntityContainer';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import CreateIcon from 'web/entity/icon/createicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import Table from '../../components/table/stripedtable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableRow from '../../components/table/row.js';
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/roles';
 
-import RoleComponent from './component.js';
-import RoleDetails from './details.js';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
 
-const TabTitleCount = glamorous.span({
-  fontSize: '0.7em',
-});
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
 
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCount>(<i>{(count)}</i>)</TabTitleCount>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
+import RoleComponent from './component';
+import RoleDetails from './details';
+import EntityPermissions from 'web/entity/permissions';
 
 const ToolBarIcons = ({
   entity,
@@ -211,10 +205,20 @@ GeneralPermissions.propTypes = {
 };
 
 const Page = ({
+  entity,
+  generalPermissions = [],
+  links = true,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
-  general_permissions,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => (
   <RoleComponent
@@ -237,9 +241,9 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
+        entity={entity}
         sectionIcon="role.svg"
         title={_('Role')}
-        detailsComponent={Details}
         toolBarIcons={ToolBarIcons}
         onRoleCloneClick={clone}
         onRoleCreateClick={create}
@@ -247,24 +251,11 @@ const Page = ({
         onRoleDownloadClick={download}
         onRoleEditClick={edit}
         onRoleSaveClick={save}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
-          links = true,
-          permissionsComponent,
-          permissionsTitle,
-          tagsComponent,
-          tagsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
-          const genPermsCount = isDefined(general_permissions) ?
-            general_permissions.entities.length : 0;
-
           return (
             <Layout grow="1" flex="column">
               <TabLayout
@@ -279,22 +270,15 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  <Tab>
-                    <TabTitle
-                      title={_('General Command Permissions')}
-                      count={genPermsCount}
-                    />
-                  </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <EntitiesTab entities={generalPermissions}>
+                    {_('General Command Permissions')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                  <EntitiesTab entities={permissions}>
+                    {_('Permissions')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -308,20 +292,30 @@ const Page = ({
                   </TabPanel>
                   <TabPanel>
                     <GeneralPermissions
-                      permissions={isDefined(general_permissions) ?
-                        general_permissions.entities : []}
+                      permissions={generalPermissions}
                     />
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityPermissions
+                      entity={entity}
+                      permissions={permissions}
+                      onChanged={onChanged}
+                      onDownloaded={onDownloaded}
+                      onError={onError}
+                    />
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>
@@ -333,28 +327,48 @@ const Page = ({
 );
 
 Page.propTypes = {
-  general_permissions: PropTypes.object,
+  entity: PropTypes.model,
+  generalPermissions: PropTypes.array,
+  links: PropTypes.bool,
+  permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const general_permissions_loader = loader('permissions',
-  id => 'subject_uuid=' + id, 'general_permissions');
+const generalPermissionsFilter = id =>
+  Filter.fromString('subject_uuid=' + id).all();
 
-const RolePage = props => (
-  <EntityContainer
-    {...props}
-    name="role"
-    loaders={[
-      general_permissions_loader,
-      permissions_subject_loader,
-    ]}
-  >
-    {cprops => <Page {...props} {...cprops} />}
-  </EntityContainer>
-);
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id)));
+    dispatch(loadPermissionsFunc(generalPermissionsFilter(id)));
+  };
+};
 
-export default RolePage;
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsSubjectFilter(id)),
+    generalPermissions: permissionsSel.getEntities(
+      generalPermissionsFilter(id)),
+  };
+};
+
+export default withEntityContainer('role', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,38 +25,55 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import Filter from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import DetailsBlock from '../../entity/block.js';
-import Note from '../../entity/note.js';
-import Override from '../../entity/override.js';
-import EntityPage from '../../entity/page.js';
-import EntityContainer, {loader} from '../../entity/container.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import Link from 'web/components/link/link';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Link from '../../components/link/link.js';
+import DetailsBlock from 'web/entity/block';
+import Note from 'web/entity/note';
+import Override from 'web/entity/override';
+import EntityPage from 'web/entity/page';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import {
+  selector as notesSelector,
+  loadEntities as loadNotes,
+} from 'web/store/entities/notes';
 
-import NvtComponent from './component.js';
-import NvtDetails from './details.js';
-import Preferences from './preferences.js';
+import {
+  selector as nvtsSelector,
+  loadEntity,
+} from 'web/store/entities/nvts';
+
+import {
+  selector as overridesSelector,
+  loadEntities as loadOverrides,
+} from 'web/store/entities/overrides';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import NvtComponent from './component';
+import NvtDetails from './details';
+import Preferences from './preferences';
 
 let ToolBarIcons = ({
   capabilities,
@@ -228,9 +245,19 @@ const open_dialog = (nvt, func) => {
 };
 
 const Page = ({
+  entity,
+  notes,
+  overrides,
   onChanged,
   onDownloaded,
   onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
   ...props
 }) => (
   <NvtComponent
@@ -245,8 +272,7 @@ const Page = ({
     }) => (
       <EntityPage
         {...props}
-        detailsComponent={Details}
-        permissionsComponent={false}
+        entity={entity}
         toolBarIcons={ToolBarIcons}
         title={_('NVT')}
         sectionIcon="nvt.svg"
@@ -254,19 +280,10 @@ const Page = ({
         onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
         onNvtDownloadClick={download}
         onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
-          permissionsComponent,
-          permissionsTitle,
-          tagsComponent,
-          tagsTitle,
           onActivateTab,
-          entity,
-          ...other
         }) => {
           return (
             <Layout grow="1" flex="column">
@@ -282,16 +299,9 @@ const Page = ({
                   <Tab>
                     {_('Information')}
                   </Tab>
-                  {isDefined(tagsComponent) &&
-                    <Tab>
-                      {tagsTitle}
-                    </Tab>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
-                  }
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
                 </TabList>
               </TabLayout>
 
@@ -299,19 +309,23 @@ const Page = ({
                 <TabPanels>
                   <TabPanel>
                     <Details
+                      notes={notes}
+                      overrides={overrides}
                       entity={entity}
                     />
                   </TabPanel>
-                  {isDefined(tagsComponent) &&
-                    <TabPanel>
-                      {tagsComponent}
-                    </TabPanel>
-                  }
-                  {isDefined(permissionsComponent) &&
-                    <TabPanel>
-                      {permissionsComponent}
-                    </TabPanel>
-                  }
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
                 </TabPanels>
               </Tabs>
             </Layout>
@@ -323,37 +337,47 @@ const Page = ({
 );
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  notes: PropTypes.array,
+  overrides: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const nvt_id_filter = id => 'nvt_id=' + id;
+const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();
 
-const NvtPage = props => (
-  <EntityContainer
-    {...props}
-    name="nvt"
-    loaders={[
-      loader('notes', nvt_id_filter),
-      loader('overrides', nvt_id_filter),
-    ]}
-  >
-    {({
-      notes,
-      overrides,
-      ...cprops
-    }) => (
-      <Page
-        {...props}
-        {...cprops}
-        notes={isDefined(notes) ? notes.entities : undefined}
-        overrides={isDefined(overrides) ? overrides.entities : undefined}
-      />
-    )}
-  </EntityContainer>
-);
+const mapStateToProps = (rootState, {id}) => {
+  const notesSel = notesSelector(rootState);
+  const overridesSel = overridesSelector(rootState);
+  return {
+    notes: notesSel.getEntities(nvtIdFilter(id)),
+    overrides: overridesSel.getEntities(nvtIdFilter(id)),
+  };
+};
 
-export default NvtPage;
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadNotesFunc = loadNotes(gmp);
+  const loadOverridesFunc = loadOverrides(gmp);
+  return id => dispatch => {
+    dispatch(loadEntityFunc(id));
+    dispatch(loadNotesFunc(nvtIdFilter(id)));
+    dispatch(loadOverridesFunc(nvtIdFilter(id)));
+  };
+};
+
+export default withEntityContainer('task', {
+  load,
+  entitySelector: nvtsSelector,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
