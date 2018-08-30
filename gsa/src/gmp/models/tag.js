@@ -24,6 +24,8 @@
 import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
+import {parseInt} from 'gmp/parser';
+
 import Model from '../model';
 
 class Tag extends Model {
@@ -35,7 +37,7 @@ class Tag extends Model {
 
     if (isDefined(elem.resources)) {
       ret.resourceType = normalizeType(elem.resources.type);
-      ret.resourceCount = elem.resources.count.total;
+      ret.resourceCount = parseInt(elem.resources.count.total);
     }
     else {
       ret.resourceCount = 0;
