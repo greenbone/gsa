@@ -60,20 +60,20 @@ class UserComponent extends React.Component {
 
     gmp.user.currentAuthSettings().then(response => {
       if (isDefined(user)) {
-        const group_ids = user.groups.map(group => group.id);
-        const role_ids = user.roles.map(role => role.id);
+        const groupIds = user.groups.map(group => group.id);
+        const roleIds = user.roles.map(role => role.id);
 
         this.setState({
           dialogVisible: true,
-          access_hosts: user.hosts.addresses.join(', '),
-          access_ifaces: user.ifaces.addresses.join(', '),
+          accessHosts: user.hosts.addresses.join(', '),
+          accessIfaces: user.ifaces.addresses.join(', '),
           comment: user.comment,
-          group_ids: group_ids,
-          hosts_allow: user.hosts.allow,
-          ifaces_allow: user.ifaces.allow,
+          groupIds,
+          hostsAllow: user.hosts.allow,
+          ifacesAllow: user.ifaces.allow,
           name: user.name,
-          old_name: user.name,
-          role_ids: role_ids,
+          oldName: user.name,
+          roleIds,
           settings: response.data,
           title: _('Edit User {{name}}', user),
           user,
@@ -81,16 +81,16 @@ class UserComponent extends React.Component {
       }
       else {
         this.setState({
-          access_hosts: undefined,
-          access_ifaces: undefined,
+          accessHosts: undefined,
+          accessIfaces: undefined,
           comment: undefined,
           dialogVisible: true,
-          group_ids: undefined,
-          hosts_allow: undefined,
-          ifaces_allow: undefined,
+          groupIds: undefined,
+          hostsAllow: undefined,
+          ifacesAllow: undefined,
           name: undefined,
-          old_name: undefined,
-          role_ids: undefined,
+          oldName: undefined,
+          roleIds: undefined,
           settings: response.data,
           title: undefined,
           user: undefined,
@@ -119,17 +119,17 @@ class UserComponent extends React.Component {
     } = this.props;
 
     const {
-      access_hosts,
-      access_ifaces,
+      accessHosts,
+      accessIfaces,
       comment,
       dialogVisible,
-      group_ids,
+      groupIds,
       groups,
-      hosts_allow,
-      ifaces_allow,
+      hostsAllow,
+      ifacesAllow,
       name,
-      old_name,
-      role_ids,
+      oldName,
+      roleIds,
       roles,
       settings,
       title,
@@ -162,16 +162,16 @@ class UserComponent extends React.Component {
             })}
             {dialogVisible &&
               <UserDialog
-                access_hosts={access_hosts}
-                access_ifaces={access_ifaces}
+                accessHosts={accessHosts}
+                accessIfaces={accessIfaces}
                 comment={comment}
-                group_ids={group_ids}
+                groupIds={groupIds}
                 groups={groups}
-                hosts_allow={hosts_allow}
-                ifaces_allow={ifaces_allow}
+                hostsAllow={hostsAllow}
+                ifacesAllow={ifacesAllow}
                 name={name}
-                old_name={old_name}
-                role_ids={role_ids}
+                oldName={oldName}
+                roleIds={roleIds}
                 roles={roles}
                 settings={settings}
                 title={title}

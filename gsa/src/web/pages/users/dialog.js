@@ -57,20 +57,20 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
   render() {
 
     const {
-      access_hosts = '',
-      access_ifaces = '',
-      auth_method = AUTH_METHOD_PASSWORD,
+      accessHosts = '',
+      accessIfaces = '',
+      authMethod = AUTH_METHOD_PASSWORD,
       capabilities,
       comment = '',
       groups,
-      group_ids = [],
-      hosts_allow = ACCESS_ALLOW_ALL,
-      ifaces_allow = ACCESS_ALLOW_ALL,
+      groupIds = [],
+      hostsAllow = ACCESS_ALLOW_ALL,
+      ifacesAllow = ACCESS_ALLOW_ALL,
       name = _('Unnamed'),
-      old_name,
+      oldName,
       password = '',
       roles,
-      role_ids = [],
+      roleIds = [],
       settings,
       title = _('New User'),
       user,
@@ -80,18 +80,18 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 
     const data = {
       ...user,
-      access_hosts,
-      access_ifaces,
-      auth_method,
+      access_hosts: accessHosts,
+      access_ifaces: accessIfaces,
+      auth_method: authMethod,
       comment,
-      group_ids,
+      group_ids: groupIds,
       groups,
-      hosts_allow,
-      ifaces_allow,
+      hosts_allow: hostsAllow,
+      ifaces_allow: ifacesAllow,
       name,
-      old_name,
+      old_name: oldName,
       password,
-      role_ids,
+      role_ids: roleIds,
       roles,
     };
 
@@ -330,9 +330,9 @@ class Dialog extends React.Component { // eslint-disable-line react/prefer-state
 }
 
 Dialog.propTypes = {
-  access_hosts: PropTypes.string,
-  access_ifaces: PropTypes.string,
-  auth_method: PropTypes.oneOf([
+  accessHosts: PropTypes.string,
+  accessIfaces: PropTypes.string,
+  authMethod: PropTypes.oneOf([
     AUTH_METHOD_LDAP,
     AUTH_METHOD_NEW_PASSWORD,
     AUTH_METHOD_PASSWORD,
@@ -340,21 +340,21 @@ Dialog.propTypes = {
   ]),
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
-  group_ids: PropTypes.array,
+  groupIds: PropTypes.array,
   groups: PropTypes.array,
-  hosts_allow: PropTypes.oneOf([
+  hostsAllow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
   ]),
   id: PropTypes.id,
-  ifaces_allow: PropTypes.oneOf([
+  ifacesAllow: PropTypes.oneOf([
     ACCESS_ALLOW_ALL,
     ACCESS_DENY_ALL,
   ]),
   name: PropTypes.string,
-  old_name: PropTypes.string,
+  oldName: PropTypes.string,
   password: PropTypes.string,
-  role_ids: PropTypes.array,
+  roleIds: PropTypes.array,
   roles: PropTypes.array,
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
