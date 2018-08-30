@@ -43,8 +43,6 @@ import compose from '../../utils/compose.js';
 
 import withDownload from '../../components/form/withDownload.js';
 
-import Wrapper from '../../components/layout/wrapper.js';
-
 import withDialogNotification from '../../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
 
 import TargetComponent from '../targets/component.js';
@@ -463,7 +461,7 @@ class ReportDetails extends React.Component {
     } = this.state;
     const {report} = entity;
     return (
-      <Wrapper>
+      <React.Fragment>
         <TargetComponent
           onError={this.handleError}
         >
@@ -499,7 +497,7 @@ class ReportDetails extends React.Component {
             onCloseClick={this.handleFilterDialogClose}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
