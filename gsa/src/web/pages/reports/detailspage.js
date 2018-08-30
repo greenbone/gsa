@@ -33,7 +33,7 @@ import CancelToken from 'gmp/cancel';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from '../../utils/proptypes.js';
 import {create_pem_certificate} from '../../utils/cert.js';
@@ -82,6 +82,7 @@ class ReportDetails extends React.Component {
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
     this.handleFilterRemoveSeverity =
       this.handleFilterRemoveSeverity.bind(this);
+    this.handleFilterRemoveClick = this.handleFilterRemoveClick.bind(this);
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
@@ -323,6 +324,10 @@ class ReportDetails extends React.Component {
     this.load({filter});
   }
 
+  handleFilterRemoveClick() {
+    this.handleFilterChange(RESET_FILTER);
+  }
+
   handleFilterResetClick(filter) {
     this.handleFilterChange();
   }
@@ -477,6 +482,7 @@ class ReportDetails extends React.Component {
               onFilterEditClick={this.handleFilterEditClick}
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
+              onFilterRemoveClick={this.handleFilterRemoveClick}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleReportDownload}
               onReportFormatChange={this.handleReportFormatChange}

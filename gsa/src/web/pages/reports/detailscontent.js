@@ -303,6 +303,7 @@ const PageContent = ({
   onFilterDecreaseMinQoDClick,
   onFilterEditClick,
   onFilterRemoveSeverityClick,
+  onFilterRemoveClick,
   onFilterResetClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
@@ -409,6 +410,7 @@ const PageContent = ({
             onError={onError}
             onFilterCreated={onFilterCreated}
             onResetClick={onFilterResetClick}
+            onRemoveClick={onFilterRemoveClick}
             onUpdate={onFilterChanged}
           />
         </Layout>
@@ -695,6 +697,7 @@ PageContent.propTypes = {
   onFilterCreated: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
+  onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
