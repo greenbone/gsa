@@ -107,7 +107,7 @@ class EntitiesContainer extends React.Component {
     this.handleCloseTagsDialog = this.handleCloseTagsDialog.bind(this);
     this.handleInteraction = this.handleInteraction.bind(this);
 
-    this.renewSession = debounce(this.renewSession.bind(this), 500);
+    this.handleInteraction = debounce(this.handleInteraction.bind(this), 500);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -147,8 +147,8 @@ class EntitiesContainer extends React.Component {
     this.clearTimer(); // remove possible running timer
   }
 
-  renewSession() {
-    this.props.renewSessionTimeout();
+  handleInteraction() {
+    this.props.onInteraction();
   }
 
   load(filter) {
@@ -215,7 +215,7 @@ class EntitiesContainer extends React.Component {
     }
 
     this.setState({selectionType, selected});
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleDownloadBulk(filename = 'export.xml') {
@@ -241,7 +241,7 @@ class EntitiesContainer extends React.Component {
       promise = entitiesCommand.exportByFilter(loadedFilter.all());
     }
 
-    this.renewSession();
+    this.handleInteraction();
 
     promise.then(response => {
       const {data} = response;
@@ -270,7 +270,7 @@ class EntitiesContainer extends React.Component {
       promise = entitiesCommand.deleteByFilter(loadedFilter.all());
     }
 
-    this.renewSession();
+    this.handleInteraction();
 
     promise.then(deleted => {
       this.reload();
@@ -285,7 +285,7 @@ class EntitiesContainer extends React.Component {
 
     this.setState({selected});
 
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleDeselected(entity) {
@@ -295,7 +295,7 @@ class EntitiesContainer extends React.Component {
 
     this.setState({selected});
 
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleSortChange(field) {
@@ -323,7 +323,7 @@ class EntitiesContainer extends React.Component {
 
   changeFilter(filter) {
     this.load(filter);
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleFirst() {
@@ -379,7 +379,7 @@ class EntitiesContainer extends React.Component {
 
   openTagDialog() {
     this.setState({tagDialogVisible: true});
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeTagDialog() {
@@ -388,14 +388,14 @@ class EntitiesContainer extends React.Component {
 
   handleCloseTagDialog() {
     this.closeTagDialog();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleCreateTag(data) {
     const {gmp} = this.props;
     const {tags} = this.state;
 
-    this.renewSession();
+    this.handleInteraction();
 
     return gmp.tag.create(data)
       .then(response => gmp.tag.get(response.data))
@@ -414,7 +414,7 @@ class EntitiesContainer extends React.Component {
   handleTagChange(id) {
     const {gmp} = this.props;
 
-    this.renewSession();
+    this.handleInteraction();
 
     gmp.tag.get({id}).then(response => {
       this.setState({
@@ -454,7 +454,7 @@ class EntitiesContainer extends React.Component {
       filter = loadedFilter.all();
     }
 
-    this.renewSession();
+    this.handleInteraction();
 
     return gmp.tag.save({
       active: YES_VALUE,
@@ -475,7 +475,7 @@ class EntitiesContainer extends React.Component {
       tagsDialogVisible: true,
       multiTagEntitiesCount: this.getMultiTagEntitiesCount(),
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeTagsDialog() {
@@ -484,11 +484,7 @@ class EntitiesContainer extends React.Component {
 
   handleCloseTagsDialog() {
     this.closeTagsDialog();
-    this.renewSession();
-  }
-
-  handleInteraction() {
-    this.renewSession();
+    this.handleInteraction();
   }
 
   getTagsByType() {
@@ -656,12 +652,12 @@ EntitiesContainer.propTypes = {
   loadEntities: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntitiesContainer;
