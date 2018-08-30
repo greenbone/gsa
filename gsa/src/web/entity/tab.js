@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -20,41 +21,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import styled from 'styled-components';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-const TabList = ({
-  active = 0,
+import Tab from 'web/components/tab/tab';
+
+import PropTypes from 'web/utils/proptypes';
+
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
+
+const EntitiesTab = ({
   children,
-  onActivateTab,
+  entities = [],
+  count = entities.length,
   ...props
-}) => {
-  children = React.Children.map(children, (child, index) => {
-    if (child !== null) {
-      return React.cloneElement(child, {
-        isActive: active === index,
-        onActivate: () => onActivateTab(index),
-      });
-    }
-
-    return child;
-  });
-  return (
-    <Layout {...props}>
-      {children}
+}) => (
+  <Tab {...props}>
+    <Layout flex="column" align={['center', 'center']}>
+      <span>{children}</span>
+      <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
     </Layout>
-  );
+  </Tab>
+);
+
+EntitiesTab.propTypes = {
+  count: PropTypes.number,
+  entities: PropTypes.array,
 };
 
-TabList.propTypes = {
-  active: PropTypes.number,
-  onActivateTab: PropTypes.func,
-};
-
-export default TabList;
+export default EntitiesTab;
 
 // vim: set ts=2 sw=2 tw=80:

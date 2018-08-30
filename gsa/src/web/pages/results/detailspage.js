@@ -25,19 +25,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
-import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
-import Note from 'web/entity/note';
-import Override from 'web/entity/override';
-import EntityContainer from 'web/entity/container';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -64,6 +52,22 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import Note from 'web/entity/note';
+import Override from 'web/entity/override';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
+
+import {
+  loadEntity,
+  selector,
+} from 'web/store/entities/results';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import NoteComponent from '../notes/component';
 
@@ -342,7 +346,17 @@ class Page extends React.Component {
   }
 
   render() {
-    const {onChanged} = this.props;
+    const {
+      entity,
+      onChanged,
+      onTagAddClick,
+      onTagCreateClick,
+      onTagDeleteClick,
+      onTagDisableClick,
+      onTagEditClick,
+      onTagEnableClick,
+      onTagRemoveClick,
+    } = this.props;
     return (
       <NoteComponent
         onCreated={onChanged}
@@ -354,11 +368,10 @@ class Page extends React.Component {
             {({create: createoverride}) => (
               <EntityPage
                 {...this.props}
+                entity={entity}
                 sectionIcon="result.svg"
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
-                detailsComponent={Details}
-                permissionsComponent={false}
                 onNoteCreateClick={
                   result => this.openDialog(result, createnote)}
                 onOverrideCreateClick={
@@ -367,13 +380,7 @@ class Page extends React.Component {
               >
                 {({
                   activeTab = 0,
-                  permissionsComponent,
-                  permissionsTitle,
-                  tagsComponent,
-                  tagsTitle,
                   onActivateTab,
-                  entity,
-                  ...other
                 }) => {
                   return (
                     <Layout grow="1" flex="column">
@@ -389,16 +396,9 @@ class Page extends React.Component {
                           <Tab>
                             {_('Information')}
                           </Tab>
-                          {isDefined(tagsComponent) &&
-                            <Tab>
-                              {tagsTitle}
-                            </Tab>
-                          }
-                          {isDefined(permissionsComponent) &&
-                            <Tab>
-                              {permissionsTitle}
-                            </Tab>
-                          }
+                          <EntitiesTab entities={entity.userTags}>
+                            {_('User Tags')}
+                          </EntitiesTab>
                         </TabList>
                       </TabLayout>
 
@@ -409,16 +409,18 @@ class Page extends React.Component {
                               entity={entity}
                             />
                           </TabPanel>
-                          {isDefined(tagsComponent) &&
-                            <TabPanel>
-                              {tagsComponent}
-                            </TabPanel>
-                          }
-                          {isDefined(permissionsComponent) &&
-                            <TabPanel>
-                              {permissionsComponent}
-                            </TabPanel>
-                          }
+                          <TabPanel>
+                            <EntityTags
+                              entity={entity}
+                              onTagAddClick={onTagAddClick}
+                              onTagDeleteClick={onTagDeleteClick}
+                              onTagDisableClick={onTagDisableClick}
+                              onTagEditClick={onTagEditClick}
+                              onTagEnableClick={onTagEnableClick}
+                              onTagCreateClick={onTagCreateClick}
+                              onTagRemoveClick={onTagRemoveClick}
+                            />
+                          </TabPanel>
                         </TabPanels>
                       </Tabs>
                     </Layout>
@@ -434,26 +436,23 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
+  entity: PropTypes.model,
+  gmp: PropTypes.gmp.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-Page.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-Page = withGmp(Page);
-
-const ResultPage = props => (
-  <EntityContainer
-    {...props}
-    name="result"
-  >
-    {cprops => <Page {...cprops} />}
-  </EntityContainer>
-);
-
-export default ResultPage;
+export default withEntityContainer('result', {
+  entitySelector: selector,
+  load: loadEntity,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

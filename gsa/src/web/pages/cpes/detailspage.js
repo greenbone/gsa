@@ -26,43 +26,48 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import PropTypes from '../../utils/proptypes.js';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
 
-import DetailsBlock from '../../entity/block.js';
-import EntityPage from '../../entity/page.js';
-import EntityComponent from '../../entity/component.js';
-import EntityContainer from '../../entity/container.js';
-import {InfoLayout} from '../../entity/info.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import ExportIcon from '../../components/icon/exporticon.js';
-import ManualIcon from '../../components/icon/manualicon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Table from 'web/components/table/stripedtable';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
+import EntityComponent from 'web/entity/component';
+import {InfoLayout} from 'web/entity/info';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
+import withEntityContainer from 'web/entity/withEntityContainer';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import {
+  selector,
+  loadEntity,
+} from 'web/store/entities/cpes';
 
-import Table from '../../components/table/stripedtable.js';
-import TableHeader from '../../components/table/header.js';
-import TableHead from '../../components/table/head.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import PropTypes from 'web/utils/proptypes';
 
-import CpeDetails from './details.js';
+import CpeDetails from './details';
 
 const ToolBarIcons = ({
   entity,
@@ -173,100 +178,105 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = props => (
-  <EntityContainer
-    {...props}
+const CpePage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onTagAddClick,
+  onTagCreateClick,
+  onTagDeleteClick,
+  onTagDisableClick,
+  onTagEditClick,
+  onTagEnableClick,
+  onTagRemoveClick,
+  ...props
+}) => (
+  <EntityComponent
     name="cpe"
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
   >
-    {({
-      onChanged,
-      onDownloaded,
-      onError,
-      ...cprops
-    }) => (
-      <EntityComponent
-        name="cpe"
-        onDownloaded={onDownloaded}
-        onDownloadError={onError}
+    {({download}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon="cpe.svg"
+        title={_('CPE')}
+        infoComponent={EntityInfo}
+        toolBarIcons={ToolBarIcons}
+        onCpeDownloadClick={download}
       >
-        {({download}) => (
-          <EntityPage
-            {...props}
-            {...cprops}
-            sectionIcon="cpe.svg"
-            title={_('CPE')}
-            detailsComponent={Details}
-            infoComponent={EntityInfo}
-            permissionsComponent={false}
-            toolBarIcons={ToolBarIcons}
-            onCpeDownloadClick={download}
-          >
-            {({
-              activeTab = 0,
-              permissionsComponent,
-              permissionsTitle,
-              tagsComponent,
-              tagsTitle,
-              onActivateTab,
-              entity,
-              ...other
-            }) => {
-              return (
-                <Layout grow="1" flex="column">
-                  <TabLayout
-                    grow="1"
-                    align={['start', 'end']}
-                  >
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>
-                        {_('Information')}
-                      </Tab>
-                      {isDefined(tagsComponent) &&
-                        <Tab>
-                          {tagsTitle}
-                        </Tab>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <Tab>
-                          {permissionsTitle}
-                        </Tab>
-                      }
-                    </TabList>
-                  </TabLayout>
+        {({
+          activeTab = 0,
+          onActivateTab,
+        }) => {
+          return (
+            <Layout grow="1" flex="column">
+              <TabLayout
+                grow="1"
+                align={['start', 'end']}
+              >
+                <TabList
+                  active={activeTab}
+                  align={['start', 'stretch']}
+                  onActivateTab={onActivateTab}
+                >
+                  <Tab>
+                    {_('Information')}
+                  </Tab>
+                  <EntitiesTab entities={entity.userTags}>
+                    {_('User Tags')}
+                  </EntitiesTab>
+                </TabList>
+              </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details
-                          entity={entity}
-                        />
-                      </TabPanel>
-                      {isDefined(tagsComponent) &&
-                        <TabPanel>
-                          {tagsComponent}
-                        </TabPanel>
-                      }
-                      {isDefined(permissionsComponent) &&
-                        <TabPanel>
-                          {permissionsComponent}
-                        </TabPanel>
-                      }
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-              );
-            }}
-          </EntityPage>
-        )}
-      </EntityComponent>
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Details
+                      entity={entity}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityTags
+                      entity={entity}
+                      onTagAddClick={onTagAddClick}
+                      onTagDeleteClick={onTagDeleteClick}
+                      onTagDisableClick={onTagDisableClick}
+                      onTagEditClick={onTagEditClick}
+                      onTagEnableClick={onTagEnableClick}
+                      onTagCreateClick={onTagCreateClick}
+                      onTagRemoveClick={onTagRemoveClick}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Layout>
+          );
+        }}
+      </EntityPage>
     )}
-  </EntityContainer>
+  </EntityComponent>
 );
 
-export default CpePage;
+CpePage.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onTagAddClick: PropTypes.func.isRequired,
+  onTagCreateClick: PropTypes.func.isRequired,
+  onTagDeleteClick: PropTypes.func.isRequired,
+  onTagDisableClick: PropTypes.func.isRequired,
+  onTagEditClick: PropTypes.func.isRequired,
+  onTagEnableClick: PropTypes.func.isRequired,
+  onTagRemoveClick: PropTypes.func.isRequired,
+};
+
+export default withEntityContainer('cpe', {
+  load: loadEntity,
+  entitySelector: selector,
+})(CpePage);
 
 // vim: set ts=2 sw=2 tw=80:
