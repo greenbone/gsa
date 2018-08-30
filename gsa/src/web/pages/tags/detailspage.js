@@ -60,6 +60,7 @@ import withCapabilties from 'web/utils/withCapabilities';
 import ResourceList from './resourcelist';
 import TagComponent from './component';
 import TagDetails from './details';
+import EntityPermissions from 'web/entity/permissions';
 
 const ToolBarIcons = withCapabilties(({
   capabilities,
@@ -149,6 +150,8 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  entity,
+  permissions = [],
   onChanged,
   onDownloaded,
   onError,
@@ -182,10 +185,9 @@ const Page = ({
       }) => (
         <EntityPage
           {...props}
-          detailsComponent={TagDetails}
+          entity={entity}
           sectionIcon="tag.svg"
           toolBarIcons={ToolBarIcons}
-          tagsComponent={false}
           title={_('Tag')}
           onTagCloneClick={clone}
           onTagCreateClick={create}
@@ -196,18 +198,10 @@ const Page = ({
           onTagEnableClick={enable}
           onTagDisableClick={disable}
           onTagRemoveClick={remove}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
         >
           {({
             activeTab = 0,
-            permissionsComponent,
-            permissionsTitle,
-            resourcesComponent,
             onActivateTab,
-            entity,
-            ...other
           }) => {
             return (
               <Layout grow="1" flex="column">
@@ -223,12 +217,12 @@ const Page = ({
                     <Tab>
                       {_('Information')}
                     </Tab>
-                    <EntitiesTab entities={entity.resouceCount}>
+                    <EntitiesTab count={entity.resourceCount}>
                       {_('Assigned Items')}
                     </EntitiesTab>
-                    <Tab>
-                      {permissionsTitle}
-                    </Tab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
                   </TabList>
                 </TabLayout>
 
@@ -243,7 +237,13 @@ const Page = ({
                       <ResourceList entity={entity}/>
                     </TabPanel>
                     <TabPanel>
-                      {permissionsComponent}
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                      />
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
