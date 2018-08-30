@@ -90,6 +90,7 @@ class UserComponent extends React.Component {
           ifaces_allow: undefined,
           name: undefined,
           old_name: undefined,
+          role_ids: undefined,
           settings: response.data,
           title: undefined,
           user: undefined,
