@@ -23,9 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
-
-import _ from 'gmp/locale';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -41,25 +39,9 @@ import Section from '../components/section/section.js';
 
 import EntityInfo from './info.js';
 
-export const Col = glamorous.col(
-  ({width}) => ({width})
-);
-
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
-
-const TabTitle = ({title, count}) => (
-  <Layout flex="column" align={['center', 'center']}>
-    <span>{title}</span>
-    <TabTitleCounts>(<i>{(count)}</i>)</TabTitleCounts>
-  </Layout>
-);
-
-TabTitle.propTypes = {
-  count: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-};
+export const Col = styled.col`
+  width: ${props => props.width};
+`;
 
 class EntityPage extends React.Component {
 
