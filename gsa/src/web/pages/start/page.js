@@ -492,7 +492,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(loadSettings({gmp})(id, defaults)),
   saveSettings: (id, settings) =>
     dispatch(saveSettings({gmp})(id, settings)),
-  renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
+  renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
 export default compose(

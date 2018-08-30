@@ -47,7 +47,7 @@ export const setSessionTimeout = timeout => ({
   timeout,
 });
 
-export const renewSessionTimeout = ({gmp}) => dispatch =>
+export const renewSessionTimeout = gmp => () => dispatch =>
   gmp.user.renewSession().then(response =>
     dispatch(setSessionTimeout(response.data)));
 

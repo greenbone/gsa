@@ -68,7 +68,7 @@ ScansPage.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout({gmp})),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
 export default compose(
