@@ -27,7 +27,7 @@ import {map} from '../utils/array';
 
 import Info from './info';
 
-import {parseSeverity} from '../parser';
+import {parseSeverity, parseDate} from '../parser';
 
 class Cpe extends Info {
 
@@ -51,6 +51,11 @@ class Cpe extends Info {
 
     if (isEmpty(ret.status)) {
       delete ret.status;
+    }
+
+    if (isDefined(ret.update_time)) {
+      ret.updateTime = parseDate(ret.update_time);
+      delete ret.update_time;
     }
 
     return ret;
