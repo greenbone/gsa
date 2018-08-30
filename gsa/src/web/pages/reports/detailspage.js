@@ -52,7 +52,7 @@ import TargetComponent from '../targets/component.js';
 import Page from './detailscontent.js';
 import FilterDialog from './detailsfilterdialog.js';
 
-const log = logger.getLogger('web.pages.report.details');
+const log = logger.getLogger('web.pages.report.detailspage');
 
 const connect = (in_func, out_func) => (...args) =>
   in_func(...args).then(out_func);
