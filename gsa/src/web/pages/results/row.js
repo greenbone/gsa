@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Seffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,27 +24,33 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
+import Icon from 'web/components/icon/icon';
+import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import ResultDelta from './delta.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
+
+import ResultDelta from './delta';
 
 const Row = ({
   actions,
@@ -56,7 +63,10 @@ const Row = ({
   const {host} = entity;
   const shown_name = isDefined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = isDefined(entity.nvt) && isDefined(entity.nvt.tags);
-
+  const hasActiveNotes =
+    entity.notes.filter(note => note.isActive()).length > 0;
+  const hasActiveOverrides =
+    entity.overrides.filter(override => override.isActive()).length > 0;
   return (
     <TableRow>
       {delta &&
@@ -73,7 +83,25 @@ const Row = ({
           name={entity.id}
           onClick={onToggleDetailsClick}
         >
-          {shown_name}
+          <Layout flex align="space-between">
+            <span>
+              {shown_name}
+            </span>
+            <IconDivider>
+              {hasActiveNotes &&
+                <Icon
+                  img="new_note.svg"
+                  title={_('There are notes for this result')}
+                />
+              }
+              {hasActiveOverrides &&
+                <Icon
+                  img="new_override.svg"
+                  title={_('There are overrides for this result')}
+                />
+              }
+            </IconDivider>
+          </Layout>
         </RowDetailsToggle>
       </TableData>
       <TableData flex align="center">
