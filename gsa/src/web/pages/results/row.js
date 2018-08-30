@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Seffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -29,21 +30,21 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
+import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
-import ResultDelta from './delta.js';
+import ResultDelta from './delta';
 
 const Row = ({
   actions,
