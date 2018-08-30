@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import _ from 'gmp/locale';
+
 import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -37,7 +39,11 @@ import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import Icon from 'web/components/icon/icon';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
+
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -57,7 +63,10 @@ const Row = ({
   const {host} = entity;
   const shown_name = isDefined(entity.name) ? entity.name : entity.nvt.oid;
   const has_tags = isDefined(entity.nvt) && isDefined(entity.nvt.tags);
-
+  const hasActiveNotes =
+    entity.notes.filter(note => note.isActive()).length > 0;
+  const hasActiveOverrides =
+    entity.overrides.filter(override => override.isActive()).length > 0;
   return (
     <TableRow>
       {delta &&
@@ -74,7 +83,25 @@ const Row = ({
           name={entity.id}
           onClick={onToggleDetailsClick}
         >
-          {shown_name}
+          <Layout flex align="space-between">
+            <span>
+              {shown_name}
+            </span>
+            <IconDivider>
+              {hasActiveNotes &&
+                <Icon
+                  img="new_note.svg"
+                  title={_('There are notes for this result')}
+                />
+              }
+              {hasActiveOverrides &&
+                <Icon
+                  img="new_override.svg"
+                  title={_('There are overrides for this result')}
+                />
+              }
+            </IconDivider>
+          </Layout>
         </RowDetailsToggle>
       </TableData>
       <TableData flex align="center">
