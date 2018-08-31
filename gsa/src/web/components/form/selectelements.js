@@ -29,10 +29,10 @@ import glamorous from 'glamorous';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import Theme from '../../utils/theme';
-import PropTypes from '../../utils/proptypes';
+import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
-import Portal from '../../components/portal/portal';
+import Portal from 'web/components/portal/portal';
 
 export const Box = glamorous.div({
   border: '1px solid ' + Theme.inputBorderGray,
@@ -43,6 +43,8 @@ export const Box = glamorous.div({
   flexGrow: 1,
   padding: '1px 5px',
   backgroundColor: Theme.white,
+  color: Theme.black,
+  fontWeight: 'normal',
 }, ({isOpen}) => isOpen ? {
   borderRadius: '4px 4px 0 0',
 } : null, ({disabled}) => disabled ? {
