@@ -313,7 +313,7 @@ EntitiesPage.propTypes = {
   onFilterCreated: PropTypes.func.isRequired,
   onFilterRemoved: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export const createEntitiesPage = (options = {}) => {
