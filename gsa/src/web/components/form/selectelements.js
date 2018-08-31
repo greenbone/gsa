@@ -29,10 +29,10 @@ import glamorous from 'glamorous';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import Theme from '../../utils/theme';
-import PropTypes from '../../utils/proptypes';
+import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
-import Portal from '../../components/portal/portal';
+import Portal from 'web/components/portal/portal';
 
 export const Box = glamorous.div({
   border: '1px solid ' + Theme.inputBorderGray,
