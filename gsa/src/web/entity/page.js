@@ -68,7 +68,13 @@ class EntityPage extends React.Component {
   }
 
   handleActivateTab(index) {
+    const {onInteraction} = this.props;
+
     this.setState({activeTab: index});
+
+    if (index !== this.state.activeTab && isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   renderSection() {
