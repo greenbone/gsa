@@ -43,6 +43,8 @@ export const Box = glamorous.div({
   flexGrow: 1,
   padding: '1px 5px',
   backgroundColor: Theme.white,
+  color: Theme.black,
+  fontWeight: 'normal',
 }, ({isOpen}) => isOpen ? {
   borderRadius: '4px 4px 0 0',
 } : null, ({disabled}) => disabled ? {
