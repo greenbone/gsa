@@ -224,7 +224,8 @@ class UsersPage extends React.Component {
             title={title}
             inheritorUsers={inheritorUsers}
             onClose={this.closeConfirmDeleteDialog}
-            onSave={this.handleDeleteUser}
+            onSave={d => this.handleDeleteUser(d).then(() =>
+              this.closeConfirmDeleteDialog())}
           />
         }
       </React.Fragment>
