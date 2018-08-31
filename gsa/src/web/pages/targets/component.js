@@ -59,11 +59,12 @@ class TargetComponent extends React.Component {
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
+    this.handleCloseCredentialsDialog =
+      this.handleCloseCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
-    this.closePortListDialog = this.closePortListDialog.bind(this);
+    this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
-    this.closeTargetDialog = this.closeTargetDialog.bind(this);
+    this.handleCloseTargetDialog = this.handleCloseTargetDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
@@ -88,10 +89,17 @@ class TargetComponent extends React.Component {
       credentialTypes: types,
       credentials_title: title,
     });
+
+    this.handleInteraction();
   }
 
   closeCredentialsDialog() {
     this.setState({credentialsDialogVisible: false});
+  }
+
+  handleCloseCredentialsDialog() {
+    this.closeCredentialsDialog();
+    this.handleInteraction();
   }
 
   openTargetDialog(entity, initial = {}) {
@@ -151,6 +159,8 @@ class TargetComponent extends React.Component {
         ...initial,
       });
     }
+
+    this.handleInteraction();
   }
 
   openCreateTargetDialog(initial = {}) {
@@ -159,6 +169,11 @@ class TargetComponent extends React.Component {
 
   closeTargetDialog() {
     this.setState({targetDialogVisible: false});
+  }
+
+  handleCloseTargetDialog() {
+    this.closeTargetDialog();
+    this.handleInteraction();
   }
 
   loadAll() {
@@ -183,16 +198,24 @@ class TargetComponent extends React.Component {
       portListDialogVisible: true,
       port_lists_title: _('New Port List'),
     });
+    this.handleInteraction();
   }
 
   closePortListDialog() {
     this.setState({portListDialogVisible: false});
   }
 
+  handleClosePortListDialog() {
+    this.closePortListDialog();
+    this.handleInteraction();
+  }
+
   handleCreateCredential(data) {
     const {gmp} = this.props;
 
     let credential_id;
+
+    this.handleInteraction();
 
     return gmp.credential.create(data)
       .then(response => {
@@ -213,6 +236,8 @@ class TargetComponent extends React.Component {
   handleCreatePortList(data) {
     const {gmp} = this.props;
     let port_list_id;
+
+    this.handleInteraction();
 
     return gmp.portlist.create(data)
       .then(response => {
@@ -249,6 +274,13 @@ class TargetComponent extends React.Component {
     this.setState({smb_credential_id});
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       children,
@@ -260,6 +292,7 @@ class TargetComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -304,6 +337,7 @@ class TargetComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -340,7 +374,7 @@ class TargetComponent extends React.Component {
                 target_source={target_source}
                 target_exclude_source={target_exclude_source}
                 title={target_title}
-                onClose={this.closeTargetDialog}
+                onClose={this.handleCloseTargetDialog}
                 onNewCredentialsClick={this.openCredentialsDialog}
                 onNewPortListClick={this.openPortListDialog}
                 onPortListChange={this.handlePortListChange}
@@ -348,7 +382,10 @@ class TargetComponent extends React.Component {
                 onSshCredentialChange={this.handleSshCredentialChange}
                 onEsxiCredentialChange={this.handleEsxiCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
-                onSave={d => save(d).then(() => this.closeTargetDialog())}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeTargetDialog());
+                }}
               />
             }
             {credentialsDialogVisible &&
@@ -356,7 +393,7 @@ class TargetComponent extends React.Component {
                 types={credentialTypes}
                 base={first(credentialTypes)}
                 title={credentials_title}
-                onClose={this.closeCredentialsDialog}
+                onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />
             }
@@ -364,7 +401,7 @@ class TargetComponent extends React.Component {
               <PortListDialog
                 title={port_lists_title}
                 visible={portListDialogVisible}
-                onClose={this.closePortListDialog}
+                onClose={this.handleClosePortListDialog}
                 onSave={this.handleCreatePortList}
               />
             }
@@ -386,6 +423,7 @@ TargetComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

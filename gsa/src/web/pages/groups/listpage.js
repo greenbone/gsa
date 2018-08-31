@@ -76,6 +76,7 @@ const GroupsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <GroupComponent
@@ -87,6 +88,7 @@ const GroupsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({
       clone,
@@ -113,6 +115,7 @@ const GroupsPage = ({
         onGroupDownloadClick={download}
         onGroupEditClick={edit}
         onGroupSaveClick={save}
+        onInteraction={onInteraction}
       />
     )}
   </GroupComponent>
@@ -122,6 +125,7 @@ GroupsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('group', {

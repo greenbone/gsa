@@ -78,6 +78,7 @@ const RolesPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <RoleComponent
@@ -89,6 +90,7 @@ const RolesPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -108,6 +110,7 @@ const RolesPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onRoleCloneClick={clone}
       onRoleCreateClick={create}
       onRoleDeleteClick={delete_func}
@@ -123,6 +126,7 @@ RolesPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('role', {

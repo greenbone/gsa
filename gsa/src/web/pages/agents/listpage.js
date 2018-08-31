@@ -78,6 +78,7 @@ const AgentsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <AgentComponent
@@ -91,6 +92,7 @@ const AgentsPage = ({
     onDownloadError={onError}
     onInstallerDownloadError={onError}
     onInstallerDownloaded={onDownloaded}
+    onInteraction={onInteraction}
     onVerifyError={onError}
     onVerified={onChanged}
   >{({
@@ -122,6 +124,7 @@ const AgentsPage = ({
       onAgentInstallerDownloadClick={downloadinstaller}
       onAgentSaveClick={save}
       onAgentVerifyClick={verify}
+      onInteraction={onInteraction}
     />
   )}
   </AgentComponent>
@@ -131,6 +134,7 @@ AgentsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 

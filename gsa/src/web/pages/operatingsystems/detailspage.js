@@ -224,6 +224,7 @@ const Page = ({
   onTagEnableClick,
   onTagRemoveClick,
   onError,
+  onInteraction,
   ...props
 }) => (
   <OsComponent
@@ -231,6 +232,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({
       delete: delete_func,
@@ -242,6 +244,7 @@ const Page = ({
         sectionIcon="os.svg"
         title={_('Operating System')}
         toolBarIcons={ToolBarIcons}
+        onInteraction={onInteraction}
         onOperatingSystemDeleteClick={delete_func}
         onOperatingSystemDownloadClick={download}
         onPermissionChanged={onChanged}
@@ -301,6 +304,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -319,6 +323,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

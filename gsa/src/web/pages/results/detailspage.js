@@ -351,6 +351,7 @@ class Page extends React.Component {
     const {
       entity,
       onChanged,
+      onInteraction,
       onTagAddClick,
       onTagCreateClick,
       onTagDeleteClick,
@@ -362,10 +363,12 @@ class Page extends React.Component {
     return (
       <NoteComponent
         onCreated={onChanged}
+        onInteraction={onInteraction}
       >
         {({create: createnote}) => (
           <OverrideComponent
             onCreated={onChanged}
+            onInteraction={onInteraction}
           >
             {({create: createoverride}) => (
               <EntityPage
@@ -374,6 +377,7 @@ class Page extends React.Component {
                 sectionIcon="result.svg"
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
+                onInteraction={onInteraction}
                 onNoteCreateClick={
                   result => this.openDialog(result, createnote)}
                 onOverrideCreateClick={
@@ -443,6 +447,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

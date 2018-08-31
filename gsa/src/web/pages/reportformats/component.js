@@ -41,7 +41,8 @@ class ReportFormatComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeReportFormatDialog = this.closeReportFormatDialog.bind(this);
+    this.handleCloseReportFormatDialog =
+      this.handleCloseReportFormatDialog.bind(this);
     this.handleVerify = this.handleVerify.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
@@ -50,10 +51,14 @@ class ReportFormatComponent extends React.Component {
   handleVerify(format) {
     const {gmp, onVerified, onVerifyError} = this.props;
 
+    this.handleInteraction();
+
     gmp.reportformat.verify(format).then(onVerified, onVerifyError);
   }
 
   openReportFormatDialog(reportformat) {
+    this.handleInteraction();
+
     if (isDefined(reportformat)) {
       const {gmp} = this.props;
 
@@ -105,8 +110,16 @@ class ReportFormatComponent extends React.Component {
     this.setState({dialogVisible: false});
   }
 
+  handleCloseReportFormatDialog() {
+    this.closeReportFormatDialog();
+    this.handleInteraction();
+  }
+
   handleSave(data) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
       return gmp.reportformat.save(data)
@@ -120,6 +133,13 @@ class ReportFormatComponent extends React.Component {
       .then(() => this.closeReportFormatDialog());
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       children,
@@ -129,6 +149,7 @@ class ReportFormatComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
     } = this.props;
 
     const {
@@ -146,6 +167,7 @@ class ReportFormatComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
       >
         {other => (
           <React.Fragment>
@@ -159,7 +181,7 @@ class ReportFormatComponent extends React.Component {
               <ReportFormatDialog
                 reportformat={reportformat}
                 title={title}
-                onClose={this.closeReportFormatDialog}
+                onClose={this.handleCloseReportFormatDialog}
                 onSave={this.handleSave}
               />
             }
@@ -181,6 +203,7 @@ ReportFormatComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,

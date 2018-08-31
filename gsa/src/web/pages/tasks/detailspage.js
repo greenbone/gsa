@@ -380,6 +380,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -399,6 +400,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onReportImported={onChanged}
     onResumed={onChanged}
     onResumeError={onError}
@@ -429,9 +431,7 @@ const Page = ({
         onChanged={onChanged}
         onContainerTaskCreateClick={createcontainer}
         onError={onError}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
+        onInteraction={onInteraction}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -494,6 +494,7 @@ const Page = ({
                       permissions={permissions}
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
+                      onInteraction={onInteraction}
                       onError={onError}
                     />
                   </TabPanel>
@@ -513,6 +514,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

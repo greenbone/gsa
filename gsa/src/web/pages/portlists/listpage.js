@@ -81,6 +81,7 @@ const PortListsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <PortListComponent
@@ -94,6 +95,7 @@ const PortListsPage = ({
     onDownloadError={onError}
     onImported={onChanged}
     onImportError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -114,6 +116,7 @@ const PortListsPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onPortListCloneClick={clone}
       onPortListCreateClick={create}
       onPortListDeleteClick={delete_func}
@@ -130,6 +133,7 @@ PortListsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('portlist', {

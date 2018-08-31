@@ -64,17 +64,20 @@ class ScanConfigComponent extends React.Component {
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
-    this.closeCreateConfigDialog = this.closeCreateConfigDialog.bind(this);
+    this.handleCloseCreateConfigDialog =
+      this.handleCloseCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
-    this.closeEditConfigDialog = this.closeEditConfigDialog.bind(this);
+    this.handleCloseEditConfigDialog =
+      this.handleCloseEditConfigDialog.bind(this);
     this.openEditConfigFamilyDialog =
       this.openEditConfigFamilyDialog.bind(this);
-    this.closeEditConfigFamilyDialog =
-      this.closeEditConfigFamilyDialog.bind(this);
+    this.handleCloseEditConfigFamilyDialog =
+      this.handleCloseEditConfigFamilyDialog.bind(this);
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
-    this.closeEditNvtDetailsDialog = this.closeEditNvtDetailsDialog.bind(this);
+    this.handleCloseEditNvtDetailsDialog =
+      this.handleCloseEditNvtDetailsDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
-    this.closeImportDialog = this.closeImportDialog.bind(this);
+    this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
   }
 
   openEditConfigDialog(config) {
@@ -90,10 +93,17 @@ class ScanConfigComponent extends React.Component {
           title: _('Edit Scan Config {{name}}', {name: shorten(config.name)}),
         });
     });
+
+    this.handleInteraction();
   }
 
   closeEditConfigDialog() {
     this.setState({editConfigDialogVisible: false});
+  }
+
+  handleCloseEditConfigDialog() {
+    this.closeEditConfigDialog();
+    this.handleInteraction();
   }
 
   openCreateConfigDialog() {
@@ -102,18 +112,31 @@ class ScanConfigComponent extends React.Component {
         ...state,
         createConfigDialogVisible: true,
       }));
+
+    this.handleInteraction();
   }
 
   closeCreateConfigDialog() {
     this.setState({createConfigDialogVisible: false});
   }
 
+  handleCloseCreateConfigDialog() {
+    this.closeCreateConfigDialog();
+    this.handleInteraction();
+  }
+
   openImportDialog() {
     this.setState({importDialogVisible: true});
+    this.handleInteraction();
   }
 
   closeImportDialog() {
     this.setState({importDialogVisible: false});
+  }
+
+  handleCloseImportDialog() {
+    this.closeImportDialog();
+    this.handleInteraction();
   }
 
   openEditConfigFamilyDialog({config, name}) {
@@ -126,10 +149,16 @@ class ScanConfigComponent extends React.Component {
           {name: shorten(name)}),
       });
     });
+    this.handleInteraction();
   }
 
   closeEditConfigFamilyDialog() {
     this.setState({editConfigFamilyDialogVisible: false});
+  }
+
+  handleCloseEditConfigFamilyDialog() {
+    this.closeEditConfigFamilyDialog();
+    this.handleInteraction();
   }
 
   openEditNvtDetailsDialog({config, nvt}) {
@@ -142,14 +171,23 @@ class ScanConfigComponent extends React.Component {
           _('Edit Scan Config NVT {{name}}', {name: shorten(nvt.name)}),
       });
     });
+    this.handleInteraction();
   }
 
   closeEditNvtDetailsDialog() {
     this.setState({editNvtDetailsDialogVisible: false});
   }
 
+  handleCloseEditNvtDetailsDialog() {
+    this.closeEditNvtDetailsDialog();
+    this.handleInteraction();
+  }
+
   handleImportConfig(data) {
     const {gmp, onImported, onImportError} = this.props;
+
+    this.handleInteraction();
+
     return gmp.scanconfig.import(data)
       .then(onImported, onImportError)
       .then(() => this.closeImportDialog());
@@ -157,6 +195,9 @@ class ScanConfigComponent extends React.Component {
 
   handleSaveConfigFamily(data) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     return gmp.scanconfig.saveScanConfigFamily(data)
       .then(() => {
         return this.loadEditScanConfigSettings(data.config);
@@ -169,6 +210,9 @@ class ScanConfigComponent extends React.Component {
 
   handleSaveConfigNvt(values) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     return gmp.scanconfig.saveScanConfigNvt(values)
       .then(response => {
         // update nvt timeouts in nvt family dialog
@@ -183,6 +227,13 @@ class ScanConfigComponent extends React.Component {
         });
       })
       .then(() => this.closeEditNvtDetailsDialog());
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   loadScanners(dialog) {
@@ -321,6 +372,7 @@ class ScanConfigComponent extends React.Component {
       return state;
     });
   }
+
   render() {
     const {
       children,
@@ -332,6 +384,7 @@ class ScanConfigComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -378,6 +431,7 @@ class ScanConfigComponent extends React.Component {
           onDeleteError={onDeleteError}
           onDownloaded={onDownloaded}
           onDownloadError={onDownloadError}
+          onInteraction={onInteraction}
           onSaved={onSaved}
           onSaveError={onSaveError}
         >
@@ -396,9 +450,11 @@ class ScanConfigComponent extends React.Component {
                 <ScanConfigDialog
                   scanner_id={scanner_id}
                   scanners={scanners}
-                  onClose={this.closeCreateConfigDialog}
-                  onSave={
-                    d => save(d).then(() => this.closeCreateConfigDialog())}
+                  onClose={this.handleCloseCreateConfigDialog}
+                  onSave={d => {
+                    this.handleInteraction();
+                    return save(d).then(() => this.closeCreateConfigDialog());
+                  }}
                 />
               }
               {editConfigDialogVisible &&
@@ -414,10 +470,13 @@ class ScanConfigComponent extends React.Component {
                   select={select}
                   title={title}
                   trend={trend}
-                  onClose={this.closeEditConfigDialog}
+                  onClose={this.handleCloseEditConfigDialog}
                   onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={d => save(d).then(() => this.closeEditConfigDialog())}
+                  onSave={d => {
+                    this.handleInteraction();
+                    return save(d).then(() => this.closeEditConfigDialog());
+                  }}
                 />
               }
             </Wrapper>
@@ -425,7 +484,7 @@ class ScanConfigComponent extends React.Component {
         </EntityComponent>
         {importDialogVisible &&
           <ImportDialog
-            onClose={this.closeImportDialog}
+            onClose={this.handleCloseImportDialog}
             onSave={this.handleImportConfig}
           />
         }
@@ -438,7 +497,7 @@ class ScanConfigComponent extends React.Component {
             nvts={nvts}
             selected={selected}
             title={editConfigFamilyDialogTitle}
-            onClose={this.closeEditConfigFamilyDialog}
+            onClose={this.handleCloseEditConfigFamilyDialog}
             onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
             onSave={this.handleSaveConfigFamily}
           />
@@ -453,7 +512,7 @@ class ScanConfigComponent extends React.Component {
             preference_values={preference_values}
             timeout={timeout}
             title={editNvtDetailsDialogTitle}
-            onClose={this.closeEditNvtDetailsDialog}
+            onClose={this.handleCloseEditNvtDetailsDialog}
             onSave={this.handleSaveConfigNvt}
           />
         }
@@ -475,6 +534,7 @@ ScanConfigComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

@@ -251,6 +251,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -264,6 +265,7 @@ const Page = ({
     onChanged={onChanged}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({
       notecreate,
@@ -277,6 +279,7 @@ const Page = ({
         title={_('NVT')}
         sectionIcon="nvt.svg"
         onChanged={onChanged}
+        onInteraction={onInteraction}
         onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
         onNvtDownloadClick={download}
         onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
@@ -343,6 +346,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

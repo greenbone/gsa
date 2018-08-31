@@ -890,7 +890,7 @@ TaskComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
-  onInteraction: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onModifyTaskWizardError: PropTypes.func,
   onModifyTaskWizardSaved: PropTypes.func,
   onReportImportError: PropTypes.func,

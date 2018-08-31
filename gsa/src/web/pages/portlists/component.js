@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
@@ -52,9 +53,10 @@ class PortListComponent extends React.Component {
     this.created_port_ranges = [];
     this.deleted_port_ranges = [];
 
-    this.closeImportDialog = this.closeImportDialog.bind(this);
-    this.closePortListDialog = this.closePortListDialog.bind(this);
-    this.closeNewPortRangeDialog = this.closeNewPortRangeDialog.bind(this);
+    this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
+    this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
+    this.handleCloseNewPortRangeDialog =
+      this.handleCloseNewPortRangeDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
@@ -97,18 +99,31 @@ class PortListComponent extends React.Component {
         title: _('New Port List'),
       });
     }
+
+    this.handleInteraction();
   }
 
   closePortListDialog() {
     this.setState({portListDialogVisible: false});
   }
 
+  handleClosePortListDialog() {
+    this.closePortListDialog();
+    this.handleInteraction();
+  }
+
   openImportDialog() {
     this.setState({importDialogVisible: true});
+    this.handleInteraction();
   }
 
   closeImportDialog() {
     this.setState({importDialogVisible: false});
+  }
+
+  handleCloseImportDialog() {
+    this.closeImportDialog();
+    this.handleInteraction();
   }
 
   openNewPortRangeDialog(port_list) {
@@ -116,10 +131,16 @@ class PortListComponent extends React.Component {
       portRangeDialogVisible: true,
       id: port_list.id,
     });
+    this.handleInteraction();
   }
 
   closeNewPortRangeDialog() {
     this.setState({portRangeDialogVisible: false});
+  }
+
+  handleCloseNewPortRangeDialog() {
+    this.closeNewPortRangeDialog();
+    this.handleInteraction();
   }
 
   handleDeletePortRange(range) {
@@ -144,6 +165,9 @@ class PortListComponent extends React.Component {
       onImported,
       onImportError,
     } = this.props;
+
+    this.handleInteraction();
+
     return gmp.portlist.import(data)
       .then(onImported, onImportError)
       .then(() => this.closeImportDialog());
@@ -151,6 +175,8 @@ class PortListComponent extends React.Component {
 
   handleSavePortList(save, data) {
     const created_port_ranges_copy = [...this.created_port_ranges];
+
+    this.handleInteraction();
 
     let promises = created_port_ranges_copy.map(range => {
       const saveData = {
@@ -186,6 +212,8 @@ class PortListComponent extends React.Component {
       port_range_start,
       port_type,
     } = values;
+
+    this.handleInteraction();
 
     // reject port ranges with missing values
     if (!port_range_start || !port_range_end) {
@@ -253,6 +281,15 @@ class PortListComponent extends React.Component {
 
     new_port_ranges = port_ranges.filter(range => range !== port_range);
     this.setState({port_ranges: new_port_ranges});
+
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -266,6 +303,7 @@ class PortListComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -293,6 +331,7 @@ class PortListComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -315,23 +354,22 @@ class PortListComponent extends React.Component {
                 port_list={port_list}
                 title={title}
                 port_ranges={port_ranges}
-                onClose={this.closePortListDialog}
+                onClose={this.handleClosePortListDialog}
                 onNewPortRangeClick={this.openNewPortRangeDialog}
                 onSave={(...args) => this.handleSavePortList(save, ...args)}
-                onTmpAddPortRange={this.handleTmpAddPortRange}
                 onTmpDeletePortRange={this.handleTmpDeletePortRange}
               />
             }
             {importDialogVisible &&
               <ImportPortListDialog
-                onClose={this.closeImportDialog}
+                onClose={this.handleCloseImportDialog}
                 onSave={this.handleImportPortList}
               />
             }
             {portRangeDialogVisible &&
               <PortRangeDialog
                 id={id}
-                onClose={this.closeNewPortRangeDialog}
+                onClose={this.handleCloseNewPortRangeDialog}
                 onSave={this.handleTmpAddPortRange}
               />
             }
@@ -355,6 +393,7 @@ PortListComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

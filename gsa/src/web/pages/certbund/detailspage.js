@@ -229,6 +229,7 @@ const CertBundAdvPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -242,6 +243,7 @@ const CertBundAdvPage = ({
     name="certbund"
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
@@ -251,6 +253,7 @@ const CertBundAdvPage = ({
         title={_('CERT-Bund Advisory')}
         toolBarIcons={ToolBarIcons}
         onCertBundAdvDownloadClick={download}
+        onInteraction={onInteraction}
       >
         {({
           activeTab = 0,
@@ -310,6 +313,7 @@ CertBundAdvPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

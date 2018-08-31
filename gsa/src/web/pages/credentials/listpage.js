@@ -78,6 +78,7 @@ const CredentialsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <CredentialComponent
@@ -91,6 +92,7 @@ const CredentialsPage = ({
     onDownloadError={onError}
     onInstallerDownloaded={onDownloaded}
     onInstallerDownloadError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -109,8 +111,6 @@ const CredentialsPage = ({
       title={_('Credentials')}
       toolBarIcons={ToolBarIcons}
       onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
       onCredentialCloneClick={clone}
       onCredentialCreateClick={create}
       onCredentialDeleteClick={delete_func}
@@ -118,6 +118,9 @@ const CredentialsPage = ({
       onCredentialEditClick={edit}
       onCredentialSaveClick={save}
       onCredentialInstallerDownloadClick={downloadinstaller}
+      onDownloaded={onDownloaded}
+      onError={onError}
+      onInteraction={onInteraction}
     />
   )}
   </CredentialComponent>
@@ -127,6 +130,7 @@ CredentialsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('credential', {

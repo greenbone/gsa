@@ -73,6 +73,7 @@ const TargetsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <TargetComponent
@@ -84,6 +85,7 @@ const TargetsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -103,6 +105,7 @@ const TargetsPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onTargetCloneClick={clone}
       onTargetCreateClick={create}
       onTargetDeleteClick={delete_func}
@@ -118,6 +121,7 @@ TargetsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('target', {

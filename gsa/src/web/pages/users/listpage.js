@@ -94,7 +94,8 @@ class UsersPage extends React.Component {
 
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
-    this.closeConfirmDeleteDialog = this.closeConfirmDeleteDialog.bind(this);
+    this.handleCloseConfirmDeleteDialog =
+      this.handleCloseConfirmDeleteDialog.bind(this);
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 
@@ -104,6 +105,8 @@ class UsersPage extends React.Component {
     if (inheritorId === '--') {
       inheritorId = undefined;
     }
+
+    this.handleInteraction();
 
     if (deleteUsers.length === 1) {
       const {id} = deleteUsers[0]; // eslint-disable-line prefer-destructuring
@@ -118,6 +121,8 @@ class UsersPage extends React.Component {
     const {loadAll, gmp} = this.props;
 
     loadAll();
+
+    this.handleInteraction();
 
     if (isDefined(user)) {
       this.setState({
@@ -160,12 +165,25 @@ class UsersPage extends React.Component {
     this.setState({confirmDeleteDialogVisible: false});
   }
 
+  handleCloseConfirmDeleteDialog() {
+    this.closeConfirmDeleteDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       allUsers = [],
       onChanged,
       onDownloaded,
       onError,
+      onInteraction,
       ...props
     } = this.props;
 
@@ -190,6 +208,7 @@ class UsersPage extends React.Component {
           onDeleteError={onError}
           onDownloaded={onDownloaded}
           onDownloadError={onError}
+          onInteraction={onInteraction}
         >{({
           clone,
           create,
@@ -209,6 +228,7 @@ class UsersPage extends React.Component {
             onDeleteBulk={this.openConfirmDeleteDialog}
             onDownloaded={onDownloaded}
             onError={onError}
+            onInteraction={onInteraction}
             onUserCloneClick={clone}
             onUserCreateClick={create}
             onUserDeleteClick={this.openConfirmDeleteDialog}
@@ -223,7 +243,7 @@ class UsersPage extends React.Component {
             deleteUsers={deleteUsers}
             title={title}
             inheritorUsers={inheritorUsers}
-            onClose={this.closeConfirmDeleteDialog}
+            onClose={this.handleCloseConfirmDeleteDialog}
             onSave={d => this.handleDeleteUser(d).then(() =>
               this.closeConfirmDeleteDialog())}
           />
@@ -244,6 +264,7 @@ UsersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {

@@ -168,6 +168,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -189,6 +190,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
     onVerified={onChanged}
     onVerifyError={onError}
@@ -210,6 +212,7 @@ const Page = ({
         sectionIcon="scanner.svg"
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
+        onInteraction={onInteraction}
         onScannerCertificateDownloadClick={downloadcertificate}
         onScannerCloneClick={clone}
         onScannerCreateClick={create}
@@ -273,6 +276,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -291,6 +295,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

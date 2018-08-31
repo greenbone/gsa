@@ -91,6 +91,7 @@ const Page = ({
     onDownloadError={onError}
     onDeleted={onChanged}
     onDeleteError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({

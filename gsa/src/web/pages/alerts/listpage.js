@@ -80,6 +80,7 @@ const AlertsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <AlertComponent
@@ -91,6 +92,7 @@ const AlertsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onTestSuccess={showSuccess}
     onTestError={showError}
   >{({
@@ -118,6 +120,7 @@ const AlertsPage = ({
       onAlertTestClick={test}
       onAlertSaveClick={save}
       onError={onError}
+      onInteraction={onInteraction}
       onPermissionChanged={onChanged}
       onPermissionDownloaded={onDownloaded}
       onPermissionDownloadError={onError}
@@ -132,6 +135,7 @@ AlertsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('alert', {

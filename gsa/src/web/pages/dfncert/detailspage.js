@@ -165,6 +165,7 @@ const DfnCertAdvPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -178,6 +179,7 @@ const DfnCertAdvPage = ({
     name="dfncert"
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
@@ -187,6 +189,7 @@ const DfnCertAdvPage = ({
         title={_('DFN-CERT Advisory')}
         toolBarIcons={ToolBarIcons}
         onDfnCertAdvDownloadClick={download}
+        onInteraction={onInteraction}
       >
         {({
           activeTab = 0,
@@ -246,6 +249,7 @@ DfnCertAdvPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

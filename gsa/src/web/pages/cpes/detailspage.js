@@ -183,6 +183,7 @@ const CpePage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -196,6 +197,7 @@ const CpePage = ({
     name="cpe"
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
@@ -206,6 +208,7 @@ const CpePage = ({
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCpeDownloadClick={download}
+        onInteraction={onInteraction}
       >
         {({
           activeTab = 0,
@@ -265,6 +268,7 @@ CpePage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,
