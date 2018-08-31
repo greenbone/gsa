@@ -38,6 +38,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/nvts';
 
+import PropTypes from 'web/utils/proptypes';
+
 import NvtsFilterDialog from './filterdialog';
 import NvtsTable from './table';
 
@@ -51,22 +53,45 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={NvtsDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={NVTS_DASHBOARD_ID} />
+    dashboard={() => (
+      <NvtsDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={NVTS_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={NvtsFilterDialog}
     filtersFilter={NVTS_FILTER_FILTER}
     sectionIcon="nvt.svg"
     table={NvtsTable}
     title={_('NVTs')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('nvt', {
   entitiesSelector,

@@ -90,7 +90,7 @@ export default compose(
   withGmp,
   withRouter,
   connect(undefined, (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
+    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   })),
 )(SessionObserver);
 

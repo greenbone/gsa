@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/ovaldefs';
 
+import PropTypes from 'web/utils/proptypes';
+
 import OvaldefFilterDialog from './filterdialog';
 import OvaldefsTable from './table';
 
@@ -52,22 +54,45 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={OvaldefDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={OVALDEF_DASHBOARD_ID}/>
+    dashboard={() => (
+      <OvaldefDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={OVALDEF_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={OvaldefFilterDialog}
     filtersFilter={OVALDEFS_FILTER_FILTER}
     sectionIcon="ovaldef.svg"
     table={OvaldefsTable}
     title={_('OVAL Definitions')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('ovaldef', {
   entitiesSelector,

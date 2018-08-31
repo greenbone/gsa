@@ -117,8 +117,14 @@ class ScansDashboard extends React.Component {
   }
 
   render() {
+    const {
+      gmp,
+      notify,
+      ...props
+    } = this.props;
     return (
       <Dashboard
+        {...props}
         showFilterSelection
         showFilterString
         id={SCANS_DASHBOARD_ID}

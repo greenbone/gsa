@@ -62,8 +62,6 @@ import EntityComponent from 'web/entity/component';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
 import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
 import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
 import TaskWizard from 'web/wizard/taskwizard';
@@ -150,10 +148,15 @@ class TaskComponent extends React.Component {
     this.handleAlertCreated = this.handleAlertCreated.bind(this);
     this.handleTargetCreated = this.handleTargetCreated.bind(this);
     this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
+
+    this.handleInteraction = this.handleInteraction.bind(this);
   }
 
-  renewSession() {
-    this.props.renewSessionTimeout();
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   handleTargetChange(target_id) {
@@ -171,17 +174,23 @@ class TaskComponent extends React.Component {
   handleTaskStart(task) {
     const {onStarted, onStartError} = this.props;
 
+    this.handleInteraction();
+
     return this.cmd.start(task).then(onStarted, onStartError);
   }
 
   handleTaskStop(task) {
     const {onStopped, onStopError} = this.props;
 
+    this.handleInteraction();
+
     return this.cmd.stop(task).then(onStopped, onStopError);
   }
 
   handleTaskResume(task) {
     const {onResumed, onResumeError} = this.props;
+
+    this.handleInteraction();
 
     return this.cmd.resume(task).then(onResumed, onResumeError);
   }
@@ -243,30 +252,32 @@ class TaskComponent extends React.Component {
       title: task ? _('Edit Container Task {{name}}', task) :
         _('New Container Task'),
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
-  closeContainerDialog() {
+  closeContainerTaskDialog() {
     this.setState({containerTaskDialogVisible: false});
   }
 
   handleCloseContainerTaskDialog() {
-    this.closeContainerDialog();
-    this.renewSession();
+    this.closeContainerTaskDialog();
+    this.handleInteraction();
   }
 
   handleSaveContainerTask(data) {
+    this.handleInteraction();
+
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = this.props;
       return this.cmd.saveContainer(data)
         .then(onContainerSaved, onContainerSaveError)
-        .then(() => this.closeContainerDialog());
+        .then(() => this.closeContainerTaskDialog());
     }
 
     const {onContainerCreated, onContainerCreateError} = this.props;
     return this.cmd.createContainer(data)
       .then(onContainerCreated, onContainerCreateError)
-      .then(() => this.closeContainerDialog());
+      .then(() => this.closeContainerTaskDialog());
   }
 
 
@@ -277,7 +288,6 @@ class TaskComponent extends React.Component {
     else {
       this.openStandardTaskDialog(task);
     }
-    this.renewSession();
   }
 
   closeTaskDialog() {
@@ -286,7 +296,7 @@ class TaskComponent extends React.Component {
 
   handleCloseTaskDialog() {
     this.closeTaskDialog();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   openStandardTaskDialog(task) {
@@ -420,6 +430,7 @@ class TaskComponent extends React.Component {
         });
       });
     }
+    this.handleInteraction();
   }
 
   openTaskWizard() {
@@ -439,7 +450,7 @@ class TaskComponent extends React.Component {
         scanner_id: settings.get('Default OpenVAS Scanner').value,
       });
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeTaskWizard() {
@@ -448,11 +459,13 @@ class TaskComponent extends React.Component {
 
   handleCloseTaskWizard() {
     this.closeTaskWizard();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleSaveTaskWizard(data) {
     const {onTaskWizardSaved, onTaskWizardError, gmp} = this.props;
+
+    this.handleInteraction();
 
     return gmp.wizard.runQuickFirstScan(data)
       .then(onTaskWizardSaved, onTaskWizardError)
@@ -505,7 +518,7 @@ class TaskComponent extends React.Component {
         start_timezone: timezone,
       });
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeAdvancedTaskWizard() {
@@ -514,7 +527,7 @@ class TaskComponent extends React.Component {
 
   handleCloseAdvancedTaskWizard() {
     this.closeAdvancedTaskWizard();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleSaveAdvancedTaskWizard(data) {
@@ -524,11 +537,12 @@ class TaskComponent extends React.Component {
       onAdvancedTaskWizardError,
     } = this.props;
 
+    this.handleInteraction();
+
     return gmp.wizard.runQuickTask(data)
       .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
       .then(() => this.closeAdvancedTaskWizard());
   }
-
 
   openModifyTaskWizard() {
     const {
@@ -551,7 +565,7 @@ class TaskComponent extends React.Component {
         start_timezone: timezone,
       });
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeModifyTaskWizard() {
@@ -560,11 +574,13 @@ class TaskComponent extends React.Component {
 
   handleCloseModifyTaskWizard() {
     this.closeModifyTaskWizard();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleSaveModifyTaskWizard(data) {
     const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = this.props;
+
+    this.handleInteraction();
 
     return gmp.wizard.runModifyTask(data)
       .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
@@ -577,7 +593,7 @@ class TaskComponent extends React.Component {
       task_id: task.id,
       tasks: [task],
     });
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeReportImportDialog() {
@@ -586,11 +602,13 @@ class TaskComponent extends React.Component {
 
   handleCloseReportImportDialog() {
     this.closeReportImportDialog();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleReportImport(data) {
     const {onReportImported, onReportImportError, gmp} = this.props;
+
+    this.handleInteraction();
 
     return gmp.report.import(data)
       .then(onReportImported, onReportImportError)
@@ -608,6 +626,7 @@ class TaskComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -678,6 +697,7 @@ class TaskComponent extends React.Component {
           onDeleteError={onDeleteError}
           onDownloaded={onDownloaded}
           onDownloadError={onDownloadError}
+          onInteraction={onInteraction}
           onSaved={onSaved}
           onSaveError={onSaveError}
         >
@@ -752,8 +772,11 @@ class TaskComponent extends React.Component {
                               onScheduleChange={this.handleScheduleChange}
                               onTargetChange={this.handleTargetChange}
                               onClose={this.handleCloseTaskDialog}
-                              onSave={d => save(d).then(
-                                () => this.closeTaskDialog())}
+                              onSave={d => {
+                                this.handleInteraction();
+                                return save(d)
+                                  .then(() => this.closeTaskDialog());
+                              }}
                             />
                           )}
                         </ScheduleComponent>
@@ -852,7 +875,6 @@ TaskComponent.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
@@ -868,6 +890,7 @@ TaskComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onModifyTaskWizardError: PropTypes.func,
   onModifyTaskWizardSaved: PropTypes.func,
   onReportImportError: PropTypes.func,
@@ -889,7 +912,5 @@ export default compose(
   withCapabilities,
   connect(rootState => ({
     timezone: getTimezone(rootState),
-  }), (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
   })),
 )(TaskComponent);

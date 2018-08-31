@@ -82,7 +82,7 @@ class TagComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeTagDialog = this.closeTagDialog.bind(this);
+    this.handleCloseTagDialog = this.handleCloseTagDialog.bind(this);
     this.handleEnableTag = this.handleEnableTag.bind(this);
     this.handleDisableTag = this.handleDisableTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
@@ -94,17 +94,23 @@ class TagComponent extends React.Component {
   handleEnableTag(tag) {
     const {gmp, onEnabled, onEnableError} = this.props;
 
+    this.handleInteraction();
+
     gmp.tag.enable(tag).then(onEnabled, onEnableError);
   }
 
   handleDisableTag(tag) {
     const {gmp, onDisabled, onDisableError} = this.props;
 
+    this.handleInteraction();
+
     gmp.tag.disable(tag).then(onDisabled, onDisableError);
   }
 
   handleAddTag({name, value, entity}) {
     const {gmp, onAdded, onAddError} = this.props;
+
+    this.handleInteraction();
 
     return gmp.tag.create({
       name,
@@ -176,10 +182,17 @@ class TagComponent extends React.Component {
         ...options,
       });
     }
+
+    this.handleInteraction();
   }
 
   closeTagDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseTagDialog() {
+    this.closeTagDialog();
+    this.handleInteraction();
   }
 
   openCreateTagDialog(options = {}) {
@@ -188,6 +201,8 @@ class TagComponent extends React.Component {
 
   handleRemove(tag_id, entity) {
     const {gmp, onRemoved, onRemoveError} = this.props;
+
+    this.handleInteraction();
 
     return gmp.tag.get({id: tag_id})
       .then(response => response.data)
@@ -198,6 +213,14 @@ class TagComponent extends React.Component {
         resources_action: 'remove',
       }))
       .then(onRemoved, onRemoveError);
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -211,6 +234,7 @@ class TagComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -241,6 +265,7 @@ class TagComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -270,8 +295,11 @@ class TagComponent extends React.Component {
                 resourceCount={resourceCount}
                 title={title}
                 value={value}
-                onClose={this.closeTagDialog}
-                onSave={d => save(d).then(() => this.closeTagDialog())}
+                onClose={this.handleCloseTagDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeTagDialog());
+                }}
                 {...options}
               />
             }
@@ -300,6 +328,7 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
+  onInteraction: PropTypes.func,
   onRemoveError: PropTypes.func,
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,

@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
@@ -48,13 +46,10 @@ export const DFNCERT_DISPLAYS = [
   DfnCertSeverityClassTableDisplay.displayId,
 ];
 
-const DfnCertDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const DfnCertDashboard = props => (
   <Dashboard
+    {...props}
     id={DFNCERT_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={DFNCERT_DISPLAYS}
     defaultContent={[
       [
@@ -63,14 +58,8 @@ const DfnCertDashboard = ({
         DfnCertCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-DfnCertDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default DfnCertDashboard;
 

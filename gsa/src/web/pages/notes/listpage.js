@@ -75,9 +75,12 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  filter,
   onChanged,
   onDownloaded,
   onError,
+  onFilterChanged,
+  onInteraction,
   ...props
 }) => (
   <NoteComponent
@@ -88,6 +91,7 @@ const Page = ({
     onDownloadError={onError}
     onDeleted={onChanged}
     onDeleteError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -99,10 +103,20 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard2={NotesDashboard}
-        dashboardControls={() => (
-          <DashboardControls dashboardId={NOTES_DASHBOARD_ID} />
+        dashboard={() => (
+          <NotesDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={NOTES_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={NOTES_FILTER_FILTER}
         sectionIcon="note.svg"
@@ -110,6 +124,8 @@ const Page = ({
         title={_('Notes')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onNoteCloneClick={clone}
         onNoteCreateClick={create}
         onNoteDeleteClick={delete_func}
@@ -121,9 +137,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('note', {

@@ -217,6 +217,7 @@ const CvePage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -230,6 +231,7 @@ const CvePage = ({
     name="cve"
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
@@ -240,9 +242,7 @@ const CvePage = ({
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCveDownloadClick={download}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
+        onInteraction={onInteraction}
       >
         {({
           activeTab = 0,
@@ -302,6 +302,7 @@ CvePage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

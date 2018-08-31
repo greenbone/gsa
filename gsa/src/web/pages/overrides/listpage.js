@@ -76,9 +76,12 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  filter,
   onChanged,
-  onError,
   onDownloaded,
+  onError,
+  onFilterChanged,
+  onInteraction,
   ...props
 }) => (
   <OverrideComponent
@@ -101,10 +104,20 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard2={OverridesDashboard}
-        dashboardControls={() => (
-          <DashboardControls dashboardId={OVERRIDES_DASHBOARD_ID}/>
+        dashboard={() => (
+          <OverridesDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={OVERRIDES_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={OVERRIDES_FILTER_FILTER}
         sectionIcon="override.svg"
@@ -114,6 +127,8 @@ const Page = ({
         onChanged={onChanged}
         onDownloaded={onDownloaded}
         onError={onError}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
         onOverrideCloneClick={clone}
         onOverrideCreateClick={create}
         onOverrideDeleteClick={delete_func}
@@ -126,9 +141,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('override', {

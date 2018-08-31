@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {CvesCreatedDisplay, CvesCreatedTableDisplay} from './createddisplay';
@@ -45,13 +43,10 @@ export const CVES_DISPLAYS = [
   CvesSeverityClassTableDisplay.displayId,
 ];
 
-const CvesDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const CvesDashboard = props => (
   <Dashboard
+    {...props}
     id={CVES_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={CVES_DISPLAYS}
     defaultContent={[
       [
@@ -60,14 +55,8 @@ const CvesDashboard = ({
         CvesCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-CvesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default CvesDashboard;
 

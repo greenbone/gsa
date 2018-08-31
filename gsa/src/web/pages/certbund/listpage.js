@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/certbund';
 
+import PropTypes from 'web/utils/proptypes';
+
 import CertBundFilterDialog from './filterdialog';
 import CertBundTable from './table';
 
@@ -52,22 +54,45 @@ const ToolBarIcons = props => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={CertBundDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={CERTBUND_DASHBOARD_ID}/>
+    dashboard={() => (
+      <CertBundDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={CERTBUND_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={CertBundFilterDialog}
     filtersFilter={CERTBUND_FILTER_FILTER}
     sectionIcon="cert_bund_adv.svg"
     table={CertBundTable}
     title={_('CERT-Bund Advisories')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('certbund', {
   entitiesSelector,

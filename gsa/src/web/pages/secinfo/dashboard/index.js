@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
@@ -51,13 +49,10 @@ export const SECINFO_DISPLAYS = [
   SecInfosTypeTableDisplay.displayId,
 ];
 
-export const SecInfoDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+export const SecInfoDashboard = props => (
   <Dashboard
+    {...props}
     id={SECINFO_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={SECINFO_DISPLAYS}
     defaultContent={[
       [
@@ -66,13 +61,7 @@ export const SecInfoDashboard = ({
         SecInfosCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-SecInfoDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 // vim: set ts=2 sw=2 tw=80:

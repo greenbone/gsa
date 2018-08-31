@@ -165,6 +165,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => {
   return (
@@ -176,10 +177,11 @@ const Page = ({
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
-      onEnableError={onError}
-      onEnabled={onChanged}
       onDisableError={onError}
       onDisabled={onChanged}
+      onEnableError={onError}
+      onEnabled={onChanged}
+      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -199,6 +201,7 @@ const Page = ({
           sectionIcon="tag.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Tag')}
+          onInteraction={onInteraction}
           onTagCloneClick={clone}
           onTagCreateClick={create}
           onTagDeleteClick={delete_func}
@@ -253,6 +256,7 @@ const Page = ({
                         onChanged={onChanged}
                         onDownloaded={onDownloaded}
                         onError={onError}
+                        onInteraction={onInteraction}
                       />
                     </TabPanel>
                   </TabPanels>
@@ -272,6 +276,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

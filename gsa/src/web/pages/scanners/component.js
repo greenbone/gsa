@@ -57,8 +57,9 @@ class ScannerComponent extends React.Component {
       scannerDialogVisible: false,
     };
 
-    this.closeCredentialsDialog = this.closeCredentialsDialog.bind(this);
-    this.closeScannerDialog = this.closeScannerDialog.bind(this);
+    this.handleCloseCredentialsDialog =
+      this.handleCloseCredentialsDialog.bind(this);
+    this.handleCloseScannerDialog = this.handleCloseScannerDialog.bind(this);
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.openScannerDialog = this.openScannerDialog.bind(this);
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
@@ -71,6 +72,9 @@ class ScannerComponent extends React.Component {
 
   openScannerDialog(scanner) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     const credPromise = gmp.credentials.getAll().then(response => {
       return response.data;
     });
@@ -122,10 +126,18 @@ class ScannerComponent extends React.Component {
     this.setState({scannerDialogVisible: false});
   }
 
+  handleCloseScannerDialog() {
+    this.closeScannerDialog();
+    this.handleInteraction();
+  }
+
   openCredentialsDialog(type) {
     const base = type === SLAVE_SCANNER_TYPE ?
       USERNAME_PASSWORD_CREDENTIAL_TYPE :
       CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+
+    this.handleInteraction();
+
     this.setState({
       base,
       credentialDialogVisible: true,
@@ -137,8 +149,15 @@ class ScannerComponent extends React.Component {
     this.setState({credentialDialogVisible: false});
   }
 
+  handleCloseCredentialsDialog() {
+    this.closeCredentialsDialog();
+    this.handleInteraction();
+  }
+
   handleVerifyScanner(scanner) {
     const {gmp, onVerified, onVerifyError} = this.props;
+
+    this.handleInteraction();
 
     return gmp.scanner.verify(scanner).then(onVerified, response => {
       const message = isDefined(response.root) &&
@@ -156,6 +175,9 @@ class ScannerComponent extends React.Component {
   handleCreateCredential(data) {
     const {gmp} = this.props;
     let credential;
+
+    this.handleInteraction();
+
     return gmp.credential.create(data).then(response => {
         credential = response.data;
       })
@@ -186,6 +208,8 @@ class ScannerComponent extends React.Component {
     const {credential} = scanner;
     const {name, id} = credential;
 
+    this.handleInteraction();
+
     return gmp.credential.download(credential, 'pem').then(response => {
       const filename = 'scanner-credential-' + name + '-' + id + '.pem';
       return {filename, data: response.data};
@@ -194,6 +218,13 @@ class ScannerComponent extends React.Component {
 
   handleScannerTypeChange(value, name) {
     this.setState({[name]: value});
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -207,6 +238,7 @@ class ScannerComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -238,6 +270,7 @@ class ScannerComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -266,17 +299,20 @@ class ScannerComponent extends React.Component {
                 title={title}
                 type={type}
                 which_cert={which_cert}
-                onClose={this.closeScannerDialog}
+                onClose={this.handleCloseScannerDialog}
                 onCredentialChange={this.handleCredentialChange}
                 onNewCredentialClick={this.openCredentialsDialog}
-                onSave={d => save(d).then(() => this.closeScannerDialog())}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeScannerDialog());
+                }}
                 onScannerTypeChange={this.handleScannerTypeChange}
               />
             }
             {credentialDialogVisible &&
               <CredentialsDialog
                 types={credentialTypes}
-                onClose={this.closeCredentialsDialog}
+                onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />
             }
@@ -302,6 +338,7 @@ ScannerComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,

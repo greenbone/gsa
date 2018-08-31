@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
@@ -30,9 +32,17 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import Section from 'web/components/section/section';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
 import AssetsDashboard, {ASSETS_DASHBOARD_ID} from './dashboard';
 
-const AssetsPage = () => (
+const AssetsPage = ({
+  onInteraction,
+}) => (
   <SubscriptionProvider>
     {({notify}) => (
       <Section
@@ -41,17 +51,30 @@ const AssetsPage = () => (
         extra={
           <DashboardControls
             dashboardId={ASSETS_DASHBOARD_ID}
+            onInteraction={onInteraction}
           />
         }
       >
         <AssetsDashboard
           notify={notify}
+          onInteraction={onInteraction}
         />
       </Section>
     )}
   </SubscriptionProvider>
 );
 
-export default AssetsPage;
+AssetsPage.propTypes = {
+  onInteraction: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(AssetsPage);
 
 // vim: set ts=2 sw=2 tw=80:

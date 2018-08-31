@@ -110,32 +110,36 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
   onChanged,
   onDownloaded,
   onError,
   ...props
 }) => (
   <TaskComponent
+    onAdvancedTaskWizardSaved={onChanged}
     onCloned={onChanged}
     onCloneError={onError}
+    onContainerSaved={onChanged}
     onCreated={onChanged}
     onContainerCreated={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
+    onModifyTaskWizardSaved={onChanged}
+    onReportImported={onChanged}
+    onResumed={onChanged}
+    onResumeError={onError}
     onSaved={onChanged}
     onStarted={onChanged}
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onAdvancedTaskWizardSaved={onChanged}
-    onModifyTaskWizardSaved={onChanged}
     onTaskWizardSaved={onChanged}
-    onContainerSaved={onChanged}
-    onReportImported={onChanged}
   >
     {({
       clone,
@@ -154,20 +158,32 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        dashboard2={dashboardProps => (
-          <TaskDashboard {...dashboardProps} />
+        dashboard={() => (
+          <TaskDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
         )}
         dashboardControls={() => (
-          <DashboardControls dashboardId={TASK_DASHBOARD_ID} />
+          <DashboardControls
+            dashboardId={TASK_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
         )}
+        filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
         sectionIcon="task.svg"
         table={Table}
         title={_('Tasks')}
         toolBarIcons={ToolBarIcons}
+        onAdvancedTaskWizardClick={advancedtaskwizard}
         onContainerTaskCreateClick={createcontainer}
         onError={onError}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+        onModifyTaskWizardClick={modifytaskwizard}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -177,8 +193,6 @@ const Page = ({
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        onAdvancedTaskWizardClick={advancedtaskwizard}
-        onModifyTaskWizardClick={modifytaskwizard}
         onTaskWizardClick={taskwizard}
       />
     )}
@@ -186,9 +200,12 @@ const Page = ({
 );
 
 Page.propTypes = {
+  filter: PropTypes.filter,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('task', {

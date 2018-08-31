@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cves';
 
+import PropTypes from 'web/utils/proptypes';
+
 import CveFilterDialog from './filterdialog';
 import CvesTable from './table';
 
@@ -52,22 +54,45 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={CvesDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={CVES_DASHBOARD_ID}/>
+    dashboard={() => (
+      <CvesDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={CVES_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={CveFilterDialog}
     filtersFilter={CVES_FILTER_FILTER}
     sectionIcon="cve.svg"
     table={CvesTable}
     title={_('CVEs')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('cve', {
   entitiesSelector,

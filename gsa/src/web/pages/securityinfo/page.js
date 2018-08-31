@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
@@ -31,9 +33,17 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import Section from 'web/components/section/section';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
 import SecurityInfoDashboard, {SECURITYINFO_DASHBOARD_ID} from './dashboard';
 
-const SecurityInfoPage = () => (
+const SecurityInfoPage = ({
+  onInteraction,
+}) => (
   <SubscriptionProvider>
     {({notify}) => (
       <Section
@@ -42,17 +52,30 @@ const SecurityInfoPage = () => (
         extra={
           <DashboardControls
             dashboardId={SECURITYINFO_DASHBOARD_ID}
+            onInteraction={onInteraction}
           />
         }
       >
         <SecurityInfoDashboard
           notify={notify}
+          onInteraction={onInteraction}
         />
       </Section>
     )}
   </SubscriptionProvider>
 );
 
-export default SecurityInfoPage;
+SecurityInfoPage.propTypes = {
+  onInteraction: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(SecurityInfoPage);
 
 // vim: set ts=2 sw=2 tw=80:

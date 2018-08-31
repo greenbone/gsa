@@ -45,12 +45,14 @@ class AgentComponent extends React.Component {
 
     this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
     this.handleVerifyAgent = this.handleVerifyAgent.bind(this);
-    this.closeAgentDialog = this.closeAgentDialog.bind(this);
+    this.handleCloseAgentDialog = this.handleCloseAgentDialog.bind(this);
     this.openAgentDialog = this.openAgentDialog.bind(this);
   }
 
   handleVerifyAgent(agent) {
     const {gmp, onVerifyError, onVerified} = this.props;
+
+    this.handleInteraction();
 
     gmp.agent.verify(agent).then(onVerified, onVerifyError);
   }
@@ -58,6 +60,8 @@ class AgentComponent extends React.Component {
   handleDownloadInstaller(agent) {
     const {gmp, onInstallerDownloadError, onInstallerDownloaded} = this.props;
     const {id, name} = agent;
+
+    this.handleInteraction();
 
     return gmp.agent.downloadInstaller(agent).then(response => {
       const filename = 'agent-' + name + '-' + id + '-installer';
@@ -80,10 +84,24 @@ class AgentComponent extends React.Component {
       agent,
       title,
     });
+
+    this.handleInteraction();
   }
 
   closeAgentDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseAgentDialog() {
+    this.closeAgentDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -97,6 +115,7 @@ class AgentComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -118,6 +137,7 @@ class AgentComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -137,8 +157,11 @@ class AgentComponent extends React.Component {
               <AgentDialog
                 agent={agent}
                 title={title}
-                onClose={this.closeAgentDialog}
-                onSave={d => save(d).then(() => this.closeAgentDialog())}
+                onClose={this.handleCloseAgentDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeAgentDialog());
+                }}
               />
             }
           </React.Fragment>
@@ -161,6 +184,7 @@ AgentComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onInstallerDownloadError: PropTypes.func,
   onInstallerDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onVerified: PropTypes.func,

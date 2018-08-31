@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {CpesCreatedDisplay, CpesCreatedTableDisplay} from './createddisplay';
@@ -45,13 +43,10 @@ export const CPES_DISPLAYS = [
   CpesSeverityClassTableDisplay.displayId,
 ];
 
-const CpesDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const CpesDashboard = props => (
   <Dashboard
+    {...props}
     id={CPES_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={CPES_DISPLAYS}
     defaultContent={[
       [
@@ -60,14 +55,8 @@ const CpesDashboard = ({
         CpesCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-CpesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default CpesDashboard;
 

@@ -84,6 +84,7 @@ const StartDashboard = ({
   id,
   loadSettings,
   saveSettings,
+  onInteraction,
   onNewDisplay,
   onResetDashboard,
   ...props
@@ -94,6 +95,7 @@ const StartDashboard = ({
         canAdd={canAddDisplay(props)}
         dashboardId={id}
         displayIds={ALL_DISPLAYS}
+        onInteraction={onInteraction}
         onNewDisplay={onNewDisplay}
         onResetClick={onResetDashboard}
       />
@@ -107,6 +109,7 @@ const StartDashboard = ({
       permittedDisplays={ALL_DISPLAYS}
       loadSettings={loadSettings}
       saveSettings={saveSettings}
+      onInteraction={onInteraction}
     />
   </Layout>
 );
@@ -115,6 +118,7 @@ StartDashboard.propTypes = {
   id: PropTypes.id.isRequired,
   loadSettings: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onNewDisplay: PropTypes.func.isRequired,
   onResetDashboard: PropTypes.func.isRequired,
 };

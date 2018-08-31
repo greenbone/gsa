@@ -92,7 +92,7 @@ describe('settings actions tests', () => {
         renewSession,
       },
     };
-    return renewSessionTimeout({gmp})(dispatch).then(() => {
+    return renewSessionTimeout(gmp)()(dispatch).then(() => {
       expect(dispatch).toBeCalledWith({
         type: USER_SETTINGS_SET_SESSION_TIMEOUT,
         timeout: sessionTimeout,

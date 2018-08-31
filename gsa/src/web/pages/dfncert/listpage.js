@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/dfncerts';
 
+import PropTypes from 'web/utils/proptypes';
+
  // DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog';
 
@@ -54,22 +56,45 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={DfnCertDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={DFNCERT_DASHBOARD_ID}/>
+    dashboard={() => (
+      <DfnCertDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={DFNCERT_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={FilterDialog}
     filtersFilter={DFNCERT_FILTER_FILTER}
     sectionIcon="dfn_cert_adv.svg"
     table={DfnCertTable}
     title={_('DFN-CERT Advisories')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('dfncert', {
   entitiesSelector,

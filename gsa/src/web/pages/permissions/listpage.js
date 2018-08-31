@@ -78,6 +78,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <PermissionComponent
@@ -89,6 +90,7 @@ const Page = ({
     onSaveError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({
       clone,
@@ -105,6 +107,7 @@ const Page = ({
         title={_('Permissions')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
+        onInteraction={onInteraction}
         onPermissionCloneClick={clone}
         onPermissionCreateClick={create}
         onPermissionDeleteClick={delete_func}
@@ -119,6 +122,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('permission', {

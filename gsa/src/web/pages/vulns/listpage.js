@@ -27,12 +27,12 @@ import _ from 'gmp/locale';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
-import Layout from 'web/components/layout/layout';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
+
+import Layout from 'web/components/layout/layout';
 
 import ManualIcon from 'web/components/icon/manualicon';
 
@@ -40,6 +40,8 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/vulns';
+
+import PropTypes from 'web/utils/proptypes';
 
 import VulnsFilterDialog from './filterdialog';
 import VulnsTable from './table';
@@ -56,21 +58,44 @@ const ToolBarIcons = () => (
   </Layout>
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
-    dashboard2={VulnerabilitiesDashboard}
+    dashboard={() => (
+      <VulnerabilitiesDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
+    )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={VULNS_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={VulnsFilterDialog}
     filtersFilter={VULNS_FILTER_FILTER}
     table={VulnsTable}
     title={_('Vulnerabilities')}
     sectionIcon="vulnerability.svg"
     toolBarIcons={ToolBarIcons}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={VULNS_DASHBOARD_ID} />
-    )}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('vuln', {
   entitiesSelector,

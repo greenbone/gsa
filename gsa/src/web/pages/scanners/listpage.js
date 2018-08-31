@@ -78,6 +78,7 @@ const ScannersPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <ScannerComponent
@@ -93,6 +94,7 @@ const ScannersPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onVerified={onChanged}
     onVerifyError={onError}
   >{({
@@ -117,6 +119,7 @@ const ScannersPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onScannerCertificateDownloadClick={downloadcertificate}
       onScannerCloneClick={clone}
       onScannerCreateClick={create}
@@ -135,6 +138,7 @@ ScannersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('scanner', {

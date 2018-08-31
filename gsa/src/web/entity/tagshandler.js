@@ -70,23 +70,25 @@ class TagsHandler extends React.Component {
       children,
       onChanged,
       onError,
+      onInteraction,
     } = this.props;
     return (
       <TagComponent
         onAdded={onChanged}
         onAddError={onError}
-        onEnabled={onChanged}
-        onEnableError={onError}
-        onDisabled={onChanged}
-        onDisableError={onError}
+        onCreated={onChanged}
+        onCreateError={onError}
         onDeleted={onChanged}
         onDeleteError={onError}
+        onDisabled={onChanged}
+        onDisableError={onError}
+        onEnabled={onChanged}
+        onEnableError={onError}
+        onInteraction={onInteraction}
         onRemoved={onChanged}
         onRemoveError={onError}
         onSaved={onChanged}
         onSaveError={onError}
-        onCreated={onChanged}
-        onCreateError={onError}
       >{({
           add,
           create,
@@ -115,6 +117,7 @@ TagsHandler.propTypes = {
   resourceType: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withGmp(TagsHandler);

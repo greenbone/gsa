@@ -78,6 +78,7 @@ const FiltersPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <FilterComponent
@@ -89,6 +90,7 @@ const FiltersPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -114,6 +116,7 @@ const FiltersPage = ({
       onFilterDownloadClick={download}
       onFilterEditClick={edit}
       onFilterSaveClick={save}
+      onInteraction={onInteraction}
     />
   )}
   </FilterComponent>
@@ -123,6 +126,7 @@ FiltersPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('filter', {

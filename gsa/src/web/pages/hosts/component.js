@@ -49,7 +49,7 @@ class HostComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeHostDialog = this.closeHostDialog.bind(this);
+    this.handleCloseHostDialog = this.handleCloseHostDialog.bind(this);
     this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
     this.openHostDialog = this.openHostDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
@@ -59,6 +59,9 @@ class HostComponent extends React.Component {
 
   handleIdentifierDelete(identifier) {
     const {gmp, onIdentifierDeleted, onIdentifierDeleteError} = this.props;
+
+    this.handleInteraction();
+
     return gmp.host.deleteIdentifier(identifier).then(
       onIdentifierDeleted, onIdentifierDeleteError);
   }
@@ -75,10 +78,24 @@ class HostComponent extends React.Component {
       host,
       title,
     });
+
+    this.handleInteraction();
   }
 
   closeHostDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseHostDialog() {
+    this.closeHostDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   openCreateTargetDialog(host) {
@@ -129,6 +146,7 @@ class HostComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -150,6 +168,7 @@ class HostComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -170,8 +189,11 @@ class HostComponent extends React.Component {
               <HostDialog
                 host={host}
                 title={title}
-                onClose={this.closeHostDialog}
-                onSave={d => save(d).then(() => this.closeHostDialog())}
+                onClose={this.handleCloseHostDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeHostDialog());
+                }}
               />
             }
           </React.Fragment>
@@ -196,6 +218,7 @@ HostComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onIdentifierDeleteError: PropTypes.func,
   onIdentifierDeleted: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
@@ -203,6 +226,7 @@ HostComponent.propTypes = {
 HostComponent = withGmp(HostComponent);
 
 const HostWithTargetComponent = ({
+  onInteraction,
   onTargetCreated,
   onTargetCreateError,
   ...props
@@ -211,11 +235,13 @@ const HostWithTargetComponent = ({
     <TargetComponent
       onCreated={onTargetCreated}
       onCreateError={onTargetCreateError}
+      onInteraction={onInteraction}
     >
       {({create}) => (
         <HostComponent
           {...props}
           createtarget={create}
+          onInteraction={onInteraction}
         />
       )}
     </TargetComponent>
@@ -223,6 +249,7 @@ const HostWithTargetComponent = ({
 };
 
 HostWithTargetComponent.propTypes = {
+  onInteraction: PropTypes.func.isRequired,
   onTargetCreateError: PropTypes.func.isRequired,
   onTargetCreated: PropTypes.func.isRequired,
 };
