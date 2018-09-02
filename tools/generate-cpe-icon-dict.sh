@@ -152,4 +152,5 @@ else
 fi
 
 # Close root element
-echo "\n</cpe_icon_dict>"
+echo
+echo "</cpe_icon_dict>"

@@ -98,7 +98,7 @@ else
 fi
 
 echo "  <!-- Generated. -->"
-sed '/^\#/d' /usr/share/zoneinfo/zone.tab | cut -s -f 3 | sort | sed -e "s;\(.*\);  <zone><name>\1</name></zone>;"
+sed '/^\#/d' /usr/share/zoneinfo/zone.tab | cut -s -f 3 | LC_ALL=C sort | sed -e "s;\(.*\);  <zone><name>\1</name></zone>;"
 
 # Append manual zones.
 if [ -r "$APPEND_FILE" ]
