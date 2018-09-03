@@ -46,8 +46,7 @@ import {
   percent,
   riskFactorColorScale,
 } from '../utils';
-
-const format = value => value.toFixed(1);
+import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
@@ -94,23 +93,23 @@ const transformSeverityData = (
 
     switch (riskFactor) {
       case HIGH:
-        toolTip = `${label} (${format(high)} - 10.0)`;
+        toolTip = `${label} (${severityValue(high)} - 10.0)`;
         filterValue = {
-          start: format(high - 0.1),
+          start: severityValue(high - 0.1),
           end: 10,
         };
         break;
       case MEDIUM:
-        limit = format(high - 0.1);
-        toolTip = `${label} (${format(medium)} - ${limit})`;
+        limit = severityValue(high - 0.1);
+        toolTip = `${label} (${severityValue(medium)} - ${limit})`;
         filterValue = {
-          start: format(medium - 0.1),
+          start: severityValue(medium - 0.1),
           end: high,
         };
         break;
       case LOW:
-        limit = format(medium - 0.1);
-        toolTip = `${label} (${format(low)} - ${limit})`;
+        limit = severityValue(medium - 0.1);
+        toolTip = `${label} (${severityValue(low)} - ${limit})`;
         filterValue = {
           start: low - 0.05, // to include 0.1 but exclude 0
           end: medium,

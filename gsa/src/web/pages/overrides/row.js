@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
+import {severityValue} from 'gmp/utils/number';
 
 import PropTypes from '../../utils/proptypes.js';
 import {renderComponent} from '../../utils/render.js';
@@ -58,7 +59,7 @@ const render_severity = severity => {
     if (severity <= LOG_VALUE) {
       return translateRiskFactor(extraRiskFactor(severity));
     }
-    return '> ' + (severity - 0.1).toFixed(1);
+    return '> ' + severityValue(severity - 0.1);
   }
   return _('Any');
 };
