@@ -20,8 +20,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -47,6 +48,9 @@ import TableRow from 'web/components/table/row';
 
 import Loading from 'web/components/loading/loading';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -73,7 +77,7 @@ class LdapAuthentication extends React.Component {
 
   load() {
     this.getLdapAuth()
-    .then(this.setState({loading: false}));
+      .then(this.setState({loading: false}));
   }
 
   getLdapAuth() {
@@ -93,6 +97,13 @@ class LdapAuthentication extends React.Component {
     return auth_data;
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleSaveSettings() {
     const {
       authdn,
@@ -107,6 +118,9 @@ class LdapAuthentication extends React.Component {
       ldaphost,
     };
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     return gmp.auth.saveLdap(data);
   }
 
@@ -234,8 +248,16 @@ class LdapAuthentication extends React.Component {
 
 LdapAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(LdapAuthentication);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(LdapAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:
