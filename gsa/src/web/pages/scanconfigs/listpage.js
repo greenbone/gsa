@@ -88,6 +88,7 @@ const ScanConfigsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <ScanConfigComponent
@@ -98,8 +99,9 @@ const ScanConfigsPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
-    onSaved={onChanged}
     onImported={onChanged}
+    onInteraction={onInteraction}
+    onSaved={onChanged}
   >
     {({
       clone,
@@ -118,6 +120,7 @@ const ScanConfigsPage = ({
         title={_('Scan Configs')}
         toolBarIcons={ToolBarIcons}
         onError={onError}
+        onInteraction={onInteraction}
         onScanConfigImportClick={import_func}
         onScanConfigCloneClick={clone}
         onScanConfigCreateClick={create}
@@ -133,6 +136,7 @@ ScanConfigsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('scanconfig', {

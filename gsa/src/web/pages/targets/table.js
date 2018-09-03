@@ -55,13 +55,13 @@ const Header = ({
   onSortChange,
 }) => {
 
-  let select_sort = 'ssh_credential';
-  const sort_by = filter ? filter.getSortBy() : undefined;
+  let selectSort = 'ssh_credential';
+  const sortBy = filter ? filter.getSortBy() : undefined;
 
-  if (sort_by === 'smb_credential' ||
-    sort_by === 'esxi_credential' ||
-    sort_by === 'snmp_credential') {
-    select_sort = sort_by;
+  if (sortBy === 'smb_credential' ||
+    sortBy === 'esxi_credential' ||
+    sortBy === 'snmp_credential') {
+    selectSort = sortBy;
   }
   return (
     <TableHeader>
@@ -104,12 +104,12 @@ const Header = ({
         </TableHead>
         <TableHead flex width="22%">
           <Divider>
-            <Sort by={sort ? select_sort : false} onClick={onSortChange}>
+            <Sort by={sort ? selectSort : false} onClick={onSortChange}>
               {_('Credentials')}
             </Sort>
             {sort !== false &&
               <Select
-                value={select_sort}
+                value={selectSort}
                 onChange={onSortChange}
               >
                 <option value="ssh_credential">{_('SSH')}</option>

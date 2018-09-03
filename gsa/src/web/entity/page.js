@@ -68,7 +68,13 @@ class EntityPage extends React.Component {
   }
 
   handleActivateTab(index) {
+    const {onInteraction} = this.props;
+
     this.setState({activeTab: index});
+
+    if (index !== this.state.activeTab && isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   renderSection() {
@@ -165,6 +171,7 @@ EntityPage.propTypes = {
   sectionIcon: PropTypes.icon,
   title: PropTypes.string,
   toolBarIcons: PropTypes.component,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityPage;

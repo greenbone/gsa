@@ -74,7 +74,7 @@ class OverrideComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeOverrideDialog = this.closeOverrideDialog.bind(this);
+    this.handleCloseOverrideDialog = this.handleCloseOverrideDialog.bind(this);
     this.openCreateOverrideDialog = this.openCreateOverrideDialog.bind(this);
     this.openOverrideDialog = this.openOverrideDialog.bind(this);
   }
@@ -155,6 +155,8 @@ class OverrideComponent extends React.Component {
         ...initial,
       });
     }
+    this.handleInteraction();
+
     this.loadTasks();
   }
 
@@ -162,8 +164,20 @@ class OverrideComponent extends React.Component {
     this.setState({dialogVisible: false});
   }
 
+  handleCloseOverrideDialog() {
+    this.setState({dialogVisible: false});
+    this.handleInteraction();
+  }
+
   openCreateOverrideDialog(initial = {}) {
     this.openOverrideDialog(undefined, initial);
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   loadTasks() {
@@ -184,6 +198,7 @@ class OverrideComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -225,6 +240,7 @@ class OverrideComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -261,8 +277,11 @@ class OverrideComponent extends React.Component {
                 tasks={tasks}
                 text={text}
                 title={title}
-                onClose={this.closeOverrideDialog}
-                onSave={d => save(d).then(() => this.closeOverrideDialog())}
+                onClose={this.handleCloseOverrideDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeOverrideDialog());
+                }}
                 {...initial}
               />
             }
@@ -284,6 +303,7 @@ OverrideComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

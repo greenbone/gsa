@@ -351,6 +351,7 @@ const OvaldefPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -364,6 +365,7 @@ const OvaldefPage = ({
     name="ovaldef"
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >
     {({download}) => (
       <EntityPage
@@ -372,6 +374,7 @@ const OvaldefPage = ({
         sectionIcon="ovaldef.svg"
         title={_('OVAL Definition')}
         toolBarIcons={ToolBarIcons}
+        onInteraction={onInteraction}
         onOvaldefDownloadClick={download}
       >
         {({
@@ -432,6 +435,7 @@ OvaldefPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

@@ -345,6 +345,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -364,8 +365,9 @@ const Page = ({
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
-      onSaved={onChanged}
       onImported={goto_details('scanconfig', props)}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
     >
       {({
         clone,
@@ -382,6 +384,7 @@ const Page = ({
           sectionIcon="config.svg"
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
+          onInteraction={onInteraction}
           onScanConfigCloneClick={clone}
           onScanConfigCreateClick={create}
           onScanConfigDeleteClick={delete_func}
@@ -464,6 +467,7 @@ const Page = ({
                         onChanged={onChanged}
                         onDownloaded={onDownloaded}
                         onError={onError}
+                        onInteraction={onInteraction}
                       />
                     </TabPanel>
                   </TabPanels>
@@ -483,6 +487,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

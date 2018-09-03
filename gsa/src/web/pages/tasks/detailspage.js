@@ -380,6 +380,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -394,19 +395,20 @@ const Page = ({
     onCloneError={onError}
     onCreated={goto_details('task', props)}
     onContainerCreated={goto_details('task', props)}
+    onContainerSaved={onChanged}
     onDeleted={goto_list('tasks', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
+    onReportImported={onChanged}
+    onResumed={onChanged}
+    onResumeError={onError}
     onSaved={onChanged}
     onStarted={onChanged}
     onStartError={onError}
     onStopped={onChanged}
     onStopError={onError}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onContainerSaved={onChanged}
-    onReportImported={onChanged}
   >
     {({
       clone,
@@ -427,8 +429,9 @@ const Page = ({
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
-        onError={onError}
         onContainerTaskCreateClick={createcontainer}
+        onError={onError}
+        onInteraction={onInteraction}
         onReportImportClick={reportimport}
         onTaskCloneClick={clone}
         onTaskCreateClick={create}
@@ -438,9 +441,6 @@ const Page = ({
         onTaskResumeClick={resume}
         onTaskStartClick={start}
         onTaskStopClick={stop}
-        onPermissionChanged={onChanged}
-        onPermissionDownloaded={onDownloaded}
-        onPermissionDownloadError={onError}
       >
         {({
           activeTab = 0,
@@ -494,6 +494,7 @@ const Page = ({
                       permissions={permissions}
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
+                      onInteraction={onInteraction}
                       onError={onError}
                     />
                   </TabPanel>
@@ -513,6 +514,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {ResultsCvssDisplay, ResultsCvssTableDisplay} from './cvssdisplay';
@@ -54,13 +52,10 @@ export const RESULTS_DISPLAYS = [
   ResultsWordCloudTableDisplay.displayId,
 ];
 
-const ResultsDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const ResultsDashboard = props => (
   <Dashboard
+    {...props}
     id={RESULTS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={RESULTS_DISPLAYS}
     defaultContent={[
       [
@@ -69,14 +64,8 @@ const ResultsDashboard = ({
         ResultsCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-ResultsDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default ResultsDashboard;
 

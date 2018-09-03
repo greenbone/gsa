@@ -44,7 +44,7 @@ class ScheduleComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeScheduleDialog = this.closeScheduleDialog.bind(this);
+    this.handleCloseScheduleDialog = this.handleCloseScheduleDialog.bind(this);
     this.openScheduleDialog = this.openScheduleDialog.bind(this);
   }
 
@@ -93,10 +93,24 @@ class ScheduleComponent extends React.Component {
         weekdays: undefined,
       });
     }
+
+    this.handleInteraction();
   }
 
   closeScheduleDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseScheduleDialog() {
+    this.closeScheduleDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -110,6 +124,7 @@ class ScheduleComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -130,6 +145,7 @@ class ScheduleComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -146,8 +162,11 @@ class ScheduleComponent extends React.Component {
             {dialogVisible &&
               <ScheduleDialog
                 {...dialogProps}
-                onClose={this.closeScheduleDialog}
-                onSave={d => save(d).then(() => this.closeScheduleDialog())}
+                onClose={this.handleCloseScheduleDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeScheduleDialog());
+                }}
               />
             }
           </React.Fragment>
@@ -168,6 +187,7 @@ ScheduleComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

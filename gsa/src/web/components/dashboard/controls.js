@@ -51,8 +51,6 @@ import NewIcon from '../icon/newicon';
 import Icon from '../icon/icon';
 
 import {getDisplay} from './registry';
-import {renewSessionTimeout} from 'web/store/usersettings/actions.js';
-
 export class DashboardControls extends React.Component {
 
   constructor(...args) {
@@ -74,13 +72,16 @@ export class DashboardControls extends React.Component {
       onResetClick,
     } = this.props;
 
-    onResetClick(dashboardId);
-    this.renewSession();
+    if (isDefined(onResetClick)) {
+      onResetClick(dashboardId);
+    }
+
+    this.handleInteraction();
   }
 
   handleNewClick() {
     this.setState({showNewDialog: true});
-    this.renewSession();
+    this.handleInteraction();
   }
 
   closeNewDialog() {
@@ -89,7 +90,7 @@ export class DashboardControls extends React.Component {
 
   handleNewDialoClose() {
     this.closeNewDialog();
-    this.renewSession();
+    this.handleInteraction();
   }
 
   handleNewDisplay({displayId}) {
@@ -103,12 +104,16 @@ export class DashboardControls extends React.Component {
 
       onNewDisplay(dashboardId, displayId);
 
-      this.renewSession();
+      this.handleInteraction();
     }
   }
 
-  renewSession() {
-    this.props.renewSessionTimeout();
+  handleInteraction() {
+    const {onInteraction} = this.props;
+
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -176,7 +181,7 @@ DashboardControls.propTypes = {
   canAdd: PropTypes.bool.isRequired,
   dashboardId: PropTypes.id.isRequired,
   displayIds: PropTypes.arrayOf(PropTypes.string),
-  renewSessionTimeout: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
   onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
 };
@@ -194,7 +199,6 @@ const mapStateToProps = (rootState, {dashboardId}) => {
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   onResetClick: (...args) => dispatch(resetSettings({gmp})(...args)),
   onNewDisplay: (...args) => dispatch(addDisplay({gmp})(...args)),
-  renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
 });
 
 export default compose(

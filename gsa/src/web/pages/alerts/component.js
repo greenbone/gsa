@@ -109,19 +109,22 @@ class AlertComponent extends React.Component {
       this.handleTippingPointCredentialChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
-    this.closeAlertDialog = this.closeAlertDialog.bind(this);
+    this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
       this);
     this.openTippingPointCredentialDialog =
       this.openTippingPointCredentialDialog.bind(this);
-    this.closeCredentialDialog = this.closeCredentialDialog.bind(this);
+    this.handleCloseCredentialDialog =
+      this.handleCloseCredentialDialog.bind(this);
 
   }
 
   handleCreateCredential(credentialdata) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
 
     let credential_id;
     gmp.credential.create(credentialdata)
@@ -167,10 +170,17 @@ class AlertComponent extends React.Component {
       credentialDialogTitle: _('New Credential'),
       credentialTypes: types,
     });
+
+    this.handleInteraction();
   }
 
   closeCredentialDialog() {
     this.setState({credentialDialogVisible: false});
+  }
+
+  handleCloseCredentialDialog() {
+    this.closeCredentialDialog();
+    this.handleInteraction();
   }
 
   openScpCredentialDialog(types) {
@@ -191,6 +201,8 @@ class AlertComponent extends React.Component {
 
   openAlertDialog(alert) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
 
     if (isDefined(alert)) {
       gmp.alert.editAlertSettings(alert).then(response => {
@@ -433,9 +445,16 @@ class AlertComponent extends React.Component {
     this.setState({alertDialogVisible: false});
   }
 
+  handleCloseAlertDialog() {
+    this.closeAlertDialog();
+    this.handleInteraction();
+  }
+
   handleTestAlert(alert) {
     const {gmp} = this.props;
     const {onTestSuccess, onTestError} = this.props;
+
+    this.handleInteraction();
 
     gmp.alert.test(alert).then(response => {
       const {success, details, message} = response.data;
@@ -489,6 +508,13 @@ class AlertComponent extends React.Component {
     this.setState({method_data_verinice_server_credential: credential});
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       children,
@@ -501,6 +527,7 @@ class AlertComponent extends React.Component {
       onDeleteError = onError,
       onDownloaded,
       onDownloadError = onError,
+      onInteraction,
       onSaved,
       onSaveError = onError,
     } = this.props;
@@ -584,6 +611,7 @@ class AlertComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -670,13 +698,16 @@ class AlertComponent extends React.Component {
                 method_data_delta_type={method_data_delta_type}
                 method_data_delta_report_id={method_data_delta_report_id}
                 tasks={tasks}
-                onClose={this.closeAlertDialog}
+                onClose={this.handleCloseAlertDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog}
-                onSave={d => save(d).then(() => this.closeAlertDialog())}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeAlertDialog());
+                }}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
@@ -688,7 +719,7 @@ class AlertComponent extends React.Component {
               <CredentialsDialog
                 title={credentialDialogTitle}
                 types={credentialTypes}
-                onClose={this.closeCredentialDialog}
+                onClose={this.handleCloseCredentialDialog}
                 onSave={this.handleCreateCredential}
               />
             }
@@ -711,6 +742,7 @@ AlertComponent.propTypes = {
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onError: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
   onTestError: PropTypes.func,

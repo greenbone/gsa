@@ -78,7 +78,7 @@ const withEntitiesContainer = (gmpname, {
   const mapDispatchToProps = (dispatch, {gmp}) => ({
     loadEntities: filter => dispatch(loadEntities(gmp)(filter)),
     updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
-    renewSessionTimeout: () => dispatch(renewSessionTimeout({gmp})),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   });
 
   EntitiesContainerWrapper = compose(

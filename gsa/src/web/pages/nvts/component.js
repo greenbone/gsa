@@ -35,9 +35,11 @@ const NvtComponent = ({
   onChanged,
   onDownloaded,
   onDownloadError,
+  onInteraction,
 }) => (
   <NoteComponent
     onCreated={onChanged}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -45,6 +47,7 @@ const NvtComponent = ({
     }) => (
       <OverrideComponent
         onCreated={onChanged}
+        onInteraction={onInteraction}
         onSaved={onChanged}
       >
         {({
@@ -54,6 +57,7 @@ const NvtComponent = ({
             name="nvt"
             onDownloaded={onDownloaded}
             onDownloadError={onDownloadError}
+            onInteraction={onInteraction}
           >
             {({download}) =>
               children({
@@ -74,6 +78,7 @@ NvtComponent.propTypes = {
   onChanged: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default NvtComponent;

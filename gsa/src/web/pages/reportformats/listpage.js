@@ -78,6 +78,7 @@ const ReportFormatsPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <ReportFormatComponent
@@ -89,6 +90,7 @@ const ReportFormatsPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onImported={onChanged}
+    onInteraction={onInteraction}
     onVerified={onChanged}
     onVerifyError={onError}
   >{({
@@ -111,6 +113,7 @@ const ReportFormatsPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onReportFormatCloneClick={clone}
       onReportFormatImportClick={import_func}
       onReportFormatDeleteClick={delete_func}
@@ -126,6 +129,7 @@ ReportFormatsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('reportformat', {

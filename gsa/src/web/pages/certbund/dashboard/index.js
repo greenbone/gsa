@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {
@@ -48,13 +46,10 @@ export const CERTBUND_DISPLAYS = [
   CertBundSeverityClassTableDisplay.displayId,
 ];
 
-const CertBundDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const CertBundDashboard = props => (
   <Dashboard
+    {...props}
     id={CERTBUND_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={CERTBUND_DISPLAYS}
     defaultContent={[
       [
@@ -63,14 +58,8 @@ const CertBundDashboard = ({
         CertBundCvssDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-CertBundDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default CertBundDashboard;
 

@@ -130,6 +130,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -148,6 +149,7 @@ const Page = ({
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
+      onInteraction={onInteraction}
       onSaved={onChanged}
     >
       {({
@@ -170,6 +172,7 @@ const Page = ({
           onFilterDownloadClick={download}
           onFilterEditClick={edit}
           onFilterSaveClick={save}
+          onInteraction={onInteraction}
         >
           {({
             activeTab = 0,
@@ -224,6 +227,7 @@ const Page = ({
                         onChanged={onChanged}
                         onDownloaded={onDownloaded}
                         onError={onError}
+                        onInteraction={onInteraction}
                       />
                     </TabPanel>
                   </TabPanels>
@@ -243,6 +247,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

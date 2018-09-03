@@ -223,6 +223,7 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   onTagAddClick,
   onTagCreateClick,
   onTagDeleteClick,
@@ -240,6 +241,7 @@ const Page = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onImported={goto_details('reportformat', props)}
+    onInteraction={onInteraction}
     onSaved={onChanged}
     onVerify={onChanged}
     onVerifyError={onError}
@@ -259,6 +261,7 @@ const Page = ({
         sectionIcon="report_format.svg"
         title={_('Report Format')}
         toolBarIcons={ToolBarIcons}
+        onInteraction={onInteraction}
         onReportFormatCloneClick={clone}
         onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
@@ -327,6 +330,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -346,6 +350,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTagAddClick: PropTypes.func.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDeleteClick: PropTypes.func.isRequired,

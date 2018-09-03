@@ -78,6 +78,7 @@ const SchedulesPage = ({
   onChanged,
   onDownloaded,
   onError,
+  onInteraction,
   ...props
 }) => (
   <ScheduleComponent
@@ -89,6 +90,7 @@ const SchedulesPage = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
   >{({
     clone,
     create,
@@ -108,6 +110,7 @@ const SchedulesPage = ({
       onChanged={onChanged}
       onDownloaded={onDownloaded}
       onError={onError}
+      onInteraction={onInteraction}
       onScheduleCloneClick={clone}
       onScheduleCreateClick={create}
       onScheduleDeleteClick={delete_func}
@@ -123,6 +126,7 @@ SchedulesPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('schedule', {

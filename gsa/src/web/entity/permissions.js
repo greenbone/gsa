@@ -90,8 +90,8 @@ class Permissions extends React.Component {
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
     this.openMultiplePermissionDialog = this.openMultiplePermissionDialog
       .bind(this);
-    this.closeMultiplePermissionDialog = this.closeMultiplePermissionDialog
-      .bind(this);
+    this.handleCloseMultiplePermissionDialog =
+      this.handleCloseMultiplePermissionDialog.bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -149,17 +149,34 @@ class Permissions extends React.Component {
         userId: selectSaveId(users),
       });
     });
+
+    this.handleInteraction();
   }
 
   closeMultiplePermissionDialog() {
     this.setState({multiplePermissionDialogVisible: false});
   }
 
+  handleCloseMultiplePermissionDialog() {
+    this.closeMultiplePermissionDialog();
+    this.handleInteraction();
+  }
+
   handleMultipleSave(data) {
     const {gmp, onChanged} = this.props;
+
+    this.handleInteraction();
+
     return gmp.permissions.create(data)
       .then(onChanged)
       .then(() => this.closeMultiplePermissionDialog());
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -228,7 +245,7 @@ class Permissions extends React.Component {
             title={title}
             userId={userId}
             users={users}
-            onClose={this.closeMultiplePermissionDialog}
+            onClose={this.handleCloseMultiplePermissionDialog}
             onSave={this.handleMultipleSave}
           />
         }
@@ -243,6 +260,7 @@ Permissions.propTypes = {
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onPermissionCloneClick: PropTypes.func.isRequired,
   onPermissionDeleteClick: PropTypes.func.isRequired,
   onPermissionDownloadClick: PropTypes.func.isRequired,
@@ -252,10 +270,13 @@ Permissions.propTypes = {
 Permissions = withGmp(Permissions);
 
 const EntityPermissions = ({
+  entity,
+  permissions,
+  relatedResourcesLoaders,
   onChanged,
   onDownloaded,
   onError,
-  ...props
+  onInteraction,
 }) => (
   <PermissionComponent
     onDownloaded={onDownloaded}
@@ -265,6 +286,7 @@ const EntityPermissions = ({
     onCreated={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -275,8 +297,11 @@ const EntityPermissions = ({
       edit,
     }) => (
       <Permissions
-        {...props}
+        entity={entity}
+        permissions={permissions}
+        relatedResourcesLoaders={relatedResourcesLoaders}
         onChanged={onChanged}
+        onInteraction={onInteraction}
         onPermissionCreateClick={create}
         onPermissionCloneClick={clone}
         onPermissionDeleteClick={delete_func}
@@ -288,9 +313,13 @@ const EntityPermissions = ({
 );
 
 EntityPermissions.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
+  relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityPermissions;

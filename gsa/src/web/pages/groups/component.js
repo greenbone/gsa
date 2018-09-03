@@ -41,12 +41,14 @@ class GroupComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeGroupDialog = this.closeGroupDialog.bind(this);
+    this.handleCloseGroupDialog = this.handleCloseGroupDialog.bind(this);
     this.openGroupDialog = this.openGroupDialog.bind(this);
   }
 
   openGroupDialog(group) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
 
     let allUsers = [];
     gmp.users.getAll().then(response => {
@@ -78,6 +80,18 @@ class GroupComponent extends React.Component {
     this.setState({dialogVisible: false});
   }
 
+  handleCloseGroupDialog() {
+    this.closeGroupDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       children,
@@ -89,6 +103,7 @@ class GroupComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -111,6 +126,7 @@ class GroupComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -129,8 +145,11 @@ class GroupComponent extends React.Component {
                 allUsers={allUsers}
                 group={group}
                 title={title}
-                onClose={this.closeGroupDialog}
-                onSave={d => save(d).then(() => this.closeGroupDialog())}
+                onClose={this.handleCloseGroupDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeGroupDialog());
+                }}
               />
             }
           </React.Fragment>
@@ -151,6 +170,7 @@ GroupComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

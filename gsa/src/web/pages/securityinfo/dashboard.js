@@ -44,7 +44,7 @@ import {NvtsSeverityClassDisplay} from '../nvts/dashboard/severityclassdisplay';
 import {CvesCreatedDisplay} from '../cves/dashboard/createddisplay';
 import {CvesSeverityClassDisplay} from '../cves/dashboard/severityclassdisplay';
 import {CertBundCreatedDisplay} from '../certbund/dashboard/createddisplay';
-import {CertBundCvssDisplay} from '../certbund/dashboard/cvssdisplay'; // eslint-disable-line max-len
+import {CertBundCvssDisplay} from '../certbund/dashboard/cvssdisplay';
 
 export const SECURITYINFO_DASHBOARD_ID = '84ab32da-fe69-44d8-8a8f-70034cf28d4e';
 
@@ -98,8 +98,14 @@ class SecurityInfoDashboard extends React.Component {
   }
 
   render() {
+    const {
+      gmp,
+      notify,
+      ...props
+    } = this.props;
     return (
       <Dashboard
+        {...props}
         showFilterSelection
         showFilterString
         id={SECURITYINFO_DASHBOARD_ID}

@@ -23,8 +23,6 @@
 
 import React from 'react';
 
-import PropTypes from '../../../utils/proptypes';
-
 import Dashboard from '../../../components/dashboard/dashboard';
 
 import {VulnsCvssDisplay, VulnsCvssTableDisplay} from './cvssdisplay';
@@ -45,13 +43,10 @@ export const VULNS_DISPLAYS = [
   VulnsHostsTableDisplay.displayId,
 ];
 
-const VulnerabilitiesDashboard = ({
-  filter,
-  onFilterChanged,
-}) => (
+const VulnerabilitiesDashboard = props => (
   <Dashboard
+    {...props}
     id={VULNS_DASHBOARD_ID}
-    filter={filter}
     permittedDisplays={VULNS_DISPLAYS}
     defaultContent={[
       [
@@ -59,14 +54,8 @@ const VulnerabilitiesDashboard = ({
         VulnsSeverityDisplay.displayId,
       ],
     ]}
-    onFilterChanged={onFilterChanged}
   />
 );
-
-VulnerabilitiesDashboard.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
 
 export default VulnerabilitiesDashboard;
 

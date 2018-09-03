@@ -73,7 +73,7 @@ const withEntityContainer = (entityType, {
 
   const mapDispatchToProps = (dispatch, {gmp}) => {
     return {
-      onInteraction: () => dispatch(renewSessionTimeout({gmp})),
+      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
       load: id => dispatch(load(gmp)(id)),
     };
   };

@@ -43,6 +43,7 @@ import {
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
 
@@ -50,6 +51,8 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import Loading from 'web/components/loading/loading';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
@@ -65,7 +68,6 @@ import Tabs from 'web/components/tab/tabs';
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog from './newdashboarddialog';
-import Loading from '../../components/loading/loading';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -406,6 +408,7 @@ class StartPage extends React.Component {
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
                               saveSettings={this.handleSaveDashboardSettings}
+                              onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
                             />
@@ -444,6 +447,7 @@ StartPage.propTypes = {
   defaults: PropTypes.object,
   isLoading: PropTypes.bool,
   loadSettings: PropTypes.func.isRequired,
+  renewSessionTimeout: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
 };
 
@@ -483,11 +487,12 @@ const mapStateToProps = rootState => {
   return props;
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) =>
-    dispatch(loadSettings(ownProps)(id, defaults)),
+    dispatch(loadSettings({gmp})(id, defaults)),
   saveSettings: (id, settings) =>
-    dispatch(saveSettings(ownProps)(id, settings)),
+    dispatch(saveSettings({gmp})(id, settings)),
+  renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
 export default compose(

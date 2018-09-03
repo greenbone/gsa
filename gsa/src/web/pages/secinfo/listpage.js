@@ -39,6 +39,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/secinfo';
 
+import PropTypes from 'web/utils/proptypes';
+
 import SecInfoFilterDialog from './filterdialog';
 import SecInfosTable from './table';
 
@@ -55,22 +57,45 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = props => (
+const Page = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  ...props
+}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
-    dashboard2={SecInfoDashboard}
-    dashboardControls={() => (
-      <DashboardControls dashboardId={SECINFO_DASHBOARD_ID}/>
+    dashboard={() => (
+      <SecInfoDashboard
+        filter={filter}
+        onFilterChanged={onFilterChanged}
+        onInteraction={onInteraction}
+      />
     )}
+    dashboardControls={() => (
+      <DashboardControls
+        dashboardId={SECINFO_DASHBOARD_ID}
+        onInteraction={onInteraction}
+      />
+    )}
+    filter={filter}
     filterEditDialog={SecInfoFilterDialog}
     filtersFilter={SECINFO_FILTER_FILTER}
     sectionIcon="allinfo.svg"
     table={SecInfosTable}
     title={_('All SecInfo Information')}
     toolBarIcons={ToolBarIcons}
+    onFilterChanged={onFilterChanged}
+    onInteraction={onInteraction}
   />
 );
+
+Page.propTypes = {
+  filter: PropTypes.filter,
+  onFilterChanged: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
 
 export default withEntitiesContainer('secinfo', {
   entitiesSelector,

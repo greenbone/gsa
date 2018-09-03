@@ -56,7 +56,7 @@ class NoteComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.closeNoteDialog = this.closeNoteDialog.bind(this);
+    this.handleCloseNoteDialog = this.handleCloseNoteDialog.bind(this);
     this.openNoteDialog = this.openNoteDialog.bind(this);
     this.openCreateNoteDialog = this.openCreateNoteDialog.bind(this);
   }
@@ -119,11 +119,18 @@ class NoteComponent extends React.Component {
       });
     }
 
+    this.handleInteraction();
+
     this.loadTasks();
   }
 
   closeNoteDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseNoteDialog() {
+    this.setState({dialogVisible: false});
+    this.handleInteraction();
   }
 
   openCreateNoteDialog(initial = {}) {
@@ -138,6 +145,13 @@ class NoteComponent extends React.Component {
     });
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   render() {
     const {
       children,
@@ -149,6 +163,7 @@ class NoteComponent extends React.Component {
       onDeleteError,
       onDownloaded,
       onDownloadError,
+      onInteraction,
       onSaved,
       onSaveError,
     } = this.props;
@@ -185,6 +200,7 @@ class NoteComponent extends React.Component {
         onDeleteError={onDeleteError}
         onDownloaded={onDownloaded}
         onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
@@ -216,8 +232,11 @@ class NoteComponent extends React.Component {
                 tasks={tasks}
                 text={text}
                 title={title}
-                onClose={this.closeNoteDialog}
-                onSave={d => save(d).then(() => this.closeNoteDialog())}
+                onClose={this.handleCloseNoteDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeNoteDialog());
+                }}
                 {...initial}
               />
             }
@@ -239,6 +258,7 @@ NoteComponent.propTypes = {
   onDeleted: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };

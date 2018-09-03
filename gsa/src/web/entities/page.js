@@ -30,26 +30,25 @@ import _ from 'gmp/locale';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import PropTypes from '../utils/proptypes.js';
 import compose from 'web/utils/compose';
+import PropTypes from '../utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Toolbar from '../components/bar/toolbar.js';
+import Toolbar from 'web/components/bar/toolbar';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Loading from '../components/loading/loading.js';
+import Loading from '../components/loading/loading';
 
-import PowerFilter from '../components/powerfilter/powerfilter.js';
+import PowerFilter from 'web/components/powerfilter/powerfilter';
 
-import Section from '../components/section/section.js';
+import Section from 'web/components/section/section';
 
 import {loadEntities, selector} from 'web/store/entities/filters';
 
 const exclude_props = [
   'children',
   'dashboard',
-  'dashboard2',
   'dashboardControls',
   'filterEditDialog',
   'filters',
@@ -99,22 +98,28 @@ class EntitiesPage extends React.Component {
 
   handleFilterEditClick() {
     this.setState({showFilterDialog: true});
+    this.handleInteraction();
   }
 
   handleFilterDialogCloseClick() {
     this.setState({showFilterDialog: false});
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   renderSection() {
     const {
       entities,
-      filter,
       loading,
       sectionIcon,
-      dashboard: DashboardComponent,
-      dashboard2,
+      dashboard,
       dashboardControls,
-      onFilterChanged,
     } = this.props;
 
     let {
@@ -142,11 +147,8 @@ class EntitiesPage extends React.Component {
           flex="column"
           grow="1"
         >
-          {DashboardComponent &&
-            <DashboardComponent filter={filter}/>
-          }
-          {isDefined(dashboard2) &&
-            dashboard2({filter, onFilterChanged})
+          {isDefined(dashboard) &&
+            dashboard()
           }
           {loading && !isDefined(entities) ?
             this.renderLoading() :
@@ -290,8 +292,7 @@ class EntitiesPage extends React.Component {
 
 EntitiesPage.propTypes = {
   createFilterType: PropTypes.string,
-  dashboard: PropTypes.componentOrFalse,
-  dashboard2: PropTypes.func,
+  dashboard: PropTypes.func,
   dashboardControls: PropTypes.func,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
@@ -312,6 +313,7 @@ EntitiesPage.propTypes = {
   onFilterCreated: PropTypes.func.isRequired,
   onFilterRemoved: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export const createEntitiesPage = (options = {}) => {
