@@ -35,21 +35,20 @@ import {
   parseCvssBaseFromVector,
 } from 'gmp/parser';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
 
-import Layout from '../../components/layout/layout.js';
+import Section from 'web/components/section/section';
 
-import withGmp from '../../utils/withGmp.js';
-
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 const StyledTextField = glamorous(TextField)({
   width: '180px',
