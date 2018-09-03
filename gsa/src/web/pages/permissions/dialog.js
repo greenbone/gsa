@@ -137,6 +137,7 @@ const PermissionDialog = ({
   name = 'Super',
   permission,
   resourceId,
+  resourceName = '',
   resourceType = '',
   roleId,
   roles = [],
@@ -167,6 +168,7 @@ const PermissionDialog = ({
     name,
     permission,
     resourceId,
+    resourceName,
     resourceType,
     roleId,
     subjectType,
@@ -188,7 +190,7 @@ const PermissionDialog = ({
         const showResourceId = NEED_RESOURCE_ID.includes(state.name);
 
         const resource = isDefined(state.resourceType) ? new Model({
-          name: state.resourceId,
+          name: state.resourceName,
         }, state.resourceType) : undefined;
 
         let subject;
@@ -349,6 +351,7 @@ PermissionDialog.propTypes = {
   name: PropTypes.string,
   permission: PropTypes.model,
   resourceId: PropTypes.string,
+  resourceName: PropTypes.string,
   resourceType: PropTypes.string,
   roleId: PropTypes.id,
   roles: PropTypes.array,
