@@ -46,6 +46,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       this.state = this.setFilter(this.props.filter);
 
       this.handleSave = this.handleSave.bind(this);
+      this.handleFilterChange = this.handleFilterChange.bind(this);
       this.onFilterValueChange = this.onFilterValueChange.bind(this);
       this.onFilterStringChange = this.onFilterStringChange.bind(this);
       this.onSortByChange = this.onSortByChange.bind(this);
@@ -79,6 +80,10 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       if (isDefined(onCloseClick)) {
         onCloseClick();
       }
+    }
+
+    handleFilterChange(filter) {
+      this.setState({filter});
     }
 
     onFilterValueChange(value, name, relation = '=') {
@@ -142,6 +147,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
                 <FilterDialogComponent
                   {...options}
                   {...this.props}
+                  onFilterChange={this.handleFilterChange}
                   onFilterValueChange={this.onFilterValueChange}
                   onFilterStringChange={this.onFilterStringChange}
                   onSortOrderChange={this.onSortOrderChange}

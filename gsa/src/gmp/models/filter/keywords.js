@@ -32,6 +32,7 @@ export const EXTRA_KEYWORDS = [
   'overrides',
   'result_hosts_only',
   'rows',
+  'solution_type',
   'sort',
   'sort-reverse',
   'timezone',
