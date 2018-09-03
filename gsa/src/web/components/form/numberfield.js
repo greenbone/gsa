@@ -26,14 +26,11 @@ import React from 'react';
 
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
+import {fixedValue} from 'gmp/utils/number';
 
 import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
-
-const displayValue = (value, precision) => isDefined(precision) ?
-  value.toFixed(precision) :
-  value;
 
 class NumberInput extends React.Component {
 
@@ -55,7 +52,7 @@ class NumberInput extends React.Component {
       KeyCode.SPACE,
     ];
 
-    const displayedValue = displayValue(value, precision);
+    const displayedValue = fixedValue(value, precision);
 
     this.state = {
       displayedValue: displayedValue,
@@ -71,7 +68,7 @@ class NumberInput extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const {value, precision} = props;
     if (value !== state.prevValue) {
-      const displayedValue = displayValue(value, precision);
+      const displayedValue = fixedValue(value, precision);
       return {
         prevValue: value,
         displayedValue,
@@ -137,7 +134,7 @@ class NumberInput extends React.Component {
         parsedValue = min;
       }
 
-      const newDisplayedValue = displayValue(parsedValue, precision);
+      const newDisplayedValue = fixedValue(parsedValue, precision);
 
       this.setState({
         displayedValue: newDisplayedValue,
@@ -145,7 +142,7 @@ class NumberInput extends React.Component {
       });
     }
     else {
-      this.setState({displayedValue: displayValue(lastValidValue, precision)});
+      this.setState({displayedValue: fixedValue(lastValidValue, precision)});
     }
   }
 

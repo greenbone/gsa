@@ -29,6 +29,7 @@ import glamorous from 'glamorous';
 
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
+import {fixedValue} from 'gmp/utils/number';
 
 import {parseFloat, parseInt} from 'gmp/parser';
 
@@ -240,7 +241,7 @@ class SpinnerComponent extends React.Component {
     value = base + above_min;
 
     // Fix precision from bad JS floating point math
-    value = parseFloat(value.toFixed(this.getPrecision()));
+    value = parseFloat(fixedValue(value, this.getPrecision()));
 
     this.setValue(value);
   }
