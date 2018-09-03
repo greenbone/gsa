@@ -22,6 +22,8 @@
 */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {Col} from 'glamorous';
 
 import _ from 'gmp/locale';
@@ -48,6 +50,9 @@ import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
@@ -110,7 +115,7 @@ class Trashcan extends React.Component {
   }
 
   componentDidMount() {
-      this.getTrash();
+    this.getTrash();
   }
 
   getTrash() {
@@ -122,18 +127,34 @@ class Trashcan extends React.Component {
     return data;
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleRestore(entity) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.restore(entity).then(this.getTrash);
   }
 
   handleDelete(entity) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.delete(entity).then(this.getTrash);
   }
 
   handleEmpty() {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.empty().then(this.getTrash);
   }
 
@@ -434,8 +455,16 @@ class Trashcan extends React.Component {
 
 Trashcan.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(Trashcan);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(Trashcan);
 
 // vim: set ts=2 sw=2 tw=80:
