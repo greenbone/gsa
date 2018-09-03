@@ -303,6 +303,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/powerfilter/powerfilter.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/resultsperpagegroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/severitylevelsgroup.js
+     ${GSA_SRC_DIR}/src/web/components/powerfilter/solutiontypegroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/withFilterDialog.js
      ${GSA_SRC_DIR}/src/web/components/provider/cachefactoryprovider.js
