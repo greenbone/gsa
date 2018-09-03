@@ -34,12 +34,12 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-const log = Logger.getLogger('web.observer.sessionobserver');
+const log = Logger.getLogger('web.observer.locationobserver');
 
 const locationChanged = (loc, prevLoc) =>
   loc.pathname !== prevLoc.pathname || loc.search !== prevLoc.search;
 
-class SessionObserver extends React.Component {
+class LocationObserver extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -80,7 +80,7 @@ class SessionObserver extends React.Component {
   }
 }
 
-SessionObserver.propTypes = {
+LocationObserver.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   location: PropTypes.object.isRequired,
   renewSessionTimeout: PropTypes.func.isRequired,
@@ -92,6 +92,6 @@ export default compose(
   connect(undefined, (dispatch, {gmp}) => ({
     renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   })),
-)(SessionObserver);
+)(LocationObserver);
 
 // vim: set ts=2 sw=2 tw=80:
