@@ -56,8 +56,9 @@ import withGmp from 'web/utils/withGmp';
 
 class LdapAuthentication extends React.Component {
 
-  constructor() {
-    super();
+  constructor(...args) {
+    super(...args);
+
     this.state = {
       authdn: '',
       ldaphost: '',

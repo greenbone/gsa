@@ -44,8 +44,10 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 class RadiusAuthentication extends React.Component {
-  constructor() {
-    super();
+
+  constructor(...args) {
+    super(...args);
+
     this.state = {
       enable: '',
       radiushost: '',
