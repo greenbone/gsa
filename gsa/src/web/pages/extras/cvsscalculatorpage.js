@@ -20,8 +20,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import glamorous from 'glamorous';
 
@@ -35,21 +36,23 @@ import {
   parseCvssBaseFromVector,
 } from 'gmp/parser';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
 
-import Layout from '../../components/layout/layout.js';
+import Section from 'web/components/section/section';
 
-import withGmp from '../../utils/withGmp.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import PropTypes from '../../utils/proptypes.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 const StyledTextField = glamorous(TextField)({
   width: '180px',
@@ -137,7 +140,16 @@ class CvssCalculator extends React.Component {
     });
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleMetricsChange(value, name) {
+    this.handleInteraction();
+
     this.calculateVector({[name]: value});
   }
 
@@ -147,6 +159,9 @@ class CvssCalculator extends React.Component {
 
   handleVectorChange() {
     const {userVector} = this.state;
+
+    this.handleInteraction();
+
     const cvssValues = parseCvssBaseFromVector(userVector);
     const {
       accessVector,
@@ -293,6 +308,16 @@ class CvssCalculator extends React.Component {
 
 CvssCalculator.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(CvssCalculator);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(CvssCalculator);
+
+// vim: set ts=2 sw=2 tw=80:

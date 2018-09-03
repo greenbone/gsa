@@ -22,55 +22,60 @@
 */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import {Col} from 'glamorous';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import AlertsTable from '../alerts/table.js';
-import AgentsTable from '../agents/table.js';
-import ScanConfigsTable from '../scanconfigs/table.js';
-import CredentialsTable from '../credentials/table.js';
-import FiltersTable from '../filters/table.js';
-import GroupsTable from '../groups/table.js';
-import NotesTable from '../notes/table.js';
-import OverridesTable from '../overrides/table.js';
-import PermissionsTable from '../permissions/table.js';
-import PortListsTable from '../portlists/table.js';
-import ReportFormatsTable from '../reportformats/table.js';
-import RolesTable from '../roles/table.js';
-import ScannersTable from '../scanners/table.js';
-import SchedulesTable from '../schedules/table.js';
-import TagsTable from '../tags/table.js';
-import TargetsTable from '../targets/table.js';
-import TasksTable from '../tasks/table.js';
+import Button from 'web/components/form/button';
 
-import Table from '../../components/table/stripedtable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
 
-import InnerLink from '../../components/link/innerlink.js';
-import LinkTarget from '../../components/link/target.js';
+import InnerLink from 'web/components/link/innerlink';
+import LinkTarget from 'web/components/link/target';
 
-import Button from '../../components/form/button.js';
+import Loading from 'web/components/loading/loading';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import Section from 'web/components/section/section';
 
-import Loading from '../../components/loading/loading.js';
+import Table from 'web/components/table/stripedtable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
 
-import PropTypes from '../../utils/proptypes.js';
-import withCapabilities from '../../utils/withCapabilities.js';
-import withGmp from '../../utils/withGmp.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import TrashActions from './trashactions.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
+import AlertsTable from '../alerts/table';
+import AgentsTable from '../agents/table';
+import ScanConfigsTable from '../scanconfigs/table';
+import CredentialsTable from '../credentials/table';
+import FiltersTable from '../filters/table';
+import GroupsTable from '../groups/table';
+import NotesTable from '../notes/table';
+import OverridesTable from '../overrides/table';
+import PermissionsTable from '../permissions/table';
+import PortListsTable from '../portlists/table';
+import ReportFormatsTable from '../reportformats/table';
+import RolesTable from '../roles/table';
+import ScannersTable from '../scanners/table';
+import SchedulesTable from '../schedules/table';
+import TagsTable from '../tags/table';
+import TargetsTable from '../targets/table';
+import TasksTable from '../tasks/table';
+
+import TrashActions from './trashactions';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -110,7 +115,7 @@ class Trashcan extends React.Component {
   }
 
   componentDidMount() {
-      this.getTrash();
+    this.getTrash();
   }
 
   getTrash() {
@@ -122,18 +127,34 @@ class Trashcan extends React.Component {
     return data;
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleRestore(entity) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.restore(entity).then(this.getTrash);
   }
 
   handleDelete(entity) {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.delete(entity).then(this.getTrash);
   }
 
   handleEmpty() {
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     gmp.trashcan.empty().then(this.getTrash);
   }
 
@@ -434,8 +455,16 @@ class Trashcan extends React.Component {
 
 Trashcan.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(Trashcan);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(Trashcan);
 
 // vim: set ts=2 sw=2 tw=80:

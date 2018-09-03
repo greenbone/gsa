@@ -271,7 +271,7 @@ export const parseCvssBaseVector = ({
 };
 
 export const parseCvssBaseFromVector = vector => {
-  if (!isDefined(vector)) {
+  if (!isDefined(vector) && vector.length > 0) {
     return {};
   }
 
@@ -288,7 +288,7 @@ export const parseCvssBaseFromVector = vector => {
     let [metric, value] = currentvalue.split(':');
 
     metric = metric.toLowerCase();
-    value = value.toLowerCase();
+    value = isDefined(value) ? value.toLowerCase() : '';
 
     switch (metric) {
       case 'av':

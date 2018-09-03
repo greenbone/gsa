@@ -99,7 +99,10 @@ import {
 } from 'web/store/usersettings/defaults/selectors';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
-import {updateTimezone} from 'web/store/usersettings/actions';
+import {
+  updateTimezone,
+  renewSessionTimeout,
+} from 'web/store/usersettings/actions';
 
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
@@ -199,7 +202,7 @@ class UserSettings extends React.Component {
     };
 
     this.openDialog = this.openDialog.bind(this);
-    this.closeDialog = this.closeDialog.bind(this);
+    this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.handleSaveSettings = this.handleSaveSettings.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
   }
@@ -223,10 +226,23 @@ class UserSettings extends React.Component {
 
   openDialog() {
     this.setState({dialogVisible: true});
+    this.handleInteraction();
   }
 
   closeDialog() {
     this.setState({dialogVisible: false});
+  }
+
+  handleCloseDialog() {
+    this.closeDialog();
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   getSeverityClassNameById(id) {
@@ -244,6 +260,9 @@ class UserSettings extends React.Component {
       userInterfaceLanguage = BROWSER_LANGUAGE,
       timezone,
     } = data;
+
+    this.handleInteraction();
+
     return gmp.user.saveSettings(data).then(() => {
       this.closeDialog();
       this.props.setLocale(userInterfaceLanguage === BROWSER_LANGUAGE ?
@@ -760,7 +779,7 @@ class UserSettings extends React.Component {
             certBundFilter={certBundFilter.id}
             dfnCertFilter={dfnCertFilter.id}
             secInfoFilter={secInfoFilter.id}
-            onClose={this.closeDialog}
+            onClose={this.handleCloseDialog}
             onSave={this.handleSaveSettings}
             onValueChange={this.handleValueChange}
           />
@@ -844,6 +863,7 @@ UserSettings.propTypes = {
   tasksFilter: PropTypes.object,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.object,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -1060,9 +1080,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)(ALL_FILTER)),
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
 });

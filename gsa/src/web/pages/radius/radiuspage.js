@@ -22,31 +22,38 @@
 */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import Button from '../../components/form/button.js';
-import CheckBox from '../../components/form/checkbox.js';
-import FormGroup from '../../components/form/formgroup.js';
-import PasswordField from '../../components/form/passwordfield.js';
-import TextField from '../../components/form/textfield.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import Button from 'web/components/form/button';
+import CheckBox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import TextField from 'web/components/form/textfield';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Loading from '../../components/loading/loading.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import Section from 'web/components/section/section';
 
-import withGmp from '../../utils/withGmp.js';
+import Loading from 'web/components/loading/loading';
 
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 class RadiusAuthentication extends React.Component {
-  constructor() {
-    super();
+
+  constructor(...args) {
+    super(...args);
+
     this.state = {
       enable: '',
       radiushost: '',
@@ -65,7 +72,7 @@ class RadiusAuthentication extends React.Component {
 
   load() {
     this.getRadiusAuth()
-    .then(this.setState({loading: false}));
+      .then(this.setState({loading: false}));
   }
 
   getRadiusAuth() {
@@ -84,6 +91,13 @@ class RadiusAuthentication extends React.Component {
     return auth_data;
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleSaveSettings() {
     const {
       enable,
@@ -96,6 +110,9 @@ class RadiusAuthentication extends React.Component {
       radiuskey,
     };
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     return gmp.auth.saveRadius(data);
   }
 
@@ -169,8 +186,16 @@ class RadiusAuthentication extends React.Component {
 
 RadiusAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(RadiusAuthentication);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(RadiusAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:

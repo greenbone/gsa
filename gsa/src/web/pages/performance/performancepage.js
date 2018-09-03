@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
@@ -31,28 +33,31 @@ import {isDefined} from 'gmp/utils/identity';
 import date from 'gmp/models/date';
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
-import {renderSelectItems} from '../../utils/render.js';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import withClickHandler from 'web/components/form/withClickHandler';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-import withClickHandler from '../../components/form/withClickHandler.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import LinkTarget from 'web/components/link/target';
 
-import LinkTarget from '../../components/link/target.js';
+import IconMenu from 'web/components/menu/iconmenu';
+import MenuEntry from 'web/components/menu/menuentry';
 
-import IconMenu from '../../components/menu/iconmenu.js';
-import MenuEntry from '../../components/menu/menuentry.js';
+import Section from 'web/components/section/section';
 
-import Section from '../../components/section/section.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import StartEndTimeSelection from './startendtimeselection.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import {renderSelectItems} from 'web/utils/render';
+
+import StartEndTimeSelection from './startendtimeselection';
 
 const DURATION_HOUR = 60 * 60;
 const DURATION_DAY = DURATION_HOUR * 24;
@@ -237,6 +242,8 @@ class PerformancePage extends React.Component {
         end_hour: end.hour(),
         end_minute: end.minute(),
       });
+
+      this.handleInteraction();
     }
   }
 
@@ -249,6 +256,15 @@ class PerformancePage extends React.Component {
       ...data,
       duration: undefined,
     });
+
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -359,8 +375,16 @@ class PerformancePage extends React.Component {
 
 PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(PerformancePage);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -20,8 +20,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -29,32 +30,35 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Button from '../../components/form/button.js';
-import CheckBox from '../../components/form/checkbox.js';
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
+import Button from 'web/components/form/button';
+import CheckBox from 'web/components/form/checkbox';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
+import Section from 'web/components/section/section';
 
-import Table from '../../components/table/simpletable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import Table from 'web/components/table/simpletable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import Loading from '../../components/loading/loading.js';
+import Loading from 'web/components/loading/loading';
 
-import PropTypes from '../../utils/proptypes.js';
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import withGmp from '../../utils/withGmp.js';
-
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 class LdapAuthentication extends React.Component {
-  constructor() {
-    super();
+
+  constructor(...args) {
+    super(...args);
+
     this.state = {
       authdn: '',
       ldaphost: '',
@@ -74,7 +78,7 @@ class LdapAuthentication extends React.Component {
 
   load() {
     this.getLdapAuth()
-    .then(this.setState({loading: false}));
+      .then(this.setState({loading: false}));
   }
 
   getLdapAuth() {
@@ -94,6 +98,13 @@ class LdapAuthentication extends React.Component {
     return auth_data;
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleSaveSettings() {
     const {
       authdn,
@@ -108,6 +119,9 @@ class LdapAuthentication extends React.Component {
       ldaphost,
     };
     const {gmp} = this.props;
+
+    this.handleInteraction();
+
     return gmp.auth.saveLdap(data);
   }
 
@@ -235,8 +249,16 @@ class LdapAuthentication extends React.Component {
 
 LdapAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(LdapAuthentication);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(LdapAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:
