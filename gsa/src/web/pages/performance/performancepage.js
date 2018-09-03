@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import glamorous from 'glamorous';
 
 import _ from 'gmp/locale';
@@ -48,6 +50,9 @@ import MenuEntry from 'web/components/menu/menuentry';
 
 import Section from 'web/components/section/section';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
@@ -237,6 +242,8 @@ class PerformancePage extends React.Component {
         end_hour: end.hour(),
         end_minute: end.minute(),
       });
+
+      this.handleInteraction();
     }
   }
 
@@ -249,6 +256,15 @@ class PerformancePage extends React.Component {
       ...data,
       duration: undefined,
     });
+
+    this.handleInteraction();
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -359,8 +375,16 @@ class PerformancePage extends React.Component {
 
 PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(PerformancePage);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:
