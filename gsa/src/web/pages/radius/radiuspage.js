@@ -26,23 +26,22 @@ import _ from 'gmp/locale';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import Button from '../../components/form/button.js';
-import CheckBox from '../../components/form/checkbox.js';
-import FormGroup from '../../components/form/formgroup.js';
-import PasswordField from '../../components/form/passwordfield.js';
-import TextField from '../../components/form/textfield.js';
+import Button from 'web/components/form/button';
+import CheckBox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
+import PasswordField from 'web/components/form/passwordfield';
+import TextField from 'web/components/form/textfield';
 
-import ManualIcon from '../../components/icon/manualicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
 
-import Loading from '../../components/loading/loading.js';
+import Section from 'web/components/section/section';
 
-import PropTypes from '../../utils/proptypes.js';
+import Loading from 'web/components/loading/loading';
 
-import withGmp from '../../utils/withGmp.js';
-
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 class RadiusAuthentication extends React.Component {
   constructor() {
