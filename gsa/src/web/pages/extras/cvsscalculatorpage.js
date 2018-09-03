@@ -20,8 +20,9 @@
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import glamorous from 'glamorous';
 
@@ -47,6 +48,9 @@ import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -136,7 +140,16 @@ class CvssCalculator extends React.Component {
     });
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleMetricsChange(value, name) {
+    this.handleInteraction();
+
     this.calculateVector({[name]: value});
   }
 
@@ -146,6 +159,9 @@ class CvssCalculator extends React.Component {
 
   handleVectorChange() {
     const {userVector} = this.state;
+
+    this.handleInteraction();
+
     const cvssValues = parseCvssBaseFromVector(userVector);
     const {
       accessVector,
@@ -292,6 +308,16 @@ class CvssCalculator extends React.Component {
 
 CvssCalculator.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(CvssCalculator);
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(undefined, mapDispatchToProps),
+)(CvssCalculator);
+
+// vim: set ts=2 sw=2 tw=80:
