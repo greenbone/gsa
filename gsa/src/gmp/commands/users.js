@@ -27,6 +27,7 @@ import registerCommand from '../command';
 
 import {forEach, map} from '../utils/array';
 import {isDefined} from '../utils/identity';
+import {severityValue} from '../utils/number';
 
 import Capabilities from '../capabilities/capabilities';
 
@@ -222,7 +223,7 @@ class UserCommand extends EntityCommand {
       report_fname: data.reportExportFileName,
       severity_class: data.severityClass,
       dynamic_severity: data.dynamicSeverity,
-      default_severity: data.defaultSeverity,
+      default_severity: severityValue(data.defaultSeverity),
       /* eslint-disable max-len */
       'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899': data.defaultAlert,
       'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7': data.defaultEsxiCredential,
