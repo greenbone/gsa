@@ -83,11 +83,13 @@ const About = () => (
           </DivP>
           <DivP>
             Copyright 2009-2018 by&nbsp;
-            <ExternalLink
-              to="https://www.greenbone.net"
+            <a
+              href="https://www.greenbone.net"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Greenbone Networks GmbH
-            </ExternalLink>
+            </a>
           </DivP>
           <DivP>
             License: GNU General Public License version 2 or any later version
