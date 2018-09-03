@@ -35,6 +35,7 @@ import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../../components/powerfilter/sortbygroup.js';
 import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
+import SolutionTypeGroup from '../../components/powerfilter/solutiontypegroup.js';
 import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
 import AutoFpGroup from '../../components/powerfilter/autofpgroup.js';
@@ -55,6 +56,7 @@ const SORT_FIELDS = [
 const ResultsFilterDialogComponent = ({
   filter,
   filterstring,
+  onFilterChange,
   onFilterStringChange,
   onFilterValueChange,
   onSortByChange,
@@ -81,6 +83,11 @@ const ResultsFilterDialogComponent = ({
     <SeverityLevelsGroup
       filter={filter}
       onChange={onFilterValueChange}
+    />
+
+    <SolutionTypeGroup
+      filter={filter}
+      onChange={onFilterChange}
     />
 
     <MinQodGroup
