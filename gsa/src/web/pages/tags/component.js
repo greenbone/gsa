@@ -171,6 +171,7 @@ class TagComponent extends React.Component {
       this.setState({
         active: undefined,
         comment: undefined,
+        id: undefined,
         name: undefined,
         resourceCount: 0,
         resource_ids: [],
@@ -328,7 +329,7 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
-  onInteraction: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveError: PropTypes.func,
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,

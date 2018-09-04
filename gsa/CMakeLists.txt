@@ -371,7 +371,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entity/permissions.js
      ${GSA_SRC_DIR}/src/web/entity/tab.js
      ${GSA_SRC_DIR}/src/web/entity/tags.js
-     ${GSA_SRC_DIR}/src/web/entity/tagshandler.js
      ${GSA_SRC_DIR}/src/web/entity/withEntityContainer.js
      ${GSA_SRC_DIR}/src/web/pages/agents/component.js
      ${GSA_SRC_DIR}/src/web/pages/agents/details.js

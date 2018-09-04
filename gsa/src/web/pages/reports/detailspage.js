@@ -24,6 +24,8 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -35,24 +37,26 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import {create_pem_certificate} from '../../utils/cert.js';
-import withCache from '../../utils/withCache.js';
-import withGmp from '../../utils/withGmp.js';
-import compose from '../../utils/compose.js';
+import withDownload from 'web/components/form/withDownload';
 
-import withDownload from '../../components/form/withDownload.js';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import withDialogNotification from '../../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import TargetComponent from '../targets/component.js';
+import {create_pem_certificate} from 'web/utils/cert';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCache from 'web/utils/withCache';
+import withGmp from 'web/utils/withGmp';
 
-import Page from './detailscontent.js';
-import FilterDialog from './detailsfilterdialog.js';
+import TargetComponent from '../targets/component';
+
+import Page from './detailscontent';
+import FilterDialog from './detailsfilterdialog';
 
 const log = logger.getLogger('web.pages.report.detailspage');
 
-const connect = (in_func, out_func) => (...args) =>
+const connectFunc = (in_func, out_func) => (...args) =>
   in_func(...args).then(out_func);
 
 const DEFAULT_NUM_ROWS = 100; // displayed rows after first request
@@ -319,6 +323,8 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterChange(filter) {
+    this.handleInteraction();
+
     this.load({filter});
   }
 
@@ -331,6 +337,8 @@ class ReportDetails extends React.Component {
   }
 
   handleActivateTab(index) {
+    this.handleInteraction();
+
     this.setState({activeTab: index});
   }
 
@@ -341,6 +349,8 @@ class ReportDetails extends React.Component {
   handleAddToAssets() {
     const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
+
+    this.handleInteraction();
 
     gmp.report.addAssets(entity, {filter}).then(response => {
       showSuccessMessage(
@@ -353,6 +363,8 @@ class ReportDetails extends React.Component {
     const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
 
+    this.handleInteraction();
+
     gmp.report.removeAssets(entity, {filter}).then(response => {
       showSuccessMessage(
         _('Report content removed from Assets.')
@@ -361,10 +373,14 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterEditClick() {
+    this.handleInteraction();
+
     this.setState({showFilterDialog: true});
   }
 
   handleFilterDialogClose() {
+    this.handleInteraction();
+
     this.setState({showFilterDialog: false});
   }
 
@@ -384,6 +400,8 @@ class ReportDetails extends React.Component {
     const extension = isDefined(report_format) ? report_format.extension :
       'unknown'; // unknown should never happen but we should be save here
 
+    this.handleInteraction();
+
     gmp.report.download(entity, {
       report_format_id,
       delta_report_id: delta_id,
@@ -400,6 +418,8 @@ class ReportDetails extends React.Component {
 
     const {data, serial} = cert;
 
+    this.handleInteraction();
+
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
       data: create_pem_certificate(data),
@@ -407,6 +427,8 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterCreated(filter) {
+    this.handleInteraction();
+
     this.load({filter});
     this.loadFilters();
   }
@@ -414,6 +436,8 @@ class ReportDetails extends React.Component {
   handleFilterAddLogLevel() {
     const {filter} = this.state;
     let levels = filter.get('levels', '');
+
+    this.handleInteraction();
 
     if (!levels.includes('g')) {
       levels += 'g';
@@ -426,6 +450,8 @@ class ReportDetails extends React.Component {
   handleFilterRemoveSeverity() {
     const {filter} = this.state;
 
+    this.handleInteraction();
+
     if (filter.has('severity')) {
       const lfilter = filter.copy();
       lfilter.delete('severity');
@@ -436,10 +462,19 @@ class ReportDetails extends React.Component {
   handleFilterDecreaseMinQoD() {
     const {filter} = this.state;
 
+    this.handleInteraction();
+
     if (filter.has('min_qod')) {
       const lfilter = filter.copy();
       lfilter.set('min_qod', 30);
       this.load({filter: lfilter});
+    }
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
     }
   }
 
@@ -454,6 +489,7 @@ class ReportDetails extends React.Component {
   }
 
   render() {
+    const {onInteraction} = this.props;
     const {
       filter,
       entity = {},
@@ -464,6 +500,7 @@ class ReportDetails extends React.Component {
       <React.Fragment>
         <TargetComponent
           onError={this.handleError}
+          onInteraction={onInteraction}
         >
           {({edit}) => (
             <Page
@@ -481,11 +518,12 @@ class ReportDetails extends React.Component {
               onFilterRemoveSeverityClick={this.handleFilterRemoveSeverity}
               onFilterResetClick={this.handleFilterResetClick}
               onFilterRemoveClick={this.handleFilterRemoveClick}
+              onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleReportDownload}
               onReportFormatChange={this.handleReportFormatChange}
               onTagSuccess={this.handleChanged}
-              onTargetEditClick={connect(this.loadTarget, edit)}
+              onTargetEditClick={connectFunc(this.loadTarget, edit)}
             />
           )}
         </TargetComponent>
@@ -511,13 +549,19 @@ ReportDetails.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
 
 export default compose(
   withCache({cache: 'report'}),
   withGmp,
   withDialogNotification,
   withDownload,
+  connect(undefined, mapDispatchToProps),
 )(ReportDetails);
 
 // vim: set ts=2 sw=2 tw=80:
