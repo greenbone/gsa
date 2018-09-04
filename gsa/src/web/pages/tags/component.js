@@ -329,7 +329,7 @@ TagComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onEnableError: PropTypes.func,
   onEnabled: PropTypes.func,
-  onInteraction: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveError: PropTypes.func,
   onRemoved: PropTypes.func,
   onSaveError: PropTypes.func,
