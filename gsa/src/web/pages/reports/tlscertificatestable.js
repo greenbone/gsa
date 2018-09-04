@@ -23,22 +23,23 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Link from '../../components/link/link.js';
+import Link from 'web/components/link/link';
 
-import TableData from '../../components/table/data.js';
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import {createEntitiesTable} from '../../entities/table.js';
-import glamorous from 'glamorous';
+import {createEntitiesTable} from 'web/entities/table';
 
 const Header = ({
   actions = true,
@@ -125,9 +126,9 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const StyledSpan = glamorous.span({
-  wordBreak: 'break-all',
-});
+const StyledSpan = styled.span`
+  word-break: break-all;
+`;
 
 const Row = ({
   actions = true,

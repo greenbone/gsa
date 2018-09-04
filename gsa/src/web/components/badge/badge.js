@@ -54,9 +54,7 @@ const BadgeIcon = styled.span`
   min-width: 10px;
   padding: 3px 5px;
   z-index: ${Theme.Layers.higher};
-  background-color: ${props => isDefined(props.backgroundColor) ?
-    props.backgroundColor :
-    Theme.green};
+  background-color: ${({backgroundColor = Theme.green}) => backgroundColor};
   color: ${({color = Theme.white}) => color};
   ${({position = 'bottom'}) => position}: ${({radius = 8}) => -radius}px;
   right: ${({margin = 8}) => -margin}px;

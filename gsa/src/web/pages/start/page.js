@@ -24,7 +24,7 @@ import React from 'react';
 
 import uuid from 'uuid/v4';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
@@ -86,9 +86,9 @@ const DEFAULTS = {
 const DEFAULT_TAB = 0;
 const MAX_DASHBOARDS = 10;
 
-const StyledNewIcon = glamorous(NewIcon)({
-  margin: '0 10px',
-});
+const StyledNewIcon = styled(NewIcon)`
+  margin: 0 10px;
+`;
 
 class StartPage extends React.Component {
 

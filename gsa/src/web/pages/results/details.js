@@ -24,7 +24,7 @@ import 'core-js/fn/string/starts-with';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -55,10 +55,10 @@ import P from '../nvts/preformatted';
  security and log messages from nvts are converted to results
  results should preserve newlines AND whitespaces for formatting
 */
-const Pre = glamorous.pre({
-  whiteSpace: 'pre-wrap',
-  wordWrap: 'normal',
-});
+const Pre = styled.pre`
+  white-space: pre-wrap;
+  word-wrap: normal;
+`;
 
 const ResultDetails = ({
     className,
