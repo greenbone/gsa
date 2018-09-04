@@ -66,7 +66,6 @@ import Section from '../../components/section/section.js';
 import SectionHeader from '../../components/section/header.js';
 
 import EntityTags from '../../entity/tags.js';
-import TagsHandler from '../../entity/tagshandler.js';
 
 import AlertActions from './alertactions.js';
 import ApplicationsTable from './applicationstable.js';
@@ -237,50 +236,10 @@ ToolBarIcons.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
-};
-
-const UserTags = ({
-  report,
-  onError,
-  onTagChanged,
-}) => {
-  return (
-    <TagsHandler
-      onError={onError}
-      onChanged={onTagChanged}
-      resourceType="report"
-    >
-      {({
-        add,
-        create,
-        delete: delete_func,
-        disable,
-        enable,
-        edit,
-        remove,
-      }) => (
-        <EntityTags
-          entity={report}
-          onTagAddClick={add}
-          onTagCreateClick={create}
-          onTagDeleteClick={delete_func}
-          onTagDisableClick={disable}
-          onTagEditClick={edit}
-          onTagEndableClick={enable}
-          onTagRemoveClick={remove}
-        />
-      )}
-    </TagsHandler>
-  );
-};
-
-UserTags.propTypes = {
-  report: PropTypes.model.isRequired,
-  onError: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
 };
 
 const PageContent = ({
@@ -675,10 +634,11 @@ const PageContent = ({
                   </ReportEntitiesContainer>
                 </TabPanel>
                 <TabPanel>
-                  <UserTags
-                    report={report}
+                  <EntityTags
+                    entity={report}
+                    onChanged={onTagSuccess}
                     onError={onError}
-                    onTagChanged={onTagSuccess}
+                    onInteraction={onInteraction}
                   />
                 </TabPanel>
               </TabPanels>
