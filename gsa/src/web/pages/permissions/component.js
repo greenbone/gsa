@@ -70,6 +70,8 @@ class PermissionsComponent extends React.Component {
         permission,
         resourceId: isDefined(permission.resource) ?
           permission.resource.id : '',
+        resourceName: isDefined(permission.resource) ?
+          permission.resource.name : '',
         resourceType: isDefined(permission.resource) ?
           getEntityType(permission.resource) : '',
         roleId: undefined,
@@ -100,8 +102,9 @@ class PermissionsComponent extends React.Component {
         comment: undefined,
         id: undefined,
         name: undefined,
-        resourceType: undefined,
         resourceId: undefined,
+        resourceName: undefined,
+        resourceType: undefined,
         subjectType: undefined,
         userId: undefined,
         groupId: undefined,
@@ -207,6 +210,7 @@ class PermissionsComponent extends React.Component {
       name,
       permission,
       resourceId,
+      resourceName,
       resourceType,
       roleId,
       roles,
@@ -251,7 +255,8 @@ class PermissionsComponent extends React.Component {
                 name={name}
                 permission={permission}
                 resourceId={resourceId}
-                resourceIype={resourceType}
+                resourceName={resourceName}
+                resourceType={resourceType}
                 roleId={roleId}
                 roles={roles}
                 subjectType={subjectType}
