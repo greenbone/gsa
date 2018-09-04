@@ -34,8 +34,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
@@ -197,7 +195,7 @@ class FilterComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openFilterDialog,
@@ -219,7 +217,7 @@ class FilterComponent extends React.Component {
                 }}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );
