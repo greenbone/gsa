@@ -46,6 +46,7 @@ const ResultsTab = ({
   onFilterEditClick,
   onFilterRemoveSeverityClick,
   onFilterResetClick,
+  onInteraction,
   onTargetEditClick,
 }) => {
   if (counts.filtered === 0) {
@@ -79,6 +80,7 @@ const ResultsTab = ({
       counts={counts}
       filter={filter}
       sortFunctions={results_sort_functions}
+      onInteraction={onInteraction}
     >
       {props => (
         <ResultsTable
@@ -104,6 +106,7 @@ ResultsTab.propTypes = {
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
