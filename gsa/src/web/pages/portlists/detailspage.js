@@ -177,13 +177,6 @@ const Page = ({
   onError,
   onChanged,
   onDownloaded,
-  onTagAddClick,
-  onTagCreateClick,
-  onTagDeleteClick,
-  onTagDisableClick,
-  onTagEditClick,
-  onTagEnableClick,
-  onTagRemoveClick,
   onInteraction,
   ...props
 }) => (
@@ -267,13 +260,8 @@ const Page = ({
                   <TabPanel>
                     <EntityTags
                       entity={entity}
-                      onTagAddClick={onTagAddClick}
-                      onTagDeleteClick={onTagDeleteClick}
-                      onTagDisableClick={onTagDisableClick}
-                      onTagEditClick={onTagEditClick}
-                      onTagEnableClick={onTagEnableClick}
-                      onTagCreateClick={onTagCreateClick}
-                      onTagRemoveClick={onTagRemoveClick}
+                      onChanged={onChanged}
+                      onError={onError}
                       onInteraction={onInteraction}
                     />
                   </TabPanel>
@@ -304,13 +292,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
-  onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
-  onTagDisableClick: PropTypes.func.isRequired,
-  onTagEditClick: PropTypes.func.isRequired,
-  onTagEnableClick: PropTypes.func.isRequired,
-  onTagRemoveClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
