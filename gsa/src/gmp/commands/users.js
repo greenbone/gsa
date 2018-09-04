@@ -278,6 +278,12 @@ class UserCommand extends EntityCommand {
     });
   }
 
+  ping() {
+    return this.httpGet({
+      cmd: 'ping',
+    });
+  }
+
   getElementFromRoot(root) {
     return root.get_user.get_users_response.user;
   }
