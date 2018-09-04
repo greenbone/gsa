@@ -95,12 +95,6 @@ const EntityTags = ({
   onTagCreateClick,
   onTagRemoveClick,
 }) => {
-  const extra = (
-    <SectionElements
-      entity={entity}
-      onTagCreateClick={onTagCreateClick}
-    />
-  );
   const {userTags} = entity;
   const count = userTags.length;
   const entityType = getEntityType(entity);
@@ -109,11 +103,12 @@ const EntityTags = ({
       flex="column"
       title={_('User Tags ({{count}})', {count})}
     >
-      {extra}
-      {count === 0 &&
-        _('No user tags available')
-      }
-      {count > 0 &&
+      <SectionElements
+        entity={entity}
+        onTagCreateClick={onTagCreateClick}
+      />
+      {count === 0 ?
+        _('No user tags available') :
         <Table>
           <TableHeader>
             <TableRow>
