@@ -470,6 +470,7 @@ init_validator ()
                          "|(move_task)"
                          "|(new_alert)"
                          "|(new_task)"
+                         "|(ping)"
                          "|(renew_session)"
                          "|(report_alert)"
                          "|(restore)"
@@ -2211,6 +2212,7 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
+  ELSE (ping)
   ELSE (sync_config)
   ELSE (wizard)
   ELSE (wizard_get)

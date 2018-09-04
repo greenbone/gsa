@@ -24,74 +24,97 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {withRouter} from 'react-router-dom';
-
 import Logger from 'gmp/log';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import moment from 'gmp/models/date';
 
-import compose from 'web/utils/compose';
+import {isDefined} from 'gmp/utils/identity';
+
+import {getSessionTimeout} from 'web/store/usersettings/selectors';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
-const locationChanged = (loc, prevLoc) =>
-  loc.pathname !== prevLoc.pathname || loc.search !== prevLoc.search;
+const DELAY = 15 * 1000; // 15 seconds in milliseconds
 
-class SessionObserver extends React.Component {
+class Ping extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    this.state = {
-      location: this.props.location,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (locationChanged(props.location, state.location)) {
-      return {
-        location: props.location,
-        locationHasChanged: true,
-      };
-    }
-    return {
-      locationHasChanged: false,
-    };
+    this.handlePing = this.handlePing.bind(this);
   }
 
   componentDidMount() {
-    // init session timeout in store
-    // this is necessary for page reloads
-    this.props.renewSessionTimeout();
+    this.startTimer();
   }
 
-  componentDidUpdate() {
-    if (this.state.locationHasChanged) {
-      log.debug('Location has changed. Renewing session.');
+  componentWillUnmount() {
+    this.clearTimer();
+  }
 
-      this.props.renewSessionTimeout();
+  clearTimer() {
+    if (isDefined(this.timer)) {
+      log.debug('clearing ping timer', this.timer);
+
+      global.clearTimeout(this.timer);
     }
   }
 
+  startTimer() {
+    const {sessionTimeout} = this.props;
+
+    const timeout = sessionTimeout.diff(moment()) + DELAY;
+
+    if (timeout > 0) {
+      this.timer = global.setTimeout(this.handlePing, timeout);
+
+      log.debug('started ping timer', this.timer, 'timeout', timeout,
+        'milliseconds');
+    }
+  }
+
+  handlePing() {
+    const {gmp} = this.props;
+
+    this.timer = undefined;
+
+    gmp.user.ping();
+  }
+
   render() {
-    return this.props.children;
+    return null;
   }
 }
 
-SessionObserver.propTypes = {
+Ping.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  location: PropTypes.object.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
+  sessionTimeout: PropTypes.date.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-  connect(undefined, (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-  })),
-)(SessionObserver);
+Ping = withGmp(Ping);
+
+const SessionObserver = ({sessionTimeout}) => {
+  if (!isDefined(sessionTimeout)) {
+    return null;
+  }
+
+  return (
+    <Ping
+      key={sessionTimeout.unix()}
+      sessionTimeout={sessionTimeout}
+    />
+  );
+};
+
+SessionObserver.propTypes = {
+  sessionTimeout: PropTypes.date,
+};
+
+export default connect(rootState => ({
+  sessionTimeout: getSessionTimeout(rootState),
+}))(SessionObserver);
 
 // vim: set ts=2 sw=2 tw=80:

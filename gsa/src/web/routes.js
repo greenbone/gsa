@@ -33,6 +33,7 @@ import {createBrowserHistory} from 'history';
 import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 
+import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
 import AssetsPage from './pages/assets/page';
@@ -153,7 +154,8 @@ class Routes extends React.Component {
         <Switch>
           <Route path="/login" component={LoginPage}/>
           <Authorized>
-            <SessionObserver>
+            <SessionObserver/>
+            <LocationObserver>
               <Page>
                 <Switch>
                   <Route
@@ -444,7 +446,7 @@ class Routes extends React.Component {
                   <Route component={PageNotFound}/>
                 </Switch>
               </Page>
-            </SessionObserver>
+            </LocationObserver>
           </Authorized>
         </Switch>
       </Router>
