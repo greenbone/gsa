@@ -270,7 +270,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/layout/icondivider.js
      ${GSA_SRC_DIR}/src/web/components/layout/layout.js
      ${GSA_SRC_DIR}/src/web/components/layout/withLayout.js
-     ${GSA_SRC_DIR}/src/web/components/layout/wrapper.js
      ${GSA_SRC_DIR}/src/web/components/loading/loading.js
      ${GSA_SRC_DIR}/src/web/components/link/blanklink.js
      ${GSA_SRC_DIR}/src/web/components/link/certlink.js
