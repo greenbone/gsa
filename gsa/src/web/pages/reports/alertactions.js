@@ -28,6 +28,7 @@ import _ from 'gmp/locale';
 import logger from 'gmp/log';
 
 import {first} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity.js';
 
 import PropTypes from '../../utils/proptypes.js';
 import {renderSelectItems} from '../../utils/render.js';
@@ -73,6 +74,13 @@ class AlertActions extends React.Component {
     this.setState({alert_id});
   }
 
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
   handleTestAlert() {
     const {alert_id} = this.state;
     const {
@@ -82,6 +90,8 @@ class AlertActions extends React.Component {
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
+
+    this.handleInteraction();
 
     gmp.report.alert({
       report_id: report.id,
@@ -109,6 +119,7 @@ class AlertActions extends React.Component {
   render() {
     const {
       showError,
+      onInteraction,
     } = this.props;
     const {
       alert_id,
@@ -118,6 +129,7 @@ class AlertActions extends React.Component {
       <AlertComponent
         onCreated={this.onAlertCreated}
         onError={showError}
+        onInteraction={onInteraction}
       >
         {({create}) => (
           <IconDivider>
@@ -151,6 +163,7 @@ AlertActions.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withGmp(AlertActions);
