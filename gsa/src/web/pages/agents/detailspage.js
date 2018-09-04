@@ -157,6 +157,7 @@ const Page = ({
   onTagEditClick,
   onTagEnableClick,
   onTagRemoveClick,
+  onInteraction,
   ...props
 }) => (
   <AgentComponent
@@ -169,6 +170,7 @@ const Page = ({
     onDownloadError={onError}
     onInstallerDownloaded={onDownloaded}
     onInstallerDownloadError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
     onVerified={onChanged}
     onVerifyError={onError}
@@ -197,6 +199,7 @@ const Page = ({
         onAgentInstallerDownloadClick={downloadinstaller}
         onAgentSaveClick={save}
         onAgentVerifyClick={verify}
+        onInteraction={onInteraction}
       >
         {({
           activeTab = 0,
@@ -250,6 +253,7 @@ const Page = ({
                     onChanged={onChanged}
                     onDownloaded={onDownloaded}
                     onError={onError}
+                    onInteraction={onInteraction}
                   />
                 </TabPanel>
               </TabPanels>
@@ -274,6 +278,7 @@ Page.propTypes = {
   onTagEditClick: PropTypes.func.isRequired,
   onTagEnableClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {
