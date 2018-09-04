@@ -56,8 +56,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE} from 'web/utils/render';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
@@ -686,7 +684,7 @@ class TaskComponent extends React.Component {
     } = this.state;
 
     return (
-      <Wrapper>
+      <React.Fragment>
         <EntityComponent
           name="task"
           onCreated={onCreated}
@@ -705,7 +703,7 @@ class TaskComponent extends React.Component {
             save,
             ...other
           }) => (
-            <Wrapper>
+            <React.Fragment>
               {children({
                 ...other,
                 create: this.openTaskDialog,
@@ -785,7 +783,7 @@ class TaskComponent extends React.Component {
                   )}
                 </TargetComponent>
               }
-            </Wrapper>
+            </React.Fragment>
           )}
         </EntityComponent>
 
@@ -866,7 +864,7 @@ class TaskComponent extends React.Component {
             onSave={this.handleReportImport}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
