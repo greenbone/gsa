@@ -34,6 +34,7 @@ import {stringify, parse} from 'qs';
 import qhistory from 'qhistory';
 
 import LocationObserver from 'web/components/observer/locationobserver';
+import SessionObserver from 'web/components/observer/sessionobserver';
 
 import AssetsPage from './pages/assets/page';
 import Page from './pages/page';
@@ -153,6 +154,7 @@ class Routes extends React.Component {
         <Switch>
           <Route path="/login" component={LoginPage}/>
           <Authorized>
+            <SessionObserver/>
             <LocationObserver>
               <Page>
                 <Switch>
