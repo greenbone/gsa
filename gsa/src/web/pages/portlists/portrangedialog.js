@@ -37,6 +37,8 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
+const convertPort = value => value === '' ? value : parseInt(value);
+
 const PortRangeDialog = ({
   id,
   port_type = 'tcp',
@@ -47,6 +49,8 @@ const PortRangeDialog = ({
 
   const data = {
     id,
+    port_range_start: '',
+    port_range_end: '',
     port_type,
   };
 
@@ -69,7 +73,7 @@ const PortRangeDialog = ({
                 value={state.port_range_start}
                 grow="1"
                 size="30"
-                convert={parseInt}
+                convert={convertPort}
                 onChange={onValueChange}
                 maxLength="80"
               />
@@ -82,7 +86,7 @@ const PortRangeDialog = ({
                 grow="1"
                 size="30"
                 maxLength="80"
-                convert={parseInt}
+                convert={convertPort}
                 onChange={onValueChange}
               />
             </FormGroup>
