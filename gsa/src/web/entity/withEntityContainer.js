@@ -68,7 +68,6 @@ const withEntityContainer = (entityType, {
 
   EntityContainerWrapper.propTypes = {
     id: PropTypes.id.isRequired,
-    match: PropTypes.object.isRequired,
   };
 
   const mapDispatchToProps = (dispatch, {gmp}) => {
