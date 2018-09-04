@@ -29,8 +29,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import TagsHandler from './tagshandler';
-
 const log = logger.getLogger('web.entity.container');
 
 class EntityContainer extends React.Component {
@@ -111,42 +109,15 @@ class EntityContainer extends React.Component {
   render() {
     const {
       children,
-      entityType,
       onDownload,
-      onInteraction,
     } = this.props;
-    return (
-      <TagsHandler
-        resourceType={entityType}
-        onChanged={this.handleChanged}
-        onError={this.handleError}
-        onInteraction={onInteraction}
-      >
-        {({
-          add,
-          create,
-          delete: delete_func,
-          disable,
-          edit,
-          enable,
-          remove,
-        }) => children({
-          onChanged: this.handleChanged,
-          onSuccess: this.handleChanged,
-          onError: this.handleError,
-          onDownloaded: onDownload,
-          onInteraction: this.handleInteraction,
-          onTagAddClick: add,
-          onTagCreateClick: create,
-          onTagDeleteClick: delete_func,
-          onTagDisableClick: disable,
-          onTagEditClick: edit,
-          onTagEnableClick: enable,
-          onTagRemoveClick: remove,
-          ...this.props,
-        })}
-      </TagsHandler>
-    );
+    return children({
+      ...this.props,
+      onChanged: this.handleChanged,
+      onSuccess: this.handleChanged,
+      onError: this.handleError,
+      onDownloaded: onDownload,
+    });
   }
 }
 
