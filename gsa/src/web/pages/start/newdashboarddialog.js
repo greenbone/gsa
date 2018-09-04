@@ -50,7 +50,7 @@ const NewDashboardDialog = ({
     onSave={onSave}
   >
     {({
-      data,
+      values,
       onValueChange,
     }) => (
       <FormGroup
@@ -61,7 +61,7 @@ const NewDashboardDialog = ({
           grow
           name="title"
           maxLength={MAX_TITLE_LENGTH}
-          value={data.title}
+          value={values.title}
           onChange={onValueChange}
         />
       </FormGroup>
