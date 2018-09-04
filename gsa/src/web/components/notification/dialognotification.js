@@ -26,13 +26,13 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Dialog from '../dialog/dialog.js';
-import DialogContent from '../dialog/content.js';
-import DialogFooter from '../dialog/footer.js';
-import DialogTitle from '../dialog/title.js';
-import ScrollableContent from '../dialog/scrollablecontent.js';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent from 'web/components/dialog/content';
+import DialogFooter from 'web/components/dialog/footer';
+import DialogTitle from 'web/components/dialog/title';
+import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
 class DialogNotification extends React.Component {
 
