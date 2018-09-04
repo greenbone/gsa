@@ -20,15 +20,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 /*
  nvt tags should preserve newlines
  whitespaces can be collapsed
 */
-const Preformatted = glamorous.div({
-  whiteSpace: 'pre-line',
-});
+const Preformatted = styled.div`
+  white-space: pre-line;
+`;
 
 export default Preformatted;
 
