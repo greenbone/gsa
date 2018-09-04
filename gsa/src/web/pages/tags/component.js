@@ -171,6 +171,7 @@ class TagComponent extends React.Component {
       this.setState({
         active: undefined,
         comment: undefined,
+        id: undefined,
         name: undefined,
         resourceCount: 0,
         resource_ids: [],
