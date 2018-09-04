@@ -30,56 +30,56 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
-import EntityInfo from '../../entity/info.js';
+import EntityInfo from 'web/entity/info';
 
-import StatusBar from '../../components/bar/statusbar.js';
-import ToolBar from '../../components/bar/toolbar.js';
+import StatusBar from 'web/components/bar/statusbar';
+import ToolBar from 'web/components/bar/toolbar';
 
-import Select from '../../components/form/select.js';
+import Select from 'web/components/form/select';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Loading from '../../components/loading/loading.js';
+import Loading from 'web/components/loading/loading';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import Powerfilter from '../../components/powerfilter/powerfilter.js';
+import Powerfilter from 'web/components/powerfilter/powerfilter';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Section from '../../components/section/section.js';
-import SectionHeader from '../../components/section/header.js';
+import Section from 'web/components/section/section';
+import SectionHeader from 'web/components/section/header';
 
-import EntityTags from '../../entity/tags.js';
-import TagsHandler from '../../entity/tagshandler.js';
+import EntityTags from 'web/entity/tags';
+import TagsHandler from 'web/entity/tagshandler';
 
-import AlertActions from './alertactions.js';
-import ApplicationsTable from './applicationstable.js';
-import ClosedCvesTable from './closedcvestable.js';
-import CvesTable from './cvestable.js';
-import ErrorsTable from './errorstable.js';
-import HostsTable from './hoststable.js';
-import OperatingSystemsTable from './operatingsystemstable.js';
-import PortsTable from './portstable.js';
-import ReportEntitiesContainer from './reportentitiescontainer.js';
-import ResultsTab from './resultstab.js';
-import Summary from './summary.js';
-import TLSCertificatesTable from './tlscertificatestable.js';
+import AlertActions from './alertactions';
+import ApplicationsTable from './applicationstable';
+import ClosedCvesTable from './closedcvestable';
+import CvesTable from './cvestable';
+import ErrorsTable from './errorstable';
+import HostsTable from './hoststable';
+import OperatingSystemsTable from './operatingsystemstable';
+import PortsTable from './portstable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+import ResultsTab from './resultstab';
+import Summary from './summary';
+import TLSCertificatesTable from './tlscertificatestable';
 
 import {
   apps_sort_functions,
@@ -90,8 +90,8 @@ import {
   operatingssystems_sort_functions,
   ports_sort_functions,
   tls_certificates_sort_functions,
-} from './sort.js';
-import {TASK_STATUS} from 'gmp/models/task.js';
+} from './sort';
+import {TASK_STATUS} from 'gmp/models/task';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
