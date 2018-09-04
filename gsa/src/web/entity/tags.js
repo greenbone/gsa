@@ -54,6 +54,8 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
+import TagComponent from '../pages/tags/component';
+
 const SectionElementDivider = glamorous(Divider)({
   marginBottom: '3px',
 });
@@ -88,102 +90,181 @@ SectionElements.propTypes = {
   onTagCreateClick: PropTypes.func.isRequired,
 };
 
-const EntityTags = ({
-  entity,
-  onTagDisableClick,
-  onTagEditClick,
-  onTagCreateClick,
-  onTagRemoveClick,
-}) => {
-  const {userTags} = entity;
-  const count = userTags.length;
-  const entityType = getEntityType(entity);
-  return (
-    <Layout
-      flex="column"
-      title={_('User Tags ({{count}})', {count})}
-    >
-      <SectionElements
-        entity={entity}
-        onTagCreateClick={onTagCreateClick}
-      />
-      {count === 0 ?
-        _('No user tags available') :
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Comment')}
-              </TableHead>
-              <TableHead width="5em">
-                {_('Actions')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {userTags.map(tag => {
-                return (
-                  <TableRow
-                    key={tag.id}
-                  >
-                    <TableData>
-                      <DetailsLink
-                        id={tag.id}
-                        type="tag"
-                      >
-                        {tag.name}
-                      </DetailsLink>
-                    </TableData>
-                    <TableData>
-                      {tag.value}
-                    </TableData>
-                    <TableData>
-                      {tag.comment}
-                    </TableData>
-                    <TableData>
-                      <IconDivider>
-                        <Icon
-                          img="disable.svg"
-                          value={tag}
-                          title={_('Disable Tag')}
-                          onClick={onTagDisableClick}
-                        />
-                        <DeleteIcon
-                          value={tag}
-                          title={_('Remove Tag from {{type}}',
-                            {type: typeName(entityType)})}
-                          onClick={() => onTagRemoveClick(tag.id, entity)}
-                        />
-                        <EditIcon
-                          value={tag}
-                          title={_('Edit Tag')}
-                          onClick={onTagEditClick}
-                        />
-                      </IconDivider>
-                    </TableData>
-                  </TableRow>
-                );
-              })
-            }
-          </TableBody>
-        </Table>
-      }
-    </Layout>
-  );
-};
+class EntityTagsTable extends React.Component {
 
-EntityTags.propTypes = {
+  constructor(...args) {
+    super(...args);
+
+    this.handleCreateTag = this.handleCreateTag.bind(this);
+    this.handleEditTag = this.handleEditTag.bind(this);
+  }
+
+  handleCreateTag() {
+    const {
+      entity,
+      onTagCreateClick,
+    } = this.props;
+
+    const entityType = getEntityType(entity);
+
+    onTagCreateClick({
+      fixed: true,
+      resource_ids: [entity.id],
+      resource_type: entityType,
+      name: _('{{type}}:unnamed', {type: entityType}),
+    });
+  }
+
+  handleEditTag(tag) {
+    const {
+      onTagEditClick,
+    } = this.props;
+    onTagEditClick(tag, {fixed: true});
+  }
+
+  render() {
+    const {
+      entity,
+      onTagDisableClick,
+      onTagRemoveClick,
+    } = this.props;
+    const {userTags} = entity;
+    const count = userTags.length;
+    const entityType = getEntityType(entity);
+    return (
+      <Layout
+        flex="column"
+        title={_('User Tags ({{count}})', {count})}
+      >
+        <SectionElements
+          entity={entity}
+          onTagCreateClick={this.handleCreateTag}
+        />
+        {count === 0 ?
+          _('No user tags available') :
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('Name')}
+                </TableHead>
+                <TableHead>
+                  {_('Value')}
+                </TableHead>
+                <TableHead>
+                  {_('Comment')}
+                </TableHead>
+                <TableHead width="5em">
+                  {_('Actions')}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {userTags.map(tag => {
+                  return (
+                    <TableRow
+                      key={tag.id}
+                    >
+                      <TableData>
+                        <DetailsLink
+                          id={tag.id}
+                          type="tag"
+                        >
+                          {tag.name}
+                        </DetailsLink>
+                      </TableData>
+                      <TableData>
+                        {tag.value}
+                      </TableData>
+                      <TableData>
+                        {tag.comment}
+                      </TableData>
+                      <TableData>
+                        <IconDivider>
+                          <Icon
+                            img="disable.svg"
+                            value={tag}
+                            title={_('Disable Tag')}
+                            onClick={onTagDisableClick}
+                          />
+                          <DeleteIcon
+                            value={tag}
+                            title={_('Remove Tag from {{type}}',
+                              {type: typeName(entityType)})}
+                            onClick={() => onTagRemoveClick(tag.id, entity)}
+                          />
+                          <EditIcon
+                            value={tag}
+                            title={_('Edit Tag')}
+                            onClick={this.handleEditTag}
+                          />
+                        </IconDivider>
+                      </TableData>
+                    </TableRow>
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
+        }
+      </Layout>
+    );
+  };
+}
+
+EntityTagsTable.propTypes = {
   entity: PropTypes.model.isRequired,
   onTagCreateClick: PropTypes.func.isRequired,
   onTagDisableClick: PropTypes.func.isRequired,
   onTagEditClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
+};
+
+const EntityTags = ({
+  entity,
+  onChanged,
+  onError,
+  onInteraction,
+}) => (
+  <TagComponent
+    onAdded={onChanged}
+    onAddError={onError}
+    onCreated={onChanged}
+    onCreateError={onError}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDisabled={onChanged}
+    onDisableError={onError}
+    onEnabled={onChanged}
+    onEnableError={onError}
+    onInteraction={onInteraction}
+    onRemoved={onChanged}
+    onRemoveError={onError}
+    onSaved={onChanged}
+    onSaveError={onError}
+  >
+    {({
+      create,
+      disable,
+      edit,
+      remove,
+    }) => (
+      <EntityTagsTable
+        entity={entity}
+        onTagCreateClick={create}
+        onTagDisableClick={disable}
+        onTagEditClick={edit}
+        onTagRemoveClick={remove}
+      />
+    )}
+  </TagComponent>
+);
+
+EntityTags.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func,
+  onError: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default EntityTags;
