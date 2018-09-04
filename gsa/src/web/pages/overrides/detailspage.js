@@ -211,6 +211,7 @@ const Page = ({
   onTagEditClick,
   onTagEnableClick,
   onTagRemoveClick,
+  onInteraction,
   ...props
 }) => (
   <OverrideComponent
@@ -221,6 +222,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -240,6 +242,7 @@ const Page = ({
         onChanged={onChanged}
         onDownloaded={onDownloaded}
         onError={onError}
+        onInteraction={onInteraction}
         onOverrideCloneClick={clone}
         onOverrideCreateClick={create}
         onOverrideDeleteClick={delete_func}
@@ -300,6 +303,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -325,6 +329,7 @@ Page.propTypes = {
   onTagEditClick: PropTypes.func.isRequired,
   onTagEnableClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {
