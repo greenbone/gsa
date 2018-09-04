@@ -24,7 +24,7 @@ import React from 'react';
 
 import {withRouter} from 'react-router-dom';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
@@ -50,11 +50,11 @@ import {
 
 import {OsVulnScoreLoader} from './loaders';
 
-const ToolTip = glamorous.div({
-    fontWeight: 'normal',
-    textAlign: 'center',
-    lineHeight: '1.2em',
-  });
+const ToolTip = styled.div`
+  font-weight: normal;
+  text-align: center;
+  line-height: 1.2em;
+`;
 
 const transformVulnScoreData = (data = {}, {severityClass}) => {
   const {groups = []} = data;
