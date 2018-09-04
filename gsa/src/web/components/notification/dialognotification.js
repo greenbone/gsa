@@ -34,8 +34,6 @@ import DialogFooter from '../dialog/footer.js';
 import DialogTitle from '../dialog/title.js';
 import ScrollableContent from '../dialog/scrollablecontent.js';
 
-import Wrapper from '../layout/wrapper.js';
-
 class DialogNotification extends React.Component {
 
   constructor(...args) {
@@ -86,7 +84,7 @@ class DialogNotification extends React.Component {
 
     const {title, message} = this.state;
     return (
-      <Wrapper>
+      <React.Fragment>
         {children({
           showError: this.handleShowError,
           showErrorMessage: this.handleShowErrorMessage,
@@ -120,7 +118,7 @@ class DialogNotification extends React.Component {
             )}
           </Dialog>
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
