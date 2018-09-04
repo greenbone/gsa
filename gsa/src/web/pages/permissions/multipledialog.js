@@ -58,7 +58,7 @@ const MultiplePermissionDialog = withCapabilities(({
   roleId,
   roles = [],
   subjectType = 'user',
-  title = _('Create Multiple Permissions'),
+  title = _('Create Permission'),
   userId,
   users = [],
   onClose,
