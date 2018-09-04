@@ -23,13 +23,13 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Img from '../components/img/img.js';
+import Img from 'web/components/img/img.js';
 
-const WizImg = glamorous(Img)({
-  height: '300px',
-});
+const WizImg = styled(Img)`
+  height: 300px;
+`;
 
 const Wizardess = () => (
   <WizImg
