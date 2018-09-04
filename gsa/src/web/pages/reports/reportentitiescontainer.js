@@ -180,6 +180,8 @@ class ReportEntitiesContainer extends React.Component {
       return;
     }
 
+    this.handleInteraction();
+
     const compare = compare_func(new_sort.reverse);
 
     this.load({
@@ -189,6 +191,8 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   handleFirst() {
+    this.handleInteraction();
+
     this.load({next_entity_index: 0});
   }
 
@@ -202,6 +206,8 @@ class ReportEntitiesContainer extends React.Component {
 
     const last = Math.floor((filtered - 1) / rows) * rows + 1;
 
+    this.handleInteraction();
+
     this.load({next_entity_index: last});
   }
 
@@ -210,6 +216,8 @@ class ReportEntitiesContainer extends React.Component {
       current_entity_index,
       displayed_entity_rows: rows,
     } = this.state;
+
+    this.handleInteraction();
 
     this.load({
       next_entity_index: current_entity_index + rows,
@@ -222,9 +230,18 @@ class ReportEntitiesContainer extends React.Component {
       displayed_entity_rows: rows,
     } = this.state;
 
+    this.handleInteraction();
+
     this.load({
       next_entity_index: current_entity_index - rows,
     });
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
   }
 
   render() {
@@ -264,6 +281,7 @@ ReportEntitiesContainer.propTypes = {
   entities: PropTypes.array.isRequired,
   filter: PropTypes.filter,
   sortFunctions: PropTypes.object,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 export default ReportEntitiesContainer;
