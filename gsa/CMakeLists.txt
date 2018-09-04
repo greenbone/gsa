@@ -292,6 +292,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/notification/withDialogNotifiaction.js
      ${GSA_SRC_DIR}/src/web/components/observer/localeobserver.js
      ${GSA_SRC_DIR}/src/web/components/observer/locationobserver.js
+     ${GSA_SRC_DIR}/src/web/components/observer/sessionobserver.js
      ${GSA_SRC_DIR}/src/web/components/pagination/pagination.js
      ${GSA_SRC_DIR}/src/web/components/panel/infopanel.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
