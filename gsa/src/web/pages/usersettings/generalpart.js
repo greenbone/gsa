@@ -23,7 +23,7 @@
 import 'core-js/fn/object/entries';
 
 import React from 'react';
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -51,9 +51,9 @@ const renderLanguageItems = () =>
     })
   );
 
-const NotificationDiv = glamorous.div(
-  ({color}) => ({color})
-);
+const NotificationDiv = styled.div`
+  color: ${props => props.color};
+`;
 
 const Notification = ({newPassword, oldPassword, confPassword}) => {
   let color;
