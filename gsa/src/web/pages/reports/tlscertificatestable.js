@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
@@ -38,7 +40,6 @@ import TableHeader from '../../components/table/header.js';
 import TableRow from '../../components/table/row.js';
 
 import {createEntitiesTable} from '../../entities/table.js';
-import glamorous from 'glamorous';
 
 const Header = ({
   actions = true,
@@ -125,9 +126,9 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const StyledSpan = glamorous.span({
-  wordBreak: 'break-all',
-});
+const StyledSpan = styled.span`
+  word-break: break-all;
+`;
 
 const Row = ({
   actions = true,
