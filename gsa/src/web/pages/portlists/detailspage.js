@@ -177,13 +177,7 @@ const Page = ({
   onError,
   onChanged,
   onDownloaded,
-  onTagAddClick,
-  onTagCreateClick,
-  onTagDeleteClick,
-  onTagDisableClick,
-  onTagEditClick,
-  onTagEnableClick,
-  onTagRemoveClick,
+  onInteraction,
   ...props
 }) => (
   <PortListComponent
@@ -194,6 +188,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -213,6 +208,7 @@ const Page = ({
         onChanged={onChanged}
         onDownloaded={onDownloaded}
         onError={onError}
+        onInteraction={onInteraction}
         onPortListCloneClick={clone}
         onPortListCreateClick={create}
         onPortListDeleteClick={delete_func}
@@ -264,13 +260,9 @@ const Page = ({
                   <TabPanel>
                     <EntityTags
                       entity={entity}
-                      onTagAddClick={onTagAddClick}
-                      onTagDeleteClick={onTagDeleteClick}
-                      onTagDisableClick={onTagDisableClick}
-                      onTagEditClick={onTagEditClick}
-                      onTagEnableClick={onTagEnableClick}
-                      onTagCreateClick={onTagCreateClick}
-                      onTagRemoveClick={onTagRemoveClick}
+                      onChanged={onChanged}
+                      onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -280,6 +272,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -299,13 +292,7 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
-  onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
-  onTagDisableClick: PropTypes.func.isRequired,
-  onTagEditClick: PropTypes.func.isRequired,
-  onTagEnableClick: PropTypes.func.isRequired,
-  onTagRemoveClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {

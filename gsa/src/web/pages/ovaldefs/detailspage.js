@@ -352,13 +352,6 @@ const OvaldefPage = ({
   onDownloaded,
   onError,
   onInteraction,
-  onTagAddClick,
-  onTagCreateClick,
-  onTagDeleteClick,
-  onTagDisableClick,
-  onTagEditClick,
-  onTagEnableClick,
-  onTagRemoveClick,
   ...props
 }) => (
   <EntityComponent
@@ -411,13 +404,9 @@ const OvaldefPage = ({
                   <TabPanel>
                     <EntityTags
                       entity={entity}
-                      onTagAddClick={onTagAddClick}
-                      onTagDeleteClick={onTagDeleteClick}
-                      onTagDisableClick={onTagDisableClick}
-                      onTagEditClick={onTagEditClick}
-                      onTagEnableClick={onTagEnableClick}
-                      onTagCreateClick={onTagCreateClick}
-                      onTagRemoveClick={onTagRemoveClick}
+                      onChanged={onChanged}
+                      onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -436,13 +425,6 @@ OvaldefPage.propTypes = {
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
-  onTagAddClick: PropTypes.func.isRequired,
-  onTagCreateClick: PropTypes.func.isRequired,
-  onTagDeleteClick: PropTypes.func.isRequired,
-  onTagDisableClick: PropTypes.func.isRequired,
-  onTagEditClick: PropTypes.func.isRequired,
-  onTagEnableClick: PropTypes.func.isRequired,
-  onTagRemoveClick: PropTypes.func.isRequired,
 };
 
 export default withEntityContainer('ovaldef', {

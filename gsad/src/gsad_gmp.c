@@ -9109,12 +9109,14 @@ save_tag_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      "<name>%s</name>"
                      "<comment>%s</comment>"
                      "<value>%s</value>"
+                     "<active>%s</active>"
                      "<resources action=\"%s\" filter=\"%s\">"
                      "<type>%s</type>",
                      tag_id,
                      name,
                      comment,
                      value,
+                     active,
                      resources_action ? resources_action : "",
                      filter ? filter : "",
                      resource_type);

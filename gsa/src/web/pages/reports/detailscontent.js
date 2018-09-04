@@ -66,7 +66,6 @@ import Section from 'web/components/section/section';
 import SectionHeader from 'web/components/section/header';
 
 import EntityTags from 'web/entity/tags';
-import TagsHandler from 'web/entity/tagshandler';
 
 import AlertActions from './alertactions';
 import ApplicationsTable from './applicationstable';
@@ -141,6 +140,7 @@ const ToolBarIcons = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
+  onInteraction,
 }) => {
   const {task = {}} = report;
   const {id: task_id = ''} = task;
@@ -220,6 +220,7 @@ const ToolBarIcons = ({
               showError={showError}
               showSuccessMessage={showSuccessMessage}
               showErrorMessage={showErrorMessage}
+              onInteraction={onInteraction}
             />
           }
         </React.Fragment>
@@ -239,50 +240,10 @@ ToolBarIcons.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
-};
-
-const UserTags = ({
-  report,
-  onError,
-  onTagChanged,
-}) => {
-  return (
-    <TagsHandler
-      onError={onError}
-      onChanged={onTagChanged}
-      resourceType="report"
-    >
-      {({
-        add,
-        create,
-        delete: delete_func,
-        disable,
-        enable,
-        edit,
-        remove,
-      }) => (
-        <EntityTags
-          entity={report}
-          onTagAddClick={add}
-          onTagCreateClick={create}
-          onTagDeleteClick={delete_func}
-          onTagDisableClick={disable}
-          onTagEditClick={edit}
-          onTagEndableClick={enable}
-          onTagRemoveClick={remove}
-        />
-      )}
-    </TagsHandler>
-  );
-};
-
-UserTags.propTypes = {
-  report: PropTypes.model.isRequired,
-  onError: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
 };
 
 const PageContent = ({
@@ -309,6 +270,7 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
+  onInteraction,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onReportFormatChange,
@@ -401,6 +363,7 @@ const PageContent = ({
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
           onAddToAssetsClick={onAddToAssetsClick}
+          onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
           onReportFormatChange={onReportFormatChange}
@@ -539,6 +502,7 @@ const PageContent = ({
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                     onFilterEditClick={onFilterEditClick}
                     onFilterResetClick={onFilterResetClick}
+                    onInteraction={onInteraction}
                     onTargetEditClick={onTargetEditClick}
                   />
                 </TabPanel>
@@ -548,6 +512,7 @@ const PageContent = ({
                     entities={hosts.entities}
                     filter={filter}
                     sortFunctions={hosts_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <HostsTable
@@ -563,6 +528,7 @@ const PageContent = ({
                     entities={ports.entities}
                     filter={filter}
                     sortFunctions={ports_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <PortsTable
@@ -578,6 +544,7 @@ const PageContent = ({
                     entities={applications.entities}
                     filter={filter}
                     sortFunctions={apps_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ApplicationsTable
@@ -594,6 +561,7 @@ const PageContent = ({
                     entities={operatingsystems.entities}
                     filter={filter}
                     sortFunctions={operatingssystems_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <OperatingSystemsTable
@@ -609,6 +577,7 @@ const PageContent = ({
                     entities={cves.entities}
                     filter={filter}
                     sortFunctions={cves_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <CvesTable
@@ -624,6 +593,7 @@ const PageContent = ({
                     entities={closed_cves.entities}
                     filter={filter}
                     sortFunctions={closed_cves_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ClosedCvesTable
@@ -639,6 +609,7 @@ const PageContent = ({
                     entities={tls_certificates.entities}
                     filter={filter}
                     sortFunctions={tls_certificates_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <TLSCertificatesTable
@@ -656,6 +627,7 @@ const PageContent = ({
                     entities={errors.entities}
                     filter={filter}
                     sortFunctions={errors_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ErrorsTable
@@ -666,10 +638,11 @@ const PageContent = ({
                   </ReportEntitiesContainer>
                 </TabPanel>
                 <TabPanel>
-                  <UserTags
-                    report={report}
+                  <EntityTags
+                    entity={report}
+                    onChanged={onTagSuccess}
                     onError={onError}
-                    onTagChanged={onTagSuccess}
+                    onInteraction={onInteraction}
                   />
                 </TabPanel>
               </TabPanels>
@@ -704,6 +677,7 @@ PageContent.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
