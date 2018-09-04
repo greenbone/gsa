@@ -184,6 +184,7 @@ const Page = ({
   onTagEditClick,
   onTagEnableClick,
   onTagRemoveClick,
+  onInteraction,
   ...props
 }) => (
   <PortListComponent
@@ -194,6 +195,7 @@ const Page = ({
     onDeleteError={onError}
     onDownloaded={onDownloaded}
     onDownloadError={onError}
+    onInteraction={onInteraction}
     onSaved={onChanged}
   >
     {({
@@ -213,6 +215,7 @@ const Page = ({
         onChanged={onChanged}
         onDownloaded={onDownloaded}
         onError={onError}
+        onInteraction={onInteraction}
         onPortListCloneClick={clone}
         onPortListCreateClick={create}
         onPortListDeleteClick={delete_func}
@@ -271,6 +274,7 @@ const Page = ({
                       onTagEnableClick={onTagEnableClick}
                       onTagCreateClick={onTagCreateClick}
                       onTagRemoveClick={onTagRemoveClick}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -280,6 +284,7 @@ const Page = ({
                       onChanged={onChanged}
                       onDownloaded={onDownloaded}
                       onError={onError}
+                      onInteraction={onInteraction}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -306,6 +311,7 @@ Page.propTypes = {
   onTagEditClick: PropTypes.func.isRequired,
   onTagEnableClick: PropTypes.func.isRequired,
   onTagRemoveClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
 const load = gmp => {
