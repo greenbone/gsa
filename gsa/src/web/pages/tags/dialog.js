@@ -26,7 +26,7 @@ import 'core-js/fn/array/find';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -53,14 +53,14 @@ import Layout from 'web/components/layout/layout';
 
 import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
 
-const Divider = glamorous.div({
-  margin: '0 5px',
-});
+const Divider = styled.div`
+  margin: 0 5px;
+`;
 
-const ScrollableContent = glamorous.div({
-  maxHeight: '200px',
-  overflow: 'auto',
-});
+const ScrollableContent = styled.div`
+  max-height: 200px;
+  overflow: auto;
+`;
 
 class TagDialog extends React.Component {
 
