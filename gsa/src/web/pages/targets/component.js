@@ -33,8 +33,6 @@ import PropTypes from '../../utils/proptypes.js';
 import withGmp from '../../utils/withGmp';
 import {UNSET_VALUE} from '../../utils/render.js';
 
-import Wrapper from '../../components/layout/wrapper.js';
-
 import EntityComponent from '../../entity/component.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
@@ -345,7 +343,7 @@ class TargetComponent extends React.Component {
           save,
           ...other
         }) => (
-          <Wrapper>
+          <React.Fragment>
             {children({
               ...other,
               create: this.openCreateTargetDialog,
@@ -405,7 +403,7 @@ class TargetComponent extends React.Component {
                 onSave={this.handleCreatePortList}
               />
             }
-          </Wrapper>
+          </React.Fragment>
         )}
       </EntityComponent>
     );

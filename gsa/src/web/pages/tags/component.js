@@ -124,7 +124,7 @@ class TagComponent extends React.Component {
   getResourceTypes() {
     const {capabilities} = this.props;
     return TYPES.map(type => capabilities.mayAccess(type) ?
-     [type, typeName(type)] : undefined).filter(isDefined);
+      [type, typeName(type)] : undefined).filter(isDefined);
   }
 
   openTagDialog(tag, options = {}) {

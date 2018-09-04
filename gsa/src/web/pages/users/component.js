@@ -208,6 +208,7 @@ class UserComponent extends React.Component {
 
 UserComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -219,10 +220,6 @@ UserComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-};
-
-UserComponent.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
 };
 
 export default withGmp(UserComponent);

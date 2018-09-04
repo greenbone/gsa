@@ -91,7 +91,7 @@ const Page = ({
 );
 
 Page.propTypes = {
-  filter: PropTypes.filter.isRequired,
+  filter: PropTypes.filter,
   onFilterChanged: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };

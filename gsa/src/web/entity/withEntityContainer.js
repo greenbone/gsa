@@ -68,15 +68,12 @@ const withEntityContainer = (entityType, {
 
   EntityContainerWrapper.propTypes = {
     id: PropTypes.id.isRequired,
-    match: PropTypes.object.isRequired,
   };
 
-  const mapDispatchToProps = (dispatch, {gmp}) => {
-    return {
-      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-      load: id => dispatch(load(gmp)(id)),
-    };
-  };
+  const mapDispatchToProps = (dispatch, {gmp}) => ({
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    load: id => dispatch(load(gmp)(id)),
+  });
 
   const mapStateToProps = (rootState, {gmp, match, ...props}) => {
     const {id} = match.params;
