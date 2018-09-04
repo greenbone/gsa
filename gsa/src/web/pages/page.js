@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import logger from 'gmp/log';
 
@@ -46,9 +46,9 @@ import Main from 'web/components/structure/main';
 
 const log = logger.getLogger('web.page');
 
-const StyledLayout = glamorous(Layout)({
-  height: '100%',
-});
+const StyledLayout = styled(Layout)`
+  height: 100%;
+`;
 
 class Page extends React.Component {
 
