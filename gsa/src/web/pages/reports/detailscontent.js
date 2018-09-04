@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import glamorous, {Span} from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
@@ -93,9 +93,13 @@ import {
 } from './sort.js';
 import {TASK_STATUS} from 'gmp/models/task.js';
 
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
+
+const Span = styled.span`
+   margin-top: 2px;
+`;
 
 const TabTitle = ({title, counts}) => (
   <Layout flex="column" align={['center', 'center']}>
@@ -356,7 +360,7 @@ const PageContent = ({
           <span>
             {longDate(timestamp)}
           </span>
-          <Span marginTop="2px">
+          <Span>
             <StatusBar
               status={status}
               progress={task.progress}
