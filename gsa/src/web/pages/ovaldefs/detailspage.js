@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
@@ -160,9 +160,9 @@ Criteria.propTypes = {
   criteria: PropTypes.object.isRequired,
 };
 
-const StyledDivider = glamorous(Divider)({
-  marginBottom: '1em',
-});
+const StyledDivider = styled(Divider)`
+  margin-bottom: 1em;
+`;
 
 const Details = ({
   entity,
