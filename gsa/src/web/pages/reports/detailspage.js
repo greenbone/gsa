@@ -35,20 +35,20 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import {create_pem_certificate} from '../../utils/cert.js';
-import withCache from '../../utils/withCache.js';
-import withGmp from '../../utils/withGmp.js';
-import compose from '../../utils/compose.js';
+import withDownload from 'web/components/form/withDownload';
 
-import withDownload from '../../components/form/withDownload.js';
+import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import withDialogNotification from '../../components/notification/withDialogNotifiaction.js'; // eslint-disable-line max-len
+import {create_pem_certificate} from 'web/utils/cert';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCache from 'web/utils/withCache';
+import withGmp from 'web/utils/withGmp';
 
-import TargetComponent from '../targets/component.js';
+import TargetComponent from '../targets/component';
 
-import Page from './detailscontent.js';
-import FilterDialog from './detailsfilterdialog.js';
+import Page from './detailscontent';
+import FilterDialog from './detailsfilterdialog';
 
 const log = logger.getLogger('web.pages.report.detailspage');
 
