@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -35,17 +35,17 @@ import Button from 'web/components/dialog/button';
 
 import Divider from 'web/components/layout/divider';
 
-const StyledDivider = glamorous(Divider)({
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 20px 10px 15px',
-});
+const StyledDivider = styled(Divider)`
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #ddd;
+  margin-top: 15px;
+  padding: 10px 20px 10px 15px;
+`;
 
-const Content = glamorous.div({
-  padding: '5px',
-});
+const Content = styled.div`
+  padding: 5px;
+`;
 
 const ConfirmRemoveDialog = ({
   dashboardTitle,

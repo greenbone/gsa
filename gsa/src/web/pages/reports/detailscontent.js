@@ -23,63 +23,62 @@
 
 import React from 'react';
 
-import glamorous, {Span} from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
-import EntityInfo from '../../entity/info.js';
+import EntityInfo from 'web/entity/info';
 
-import StatusBar from '../../components/bar/statusbar.js';
-import ToolBar from '../../components/bar/toolbar.js';
+import StatusBar from 'web/components/bar/statusbar';
+import ToolBar from 'web/components/bar/toolbar';
 
-import Select from '../../components/form/select.js';
+import Select from 'web/components/form/select';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
-import ListIcon from '../../components/icon/listicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import ListIcon from 'web/components/icon/listicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Loading from '../../components/loading/loading.js';
+import Loading from 'web/components/loading/loading';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import Powerfilter from '../../components/powerfilter/powerfilter.js';
+import Powerfilter from 'web/components/powerfilter/powerfilter';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-import Section from '../../components/section/section.js';
-import SectionHeader from '../../components/section/header.js';
+import Section from 'web/components/section/section';
+import SectionHeader from 'web/components/section/header';
 
-import EntityTags from '../../entity/tags.js';
-import TagsHandler from '../../entity/tagshandler.js';
+import EntityTags from 'web/entity/tags';
 
-import AlertActions from './alertactions.js';
-import ApplicationsTable from './applicationstable.js';
-import ClosedCvesTable from './closedcvestable.js';
-import CvesTable from './cvestable.js';
-import ErrorsTable from './errorstable.js';
-import HostsTable from './hoststable.js';
-import OperatingSystemsTable from './operatingsystemstable.js';
-import PortsTable from './portstable.js';
-import ReportEntitiesContainer from './reportentitiescontainer.js';
-import ResultsTab from './resultstab.js';
-import Summary from './summary.js';
-import TLSCertificatesTable from './tlscertificatestable.js';
+import AlertActions from './alertactions';
+import ApplicationsTable from './applicationstable';
+import ClosedCvesTable from './closedcvestable';
+import CvesTable from './cvestable';
+import ErrorsTable from './errorstable';
+import HostsTable from './hoststable';
+import OperatingSystemsTable from './operatingsystemstable';
+import PortsTable from './portstable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+import ResultsTab from './resultstab';
+import Summary from './summary';
+import TLSCertificatesTable from './tlscertificatestable';
 
 import {
   apps_sort_functions,
@@ -90,12 +89,16 @@ import {
   operatingssystems_sort_functions,
   ports_sort_functions,
   tls_certificates_sort_functions,
-} from './sort.js';
-import {TASK_STATUS} from 'gmp/models/task.js';
+} from './sort';
+import {TASK_STATUS} from 'gmp/models/task';
 
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
+
+const Span = styled.span`
+   margin-top: 2px;
+`;
 
 const TabTitle = ({title, counts}) => (
   <Layout flex="column" align={['center', 'center']}>
@@ -137,6 +140,7 @@ const ToolBarIcons = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
+  onInteraction,
 }) => {
   const {task = {}} = report;
   const {id: task_id = ''} = task;
@@ -216,6 +220,7 @@ const ToolBarIcons = ({
               showError={showError}
               showSuccessMessage={showSuccessMessage}
               showErrorMessage={showErrorMessage}
+              onInteraction={onInteraction}
             />
           }
         </React.Fragment>
@@ -235,50 +240,10 @@ ToolBarIcons.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
-};
-
-const UserTags = ({
-  report,
-  onError,
-  onTagChanged,
-}) => {
-  return (
-    <TagsHandler
-      onError={onError}
-      onChanged={onTagChanged}
-      resourceType="report"
-    >
-      {({
-        add,
-        create,
-        delete: delete_func,
-        disable,
-        enable,
-        edit,
-        remove,
-      }) => (
-        <EntityTags
-          entity={report}
-          onTagAddClick={add}
-          onTagCreateClick={create}
-          onTagDeleteClick={delete_func}
-          onTagDisableClick={disable}
-          onTagEditClick={edit}
-          onTagEndableClick={enable}
-          onTagRemoveClick={remove}
-        />
-      )}
-    </TagsHandler>
-  );
-};
-
-UserTags.propTypes = {
-  report: PropTypes.model.isRequired,
-  onError: PropTypes.func.isRequired,
-  onTagChanged: PropTypes.func.isRequired,
 };
 
 const PageContent = ({
@@ -305,6 +270,7 @@ const PageContent = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
+  onInteraction,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onReportFormatChange,
@@ -356,7 +322,7 @@ const PageContent = ({
           <span>
             {longDate(timestamp)}
           </span>
-          <Span marginTop="2px">
+          <Span>
             <StatusBar
               status={status}
               progress={task.progress}
@@ -397,6 +363,7 @@ const PageContent = ({
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
           onAddToAssetsClick={onAddToAssetsClick}
+          onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
           onReportFormatChange={onReportFormatChange}
@@ -535,6 +502,7 @@ const PageContent = ({
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                     onFilterEditClick={onFilterEditClick}
                     onFilterResetClick={onFilterResetClick}
+                    onInteraction={onInteraction}
                     onTargetEditClick={onTargetEditClick}
                   />
                 </TabPanel>
@@ -544,6 +512,7 @@ const PageContent = ({
                     entities={hosts.entities}
                     filter={filter}
                     sortFunctions={hosts_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <HostsTable
@@ -559,6 +528,7 @@ const PageContent = ({
                     entities={ports.entities}
                     filter={filter}
                     sortFunctions={ports_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <PortsTable
@@ -574,6 +544,7 @@ const PageContent = ({
                     entities={applications.entities}
                     filter={filter}
                     sortFunctions={apps_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ApplicationsTable
@@ -590,6 +561,7 @@ const PageContent = ({
                     entities={operatingsystems.entities}
                     filter={filter}
                     sortFunctions={operatingssystems_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <OperatingSystemsTable
@@ -605,6 +577,7 @@ const PageContent = ({
                     entities={cves.entities}
                     filter={filter}
                     sortFunctions={cves_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <CvesTable
@@ -620,6 +593,7 @@ const PageContent = ({
                     entities={closed_cves.entities}
                     filter={filter}
                     sortFunctions={closed_cves_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ClosedCvesTable
@@ -635,6 +609,7 @@ const PageContent = ({
                     entities={tls_certificates.entities}
                     filter={filter}
                     sortFunctions={tls_certificates_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <TLSCertificatesTable
@@ -652,6 +627,7 @@ const PageContent = ({
                     entities={errors.entities}
                     filter={filter}
                     sortFunctions={errors_sort_functions}
+                    onInteraction={onInteraction}
                   >
                     {props => (
                       <ErrorsTable
@@ -662,10 +638,11 @@ const PageContent = ({
                   </ReportEntitiesContainer>
                 </TabPanel>
                 <TabPanel>
-                  <UserTags
-                    report={report}
+                  <EntityTags
+                    entity={report}
+                    onChanged={onTagSuccess}
                     onError={onError}
-                    onTagChanged={onTagSuccess}
+                    onInteraction={onInteraction}
                   />
                 </TabPanel>
               </TabPanels>
@@ -700,6 +677,7 @@ PageContent.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,

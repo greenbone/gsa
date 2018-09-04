@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -39,12 +39,12 @@ import Layout from '../components/layout/layout.js';
 
 import Wizardess from './wizardess.js';
 
-export const WizardContent = glamorous.div({
-  '& > p img': {
-    marginLeft: '5px',
-    marginRight: '5px',
-  },
-});
+export const WizardContent = styled.div`
+  & > p img {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+`;
 
 const TaskWizard = ({
   hosts,
