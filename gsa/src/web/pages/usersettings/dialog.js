@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
@@ -46,9 +46,9 @@ import GeneralPart from './generalpart';
 import SeverityPart from './severitypart';
 
 // necessary to stretch FormGroups to full width inside of Section
-const FormGroupSizer = glamorous.div({
-  width: '100%',
-});
+const FormGroupSizer = styled.div`
+  width: 100%;
+`;
 
 let UserSettingsDialog = ({
     alerts,
