@@ -66,7 +66,7 @@ class AssetsDashboard extends React.Component {
 
   getRefreshInterval() {
     const {gmp} = this.props;
-    return gmp.autorefresh * 1000;
+    return gmp.reloadInterval;
   }
 
   startTimer() {
