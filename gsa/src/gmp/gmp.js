@@ -84,7 +84,7 @@ class Gmp {
 
   constructor(options = {}) {
     const {
-      autorefresh,
+      reloadinterval,
       protocol,
       server,
       storage,
@@ -96,7 +96,7 @@ class Gmp {
     log.debug('Using gmp options', options);
 
     this.settings = new GmpSettings(storage, {
-      autorefresh,
+      reloadinterval,
       manualurl,
       protocol,
       protocoldocurl,
@@ -218,8 +218,8 @@ class Gmp {
     return this;
   }
 
-  get autorefresh() {
-    return this.settings.autorefresh;
+  get reloadInterval() {
+    return this.settings.reloadinterval;
   }
 
   addHttpErrorHandler(handler) {

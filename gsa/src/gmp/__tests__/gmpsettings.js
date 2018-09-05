@@ -36,7 +36,7 @@ describe('GmpSettings tests', () => {
   test('should init with passed options', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
-      autorefresh: 10,
+      reloadinterval: 10,
       locale: 'en',
       manualurl: 'http://manual',
       protocol: 'http',
@@ -48,7 +48,7 @@ describe('GmpSettings tests', () => {
       username: 'foo',
     });
 
-    expect(settings.autorefresh).toEqual(10);
+    expect(settings.reloadinterval).toEqual(10);
     expect(settings.locale).toEqual('en');
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');
@@ -81,7 +81,7 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
-    expect(settings.autorefresh).toBeUndefined();
+    expect(settings.reloadinterval).toBeUndefined();
     expect(settings.locale).toEqual('en');
     expect(settings.manualurl).toBeUndefined();
     expect(settings.protocol).toEqual('http');
@@ -101,7 +101,7 @@ describe('GmpSettings tests', () => {
 
   test('should ensure options override settings from storage', () => {
     const storage = createStorage({
-      autorefresh: 20,
+      reloadinterval: 20,
       locale: 'de',
       manualurl: 'http://ipsum',
       protocol: 'https',
@@ -114,7 +114,7 @@ describe('GmpSettings tests', () => {
     });
 
     const settings = new GmpSettings(storage, {
-      autorefresh: 10,
+      reloadinterval: 10,
       locale: 'en',
       manualurl: 'http://manual',
       protocol: 'http',
@@ -126,7 +126,7 @@ describe('GmpSettings tests', () => {
       username: 'foo',
     });
 
-    expect(settings.autorefresh).toEqual(10);
+    expect(settings.reloadinterval).toEqual(10);
     expect(settings.locale).toEqual('en');
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');

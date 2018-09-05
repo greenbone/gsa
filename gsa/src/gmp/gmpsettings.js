@@ -34,7 +34,7 @@ const set = (storage, name, value) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
-      autorefresh,
+      reloadinterval,
       locale,
       manualurl,
       protocol = global.location.protocol,
@@ -47,7 +47,7 @@ class GmpSettings {
     } = {...storage, ...options};
     this.storage = storage;
 
-    this.autorefresh = autorefresh;
+    this.reloadinterval = reloadinterval;
     this.locale = locale;
     this.manualurl = manualurl;
     this.protocol = protocol;
