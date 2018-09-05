@@ -823,6 +823,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/authorized.js
      ${GSA_SRC_DIR}/src/web/utils/cert.js
      ${GSA_SRC_DIR}/src/web/utils/compose.js
+     ${GSA_SRC_DIR}/src/web/utils/constants.js
      ${GSA_SRC_DIR}/src/web/utils/cpe.js
      ${GSA_SRC_DIR}/src/web/utils/globalcss.js
      ${GSA_SRC_DIR}/src/web/utils/os.js
