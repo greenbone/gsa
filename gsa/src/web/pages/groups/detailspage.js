@@ -240,10 +240,10 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => {
-    dispatch(loadEntityFunc(id));
-    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id)));
-  };
+  return id => dispatch => Promise.all([
+    dispatch(loadEntityFunc(id)),
+    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
+  ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

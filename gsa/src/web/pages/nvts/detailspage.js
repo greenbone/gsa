@@ -353,11 +353,11 @@ const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch => {
-    dispatch(loadEntityFunc(id));
-    dispatch(loadNotesFunc(nvtIdFilter(id)));
-    dispatch(loadOverridesFunc(nvtIdFilter(id)));
-  };
+  return id => dispatch => Promise.all([
+    dispatch(loadEntityFunc(id)),
+    dispatch(loadNotesFunc(nvtIdFilter(id))),
+    dispatch(loadOverridesFunc(nvtIdFilter(id))),
+  ]);
 };
 
 export default withEntityContainer('task', {

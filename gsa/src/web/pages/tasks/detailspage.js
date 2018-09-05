@@ -559,12 +559,12 @@ const load = gmp => {
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch => {
-    dispatch(loadTaskFunc(id));
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
-    dispatch(loadNotesFunc(taskIdFilter(id)));
-    dispatch(loadOverridesFunc(taskIdFilter(id)));
-  };
+  return id => dispatch => Promise.all([
+    dispatch(loadTaskFunc(id)),
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    dispatch(loadNotesFunc(taskIdFilter(id))),
+    dispatch(loadOverridesFunc(taskIdFilter(id))),
+  ]);
 };
 
 export default withEntityContainer('task', {
