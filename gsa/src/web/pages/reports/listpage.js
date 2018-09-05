@@ -270,17 +270,19 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const reportsReloadInterval = (gmp, entities = []) =>
-  entities.some(entity => isActive(entity.report.scan_run_status)) ?
-    DEFAULT_RELOAD_INTERVAL_ACTIVE :
-    gmp.autorefresh * 1000;
+const reportsReloadInterval = ({
+  entities = [],
+  defaultReloadInterval,
+}) => entities.some(entity => isActive(entity.report.scan_run_status)) ?
+  DEFAULT_RELOAD_INTERVAL_ACTIVE :
+  defaultReloadInterval;
 
 export default compose(
   withGmp,
   withEntitiesContainer('report', {
     entitiesSelector,
     loadEntities,
-    reloadInterval: ({gmp, entities}) => reportsReloadInterval(gmp, entities),
+    reloadInterval: reportsReloadInterval,
   }),
 )(Page);
 

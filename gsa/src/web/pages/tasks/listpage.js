@@ -210,15 +210,17 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const taskReloadInterval = (gmp, entities = []) =>
-  entities.some(task => task.isActive()) ?
-    DEFAULT_RELOAD_INTERVAL_ACTIVE :
-    gmp.autorefresh * 1000;
+const taskReloadInterval = ({
+  entities = [],
+  defaultReloadInterval,
+}) => entities.some(task => task.isActive()) ?
+  DEFAULT_RELOAD_INTERVAL_ACTIVE :
+  defaultReloadInterval;
 
 export default withEntitiesContainer('task', {
   entitiesSelector,
   loadEntities,
-  reloadInterval: ({gmp, entities}) => taskReloadInterval(gmp, entities),
+  reloadInterval: taskReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

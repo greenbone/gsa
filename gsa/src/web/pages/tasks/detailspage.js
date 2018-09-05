@@ -572,9 +572,9 @@ export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
-  reloadInterval: ({gmp, entity}) => entity.isActive() ?
+  reloadInterval: ({defaultReloadInterval, entity}) => entity.isActive() ?
     DEFAULT_RELOAD_INTERVAL_ACTIVE :
-    gmp.autorefresh,
+    defaultReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
