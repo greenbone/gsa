@@ -190,7 +190,7 @@ class EntitiesContainer extends React.Component {
     return duration;
   }
 
-  getRefreshInterval() {
+  getReloadInterval() {
     const {
       defaultReloadInterval,
       reloadInterval,
@@ -209,7 +209,7 @@ class EntitiesContainer extends React.Component {
 
     log.debug('Loading time was', loadTime, 'milliseconds');
 
-    let interval = this.getRefreshInterval();
+    let interval = this.getReloadInterval();
 
     if (loadTime > interval) {
       // ensure timer is longer then the loading procedure

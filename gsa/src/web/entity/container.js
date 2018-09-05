@@ -82,7 +82,7 @@ class EntityContainer extends React.Component {
     this.reload();
   }
 
-  getRefreshInterval() {
+  getReloadInterval() {
     const {
       defaultReloadInterval,
       reloadInterval,
@@ -97,7 +97,7 @@ class EntityContainer extends React.Component {
       return;
     }
 
-    const interval = this.getRefreshInterval();
+    const interval = this.getReloadInterval();
 
     if (interval > 0) {
       this.timer = global.setTimeout(this.handleTimer, interval);
