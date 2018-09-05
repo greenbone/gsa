@@ -22,8 +22,6 @@
  */
 import React from 'react';
 
-import Wrapper from '../layout/wrapper.js';
-
 import Download from './download.js';
 
 const withDownload = Component => {
@@ -44,7 +42,7 @@ const withDownload = Component => {
 
     render() {
       return (
-        <Wrapper>
+        <React.Fragment>
           <Component
             {...this.props}
             onDownload={this.handleDownload}
@@ -52,7 +50,7 @@ const withDownload = Component => {
           <Download
             ref={ref => this.download = ref}
           />
-        </Wrapper>
+        </React.Fragment>
       );
     }
   }

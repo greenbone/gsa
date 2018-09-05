@@ -26,8 +26,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 
-import Wrapper from '../layout/wrapper.js';
-
 import TabPanels from './tabpanels.js';
 import TabList from './tablist.js';
 
@@ -83,9 +81,9 @@ class Tabs extends React.Component {
       return child;
     });
     return (
-      <Wrapper>
+      <React.Fragment>
         {children}
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }

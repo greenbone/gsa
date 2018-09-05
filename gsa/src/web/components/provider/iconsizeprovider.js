@@ -23,9 +23,7 @@
 
 import React from 'react';
 
-import Wrapper from '../layout/wrapper.js';
-
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
 class IconSizeProvider extends React.Component {
 
@@ -39,7 +37,9 @@ class IconSizeProvider extends React.Component {
     const {children} = this.props;
     if (React.Children.count(children) > 1) {
       return (
-        <Wrapper>{children}</Wrapper>
+        <React.Fragment>
+          {children}
+        </React.Fragment>
       );
     }
     return children;

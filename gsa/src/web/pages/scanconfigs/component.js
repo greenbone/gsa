@@ -37,8 +37,6 @@ import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Wrapper from 'web/components/layout/wrapper';
-
 import EntityComponent from 'web/entity/component';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
@@ -420,7 +418,7 @@ class ScanConfigComponent extends React.Component {
     } = this.state;
 
     return (
-      <Wrapper>
+      <React.Fragment>
         <EntityComponent
           name="scanconfig"
           onCreated={onCreated}
@@ -439,7 +437,7 @@ class ScanConfigComponent extends React.Component {
             save,
             ...other
           }) => (
-            <Wrapper>
+            <React.Fragment>
               {children({
                 ...other,
                 create: this.openCreateConfigDialog,
@@ -479,7 +477,7 @@ class ScanConfigComponent extends React.Component {
                   }}
                 />
               }
-            </Wrapper>
+            </React.Fragment>
           )}
         </EntityComponent>
         {importDialogVisible &&
@@ -516,7 +514,7 @@ class ScanConfigComponent extends React.Component {
             onSave={this.handleSaveConfigNvt}
           />
         }
-      </Wrapper>
+      </React.Fragment>
     );
   }
 }
