@@ -28,6 +28,8 @@ import _ from 'gmp/locale';
 
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
+import {isActive} from 'gmp/models/task';
+
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -268,11 +270,17 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const reportsReloadInterval = (gmp, entities = []) =>
+  entities.some(entity => isActive(entity.report.scan_run_status)) ?
+    DEFAULT_RELOAD_INTERVAL_ACTIVE :
+    gmp.autorefresh * 1000;
+
 export default compose(
   withGmp,
   withEntitiesContainer('report', {
     entitiesSelector,
     loadEntities,
+    reloadInterval: ({gmp, entities}) => reportsReloadInterval(gmp, entities),
   }),
 )(Page);
 
