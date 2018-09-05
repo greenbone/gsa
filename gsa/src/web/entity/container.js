@@ -83,7 +83,14 @@ class EntityContainer extends React.Component {
   }
 
   getRefreshInterval() {
-    const {gmp} = this.props;
+    const {
+      gmp,
+      reloadInterval,
+    } = this.props;
+
+    if (isDefined(reloadInterval)) {
+      return reloadInterval(this.props);
+    }
     return gmp.autorefresh * 1000;
   }
 
@@ -142,6 +149,7 @@ EntityContainer.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   id: PropTypes.id.isRequired,
   load: PropTypes.func.isRequired,
+  reloadInterval: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,

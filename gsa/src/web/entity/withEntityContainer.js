@@ -55,12 +55,14 @@ const withEntityContainer = (entityType, {
   load,
   entitySelector,
   mapStateToProps: componentMapStateToProps,
+  reloadInterval,
 }) => Component => {
   const EntityContainerWrapper = ({id, ...props}) => (
     <EntityContainer
       {...props}
       id={id}
       entityType={entityType}
+      reloadInterval={reloadInterval}
     >
       {cprops => <Component {...cprops} />}
     </EntityContainer>

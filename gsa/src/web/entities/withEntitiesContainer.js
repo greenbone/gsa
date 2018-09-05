@@ -42,6 +42,7 @@ import EntitiesContainer from './container';
 const withEntitiesContainer = (gmpname, {
   entitiesSelector,
   loadEntities,
+  reloadInterval,
 }) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
@@ -50,6 +51,7 @@ const withEntitiesContainer = (gmpname, {
           {...props}
           notify={notify}
           gmpname={gmpname}
+          reloadInterval={reloadInterval}
         >
           {pageProps => (
             <Component
