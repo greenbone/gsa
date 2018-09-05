@@ -89,6 +89,7 @@ import {
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
 
+import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
@@ -571,6 +572,9 @@ export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
+  reloadInterval: ({gmp, entity}) => entity.isActive() ?
+    DEFAULT_RELOAD_INTERVAL_ACTIVE :
+    gmp.autorefresh,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
