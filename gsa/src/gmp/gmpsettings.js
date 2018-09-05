@@ -22,6 +22,8 @@
  */
 import {isDefined} from './utils/identity';
 
+const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
+
 const set = (storage, name, value) => {
   if (isDefined(value)) {
     storage.setItem(name, value);
@@ -34,7 +36,7 @@ const set = (storage, name, value) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
-      reloadinterval,
+      reloadinterval = DEFAULT_RELOAD_INTERVAL,
       locale,
       manualurl,
       protocol = global.location.protocol,

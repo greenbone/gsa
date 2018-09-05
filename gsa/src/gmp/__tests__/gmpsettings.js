@@ -81,7 +81,7 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
-    expect(settings.reloadinterval).toBeUndefined();
+    expect(settings.reloadinterval).toEqual(15000);
     expect(settings.locale).toEqual('en');
     expect(settings.manualurl).toBeUndefined();
     expect(settings.protocol).toEqual('http');
