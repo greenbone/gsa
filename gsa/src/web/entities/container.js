@@ -131,6 +131,7 @@ class EntitiesContainer extends React.Component {
   };
 
   componentDidMount() {
+    this.isRunning = true;
     const {filter} = this.props.location.query;
 
     if (isDefined(filter)) {
@@ -144,6 +145,7 @@ class EntitiesContainer extends React.Component {
   }
 
   componentWillUnmount() {
+    this.isRunning = false;
     this.clearTimer(); // remove possible running timer
   }
 
@@ -176,6 +178,10 @@ class EntitiesContainer extends React.Component {
   }
 
   startTimer() {
+    if (!this.isRunning) {
+      return;
+    }
+
     const refresh = this.getRefreshInterval();
     if (refresh > 0) {
       this.timer = global.setTimeout(this.handleTimer, refresh);
