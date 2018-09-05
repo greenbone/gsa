@@ -60,6 +60,8 @@ const exclude_props = [
   'onDownload',
 ];
 
+const LOAD_TIME_FACTOR = 1.2;
+
 class EntitiesContainer extends React.Component {
 
   constructor(...args) {
@@ -134,6 +136,8 @@ class EntitiesContainer extends React.Component {
     this.isRunning = true;
     const {filter} = this.props.location.query;
 
+    this.startMeasurement();
+
     if (isDefined(filter)) {
       // use filter from url
       this.load(Filter.fromString(filter));
@@ -172,6 +176,20 @@ class EntitiesContainer extends React.Component {
     this.load(this.props.filter);
   }
 
+  startMeasurement() {
+    this.startTimeStamp = performance.now();
+  }
+
+  endMeasurement() {
+    if (!isDefined(this.startTimeStamp)) {
+      return 0;
+    }
+
+    const duration = performance.now() - this.startTimeStamp;
+    this.startTimeStamp = undefined;
+    return duration;
+  }
+
   getRefreshInterval() {
     const {gmp} = this.props;
     return gmp.autorefresh * 1000;
@@ -182,11 +200,21 @@ class EntitiesContainer extends React.Component {
       return;
     }
 
-    const refresh = this.getRefreshInterval();
-    if (refresh > 0) {
-      this.timer = global.setTimeout(this.handleTimer, refresh);
+    const loadTime = this.endMeasurement();
+
+    log.debug('Loading time was', loadTime, 'milliseconds');
+
+    let interval = this.getRefreshInterval();
+
+    if (loadTime > interval) {
+      // ensure timer is longer then the loading procedure
+      interval = loadTime * LOAD_TIME_FACTOR;
+    }
+
+    if (interval > 0) {
+      this.timer = global.setTimeout(this.handleTimer, interval);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
-        refresh, 'milliseconds for', this.props.gmpname);
+        interval, 'milliseconds for', this.props.gmpname);
     }
   }
 
@@ -202,13 +230,18 @@ class EntitiesContainer extends React.Component {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
     this.timer = undefined;
-    this.reload();
+
+    this.startMeasurement();
+
     this.notifyTimer();
+    this.reload();
   }
 
   handleChanged() {
-    this.reload();
+    this.startMeasurement();
+
     this.notifyChanged();
+    this.reload();
   }
 
   handleSelectionTypeChange(selectionType) {
@@ -280,8 +313,8 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
 
     promise.then(deleted => {
-      this.reload();
       log.debug('successfully deleted entities', deleted);
+      this.handleChanged();
     }, this.handleError);
   }
 
