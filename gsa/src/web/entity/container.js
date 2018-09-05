@@ -46,8 +46,16 @@ class EntityContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.isRunning = true;
+
     const {id} = this.props;
     this.load(id);
+  }
+
+  componentWillUnmount() {
+    this.isRunning = false;
+
+    this.clearTimer();
   }
 
   componentDidUpdate() {
@@ -58,8 +66,11 @@ class EntityContainer extends React.Component {
   }
 
   load(id) {
-    this.props.load(id);
+    this.clearTimer();
+
     this.setState({id});
+
+    this.props.load(id).then(() => this.startTimer());
   }
 
   reload() {
@@ -76,13 +87,17 @@ class EntityContainer extends React.Component {
     return gmp.autorefresh * 1000;
   }
 
-  startTimer(immediate = false) {
-    const refresh = immediate ? 0 : this.getRefreshInterval();
+  startTimer() {
+    if (!this.isRunning) {
+      return;
+    }
 
-    if (refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh);
+    const interval = this.getRefreshInterval();
+
+    if (interval > 0) {
+      this.timer = global.setTimeout(this.handleTimer, interval);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
-        refresh, 'milliseconds');
+        interval, 'milliseconds');
     }
   }
 
