@@ -745,6 +745,7 @@ class TaskComponent extends React.Component {
                               comment={comment}
                               config_id={config_id}
                               hosts_ordering={hosts_ordering}
+                              id={id}
                               in_assets={in_assets}
                               max_checks={max_checks}
                               max_hosts={max_hosts}
