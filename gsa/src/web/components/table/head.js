@@ -30,27 +30,26 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Sort from '../sortby/sortby.js';
+import Sort from 'web/components/sortby/sortby';
 
 const TableHead = ({
-    children,
-    className,
-    colSpan,
-    rowSpan,
-    currentSortBy,
-    currentSortDir,
-    sort = true,
-    sortBy,
-    width,
-    onSortChange,
-    ...other
-  }) => {
-
+  children,
+  className,
+  colSpan,
+  rowSpan,
+  currentSortBy,
+  currentSortDir,
+  sort = true,
+  sortBy,
+  width,
+  onSortChange,
+  ...other
+}) => {
 
   let sortSymbol;
   if (currentSortBy === sortBy) {
