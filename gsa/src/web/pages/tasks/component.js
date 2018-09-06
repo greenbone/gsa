@@ -339,6 +339,7 @@ class TaskComponent extends React.Component {
 
         this.setState({
           taskDialogVisible: true,
+          ...data,
           alert_ids: map(task.alerts, alert => alert.id),
           alerts,
           alterable: task.alterable,
