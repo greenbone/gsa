@@ -29,11 +29,11 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TASK_STATUS} from 'gmp/models/task';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import StatusBar from '../../components/bar/statusbar.js';
+import StatusBar from 'web/components/bar/statusbar';
 
 const StyledDetailsLink = styled(DetailsLink)`
   &:hover {
