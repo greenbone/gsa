@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -39,10 +39,10 @@ import SectionHeader from './header.js';
 
 const FoldableLayout = withFolding(Layout);
 
-const FoldLayout = glamorous(Layout)({
-  marginLeft: '3px',
-  marginTop: '-2px',
-});
+const FoldLayout = styled(Layout)`
+  margin-left: 3px;
+  margin-top: -2px;
+`;
 
 const Section = ({
   children,
