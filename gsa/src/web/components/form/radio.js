@@ -27,13 +27,13 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from '../../utils/compose.js';
-import PropTypes from '../../utils/proptypes.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../layout/divider.js';
-import withLayout from '../layout/withLayout.js';
+import Divider from 'web/components/layout/divider';
+import withLayout from 'web/components/layout/withLayout';
 
-import withChangeHandler from './withChangeHandler.js';
+import withChangeHandler from './withChangeHandler';
 
 export const StyledElement = styled.label`
   display: inline-flex;
