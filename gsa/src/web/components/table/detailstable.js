@@ -21,17 +21,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import SimpleTable from './simpletable.js';
 
-const Table = glamorous(SimpleTable)({
-  '& tr td:first-child': {
-    fontWeight: 'bold',
-    textAlign: 'right',
-    paddingRight: '5px',
-  },
-});
+const Table = styled(SimpleTable)`
+  & tr td:first-child {
+    font-weight: bold;
+    text-align: right;
+    padding-right: 5px;
+  };
+`;
 
 export default Table;
 
