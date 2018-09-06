@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import Theme from 'web/utils/theme';
 import withClickHandler from 'web/components/form/withClickHandler';
@@ -45,20 +45,19 @@ export const withEntityRow = (actions = EntityActions, options = {}) =>
   return EntityRowWrapper;
 };
 
-export const RowDetailsToggle = withClickHandler()(glamorous.span(
-  'row-details-toggle',
+export const RowDetailsToggle = withClickHandler()(styled.span`
   {
-    cursor: 'pointer',
-    textDecoration: 'none',
-    color: Theme.blue,
-    ':hover': {
-      textDecoration: 'underline',
-      color: Theme.blue,
-    },
-    '@media print': {
-      color: Theme.black,
-    },
-  },
-));
+    cursor: pointer;
+    text-decoration: none;
+    color: ${Theme.blue};
+    :hover {
+      text-decoration: underline;
+      color: ${Theme.blue};
+    };
+    @media print {
+      color: ${Theme.black};
+    };
+  }
+`);
 
 // vim: set ts=2 sw=2 tw=80:
