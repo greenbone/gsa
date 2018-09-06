@@ -35,7 +35,7 @@ const EmptyGridRow = styled.div`
   min-height: 50px;
   display: ${props => props.active ? 'flex' : 'none'};
   border: 1px dashed ${Theme.lightGray};
-  background: ${props => props.isDraggingOver ? 'lightblue' : 'none'};
+  background: ${props => props.isDraggingOver ? Theme.lightBlue : 'none'};
   height: ${props => props.height}px;
 `;
 
