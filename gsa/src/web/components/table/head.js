@@ -23,33 +23,33 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Sort from '../sortby/sortby.js';
+import Sort from 'web/components/sortby/sortby';
 
 const TableHead = ({
-    children,
-    className,
-    colSpan,
-    rowSpan,
-    currentSortBy,
-    currentSortDir,
-    sort = true,
-    sortBy,
-    width,
-    onSortChange,
-    ...other
-  }) => {
-
+  children,
+  className,
+  colSpan,
+  rowSpan,
+  currentSortBy,
+  currentSortDir,
+  sort = true,
+  sortBy,
+  width,
+  onSortChange,
+  ...other
+}) => {
 
   let sortSymbol;
   if (currentSortBy === sortBy) {
@@ -108,23 +108,18 @@ TableHead.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-export default glamorous(TableHead, {
-  displayName: 'TableHead',
-})({
-  backgroundColor: '#3A3A3A',
-  color: '#FFFFFF',
-  fontWeight: 'bold',
+export default styled(TableHead)`
+  background-color: ${Theme.darkGray};
+  color: ${Theme.white};
+  font-weight: bold;
+  width: ${props => props.width};
 
-  '@media print': {
-    color: 'black',
-    fontSize: '1.2em',
-    backgroundColor: 'none',
-    fontWeight: 'bold',
-  },
-},
-  props => ({
-    width: props.width,
-  }),
-);
+  @media print {
+    color: ${Theme.black};
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  };
+`;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -21,28 +21,30 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-const TableHeader = glamorous.thead({
-  '& a': {
-    textDecoration: 'none',
-    color: 'white',
-  },
+import Theme from 'web/utils/theme';
 
-  '& a:hover': {
-    textDecoration: 'underline',
-    color: 'white',
-  },
+const TableHeader = styled.thead`
+  & a {
+    text-decoration: none;
+    color: ${Theme.white};
+  };
 
-  '@media print': {
-    borderBottom: '1px solid black',
+  & a:hover {
+    text-decoration: underline;
+    color: ${Theme.white};
+  };
 
-    '& a, & a:hover': {
-      textDecoration: 'none',
-      color: 'black',
-    },
-  },
-});
+  @media print {
+    border-bottom: 1px solid black;
+
+    & a, & a:hover {
+      text-decoration: none;
+      color: ${Theme.black};
+    };
+  };
+`;
 
 export default TableHeader;
 

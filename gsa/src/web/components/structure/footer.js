@@ -23,27 +23,29 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import ExternalLink from '../link/externallink.js';
+import ExternalLink from 'web/components/link/externallink';
 
-const Link = glamorous(ExternalLink)({
-  color: '#787878',
-});
+import Theme from 'web/utils/theme';
 
-const Footer = glamorous.footer({
-  position: 'fixed',
-  bottom: 0,
-  right: 0,
-  left: 0,
-  padding: '2px',
-  backgroundColor: 'white',
-  fontSize: '10px',
-  textAlign: 'right',
-  color: '#787878',
-  marginTop: '10px',
-  paddingRight: '5px',
-});
+const Link = styled(ExternalLink)`
+  color: ${Theme.mediumGray};
+`;
+
+const Footer = styled.footer`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 2px;
+  background-color: ${Theme.white};
+  font-size: 10px;
+  text-align: right;
+  color: ${Theme.mediumGray};
+  margin-top: 10px;
+  padding-right: 5px;
+`;
 
 const GreenboneFooter = () => {
   return (

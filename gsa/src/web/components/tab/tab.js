@@ -24,44 +24,45 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Theme from '../../utils/theme.js';
+import Theme from 'web/utils/theme.js';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-const StyledDiv = glamorous.div(
-  {
-    fontSize: '16px',
-    display: 'flex',
-    alignItems: 'start',
-    flexGrow: '1',
-    paddingLeft: '8px',
-    paddingRight: '8px',
-    paddingBottom: '2px',
-    paddingTop: '2px',
-  },
-  ({active, disabled}) => ({
-    borderLeft: active ?
-      '1px solid ' + Theme.dialogGray : '1px solid ' + Theme.white,
-    borderRight: '1px solid ' + Theme.lightGray,
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    backgroundColor: active ? Theme.dialogGray : undefined,
-    borderBottom: active ? '1px solid ' + Theme.dialogGray : undefined,
-    marginBottom: active ? '-1px' : undefined,
-    borderTop: active ?
-      '2px solid ' + Theme.lightGreen :
-      '2px solid ' + Theme.white,
-    ':hover': {
-      borderTop: active ?
-        undefined : '2px solid ' + Theme.lightGray,
-    },
-    ':first-child': {
-      borderLeft: active ?
-        '1px solid ' + Theme.lightGray : '1px solid ' + Theme.white,
-    },
-  }),
-);
+const StyledDiv = styled.div`
+  font-size: 16px;
+  display: flex;
+  align-items: start;
+  flex-grow: 1;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+
+  border-left: ${props => props.active ?
+    '1px solid ' + Theme.dialogGray : '1px solid ' + Theme.white};
+  border-right: 1px solid ${Theme.lightGray};
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  background-color: ${props => props.active ? Theme.dialogGray : undefined};
+  border-bottom: ${props => props.active ?
+    '1px solid ' + Theme.dialogGray : undefined};
+  margin-bottom: ${props => props.active ? '-2px' : undefined};
+  border-top: ${props => props.active ?
+    '2px solid ' + Theme.lightGreen :
+    '2px solid ' + Theme.white
+  };
+  :hover {
+    border-top: ${props => props.active ?
+      undefined : '2px solid ' + Theme.lightGray
+    };
+  };
+  :first-child {
+    border-left: ${props => props.active ?
+      '1px solid ' + Theme.lightGray : '1px solid ' + Theme.white
+    };
+  };
+`;
 
 const Tab = ({
   isActive = false,
