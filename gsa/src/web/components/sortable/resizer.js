@@ -22,31 +22,31 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {throttleAnimation} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-const ResizeContainer = glamorous.div({
-  cursor: 'row-resize',
-  height: '10px',
-  width: '100%',
-  zIndex: Theme.Layers.higher,
-  display: 'flex',
-  flexGrow: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+const ResizeContainer = styled.div`
+  cursor: row-resize;
+  height: 10px;
+  width: 100%;
+  z-index: ${Theme.Layers.higher};
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
-const ResizeIcon = glamorous.span({
-  height: '2px',
-  width: '20px',
-  borderTop: '1px solid rgba(0, 0, 0, 0.3)',
-  borderBottom: '1px solid rgba(0, 0, 0, 0.3)',
-});
+const ResizeIcon = styled.span`
+  height: 2px;
+  width: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+`;
 
 class Resizer extends React.Component {
 
