@@ -89,6 +89,7 @@ import {
   loadEntity as loadTask,
 } from 'web/store/entities/tasks';
 
+import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
@@ -559,18 +560,21 @@ const load = gmp => {
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch => {
-    dispatch(loadTaskFunc(id));
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id)));
-    dispatch(loadNotesFunc(taskIdFilter(id)));
-    dispatch(loadOverridesFunc(taskIdFilter(id)));
-  };
+  return id => dispatch => Promise.all([
+    dispatch(loadTaskFunc(id)),
+    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    dispatch(loadNotesFunc(taskIdFilter(id))),
+    dispatch(loadOverridesFunc(taskIdFilter(id))),
+  ]);
 };
 
 export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
+  reloadInterval: ({defaultReloadInterval, entity}) => entity.isActive() ?
+    DEFAULT_RELOAD_INTERVAL_ACTIVE :
+    defaultReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

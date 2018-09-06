@@ -46,6 +46,8 @@ import IconDivider from 'web/components/layout/icondivider';
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
 
+import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
+
 import NewIconMenu from './icons/newiconmenu';
 
 import TaskComponent from './component';
@@ -208,9 +210,17 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const taskReloadInterval = ({
+  entities = [],
+  defaultReloadInterval,
+}) => entities.some(task => task.isActive()) ?
+  DEFAULT_RELOAD_INTERVAL_ACTIVE :
+  defaultReloadInterval;
+
 export default withEntitiesContainer('task', {
   entitiesSelector,
   loadEntities,
+  reloadInterval: taskReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

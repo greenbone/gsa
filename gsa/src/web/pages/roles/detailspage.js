@@ -336,11 +336,11 @@ const generalPermissionsFilter = id =>
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => {
-    dispatch(loadEntityFunc(id));
-    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id)));
-    dispatch(loadPermissionsFunc(generalPermissionsFilter(id)));
-  };
+  return id => dispatch => Promise.all([
+    dispatch(loadEntityFunc(id)),
+    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
+    dispatch(loadPermissionsFunc(generalPermissionsFilter(id))),
+  ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

@@ -64,17 +64,17 @@ class AssetsDashboard extends React.Component {
     this.clearTimer();
   }
 
-  getRefreshInterval() {
+  getReloadInterval() {
     const {gmp} = this.props;
-    return gmp.autorefresh * 1000;
+    return gmp.reloadInterval;
   }
 
   startTimer() {
-    const refresh = this.getRefreshInterval();
-    if (refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh);
+    const interval = this.getReloadInterval();
+    if (interval > 0) {
+      this.timer = window.setTimeout(this.handleTimer, interval);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
-        refresh, 'milliseconds');
+        interval, 'milliseconds');
     }
   }
 

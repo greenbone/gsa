@@ -46,8 +46,16 @@ class EntityContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.isRunning = true;
+
     const {id} = this.props;
     this.load(id);
+  }
+
+  componentWillUnmount() {
+    this.isRunning = false;
+
+    this.clearTimer();
   }
 
   componentDidUpdate() {
@@ -58,8 +66,11 @@ class EntityContainer extends React.Component {
   }
 
   load(id) {
-    this.props.load(id);
+    this.clearTimer();
+
     this.setState({id});
+
+    this.props.load(id).then(() => this.startTimer());
   }
 
   reload() {
@@ -71,18 +82,27 @@ class EntityContainer extends React.Component {
     this.reload();
   }
 
-  getRefreshInterval() {
-    const {gmp} = this.props;
-    return gmp.autorefresh * 1000;
+  getReloadInterval() {
+    const {
+      defaultReloadInterval,
+      reloadInterval,
+    } = this.props;
+
+    return isDefined(reloadInterval) ? reloadInterval(this.props) :
+      defaultReloadInterval;
   }
 
-  startTimer(immediate = false) {
-    const refresh = immediate ? 0 : this.getRefreshInterval();
+  startTimer() {
+    if (!this.isRunning) {
+      return;
+    }
 
-    if (refresh >= 0) {
-      this.timer = window.setTimeout(this.handleTimer, refresh);
+    const interval = this.getReloadInterval();
+
+    if (interval > 0) {
+      this.timer = global.setTimeout(this.handleTimer, interval);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
-        refresh, 'milliseconds');
+        interval, 'milliseconds');
     }
   }
 
@@ -123,10 +143,12 @@ class EntityContainer extends React.Component {
 
 EntityContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  defaultReloadInterval: PropTypes.number.isRequired,
   entityType: PropTypes.string.isRequired,
   gmp: PropTypes.gmp.isRequired,
   id: PropTypes.id.isRequired,
   load: PropTypes.func.isRequired,
+  reloadInterval: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,

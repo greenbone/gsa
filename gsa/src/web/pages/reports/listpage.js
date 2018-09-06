@@ -28,12 +28,10 @@ import _ from 'gmp/locale';
 
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
+import {isActive} from 'gmp/models/task';
+
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -51,6 +49,11 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reports';
+
+import {DEFAULT_RELOAD_INTERVAL_ACTIVE} from 'web/utils/constants';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 import ReportFilterDialog from './filterdialog';
 import ImportReportDialog from './importdialog';
@@ -267,11 +270,19 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const reportsReloadInterval = ({
+  entities = [],
+  defaultReloadInterval,
+}) => entities.some(entity => isActive(entity.report.scan_run_status)) ?
+  DEFAULT_RELOAD_INTERVAL_ACTIVE :
+  defaultReloadInterval;
+
 export default compose(
   withGmp,
   withEntitiesContainer('report', {
     entitiesSelector,
     loadEntities,
+    reloadInterval: reportsReloadInterval,
   }),
 )(Page);
 

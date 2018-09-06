@@ -60,6 +60,8 @@ const exclude_props = [
   'onDownload',
 ];
 
+const LOAD_TIME_FACTOR = 1.2;
+
 class EntitiesContainer extends React.Component {
 
   constructor(...args) {
@@ -131,7 +133,10 @@ class EntitiesContainer extends React.Component {
   };
 
   componentDidMount() {
+    this.isRunning = true;
     const {filter} = this.props.location.query;
+
+    this.startMeasurement();
 
     if (isDefined(filter)) {
       // use filter from url
@@ -144,6 +149,7 @@ class EntitiesContainer extends React.Component {
   }
 
   componentWillUnmount() {
+    this.isRunning = false;
     this.clearTimer(); // remove possible running timer
   }
 
@@ -170,23 +176,57 @@ class EntitiesContainer extends React.Component {
     this.load(this.props.filter);
   }
 
-  getRefreshInterval() {
-    const {gmp} = this.props;
-    return gmp.autorefresh * 1000;
+  startMeasurement() {
+    this.startTimeStamp = performance.now();
+  }
+
+  endMeasurement() {
+    if (!isDefined(this.startTimeStamp)) {
+      return 0;
+    }
+
+    const duration = performance.now() - this.startTimeStamp;
+    this.startTimeStamp = undefined;
+    return duration;
+  }
+
+  getReloadInterval() {
+    const {
+      defaultReloadInterval,
+      reloadInterval,
+    } = this.props;
+
+    return isDefined(reloadInterval) ? reloadInterval(this.props) :
+      defaultReloadInterval;
   }
 
   startTimer() {
-    const refresh = this.getRefreshInterval();
-    if (refresh > 0) {
-      this.timer = global.setTimeout(this.handleTimer, refresh);
+    if (!this.isRunning) {
+      return;
+    }
+
+    const loadTime = this.endMeasurement();
+
+    log.debug('Loading time was', loadTime, 'milliseconds');
+
+    let interval = this.getReloadInterval();
+
+    if (loadTime > interval) {
+      // ensure timer is longer then the loading procedure
+      interval = loadTime * LOAD_TIME_FACTOR;
+    }
+
+    if (interval > 0) {
+      this.timer = global.setTimeout(this.handleTimer, interval);
       log.debug('Started reload timer with id', this.timer, 'and interval of',
-        refresh, 'milliseconds');
+        interval, 'milliseconds for', this.props.gmpname);
     }
   }
 
   clearTimer() {
     if (isDefined(this.timer)) {
-      log.debug('Clearing reload timer with id', this.timer);
+      log.debug('Clearing reload timer with id', this.timer, 'for',
+        this.props.gmpname);
       global.clearTimeout(this.timer);
     }
   }
@@ -195,13 +235,18 @@ class EntitiesContainer extends React.Component {
     log.debug('Timer', this.timer, 'finished. Reloading data.');
 
     this.timer = undefined;
-    this.reload();
+
+    this.startMeasurement();
+
     this.notifyTimer();
+    this.reload();
   }
 
   handleChanged() {
-    this.reload();
+    this.startMeasurement();
+
     this.notifyChanged();
+    this.reload();
   }
 
   handleSelectionTypeChange(selectionType) {
@@ -273,8 +318,8 @@ class EntitiesContainer extends React.Component {
     this.handleInteraction();
 
     promise.then(deleted => {
-      this.reload();
       log.debug('successfully deleted entities', deleted);
+      this.handleChanged();
     }, this.handleError);
   }
 
@@ -641,6 +686,7 @@ class EntitiesContainer extends React.Component {
 
 EntitiesContainer.propTypes = {
   children: PropTypes.func.isRequired,
+  defaultReloadInterval: PropTypes.number.isRequired,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   extraLoadParams: PropTypes.object,
@@ -652,6 +698,7 @@ EntitiesContainer.propTypes = {
   loadEntities: PropTypes.func.isRequired,
   loadedFilter: PropTypes.filter,
   notify: PropTypes.func.isRequired,
+  reloadInterval: PropTypes.func,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
