@@ -21,18 +21,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import Theme from '../../utils/theme.js';
 
 import Layout from '../../components/layout/layout.js';
 
-const TabLayout = glamorous(Layout)({
-  borderBottom: '1px solid ' + Theme.lightGray,
-  marginTop: '30px',
-  marginBottom: '15px',
-  paddingBottom: '0px',
-});
+const TabLayout = styled(Layout)`
+  border-bottom: 2px solid ${Theme.green};
+  margin-top: 30px;
+  margin-bottom: 15px;
+`;
 
 export default TabLayout;
 
