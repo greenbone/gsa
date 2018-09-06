@@ -41,6 +41,7 @@ const Theme = {
   mediumLightRed: '#ebccd1', // used by: dialog errors border
   darkRed: '#a94442', // used by: dialog errors font
   blue: '#0000ff', // used by: links
+  lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
   dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
   inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select
   mediumBlue: '#5897fb', // used by active/hovered items in Select
