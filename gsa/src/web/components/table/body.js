@@ -21,11 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-export const TableBody = glamorous.tbody(
-  'table-body',
-);
+const TableBody = styled.tbody``;
 
 export default TableBody;
 
