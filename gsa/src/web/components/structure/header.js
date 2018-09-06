@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import Titlebar from '../bar/titlebar.js';
+import Titlebar from 'web/components/bar/titlebar';
 
 const Header = () => (
   <header>
