@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {Draggable} from 'react-beautiful-dnd';
 
@@ -36,17 +36,17 @@ export const GRID_ITEM_MARGIN = {
   right: 8,
 };
 
-const GridItem = glamorous.div('grid-item', {
-  display: 'flex',
-  flexGrow: 1,
-  flexShrink: 1,
-  flexBasis: 0,
-  userSelect: 'none',
-  marginTop: GRID_ITEM_MARGIN.top + 'px',
-  marginBottom: GRID_ITEM_MARGIN.bottom + 'px',
-  marginLeft: GRID_ITEM_MARGIN.left + 'px',
-  marginRight: GRID_ITEM_MARGIN.right + 'px',
-});
+const GridItem = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  user-select: none;
+  margin-top: ${GRID_ITEM_MARGIN.top}px;
+  margin-bottom: ${GRID_ITEM_MARGIN.bottom}px;
+  margin-left: ${GRID_ITEM_MARGIN.left}px;
+  margin-right: ${GRID_ITEM_MARGIN.right}px;
+`;
 
 const Item = ({
   children,
