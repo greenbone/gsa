@@ -64,11 +64,11 @@ import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
 import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
 import TaskWizard from 'web/wizard/taskwizard';
 
-import ScheduleComponent from '../schedules/component.js';
-import AlertComponent from '../alerts/component.js';
-import TargetComponent from '../targets/component';
+import ScheduleComponent from 'web/pages/schedules/component';
+import AlertComponent from 'web/pages/alerts/component';
+import TargetComponent from 'web/pages/targets/component';
 
-import TaskDialog from './dialog.js';
+import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.tasks.component');
