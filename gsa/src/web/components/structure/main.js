@@ -20,21 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import withLayout from '../layout/withLayout.js';
+import withLayout from 'web/components/layout/withLayout';
 
-const Main = glamorous.main({
-  padding: '5px 10px',
-  height: '100%',
-  paddingBottom: '20px',
-});
+const Main = styled.main`
+  padding: 5px 10px;
+  height: 100%;
+  padding-bottom: 20px;
+`;
 
 Main.displayName = 'Main';
 
 export default withLayout({
   flex: 'column',
-  align: ['start', 'stretch'],
+  align: 'start',
 })(Main);
 
 // vim: set ts=2 sw=2 tw=80:
