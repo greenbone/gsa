@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
@@ -23,47 +24,40 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../layout/layout.js';
+import Theme from 'web/utils/theme';
 
-const Panel = glamorous(Layout)({
-  backgroundColor: '#ffffff',
-  border: '1px solid #bce8f1',
-  borderRadius: '4px',
-  boxShadow: '0 1px 1px rgba(0, 0, 0, 0.05)',
-});
+import Layout from 'web/components/layout/layout';
 
-const Heading = glamorous.div({
-  display: 'flex',
-  padding: '10px 15px',
-  borderBottom: '1px solid #bce8f1',
-  borderTopRightRadius: '3px',
-  borderTopLeftRadius: '3px',
-  minHeight: '35px',
-  color: '#31708f',
-  backgroundColor: '#d9edf7',
-  borderColor: '#bce8f1',
-});
+const Panel = styled(Layout)`
+  background-color: ${Theme.white};
+  border: 1px solid ${Theme.lightBlue};
+`;
 
-const Footer = glamorous.div({
-  display: 'flex',
-  padding: '10px 15px',
-  borderBottom: '1px solid #bce8f1',
-  borderBottomRightRadius: '3px',
-  borderBottomLeftRadius: '3px',
-  minHeight: '35px',
-  color: '#31708f',
-  backgroundColor: '#d9edf7',
-});
+const Heading = styled.div`
+  display: flex;
+  padding: 10px 15px;
+  min-height: 35px;
+  background-color: ${Theme.lightBlue};
+  border-color: ${Theme.mediumBlue};
+`;
 
-const Body = glamorous.div({
-  display: 'flex',
-  padding: '15px',
-  flexGrow: '1',
-});
+const Footer = styled.div`
+  display: flex;
+  padding: 10px 15px;
+  border-bottom: 1px solid ${Theme.lightBlue};
+  min-height: 35px;
+  background-color: ${Theme.lightBlue};
+`;
+
+const Body = styled.div`
+  display: flex;
+  padding: 15px;
+  flex-grow: 1;
+`;
 
 const InfoPanel = ({
   heading,
