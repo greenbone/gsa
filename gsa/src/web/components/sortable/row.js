@@ -22,25 +22,24 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {Droppable} from 'react-beautiful-dnd';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
 import Resizer from './resizer';
 
 const MIN_HEIGHT = 175;
 
-const GridRow = glamorous.div('grid-row', {
-  display: 'flex',
-  minHeight: `${MIN_HEIGHT}px`,
-}, ({isDraggingOver, height}) => ({
-  background: isDraggingOver ? 'lightblue' : 'none',
-  height,
-}));
+const GridRow = styled.div`
+  display: flex;
+  height: ${props => props.height}px;
+  min-height: ${MIN_HEIGHT}px;
+  background: ${props => props.isDraggingOver ? 'lightblue' : 'none'};
+`;
 
 class Row extends React.Component {
   constructor(...args) {
