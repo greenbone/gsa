@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -35,41 +35,44 @@ import withLayout from '../layout/withLayout.js';
 
 import withChangeHandler from './withChangeHandler.js';
 
-export const StyledElement = glamorous.label({
-  display: 'inline-flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  fontWeight: 'normal',
-  cursor: 'pointer',
-});
+export const StyledElement = styled.label`
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+  ${props => props.disabled ?
+    {cursor: 'not-allowed'} : undefined
+  };
+`;
 
-export const StyledInput = glamorous.input({
+export const StyledInput = styled.input`
   /* use font and line settings from parents not from browser default */
-  fontamily: 'inherit',
-  fontSize: 'inherit',
+  font-family: inherit;
+  font-size: inherit;
 
-  padding: 0,
-  margin: 0,
-  marginLeft: '10px',
-  lineHeight: 'normal',
-  width: 'auto',
-  height: 'auto',
-  '& disabled': {
-    cursor: 'not-allowed',
-    opacity: '0.7',
-  },
-});
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
+  ${props => props.disabled ?
+    {
+      cursor: 'not-allowed',
+      opacity: 0.7,
+    } : undefined
+  };
+`;
 
-export const StyledTitle = glamorous.span(
-  ({disabled}) => ({
-    cursor: disabled ? 'not-allowed' : '',
-    opacity: disabled ? '0.5' : '1',
-  }),
-);
+export const StyledTitle = styled.span`
+  cursor: ${props => props.disabled ? 'not-allowed' : ''};
+  opacity: ${props => props.disabled ? '0.5' : '1'};
+`;
 
 const RadioComponent = ({title, children, disabled, ...other}) => {
   return (
-    <StyledElement>
+    <StyledElement disabled={disabled}>
       <Divider>
         <StyledInput
           {...other}
