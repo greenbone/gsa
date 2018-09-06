@@ -23,6 +23,8 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import {TASK_STATUS} from 'gmp/models/task';
@@ -32,6 +34,12 @@ import PropTypes from '../../utils/proptypes.js';
 import DetailsLink from '../../components/link/detailslink.js';
 
 import StatusBar from '../../components/bar/statusbar.js';
+
+const StyledDetailsLink = styled(DetailsLink)`
+  &:hover {
+    text-decoration: none;
+  }
+`;
 
 const TaskStatus = ({task, links = true}) => {
   let report_id;
@@ -47,7 +55,7 @@ const TaskStatus = ({task, links = true}) => {
   }
 
   return (
-    <DetailsLink
+    <StyledDetailsLink
       type="report"
       id={report_id}
       textOnly={!links}
@@ -56,7 +64,7 @@ const TaskStatus = ({task, links = true}) => {
         status={task.isContainer() ? TASK_STATUS.container : task.status}
         progress={task.progress}
       />
-    </DetailsLink>
+    </StyledDetailsLink>
   );
 };
 
