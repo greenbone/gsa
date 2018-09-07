@@ -32,6 +32,8 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import {isActive} from 'gmp/models/task';
+
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -61,6 +63,10 @@ import {
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import {create_pem_certificate} from 'web/utils/cert';
+import {
+  DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  LOAD_TIME_FACTOR,
+} from 'web/utils/constants';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -153,6 +159,20 @@ class ReportDetails extends React.Component {
     }
   }
 
+  startMeasurement() {
+    this.startTimeStamp = performance.now();
+  }
+
+  endMeasurement() {
+    if (!isDefined(this.startTimeStamp)) {
+      return 0;
+    }
+
+    const duration = performance.now() - this.startTimeStamp;
+    this.startTimeStamp = undefined;
+    return duration;
+  }
+
   load(filter = this.props.filter) {
     const {reportId, deltaReportId} = this.props;
 
@@ -166,9 +186,12 @@ class ReportDetails extends React.Component {
       filter,
     });
 
+    this.startMeasurement();
+
     this.setState({reportId, deltaReportId});
 
-    this.props.loadReport(reportId, deltaReportId, filter);
+    this.props.loadReport(reportId, deltaReportId, filter)
+      .then(() => this.startTimer());
   }
 
   loadReportFormats() {
@@ -185,8 +208,10 @@ class ReportDetails extends React.Component {
   }
 
   getReloadInterval() {
-    const {gmp} = this.props;
-    return gmp.reloadInterval;
+    const {entity} = this.props;
+    return isActive(entity.report.scan_run_status) ?
+      DEFAULT_RELOAD_INTERVAL_ACTIVE :
+      0; // report doesn't change anymore. no need to reload
   }
 
   startTimer() {
@@ -194,7 +219,16 @@ class ReportDetails extends React.Component {
       return;
     }
 
-    const interval = this.getReloadInterval();
+    const loadTime = this.endMeasurement();
+
+    log.debug('Loading time was', loadTime, 'milliseconds');
+
+    let interval = this.getReloadInterval();
+
+    if (loadTime > interval && interval !== 0) {
+      // ensure timer is longer then the loading procedure
+      interval = loadTime * LOAD_TIME_FACTOR;
+    }
 
     if (interval > 0) {
       this.timer = global.setTimeout(this.handleTimer, interval);
