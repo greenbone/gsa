@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import DatePicker from 'react-datepicker';
 
@@ -42,23 +42,19 @@ import Icon from '../icon/icon.js';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const StyledIcon = glamorous(Icon)({
-  marginLeft: '5px',
-}, ({disabled}) => ({
-  ':hover': {
-    cursor: disabled ? 'not-allowed ' : 'pointer',
-  },
-}));
+const StyledIcon = styled(Icon)`
+  margin-left: 5px;
+  :hover {
+    cursor: ${props => props.disabled ? 'not-allowed ' : 'pointer'};
+  };
+`;
 
-const StyledDiv = glamorous.div({
-  display: 'flex',
-  marginRight: '5px',
-},
-  ({width, disabled}) => ({
-    width,
-    color: disabled ? Theme.lightGray : undefined,
-  }),
-);
+const StyledDiv = styled.div`
+  display: flex;
+  margin-right: 5px;
+  width: ${props => props.width};
+  color: ${props => props.disabled ? Theme.lightGray : undefined};
+`;
 
 // InputField must be a Class to work correctly with Datepicker :-/
 class InputField extends React.Component { // eslint-disable-line react/prefer-stateless-function
