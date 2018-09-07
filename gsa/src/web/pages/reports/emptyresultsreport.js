@@ -31,6 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import InfoPanel from 'web/components/panel/infopanel';
 
@@ -50,7 +51,7 @@ const EmptyResultsReport = ({
   const min_qod = filter.get('min_qod');
   const has_severity_filter = isDefined(severity) && severity.relation === '>';
   return (
-    <Divider
+    <Layout
       flex="column"
       align={['start', 'stretch']}
       grow
@@ -115,7 +116,7 @@ const EmptyResultsReport = ({
           {_('Reset the filter settings to the defaults.')}
         </ReportPanel>
       </Divider>
-    </Divider>
+    </Layout>
   );
 };
 
