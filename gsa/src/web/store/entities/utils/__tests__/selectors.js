@@ -119,7 +119,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
 
 });
 
-describe('EntitiesSelector getIsLoadingEntity tests', () => {
+describe('EntitiesSelector isLoadingEntity tests', () => {
 
   test('should be false for undefined state', () => {
     const id = 'a1';
