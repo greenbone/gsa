@@ -123,6 +123,7 @@ class ReportDetails extends React.Component {
   }
 
   componentDidMount() {
+    this.isRunning = true;
     const {filter: filterString} = this.props.location.query;
 
     const filter = isDefined(filterString) ?
@@ -134,6 +135,8 @@ class ReportDetails extends React.Component {
   }
 
   componentWillUnmount() {
+    this.isRunning = false;
+
     this.clearTimer();
   }
 
@@ -187,6 +190,10 @@ class ReportDetails extends React.Component {
   }
 
   startTimer() {
+    if (!this.isRunning) {
+      return;
+    }
+
     const interval = this.getReloadInterval();
 
     if (interval > 0) {
