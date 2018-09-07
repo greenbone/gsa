@@ -174,17 +174,26 @@ class Page extends React.Component {
   }
 
   handleReportDeltaSelect(report) {
-    const {selectedDeltaReport} = this.state;
+    const {onFilterChanged} = this.props;
+    const {selectedDeltaReport, beforeSelectFilter} = this.state;
 
     if (isDefined(selectedDeltaReport)) {
       const {history} = this.props;
+
+      onFilterChanged(beforeSelectFilter);
+
       history.push('/report/delta/' + selectedDeltaReport.id + '/' +
         report.id);
     }
     else {
-      const {onFilterChanged, filter = new Filter()} = this.props;
+      const {filter = new Filter()} = this.props;
+
       onFilterChanged(filter.copy().set('task_id', report.task.id));
-      this.setState({selectedDeltaReport: report});
+
+      this.setState({
+        beforeSelectFilter: filter,
+        selectedDeltaReport: report,
+      });
     }
   }
 
