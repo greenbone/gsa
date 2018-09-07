@@ -24,12 +24,28 @@ import {createAll} from './utils/main';
 
 const {
   loadEntities,
-  loadEntity,
   reducer,
   selector,
   entitiesActions,
   entityActions,
 } = createAll('report');
+
+const loadEntity = gmp => (id, filter) => (dispatch, getState) => {
+  const rootState = getState();
+  const state = selector(rootState);
+
+  if (state.isLoadingEntity(id)) {
+    // we are already loading data
+    return Promise.resolve();
+  }
+
+  dispatch(entityActions.request(id));
+
+  return gmp.report.get({id}, {filter}).then(
+    response => dispatch(entityActions.success(id, response.data)),
+    error => dispatch(entityActions.error(id, error)),
+  );
+};
 
 export {
   loadEntities,
