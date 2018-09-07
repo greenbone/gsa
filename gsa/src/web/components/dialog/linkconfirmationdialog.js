@@ -23,11 +23,13 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Theme from 'web/utils/theme';
 
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
@@ -40,14 +42,14 @@ import Layout from '../../components/layout/layout.js';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
-const StyledLayout = glamorous(Layout)({
-  justifyContent: 'space-between',
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 15px 10px 15px',
-});
+const StyledLayout = styled(Layout)`
+  justify-content: space-between;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: ${Theme.lightGray};
+  margin-top: 15px;
+  padding: 10px 15px 10px 15px;
+`;
 
 class ConfirmationDialogContent extends React.Component {
 
