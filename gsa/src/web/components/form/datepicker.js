@@ -34,11 +34,11 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Theme from '../../utils/theme.js';
+import Theme from 'web/utils/theme';
 
-import Icon from '../icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
