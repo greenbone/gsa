@@ -35,6 +35,7 @@ import Layout from 'web/components/layout/layout';
 const Panel = styled(Layout)`
   background-color: ${Theme.white};
   border: 1px solid ${Theme.lightBlue};
+  margin-top: 5px;
 `;
 
 const Heading = styled.div`

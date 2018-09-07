@@ -29,11 +29,9 @@ import {map} from 'gmp/utils/array';
 
 import timezones from 'gmp/timezones';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import withLayout from '../layout/withLayout.js';
-
-import Select from './select.js';
+import Select from './select';
 
 
 const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
@@ -53,7 +51,9 @@ const TimeZoneSelectComponent = ({value = 'UTC', ...props}) => {
     <Select
       {...props}
       items={timezoneItems}
+      menuPosition="adjust"
       value={value}
+      width="230px"
     />
   );
 };
@@ -62,6 +62,6 @@ TimeZoneSelectComponent.propTypes = {
   value: PropTypes.string,
 };
 
-export default withLayout()(TimeZoneSelectComponent);
+export default TimeZoneSelectComponent;
 
 // vim: set ts=2 sw=2 tw=80:

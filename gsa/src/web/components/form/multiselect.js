@@ -24,18 +24,20 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import Downshift from 'downshift';
 
 import {arraysEqual} from 'gmp/utils/array';
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import ArrowIcon from '../icon/arrowicon.js';
+import ArrowIcon from 'web/components/icon/arrowicon';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
 
 import {
   Box,
@@ -47,35 +49,35 @@ import {
   option_items,
   SelectContainer,
   SelectedValue,
-} from './selectelements.js';
+} from './selectelements';
 
 const DEFAULT_WIDTH = '250px';
 
-export const MultiSelectedValue = glamorous(SelectedValue)({
-  display: 'inline',
-  border: '1px solid #aaa',
-  borderRadius: '3px',
-  padding: '0 3px',
-  marginRight: '4px',
-  marginTop: '1px',
-  marginBottom: '1px',
-  backgroundColor: '#ddd',
-  width: '80px', // acts similar to minWidth?
-});
+export const MultiSelectedValue = styled(SelectedValue)`
+  display: inline;
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 3px;
+  padding: 0 3px;
+  margin-right: 4px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  background-color: ${Theme.lightGray};
+  width: 80px; /* acts similar to minWidth? */
+`;
 
-const DeleteButton = glamorous.div({
-  display: 'inline',
-  color: '#888',
-  marginRight: '2px',
-  '&:hover': {
-    color: '#000',
-  },
-});
+const DeleteButton = styled.div`
+  display: inline;
+  color: ${Theme.mediumGray};
+  margin-right: 2px;
+  &:hover {
+    color: ${Theme.black};
+  };
+`;
 
-const Label = glamorous.span({
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-});
+const Label = styled.span`
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
 
 class MultiSelect extends React.Component {
 

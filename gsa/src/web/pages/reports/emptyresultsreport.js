@@ -28,13 +28,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import InfoPanel from '../../components/panel/infopanel.js';
+import InfoPanel from 'web/components/panel/infopanel';
 
-import ReportPanel from './reportpanel.js';
+import ReportPanel from './reportpanel';
 
 const EmptyResultsReport = ({
   all,
@@ -50,7 +51,7 @@ const EmptyResultsReport = ({
   const min_qod = filter.get('min_qod');
   const has_severity_filter = isDefined(severity) && severity.relation === '>';
   return (
-    <Divider
+    <Layout
       flex="column"
       align={['start', 'stretch']}
       grow
@@ -58,7 +59,7 @@ const EmptyResultsReport = ({
       <InfoPanel
         heading={
           _('The Report is empty. The filter does not match any of the ' +
-            '{{all}} results', {all})
+            '{{all}} results.', {all})
         }
       />
 
@@ -66,7 +67,7 @@ const EmptyResultsReport = ({
         {!levels.includes('g') &&
           <ReportPanel
             icon="filter.svg"
-            title={_('Log messages are currently excluded')}
+            title={_('Log messages are currently excluded.')}
             onClick={onFilterAddLogLevelClick}
           >
             {_('Include log messages in your filter settings.')}
@@ -77,7 +78,7 @@ const EmptyResultsReport = ({
           <ReportPanel
             icon="filter.svg"
             title={
-              _('You are using keywords setting a minimum limit on severity')
+              _('You are using keywords setting a minimum limit on severity.')
             }
             onClick={onFilterRemoveSeverityClick}
           >
@@ -101,7 +102,7 @@ const EmptyResultsReport = ({
 
         <ReportPanel
           icon="edit.svg"
-          title={_('Your filter settings may be too refined')}
+          title={_('Your filter settings may be too refined.')}
           onClick={onFilterEditClick}
         >
           {_('Adjust and update your filter settings.')}
@@ -109,13 +110,13 @@ const EmptyResultsReport = ({
 
         <ReportPanel
           icon="delete.svg"
-          title={_('Your last filter change may be too restrictive')}
+          title={_('Your last filter change may be too restrictive.')}
           onClick={onFilterResetClick}
         >
           {_('Reset the filter settings to the defaults.')}
         </ReportPanel>
       </Divider>
-    </Divider>
+    </Layout>
   );
 };
 

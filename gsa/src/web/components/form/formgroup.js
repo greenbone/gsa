@@ -23,14 +23,14 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
 
-import Layout from '../layout/layout';
-import PropTypes from '../../utils/proptypes.js';
+import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 const COLUMNS = [
   '8.33333333%',
@@ -47,32 +47,35 @@ const COLUMNS = [
   '100%',
 ];
 
-const FormGroupLayout = glamorous(Layout)({
-  paddingBottom: '10px',
-});
+const FormGroupLayout = styled(Layout)`
+  padding-bottom: 10px;
+`;
 
-const Title = glamorous.label({
-  display: 'inline-block',
-  maxWidth: '100%',
-  fontWeight: 'bold',
-  textAlign: 'right',
-  paddingLeft: '10px',
-  paddingRight: '10px',
-}, ({titleOffset, titleSize}) => ({
-  width: COLUMNS[parseInt(titleSize) - 1],
-  marginLeft: COLUMNS[parseInt(titleOffset) - 1],
-}));
+const Title = styled.label`
+  display: inline-block;
+  max-width: 100%;
+  font-weight: bold;
+  text-align: right;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: ${props => COLUMNS[parseInt(props.titleSize) - 1]};
+  margin-left: ${props => COLUMNS[parseInt(props.titleOffset) - 1]};
+`;
 
-const FormGroupContent = glamorous(Layout)(
-  ({size}) => isDefined(size) ? {
-    width: COLUMNS[parseInt(size) - 1],
-    paddingLeft: '10px',
-    paddingRight: '10px',
-  } : null,
-  ({offset}) => isDefined(offset) ? {
-    marginLeft: COLUMNS[parseInt(offset) - 1],
-  } : null,
-);
+const FormGroupContent = styled(Layout)`
+  ${props => {
+    const ret = {};
+    if (isDefined(props.size)) {
+      ret.width = COLUMNS[parseInt(props.size) - 1];
+      ret.paddingLeft = '10px';
+      ret.paddingRight = '10px';
+    }
+    if (isDefined(props.offset)) {
+      ret.marginLeft = COLUMNS[parseInt(props.offset) - 1];
+    }
+    return ret;
+  }}
+`;
 
 const FormGroup = ({
   children,

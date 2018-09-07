@@ -25,7 +25,7 @@ import 'core-js/fn/string/includes';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
@@ -34,99 +34,90 @@ import PropTypes from 'web/utils/proptypes';
 
 import Portal from 'web/components/portal/portal';
 
-export const Box = glamorous.div({
-  border: '1px solid ' + Theme.inputBorderGray,
-  borderRadius: '4px',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'stretch',
-  flexGrow: 1,
-  padding: '1px 5px',
-  backgroundColor: Theme.white,
-  color: Theme.black,
-  fontWeight: 'normal',
-}, ({isOpen}) => isOpen ? {
-  borderRadius: '4px 4px 0 0',
-} : null, ({disabled}) => disabled ? {
-  backgroundColor: Theme.dialogGray,
-} : null);
+export const Box = styled.div`
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: ${Theme.white};
+  color: ${Theme.black};
+  font-weight: normal;
+  border-radius: ${props => props.isOpen ? '4px 4px 0 0' : null};
+  background-color: ${props => props.disabled ? Theme.dialogGray : null};
+`;
 
-export const Input = glamorous.input({
-  flexGrow: 1,
-  padding: '1px',
-  margin: '5px',
+export const Input = styled.input`
+  flex-grow: 1;
+  padding: 1px;
+  margin: 5px;
 
   /* use font and line settings from parents not from browser default */
- fontFamily: 'inherit',
- fontSize: 'inherit',
- lineHeight: 'inherit',
-});
+ font-family: inherit;
+ font-size: inherit;
+ line-height: inherit;
+`;
 
-export const Item = glamorous.span({
-  padding: '1px 5px',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: Theme.mediumBlue,
-    color: 'white',
-  },
-}, ({isSelected}) => isSelected ? {
-  backgroundColor: Theme.lightGray,
-} : null, ({isActive}) => isActive ? {
-  backgroundColor: Theme.mediumBlue,
-  color: Theme.white,
-} : null);
+export const Item = styled.span`
+  padding: 1px 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${Theme.mediumBlue};
+    color: ${Theme.white};
+  };
+  background-color: ${props => props.isSelected ? Theme.lightGray : null};
+  {$props => props.isActive ?
+    {
+      backgroundColor: Theme.mediumBlue,
+      color: Theme.white,
+    } : null;
+  };
+`;
 
-export const ItemContainer = glamorous.div({
-  maxHeight: '320px',
-  overflowY: 'auto',
-  overflowX: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-});
+export const ItemContainer = styled.div`
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+`;
 
-const MenuContainer = glamorous.div({
-  outline: '0',
-  borderRadius: '0 0 4px 4px',
-  transition: 'opacity .1s ease',
-  boxShadow: '0 2px 3px 0 rgba(34,36,38,.15)',
-  borderColor: Theme.inputBorderGray,
-  borderWidth: '1px 1px 1px 1px',
-  borderStyle: 'solid',
-  backgroundColor: 'white',
-  display: 'flex',
-  flexDirection: 'column',
-  position: 'absolute',
-  zIndex: Theme.Layers.onTop,
-  marginTop: '-1px', // collapse top border
-  boxSizing: 'border-box',
-}, ({
-  position,
-  right,
-  width,
-  x,
-  y,
-}) => {
-  switch (position) {
-    case 'adjust':
-      return {
-        top: y,
-        left: x,
-        width,
-      };
-    case 'right':
-      return {
-        top: y,
-        right,
-        whiteSpace: 'nowrap',
-      };
-    default:
-      return {
-        top: y,
-        left: x,
-        whiteSpace: 'nowrap',
-      };
-  }
-});
+const MenuContainer = styled.div`
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  transition: opacity .1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  border: 1px solid ${Theme.inputBorderGray};
+  background-color: ${Theme.white};
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: ${Theme.Layers.onTop};
+  margin-top: -1px; /* collapse top border */
+  box-sizing: border-box;
+  top: ${props => props.y}px;
+  ${props => {
+    switch (props.position) {
+      case 'adjust':
+        return {
+          left: props.x + 'px',
+          width: props.width + 'px',
+        };
+      case 'right':
+        return {
+          right: props.right + 'px',
+          whiteSpace: 'nowrap',
+        };
+      default:
+        return {
+          left: props.x + 'px',
+          whiteSpace: 'nowrap',
+        };
+    }
+  }};
+`;
 
 const getParentNode = element => {
   if (element.nodeName === 'HTML') {
@@ -235,25 +226,22 @@ Menu.propTypes = {
   target: PropTypes.object.isRequired,
 };
 
-export const SelectContainer = glamorous.div({
-  display: 'flex',
-  flexDirection: 'column',
-  position: 'relative',
-}, ({width}) => ({
-  width,
-}));
+export const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: ${props => props.width};
+`;
 
-export const SelectedValue = glamorous.div({
-  display: 'flex',
-  alignItems: 'center',
-  flexGrow: 1,
-  cursor: 'pointer',
-  wordBreak: 'keep-all',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-}, ({disabled}) => disabled ? {
-  cursor: 'default',
-} : null);
+export const SelectedValue = styled.div`
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+`;
 
 export const case_insensitive_filter = search => {
   if (!isDefined(search) || search.length === 0) {
