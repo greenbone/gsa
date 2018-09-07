@@ -27,18 +27,18 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Dialog from '../dialog/dialog.js';
-import DialogContent from '../dialog/content.js';
-import DialogTitle from '../dialog/title.js';
-import ScrollableContent from '../dialog/scrollablecontent.js';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent from 'web/components/dialog/content';
+import DialogTitle from 'web/components/dialog/title';
+import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
-import Button from '../dialog/button.js';
+import Button from 'web/components/dialog/button';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
