@@ -499,7 +499,7 @@ const PageContent = ({
                     onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                     onFilterEditClick={onFilterEditClick}
-                    onFilterResetClick={onFilterResetClick}
+                    onFilterRemoveClick={onFilterRemoveClick}
                     onInteraction={onInteraction}
                     onTargetEditClick={onTargetEditClick}
                   />

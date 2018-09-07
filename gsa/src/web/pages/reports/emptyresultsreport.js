@@ -44,7 +44,7 @@ const EmptyResultsReport = ({
   onFilterEditClick,
   onFilterDecreaseMinQoDClick,
   onFilterRemoveSeverityClick,
-  onFilterResetClick,
+  onFilterRemoveClick,
 }) => {
   const levels = filter.get('levels', '');
   const severity = filter.getTerm('severity');
@@ -111,9 +111,9 @@ const EmptyResultsReport = ({
         <ReportPanel
           icon="delete.svg"
           title={_('Your last filter change may be too restrictive.')}
-          onClick={onFilterResetClick}
+          onClick={onFilterRemoveClick}
         >
-          {_('Reset the filter settings to the defaults.')}
+          {_('Remove all filter settings.')}
         </ReportPanel>
       </Divider>
     </Layout>
@@ -126,8 +126,8 @@ EmptyResultsReport.propTypes = {
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
+  onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
-  onFilterResetClick: PropTypes.func.isRequired,
 };
 
 export default EmptyResultsReport;

@@ -45,7 +45,7 @@ const ResultsTab = ({
   onFilterDecreaseMinQoDClick,
   onFilterEditClick,
   onFilterRemoveSeverityClick,
-  onFilterResetClick,
+  onFilterRemoveClick,
   onInteraction,
   onTargetEditClick,
 }) => {
@@ -68,8 +68,8 @@ const ResultsTab = ({
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
           onFilterEditClick={onFilterEditClick}
+          onFilterRemoveClick={onFilterRemoveClick}
           onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-          onFilterResetClick={onFilterResetClick}
         />
       );
     }
@@ -104,8 +104,8 @@ ResultsTab.propTypes = {
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
+  onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
-  onFilterResetClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
 };
