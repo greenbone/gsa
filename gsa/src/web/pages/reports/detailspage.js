@@ -58,11 +58,6 @@ import {
   selector as reportSelector,
 } from 'web/store/entities/reports';
 
-import {
-  loadEntity as loadTarget,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import {create_pem_certificate} from 'web/utils/cert';
@@ -386,7 +381,7 @@ class ReportDetails extends React.Component {
 
   loadTarget() {
     const {entity} = this.props;
-    const {target} = getTarget(entity);
+    const target = getTarget(entity);
 
     return this.props.loadTarget(target.id);
   }
@@ -398,7 +393,6 @@ class ReportDetails extends React.Component {
       filters = [],
       isLoading,
       reportFormats,
-      target,
       onInteraction,
       showError,
       showErrorMessage,
@@ -443,7 +437,7 @@ class ReportDetails extends React.Component {
               onReportFormatChange={this.handleReportFormatChange}
               onTagSuccess={this.handleChanged}
               onTargetEditClick={() => this.loadTarget()
-                .then(() => edit(target))}
+                .then(response => edit(response.data))}
               onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
               showError={showError}
               showErrorMessage={showErrorMessage}
@@ -491,7 +485,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
-    loadTarget: targetId => dispatch(loadTarget(gmp)(targetId)),
+    loadTarget: targetId => gmp.target.get({id: targetId}),
     loadReportFormats: () => dispatch(
       loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
     loadReport: (id, deltaId, filter) => dispatch(isDefined(deltaId) ?
@@ -503,20 +497,17 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 const mapStateToProps = (rootState, {match}) => {
   const {id, deltaid} = match.params;
   const filterSel = filterSelector(rootState);
-  const targetSel = targetSelector(rootState);
   const reportSel = reportSelector(rootState);
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
 
   const entity = isDefined(deltaid) ? deltaSel.getEntity(id, deltaid) :
     reportSel.getEntity(id);
-  const target = getTarget(entity);
   return {
     entity,
     filter: getFilter(entity),
     isLoading: !isDefined(entity),
     filters: filterSel.getEntities(RESULTS_FILTER_FILTER),
-    target: isDefined(target) ? targetSel.getEntity(target.id) : undefined,
     reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     deltaReportId: deltaid,
