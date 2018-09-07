@@ -22,21 +22,22 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {Droppable} from 'react-beautiful-dnd';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-const EmptyGridRow = glamorous.div({
-  margin: '8px 0px',
-  minHeight: '50px',
-}, ({active, isDraggingOver, height}) => ({
-  display: active ? 'flex' : 'none',
-  border: '1px dashed lightgray',
-  background: isDraggingOver ? 'lightblue' : 'none',
-  height,
-}));
+import Theme from 'web/utils/theme';
+
+const EmptyGridRow = styled.div`
+  margin: 8px 0px;
+  min-height: 50px;
+  display: ${props => props.active ? 'flex' : 'none'};
+  border: 1px dashed ${Theme.lightGray};
+  background: ${props => props.isDraggingOver ? Theme.lightBlue : 'none'};
+  height: ${props => props.height}px;
+`;
 
 const EmptyRow = ({
   children,

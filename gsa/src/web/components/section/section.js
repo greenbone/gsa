@@ -23,26 +23,26 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {withFolding, withFoldToggle} from '../folding/folding.js';
+import {withFolding, withFoldToggle} from 'web/components/folding/folding';
 
-import FoldIcon from '../icon/foldicon.js';
+import FoldIcon from 'web/components/icon/foldicon';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 import SectionHeader from './header.js';
 
 const FoldableLayout = withFolding(Layout);
 
-const FoldLayout = glamorous(Layout)({
-  marginLeft: '3px',
-  marginTop: '-2px',
-});
+const FoldLayout = styled(Layout)`
+  margin-left: 3px;
+  margin-top: -2px;
+`;
 
 const Section = ({
   children,

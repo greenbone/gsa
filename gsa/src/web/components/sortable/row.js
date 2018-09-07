@@ -30,6 +30,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
+import Theme from 'web/utils/theme';
+
 import Resizer from './resizer';
 
 const MIN_HEIGHT = 175;
@@ -38,7 +40,7 @@ const GridRow = styled.div`
   display: flex;
   height: ${props => props.height}px;
   min-height: ${MIN_HEIGHT}px;
-  background: ${props => props.isDraggingOver ? 'lightblue' : 'none'};
+  background: ${props => props.isDraggingOver ? Theme.lightBlue : 'none'};
 `;
 
 class Row extends React.Component {

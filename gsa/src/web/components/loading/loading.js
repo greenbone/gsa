@@ -24,26 +24,27 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
-import {css} from 'glamor';
+import styled, {keyframes} from 'styled-components';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-const Loader = glamorous.div({
-    border: '12px solid #c8d3d9',
-    borderTop: '12px solid #66c430',
-    borderRadius: '50%',
-    width: '80px',
-    height: '80px',
-    animation: `${css.keyframes({
-      '0%': {transform: `rotate(0deg)`},
-      '100%': {transform: `rotate(360deg)`},
-    })} 2s linear infinite`,
-});
+import Theme from 'web/utils/theme';
 
-const StyledLayout = glamorous(Layout)({
-  width: '100%',
-});
+const Loader = styled.div`
+  border: 12px solid ${Theme.lightGray};
+  border-top: 12px solid ${Theme.green};
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: ${keyframes({
+    '0%': {transform: 'rotate(0deg)'},
+    '100%': {transform: 'rotate(360deg)'},
+  })} 2s linear infinite;
+`;
+
+const StyledLayout = styled(Layout)`
+  width: 100%;
+`;
 
 const Loading = () => {
   return (

@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -57,13 +57,13 @@ const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 
-const Label = glamorous.label({
-  marginRight: '5px',
-});
+const Label = styled.label`
+  margin-right: 5px;
+`;
 
-const LeftDivider = glamorous(Divider)({
-  marginRight: '5px',
-});
+const LeftDivider = styled(Divider)`
+  margin-right: 5px;
+`;
 
 class PowerFilter extends React.Component {
 
