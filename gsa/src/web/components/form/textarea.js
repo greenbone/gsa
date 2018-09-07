@@ -22,31 +22,29 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import compose from '../../utils/compose.js';
-import Theme from '../../utils/theme.js';
+import compose from 'web/utils/compose';
+import Theme from 'web/utils/theme';
 
-import withLayout from '../layout/withLayout.js';
+import withLayout from 'web/components/layout/withLayout';
 
-import withChangeHandler from './withChangeHandler.js';
+import withChangeHandler from './withChangeHandler';
 
-const StyledTextArea = glamorous.textarea({
-  display: 'block',
-  height: 'auto',
-  color: Theme.darkGray,
-  backgroundColor: Theme.white,
-  backgroundImage: 'none',
-  border: '1px solid ' + Theme.inputBorderGray,
-  borderRadius: '4px',
-  padding: '1px 8px',
-},
-  ({disabled}) => disabled ? {cursor: 'not-allowed'} : null,
-  ({disabled, readonly}) => readonly || disabled ? {
-    backgroundColor: Theme.dialogGray,
-    opacity: 1,
-  } : null,
-);
+const StyledTextArea = styled.textarea`
+  display: block;
+  height: auto;
+  color: ${Theme.darkGray};
+  background-color: ${Theme.white};
+  background-image: none;
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: ${props => props.disabled ? 'not-allowed' : null};
+  background-color: ${props => props.disabled || props.readonly ?
+    Theme.dialogGray : null};
+  opacity: ${props => props.disabled || props.readonly ? 1 : null};
+`;
 
 export default compose(
   withLayout(),
