@@ -41,6 +41,7 @@ import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {YES_VALUE} from 'gmp/parser';
 
+import {LOAD_TIME_FACTOR} from 'web/utils/constants';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
 
@@ -59,8 +60,6 @@ const exclude_props = [
   'gmpname',
   'onDownload',
 ];
-
-const LOAD_TIME_FACTOR = 1.2;
 
 class EntitiesContainer extends React.Component {
 

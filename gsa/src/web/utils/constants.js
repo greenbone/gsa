@@ -22,4 +22,6 @@
  */
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 
+export const LOAD_TIME_FACTOR = 1.2;
+
 // vim: set ts=2 sw=2 tw=80:
