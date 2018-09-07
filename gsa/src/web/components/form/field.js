@@ -22,38 +22,37 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import compose from '../../utils/compose.js';
-import Theme from '../../utils/theme.js';
+import compose from 'web/utils/compose';
+import Theme from 'web/utils/theme';
 
-import withLayout from '../layout/withLayout.js';
+import withLayout from 'web/components/layout/withLayout';
 
-import withChangeHandler from './withChangeHandler.js';
+import withChangeHandler from './withChangeHandler';
 
-const StyledInput = glamorous.input({
+const StyledInput = styled.input`
   /* use font and line settings from parents not from browser default */
-  fontamily: 'inherit',
-  fontSize: 'inherit',
-  lineHeight: 'inherit',
-  display: 'block',
-  height: '22px',
-  color: Theme.darkGray,
-  backgroundColor: Theme.white,
-  backgroundImage: 'none',
-  border: '1px solid ' + Theme.inputBorderGray,
-  borderRadius: '4px',
-  padding: '1px 8px',
-  // "hack" to overshadow default color in Chrome's autofilled input fields
-  '&:-webkit-autofill': {
-    boxShadow: '0 0 0 1000px white inset',
-  },
-}, ({disabled}) => disabled ? {cursor: 'not-allowed'} : null,
-  ({disabled, readonly}) => readonly || disabled ? {
-    backgroundColor: Theme.dialogGray,
-    opacity: 1,
-  } : null,
-);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: ${Theme.darkGray};
+  background-color: ${Theme.white};
+  background-image: none;
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 4px;
+  padding: 1px 8px;
+  /* "hack" to overshadow default color in Chrome's autofilled input fields */
+  &:-webkit-autofill {
+    box-shadow: 0 0 0 1000px white inset;
+  };
+  cursor: ${props => props.disabled ? 'not-allowed' : null};
+  background-color: ${props => props.disabled || props.readonly ?
+    Theme.dialogGray : null};
+  opacity: ${props => props.disabled || props.readonly ? 1 : null};
+`;
 
 export default compose(
   withLayout(),
