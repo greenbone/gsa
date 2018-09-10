@@ -22,40 +22,29 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Button from '../form/button.js';
+import Button from 'web/components/form/button';
 
-const DialogButton = glamorous(Button)({
-  border: '1px solid #519032',
-  fontWeight: 'bold',
-  color: '#519032',
-  cursor: 'pointer',
-  background: '#87d050',
-  borderRadius: '4px',
-  padding: '0 15px',
-  lineHeight: '30px',
+import Theme from 'web/utils/theme';
 
-  ':hover': {
-    color: '#fff',
-    background: '#519032',
-  },
-},
-  ({loading}) => {
-    if (loading) {
-      return {
-        background: '#87d050 url(/img/loading.gif) center center no-repeat',
-        color: 'rgba(0, 0, 0, 0.0)',
+const DialogButton = styled(Button)`
+  border: 1px solid ${Theme.darkGreen};
+  color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGreen};
+  background: ${props => props.loading ?
+    Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat' :
+    Theme.lightGreen
+  };
 
-        // when loading, :hover needs to be overwritten explicitly
-        ':hover': {
-          background: '#87d050 url(/img/loading.gif) center center no-repeat',
-          color: 'rgba(0, 0, 0, 0.0)',
-        },
-      };
-    }
-  }
-);
+  /* when hovering these settings have to be overwritten explicitly */
+  :hover {
+    color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white};
+    background: ${props => props.loading ?
+      Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat' :
+      Theme.darkGreen
+    };
+  };
+`;
 
 export default DialogButton;
 

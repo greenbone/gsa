@@ -21,25 +21,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Theme from '../../utils/theme';
+import Theme from 'web/utils/theme';
 
-const DialogOverlay = glamorous.div({
-  position: 'fixed',
-  fontFamily: Theme.Font.dialog,
-  fontSize: '1.1em',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  margin: 0,
-  background: 'rgba(102, 102, 102, 0.5)',
-  zIndex: Theme.Layers.onTop,
-  transition: 'opacity 1s ease-in',
-  width: '100%',
-  height: '100%',
-});
+const DialogOverlay = styled.div`
+  position: fixed;
+  font-family: ${Theme.Font.dialog};
+  font-size: 1.1em;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  background: rgba(102, 102, 102, 0.5);
+  z-index: ${Theme.Layers.onTop};
+  transition: opacity 1s ease-in;
+  width: 100%;
+  height: 100%;
+`;
 
 export default DialogOverlay;
 

@@ -24,21 +24,23 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../layout/layout.js';
+import Theme from 'web/utils/theme';
 
-import Button from './button.js';
+import Layout from 'web/components/layout/layout';
 
-const StyledLayout = glamorous(Layout)({
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 20px 10px 15px',
-});
+import Button from './button';
+
+const StyledLayout = styled(Layout)`
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: ${Theme.lightGray};
+  margin-top: 15px;
+  padding: 10px 20px 10px 15px;
+`;
 
 const DialogFooter = ({
   title,

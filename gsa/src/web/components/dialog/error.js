@@ -23,41 +23,41 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Theme from '../../utils/theme.js';
+import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import CloseButton from './closebutton.js';
+import CloseButton from './closebutton';
 
-const StyledLayout = glamorous(Layout)({
-  padding: '15px',
-  margin: '20px 1em',
-  border: '1px solid ' + Theme.mediumLightRed,
-  borderRadius: '4px',
-  color: Theme.darkRed,
-  backgroundColor: Theme.lightRed,
-});
+const StyledLayout = styled(Layout)`
+  padding: 15px;
+  margin: 20px 1em;
+  border: 1px solid ${Theme.mediumLightRed};
+  border-radius: 4px;
+  color: ${Theme.darkRed};
+  background-color: ${Theme.lightRed};
+`;
 
-const DialogCloseButton = glamorous(CloseButton)({
-  border: '1px solid ' + Theme.lightRed,
-  background: '0',
-  color: Theme.darkRed,
+const DialogCloseButton = styled(CloseButton)`
+  border: 1px solid ${Theme.lightRed};
+  background: 0;
+  color: ${Theme.darkRed};
 
-  ':hover': {
-    border: '1px solid ' + Theme.darkRed,
-    background: '0',
-    color: Theme.black,
-    opacity: '.5',
-  },
-});
+  :hover {
+    border: 1px solid ${Theme.darkRed};
+    background: 0;
+    color: ${Theme.black};
+    opacity: .5;
+  };
+`;
 
 const DialogError = ({error, onCloseClick}) => {
   if (!isDefined(error)) {

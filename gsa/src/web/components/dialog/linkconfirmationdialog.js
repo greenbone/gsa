@@ -23,31 +23,33 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Dialog from '../dialog/dialog.js';
-import DialogContent from '../dialog/content.js';
-import DialogTitle from '../dialog/title.js';
-import ScrollableContent from '../dialog/scrollablecontent.js';
+import Theme from 'web/utils/theme';
 
-import Button from '../dialog/button.js';
+import Dialog from 'web/components/dialog/dialog';
+import DialogContent from 'web/components/dialog/content';
+import DialogTitle from 'web/components/dialog/title';
+import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
-import Layout from '../../components/layout/layout.js';
+import Button from 'web/components/dialog/button';
+
+import Layout from 'web/components/layout/layout';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
-const StyledLayout = glamorous(Layout)({
-  justifyContent: 'space-between',
-  borderWidth: '1px 0 0 0',
-  borderStyle: 'solid',
-  borderColor: '#ddd',
-  marginTop: '15px',
-  padding: '10px 15px 10px 15px',
-});
+const StyledLayout = styled(Layout)`
+  justify-content: space-between;
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: ${Theme.lightGray};
+  margin-top: 15px;
+  padding: 10px 15px 10px 15px;
+`;
 
 class ConfirmationDialogContent extends React.Component {
 
