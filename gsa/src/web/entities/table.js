@@ -31,22 +31,22 @@ import {isDefined} from 'gmp/utils/identity';
 import {forEach} from 'gmp/utils/array';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import FootNote from '../components/footnote/footnote.js';
+import FootNote from 'web/components/footnote/footnote';
 
-import {FoldState} from '../components/folding/folding.js';
+import {FoldState} from 'web/components/folding/folding';
 
-import FoldIcon from '../components/icon/foldicon.js';
+import FoldIcon from 'web/components/icon/foldicon';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Pagination from '../components/pagination/pagination.js';
+import Pagination from 'web/components/pagination/pagination';
 
-import TableBody from '../components/table/body.js';
-import StripedTable from '../components/table/stripedtable.js';
+import TableBody from 'web/components/table/body';
+import StripedTable from 'web/components/table/stripedtable';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import withComponentDefaults from '../utils/withComponentDefaults.js';
+import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 const exclude_props = [
   'row',
