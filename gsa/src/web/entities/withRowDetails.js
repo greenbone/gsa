@@ -23,13 +23,15 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isFunction} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
+
+import Theme from 'web/utils/theme';
 
 import Icon from '../components/icon/icon.js';
 
@@ -40,23 +42,21 @@ import DetailsLink from '../components/link/detailslink.js';
 import TableData from '../components/table/data.js';
 import TableRow from '../components/table/row.js';
 
-const Indent = glamorous.div({
-  display: 'flex',
-  width: '3em',
-  borderRight: '2px solid black',
-  marginRight: '1em',
-  flexShrink: 0, // don't shrink at all
-});
+const Indent = styled.div`
+  display: flex;
+  width: 3em;
+  border-right: 2px solid ${Theme.black};
+  margin-right: 1em;
+  flex-shrink: 0; /* don't shrink at all */
+`;
 
 Indent.displayName = 'Indent';
 
-const StyledTableRow = glamorous(TableRow, {
-  displayName: 'StyledTableRow',
-})({
-  '&, &:hover': {
-    backgroundColor: 'white !important',
-  },
-});
+const StyledTableRow = styled(TableRow)`
+  &, &:hover {
+    background-color: ${Theme.white} !important;
+  };
+`;
 
 const withRowDetails = (type, colSpan = '10') => Component => {
   const RowDetailsWrapper = ({entity, links = true, ...props}) => (
