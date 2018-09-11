@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -35,22 +35,19 @@ import Icon from '../icon/icon.js';
 import Layout from '../layout/layout.js';
 import IconDivider from '../layout/icondivider.js';
 
-const PaginationText = glamorous.span({
-  margin: '0 3px',
-});
+const PaginationText = styled.span`
+  margin: 0 3px;
+`;
 
-const PaginationLayout = glamorous(Layout)(
-  'pagination',
-  {
-    margin: '2px 3px',
-  }
-);
+const PaginationLayout = styled(Layout)`
+  margin: 2px 3px;
+`;
 
-const NavigationIcon = glamorous(Icon)({
-  '@media print': {
-    display: 'none',
-  },
-});
+const NavigationIcon = styled(Icon)`
+  @media print {
+    display: none;
+  };
+`;
 
 const Pagination = ({
     counts,
