@@ -26,12 +26,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import ExternalLink from '../../components/link/externallink.js';
-import ProtocolDocLink from '../../components/link/protocoldoclink.js';
-import Img from '../../components/img/img.js';
+import ExternalLink from 'web/components/link/externallink';
+import ProtocolDocLink from 'web/components/link/protocoldoclink';
+import Img from 'web/components/img/img';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
+import Section from 'web/components/section/section';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
