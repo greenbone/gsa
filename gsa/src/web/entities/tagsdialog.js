@@ -80,7 +80,7 @@ const TagsDialog = ({
               menuPosition="adjust"
               name="name"
               value={id}
-              width="230"
+              width="230px"
               items={renderSelectItems(tags)}
               onChange={onTagChanged}
             />
