@@ -28,12 +28,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Layout from '../layout/layout.js';
-import IconDivider from '../layout/icondivider.js';
+import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
 const PaginationText = styled.span`
   margin: 0 3px;
