@@ -24,15 +24,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import EntityBox from './box.js';
+import EntityBox from './box';
 
 const NoteBox = ({
   note,
