@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -51,13 +51,14 @@ import TableBody from '../../components/table/body.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-const Table = glamorous(SimpleTable)({
-  marginTop: '5px',
-  marginLeft: '45px',
-  '& td': {
-    padding: '0',
-  },
-});
+const Table = styled(SimpleTable)`
+  margin-top: 5px;
+  margin-left: 45px;
+  & td {
+    padding: 0;
+  };
+`;
+
 const Method = ({
   method,
   details = false,
