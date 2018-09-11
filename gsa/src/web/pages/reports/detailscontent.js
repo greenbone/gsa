@@ -395,7 +395,7 @@ const PageContent = ({
             >
               <TabList
                 active={activeTab}
-                align={['start', 'stretch']}i
+                align={['start', 'stretch']}
                 onActivateTab={onActivateTab}
               >
                 <Tab>
