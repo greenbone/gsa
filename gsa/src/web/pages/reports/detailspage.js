@@ -159,11 +159,11 @@ class ReportDetails extends React.Component {
     }
   }
 
-  startMeasurement() {
+  startDurationMeasurement() {
     this.startTimeStamp = performance.now();
   }
 
-  endMeasurement() {
+  endDurationMeasurement() {
     if (!isDefined(this.startTimeStamp)) {
       return 0;
     }
@@ -186,7 +186,7 @@ class ReportDetails extends React.Component {
       filter,
     });
 
-    this.startMeasurement();
+    this.startDurationMeasurement();
 
     this.setState({reportId, deltaReportId});
 
@@ -219,7 +219,7 @@ class ReportDetails extends React.Component {
       return;
     }
 
-    const loadTime = this.endMeasurement();
+    const loadTime = this.endDurationMeasurement();
 
     log.debug('Loading time was', loadTime, 'milliseconds');
 
