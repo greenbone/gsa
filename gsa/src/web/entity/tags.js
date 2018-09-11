@@ -26,7 +26,7 @@ import 'core-js/fn/set';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -56,9 +56,9 @@ import TableRow from 'web/components/table/row';
 
 import TagComponent from '../pages/tags/component';
 
-const SectionElementDivider = glamorous(Divider)({
-  marginBottom: '3px',
-});
+const SectionElementDivider = styled(Divider)`
+  margin-bottom: 3px;
+`;
 
 const SectionElements = withCapabilities(({
   capabilities,
