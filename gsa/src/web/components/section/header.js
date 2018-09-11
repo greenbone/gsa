@@ -24,40 +24,35 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
+
+import Theme from 'web/utils/theme';
 
 import Icon from '../icon/icon.js';
 
 import Layout from '../layout/layout.js';
 import withLayout from '../layout/withLayout.js';
 
-const HeaderLayout = glamorous(Layout, {
-  displayName: 'HeaderLayout',
-})(
-  'section-header',
-  {
-    margin: '10px 0px',
-    paddingBottom: '1px',
-    borderBottom: '2px solid black',
-    position: 'relative',
-  },
-);
+const HeaderLayout = styled(Layout)`
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid ${Theme.black};
+  position: relative;
+`;
 
-const HeaderHeading = withLayout()(glamorous.h2({
-  margin: '0 0 1px 0',
-}));
+const HeaderHeading = withLayout()(styled.h2`
+  margin: 0 0 1px 0;
+`);
 
 HeaderHeading.displayName = 'HeaderHeading';
 
-const HeaderIconLayout = glamorous(Layout, {
-  displayName: 'HeaderIconLayout',
-})({
-  marginRight: '5px',
-});
+const HeaderIconLayout = styled(Layout)`
+  margin-right: 5px;
+`;
 
 const SectionHeader = ({
   children,
