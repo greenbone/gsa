@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,13 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-const Anchor = glamorous.a(
-  'sort-by',
-  {
-    cursor: 'pointer',
-  }
-);
+const Anchor = styled.a`
+  cursor: pointer;
+`;
 
 class SortBy extends React.Component {
 
