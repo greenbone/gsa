@@ -22,35 +22,32 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Layout from '../layout/layout.js';
-import IconDivider from '../layout/icondivider.js';
+import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
-const PaginationText = glamorous.span({
-  margin: '0 3px',
-});
+const PaginationText = styled.span`
+  margin: 0 3px;
+`;
 
-const PaginationLayout = glamorous(Layout)(
-  'pagination',
-  {
-    margin: '2px 3px',
-  }
-);
+const PaginationLayout = styled(Layout)`
+  margin: 2px 3px;
+`;
 
-const NavigationIcon = glamorous(Icon)({
-  '@media print': {
-    display: 'none',
-  },
-});
+const NavigationIcon = styled(Icon)`
+  @media print {
+    display: none;
+  };
+`;
 
 const Pagination = ({
     counts,

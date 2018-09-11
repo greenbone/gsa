@@ -23,36 +23,38 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../components/layout/layout.js';
+import Theme from 'web/utils/theme';
 
-import InfoTable from '../components/table/infotable.js';
-import TableBody from '../components/table/body.js';
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import Layout from 'web/components/layout/layout';
 
-const Pre = glamorous.pre({
-  whiteSpace: 'pre-wrap',
-  wordWrap: 'normal',
-});
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-const BoxLayout = glamorous(Layout)({
-  border: '1px solid #CCCCCC',
-  padding: '5px',
-  marginBottom: '10px',
-  width: '400px',
-  '& h3': {
-    marginTop: 0,
-  },
-});
+const Pre = styled.pre`
+  white-space: pre-wrap;
+  word-wrap: normal;
+`;
+
+const BoxLayout = styled(Layout)`
+  border: 1px solid ${Theme.lightGray};
+  padding: 5px;
+  margin-bottom: 10px;
+  width: 400px;
+  & h3 {
+    margin-top: 0;
+  };
+`;
 
 const EntityBox = ({
   children,

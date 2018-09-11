@@ -23,40 +23,40 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {isFunction} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../components/icon/icon.js';
+import Theme from 'web/utils/theme';
 
-import Layout from '../components/layout/layout.js';
+import Icon from 'web/components/icon/icon';
 
-import DetailsLink from '../components/link/detailslink.js';
+import Layout from 'web/components/layout/layout';
 
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-const Indent = glamorous.div({
-  display: 'flex',
-  width: '3em',
-  borderRight: '2px solid black',
-  marginRight: '1em',
-  flexShrink: 0, // don't shrink at all
-});
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
+const Indent = styled.div`
+  display: flex;
+  width: 3em;
+  border-right: 2px solid ${Theme.black};
+  margin-right: 1em;
+  flex-shrink: 0; /* don't shrink at all */
+`;
 
 Indent.displayName = 'Indent';
 
-const StyledTableRow = glamorous(TableRow, {
-  displayName: 'StyledTableRow',
-})({
-  '&, &:hover': {
-    backgroundColor: 'white !important',
-  },
-});
+const StyledTableRow = styled(TableRow)`
+  &, &:hover {
+    background-color: ${Theme.white} !important;
+  };
+`;
 
 const withRowDetails = (type, colSpan = '10') => Component => {
   const RowDetailsWrapper = ({entity, links = true, ...props}) => (

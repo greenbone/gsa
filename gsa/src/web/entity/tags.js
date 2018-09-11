@@ -26,7 +26,7 @@ import 'core-js/fn/set';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -35,11 +35,11 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import EditIcon from 'web/components/icon/editicon.js';
-import ManualIcon from 'web/components/icon/manualicon.js';
-import Icon from 'web/components/icon/icon.js';
-import NewIcon from 'web/components/icon/newicon.js';
-import DeleteIcon from 'web/components/icon/deleteicon.js';
+import EditIcon from 'web/components/icon/editicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
+import NewIcon from 'web/components/icon/newicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -54,11 +54,11 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-import TagComponent from '../pages/tags/component';
+import TagComponent from 'web/pages/tags/component';
 
-const SectionElementDivider = glamorous(Divider)({
-  marginBottom: '3px',
-});
+const SectionElementDivider = styled(Divider)`
+  margin-bottom: 3px;
+`;
 
 const SectionElements = withCapabilities(({
   capabilities,

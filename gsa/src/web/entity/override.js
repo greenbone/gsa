@@ -26,19 +26,19 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
-} from '../utils/severity';
+} from 'web/utils/severity';
 
-import EntityBox from '../entity/box.js';
+import EntityBox from 'web/entity/box';
 
-import IconDivider from '../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import Icon from '../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import DetailsLink from '../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
 const OverrideBox = ({
   override,

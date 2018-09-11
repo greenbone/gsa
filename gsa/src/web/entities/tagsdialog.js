@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -30,21 +30,21 @@ import {renderSelectItems} from 'web/utils/render';
 
 import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from '../components/form/formgroup.js';
-import Select from '../components/form/select.js';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
 
-import NewIcon from '../components/icon/newicon.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../components/layout/divider.js';
-import Layout from '../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 const ENTITIES_THRESHOLD = 50000;
 
-const Notification = glamorous(Layout)({
-  justifyContent: 'center',
-});
+const Notification = styled(Layout)`
+  justify-content: center;
+`;
 
 const TagsDialog = ({
   comment = '',

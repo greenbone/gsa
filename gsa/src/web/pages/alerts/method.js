@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -40,24 +40,25 @@ import {
   METHOD_TYPE_HTTP_GET,
   METHOD_TYPE_SOURCEFIRE,
   METHOD_TYPE_VERINICE,
-} from 'gmp/models/alert.js';
+} from 'gmp/models/alert';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import SimpleTable from '../../components/table/simpletable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import SimpleTable from 'web/components/table/simpletable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-const Table = glamorous(SimpleTable)({
-  marginTop: '5px',
-  marginLeft: '45px',
-  '& td': {
-    padding: '0',
-  },
-});
+const Table = styled(SimpleTable)`
+  margin-top: 5px;
+  margin-left: 45px;
+  & td {
+    padding: 0;
+  };
+`;
+
 const Method = ({
   method,
   details = false,

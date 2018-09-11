@@ -23,18 +23,18 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Theme from '../utils/theme.js';
+import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({
   owner,
@@ -47,21 +47,18 @@ OwnerInfo.propTypes = {
   owner: PropTypes.object,
 };
 
-export const InfoLayout = glamorous(Layout)(
-  'entity-info',
-  {
-    borderSpacing: '0px',
-    color: Theme.mediumGray,
-    fontSize: '10px',
+export const InfoLayout = styled(Layout)`
+  border-spacing: 0px;
+  color: ${Theme.mediumGray};
+  font-size: 10px;
 
-    '& :nth-child(even)': {
-      marginLeft: '3px',
-    },
-    '& :nth-child(odd)': {
-      marginLeft: '30px',
-    },
-  },
-);
+  & :nth-child(even) {
+    margin-left: 3px;
+  };
+  & :nth-child(odd) {
+    margin-left: 30px;
+  };
+`;
 
 const EntityInfo = ({
   entity,

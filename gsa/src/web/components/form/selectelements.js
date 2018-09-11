@@ -230,7 +230,7 @@ export const SelectContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: ${props => props.width};
+  width: ${props => props.width}px;
 `;
 
 export const SelectedValue = styled.div`
