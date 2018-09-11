@@ -254,6 +254,7 @@ const PageContent = ({
   isLoading = true,
   reportFormats,
   reportFormatId,
+  sorting,
   showError,
   showErrorMessage,
   showSuccessMessage,
@@ -273,6 +274,7 @@ const PageContent = ({
   onRemoveFromAssetsClick,
   onReportDownloadClick,
   onReportFormatChange,
+  onSortChange,
   onTagSuccess,
   onTargetEditClick,
 }) => {
@@ -494,6 +496,8 @@ const PageContent = ({
                     hasTarget={!isContainer}
                     progress={task.progress}
                     results={results.entities}
+                    sortField={sorting.results.sortField}
+                    sortReverse={sorting.results.sortReverse}
                     status={status}
                     onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                     onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -501,6 +505,8 @@ const PageContent = ({
                     onFilterEditClick={onFilterEditClick}
                     onFilterRemoveClick={onFilterRemoveClick}
                     onInteraction={onInteraction}
+                    onSortChange={sortField =>
+                      onSortChange('results', sortField)}
                     onTargetEditClick={onTargetEditClick}
                   />
                 </TabPanel>
@@ -509,13 +515,34 @@ const PageContent = ({
                     counts={hosts.counts}
                     entities={hosts.entities}
                     filter={filter}
+                    sortField={sorting.hosts.sortField}
+                    sortReverse={sorting.hosts.sortReverse}
                     sortFunctions={hosts_sort_functions}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <HostsTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('hosts', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -525,13 +552,34 @@ const PageContent = ({
                     counts={ports.counts}
                     entities={ports.entities}
                     filter={filter}
+                    sortField={sorting.ports.sortField}
                     sortFunctions={ports_sort_functions}
+                    sortReverse={sorting.ports.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <PortsTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('ports', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -541,30 +589,71 @@ const PageContent = ({
                     counts={applications.counts}
                     entities={applications.entities}
                     filter={filter}
+                    sortField={sorting.apps.sortField}
                     sortFunctions={apps_sort_functions}
+                    sortReverse={sorting.apps.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <ApplicationsTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('apps', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
                 </TabPanel>
                 <TabPanel>
                   <ReportEntitiesContainer
-                    {...operatingsystems}
                     counts={operatingsystems.counts}
                     entities={operatingsystems.entities}
                     filter={filter}
                     sortFunctions={operatingssystems_sort_functions}
+                    sortField={sorting.os.sortField}
+                    sortReverse={sorting.os.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <OperatingSystemsTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('os', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -575,12 +664,33 @@ const PageContent = ({
                     entities={cves.entities}
                     filter={filter}
                     sortFunctions={cves_sort_functions}
+                    sortField={sorting.cves.sortField}
+                    sortReverse={sorting.cves.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <CvesTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('cves', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -591,12 +701,33 @@ const PageContent = ({
                     entities={closed_cves.entities}
                     filter={filter}
                     sortFunctions={closed_cves_sort_functions}
+                    sortField={sorting.closedcves.sortField}
+                    sortReverse={sorting.closedcves.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <ClosedCvesTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('closedcves', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -607,14 +738,35 @@ const PageContent = ({
                     entities={tls_certificates.entities}
                     filter={filter}
                     sortFunctions={tls_certificates_sort_functions}
+                    sortField={sorting.tlscerts.sortField}
+                    sortReverse={sorting.tlscerts.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <TLSCertificatesTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
+                        toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('tlscerts', sortField)}
                         onTlsCertificateDownloadClick={
                           onTlsCertificateDownloadClick}
-                        toggleDetailsIcon={false}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -625,12 +777,33 @@ const PageContent = ({
                     entities={errors.entities}
                     filter={filter}
                     sortFunctions={errors_sort_functions}
+                    sortField={sorting.errors.sortField}
+                    sortReverse={sorting.errors.sortReverse}
                     onInteraction={onInteraction}
                   >
-                    {props => (
+                    {({
+                      entities,
+                      entitiesCounts,
+                      sortBy,
+                      sortDir,
+                      onFirstClick,
+                      onLastClick,
+                      onNextClick,
+                      onPreviousClick,
+                    }) => (
                       <ErrorsTable
-                        {...props}
+                        entities={entities}
+                        entitiesCounts={entitiesCounts}
+                        filter={filter}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
                         toggleDetailsIcon={false}
+                        onFirstClick={onFirstClick}
+                        onLastClick={onLastClick}
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        onSortChange={
+                          sortField => onSortChange('errors', sortField)}
                       />
                     )}
                   </ReportEntitiesContainer>
@@ -663,6 +836,7 @@ PageContent.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  sorting: PropTypes.object,
   updating: PropTypes.bool,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
@@ -679,6 +853,7 @@ PageContent.propTypes = {
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
   onReportFormatChange: PropTypes.func.isRequired,
+  onSortChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,

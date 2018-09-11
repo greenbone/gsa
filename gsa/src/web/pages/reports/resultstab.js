@@ -40,6 +40,8 @@ const ResultsTab = ({
   hasTarget,
   progress,
   results,
+  sortField,
+  sortReverse,
   status,
   onFilterAddLogLevelClick,
   onFilterDecreaseMinQoDClick,
@@ -47,6 +49,7 @@ const ResultsTab = ({
   onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onInteraction,
+  onSortChange,
   onTargetEditClick,
 }) => {
   if (counts.filtered === 0) {
@@ -79,14 +82,35 @@ const ResultsTab = ({
       entities={results}
       counts={counts}
       filter={filter}
+      sortField={sortField}
       sortFunctions={results_sort_functions}
+      sortReverse={sortReverse}
       onInteraction={onInteraction}
     >
-      {props => (
+      {({
+        entities,
+        entitiesCounts,
+        sortBy,
+        sortDir,
+        onFirstClick,
+        onLastClick,
+        onNextClick,
+        onPreviousClick,
+      }) => (
         <ResultsTable
-          {...props}
           delta={delta}
+          entities={entities}
+          entitiesCounts={entitiesCounts}
+          filter={filter}
           footer={false}
+          sortBy={sortBy}
+          sortDir={sortDir}
+          toggleDetailsIcon={false}
+          onSortChange={onSortChange}
+          onFirstClick={onFirstClick}
+          onLastClick={onLastClick}
+          onNextClick={onNextClick}
+          onPreviousClick={onPreviousClick}
         />
       )}
     </ReportEntitiesContainer>
@@ -100,6 +124,8 @@ ResultsTab.propTypes = {
   hasTarget: PropTypes.bool,
   progress: PropTypes.number.isRequired,
   results: PropTypes.array.isRequired,
+  sortField: PropTypes.string.isRequired,
+  sortReverse: PropTypes.bool.isRequired,
   status: PropTypes.string.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
@@ -107,6 +133,7 @@ ResultsTab.propTypes = {
   onFilterRemoveClick: PropTypes.func.isRequired,
   onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
+  onSortChange: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
 };
 
