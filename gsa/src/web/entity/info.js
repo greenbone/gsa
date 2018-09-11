@@ -30,11 +30,11 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Theme from '../utils/theme.js';
+import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({
   owner,
