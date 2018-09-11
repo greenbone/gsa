@@ -28,14 +28,14 @@ import styled from 'styled-components';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Icon from '../icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Layout from '../layout/layout.js';
-import withLayout from '../layout/withLayout.js';
+import Layout from 'web/components/layout/layout';
+import withLayout from 'web/components/layout/withLayout';
 
 const HeaderLayout = styled(Layout)`
   margin: 10px 0px;
