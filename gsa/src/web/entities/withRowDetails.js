@@ -29,18 +29,18 @@ import _ from 'gmp/locale';
 
 import {isFunction} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Icon from '../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableData from '../components/table/data.js';
-import TableRow from '../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 const Indent = styled.div`
   display: flex;
