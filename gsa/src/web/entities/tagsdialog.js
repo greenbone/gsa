@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -42,9 +42,9 @@ import Layout from '../components/layout/layout.js';
 
 const ENTITIES_THRESHOLD = 50000;
 
-const Notification = glamorous(Layout)({
-  justifyContent: 'center',
-});
+const Notification = styled(Layout)`
+  justify-content: center;
+`;
 
 const TagsDialog = ({
   comment = '',
