@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -57,18 +57,14 @@ const exclude_props = [
   'children',
 ];
 
-const UpdatingStripedTable = glamorous(StripedTable)(
-  ({updating}) => {
-    return {
-      opacity: updating ? '0.2' : '1.0',
-    };
-  },
-);
+const UpdatingStripedTable = styled(StripedTable)`
+  opacity: ${props => props.updating ? '0.2' : '1.0'};
+`;
 
-const DetailsIcon = glamorous(FoldIcon)({
-  marginTop: '2px',
-  marginLeft: '2px',
-});
+const DetailsIcon = styled(FoldIcon)`
+  margin-top: 2px;
+  margin-left: 2px;
+`;
 
 class EntitiesTable extends React.Component {
 
