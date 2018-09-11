@@ -18821,6 +18821,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   int successes;
   const char  *permission, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
+  const char *permission_resource_type;
   int include_related;
 
   entity_t entity;
@@ -18843,6 +18844,14 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
   CHECK_VARIABLE_INVALID (resource_id, "Create Permission");
   CHECK_VARIABLE_INVALID (subject_type, "Create Permission");
   CHECK_VARIABLE_INVALID (resource_type, "Create Permission");
+
+  if (str_equal (resource_type, "host")
+      || str_equal (resource_type, "os"))
+    {
+      permission_resource_type = "asset";
+    }
+  else
+    permission_resource_type = resource_type;
 
   include_related = atoi (params_value (params, "include_related"));
 
@@ -18951,7 +18960,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                       "</resource>"
                       "<subject id=\"%s\"><type>%s</type></subject>"
                       "</create_permission>",
-                      resource_type,
+                      permission_resource_type,
                       comment ? comment : "",
                       resource_id,
                       subject_id,
@@ -18961,8 +18970,8 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
         }
 
       if ((strcmp (permission, "proxy") == 0)
-          && strcmp (resource_type, "result")
-          && strcmp (resource_type, "report"))
+          && strcmp (permission_resource_type, "result")
+          && strcmp (permission_resource_type, "report"))
         {
           response = NULL;
           entity = NULL;
@@ -18977,7 +18986,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                       "</resource>"
                       "<subject id=\"%s\"><type>%s</type></subject>"
                       "</create_permission>",
-                      resource_type,
+                      permission_resource_type,
                       comment ? comment : "",
                       resource_id,
                       subject_id,
@@ -18985,7 +18994,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
 
           CHECK_GMPF_RET
 
-          if (strcmp (resource_type, "task") == 0)
+          if (strcmp (permission_resource_type, "task") == 0)
             {
               response = NULL;
               entity = NULL;
@@ -19000,7 +19009,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                           "</resource>"
                           "<subject id=\"%s\"><type>%s</type></subject>"
                           "</create_permission>",
-                          resource_type,
+                          permission_resource_type,
                           comment ? comment : "",
                           resource_id,
                           subject_id,
@@ -19021,7 +19030,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                           "</resource>"
                           "<subject id=\"%s\"><type>%s</type></subject>"
                           "</create_permission>",
-                          resource_type,
+                          permission_resource_type,
                           comment ? comment : "",
                           resource_id,
                           subject_id,
@@ -19042,7 +19051,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                           "</resource>"
                           "<subject id=\"%s\"><type>%s</type></subject>"
                           "</create_permission>",
-                          resource_type,
+                          permission_resource_type,
                           comment ? comment : "",
                           resource_id,
                           subject_id,
@@ -19051,7 +19060,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
               CHECK_GMPF_RET
             }
 
-          if (strcmp (resource_type, "alert") == 0)
+          if (strcmp (permission_resource_type, "alert") == 0)
             {
               response = NULL;
               entity = NULL;
@@ -19066,7 +19075,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                           "</resource>"
                           "<subject id=\"%s\"><type>%s</type></subject>"
                           "</create_permission>",
-                          resource_type,
+                          permission_resource_type,
                           comment ? comment : "",
                           resource_id,
                           subject_id,
@@ -19075,9 +19084,9 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
               CHECK_GMPF_RET
             }
 
-          if (strcmp (resource_type, "agent") == 0
-              || strcmp (resource_type, "report_format") == 0
-              || strcmp (resource_type, "scanner") == 0)
+          if (strcmp (permission_resource_type, "agent") == 0
+              || strcmp (permission_resource_type, "report_format") == 0
+              || strcmp (permission_resource_type, "scanner") == 0)
             {
               response = NULL;
               entity = NULL;
@@ -19092,7 +19101,7 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
                           "</resource>"
                           "<subject id=\"%s\"><type>%s</type></subject>"
                           "</create_permission>",
-                          resource_type,
+                          permission_resource_type,
                           comment ? comment : "",
                           resource_id,
                           subject_id,
@@ -19118,7 +19127,15 @@ create_permissions_gmp (gvm_connection_t *connection, credentials_t *credentials
           while (params_iterator_next (&iter, &name, &param))
             {
               char *related_id = name;
-              char *related_type = param->value;
+              char *related_type;
+
+              if (str_equal (param->value, "host")
+                  || str_equal (param->value, "os"))
+                {
+                  related_type = "asset";
+                }
+              else
+                related_type = param->value;
 
               if (strcmp (permission, "read") == 0
                   || strcmp (permission, "proxy") == 0)
