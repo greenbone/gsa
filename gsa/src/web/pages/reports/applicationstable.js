@@ -43,7 +43,6 @@ import CpeIcon from '../../components/icon/cpeicon';
 const Header = ({
   currentSortBy,
   currentSortDir,
-  links = true,
   sort = true,
   onSortChange,
 }) => {
