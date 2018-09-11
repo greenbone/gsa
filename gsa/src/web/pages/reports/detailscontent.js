@@ -251,13 +251,12 @@ const PageContent = ({
   entity,
   filter,
   filters,
-  loading = true,
-  report_formats,
-  report_format_id,
+  isLoading = true,
+  reportFormats,
+  reportFormatId,
   showError,
   showErrorMessage,
   showSuccessMessage,
-  updating = false,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -301,7 +300,6 @@ const PageContent = ({
   } = report;
 
   const hasReport = isDefined(entity);
-  loading = loading && (!hasReport || updating);
 
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
@@ -314,7 +312,7 @@ const PageContent = ({
       <span>
         {_('Report:')}
       </span>
-      {loading ?
+      {isLoading ?
         <span>
           {_('Loading')}
         </span> :
@@ -355,10 +353,10 @@ const PageContent = ({
         <ToolBarIcons
           delta={delta}
           filter={filter}
-          loading={loading}
+          loading={isLoading}
           report={report}
-          report_format_id={report_format_id}
-          report_formats={report_formats}
+          report_format_id={reportFormatId}
+          report_formats={reportFormats}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
@@ -386,7 +384,7 @@ const PageContent = ({
       <Section
         header={header}
       >
-        {loading ?
+        {isLoading ?
           <Loading/> :
           <React.Fragment>
             <TabLayout
@@ -501,7 +499,7 @@ const PageContent = ({
                     onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
                     onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                     onFilterEditClick={onFilterEditClick}
-                    onFilterResetClick={onFilterResetClick}
+                    onFilterRemoveClick={onFilterRemoveClick}
                     onInteraction={onInteraction}
                     onTargetEditClick={onTargetEditClick}
                   />
@@ -659,9 +657,9 @@ PageContent.propTypes = {
   entity: PropTypes.model,
   filter: PropTypes.filter,
   filters: PropTypes.array,
-  loading: PropTypes.bool,
-  report_format_id: PropTypes.id,
-  report_formats: PropTypes.array,
+  isLoading: PropTypes.bool,
+  reportFormatId: PropTypes.id,
+  reportFormats: PropTypes.array,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,

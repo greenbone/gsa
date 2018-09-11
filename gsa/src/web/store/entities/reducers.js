@@ -41,7 +41,10 @@ import {reducer as override} from './overrides';
 import {reducer as permission} from './permissions';
 import {reducer as portlist} from './portlists';
 import {reducer as reportformat} from './reportformats';
-import {reducer as report} from './reports';
+import {
+  reducer as report,
+  deltaReducer as deltaReport,
+} from './reports';
 import {reducer as result} from './results';
 import {reducer as role} from './roles';
 import {reducer as scanconfig} from './scanconfigs';
@@ -61,6 +64,7 @@ const entitiesReducer = combineReducers({
   cpe,
   credential,
   cve,
+  deltaReport,
   dfncert,
   filter,
   group,

@@ -29,7 +29,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {TASK_STATUS} from 'gmp/models/task';
+import {TASK_STATUS, isActive} from 'gmp/models/task';
 
 import PropTypes from '../../utils/proptypes.js';
 import {renderComponent} from '../../utils/render.js';
@@ -57,12 +57,9 @@ const IconActions = ({
   onReportDeltaSelect,
 }) => {
   const {report} = entity;
-  const active = report.scan_run_status !== TASK_STATUS.running &&
-    report.scan_run_status !== TASK_STATUS.requested &&
-    report.scan_run_status !== TASK_STATUS.stoprequested &&
-    report.scan_run_status !== TASK_STATUS.resumerequested;
+  const scanActive = isActive(report.scan_run_status);
 
-  const title = active ? _('Delete Report') : _('Scan is active');
+  const title = scanActive ? _('Scan is active') : _('Delete Report');
 
   return (
     <IconDivider
@@ -89,10 +86,10 @@ const IconActions = ({
           />
       }
       <DeleteIcon
-        active={active}
+        active={!scanActive}
         value={entity}
         title={title}
-        onClick={active ? onReportDeleteClick : undefined}
+        onClick={scanActive ? undefined : onReportDeleteClick}
       />
     </IconDivider>
   );

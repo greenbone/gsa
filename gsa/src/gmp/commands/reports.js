@@ -86,12 +86,12 @@ class ReportCommand extends EntityCommand {
     });
   }
 
-  download({id}, {report_format_id, delta_report_id, filter}) {
+  download({id}, {reportFormatId, deltaReportId, filter}) {
     return this.httpGet({
       cmd: 'get_report',
-      delta_report_id,
+      delta_report_id: deltaReportId,
       report_id: id,
-      report_format_id,
+      report_format_id: reportFormatId,
       filter: isDefined(filter) ? filter.all() : ALL_FILTER,
     }, {transform: DefaultTransform, responseType: 'arraybuffer'});
   }
@@ -129,6 +129,15 @@ class ReportCommand extends EntityCommand {
       id,
       delta_report_id,
       filter,
+      ignore_pagination: 1,
+    }, options).then(this.transformResponse);
+  }
+
+  get({id}, {filter, ...options} = {}) {
+    return this.httpGet({
+      id,
+      filter,
+      ignore_pagination: 1,
     }, options).then(this.transformResponse);
   }
 
