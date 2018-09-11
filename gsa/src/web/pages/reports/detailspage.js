@@ -101,6 +101,44 @@ class ReportDetails extends React.Component {
     this.state = {
       activeTab: 1,
       showFilterDialog: false,
+      sorting: {
+        results: {
+          sortField: 'created',
+          sortReverse: true,
+        },
+        apps: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        ports: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        hosts: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        os: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        cves: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        closedcves: {
+          sortField: 'severity',
+          sortReverse: true,
+        },
+        tlscerts: {
+          sortField: 'dn',
+          sortReverse: false,
+        },
+        errors: {
+          sortField: 'error',
+          sortReverse: false,
+        },
+      },
     };
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
@@ -124,6 +162,7 @@ class ReportDetails extends React.Component {
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
       .bind(this);
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
   }
@@ -413,6 +452,25 @@ class ReportDetails extends React.Component {
     }
   }
 
+  handleSortChange(name, sortField) {
+    this.handleInteraction();
+
+    const prev = this.state.sorting[name];
+
+    const sortReverse = sortField === prev.sortField ?
+      !prev.sortReverse : false;
+
+    this.setState({
+      sorting: {
+        ...this.state.sorting,
+        [name]: {
+          sortField,
+          sortReverse,
+        },
+      },
+    });
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
@@ -443,6 +501,7 @@ class ReportDetails extends React.Component {
       activeTab,
       reportFormatId,
       showFilterDialog,
+      sorting,
     } = this.state;
 
     const {report} = entity || {};
@@ -461,6 +520,7 @@ class ReportDetails extends React.Component {
               isLoading={isLoading}
               reportFormatId={reportFormatId}
               reportFormats={reportFormats}
+              sorting={sorting}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
@@ -476,6 +536,7 @@ class ReportDetails extends React.Component {
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
               onReportDownloadClick={this.handleReportDownload}
               onReportFormatChange={this.handleReportFormatChange}
+              onSortChange={this.handleSortChange}
               onTagSuccess={this.handleChanged}
               onTargetEditClick={() => this.loadTarget()
                 .then(response => edit(response.data))}

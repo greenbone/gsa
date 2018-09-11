@@ -20,18 +20,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
-
-import logger from 'gmp/log';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SortBy from '../../components/sortby/sortby.js';
+import SortBy from 'web/components/sortby/sortby';
 
-const log = logger.getLogger('web.pages.reports.reportentitiescontainer');
+const sortEntities = ({
+  entities,
+  sortFunctions = {},
+  sortField,
+  sortReverse,
+}) => {
+  const compareFunc = sortFunctions[sortField];
+
+  if (!isDefined(compareFunc)) {
+    return entities;
+  }
+
+  const compare = compareFunc(sortReverse);
+  return [...entities].sort(compare);
+};
+
+const getRows = (filter, counts) => {
+  let rows = isDefined(filter) ? filter.get('rows') : undefined;
+
+  if (!isDefined(rows)) {
+    rows = counts.rows;
+  }
+  return rows;
+};
 
 class ReportEntitiesContainer extends React.Component {
 
@@ -39,201 +59,80 @@ class ReportEntitiesContainer extends React.Component {
     super(...args);
 
     this.state = {
-      sort: {},
+      entitiesIndex: 0,
+      page: 0,
+      sortReverse: false,
     };
 
     this.handleFirst = this.handleFirst.bind(this);
     this.handleLast = this.handleLast.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrevious = this.handlePrevious.bind(this);
-    this.handleSortChange = this.handleSortChange.bind(this);
   }
 
-  componentDidMount() {
-    const {entities, filter, counts} = this.props;
+  static getDerivedStateFromProps(props, state) {
+    const rows = getRows(props.filter, props.counts);
+    const {filtered} = props.counts;
+    const last = Math.floor(filtered / rows);
 
-    this.updateFromEntities(entities, filter, counts);
+    if (state.page > last) {
+      return {
+        page: last,
+      };
+    }
+
+    return null;
   }
 
-  componentWillReceiveProps(next) {
-    const {entities, filter, counts} = next;
-
-    if (entities !== this.props.entities ||
-      (isDefined(filter) && !filter.equals(this.props.filter))) {
-      this.updateFromEntities(entities, filter, counts);
-    }
-  }
-
-  updateFromEntities(entities, filter, counts) {
-    const {
-      sort: state_sort,
-      entities: state_entities,
-    } = this.state;
-
-    filter = isDefined(filter) ? filter : this.props.filter;
-
-    const reverse_field = filter.get('sort-reverse');
-    const reverse = isDefined(reverse_field);
-    const field = reverse ? reverse_field : filter.get('sort');
-
-    // goto first page if sorting or entities have changed
-    const next = !isDefined(state_sort) || state_sort.reverse !== reverse ||
-      state_sort.field !== field || state_entities !== entities ?
-      counts.first - 1 :
-      undefined;
-
-    const sort = {
-      reverse,
-      field,
-    };
-
-    this.load({
-      entities,
-      counts,
-      filter,
-      next_entity_index: next,
-      sort,
-    });
-  }
-
-  load({
-    entities,
-    counts,
-    filter,
-    rows,
-    sort,
-    next_entity_index,
-  } = {}) {
-    const {
-      entities: state_entities,
-      counts: state_counts,
-      current_entity_index,
-      sort: state_sort,
-      filter: state_filter,
-    } = this.state;
-
-    const index = isDefined(next_entity_index) ? next_entity_index :
-      current_entity_index;
-
-    if (!isDefined(entities)) {
-      entities = state_entities;
-    }
-
-    if (!isDefined(counts)) {
-      counts = state_counts;
-    }
-
-    if (!isDefined(sort)) {
-      sort = state_sort;
-    }
-
-    if (!isDefined(filter)) {
-      filter = state_filter;
-    }
-
-    if (!isDefined(rows)) {
-      rows = filter.get('rows');
-
-      if (!isDefined(rows)) {
-        rows = counts.rows;
-      }
-    }
-
-
-    const paged_entities = entities.slice(index, index + rows);
-    const paged_counts = counts.clone({
-      first: index + 1,
-      length: paged_entities.length,
-      rows,
-    });
-
-    this.setState({
-      current_entity_index: index,
-      displayed_entity_rows: rows,
-      entities,
-      counts,
-      paged_entities,
-      paged_counts,
-      filter,
-      sort,
-    });
-  }
-
-  handleSortChange(field) {
-    const {
-      entities,
-      sort: old_sort,
-    } = this.state;
-
-    const {sortFunctions = {}} = this.props;
-
-    const new_sort = {
-      field,
-      reverse: field === old_sort.field ? !old_sort.reverse : false,
-    };
-
-    const compare_func = sortFunctions[field];
-
-    if (!isDefined(compare_func)) {
-      // ensure not to crash if a compare function hasn't be defined yet
-      log.error('Missing compare function for column', field);
-      return;
-    }
-
-    this.handleInteraction();
-
-    const compare = compare_func(new_sort.reverse);
-
-    this.load({
-      entities: entities.sort(compare),
-      sort: new_sort,
-    });
+  getRows() {
+    const {filter, counts} = this.props;
+    return getRows(filter, counts);
   }
 
   handleFirst() {
     this.handleInteraction();
 
-    this.load({next_entity_index: 0});
+    this.setState({page: 0});
   }
 
   handleLast() {
     const {
-      displayed_entity_rows: rows,
       counts,
-    } = this.state;
+    } = this.props;
 
     const {filtered} = counts;
+    const rows = this.getRows();
 
-    const last = Math.floor((filtered - 1) / rows) * rows + 1;
+    const last = Math.floor((filtered - 1) / rows);
 
     this.handleInteraction();
 
-    this.load({next_entity_index: last});
+    this.setState({
+      page: last,
+    });
   }
 
   handleNext() {
     const {
-      current_entity_index,
-      displayed_entity_rows: rows,
+      page,
     } = this.state;
 
     this.handleInteraction();
 
-    this.load({
-      next_entity_index: current_entity_index + rows,
+    this.setState({
+      page: page + 1,
     });
   }
 
   handlePrevious() {
     const {
-      current_entity_index,
-      displayed_entity_rows: rows,
+      page,
     } = this.state;
 
     this.handleInteraction();
 
-    this.load({
-      next_entity_index: current_entity_index - rows,
+    this.setState({
+      page: page - 1,
     });
   }
 
@@ -245,32 +144,48 @@ class ReportEntitiesContainer extends React.Component {
   }
 
   render() {
-    const {children, sortFunctions} = this.props;
     const {
-      paged_entities: entities,
-      paged_counts: entitiesCounts,
-      filter,
-      sort,
+      children,
+      counts,
+      entities,
+      sortFunctions,
+      sortReverse,
+      sortField,
+    } = this.props;
+    const {
+      page,
     } = this.state;
 
-    if (!isDefined(children)) {
+    if (!isDefined(children) || !isDefined(entities)) {
       return null;
     }
 
-    const {field, reverse} = sort;
+    const sortedEntities = sortEntities({
+      entities,
+      sortFunctions,
+      sortReverse,
+      sortField,
+    });
+
+    const rows = this.getRows();
+    const entitiesIndex = page * rows;
+    const pagedEntities = sortedEntities.slice(
+      entitiesIndex, entitiesIndex + rows);
+    const pagedCounts = counts.clone({
+      first: entitiesIndex + 1,
+      length: pagedEntities.length,
+      rows,
+    });
 
     return children({
-      entities,
-      entitiesCounts,
-      filter,
-      sortBy: field,
-      sortDir: reverse ? SortBy.DESC : SortBy.ASC,
+      entities: pagedEntities,
+      entitiesCounts: pagedCounts,
+      sortBy: sortField,
+      sortDir: sortReverse ? SortBy.DESC : SortBy.ASC,
       onFirstClick: this.handleFirst,
       onLastClick: this.handleLast,
       onNextClick: this.handleNext,
       onPreviousClick: this.handlePrevious,
-      onSortChange: isDefined(sortFunctions) ? this.handleSortChange :
-        undefined,
     });
   }
 }
@@ -280,7 +195,9 @@ ReportEntitiesContainer.propTypes = {
   counts: PropTypes.counts.isRequired,
   entities: PropTypes.array.isRequired,
   filter: PropTypes.filter,
+  sortField: PropTypes.string.isRequired,
   sortFunctions: PropTypes.object,
+  sortReverse: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
