@@ -22,16 +22,16 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {scaleBand, scaleLinear} from 'd3-scale';
 
 import {shorten} from 'gmp/utils/string';
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from '../layout/layout';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
 import Axis from './axis';
 import Group from './group';
@@ -39,9 +39,9 @@ import Legend from './legend';
 import ToolTip from './tooltip';
 import Svg from './svg';
 
-const StyledLayout = glamorous(Layout)({
-  overflow: 'hidden',
-});
+const StyledLayout = styled(Layout)`
+  overflow: hidden;
+`;
 
 const LEGEND_MARGIN = 20;
 
