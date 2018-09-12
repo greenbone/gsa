@@ -49,21 +49,17 @@ describe('GmpSettings tests', () => {
     });
 
     expect(settings.reloadinterval).toEqual(10);
-    expect(settings.locale).toEqual('en');
+    expect(settings.locale).toBeUndefined();
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
-    expect(settings.token).toEqual('atoken');
+    expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
+    expect(settings.timezone).toBeUndefined();
+    expect(settings.username).toBeUndefined();
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(0);
   });
 
   test('should init from store', () => {
@@ -92,11 +88,7 @@ describe('GmpSettings tests', () => {
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(0);
   });
 
   test('should ensure options override settings from storage', () => {
@@ -127,21 +119,17 @@ describe('GmpSettings tests', () => {
     });
 
     expect(settings.reloadinterval).toEqual(10);
-    expect(settings.locale).toEqual('en');
+    expect(settings.locale).toEqual('de');
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
-    expect(settings.token).toEqual('atoken');
+    expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
+    expect(settings.timezone).toEqual('cest');
+    expect(settings.username).toEqual('bar');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(0);
   });
 
   test('should delete settings from storage', () => {
@@ -159,11 +147,7 @@ describe('GmpSettings tests', () => {
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(0);
 
     settings.locale = undefined;
     expect(storage.removeItem).toBeCalledWith('locale');

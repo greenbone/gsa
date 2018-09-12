@@ -37,28 +37,20 @@ class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
       reloadinterval = DEFAULT_RELOAD_INTERVAL,
-      locale,
       manualurl,
       protocol = global.location.protocol,
       protocoldocurl,
       server = global.location.host,
-      token,
       timeout,
-      timezone,
-      username,
-    } = {...storage, ...options};
+    } = {...options};
     this.storage = storage;
 
     this.reloadinterval = reloadinterval;
-    this.locale = locale;
     this.manualurl = manualurl;
     this.protocol = protocol;
     this.protocoldocurl = protocoldocurl;
     this.server = server;
-    this.token = token;
-    this.timezone = timezone;
     this.timeout = timeout;
-    this.username = username;
   }
 
   set token(value) {
