@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import equal from 'fast-deep-equal';
 
@@ -60,26 +60,26 @@ const ownProps = [
   'onRemoveClick',
 ];
 
-const Download = glamorous.a({
-  color: Theme.black,
-  textDecoration: 'none',
-  display: 'none',
-  '&:link': {
-    color: Theme.black,
-    textDecoration: 'none',
-  },
-  '&:hover': {
-    color: Theme.white,
-    textDecoration: 'none',
-  },
-});
+const Download = styled.a`
+  color: ${Theme.black};
+  text-decoration: none:
+  display: none;
+  &:link {
+    color: ${Theme.black};
+    text-decoration: none;
+  };
+  &:hover {
+    color: ${Theme.white};
+    text-decoration: none;
+  };
+`;
 
-const FilterString = glamorous.div({
-  fontSize: '10px',
-  color: Theme.mediumGray,
-  padding: '5px',
-  overflow: 'hidden',
-});
+const FilterString = styled.div`
+  font-size: 10px;
+  color: ${Theme.mediumGray};
+  padding: 5px;
+  overflow: hidden;
+`;
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
 
