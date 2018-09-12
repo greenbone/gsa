@@ -20,65 +20,104 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/entries';
+import 'core-js/fn/object/values';
 
 import {isDefined, isString} from './utils/identity';
 
+export const DEFAULT_LOG_LEVEL = 'error';
+
 const GREENBONE_GREEN = '#66c430';
 
-const LogLevels = {
+export const LogLevels = {
   trace: 0,
   debug: 1,
   info: 2,
   warn: 3,
   error: 4,
+  silent: 5,
 };
+
+const isValidLogLevel = level => isString(level) &&
+  level.toLowerCase() in LogLevels;
+
+const getLogLevel = loglevel => isValidLogLevel(loglevel) ?
+  LogLevels[loglevel.toLowerCase()] : undefined;
 
 function noop() {};
 
 /* eslint-disable no-console */
 
-export class Logger {
+class Logger {
 
-  constructor(name, level) {
+  constructor(name, level = DEFAULT_LOG_LEVEL) {
     this.name = name;
-    this.setLevel(level);
+    this.setDefaultLevel(level);
   }
 
-  setLevel(level) {
-    level = isString(level) ? level.toLowerCase() : undefined;
-    const loglevel = LogLevels[level];
+  _updateLogging(newLogValue) {
+    for (const [logName, logValue] of Object.entries(LogLevels)) {
+      if (logValue === LogLevels.silent) {
+        continue;
+      }
 
-    if (isDefined(loglevel)) {
-      this.level = level;
-    }
-    else {
-      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
-      level = 5;
-      this.level = 'silent';
-    }
-
-    for (const logname in LogLevels) { // eslint-disable-line guard-for-in
-      this[logname] = LogLevels[logname] < loglevel ? noop : (...args) => {
-        return console[logname]('%c' + this.name, 'color: ' + GREENBONE_GREEN,
+      this[logName] = logValue < newLogValue ? noop : (...args) => { // eslint-disable-line no-loop-func
+        return console[logName]('%c' + this.name, 'color: ' + GREENBONE_GREEN,
           ...args);
       };
     }
   }
+
+  setDefaultLevel(level) {
+    let logValue = getLogLevel(level);
+
+    if (!isDefined(logValue)) {
+      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
+      logValue = LogLevels.silent;
+    }
+
+    this.defaultLogValue = logValue;
+
+    if (!isDefined(this.logValue)) {
+      this._updateLogging(logValue);
+    }
+  }
+
+  setLevel(level) {
+    let logValue = getLogLevel(level);
+
+    if (!isDefined(logValue)) {
+      console.error('Unknown loglevel ', level, ' for Logger ', this.name);
+      logValue = LogLevels.silent;
+    }
+
+    this.logValue = logValue;
+
+    this._updateLogging(logValue);
+  }
 }
 
-const DEFAULT_LOG_LEVEL = 'error';
-
-class DefaultLogger {
+export class RootLogger {
 
   constructor() {
-    this.level = isDefined(window.config) &&
-      isString(window.config.loglevel) ? window.config.loglevel :
-      DEFAULT_LOG_LEVEL;
     this.loggers = {};
+    this.level = DEFAULT_LOG_LEVEL;
+  }
+
+  init({loglevel}) {
+    return this.setDefaultLevel(loglevel);
   }
 
   setDefaultLevel(level) {
-    this.level = isString(level) ? level.toLowerCase() : DEFAULT_LOG_LEVEL;
+    if (isValidLogLevel(level)) {
+      level = level.toLowerCase();
+      this.level = level;
+      for (const logger of Object.values(this.loggers)) {
+        logger.setDefaultLevel(level);
+      }
+      return true;
+    }
+    return false;
   }
 
   getLogger(name) {
@@ -91,29 +130,11 @@ class DefaultLogger {
     }
     return logger;
   }
-
-  error(...args) {
-    console.error(...args);
-  }
-
-  warn(...args) {
-    console.warn(...args);
-  }
-
-  info(...args) {
-    console.info(...args);
-  }
-
-  debug(...args) {
-    console.debug(...args);
-  }
 }
 
 /* eslint-enable no-console */
 
-const logger = new DefaultLogger();
-
-window.logger = logger;
+const logger = new RootLogger();
 
 export default logger;
 
