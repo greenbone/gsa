@@ -20,14 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-const Svg = glamorous.svg({
-  overflow: 'visible',
-  '& text': {
-    userSelect: 'none',
-  },
-});
+const Svg = styled.svg`
+  overflow: visible;
+  & text {
+    user-select: none;
+  };
+`;
 
 export default Svg;
 
