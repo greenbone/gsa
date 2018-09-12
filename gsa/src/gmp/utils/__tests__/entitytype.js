@@ -29,6 +29,7 @@ import {
   pluralizeType,
   normalizeType,
   apiType,
+  typeName,
 } from '../entitytype';
 
 describe('getEntityType function tests', () => {
@@ -129,6 +130,27 @@ describe('apiType function tests', () => {
 
   test('should pass through unkown types', () => {
     expect(apiType('foo')).toEqual('foo');
+  });
+
+});
+
+describe('typeName function tests', () => {
+
+  test('should pass through unkown types', () => {
+    expect(typeName('foo')).toEqual('foo');
+  });
+
+  test('should convert entity types', () => {
+    expect(typeName('task')).toEqual('Task');
+    expect(typeName('operatingsystem')).toEqual('Operating System');
+    expect(typeName('os')).toEqual('Operating System');
+    expect(typeName('certbund')).toEqual('CERT-Bund Advisory');
+    expect(typeName('dfncert')).toEqual('DFN-CERT Advisory');
+    expect(typeName('portlist')).toEqual('Port List');
+    expect(typeName('portrange')).toEqual('Port Range');
+    expect(typeName('scanconfig')).toEqual('Scan Config');
+    expect(typeName('config')).toEqual('Scan Config');
+    expect(typeName('vulnerability')).toEqual('Vulnerability');
   });
 
 });
