@@ -25,10 +25,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import PropTypes from '../../../utils/proptypes';
-import Theme from '../../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import ArrowIcon from '../../icon/arrowicon';
+import ArrowIcon from 'web/components/icon/arrowicon';
 
 const Div = styled.div`
   display: none;
