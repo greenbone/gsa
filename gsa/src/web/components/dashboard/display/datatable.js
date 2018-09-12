@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import Table from '../../table/stripedtable';
 import TableHeader from '../../table/header';
@@ -34,12 +34,12 @@ import TableBody from '../../table/body';
 
 import PropTypes from '../../../utils/proptypes';
 
-const Margin = glamorous.div({
+const Margin = styled.div`
   margin: 10,
-  display: 'flex',
-  flexGrow: 1,
-  overflowY: 'auto',
-});
+  display: flex;
+  flex-grow: 1,
+  overflow-y: auto;
+`;
 
 const DataTable = ({
   dataTitles = [],
