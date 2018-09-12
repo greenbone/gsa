@@ -24,37 +24,26 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Checkbox from '../../components/form/checkbox.js';
+import FormGroup from 'web/components/form/formgroup';
+import Checkbox from 'web/components/form/checkbox';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js';
-import AutoFpGroup from '../../components/powerfilter/autofpgroup.js';
-import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
-import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
-import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
-import SortByGroup from '../../components/powerfilter/sortbygroup.js';
-import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
-import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
-import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
-
-import DeltaResultsFilterGroup from './deltaresultsfiltergroup.js';
+import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
+import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
+import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
+import MinQodGroup from 'web/components/powerfilter/minqodgroup';
+import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
+import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
+import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
+import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
 
 /* eslint-enable */
 
-const SORT_FIELDS = [
-  ['vulnerability', _('Vulnerability')],
-  ['solution_type', _('Solution Type')],
-  ['severity', _('Severity')],
-  ['qod', _('Quality of Detection')],
-  ['host', _('Host (IP)')],
-  ['hostname', _('Host (Name)')],
-  ['location', _('Location')],
-];
+import DeltaResultsFilterGroup from './deltaresultsfiltergroup';
 
 const FilterDialog = ({
   delta = false,
@@ -62,8 +51,6 @@ const FilterDialog = ({
   filterstring,
   onFilterStringChange,
   onFilterValueChange,
-  onSortByChange,
-  onSortOrderChange,
 }) => {
   const notes = filter.get('notes');
   const overrides = filter.get('overrides');
@@ -145,12 +132,6 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SortByGroup
-        filter={filter}
-        fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
-        onSortByChange={onSortByChange}
-      />
     </Layout>
   );
 };
