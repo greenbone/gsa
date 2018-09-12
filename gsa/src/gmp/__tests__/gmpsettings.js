@@ -1,5 +1,3 @@
-import GmpSettings from 'gmp/gmpsettings';
-
 /* Greenbone Security Assistant
  *
  * Authors:
@@ -22,6 +20,12 @@ import GmpSettings from 'gmp/gmpsettings';
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import GmpSettings, {
+  DEFAULT_MANUAL_URL,
+  DEFAULT_RELOAD_INTERVAL,
+  DEFAULT_PROTOCOLDOC_URL,
+} from 'gmp/gmpsettings';
+
 const createStorage = state => {
   const store = {
     ...state,
@@ -36,11 +40,11 @@ describe('GmpSettings tests', () => {
   test('should init with defaults', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage);
-    expect(settings.reloadinterval).toEqual(15000);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toBeUndefined();
-    expect(settings.manualurl).toBeUndefined();
+    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.protocol).toEqual('http:');
-    expect(settings.protocoldocurl).toBeUndefined();
+    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.server).toEqual('localhost');
     expect(settings.token).toBeUndefined();
     expect(settings.timeout).toBeUndefined();
@@ -94,11 +98,11 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
-    expect(settings.reloadinterval).toEqual(15000);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
-    expect(settings.manualurl).toBeUndefined();
+    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.protocol).toEqual('http');
-    expect(settings.protocoldocurl).toBeUndefined();
+    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.server).toEqual('foo');
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();

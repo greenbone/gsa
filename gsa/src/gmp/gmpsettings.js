@@ -22,7 +22,10 @@
  */
 import {isDefined} from './utils/identity';
 
-const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
+export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
+export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-4/';
+export const DEFAULT_PROTOCOLDOC_URL =
+  'http://docs.greenbone.net/API/OMP/omp-7.0.html';
 
 const set = (storage, name, value) => {
   if (isDefined(value)) {
@@ -37,9 +40,9 @@ class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
       reloadinterval = DEFAULT_RELOAD_INTERVAL,
-      manualurl,
+      manualurl = DEFAULT_MANUAL_URL,
       protocol = global.location.protocol,
-      protocoldocurl,
+      protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
       server = global.location.host,
       timeout,
     } = {...options};
