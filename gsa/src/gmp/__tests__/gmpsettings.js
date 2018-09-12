@@ -33,6 +33,23 @@ const createStorage = state => {
 
 describe('GmpSettings tests', () => {
 
+  test('should init with defaults', () => {
+    const storage = createStorage();
+    const settings = new GmpSettings(storage);
+    expect(settings.reloadinterval).toEqual(15000);
+    expect(settings.locale).toBeUndefined();
+    expect(settings.manualurl).toBeUndefined();
+    expect(settings.protocol).toEqual('http:');
+    expect(settings.protocoldocurl).toBeUndefined();
+    expect(settings.server).toEqual('localhost');
+    expect(settings.token).toBeUndefined();
+    expect(settings.timeout).toBeUndefined();
+    expect(settings.timezone).toBeUndefined();
+    expect(settings.username).toBeUndefined();
+
+    expect(storage.setItem).toHaveBeenCalledTimes(0);
+  });
+
   test('should init with passed options', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
