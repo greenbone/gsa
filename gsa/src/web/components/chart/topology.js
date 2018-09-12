@@ -44,17 +44,17 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 import {
   getSeverityLevelsOld as getSeverityLevels,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
-} from '../../utils/severity';
-import {setRef} from '../../utils/render';
+} from 'web/utils/severity';
+import {setRef} from 'web/utils/render';
 
 import Group from './group';
-import {Layout} from '../layout/layout';
+import {Layout} from 'web/components/layout/layout';
 
 const MAX_HOSTS = 1000;
 
