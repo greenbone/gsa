@@ -21,22 +21,43 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React from 'react';
+
 import styled from 'styled-components';
 
 import Theme from 'web/utils/theme';
 
-const Resizer = styled.div`
+const ResizerSymbol = styled.div`
+  width: 0;
+  height: 0;
+  cursor: nwse-resize;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid ${Theme.dialogGray};
+`;
+
+const ResizerBox = styled.div`
   position: absolute;
   bottom: 6px;
   right: 6px;
-  cursor: nwse-resize;
-  width: 0px;
-  height: 0px;
-  transform: rotate(360deg);
-  border-style: solid;
-  border-width: 0 0 25px 25px;
-  border-color: transparent transparent ${Theme.lightGray} transparent;
+  width: 20px;
+  height: 20px;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    ${Theme.black} 2px,
+    ${Theme.black} 3px
+  );
 `;
+
+const Resizer = props => {
+  return (
+    <ResizerBox>
+      <ResizerSymbol {...props}/>
+    </ResizerBox>
+  );
+};
 
 export default Resizer;
 
