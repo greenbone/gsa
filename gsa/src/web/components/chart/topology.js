@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {
   forceSimulation,
@@ -61,17 +61,16 @@ const MAX_HOSTS = 1000;
 const SCANNER_RADIUS = 8;
 const HOST_RADIUS = 5;
 
-const Svg = glamorous.svg({
-  '& text': {
+const Svg = styled.svg`
+  & text {
     userSelect: 'none',
-  },
-}, ({dragging = false}) => ({
-  cursor: dragging ? 'grabbing' : 'grab',
-}));
+  };
+  cursor: ${props => props.dragging ? 'grabbing' : 'grab'};
+`;
 
-const Circle = glamorous.circle({
-  cursor: 'pointer',
-});
+const Circle = styled.circle`
+  cursor: pointer;
+`;
 
 const severityColorsGradientScale = type => {
   const severity_levels = getSeverityLevels(type);
