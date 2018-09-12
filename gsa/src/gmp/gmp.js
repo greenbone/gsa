@@ -93,8 +93,6 @@ class Gmp {
       timeout,
     } = options;
 
-    log.debug('Using gmp options', options);
-
     this.settings = new GmpSettings(storage, {
       loglevel,
       manualurl,
@@ -104,6 +102,10 @@ class Gmp {
       server,
       timeout,
     });
+
+    logger.init(this.settings);
+
+    log.debug('Using gmp options', options);
 
     this.http = new GmpHttp(this.settings);
 
