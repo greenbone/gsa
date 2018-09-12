@@ -37,7 +37,6 @@ import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js
 import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
 import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
-import SortByGroup from '../../components/powerfilter/sortbygroup.js';
 import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
 import SeverityLevelsGroup from '../../components/powerfilter/severitylevelsgroup.js';
@@ -46,24 +45,12 @@ import DeltaResultsFilterGroup from './deltaresultsfiltergroup.js';
 
 /* eslint-enable */
 
-const SORT_FIELDS = [
-  ['vulnerability', _('Vulnerability')],
-  ['solution_type', _('Solution Type')],
-  ['severity', _('Severity')],
-  ['qod', _('Quality of Detection')],
-  ['host', _('Host (IP)')],
-  ['hostname', _('Host (Name)')],
-  ['location', _('Location')],
-];
-
 const FilterDialog = ({
   delta = false,
   filter,
   filterstring,
   onFilterStringChange,
   onFilterValueChange,
-  onSortByChange,
-  onSortOrderChange,
 }) => {
   const notes = filter.get('notes');
   const overrides = filter.get('overrides');
@@ -145,12 +132,6 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <SortByGroup
-        filter={filter}
-        fields={SORT_FIELDS}
-        onSortOrderChange={onSortOrderChange}
-        onSortByChange={onSortByChange}
-      />
     </Layout>
   );
 };
