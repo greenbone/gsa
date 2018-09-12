@@ -26,7 +26,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -51,9 +51,9 @@ import Grid, {
   DEFAULT_ROW_HEIGHT,
 } from 'web/components/sortable/grid';
 
-import PropTypes from '../../utils/proptypes';
-import withGmp from '../../utils/withGmp';
-import compose from '../../utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
 
@@ -75,13 +75,13 @@ const ownPropNames = [
   'saveSettings',
 ];
 
-const RowPlaceHolder = glamorous.div({
-  display: 'flex',
-  grow: 1,
-  height: DEFAULT_ROW_HEIGHT,
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+const RowPlaceHolder = styled.div`
+  display: flex;
+  grow: 1;
+  height: ${DEFAULT_ROW_HEIGHT};
+  justify-content: center;
+  align-items: center;
+`;
 
 const convertDefaultContent = defaultContent =>
   defaultContent.map(row => createRow(
