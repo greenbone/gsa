@@ -21,20 +21,22 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-const Resizer = glamorous.div({
-  position: 'absolute',
-  bottom: '6px',
-  right: '6px',
-  cursor: 'nwse-resize',
-  width: '0px',
-  height: '0px',
-  transform: 'rotate(360deg)',
-  borderStyle: 'solid',
-  borderWidth: '0 0 25px 25px',
-  borderColor: 'transparent transparent #c8d3d9 transparent',
-});
+import Theme from 'web/utils/theme';
+
+const Resizer = styled.div`
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  cursor: nwse-resize;
+  width: 0px;
+  height: 0px;
+  transform: rotate(360deg);
+  border-style: solid;
+  border-width: 0 0 25px 25px;
+  border-color: transparent transparent ${Theme.lightGray} transparent;
+`;
 
 export default Resizer;
 
