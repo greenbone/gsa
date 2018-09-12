@@ -24,8 +24,22 @@ import _ from '../locale';
 
 import {isDefined} from './identity';
 
+/**
+ * Return the entity type of a Model object
+ *
+ * @param {Object} model Model to get the entity type from
+ *
+ * @returns {String} The GSA entity type of a model
+ */
 export const getEntityType = (model = {}) => model.entityType;
 
+/**
+ * Convert a type into its pluralized form
+ *
+ * @param {String} type The entity type to pluralize
+ *
+ * @returns {String} The pluralized entity type
+ */
 export const pluralizeType = type => type[type.length - 1] === 's' ||
   type === 'info' ? type : type + 's';
 
@@ -40,6 +54,13 @@ const TYPES = {
   vuln: 'vulnerability',
 };
 
+/**
+ * Convert a type to the GSA type name
+ *
+ * @param {String} type An entity type e.g. from a request
+ *
+ * @returns {String} Entity type name used in GSA
+ */
 export const normalizeType = type => {
   const ctype = TYPES[type];
   return isDefined(ctype) ? ctype : type;
@@ -81,7 +102,13 @@ const ENTITY_TYPES = {
   vulnerability: _('Vulnerability'),
 };
 
-
+/**
+ * Get the translateable name for an entity type
+ *
+ * @param {String} type A entity type. Either an extrenal or GSA entity type.
+ *
+ * @returns {String} A translated entity type name
+ */
 export const typeName = type => {
   type = normalizeType(type);
   const name = ENTITY_TYPES[type];
