@@ -1,3 +1,2 @@
 config = {
-  loglevel: 'warn',
 };
