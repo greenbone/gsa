@@ -23,50 +23,50 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes.js';
+import Theme from 'web/utils/theme.js';
 
-const ProgressBarBox = glamorous.div({
-  height: '12px',
-  boxSizing: 'content-box', /* height includes border */
-  display: 'inline-block',
-  width: '100px',
-  background: '#454545',
-  verticalAlign: 'middle',
-  textAlign: 'center',
-  border: '1px solid #999999',
+const ProgressBarBox = styled.div`
+  height: 12px;
+  box-sizing: content-box; /* height includes border */
+  display: inline-block;
+  width: 100px;
+  background: ${Theme.darkGray};
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid ${Theme.inputBorderGray};
 
-  '@media print': {
-    background: 'none',
-    border: 0,
-  },
-});
+  @media print {
+    background: none;
+    border: 0;
+  };
+`;
 
-const Content = glamorous.div({
-  zIndex: Theme.Layers.higher,
-  fontWeight: 'bold',
-  color: '#FFFFFF',
-  fontSize: '9px',
-  margin: 0,
-  position: 'relative',
-  top: '-12px',
+const Content = styled.div`
+  z-index: ${Theme.Layers.higher};
+  font-weight: bold;
+  color: ${Theme.white};
+  font-size: 9px;
+  margin: 0;
+  position: relative;
+  top: -12px;
 
-  '@media print': {
-    color: 'black',
-  },
-});
+  @media print {
+    color: black;
+  };
+`;
 
-const Progress = glamorous.div(
-  {
-    height: '12px',
+const Progress = styled.div`
+  height: 12px;
 
-    '@media print': {
-      background: 'none',
-    },
-  },
-  ({progress, background}) => {
+  @media print {
+    background: none;
+  };
+  ${props => {
+    let {background, progress} = props;
+
     if (background === 'warn') {
       background = '#F0A519';
     }
@@ -93,8 +93,8 @@ const Progress = glamorous.div(
       width: progress + '%',
       background,
     };
-  }
-);
+  }};
+`;
 
 const ProgressBar = ({
   background,
