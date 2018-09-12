@@ -27,12 +27,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import DialogCloseButton from './closebutton.js';
+import DialogCloseButton from './closebutton';
 
 const DialogTitleBar = styled(Layout)`
   padding: 5px 5px 5px 10px;
