@@ -25,7 +25,7 @@ import 'core-js/fn/array/for-each';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {color as d3color} from 'd3-color';
 
@@ -50,9 +50,9 @@ import Group from './group';
 const LEGEND_MARGIN = 20;
 const MIN_ANGLE_FOR_LABELS = 0.15;
 
-const StyledLayout = glamorous(Layout)({
-  overflow: 'hidden',
-});
+const StyledLayout = styled(Layout)`
+  overflow: hidden;
+`;
 
 const margin = {
   top: 20,
