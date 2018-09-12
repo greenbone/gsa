@@ -107,6 +107,8 @@ class Gmp {
 
     log.debug('Using gmp options', options);
 
+    this.log = logger;
+
     this.http = new GmpHttp(this.settings);
 
     this._login = new LoginCommand(this.http);
