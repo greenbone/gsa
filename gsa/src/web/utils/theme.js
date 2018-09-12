@@ -23,29 +23,31 @@
 
 const Theme = {
   /* source styleguide */
-  green: '#66c430',
   lightGreen: '#87d050',
+  green: '#66c430',
 
-  darkGray: '#393637',
-  mediumGray: '#787878',
   lightGray: '#c8d3d9', // used by: disabled inputs
+  mediumGray: '#787878',
+  darkGray: '#393637',
 
   goldYellow: '#fdc300',
   redBrown: '#a54317',
 
   /* source own */
-  black: '#000',
   white: '#fff',
   offWhite: '#fefefe', // used by: Login-background
+  dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
+  inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select, ProgressBar
+  black: '#000',
+
   lightRed: '#f2dede', // used by: dialog errors background
   mediumLightRed: '#ebccd1', // used by: dialog errors border
-  darkRed: '#a94442', // used by: dialog errors font
-  blue: '#0000ff', // used by: links
-  lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
-  dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
-  inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select
-  mediumBlue: '#5897fb', // used by active/hovered items in Select
   warningRed: '#d83636', // used for warning font color at login dialog
+  darkRed: '#a94442', // used by: dialog errors font
+
+  lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
+  mediumBlue: '#5897fb', // used by active/hovered items in Select
+  blue: '#0000ff', // used by: links
 
   /* source ? */
   darkGreen: '#519032',

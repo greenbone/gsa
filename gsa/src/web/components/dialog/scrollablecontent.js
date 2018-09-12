@@ -24,26 +24,24 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-const ScrollableContent = glamorous.div(
-  {
-    overflow: 'auto',
-    padding: '0 15px',
-    width: '100%',
-    height: '100%',
-  },
-  ({maxHeight}) => ({maxHeight}),
-);
+const ScrollableContent = styled.div`
+  overflow: auto;
+  padding: 0 15px;
+  width: 100%;
+  height: 100%;
+  max-height: ${props => props.maxHeight};
+`;
 
-const StyledLayout = glamorous(Layout)({
-  overflow: 'hidden', // fix for adjusting the content while resizing in firefox
-  height: '100%', // needs to be set for Chrome
-});
+const StyledLayout = styled(Layout)`
+  overflow: hidden;/* fix for adjusting the content while resizing in firefox */
+  height: 100%; /* needs to be set for Chrome */
+`;
 
 const ScrollableContentLayout = ({
   children,
