@@ -23,23 +23,23 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Table from '../../table/stripedtable';
-import TableHeader from '../../table/header';
-import TableHead from '../../table/head';
-import TableRow from '../../table/row';
-import TableData from '../../table/data';
-import TableBody from '../../table/body';
+import Table from 'web/components/table/stripedtable';
+import TableHeader from 'web/components/table/header';
+import TableHead from 'web/components/table/head';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
+import TableBody from 'web/components/table/body';
 
-import PropTypes from '../../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-const Margin = glamorous.div({
+const Margin = styled.div`
   margin: 10,
-  display: 'flex',
-  flexGrow: 1,
-  overflowY: 'auto',
-});
+  display: flex;
+  flex-grow: 1,
+  overflow-y: auto;
+`;
 
 const DataTable = ({
   dataTitles = [],

@@ -22,11 +22,11 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Layout from '../layout/layout';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
 import Legend from './legend';
 import Pie from './pie';
@@ -34,9 +34,9 @@ import ToolTip from './tooltip';
 import Label from './label';
 import Svg from './svg';
 
-const StyledLayout = glamorous(Layout)({
-  overflow: 'hidden',
-});
+const StyledLayout = styled(Layout)`
+  overflow: hidden;
+`;
 
 const Arc = ({
   path,

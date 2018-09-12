@@ -24,7 +24,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -54,9 +54,9 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-const StyledTextField = glamorous(TextField)({
-  width: '180px',
-});
+const StyledTextField = styled(TextField)`
+  width: 180px;
+`;
 
 const ToolBarIcons = () => (
   <ManualIcon

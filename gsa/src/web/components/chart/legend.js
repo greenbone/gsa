@@ -22,56 +22,62 @@
  */
 import React from 'react';
 
-import glamorous, {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {Line as VxLine} from '@vx/shape';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
 
 import ToolTip from './tooltip';
-import Theme from '../../utils/theme';
 
 const DEFAULT_SHAPE_SIZE = 15;
 
-const StyledLegend = glamorous.div({
-  padding: '5px 10px',
-  margin: '10px 5px',
-  display: 'flex',
-  flexDirection: 'column',
-  userSelect: 'none',
-  backgroundColor: Theme.mediumGray,
-  color: Theme.white,
-  opacity: 0.75,
-});
+const StyledLegend = styled.div`
+  padding: 5px 10px;
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  background-color: ${Theme.mediumGray};
+  color: ${Theme.white};
+  opacity: 0.75;
+`;
 
-export const Item = glamorous.div('legend-item', {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  margin: '5px 0',
-},
-({onClick}) => isDefined(onClick) ? {
-  cursor: 'pointer',
-} : undefined);
+export const Item = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 0;
+  ${props => isDefined(props.onClick) ? {
+    cursor: 'pointer',
+  } : undefined};
+`;
 
-export const Label = glamorous.div('legend-label', {
-  display: 'flex',
-  justifyContent: 'start',
-  alignItems: 'center',
-  flexGrow: 1,
-  marginLeft: 10,
-});
+export const Label = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-grow: 1;
+  margin-left: 10px;
+`;
 
-export const Rect = glamorous.div('legend-rect', {
-  display: 'flex',
-  alignItems: 'center',
-  width: DEFAULT_SHAPE_SIZE,
-  height: 10,
-}, ({color}) => ({
-  backgroundColor: color,
-}));
+export const Rect = styled.div`
+  display: flex;
+  align-items: center;
+  width: ${DEFAULT_SHAPE_SIZE}px;
+  height: 10px;
+  background-color: ${props => props.color};
+`;
+
+const StyledDiv = styled.div`
+  height: ${props => props.height}px;
+  background-color: ${Theme.white};
+  padding: 0 2px;
+`;
 
 export const Line = ({
   width = DEFAULT_SHAPE_SIZE + 5,
@@ -82,11 +88,7 @@ export const Line = ({
 }) => {
   const y = height / 2;
   return (
-    <Div
-      height={height}
-      backgroundColor={Theme.white}
-      padding="0 2px"
-    >
+    <StyledDiv>
       <svg width={width} height={height}>
         <VxLine
           from={{x: 0, y}}
@@ -96,7 +98,7 @@ export const Line = ({
           strokeWidth={lineWidth}
         />
       </svg>
-    </Div>
+    </StyledDiv>
   );
 };
 

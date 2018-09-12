@@ -22,15 +22,17 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-const StyledGroup = glamorous.g(({onClick}) => isDefined(onClick) ? {
-  cursor: 'pointer',
-} : undefined);
+const StyledGroup = styled.g`
+  ${props => isDefined(props.onClick) ? {
+    cursor: 'pointer',
+    } : undefined};
+`;
 
 const Group = ({
   left = 0,

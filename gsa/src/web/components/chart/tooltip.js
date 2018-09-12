@@ -23,46 +23,46 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {hasValue} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
-import Theme from '../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Portal from '../portal/portal';
+import Portal from 'web/components/portal/portal';
 
-const ToolTipText = glamorous.div({
-  boxSizing: 'border-box',
-  fontWeight: 'bold',
-  padding: '3px',
-  background: Theme.darkGray,
-  color: Theme.white,
-  borderRadius: '2px',
-  boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.2)',
-  lineHeight: 1,
-});
+const ToolTipText = styled.div`
+  box-sizing: border-box;
+  font-weight: bold;
+  padding: 3px;
+  background: ${Theme.darkGray};
+  color: ${Theme.white};
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  line-height: 1;
+`;
 
 ToolTipText.displayName = 'ToolTipText';
 
-const ToolTipArrow = glamorous.div({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'start',
-  lineHeight: 1,
-  fontSize: '10px',
-  color: Theme.darkGray,
-});
+const ToolTipArrow = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  line-height: 1;
+  font-size: 10px;
+  color: ${Theme.darkGray};
+`;
 
 ToolTipArrow.displayName = 'ToolTipArrow';
 
-const ToolTipContainer = glamorous.div({
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  flexDirection: 'column',
-  zIndex: Theme.Layers.onTop,
-});
+const ToolTipContainer = styled.div`
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  z-index: ${Theme.Layers.onTop};
+`;
 
 ToolTipContainer.displayName = 'ToolTipContainer';
 

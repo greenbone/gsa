@@ -24,7 +24,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import {Col} from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -76,6 +76,10 @@ import TargetsTable from '../targets/table';
 import TasksTable from '../tasks/table';
 
 import TrashActions from './trashactions';
+
+const Col = styled.col`
+  width: 50%;
+`;
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -262,8 +266,8 @@ class Trashcan extends React.Component {
         <h1>{_('Contents')}</h1>
         <Table>
           <colgroup>
-            <Col width="50%"/>
-            <Col width="50%"/>
+            <Col/>
+            <Col/>
           </colgroup>
           <TableHeader>
             <TableRow>
