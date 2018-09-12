@@ -26,6 +26,7 @@ export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-4/';
 export const DEFAULT_PROTOCOLDOC_URL =
   'http://docs.greenbone.net/API/OMP/omp-7.0.html';
+export const DEFAULT_LOG_LEVEL = 'warn';
 
 const set = (storage, name, value) => {
   if (isDefined(value)) {
@@ -39,19 +40,21 @@ const set = (storage, name, value) => {
 class GmpSettings {
   constructor(storage = global.localStorage, options = {}) {
     const {
-      reloadinterval = DEFAULT_RELOAD_INTERVAL,
+      loglevel = storage.loglevel,
       manualurl = DEFAULT_MANUAL_URL,
       protocol = global.location.protocol,
       protocoldocurl = DEFAULT_PROTOCOLDOC_URL,
+      reloadinterval = DEFAULT_RELOAD_INTERVAL,
       server = global.location.host,
       timeout,
     } = {...options};
     this.storage = storage;
 
-    this.reloadinterval = reloadinterval;
+    this.loglevel = isDefined(loglevel) ? loglevel : DEFAULT_LOG_LEVEL;
     this.manualurl = manualurl;
     this.protocol = protocol;
     this.protocoldocurl = protocoldocurl;
+    this.reloadinterval = reloadinterval;
     this.server = server;
     this.timeout = timeout;
   }
@@ -86,6 +89,14 @@ class GmpSettings {
 
   get locale() {
     return this.storage.locale;
+  }
+
+  get loglevel() {
+    return this.storage.loglevel;
+  }
+
+  set loglevel(value) {
+    set(this.storage, 'loglevel', value);
   }
 }
 

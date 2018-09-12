@@ -79,27 +79,28 @@ import GmpSettings from './gmpsettings';
 
 const log = logger.getLogger('gmp');
 
-
 class Gmp {
 
   constructor(options = {}) {
     const {
-      reloadinterval,
+      loglevel,
+      manualurl,
       protocol,
+      protocoldocurl,
+      reloadinterval,
       server,
       storage,
-      manualurl,
-      protocoldocurl,
       timeout,
     } = options;
 
     log.debug('Using gmp options', options);
 
     this.settings = new GmpSettings(storage, {
-      reloadinterval,
+      loglevel,
       manualurl,
       protocol,
       protocoldocurl,
+      reloadinterval,
       server,
       timeout,
     });
