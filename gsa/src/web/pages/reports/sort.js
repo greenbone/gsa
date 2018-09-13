@@ -27,7 +27,7 @@ import {
   makeCompareNumber,
   makeCompareSeverity,
   makeCompareString,
-} from 'gmp/sort.js';
+} from 'web/utils/sort';
 
 export const apps_sort_functions = {
   name: makeCompareString('name'),

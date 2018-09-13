@@ -21,14 +21,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import logger from 'gmp/log';
 
-import logger from './log.js';
+import {parseInt, parseFloat} from 'gmp/parser';
 
-import {isDefined, isFunction} from './utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 
-import {parseInt, parseFloat} from './parser.js';
-
-const log = logger.getLogger('gmp.sort');
+const log = logger.getLogger('web.utils.sort');
 
 const genericCompareAsc = (a, b) => {
   if (a > b) {

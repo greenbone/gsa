@@ -831,6 +831,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/utils/render.js
      ${GSA_SRC_DIR}/src/web/utils/selectiontype.js
      ${GSA_SRC_DIR}/src/web/utils/severity.js
+     ${GSA_SRC_DIR}/src/web/utils/sort.js
      ${GSA_SRC_DIR}/src/web/utils/theme.js
      ${GSA_SRC_DIR}/src/web/utils/state.js
      ${GSA_SRC_DIR}/src/web/utils/urls.js
