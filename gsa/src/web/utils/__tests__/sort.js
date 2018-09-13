@@ -31,6 +31,7 @@ describe('ipToNumber tests', () => {
 
   test('should pass through invalid ip addresses', () => {
     expect(ipToNumber('foo')).toEqual('foo');
+    expect(ipToNumber('192.168.1.')).toEqual('192.168.1.');
     expect(ipToNumber('a.168.1.1')).toEqual('a.168.1.1');
     expect(ipToNumber('192.a.1.1')).toEqual('192.a.1.1');
     expect(ipToNumber('192.168.a.1')).toEqual('192.168.a.1');
