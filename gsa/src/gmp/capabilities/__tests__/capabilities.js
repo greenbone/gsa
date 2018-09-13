@@ -1,0 +1,210 @@
+/* Greenbone Security Assistant
+ *
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2018 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import Capabilities from '../capabilities';
+
+describe('Capabilities tests', () => {
+
+  test('should not have capabilities', () => {
+    const caps = new Capabilities();
+
+    expect(caps.areDefined()).toEqual(false);
+    expect(caps.length).toEqual(0);
+    expect(caps.has('get_tasks')).toEqual(false);
+    expect(caps.mayOp('get_tasks')).toEqual(false);
+    expect(caps.mayAccess('tasks')).toEqual(false);
+    expect(caps.mayClone('tasks')).toEqual(false);
+    expect(caps.mayCreate('tasks')).toEqual(false);
+    expect(caps.mayDelete('tasks')).toEqual(false);
+    expect(caps.mayEdit('tasks')).toEqual(false);
+  });
+
+  test('should ignore case for capabilties', () => {
+    const caps = new Capabilities(['GET_TASKS']);
+
+    expect(caps.has('get_tasks')).toEqual(true);
+    expect(caps.has('GET_TASKS')).toEqual(true);
+    expect(caps.has('get_TASKS')).toEqual(true);
+    expect(caps.mayOp('get_tasks')).toEqual(true);
+    expect(caps.mayOp('GET_TASKS')).toEqual(true);
+    expect(caps.mayOp('get_TASKS')).toEqual(true);
+  });
+
+  test('should allow singular and plural for access', () => {
+    const caps = new Capabilities(['get_tasks']);
+
+    expect(caps.mayAccess('task')).toEqual(true);
+    expect(caps.mayAccess('tasks')).toEqual(true);
+  });
+
+  test('should have only access task capabilties', () => {
+    const caps = new Capabilities(['get_tasks']);
+
+    expect(caps.mayAccess('task')).toEqual(true);
+
+    expect(caps.mayAccess('other')).toEqual(false);
+
+    expect(caps.mayClone('task')).toEqual(false);
+    expect(caps.mayCreate('task')).toEqual(false);
+    expect(caps.mayDelete('task')).toEqual(false);
+    expect(caps.mayEdit('task')).toEqual(false);
+  });
+
+  test('should have only clone and create task capabilties', () => {
+    const caps = new Capabilities(['create_task']); // create perm allows also to clone
+
+    expect(caps.mayClone('task')).toEqual(true);
+    expect(caps.mayCreate('task')).toEqual(true);
+
+    expect(caps.mayClone('other')).toEqual(false);
+
+    expect(caps.mayAccess('task')).toEqual(false);
+    expect(caps.mayDelete('task')).toEqual(false);
+    expect(caps.mayEdit('task')).toEqual(false);
+  });
+
+
+  test('should have only delete task capabilties', () => {
+    const caps = new Capabilities(['delete_task']);
+
+    expect(caps.mayDelete('task')).toEqual(true);
+
+    expect(caps.mayDelete('other')).toEqual(false);
+
+    expect(caps.mayAccess('task')).toEqual(false);
+    expect(caps.mayClone('task')).toEqual(false);
+    expect(caps.mayCreate('task')).toEqual(false);
+    expect(caps.mayEdit('task')).toEqual(false);
+  });
+
+  test('should have only edit task capabilties', () => {
+    const caps = new Capabilities(['modify_task']);
+
+    expect(caps.mayEdit('task')).toEqual(true);
+
+    expect(caps.mayEdit('other')).toEqual(false);
+
+    expect(caps.mayAccess('task')).toEqual(false);
+    expect(caps.mayClone('task')).toEqual(false);
+    expect(caps.mayCreate('task')).toEqual(false);
+    expect(caps.mayDelete('task')).toEqual(false);
+  });
+
+  test('should support asset types', () => {
+    const caps = new Capabilities([
+      'get_assets',
+      'create_asset',
+      'delete_asset',
+      'modify_asset',
+    ]);
+
+    expect(caps.mayAccess('host')).toEqual(true);
+    expect(caps.mayAccess('hosts')).toEqual(true);
+    expect(caps.mayAccess('os')).toEqual(true);
+    expect(caps.mayAccess('operatingsystem')).toEqual(true);
+    expect(caps.mayAccess('operatingsystems')).toEqual(true);
+
+    expect(caps.mayClone('host')).toEqual(true);
+    expect(caps.mayClone('operatingsystem')).toEqual(true);
+
+    expect(caps.mayCreate('host')).toEqual(true);
+    expect(caps.mayCreate('operatingsystem')).toEqual(true);
+
+    expect(caps.mayDelete('host')).toEqual(true);
+    expect(caps.mayDelete('operatingsystem')).toEqual(true);
+
+    expect(caps.mayEdit('host')).toEqual(true);
+    expect(caps.mayEdit('operatingsystem')).toEqual(true);
+
+    expect(caps.mayAccess('other')).toEqual(false);
+    expect(caps.mayClone('other')).toEqual(false);
+    expect(caps.mayCreate('other')).toEqual(false);
+    expect(caps.mayDelete('other')).toEqual(false);
+    expect(caps.mayEdit('other')).toEqual(false);
+  });
+
+  test('should support info types', () => {
+    const caps = new Capabilities([
+      'get_info',
+      'create_info',
+      'delete_info',
+      'modify_info',
+    ]);
+
+    expect(caps.mayAccess('cve')).toEqual(true);
+    expect(caps.mayAccess('cves')).toEqual(true);
+    expect(caps.mayAccess('cpe')).toEqual(true);
+    expect(caps.mayAccess('cpes')).toEqual(true);
+    expect(caps.mayAccess('dfncert')).toEqual(true);
+    expect(caps.mayAccess('dfncerts')).toEqual(true);
+    expect(caps.mayAccess('nvt')).toEqual(true);
+    expect(caps.mayAccess('nvts')).toEqual(true);
+    expect(caps.mayAccess('ovaldef')).toEqual(true);
+    expect(caps.mayAccess('ovaldefs')).toEqual(true);
+    expect(caps.mayAccess('certbund')).toEqual(true);
+    expect(caps.mayAccess('certbunds')).toEqual(true);
+    expect(caps.mayAccess('secinfo')).toEqual(true);
+    expect(caps.mayAccess('secinfos')).toEqual(true);
+
+    expect(caps.mayClone('cve')).toEqual(true);
+    expect(caps.mayClone('cpe')).toEqual(true);
+    expect(caps.mayClone('dfncert')).toEqual(true);
+    expect(caps.mayClone('nvt')).toEqual(true);
+    expect(caps.mayClone('ovaldef')).toEqual(true);
+    expect(caps.mayClone('certbund')).toEqual(true);
+    expect(caps.mayClone('secinfo')).toEqual(true);
+
+    expect(caps.mayCreate('cve')).toEqual(true);
+    expect(caps.mayCreate('cpe')).toEqual(true);
+    expect(caps.mayCreate('dfncert')).toEqual(true);
+    expect(caps.mayCreate('nvt')).toEqual(true);
+    expect(caps.mayCreate('ovaldef')).toEqual(true);
+    expect(caps.mayCreate('certbund')).toEqual(true);
+    expect(caps.mayCreate('secinfo')).toEqual(true);
+
+    expect(caps.mayDelete('cve')).toEqual(true);
+    expect(caps.mayDelete('cpe')).toEqual(true);
+    expect(caps.mayDelete('dfncert')).toEqual(true);
+    expect(caps.mayDelete('nvt')).toEqual(true);
+    expect(caps.mayDelete('ovaldef')).toEqual(true);
+    expect(caps.mayDelete('certbund')).toEqual(true);
+    expect(caps.mayDelete('secinfo')).toEqual(true);
+
+    expect(caps.mayEdit('cve')).toEqual(true);
+    expect(caps.mayEdit('cpe')).toEqual(true);
+    expect(caps.mayEdit('dfncert')).toEqual(true);
+    expect(caps.mayEdit('nvt')).toEqual(true);
+    expect(caps.mayEdit('ovaldef')).toEqual(true);
+    expect(caps.mayEdit('certbund')).toEqual(true);
+    expect(caps.mayEdit('secinfo')).toEqual(true);
+
+    expect(caps.mayAccess('other')).toEqual(false);
+    expect(caps.mayClone('other')).toEqual(false);
+    expect(caps.mayCreate('other')).toEqual(false);
+    expect(caps.mayDelete('other')).toEqual(false);
+    expect(caps.mayEdit('other')).toEqual(false);
+
+  });
+
+});
+
+// vim: set ts=2 sw=2 tw=80:
