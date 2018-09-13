@@ -23,6 +23,7 @@
 import {
   parseFloat,
   parseInt,
+  parseProgressElement,
   parseTextElement,
   parseSeverity,
 } from '../parser.js';
@@ -149,6 +150,46 @@ describe('parseTextElement tests', () => {
       text: 'foo',
       text_excerpt: '0',
     });
+  });
+
+});
+
+describe('parseProgressElement tests', () => {
+
+  test('should parse progress as float', () => {
+    expect(parseProgressElement('0')).toEqual(0);
+    expect(parseProgressElement('1')).toEqual(1);
+    expect(parseProgressElement('5')).toEqual(5);
+    expect(parseProgressElement('0.0')).toEqual(0);
+    expect(parseProgressElement('1.1')).toEqual(1.1);
+    expect(parseProgressElement('5.4')).toEqual(5.4);
+    expect(parseProgressElement(0)).toEqual(0);
+    expect(parseProgressElement(1)).toEqual(1);
+    expect(parseProgressElement(5)).toEqual(5);
+    expect(parseProgressElement(1.1)).toEqual(1.1);
+    expect(parseProgressElement(5.4)).toEqual(5.4);
+  });
+
+  test('should parse invalid progress values as zero', () => {
+    expect(parseProgressElement()).toEqual(0);
+    expect(parseProgressElement('')).toEqual(0);
+    expect(parseProgressElement(' ')).toEqual(0);
+    expect(parseProgressElement('foo')).toEqual(0);
+    expect(parseProgressElement('1a')).toEqual(0);
+  });
+
+  test('should parse __text as progress', () => {
+    expect(parseProgressElement({__text: '0'})).toEqual(0);
+    expect(parseProgressElement({__text: '1'})).toEqual(1);
+    expect(parseProgressElement({__text: '5'})).toEqual(5);
+    expect(parseProgressElement({__text: '0.0'})).toEqual(0);
+    expect(parseProgressElement({__text: '1.1'})).toEqual(1.1);
+    expect(parseProgressElement({__text: '5.4'})).toEqual(5.4);
+    expect(parseProgressElement({__text: 0})).toEqual(0);
+    expect(parseProgressElement({__text: 1})).toEqual(1);
+    expect(parseProgressElement({__text: 5})).toEqual(5);
+    expect(parseProgressElement({__text: 1.1})).toEqual(1.1);
+    expect(parseProgressElement({__text: 5.4})).toEqual(5.4);
   });
 
 });
