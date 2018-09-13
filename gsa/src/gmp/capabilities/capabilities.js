@@ -86,7 +86,7 @@ class Capabilities {
   }
 
   has(name) {
-    return this._capabilities.has(name);
+    return this._capabilities.has(name.toLowerCase());
   }
 
   mayAccess(type) {
@@ -94,7 +94,7 @@ class Capabilities {
   }
 
   mayOp(value) {
-    return this.has(value.toLowerCase()) || this.has('everything');
+    return this.has(value) || this.has('everything');
   }
 
   mayClone(type) {
