@@ -24,39 +24,41 @@ import {
   parseInt,
 } from '../parser.js';
 
-describe('parse_int tests', () => {
-  test('int number string is parsed as int', () => {
+describe('parseInt tests', () => {
+
+  test('should parse int number string', () => {
     expect(parseInt('5')).toBe(5);
   });
 
-  test('float number string is parsed as int', () => {
+  test('should parse float number strings', () => {
     expect(parseInt('5.0')).toBe(5);
   });
 
-  test('float string should be cut', () => {
+  test('should shut cut float strings', () => {
     expect(parseInt('5.9999')).toBe(5);
     expect(parseInt('5.1')).toBe(5);
   });
 
-  test('float number should be cut', () => {
+  test('should cut float numbers', () => {
     expect(parseInt(5.9999)).toBe(5);
     expect(parseInt(5.1)).toBe(5);
   });
 
-  test('empty string should be parsed as undefined', () => {
+  test('should parse empty string as undefined', () => {
     expect(parseInt('')).toBeUndefined();
     expect(parseInt(' ')).toBeUndefined();
   });
 
-  test('string without a number should be parsed as undefined', () => {
+  test('should parse string without a number as undefined', () => {
     expect(parseInt('abc')).toBeUndefined();
     expect(parseInt('5a')).toBeUndefined();
   });
 
-  test('pase infintiy as undefined', () => {
+  test('should parse infintiy as undefined', () => {
     expect(parseInt(Infinity)).toBeUndefined();
     expect(parseInt('Infinity')).toBeUndefined();
   });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
