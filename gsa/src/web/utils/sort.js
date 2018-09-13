@@ -45,7 +45,8 @@ const genericCompareDesc = (a, b) => {
   return 0;
 };
 
-const getProperty = (object, property) => {
+// export for testing only
+export const getProperty = (object, property) => {
   try {
     if (isFunction(property)) {
       return property(object);
@@ -58,6 +59,7 @@ const getProperty = (object, property) => {
   }
 };
 
+// export for testing only
 export const ipToNumber = original => {
   if (!isDefined(original)) {
     return undefined;
@@ -84,7 +86,8 @@ export const ipToNumber = original => {
   return original; // use original value for comparison
 };
 
-const getValue = (convertFunc, value, property, undefinedVal) => {
+// export for testing only
+export const getValue = (convertFunc, value, property, undefinedVal) => {
   const val = convertFunc(getProperty(value, property));
 
   return isDefined(val) ? val : undefinedVal;
