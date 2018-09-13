@@ -21,7 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
+  parseFloat,
   parseInt,
+  parseSeverity,
 } from '../parser.js';
 
 describe('parseInt tests', () => {
@@ -57,6 +59,74 @@ describe('parseInt tests', () => {
   test('should parse infintiy as undefined', () => {
     expect(parseInt(Infinity)).toBeUndefined();
     expect(parseInt('Infinity')).toBeUndefined();
+  });
+
+});
+
+describe('parseSeverity tests', () => {
+
+  test('should parse int number strings', () => {
+    expect(parseSeverity('0')).toEqual(0);
+    expect(parseSeverity('1')).toEqual(1);
+    expect(parseSeverity('5')).toEqual(5);
+  });
+
+  test('should parse float number strings', () => {
+    expect(parseSeverity('0.0')).toEqual(0);
+    expect(parseSeverity('1.1')).toEqual(1.1);
+    expect(parseSeverity('5.4')).toEqual(5.4);
+  });
+
+  test('should pass through numbers', () => {
+    expect(parseSeverity(0)).toEqual(0);
+    expect(parseSeverity(1)).toEqual(1);
+    expect(parseSeverity(5)).toEqual(5);
+    expect(parseSeverity(1.1)).toEqual(1.1);
+    expect(parseSeverity(5.4)).toEqual(5.4);
+  });
+
+  test('should parse strings as undefined', () => {
+    expect(parseSeverity('abc')).toBeUndefined();
+    expect(parseSeverity('5a')).toBeUndefined();
+  });
+
+  test('should parse empty string as undefined', () => {
+    expect(parseSeverity('')).toBeUndefined();
+    expect(parseSeverity(' ')).toBeUndefined();
+  });
+
+});
+
+describe('parseFloat tests', () => {
+
+  test('should parse int number strings', () => {
+    expect(parseFloat('0')).toEqual(0);
+    expect(parseFloat('1')).toEqual(1);
+    expect(parseFloat('5')).toEqual(5);
+  });
+
+  test('should parse float number strings', () => {
+    expect(parseFloat('0.0')).toEqual(0);
+    expect(parseFloat('1.1')).toEqual(1.1);
+    expect(parseFloat('5.4')).toEqual(5.4);
+  });
+
+  test('should pass through numbers', () => {
+    expect(parseFloat(0)).toEqual(0);
+    expect(parseFloat(1)).toEqual(1);
+    expect(parseFloat(5)).toEqual(5);
+    expect(parseFloat(1.1)).toEqual(1.1);
+    expect(parseFloat(5.4)).toEqual(5.4);
+  });
+
+  test('should parse strings as undefined', () => {
+    expect(parseFloat('abc')).toBeUndefined();
+    expect(parseFloat('5a')).toBeUndefined();
+  });
+
+  test('should parse empty string as undefined', () => {
+    expect(parseFloat('')).toBeUndefined();
+    expect(parseFloat(' ')).toBeUndefined();
   });
 
 });
