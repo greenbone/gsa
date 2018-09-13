@@ -29,28 +29,28 @@ import {
   makeCompareString,
 } from 'web/utils/sort';
 
-export const apps_sort_functions = {
+export const appsSortFunctions = {
   name: makeCompareString('name'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   occurrences: makeCompareNumber(entity => entity.occurrences.total),
   severity: makeCompareSeverity(),
 };
 
-export const closed_cves_sort_functions = {
+export const closedCvesSortFunctions = {
   cve: makeCompareString('id'),
   host: makeCompareIp(entity => entity.host.ip),
   nvt: makeCompareString(entity => entity.source.description),
   severity: makeCompareSeverity(),
 };
 
-export const cves_sort_functions = {
+export const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   occurrences: makeCompareNumber(entity => entity.occurrences),
   severity: makeCompareSeverity(),
 };
 
-export const errors_sort_functions = {
+export const errorsSortFunctions = {
   error: makeCompareString('description'),
   host: makeCompareIp(entity => entity.host.ip),
   hostname: makeCompareString(entity => entity.host.name),
@@ -58,7 +58,7 @@ export const errors_sort_functions = {
   port: makeCompareString('port'),
 };
 
-export const hosts_sort_functions = {
+export const hostsSortFunctions = {
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
   os: makeCompareString(entity => entity.details.best_os_cpe),
@@ -72,20 +72,20 @@ export const hosts_sort_functions = {
   severity: makeCompareSeverity(),
 };
 
-export const operatingssystems_sort_functions = {
+export const operatingssystemsSortFunctions = {
   name: makeCompareString('name'),
   cpe: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   severity: makeCompareNumber('severity', 0),
 };
 
-export const ports_sort_functions = {
+export const portsSortFunctions = {
   name: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   severity: makeCompareSeverity(),
 };
 
-export const results_sort_functions = {
+export const resultsSortFunctions = {
   delta: makeCompareString(entity => entity.delta.delta_type),
   created: makeCompareDate('creationTime'),
   host: makeCompareIp(entity => entity.host.name),
@@ -97,7 +97,7 @@ export const results_sort_functions = {
   vulnerability: makeCompareString('vulnerability'),
 };
 
-export const tls_certificates_sort_functions = {
+export const tlsCertificatesSortFunctions = {
   dn: makeCompareString('issuer'),
   serial: makeCompareString('serial'),
   notvalidbefore: makeCompareDate('notbefore'),
@@ -107,7 +107,7 @@ export const tls_certificates_sort_functions = {
   port: makeCompareString('port'),
 };
 
-export const vulnerabilities_sort_functions = {
+export const vulnerabilitiesSortFunctions = {
   name: makeCompareString('name'),
   oldest: makeCompareDate(entity => entity.results.oldest),
   newest: makeCompareDate(entity => entity.results.newest),

@@ -31,7 +31,7 @@ import EmptyReport from './emptyreport.js';
 import EmptyResultsReport from './emptyresultsreport.js';
 import ReportEntitiesContainer from './reportentitiescontainer.js';
 
-import {results_sort_functions} from './sort.js';
+import {resultsSortFunctions} from './sort.js';
 
 const ResultsTab = ({
   counts,
@@ -83,7 +83,7 @@ const ResultsTab = ({
       counts={counts}
       filter={filter}
       sortField={sortField}
-      sortFunctions={results_sort_functions}
+      sortFunctions={resultsSortFunctions}
       sortReverse={sortReverse}
       onInteraction={onInteraction}
     >

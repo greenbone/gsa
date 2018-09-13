@@ -81,14 +81,14 @@ import Summary from './summary';
 import TLSCertificatesTable from './tlscertificatestable';
 
 import {
-  apps_sort_functions,
-  closed_cves_sort_functions,
-  cves_sort_functions,
-  errors_sort_functions,
-  hosts_sort_functions,
-  operatingssystems_sort_functions,
-  ports_sort_functions,
-  tls_certificates_sort_functions,
+  appsSortFunctions,
+  closedCvesSortFunctions,
+  cvesSortFunctions,
+  errorsSortFunctions,
+  hostsSortFunctions,
+  operatingssystemsSortFunctions,
+  portsSortFunctions,
+  tlsCertificatesSortFunctions,
 } from './sort';
 import {TASK_STATUS} from 'gmp/models/task';
 
@@ -517,7 +517,7 @@ const PageContent = ({
                     filter={filter}
                     sortField={sorting.hosts.sortField}
                     sortReverse={sorting.hosts.sortReverse}
-                    sortFunctions={hosts_sort_functions}
+                    sortFunctions={hostsSortFunctions}
                     onInteraction={onInteraction}
                   >
                     {({
@@ -553,7 +553,7 @@ const PageContent = ({
                     entities={ports.entities}
                     filter={filter}
                     sortField={sorting.ports.sortField}
-                    sortFunctions={ports_sort_functions}
+                    sortFunctions={portsSortFunctions}
                     sortReverse={sorting.ports.sortReverse}
                     onInteraction={onInteraction}
                   >
@@ -590,7 +590,7 @@ const PageContent = ({
                     entities={applications.entities}
                     filter={filter}
                     sortField={sorting.apps.sortField}
-                    sortFunctions={apps_sort_functions}
+                    sortFunctions={appsSortFunctions}
                     sortReverse={sorting.apps.sortReverse}
                     onInteraction={onInteraction}
                   >
@@ -626,7 +626,7 @@ const PageContent = ({
                     counts={operatingsystems.counts}
                     entities={operatingsystems.entities}
                     filter={filter}
-                    sortFunctions={operatingssystems_sort_functions}
+                    sortFunctions={operatingssystemsSortFunctions}
                     sortField={sorting.os.sortField}
                     sortReverse={sorting.os.sortReverse}
                     onInteraction={onInteraction}
@@ -663,7 +663,7 @@ const PageContent = ({
                     counts={cves.counts}
                     entities={cves.entities}
                     filter={filter}
-                    sortFunctions={cves_sort_functions}
+                    sortFunctions={cvesSortFunctions}
                     sortField={sorting.cves.sortField}
                     sortReverse={sorting.cves.sortReverse}
                     onInteraction={onInteraction}
@@ -700,7 +700,7 @@ const PageContent = ({
                     counts={closed_cves.counts}
                     entities={closed_cves.entities}
                     filter={filter}
-                    sortFunctions={closed_cves_sort_functions}
+                    sortFunctions={closedCvesSortFunctions}
                     sortField={sorting.closedcves.sortField}
                     sortReverse={sorting.closedcves.sortReverse}
                     onInteraction={onInteraction}
@@ -737,7 +737,7 @@ const PageContent = ({
                     counts={tls_certificates.counts}
                     entities={tls_certificates.entities}
                     filter={filter}
-                    sortFunctions={tls_certificates_sort_functions}
+                    sortFunctions={tlsCertificatesSortFunctions}
                     sortField={sorting.tlscerts.sortField}
                     sortReverse={sorting.tlscerts.sortReverse}
                     onInteraction={onInteraction}
@@ -776,7 +776,7 @@ const PageContent = ({
                     counts={errors.counts}
                     entities={errors.entities}
                     filter={filter}
-                    sortFunctions={errors_sort_functions}
+                    sortFunctions={errorsSortFunctions}
                     sortField={sorting.errors.sortField}
                     sortReverse={sorting.errors.sortReverse}
                     onInteraction={onInteraction}
