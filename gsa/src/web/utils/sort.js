@@ -90,7 +90,8 @@ const getValue = (convertFunc, value, property, undefinedVal) => {
   return isDefined(val) ? val : undefinedVal;
 };
 
-const makeCompare = convertFunc => (property, undefinedVal) => reverse => {
+const makeCompare = convertFunc => (property, undefinedVal) =>
+ (reverse = false) => {
   const valCompare = reverse ? genericCompareDesc : genericCompareAsc;
 
   return (a, b) => valCompare(
