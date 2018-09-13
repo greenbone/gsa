@@ -21,6 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
+  parseCsv,
   parseFloat,
   parseInt,
   parseProgressElement,
@@ -212,6 +213,24 @@ describe('parseYesNo tests', () => {
     expect(parseYesNo('0')).toEqual(NO_VALUE);
     expect(parseYesNo(0)).toEqual(NO_VALUE);
     expect(parseYesNo(NO_VALUE)).toEqual(NO_VALUE);
+  });
+
+});
+
+describe('parseCsv tests', () => {
+
+  test('should parse undefined and empty', () => {
+    expect(parseCsv()).toEqual([]);
+    expect(parseCsv('')).toEqual([]);
+    expect(parseCsv(' ')).toEqual([]);
+  });
+
+  test('should parse csv values', () => {
+    expect(parseCsv('foo,bar')).toEqual(['foo', 'bar']);
+    expect(parseCsv(' foo , bar ')).toEqual(['foo', 'bar']);
+    expect(parseCsv(' foo    ,      bar ')).toEqual(['foo', 'bar']);
+    expect(parseCsv('foo, bar, ')).toEqual(['foo', 'bar', '']);
+    expect(parseCsv('foo, bar,,,,')).toEqual(['foo', 'bar', '', '', '', '']);
   });
 
 });
