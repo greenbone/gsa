@@ -49,9 +49,8 @@ else (NOT YARN_FOUND)
   list (APPEND GSA_PKG_FILES ${GSA_SRC_DIR}/yarn.lock)
 endif (NOT YARN_FOUND)
 
-set (GSA_SRC_FILES
-     ${GSA_SRC_DIR}/public/index.html
-     ${GSA_SRC_DIR}/public/config.js)
+set (GSA_STATIC_SRC_FILES
+     ${GSA_SRC_DIR}/public/index.html)
 
 set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/index.js
@@ -856,10 +855,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_JS_SRC_FILES}
      PARENT_SCOPE)
 
-set (GSA_FILES
-     ${GSA_BUILD_DIR}/config.js
-     ${GSA_BUILD_DIR}/index.html)
-
 
 add_custom_command (OUTPUT node-modules.stamp
                     DEPENDS ${GSA_PKG_FILES}
@@ -875,16 +870,15 @@ add_custom_command (OUTPUT bundle.stamp
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                              ${GSA_PKG_FILES}
-                             ${GSA_SRC_FILES}
+                             ${GSA_STATIC_SRC_FILES}
                              ${GSA_JS_SRC_FILES}
-                             ${GSA_CSS_SRC_FILES}
                     COMMENT "Build gsa-ng install files")
 
 add_custom_target (gsa-ng ALL
                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                            ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp)
 
-install (FILES ${GSA_FILES}
+install (FILES ${GSA_STATIC_SRC_FILES}
          DESTINATION ${GSA_DEST_DIR})
 
 install (FILES public/robots.txt
