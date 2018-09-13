@@ -23,6 +23,7 @@
 import {
   parseFloat,
   parseInt,
+  parseTextElement,
   parseSeverity,
 } from '../parser.js';
 
@@ -127,6 +128,27 @@ describe('parseFloat tests', () => {
   test('should parse empty string as undefined', () => {
     expect(parseFloat('')).toBeUndefined();
     expect(parseFloat(' ')).toBeUndefined();
+  });
+
+});
+
+describe('parseTextElement tests', () => {
+
+  test('should convert text elements', () => {
+    expect(parseTextElement({
+      __text: 'foo',
+      __excerpt: '1',
+    })).toEqual({
+      text: 'foo',
+      text_excerpt: '1',
+    });
+  });
+
+  test('should convert plain text elements', () => {
+    expect(parseTextElement('foo')).toEqual({
+      text: 'foo',
+      text_excerpt: '0',
+    });
   });
 
 });
