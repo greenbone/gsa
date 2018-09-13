@@ -28,13 +28,10 @@ import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
 
-import CacheFactory from 'gmp/cache';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
 
-import CacheFactoryProvider from 'web/components/provider/cachefactoryprovider';
 import GmpProvider from 'web/components/provider/gmpprovider';
 
 import {setUsername, setTimezone} from 'web/store/usersettings/actions';
@@ -46,8 +43,6 @@ import configureStore from './store';
 import {clearStore} from './store/actions';
 
 import Routes from './routes';
-
-const caches = new CacheFactory();
 
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
@@ -92,20 +87,16 @@ class App extends React.Component {
   handleLogout() {
     // cleanup store
     clearStore(store.dispatch);
-    // cleanup cache
-    caches.clearAll();
   }
 
   render() {
     return (
       <GmpProvider gmp={gmp}>
-        <CacheFactoryProvider caches={caches}>
-          <StoreProvider store={store}>
-            <LocaleObserver>
-              <Routes />
-            </LocaleObserver>
-          </StoreProvider>
-        </CacheFactoryProvider>
+        <StoreProvider store={store}>
+          <LocaleObserver>
+            <Routes />
+          </LocaleObserver>
+        </StoreProvider>
       </GmpProvider>
     );
   }
