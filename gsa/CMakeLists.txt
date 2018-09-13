@@ -310,8 +310,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/powerfilter/solutiontypegroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/withFilterDialog.js
-     ${GSA_SRC_DIR}/src/web/components/provider/cachefactoryprovider.js
-     ${GSA_SRC_DIR}/src/web/components/provider/cacheprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
@@ -837,7 +835,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/utils/theme.js
      ${GSA_SRC_DIR}/src/web/utils/state.js
      ${GSA_SRC_DIR}/src/web/utils/urls.js
-     ${GSA_SRC_DIR}/src/web/utils/withCache.js
      ${GSA_SRC_DIR}/src/web/utils/withCapabilities.js
      ${GSA_SRC_DIR}/src/web/utils/withComponentDefaults.js
      ${GSA_SRC_DIR}/src/web/utils/withContext.js
