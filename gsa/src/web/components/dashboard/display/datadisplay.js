@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import equal from 'fast-deep-equal';
 
@@ -32,18 +32,20 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import PropTypes from '../../../utils/proptypes';
-import Theme from '../../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Loading from '../../../components/loading/loading';
+import Loading from 'web/components/loading/loading';
 
-import MenuEntry from '../../menu/menuentry';
+import {Layout} from 'web/components/layout/layout';
+
+import MenuEntry from 'web/components/menu/menuentry';
 
 import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
 import DisplayMenu from './displaymenu';
-import {Layout} from '../../layout/layout';
+
 
 const ownProps = [
   'title',
@@ -60,26 +62,26 @@ const ownProps = [
   'onRemoveClick',
 ];
 
-const Download = glamorous.a({
-  color: Theme.black,
-  textDecoration: 'none',
-  display: 'none',
-  '&:link': {
-    color: Theme.black,
-    textDecoration: 'none',
-  },
-  '&:hover': {
-    color: Theme.white,
-    textDecoration: 'none',
-  },
-});
+const Download = styled.a`
+  color: ${Theme.black};
+  text-decoration: none:
+  display: none;
+  &:link {
+    color: ${Theme.black};
+    text-decoration: none;
+  };
+  &:hover {
+    color: ${Theme.white};
+    text-decoration: none;
+  };
+`;
 
-const FilterString = glamorous.div({
-  fontSize: '10px',
-  color: Theme.mediumGray,
-  padding: '5px',
-  overflow: 'hidden',
-});
+const FilterString = styled.div`
+  font-size: 10px;
+  color: ${Theme.mediumGray};
+  padding: 5px;
+  overflow: hidden;
+`;
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
 

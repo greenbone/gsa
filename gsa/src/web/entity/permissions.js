@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -49,9 +49,9 @@ import MultiplePermissionDialog, {
 import PermissionsTable from 'web/pages/permissions/table';
 import PermissionComponent from 'web/pages/permissions/component';
 
-const SectionElementDivider = glamorous(IconDivider)({
-  marginBottom: '3px',
-});
+const SectionElementDivider = styled(IconDivider)`
+  margin-bottom: 3px;
+`;
 
 const SectionElements = withCapabilities(({
   capabilities,

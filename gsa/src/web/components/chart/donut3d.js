@@ -25,20 +25,20 @@ import 'core-js/fn/array/for-each';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {color as d3color} from 'd3-color';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
-import {setRef} from '../../utils/render';
-import Theme from '../../utils/theme';
+import PropTypes from 'web/utils/proptypes';
+import {setRef} from 'web/utils/render';
+import Theme from 'web/utils/theme';
 
 import path from './utils/path';
 import arc from './utils/arc';
 
-import Layout from '../layout/layout';
+import Layout from 'web/components/layout/layout';
 
 import Pie from './pie';
 import Label from './label';
@@ -50,9 +50,9 @@ import Group from './group';
 const LEGEND_MARGIN = 20;
 const MIN_ANGLE_FOR_LABELS = 0.15;
 
-const StyledLayout = glamorous(Layout)({
-  overflow: 'hidden',
-});
+const StyledLayout = styled(Layout)`
+  overflow: hidden;
+`;
 
 const margin = {
   top: 20,

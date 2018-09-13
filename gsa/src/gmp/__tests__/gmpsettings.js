@@ -1,5 +1,3 @@
-import GmpSettings from 'gmp/gmpsettings';
-
 /* Greenbone Security Assistant
  *
  * Authors:
@@ -22,6 +20,13 @@ import GmpSettings from 'gmp/gmpsettings';
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import GmpSettings, {
+  DEFAULT_MANUAL_URL,
+  DEFAULT_RELOAD_INTERVAL,
+  DEFAULT_PROTOCOLDOC_URL,
+  DEFAULT_LOG_LEVEL,
+} from 'gmp/gmpsettings';
+
 const createStorage = state => {
   const store = {
     ...state,
@@ -33,11 +38,31 @@ const createStorage = state => {
 
 describe('GmpSettings tests', () => {
 
+  test('should init with defaults', () => {
+    const storage = createStorage();
+    const settings = new GmpSettings(storage);
+    expect(settings.loglevel).toEqual(DEFAULT_LOG_LEVEL);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
+    expect(settings.locale).toBeUndefined();
+    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
+    expect(settings.protocol).toEqual('http:');
+    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
+    expect(settings.server).toEqual('localhost');
+    expect(settings.token).toBeUndefined();
+    expect(settings.timeout).toBeUndefined();
+    expect(settings.timezone).toBeUndefined();
+    expect(settings.username).toBeUndefined();
+
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledWith('loglevel', DEFAULT_LOG_LEVEL);
+  });
+
   test('should init with passed options', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage, {
       reloadinterval: 10,
       locale: 'en',
+      loglevel: 'error',
       manualurl: 'http://manual',
       protocol: 'http',
       protocoldocurl: 'http://protocol',
@@ -49,21 +74,19 @@ describe('GmpSettings tests', () => {
     });
 
     expect(settings.reloadinterval).toEqual(10);
-    expect(settings.locale).toEqual('en');
+    expect(settings.locale).toBeUndefined();
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
-    expect(settings.token).toEqual('atoken');
+    expect(settings.token).toBeUndefined();
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
+    expect(settings.timezone).toBeUndefined();
+    expect(settings.username).toBeUndefined();
+    expect(settings.loglevel).toEqual('error');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
   });
 
   test('should init from store', () => {
@@ -72,6 +95,7 @@ describe('GmpSettings tests', () => {
       token: 'atoken',
       timezone: 'cet',
       username: 'foo',
+      loglevel: 'error',
     });
 
     const settings = new GmpSettings(storage, {
@@ -81,22 +105,20 @@ describe('GmpSettings tests', () => {
       protocol: 'http',
     });
 
-    expect(settings.reloadinterval).toEqual(15000);
+    expect(settings.reloadinterval).toEqual(DEFAULT_RELOAD_INTERVAL);
     expect(settings.locale).toEqual('en');
-    expect(settings.manualurl).toBeUndefined();
+    expect(settings.manualurl).toEqual(DEFAULT_MANUAL_URL);
     expect(settings.protocol).toEqual('http');
-    expect(settings.protocoldocurl).toBeUndefined();
+    expect(settings.protocoldocurl).toEqual(DEFAULT_PROTOCOLDOC_URL);
     expect(settings.server).toEqual('foo');
     expect(settings.token).toEqual('atoken');
     expect(settings.timeout).toBeUndefined();
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
+    expect(settings.loglevel).toEqual('error');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
   });
 
   test('should ensure options override settings from storage', () => {
@@ -111,6 +133,7 @@ describe('GmpSettings tests', () => {
       timeout: 10000,
       timezone: 'cest',
       username: 'bar',
+      loglevel: 'error',
     });
 
     const settings = new GmpSettings(storage, {
@@ -124,24 +147,23 @@ describe('GmpSettings tests', () => {
       timeout: 30000,
       timezone: 'cet',
       username: 'foo',
+      loglevel: 'debug',
     });
 
     expect(settings.reloadinterval).toEqual(10);
-    expect(settings.locale).toEqual('en');
+    expect(settings.locale).toEqual('de');
     expect(settings.manualurl).toEqual('http://manual');
     expect(settings.protocol).toEqual('http');
     expect(settings.protocoldocurl).toEqual('http://protocol');
     expect(settings.server).toEqual('localhost');
-    expect(settings.token).toEqual('atoken');
+    expect(settings.token).toEqual('btoken');
     expect(settings.timeout).toEqual(30000);
-    expect(settings.timezone).toEqual('cet');
-    expect(settings.username).toEqual('foo');
+    expect(settings.timezone).toEqual('cest');
+    expect(settings.username).toEqual('bar');
+    expect(settings.loglevel).toEqual('debug');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'debug');
   });
 
   test('should delete settings from storage', () => {
@@ -150,6 +172,7 @@ describe('GmpSettings tests', () => {
       token: 'atoken',
       timezone: 'cet',
       username: 'foo',
+      loglevel: 'error',
     });
 
     const settings = new GmpSettings(storage, {});
@@ -158,12 +181,10 @@ describe('GmpSettings tests', () => {
     expect(settings.token).toEqual('atoken');
     expect(settings.timezone).toEqual('cet');
     expect(settings.username).toEqual('foo');
+    expect(settings.loglevel).toEqual('error');
 
-    expect(storage.setItem).toHaveBeenCalledTimes(4);
-    expect(storage.setItem).toHaveBeenCalledWith('locale', 'en');
-    expect(storage.setItem).toHaveBeenCalledWith('token', 'atoken');
-    expect(storage.setItem).toHaveBeenCalledWith('timezone', 'cet');
-    expect(storage.setItem).toHaveBeenCalledWith('username', 'foo');
+    expect(storage.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.setItem).toHaveBeenCalledWith('loglevel', 'error');
 
     settings.locale = undefined;
     expect(storage.removeItem).toBeCalledWith('locale');
@@ -176,6 +197,9 @@ describe('GmpSettings tests', () => {
 
     settings.username = undefined;
     expect(storage.removeItem).toBeCalledWith('username');
+
+    settings.loglevel = undefined;
+    expect(storage.removeItem).toBeCalledWith('loglevel');
   });
 
 });

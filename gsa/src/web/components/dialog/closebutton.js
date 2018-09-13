@@ -23,35 +23,35 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import Theme from '../../utils/theme.js';
+import Theme from 'web/utils/theme';
 
-import PropTypes from '../../utils/proptypes';
-import withIconSize from '../icon/withIconSize';
+import PropTypes from 'web/utils/proptypes';
+import withIconSize from 'web/components/icon/withIconSize';
 
-let StyledCloseButton = glamorous.div({
-  display: 'flex',
-  border: '1px solid ' + Theme.darkGreen,
-  fontWeight: 'bold',
-  fontSize: '12px',
-  fontFamily: Theme.Font.default,
-  color: Theme.darkGreen,
-  cursor: 'pointer',
-  background: Theme.lighGreen,
-  borderRadius: '4px',
-  padding: '0',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
+let StyledCloseButton = styled.div`
+  display: flex;
+  border: 1px solid ${Theme.darkGreen};
+  font-weight: bold;
+  font-size: 12px;
+  font-family: ${Theme.Font.default};
+  color: ${Theme.darkGreen};
+  cursor: pointer;
+  background: ${Theme.lighGreen};
+  border-radius: 4px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
-  ':hover': {
-    color: '#fff',
-    background: Theme.darkGreen,
-  },
-});
+  :hover {
+    color: ${Theme.white};
+    background: ${Theme.darkGreen};
+  };
+`;
 
 StyledCloseButton = withIconSize('medium')(StyledCloseButton);
 

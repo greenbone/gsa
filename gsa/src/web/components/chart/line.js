@@ -28,7 +28,7 @@ import React from 'react';
 
 import {css} from 'glamor';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {scaleLinear, scaleUtc} from 'd3-scale';
 
@@ -38,7 +38,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
-import Layout from '../layout/layout';
+import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
@@ -67,16 +67,16 @@ const lineCss = css({
 
 const LINE_HEIGHT = 15;
 
-const Text = glamorous.text({
-  fontSize: '12px',
-  fill: Theme.white,
-});
+const Text = styled.text`
+  font-size: 12px;
+  fill: ${Theme.white};
+`;
 
-const LabelTitle = glamorous.text({
-  fontSize: '13px',
-  fill: Theme.white,
-  fontFamily: 'monospace',
-});
+const LabelTitle = styled.text`
+  font-size: 13px;
+  fill: ${Theme.white};
+  font-family: monospace;
+`;
 
 export const lineDataPropType = PropTypes.shape({
   label: PropTypes.any.isRequired,

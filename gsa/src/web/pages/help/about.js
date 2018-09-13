@@ -22,38 +22,38 @@
 */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import ExternalLink from '../../components/link/externallink.js';
-import ProtocolDocLink from '../../components/link/protocoldoclink.js';
-import Img from '../../components/img/img.js';
+import ExternalLink from 'web/components/link/externallink';
+import ProtocolDocLink from 'web/components/link/protocoldoclink';
+import Img from 'web/components/img/img';
 
-import Layout from '../../components/layout/layout.js';
-import Section from '../../components/section/section.js';
+import Layout from 'web/components/layout/layout';
+import Section from 'web/components/section/section';
 
-const StyledLayout = glamorous(Layout)({
-  margin: '0 auto',
-  maxWidth: '1100px',
-});
+const StyledLayout = styled(Layout)`
+  margin: 0 auto;
+  max-width: 1100px;
+`;
 
-const DivP = glamorous.div({
-  marginBottom: '10px',
-});
+const DivP = styled.div`
+  margin-bottom: 10px;
+`;
 
-const TextBlock = glamorous.div({
-  maxWidth: '600px',
-  minWidth: '400px',
-  marginRight: '30px',
-  '@media screen and (max-width: 800px)': {
-    marginRight: '0px',
-  },
-});
+const TextBlock = styled.div`
+  max-width: 600px;
+  min-width: 400px;
+  margin-right: 30px;
+  @media screen and (max-width: 800px) {
+    margin-right: 0px;
+  };
+`;
 
-const ImageBlock = glamorous.div({
-  maxWidth: '400px',
-});
+const ImageBlock = styled.div`
+  max-width: 400px;
+`;
 
 const About = () => (
   <Layout flex="column">

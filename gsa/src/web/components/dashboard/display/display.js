@@ -23,14 +23,14 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import Theme from '../../../utils/theme';
-import PropTypes from '../../../utils/proptypes';
+import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
-import CloseButton from '../../dialog/closebutton';
+import CloseButton from 'web/components/dialog/closebutton';
 
 export const DISPLAY_HEADER_HEIGHT = 20;
 export const DISPLAY_BORDER_WIDTH = 2;
@@ -40,67 +40,67 @@ export const DISPLAY_BORDER_WIDTH = 2;
  *
  * This allows to not consider the padding and border of the Header
  */
-const HeaderContainer = glamorous.div('display-header-container', {
-  position: 'relative',
-  zIndex: Theme.Layers.higher,
-  height: DISPLAY_HEADER_HEIGHT + 'px',
-  display: 'flex',
-  flexShrink: 0,
-});
+const HeaderContainer = styled.div`
+  position: relative;
+  z-index: ${Theme.Layers.higher};
+  height: ${DISPLAY_HEADER_HEIGHT}px;
+  display: flex;
+  flex-shrink: 0;
+`;
 
-const Header = glamorous.div('display-header', {
-  display: 'flex',
-  flexGrow: 1,
-  flexShrink: 1,
-  backgroundColor: Theme.green,
-  border: '1px solid ' + Theme.darkGreen,
-  color: 'white',
-  textOverflow: 'ellipsis',
-  padding: '0px 5px',
-  fontWeight: 'bold',
-  userSelect: 'none',
-  overflow: 'hidden',
-});
+const Header = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  background-color: ${Theme.green};
+  border: 1px solid ${Theme.darkGreen};
+  color: ${Theme.white};
+  text-overflow: ellipsis;
+  padding: 0px 5px;
+  font-weight: bold;
+  user-select: none;
+  overflow: hidden;
+`;
 
-const HeaderContent = glamorous.div('display-header-content', {
-  display: 'flex',
-  padding: '1px 0',
-  flexGrow: 1,
-  flexShrink: 1,
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  overflow: 'hidden',
-});
+const HeaderContent = styled.div`
+  display: flex;
+  padding: 1px 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+`;
 
-const DisplayView = glamorous.div('display-view', {
-  display: 'flex',
-  flexDirection: 'column',
-  flexGrow: 1,
-  flexShrink: 1,
-  flexBasis: 0,
-  backgroundColor: Theme.white,
-});
+const DisplayView = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  background-color: ${Theme.white};
+`;
 
-const DisplayContent = glamorous.div('display-content', {
-  display: 'flex',
-  flexGrow: 1,
-  flexShrink: 1,
-  borderLeft: '1px solid ' + Theme.lightGray,
-  borderRight: '1px solid ' + Theme.lightGray,
-  borderBottom: '1px solid ' + Theme.lightGray,
-  overflow: 'hidden',
-});
+const DisplayContent = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  border-left: 1px solid ${Theme.lightGray};
+  border-right: 1px solid ${Theme.lightGray};
+  border-bottom: 1px solid ${Theme.lightGray};
+  overflow: hidden;
+`;
 
-const DisplayTitle = glamorous.div('display-title', {
-  display: 'block',
-  flexGrow: 1,
-  flexShrink: 1,
-  whiteSpace: 'nowrap',
-  wordBreak: 'keep-all',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  textAlign: 'center',
-});
+const DisplayTitle = styled.div`
+  display: block;
+  flex-grow: 1;
+  flex-shrink: 1;
+  white-space: nowrap;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+`;
 
 const Display = ({
   children,
