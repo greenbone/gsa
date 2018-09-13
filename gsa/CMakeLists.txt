@@ -872,7 +872,6 @@ add_custom_command (OUTPUT bundle.stamp
                              ${GSA_PKG_FILES}
                              ${GSA_STATIC_SRC_FILES}
                              ${GSA_JS_SRC_FILES}
-                             ${GSA_CSS_SRC_FILES}
                     COMMENT "Build gsa-ng install files")
 
 add_custom_target (gsa-ng ALL
