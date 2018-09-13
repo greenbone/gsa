@@ -26,29 +26,23 @@ import {isEmpty} from '../../utils/string';
 
 import {parseInt} from '../../parser.js';
 
-const convertBooleanInt = (keyword, value, relation) => {
-  return {
-    keyword,
-    value:
-    parseInt(value) >= 1 ? 1 : 0,
-    relation,
-  };
-};
+const convertBooleanInt = (keyword, value, relation) => ({
+  keyword,
+  value:
+  parseInt(value) >= 1 ? 1 : 0,
+  relation,
+});
 
-function convertInt(keyword, value, relation) {
-  return {
-    keyword,
-    value: parseInt(value),
-    relation,
-  };
-}
+const convertInt = (keyword, value, relation) => ({
+  keyword,
+  value: parseInt(value),
+  relation,
+});
 
-function convertNoRelation(keyword, value, relation) {
-  return {
-    keyword,
-    value,
-  };
-}
+const convertNoRelation = (keyword, value, relation) => ({
+  keyword,
+  value,
+});
 
 const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
 
