@@ -70,6 +70,10 @@ export const parseInt = value => {
 };
 
 export const parseFloat = value => {
+  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+    return undefined;
+  }
+
   const val = global.parseFloat(value);
 
   if (isNaN(val)) {
