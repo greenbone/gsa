@@ -75,37 +75,16 @@ import LoginCommand from './commands/login.js';
 import {setLocale} from './locale/lang';
 import {BROWSER_LANGUAGE} from './locale/detector';
 
-import GmpSettings from './gmpsettings';
-
 const log = logger.getLogger('gmp');
 
 class Gmp {
 
-  constructor(options = {}) {
-    const {
-      loglevel,
-      manualurl,
-      protocol,
-      protocoldocurl,
-      reloadinterval,
-      server,
-      storage,
-      timeout,
-    } = options;
-
-    this.settings = new GmpSettings(storage, {
-      loglevel,
-      manualurl,
-      protocol,
-      protocoldocurl,
-      reloadinterval,
-      server,
-      timeout,
-    });
+  constructor(settings = {}) {
+    this.settings = settings;
 
     logger.init(this.settings);
 
-    log.debug('Using gmp options', options);
+    log.debug('Using gmp settings', settings);
 
     this.log = logger;
 

@@ -26,6 +26,7 @@ import React from 'react';
 import {Provider as StoreProvider} from 'react-redux';
 
 import Gmp from 'gmp';
+import GmpSettings from 'gmp/gmpsettings';
 
 import CacheFactory from 'gmp/cache';
 
@@ -46,11 +47,10 @@ import {clearStore} from './store/actions';
 
 import Routes from './routes';
 
-const {config = {}} = window;
-
 const caches = new CacheFactory();
 
-const gmp = new Gmp(config);
+const settings = new GmpSettings(global.localStorage, global.config);
+const gmp = new Gmp(settings);
 
 const store = configureStore();
 
