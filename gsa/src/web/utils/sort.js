@@ -72,14 +72,14 @@ export const ipToNumber = original => {
   if (split.length === 4) { // should be an ipv4 address
     let ret = 0;
     for (const item of split) {
-      ret = ret << 8; // eslint-disable-line no-bitwise
+      ret = ret * 256; // same as shift 8 bits left
       const number = parseInt(item);
 
       if (!isDefined(number)) { // wasn't a number. it's not an ip
         return original;
       }
 
-      ret = ret | number; // eslint-disable-line no-bitwise
+      ret = ret + number;
     }
     return ret;
   }
