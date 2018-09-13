@@ -35,10 +35,13 @@ export const parseProgressElement = value => {
   if (!isDefined(value)) {
     return 0;
   }
+
   if (isDefined(value.__text)) {
     value = value.__text;
   }
-  return parseFloat(value);
+
+  const progress = parseFloat(value);
+  return isDefined(progress) ? progress : 0;
 };
 
 export const parseTextElement = text => {
