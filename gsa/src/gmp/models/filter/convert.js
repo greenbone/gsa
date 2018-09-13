@@ -26,7 +26,7 @@ import {isEmpty} from '../../utils/string';
 
 import {parseInt} from '../../parser.js';
 
-const convert_boolean_int = (keyword, value, relation) => {
+const convertBooleanInt = (keyword, value, relation) => {
   return {
     keyword,
     value:
@@ -35,7 +35,7 @@ const convert_boolean_int = (keyword, value, relation) => {
   };
 };
 
-function convert_int(keyword, value, relation) {
+function convertInt(keyword, value, relation) {
   return {
     keyword,
     value: parseInt(value),
@@ -43,33 +43,33 @@ function convert_int(keyword, value, relation) {
   };
 }
 
-function convert_no_relation(keyword, value, relation) {
+function convertNoRelation(keyword, value, relation) {
   return {
     keyword,
     value,
   };
 }
 
-const convert_no_relation_and_keyword = (keyword, value, relation) => ({value});
+const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
 
 const KEYWORD_CONVERTERS = {
-  apply_overrides: convert_boolean_int,
-  autofp: convert_int,
-  first: convert_int,
-  min_qod: convert_int,
-  notes: convert_boolean_int,
-  overrides: convert_boolean_int,
-  result_hosts_only: convert_boolean_int,
-  rows: convert_int,
+  apply_overrides: convertBooleanInt,
+  autofp: convertInt,
+  first: convertInt,
+  min_qod: convertInt,
+  notes: convertBooleanInt,
+  overrides: convertBooleanInt,
+  result_hosts_only: convertBooleanInt,
+  rows: convertInt,
 };
 
 const VALUE_CONVERTERS = {
-  and: convert_no_relation_and_keyword,
-  or: convert_no_relation_and_keyword,
-  not: convert_no_relation_and_keyword,
-  re: convert_no_relation,
-  regexp: convert_no_relation,
-  '': convert_no_relation,
+  and: convertNoRelationAndKeyword,
+  or: convertNoRelationAndKeyword,
+  not: convertNoRelationAndKeyword,
+  re: convertNoRelation,
+  regexp: convertNoRelation,
+  '': convertNoRelation,
 };
 
 const convert = (keyword, value, relation) => {
