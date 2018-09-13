@@ -864,14 +864,14 @@ set (GSA_FILES
 add_custom_command (OUTPUT node-modules.stamp
                     DEPENDS ${GSA_PKG_FILES}
                     COMMAND ${INSTALLER} "${INSTALLER_ARGS}" "install"
-                    COMMAND cmake -E touch ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
+                    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                     WORKING_DIRECTORY ${GSA_SRC_DIR}
                     COMMENT "Install gsa-ng js dependencies")
 
 
 add_custom_command (OUTPUT bundle.stamp
                     COMMAND ${INSTALLER} "${INSTALLER_ARGS}" run build
-                    COMMAND cmake -E touch ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp
+                    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                              ${GSA_PKG_FILES}
