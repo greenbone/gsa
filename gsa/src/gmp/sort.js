@@ -30,7 +30,7 @@ import {parseInt, parseFloat} from './parser.js';
 
 const log = logger.getLogger('gmp.sort');
 
-function generic_compare_asc(a_val, b_val) {
+const generic_compare_asc = (a_val, b_val) => {
   if (a_val > b_val) {
     return +1;
   }
@@ -38,9 +38,9 @@ function generic_compare_asc(a_val, b_val) {
     return -1;
   }
   return 0;
-}
+};
 
-function generic_compare_desc(a_val, b_val) {
+const generic_compare_desc = (a_val, b_val) => {
   if (a_val < b_val) {
     return +1;
   }
@@ -48,9 +48,9 @@ function generic_compare_desc(a_val, b_val) {
     return -1;
   }
   return 0;
-}
+};
 
-function get_property(object, property) {
+const get_property = (object, property) => {
   try {
     if (isFunction(property)) {
       return property(object);
@@ -62,7 +62,7 @@ function get_property(object, property) {
     log.error('Could not get property', property, object);
     return undefined;
   }
-}
+};
 
 const ip_to_number = original => {
   if (!isDefined(original)) {
