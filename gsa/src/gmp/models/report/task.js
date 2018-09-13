@@ -23,7 +23,7 @@
 import {isDefined} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
-import {parseProgress} from '../../parser';
+import {parseProgressElement} from '../../parser';
 
 import Model from '../../model';
 
@@ -46,7 +46,7 @@ class ReportTask extends Model {
       delete copy.target;
     }
 
-    copy.progress = parseProgress(elem.progress);
+    copy.progress = parseProgressElement(elem.progress);
 
     return copy;
   }

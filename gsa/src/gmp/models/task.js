@@ -29,7 +29,7 @@ import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
-  parseProgress,
+  parseProgressElement,
   parseYesNo,
   parseDuration,
   NO_VALUE,
@@ -199,7 +199,7 @@ class Task extends Model {
 
     elem.schedule_periods = parseInt(elem.schedule_periods);
 
-    elem.progress = parseProgress(elem.progress);
+    elem.progress = parseProgressElement(elem.progress);
 
     const prefs = {};
 

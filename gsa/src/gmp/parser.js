@@ -31,7 +31,7 @@ import date, {duration} from './models/date';
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
 
-export const parseProgress = value => {
+export const parseProgressElement = value => {
   if (!isDefined(value)) {
     return 0;
   }
