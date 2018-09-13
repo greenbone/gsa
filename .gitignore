@@ -2,7 +2,7 @@ build/
 /tags
 node_modules/
 .env.local
-config.local.js
+/gsa/public/config.js
 .vscode/
 .tern-project
 # directory files for image previews
