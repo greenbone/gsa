@@ -205,6 +205,25 @@ describe('Capabilities tests', () => {
 
   });
 
+  test('should allow iterating', () => {
+    const capList = [
+      'get_tasks',
+      'create_task',
+      'delete_task',
+      'modify_task',
+    ];
+    const caps = new Capabilities(capList);
+
+    expect(caps.length).toEqual(4);
+
+    let i = 0;
+    for (const cap of caps) {
+      i++;
+      expect(capList).toEqual(expect.arrayContaining([cap]));
+    }
+    expect(i).toEqual(4);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
