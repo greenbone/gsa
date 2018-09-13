@@ -97,7 +97,7 @@ describe('log tests', () => {
     expect(newLogger.defaultLogValue).toEqual(LogLevels.debug);
   });
 
-  test('should ignore unkown levels in setDefaultLogLevel', () => {
+  test('should ignore unkown levels in RootLoogger setDefaultLogLevel', () => {
     const logger = getRootLogger();
     expect(logger.init({loglevel: 'error'})).toEqual(true);
     expect(logger.level).toEqual('error');
@@ -107,6 +107,18 @@ describe('log tests', () => {
 
     expect(logger.setDefaultLevel('foo')).toEqual(false);
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
+  });
+
+  test('should ignore unkown levels in logger setDefaultLogLevel', () => {
+    const logger = getRootLogger();
+    expect(logger.init({loglevel: 'error'})).toEqual(true);
+    expect(logger.level).toEqual('error');
+
+    const newLogger = logger.getLogger('foo.bar');
+    expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
+
+    newLogger.setDefaultLevel('foo');
+    expect(newLogger.defaultLogValue).toEqual(LogLevels.silent);
   });
 
   test('should return same logger instance for the same name', () => {
