@@ -50,8 +50,7 @@ else (NOT YARN_FOUND)
 endif (NOT YARN_FOUND)
 
 set (GSA_SRC_FILES
-     ${GSA_SRC_DIR}/public/index.html
-     ${GSA_SRC_DIR}/public/config.js)
+     ${GSA_SRC_DIR}/public/index.html)
 
 set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/index.js
@@ -857,7 +856,6 @@ set (GSA_JS_SRC_FILES
      PARENT_SCOPE)
 
 set (GSA_FILES
-     ${GSA_BUILD_DIR}/config.js
      ${GSA_BUILD_DIR}/index.html)
 
 
