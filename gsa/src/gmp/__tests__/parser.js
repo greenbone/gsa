@@ -26,6 +26,9 @@ import {
   parseProgressElement,
   parseTextElement,
   parseSeverity,
+  parseYesNo,
+  YES_VALUE,
+  NO_VALUE,
 } from '../parser.js';
 
 describe('parseInt tests', () => {
@@ -190,6 +193,25 @@ describe('parseProgressElement tests', () => {
     expect(parseProgressElement({__text: 5})).toEqual(5);
     expect(parseProgressElement({__text: 1.1})).toEqual(1.1);
     expect(parseProgressElement({__text: 5.4})).toEqual(5.4);
+  });
+
+});
+
+describe('parseYesNo tests', () => {
+
+  test('should parse yes values', () => {
+    expect(parseYesNo('1')).toEqual(YES_VALUE);
+    expect(parseYesNo(1)).toEqual(YES_VALUE);
+    expect(parseYesNo(YES_VALUE)).toEqual(YES_VALUE);
+  });
+
+  test('should parse other values as no value', () => {
+    expect(parseYesNo()).toEqual(NO_VALUE);
+    expect(parseYesNo('')).toEqual(NO_VALUE);
+    expect(parseYesNo('foo')).toEqual(NO_VALUE);
+    expect(parseYesNo('0')).toEqual(NO_VALUE);
+    expect(parseYesNo(0)).toEqual(NO_VALUE);
+    expect(parseYesNo(NO_VALUE)).toEqual(NO_VALUE);
   });
 
 });
