@@ -63,7 +63,7 @@ const getProperty = (object, property) => {
   }
 };
 
-const ipToNumber = original => {
+export const ipToNumber = original => {
   if (!isDefined(original)) {
     return undefined;
   }
