@@ -62,15 +62,6 @@ class Http {
     log.debug('Using http options', options);
   }
 
-  _cacheData(data, options) {
-    const {cache, url, method} = options;
-    if (isDefined(cache) && isDefined(url) && method === 'GET') {
-      log.debug('Storing data for url', url, 'in cache', cache);
-      cache.set(url, data);
-    }
-    return this;
-  }
-
   _createFormData(data) {
     const formdata = new FormData();
 
@@ -99,7 +90,6 @@ class Http {
     args,
     data,
     url = this.url,
-    cache,
     cancel_token,
     force = false,
     responseType,
@@ -114,21 +104,6 @@ class Http {
       url += '?' + buildUrlParams({...this.getParams(), ...args});
     }
 
-    if (method === 'GET' && isDefined(cache) && cache.has(url) && !force) {
-      log.debug('Using http response for url', url, 'from cache', cache);
-
-      const entry = cache.get(url);
-
-      let responsedata = entry.value;
-
-      responsedata = responsedata.setMeta({
-        fromcache: true,
-        dirty: entry.dirty,
-      });
-
-      return Promise.resolve(responsedata);
-    }
-
     if (data && (method === 'POST' || method === 'PUT')) {
       formdata = this._createFormData({...this.getParams(), ...data});
     }
@@ -138,7 +113,6 @@ class Http {
       method,
       url,
       formdata,
-      cache,
       force,
       ...other,
     };
@@ -191,11 +165,9 @@ class Http {
 
   handleSuccess(resolve, reject, xhr, options) {
     try {
-      let response = new Response(xhr, xhr.response, {fromcache: false});
+      let response = new Response(xhr, xhr.response);
 
       response = this.transformSuccess(response, options);
-
-      this._cacheData(response, options);
 
       resolve(response);
     }

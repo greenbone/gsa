@@ -54,7 +54,6 @@ set (GSA_STATIC_SRC_FILES
 
 set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/index.js
-     ${GSA_SRC_DIR}/src/gmp/cache.js
      ${GSA_SRC_DIR}/src/gmp/cancel.js
      ${GSA_SRC_DIR}/src/gmp/capabilities/capabilities.js
      ${GSA_SRC_DIR}/src/gmp/capabilities/everything.js
