@@ -22,99 +22,99 @@
  */
 
 import {
-  make_compare_date,
-  make_compare_ip,
-  make_compare_number,
-  make_compare_severity,
-  make_compare_string,
+  makeCompareDate,
+  makeCompareIp,
+  makeCompareNumber,
+  makeCompareSeverity,
+  makeCompareString,
 } from 'gmp/sort.js';
 
 export const apps_sort_functions = {
-  name: make_compare_string('name'),
-  hosts: make_compare_number(entity => entity.hosts.count),
-  occurrences: make_compare_number(entity => entity.occurrences.total),
-  severity: make_compare_severity(),
+  name: makeCompareString('name'),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  occurrences: makeCompareNumber(entity => entity.occurrences.total),
+  severity: makeCompareSeverity(),
 };
 
 export const closed_cves_sort_functions = {
-  cve: make_compare_string('id'),
-  host: make_compare_ip(entity => entity.host.ip),
-  nvt: make_compare_string(entity => entity.source.description),
-  severity: make_compare_severity(),
+  cve: makeCompareString('id'),
+  host: makeCompareIp(entity => entity.host.ip),
+  nvt: makeCompareString(entity => entity.source.description),
+  severity: makeCompareSeverity(),
 };
 
 export const cves_sort_functions = {
-  cve: make_compare_string(entity => entity.cves.join(' ')),
-  hosts: make_compare_number(entity => entity.hosts.count),
-  occurrences: make_compare_number(entity => entity.occurrences),
-  severity: make_compare_severity(),
+  cve: makeCompareString(entity => entity.cves.join(' ')),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  occurrences: makeCompareNumber(entity => entity.occurrences),
+  severity: makeCompareSeverity(),
 };
 
 export const errors_sort_functions = {
-  error: make_compare_string('description'),
-  host: make_compare_ip(entity => entity.host.ip),
-  hostname: make_compare_string(entity => entity.host.name),
-  nvt: make_compare_string(entity => entity.nvt.name),
-  port: make_compare_string('port'),
+  error: makeCompareString('description'),
+  host: makeCompareIp(entity => entity.host.ip),
+  hostname: makeCompareString(entity => entity.host.name),
+  nvt: makeCompareString(entity => entity.nvt.name),
+  port: makeCompareString('port'),
 };
 
 export const hosts_sort_functions = {
-  ip: make_compare_ip('ip'),
-  hostname: make_compare_string('hostname'),
-  os: make_compare_string(entity => entity.details.best_os_cpe),
-  high: make_compare_number(entity => entity.result_counts.hole),
-  medium: make_compare_number(entity => entity.result_counts.warning),
-  low: make_compare_number(entity => entity.result_counts.info),
-  log: make_compare_number(entity => entity.result_counts.log),
-  false_positive: make_compare_number(
+  ip: makeCompareIp('ip'),
+  hostname: makeCompareString('hostname'),
+  os: makeCompareString(entity => entity.details.best_os_cpe),
+  high: makeCompareNumber(entity => entity.result_counts.hole),
+  medium: makeCompareNumber(entity => entity.result_counts.warning),
+  low: makeCompareNumber(entity => entity.result_counts.info),
+  log: makeCompareNumber(entity => entity.result_counts.log),
+  false_positive: makeCompareNumber(
     entity => entity.result_counts.false_positive),
-  total: make_compare_number(entity => entity.result_counts.total),
-  severity: make_compare_severity(),
+  total: makeCompareNumber(entity => entity.result_counts.total),
+  severity: makeCompareSeverity(),
 };
 
 export const operatingssystems_sort_functions = {
-  name: make_compare_string('name'),
-  cpe: make_compare_string('id'),
-  hosts: make_compare_number(entity => entity.hosts.count),
-  severity: make_compare_number('severity', 0),
+  name: makeCompareString('name'),
+  cpe: makeCompareString('id'),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  severity: makeCompareNumber('severity', 0),
 };
 
 export const ports_sort_functions = {
-  name: make_compare_string('id'),
-  hosts: make_compare_number(entity => entity.hosts.count),
-  severity: make_compare_severity(),
+  name: makeCompareString('id'),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  severity: makeCompareSeverity(),
 };
 
 export const results_sort_functions = {
-  delta: make_compare_string(entity => entity.delta.delta_type),
-  created: make_compare_date('creationTime'),
-  host: make_compare_ip(entity => entity.host.name),
-  hostname: make_compare_string(entity => entity.host.hostname),
-  location: make_compare_string('port'),
-  qod: make_compare_number(entity => entity.qod.value),
-  severity: make_compare_severity(),
-  solution_type: make_compare_string(entity => entity.nvt.tags.solution_type),
-  vulnerability: make_compare_string('vulnerability'),
+  delta: makeCompareString(entity => entity.delta.delta_type),
+  created: makeCompareDate('creationTime'),
+  host: makeCompareIp(entity => entity.host.name),
+  hostname: makeCompareString(entity => entity.host.hostname),
+  location: makeCompareString('port'),
+  qod: makeCompareNumber(entity => entity.qod.value),
+  severity: makeCompareSeverity(),
+  solution_type: makeCompareString(entity => entity.nvt.tags.solution_type),
+  vulnerability: makeCompareString('vulnerability'),
 };
 
 export const tls_certificates_sort_functions = {
-  dn: make_compare_string('issuer'),
-  serial: make_compare_string('serial'),
-  notvalidbefore: make_compare_date('notbefore'),
-  notvalidafter: make_compare_date('notafter'),
-  ip: make_compare_ip('ip'),
-  hostname: make_compare_string('hostname'),
-  port: make_compare_string('port'),
+  dn: makeCompareString('issuer'),
+  serial: makeCompareString('serial'),
+  notvalidbefore: makeCompareDate('notbefore'),
+  notvalidafter: makeCompareDate('notafter'),
+  ip: makeCompareIp('ip'),
+  hostname: makeCompareString('hostname'),
+  port: makeCompareString('port'),
 };
 
 export const vulnerabilities_sort_functions = {
-  name: make_compare_string('name'),
-  oldest: make_compare_date(entity => entity.results.oldest),
-  newest: make_compare_date(entity => entity.results.newest),
-  qod: make_compare_number(entity => entity.qod.value),
-  results: make_compare_number(entity => entity.results.count),
-  hosts: make_compare_number(entity => entity.hosts.count),
-  severity: make_compare_severity(),
+  name: makeCompareString('name'),
+  oldest: makeCompareDate(entity => entity.results.oldest),
+  newest: makeCompareDate(entity => entity.results.newest),
+  qod: makeCompareNumber(entity => entity.qod.value),
+  results: makeCompareNumber(entity => entity.results.count),
+  hosts: makeCompareNumber(entity => entity.hosts.count),
+  severity: makeCompareSeverity(),
 };
 
 // vim: set ts=2 sw=2 tw=80:
