@@ -92,8 +92,8 @@ export const NO_VALUE = 0;
 export const parseYesNo = value => value === '1' || value === 1 ?
   YES_VALUE : NO_VALUE;
 
-export const parseCsv = value => isEmpty(value) ? [] :
-  value.split(',').map(val => val.trim());
+export const parseCsv = value => !isDefined(value) || isEmpty(value.trim()) ?
+  [] : value.split(',').map(val => val.trim());
 
 export const parseQod = qod => ({
   type: qod.type,
