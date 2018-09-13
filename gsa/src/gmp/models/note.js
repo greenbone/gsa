@@ -30,7 +30,7 @@ import Model from '../model';
 import {
   parseCsv,
   parseSeverity,
-  parseText,
+  parseTextElement,
   parseYesNo,
   YES_VALUE,
 } from '../parser';
@@ -52,7 +52,7 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret = {...ret, ...parseText(ret.text)};
+    ret = {...ret, ...parseTextElement(ret.text)};
 
     ret.severity = parseSeverity(ret.severity);
 

@@ -41,7 +41,7 @@ export const parseProgress = value => {
   return parseFloat(value);
 };
 
-export const parseText = text => {
+export const parseTextElement = text => {
   if (isDefined(text.__text)) {
     return {
       text: text.__text,
@@ -53,7 +53,7 @@ export const parseText = text => {
     text,
     text_excerpt: '0',
   };
-}
+};
 
 export const parseInt = value => {
   if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
