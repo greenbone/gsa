@@ -24,8 +24,6 @@ import ReactPropTypes from 'prop-types';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {CacheFactory, Cache} from 'gmp/cache';
-
 import {isDate, isDuration} from 'gmp/models/date';
 
 import Gmp from 'gmp/gmp';
@@ -136,9 +134,6 @@ const gmp = ReactPropTypes.instanceOf(Gmp);
 
 const settings = ReactPropTypes.instanceOf(Settings);
 
-const cachefactory = ReactPropTypes.instanceOf(CacheFactory);
-const cache = ReactPropTypes.instanceOf(Cache);
-
 const dateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
   if (isDefined(value) && !isDate(value)) {
@@ -216,8 +211,6 @@ export default {
   symbol: ReactPropTypes.symbol,
   string: ReactPropTypes.string,
 
-  cache,
-  cachefactory,
   capabilities,
   counts,
   component,
