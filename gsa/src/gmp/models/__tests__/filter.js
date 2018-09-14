@@ -604,6 +604,18 @@ describe('Filter copy', () => {
 
 describe('Filter next', () => {
 
+  test('should return defaults', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+    expect(filter.get('rows')).toBeUndefined();
+
+    filter = filter.next();
+
+    expect(filter.get('first')).toEqual(1);
+    expect(filter.get('rows')).toEqual(10);
+  });
+
   test('should change first and rows', () => {
     let filter = Filter.fromString('first=1 rows=10');
     expect(filter.get('first')).toBe(1);
