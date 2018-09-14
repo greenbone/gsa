@@ -187,7 +187,7 @@ const Details = ({
               <TableData flex align={['start', 'center']}>
                 <Divider>
                   <SeverityBar severity={entity.severity}/>
-                  {overrides.active &&
+                  {active_overrides.length > 0 &&
                     <InnerLink
                       to="overrides"
                     >
