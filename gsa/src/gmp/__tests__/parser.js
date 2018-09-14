@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDate} from 'gmp/models/date';
+import {isDate, isDuration} from 'gmp/models/date';
 
 import {
   parseCsv,
@@ -35,6 +35,7 @@ import {
   YES_VALUE,
   NO_VALUE,
   parseDate,
+  parseDuration,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -319,6 +320,18 @@ describe('parseDate tests', () => {
     expect(isDate(date)).toEqual(true);
   });
 
+});
+
+describe('parseDuration tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseDuration()).toBeUndefined();
+  });
+
+  test('should parse duration', () => {
+    expect(isDuration(parseDuration('666'))).toEqual(true);
+    expect(isDuration(parseDuration(666))).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
