@@ -25,6 +25,7 @@ import {
   parseFloat,
   parseInt,
   parseProgressElement,
+  parseQod,
   parseTextElement,
   parseSeverity,
   parseYesNo,
@@ -231,6 +232,31 @@ describe('parseCsv tests', () => {
     expect(parseCsv(' foo    ,      bar ')).toEqual(['foo', 'bar']);
     expect(parseCsv('foo, bar, ')).toEqual(['foo', 'bar', '']);
     expect(parseCsv('foo, bar,,,,')).toEqual(['foo', 'bar', '', '', '', '']);
+  });
+
+});
+
+describe('parseQod tests', () => {
+
+  test('should convert value to float', () => {
+    expect(parseQod({
+      value: '55',
+      type: 'remote_vul',
+    })).toEqual({
+      value: 55,
+      type: 'remote_vul',
+    });
+  });
+
+  test('should drop unknown properties', () => {
+    expect(parseQod({
+      value: '55',
+      type: 'remote_vul',
+      foo: 'bar',
+    })).toEqual({
+      value: 55,
+      type: 'remote_vul',
+    });
   });
 
 });
