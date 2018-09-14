@@ -790,4 +790,32 @@ describe('Filter fromTerm', () => {
   });
 });
 
+describe('Filter toFilterCriteriaString', () => {
+
+  test('should return string representaion', () => {
+    const filter1 = Filter.fromString('foo=bar and lorem=ipsum');
+    expect(filter1.toFilterCriteriaString()).toEqual('foo=bar and lorem=ipsum');
+  });
+
+  test('should ignore extra keywords', () => {
+    const filter1 = Filter.fromString('foo=bar first=1 rows=66');
+    expect(filter1.toFilterCriteriaString()).toEqual('foo=bar');
+  });
+
+});
+
+describe('Filter toFilterExtraString', () => {
+
+  test('should empty string if no extra keywords are present', () => {
+    const filter1 = Filter.fromString('foo=bar and lorem=ipsum');
+    expect(filter1.toFilterExtraString()).toEqual('');
+  });
+
+  test('should ignore non extra keywords', () => {
+    const filter1 = Filter.fromString('foo=bar first=1 rows=66');
+    expect(filter1.toFilterExtraString()).toEqual('first=1 rows=66');
+  });
+
+});
+
 // vim: set ts=2 sw=2 tw=80:
