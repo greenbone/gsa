@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isArray} from '../../utils/identity';
+
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
 
@@ -529,6 +531,22 @@ describe('Filter parse elem', () => {
     });
 
     expect(filter1.term).toBeUndefined();
+  });
+
+  test('should parse alerts', () => {
+    const filter1 = new Filter({
+      term: 'abc=1',
+      alerts: {
+        alert: [{
+          id: 'a1',
+        }, {
+          id: 'a2',
+        }],
+      },
+    });
+
+    expect(isArray(filter1.alerts)).toEqual(true);
+    expect(filter1.alerts).toHaveLength(2);
   });
 });
 
