@@ -629,6 +629,29 @@ describe('Filter next', () => {
 
 });
 
+describe('Filter first', () => {
+
+  test('should set first if undefined', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+
+    filter = filter.first();
+
+    expect(filter.get('first')).toEqual(1);
+  });
+
+  test('should change first to 1', () => {
+    let filter = Filter.fromString('first=99');
+    expect(filter.get('first')).toBe(99);
+
+    filter = filter.first();
+
+    expect(filter.get('first')).toBe(1);
+  });
+
+});
+
 describe('Filter previous', () => {
 
   test('should return defaults', () => {
