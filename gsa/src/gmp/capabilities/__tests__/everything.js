@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,42 +20,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import EverythingCapabilities from '../everything';
 
-import {parseProgressElement} from '../../parser';
+describe('EverythingCapabilities tests', () => {
 
-import Model from '../../model';
+  test('should allow everything', () => {
+    const caps = new EverythingCapabilities();
 
-/*
- * Use own task model for reports to avoid cyclic dependencies
- */
+    expect(caps.mayOp('foo')).toEqual(true);
+    expect(caps.mayAccess('foo')).toEqual(true);
+    expect(caps.mayClone('foo')).toEqual(true);
+    expect(caps.mayCreate('foo')).toEqual(true);
+    expect(caps.mayDelete('foo')).toEqual(true);
+    expect(caps.mayEdit('foo')).toEqual(true);
+  });
 
-class ReportTask extends Model {
+  test('should have everything', () => {
+    const caps = new EverythingCapabilities();
 
-  static entityType = 'task';
+    expect(caps.length).toEqual(1);
+    expect(caps.areDefined()).toEqual(true);
+    expect(caps.has('everything')).toEqual(true);
+  });
 
-  parseProperties(elem) {
-    const copy = super.parseProperties(elem);
-
-    const {target} = elem;
-    if (isDefined(target) && !isEmpty(target._id)) {
-      copy.target = new Model(target, 'target');
-    }
-    else {
-      delete copy.target;
-    }
-
-    copy.progress = parseProgressElement(elem.progress);
-
-    return copy;
-  }
-
-  isContainer() {
-    return !isDefined(this.target);
-  }
-}
-
-export default ReportTask;
+});
 
 // vim: set ts=2 sw=2 tw=80:

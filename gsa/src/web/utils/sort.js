@@ -21,36 +21,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {parseInt, parseFloat} from 'gmp/parser';
 
-import logger from './log.js';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 
-import {isDefined, isFunction} from './utils/identity';
-
-import {parseInt, parseFloat} from './parser.js';
-
-const log = logger.getLogger('gmp.sort');
-
-function generic_compare_asc(a_val, b_val) {
-  if (a_val > b_val) {
+const genericCompareAsc = (a, b) => {
+  if (a > b) {
     return +1;
   }
-  else if (b_val > a_val) {
+  else if (b > a) {
     return -1;
   }
   return 0;
-}
+};
 
-function generic_compare_desc(a_val, b_val) {
-  if (a_val < b_val) {
+const genericCompareDesc = (a, b) => {
+  if (a < b) {
     return +1;
   }
-  else if (b_val < a_val) {
+  else if (b < a) {
     return -1;
   }
   return 0;
-}
+};
 
-function get_property(object, property) {
+// export for testing only
+export const getProperty = (object, property) => {
   try {
     if (isFunction(property)) {
       return property(object);
@@ -59,12 +55,12 @@ function get_property(object, property) {
     return object[property];
   }
   catch (err) {
-    log.error('Could not get property', property, object);
     return undefined;
   }
-}
+};
 
-const ip_to_number = original => {
+// export for testing only
+export const ipToNumber = original => {
   if (!isDefined(original)) {
     return undefined;
   }
@@ -73,14 +69,14 @@ const ip_to_number = original => {
   if (split.length === 4) { // should be an ipv4 address
     let ret = 0;
     for (const item of split) {
-      ret = ret << 8; // eslint-disable-line no-bitwise
+      ret = ret * 256; // same as shift 8 bits left
       const number = parseInt(item);
 
       if (!isDefined(number)) { // wasn't a number. it's not an ip
         return original;
       }
 
-      ret = ret | number; // eslint-disable-line no-bitwise
+      ret = ret + number;
     }
     return ret;
   }
@@ -90,32 +86,32 @@ const ip_to_number = original => {
   return original; // use original value for comparison
 };
 
-const get_value = (convert_func, value, property, undefined_val) => {
-  const val = convert_func(get_property(value, property));
+// export for testing only
+export const getValue = (convertFunc, value, property, undefinedVal) => {
+  const val = convertFunc(getProperty(value, property));
 
-  return isDefined(val) ? val : undefined_val;
+  return isDefined(val) ? val : undefinedVal;
 };
 
-const make_compare = convert_func => (property, undefined_val) => reverse => {
-  const val_compare = reverse ? generic_compare_desc : generic_compare_asc;
+const makeCompare = convertFunc => (property, undefinedVal) =>
+ (reverse = false) => {
+  const valCompare = reverse ? genericCompareDesc : genericCompareAsc;
 
-  return (a, b) => val_compare(
-    get_value(convert_func, a, property, undefined_val),
-    get_value(convert_func, b, property, undefined_val),
+  return (a, b) => valCompare(
+    getValue(convertFunc, a, property, undefinedVal),
+    getValue(convertFunc, b, property, undefinedVal),
   );
 };
 
-export const make_compare_plain = make_compare(value => value);
+export const makeCompareString = makeCompare(value => '' + value);
 
-export const make_compare_string = make_compare(value => '' + value);
+export const makeCompareNumber = makeCompare(parseFloat);
 
-export const make_compare_number = make_compare(parseFloat);
+export const makeCompareDate = makeCompare(value => value);
 
-export const make_compare_date = make_compare_plain;
+export const makeCompareIp = makeCompare(ipToNumber);
 
-export const make_compare_ip = make_compare(ip_to_number);
-
-export const make_compare_severity = (name = 'severity') =>
-  make_compare_number(name, 0);
+export const makeCompareSeverity = (name = 'severity') =>
+  makeCompareNumber(name, 0);
 
 // vim: set ts=2 sw=2 tw=80:

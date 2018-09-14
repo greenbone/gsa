@@ -81,22 +81,12 @@ class Capabilities {
     return this._capabilities[Symbol.iterator]();
   }
 
-  get(name) {
-    name = name.toLowerCase();
-    const capability = this._capabilities.get(name);
-    return isDefined(capability) ? capability : {};
-  }
-
   areDefined() {
     return this._has_caps;
   }
 
   has(name) {
-    return this._capabilities.has(name);
-  }
-
-  forEach(callback) {
-    return this._capabilities.forEach(callback);
+    return this._capabilities.has(name.toLowerCase());
   }
 
   mayAccess(type) {
@@ -104,7 +94,7 @@ class Capabilities {
   }
 
   mayOp(value) {
-    return this.has(value.toLowerCase()) || this.has('everything');
+    return this.has(value) || this.has('everything');
   }
 
   mayClone(type) {

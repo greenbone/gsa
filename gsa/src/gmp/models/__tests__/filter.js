@@ -20,9 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isArray} from '../../utils/identity';
 
-import Filter, {UNKNOWN_FILTER_ID} from '../filter.js';
-import FilterTerm from '../filter/filterterm.js';
+import Filter, {UNKNOWN_FILTER_ID} from '../filter';
+import FilterTerm from '../filter/filterterm';
 
 describe('Filter parse from string tests', () => {
 
@@ -231,6 +232,29 @@ describe('Filter set', () => {
     expect(filter.set('abc', '2', '=').toFilterString()).toEqual('abc=2');
   });
 
+  test('should remove sort-reverse when adding sort filter term', () => {
+    const filter = new Filter();
+
+    filter.set('sort-reverse', 'foo', '=');
+    expect(filter.has('sort-reverse')).toEqual(true);
+    expect(filter.has('sort')).toEqual(false);
+
+    filter.set('sort', 'foo', '=');
+    expect(filter.has('sort-reverse')).toEqual(false);
+    expect(filter.has('sort')).toEqual(true);
+  });
+
+  test('should remove sort when adding sort-reverse filter term', () => {
+    const filter = new Filter();
+
+    filter.set('sort', 'foo', '=');
+    expect(filter.has('sort')).toEqual(true);
+    expect(filter.has('sort-reverse')).toEqual(false);
+
+    filter.set('sort-reverse', 'foo', '=');
+    expect(filter.has('sort')).toEqual(false);
+    expect(filter.has('sort-reverse')).toEqual(true);
+  });
 });
 
 describe('Filter has', () => {
@@ -250,6 +274,11 @@ describe('Filter has', () => {
     const filter = Filter.fromString('abc=1 ~def');
     expect(filter.has('def')).toEqual(false);
     expect(filter.has('~def')).toEqual(false);
+  });
+
+  test('should return false for undefined key', () => {
+    const filter = Filter.fromString('');
+    expect(filter.has()).toEqual(false);
   });
 
 });
@@ -275,6 +304,11 @@ describe('Filter delete', () => {
 });
 
 describe('Filter equal', () => {
+
+  test('should not equal undefined', () => {
+    const filter = Filter.fromString('');
+    expect(filter.equals()).toEqual(false);
+  });
 
   test('empty filter should equal itself', () => {
     let filter = Filter.fromString('');
@@ -404,6 +438,11 @@ describe('Filter get', () => {
 
 describe('Filter getTerm', () => {
 
+  test('should return undefined', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getTerm()).toBeUndefined();
+  });
+
   test('should get term', () => {
     let filter = Filter.fromString('abc=1');
     expect(filter.getTerm('abc')).toBeDefined();
@@ -508,6 +547,22 @@ describe('Filter parse elem', () => {
 
     expect(filter1.term).toBeUndefined();
   });
+
+  test('should parse alerts', () => {
+    const filter1 = new Filter({
+      term: 'abc=1',
+      alerts: {
+        alert: [{
+          id: 'a1',
+        }, {
+          id: 'a2',
+        }],
+      },
+    });
+
+    expect(isArray(filter1.alerts)).toEqual(true);
+    expect(filter1.alerts).toHaveLength(2);
+  });
 });
 
 describe('Filter copy', () => {
@@ -549,6 +604,18 @@ describe('Filter copy', () => {
 
 describe('Filter next', () => {
 
+  test('should return defaults', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+    expect(filter.get('rows')).toBeUndefined();
+
+    filter = filter.next();
+
+    expect(filter.get('first')).toEqual(1);
+    expect(filter.get('rows')).toEqual(10);
+  });
+
   test('should change first and rows', () => {
     let filter = Filter.fromString('first=1 rows=10');
     expect(filter.get('first')).toBe(1);
@@ -558,6 +625,189 @@ describe('Filter next', () => {
 
     expect(filter.get('first')).toBe(11);
     expect(filter.get('rows')).toBe(10);
+  });
+
+});
+
+describe('Filter first', () => {
+
+  test('should set first if undefined', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+
+    filter = filter.first();
+
+    expect(filter.get('first')).toEqual(1);
+  });
+
+  test('should change first to 1', () => {
+    let filter = Filter.fromString('first=99');
+    expect(filter.get('first')).toBe(99);
+
+    filter = filter.first();
+
+    expect(filter.get('first')).toBe(1);
+  });
+
+});
+
+describe('Filter previous', () => {
+
+  test('should return defaults', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+    expect(filter.get('rows')).toBeUndefined();
+
+    filter = filter.previous();
+
+    expect(filter.get('first')).toEqual(1);
+    expect(filter.get('rows')).toEqual(10);
+  });
+
+  test('should change first and rows', () => {
+    let filter = Filter.fromString('first=11 rows=10');
+    expect(filter.get('first')).toBe(11);
+    expect(filter.get('rows')).toBe(10);
+
+    filter = filter.previous();
+
+    expect(filter.get('first')).toBe(1);
+    expect(filter.get('rows')).toBe(10);
+  });
+
+});
+
+describe('Filter getSortOrder', () => {
+
+  test('should return sort if not set', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getSortOrder()).toEqual('sort');
+  });
+
+  test('should return sort if sort is set', () => {
+    const filter = Filter.fromString('sort=foo');
+    expect(filter.getSortOrder()).toEqual('sort');
+  });
+
+  test('should return sort-reverse if sort-reverse is set', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    expect(filter.getSortOrder()).toEqual('sort-reverse');
+  });
+
+});
+
+describe('Filter getSortBy', () => {
+
+  test('should return undefined if not set', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getSortBy()).toBeUndefined();
+  });
+
+  test('should return order from sort', () => {
+    const filter = Filter.fromString('sort=foo');
+    expect(filter.getSortBy()).toEqual('foo');
+  });
+
+  test('should return order from sort-reverse', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    expect(filter.getSortBy()).toEqual('foo');
+  });
+
+});
+
+describe('Filter setSortOrder', () => {
+
+  test('should keep sort by if order changes to sort', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    filter.setSortOrder('sort');
+
+    expect(filter.has('sort-reverse')).toEqual(false);
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+  test('should keep sort by if order changes to sort-reverse', () => {
+    const filter = Filter.fromString('sort=foo');
+    filter.setSortOrder('sort-reverse');
+
+    expect(filter.has('sort')).toEqual(false);
+    expect(filter.get('sort-reverse')).toEqual('foo');
+  });
+
+  test('should set sort for unkown orders', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    filter.setSortOrder('foo');
+
+    expect(filter.has('sort-reverse')).toEqual(false);
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+});
+
+describe('Filter setSortBy', () => {
+
+  test('should set sort if not order is set', () => {
+    const filter = Filter.fromString('');
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+  test('should change sort by if order is sort', () => {
+    const filter = Filter.fromString('sort=bar');
+    expect(filter.get('sort')).toEqual('bar');
+
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+  test('should change sort by if order is sort-reverse', () => {
+    const filter = Filter.fromString('sort-reverse=bar');
+    expect(filter.get('sort-reverse')).toEqual('bar');
+
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort-reverse')).toEqual('foo');
+  });
+
+});
+
+describe('Filter simple', () => {
+
+  test('should return copy if first, rows and sort not set', () => {
+    const filter = Filter.fromString('foo=bar');
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(filter.equals(simple)).toBe(true);
+  });
+
+  test('should remove first, rows and sort terms', () => {
+    const filter = Filter.fromString('first=1 rows=10 sort=foo foo=bar');
+
+    expect(filter.has('first')).toEqual(true);
+    expect(filter.has('rows')).toEqual(true);
+    expect(filter.has('sort')).toEqual(true);
+
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(simple.has('first')).toEqual(false);
+    expect(simple.has('rows')).toEqual(false);
+    expect(simple.has('sort')).toEqual(false);
+  });
+
+  test('should remove sort-reverse term', () => {
+    const filter = Filter.fromString('sort-reverse=foo foo=bar');
+
+    expect(filter.has('sort-reverse')).toEqual(true);
+
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(simple.has('sort-reverse')).toEqual(false);
   });
 
 });
@@ -694,6 +944,34 @@ describe('Filter fromTerm', () => {
 
     expect(filter.toFilterString()).toEqual('abc=1 def>666');
   });
+});
+
+describe('Filter toFilterCriteriaString', () => {
+
+  test('should return string representaion', () => {
+    const filter1 = Filter.fromString('foo=bar and lorem=ipsum');
+    expect(filter1.toFilterCriteriaString()).toEqual('foo=bar and lorem=ipsum');
+  });
+
+  test('should ignore extra keywords', () => {
+    const filter1 = Filter.fromString('foo=bar first=1 rows=66');
+    expect(filter1.toFilterCriteriaString()).toEqual('foo=bar');
+  });
+
+});
+
+describe('Filter toFilterExtraString', () => {
+
+  test('should empty string if no extra keywords are present', () => {
+    const filter1 = Filter.fromString('foo=bar and lorem=ipsum');
+    expect(filter1.toFilterExtraString()).toEqual('');
+  });
+
+  test('should ignore non extra keywords', () => {
+    const filter1 = Filter.fromString('foo=bar first=1 rows=66');
+    expect(filter1.toFilterExtraString()).toEqual('first=1 rows=66');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

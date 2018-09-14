@@ -28,21 +28,23 @@ import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
 
-export function parseSeverity(value) {
-  return isEmpty(value) ? undefined : parseFloat(value);
-}
+export const parseSeverity = value =>
+  isEmpty(value) ? undefined : parseFloat(value);
 
-export function parseProgress(value) {
+export const parseProgressElement = value => {
   if (!isDefined(value)) {
     return 0;
   }
+
   if (isDefined(value.__text)) {
     value = value.__text;
   }
-  return parseFloat(value);
-}
 
-export function parseText(text) {
+  const progress = parseFloat(value);
+  return isDefined(progress) ? progress : 0;
+};
+
+export const parseTextElement = text => {
   if (isDefined(text.__text)) {
     return {
       text: text.__text,
@@ -54,9 +56,9 @@ export function parseText(text) {
     text,
     text_excerpt: '0',
   };
-}
+};
 
-export function parseInt(value) {
+export const parseInt = value => {
   if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
     return undefined;
   }
@@ -68,9 +70,13 @@ export function parseInt(value) {
   }
 
   return val;
-}
+};
 
-export function parseFloat(value) {
+export const parseFloat = value => {
+  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+    return undefined;
+  }
+
   const val = global.parseFloat(value);
 
   if (isNaN(val)) {
@@ -78,29 +84,23 @@ export function parseFloat(value) {
   }
 
   return val;
-}
+};
 
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export function parseYesNo(value) {
-  return value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
-}
+export const parseYesNo = value => value === '1' || value === 1 ?
+  YES_VALUE : NO_VALUE;
 
-
-export function parseCsv(value) {
-  if (isEmpty(value)) {
-    return [];
-  }
-  return value.split(',').map(val => val.trim());
-}
+export const parseCsv = value => !isDefined(value) || isEmpty(value.trim()) ?
+  [] : value.split(',').map(val => val.trim());
 
 export const parseQod = qod => ({
   type: qod.type,
   value: parseFloat(qod.value),
 });
 
-export function parseEnvelopeMeta(envelope) {
+export const parseEnvelopeMeta = envelope => {
   const meta = {};
 
   const props = [
@@ -116,7 +116,7 @@ export function parseEnvelopeMeta(envelope) {
     meta[name] = envelope[name];
   }
   return meta;
-}
+};
 
 export const parseProperties = (element, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy

@@ -525,4 +525,57 @@ describe('deltaSelector getEntity tests', () => {
   });
 });
 
+describe('deltaSelector getError tests', () => {
+
+  test('should return undefined for empty state', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createRootState({});
+    const selector = deltaSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return undefined for empty byId', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {
+      byId: {},
+    });
+    const selector = deltaSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return undefined for unkown id', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const rootState = createState('deltaReport', {
+      byId: {
+        foo: {
+          id: 'foo',
+        },
+      },
+    });
+    const selector = deltaSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toBeUndefined();
+  });
+
+  test('should return error', () => {
+    const id = 'a1';
+    const deltaId = 'a2';
+    const identifier = `${id}+${deltaId}`;
+    const rootState = createState('deltaReport', {
+      errors: {
+        [identifier]: 'An error',
+      },
+    });
+    const selector = deltaSelector(rootState);
+
+    expect(selector.getError(id, deltaId)).toEqual('An error');
+  });
+
+});
+
 // vim: set ts=2 sw=2 tw=80:
