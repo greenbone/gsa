@@ -39,6 +39,7 @@ import {
   parseDate,
   parseDuration,
   setProperties,
+  parseProperties,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -375,6 +376,84 @@ describe('setProperties tests', () => {
 
     obj.foo = 1;
     expect(obj.foo).toEqual(1);
+  });
+
+});
+
+describe('parseProperties tests', () => {
+
+  test('should create new object', () => {
+    expect(parseProperties()).toEqual({});
+  });
+
+  test('should create a shallow copy', () => {
+    const foo = {
+      a: 1,
+    };
+
+    const obj = {
+      foo,
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj);
+
+    expect(parsed).not.toBe(obj);
+    expect(parsed.foo).toBe(obj.foo);
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should copy additional properties', () => {
+    const obj = {
+      foo: 'bar',
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj, {bar: 'foo'});
+
+    expect(parsed.bar).toEqual('foo');
+    expect(parsed.foo).toEqual('bar');
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should not override properties with additional properties', () => {
+    const obj = {
+      foo: 'bar',
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj, {foo: 'foo'});
+
+    expect(parsed.foo).toEqual('bar');
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should parse id', () => {
+    const parsed = parseProperties({_id: 'a1'});
+    expect(parsed.id).toEqual('a1');
+  });
+
+  test('should parse creation_time', () => {
+    const parsed = parseProperties({creation_time: '2018-01-01'});
+
+    expect(parsed.creation_time).toBeUndefined();
+    expect(parsed.creationTime).toBeDefined();
+    expect(isDate(parsed.creationTime)).toEqual(true);
+  });
+
+  test('should parse modification_time', () => {
+    const parsed = parseProperties({modification_time: '2018-01-01'});
+
+    expect(parsed.modification_time).toBeUndefined();
+    expect(parsed.modificationTime).toBeDefined();
+    expect(isDate(parsed.modificationTime)).toEqual(true);
+  });
+
+  test('should prefix type', () => {
+    const parsed = parseProperties({type: 'foo'});
+
+    expect(parsed.type).toBeUndefined();
+    expect(parsed._type).toEqual('foo');
   });
 
 });

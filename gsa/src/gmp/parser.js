@@ -118,7 +118,7 @@ export const parseEnvelopeMeta = envelope => {
   return meta;
 };
 
-export const parseProperties = (element, object = {}) => {
+export const parseProperties = (element = {}, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
   if (isString(element._id) && element._id.length > 0) {
