@@ -745,6 +745,35 @@ describe('Filter setSortOrder', () => {
 
 });
 
+describe('Filter setSortBy', () => {
+
+  test('should set sort if not order is set', () => {
+    const filter = Filter.fromString('');
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+  test('should change sort by if order is sort', () => {
+    const filter = Filter.fromString('sort=bar');
+    expect(filter.get('sort')).toEqual('bar');
+
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort')).toEqual('foo');
+  });
+
+  test('should change sort by if order is sort-reverse', () => {
+    const filter = Filter.fromString('sort-reverse=bar');
+    expect(filter.get('sort-reverse')).toEqual('bar');
+
+    filter.setSortBy('foo');
+
+    expect(filter.get('sort-reverse')).toEqual('foo');
+  });
+
+});
+
 describe('Filter simple', () => {
 
   test('should return copy if first, rows and sort not set', () => {
