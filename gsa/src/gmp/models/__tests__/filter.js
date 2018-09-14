@@ -629,6 +629,33 @@ describe('Filter next', () => {
 
 });
 
+describe('Filter previous', () => {
+
+  test('should return defaults', () => {
+    let filter = Filter.fromString('');
+
+    expect(filter.get('first')).toBeUndefined();
+    expect(filter.get('rows')).toBeUndefined();
+
+    filter = filter.previous();
+
+    expect(filter.get('first')).toEqual(1);
+    expect(filter.get('rows')).toEqual(10);
+  });
+
+  test('should change first and rows', () => {
+    let filter = Filter.fromString('first=11 rows=10');
+    expect(filter.get('first')).toBe(11);
+    expect(filter.get('rows')).toBe(10);
+
+    filter = filter.previous();
+
+    expect(filter.get('first')).toBe(1);
+    expect(filter.get('rows')).toBe(10);
+  });
+
+});
+
 describe('Filter merge extra keywords', () => {
 
   test('should merge extra keywords', () => {
