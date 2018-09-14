@@ -698,6 +698,25 @@ describe('Filter getSortOrder', () => {
 
 });
 
+describe('Filter getSortBy', () => {
+
+  test('should return undefined if not set', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getSortBy()).toBeUndefined();
+  });
+
+  test('should return order from sort', () => {
+    const filter = Filter.fromString('sort=foo');
+    expect(filter.getSortBy()).toEqual('foo');
+  });
+
+  test('should return order from sort-reverse', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    expect(filter.getSortBy()).toEqual('foo');
+  });
+
+});
+
 describe('Filter merge extra keywords', () => {
 
   test('should merge extra keywords', () => {
