@@ -166,7 +166,7 @@ export const parseCvssBaseVector = ({
   availabilityImpact,
   confidentialityImpact,
   integrityImpact,
-}) => {
+} = {}) => {
   if (!isDefined(accessVector) &&
     !isDefined(accessComplexity) &&
     !isDefined(authentication) &&

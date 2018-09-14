@@ -40,6 +40,7 @@ import {
   parseDuration,
   setProperties,
   parseProperties,
+  parseCvssBaseVector,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -483,6 +484,82 @@ describe('parseDuration tests', () => {
     expect(isDuration(parseDuration('666'))).toEqual(true);
     expect(isDuration(parseDuration(666))).toEqual(true);
   });
+});
+
+describe('parseCvssBaseVector tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseCvssBaseVector()).toBeUndefined();
+    expect(parseCvssBaseVector({})).toBeUndefined();
+    expect(parseCvssBaseVector({foo: 'bar'})).toBeUndefined();
+  });
+
+  test('should parse accessVector', () => {
+    expect(parseCvssBaseVector({accessVector: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'LOCAL'}))
+      .toEqual('AV:L/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'NETWORK'}))
+      .toEqual('AV:N/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'ADJACENT_NETWORK'}))
+      .toEqual('AV:A/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse accessComplexity', () => {
+    expect(parseCvssBaseVector({accessComplexity: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'LOW'}))
+      .toEqual('AV:ERROR/AC:L/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'MEDIUM'}))
+      .toEqual('AV:ERROR/AC:M/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'HIGH'}))
+      .toEqual('AV:ERROR/AC:H/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse authentication', () => {
+    expect(parseCvssBaseVector({authentication: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:N/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse confidentialityImpact', () => {
+    expect(parseCvssBaseVector({confidentialityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:N/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:P/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:C/I:ERROR/A:ERROR');
+  });
+
+  test('should parse integrityImpact', () => {
+    expect(parseCvssBaseVector({integrityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:N/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:P/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:C/A:ERROR');
+  });
+
+  test('should parse availabilityImpact', () => {
+    expect(parseCvssBaseVector({availabilityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({availabilityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:N');
+    expect(parseCvssBaseVector({availabilityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:P');
+    expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
