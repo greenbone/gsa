@@ -20,11 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined, isModelElement} from '../utils/identity';
-import {map} from '../utils/array';
+import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import List from '../list';
 import Model from '../model';
 import {
   parseCsv,
@@ -103,21 +101,6 @@ class Override extends Model {
     return this.text_excerpt === YES_VALUE;
   }
 }
-
-export const parse_overrides = overrides => {
-  let active = false;
-  let entries = [];
-  if (isDefined(overrides)) {
-    entries = map(overrides.override, override => {
-      const o = new Override(override);
-      active = active || o.isActive();
-      return o;
-    });
-  }
-  const list = new List(entries);
-  list.active = active;
-  return list;
-};
 
 export default Override;
 
