@@ -276,6 +276,11 @@ describe('Filter has', () => {
     expect(filter.has('~def')).toEqual(false);
   });
 
+  test('should return false for undefined key', () => {
+    const filter = Filter.fromString('');
+    expect(filter.has()).toEqual(false);
+  });
+
 });
 
 describe('Filter delete', () => {
@@ -299,6 +304,11 @@ describe('Filter delete', () => {
 });
 
 describe('Filter equal', () => {
+
+  test('should not equal undefined', () => {
+    const filter = Filter.fromString('');
+    expect(filter.equals()).toEqual(false);
+  });
 
   test('empty filter should equal itself', () => {
     let filter = Filter.fromString('');
@@ -427,6 +437,11 @@ describe('Filter get', () => {
 });
 
 describe('Filter getTerm', () => {
+
+  test('should return undefined', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getTerm()).toBeUndefined();
+  });
 
   test('should get term', () => {
     let filter = Filter.fromString('abc=1');
