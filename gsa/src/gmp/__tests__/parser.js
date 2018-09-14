@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/keys';
+
 import {isDate, isDuration} from 'gmp/models/date';
 
 import {
@@ -36,6 +38,7 @@ import {
   NO_VALUE,
   parseDate,
   parseDuration,
+  setProperties,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -305,6 +308,75 @@ describe('parseEnvelopeMeta tests', () => {
       timezone: 'Europe/Berlin',
     });
   });
+});
+
+describe('setProperties tests', () => {
+
+  test('should create new object', () => {
+    expect(setProperties()).toEqual({});
+  });
+
+  test('should not change object', () => {
+    const obj = {foo: 'bar'};
+    expect(setProperties(undefined, obj)).toBe(obj);
+  });
+
+  test('should set properties on new object', () => {
+    const obj = setProperties({
+      foo: 'bar',
+      lorem: 'ipsum',
+    });
+
+    expect(obj.foo).toEqual('bar');
+    expect(obj.lorem).toEqual('ipsum');
+
+    expect(Object.keys(obj)).toEqual(expect.arrayContaining(['foo', 'lorem']));
+
+    expect(() => {
+      obj.foo = 'a';
+    }).toThrow();
+    expect(() => {
+      obj.lorem = 'a';
+    }).toThrow();
+  });
+
+  test('should skip properties starting with underscore', () => {
+    const obj = setProperties({
+      foo: 'bar',
+      _lorem: 'ipsum',
+    });
+
+    expect(obj.foo).toEqual('bar');
+    expect(obj.lorem).toBeUndefined();
+    expect(obj._lorem).toBeUndefined();
+  });
+
+  test('should set properties on existing object', () => {
+    const orig = {foo: 'bar'};
+    const obj = setProperties({
+      bar: 'foo',
+      lorem: 'ipsum',
+    }, orig);
+
+    expect(obj).toBe(orig);
+    expect(obj.foo).toEqual('bar');
+    expect(obj.bar).toEqual('foo');
+    expect(obj.lorem).toEqual('ipsum');
+
+    expect(Object.keys(obj)).toEqual(
+      expect.arrayContaining(['bar', 'foo', 'lorem']));
+
+    expect(() => {
+      obj.bar = 'a';
+    }).toThrow();
+    expect(() => {
+      obj.lorem = 'a';
+    }).toThrow();
+
+    obj.foo = 1;
+    expect(obj.foo).toEqual(1);
+  });
+
 });
 
 describe('parseDate tests', () => {
