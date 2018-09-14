@@ -112,7 +112,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/http/transform/x2js.js
      ${GSA_SRC_DIR}/src/gmp/http/utils.js
      ${GSA_SRC_DIR}/src/gmp/index.js
-     ${GSA_SRC_DIR}/src/gmp/list.js
      ${GSA_SRC_DIR}/src/gmp/locale/date.js
      ${GSA_SRC_DIR}/src/gmp/locale/detector.js
      ${GSA_SRC_DIR}/src/gmp/locale/lang.js

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {isDefined, isString} from '../utils/identity';
+import {isDefined, isString, isArray} from '../utils/identity';
 import {forEach} from '../utils/array';
 
 import Model from '../model';
@@ -29,9 +29,9 @@ import {parseSeverity, parseQod} from '../parser';
 
 import Nvt from './nvt';
 
-import {parse_notes} from './note';
+import Note from './note';
 
-import {parse_overrides} from './override';
+import Override from './override';
 
 export class Delta {
 
@@ -132,8 +132,10 @@ class Result extends Model {
 
     copy.qod = parseQod(qod);
 
-    copy.notes = parse_notes(notes);
-    copy.overrides = parse_overrides(overrides);
+    copy.notes = isDefined(notes) && isArray(notes.note) ?
+      notes.note.map(note => new Note(note)) : [];
+    copy.overrides = isDefined(overrides) && isArray(overrides.override) ?
+     overrides.override.map(override => new Override(override)) : [];
 
     return copy;
   }
