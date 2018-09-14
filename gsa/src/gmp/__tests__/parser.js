@@ -22,6 +22,7 @@
  */
 import {
   parseCsv,
+  parseEnvelopeMeta,
   parseFloat,
   parseInt,
   parseProgressElement,
@@ -259,6 +260,47 @@ describe('parseQod tests', () => {
     });
   });
 
+});
+
+describe('parseEnvelopeMeta tests', () => {
+
+  test('should parse envelope information', () => {
+    expect(parseEnvelopeMeta({
+      version: '1.0',
+      backend_operation: '0.01',
+      vendor_version: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    })).toEqual({
+      version: '1.0',
+      backendOperation: '0.01',
+      vendorVersion: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    });
+  });
+
+  test('should drop unkown envelope information', () => {
+    expect(parseEnvelopeMeta({
+      version: '1.0',
+      backend_operation: '0.01',
+      vendor_version: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+      foo: 'bar',
+      lorem: 'ipsum',
+    })).toEqual({
+      version: '1.0',
+      backendOperation: '0.01',
+      vendorVersion: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
