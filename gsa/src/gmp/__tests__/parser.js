@@ -20,6 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isDate} from 'gmp/models/date';
+
 import {
   parseCsv,
   parseEnvelopeMeta,
@@ -32,7 +34,8 @@ import {
   parseYesNo,
   YES_VALUE,
   NO_VALUE,
-} from '../parser.js';
+  parseDate,
+} from '../parser';
 
 describe('parseInt tests', () => {
 
@@ -301,6 +304,21 @@ describe('parseEnvelopeMeta tests', () => {
       timezone: 'Europe/Berlin',
     });
   });
+});
+
+describe('parseDate tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseDate()).toBeUndefined();
+  });
+
+  test('should return a date', () => {
+    const date = parseDate('2018-01-01');
+
+    expect(date).toBeDefined();
+    expect(isDate(date)).toEqual(true);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
