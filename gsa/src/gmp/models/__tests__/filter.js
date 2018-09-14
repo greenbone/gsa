@@ -231,6 +231,29 @@ describe('Filter set', () => {
     expect(filter.set('abc', '2', '=').toFilterString()).toEqual('abc=2');
   });
 
+  test('should remove sort-reverse when adding sort filter term', () => {
+    const filter = new Filter();
+
+    filter.set('sort-reverse', 'foo', '=');
+    expect(filter.has('sort-reverse')).toEqual(true);
+    expect(filter.has('sort')).toEqual(false);
+
+    filter.set('sort', 'foo', '=');
+    expect(filter.has('sort-reverse')).toEqual(false);
+    expect(filter.has('sort')).toEqual(true);
+  });
+
+  test('should remove sort when adding sort-reverse filter term', () => {
+    const filter = new Filter();
+
+    filter.set('sort', 'foo', '=');
+    expect(filter.has('sort')).toEqual(true);
+    expect(filter.has('sort-reverse')).toEqual(false);
+
+    filter.set('sort-reverse', 'foo', '=');
+    expect(filter.has('sort')).toEqual(false);
+    expect(filter.has('sort-reverse')).toEqual(true);
+  });
 });
 
 describe('Filter has', () => {
