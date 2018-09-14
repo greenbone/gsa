@@ -679,6 +679,25 @@ describe('Filter previous', () => {
 
 });
 
+describe('Filter getSortOrder', () => {
+
+  test('should return sort if not set', () => {
+    const filter = Filter.fromString('');
+    expect(filter.getSortOrder()).toEqual('sort');
+  });
+
+  test('should return sort if sort is set', () => {
+    const filter = Filter.fromString('sort=foo');
+    expect(filter.getSortOrder()).toEqual('sort');
+  });
+
+  test('should return sort-reverse if sort-reverse is set', () => {
+    const filter = Filter.fromString('sort-reverse=foo');
+    expect(filter.getSortOrder()).toEqual('sort-reverse');
+  });
+
+});
+
 describe('Filter merge extra keywords', () => {
 
   test('should merge extra keywords', () => {
