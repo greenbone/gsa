@@ -156,6 +156,30 @@ describe('Compound statement parsing', () => {
     expect(term.value).toBe('not');
     expect(term.relation).toBeUndefined();
   });
+
+});
+
+describe('FilterTerm toString tests', () => {
+
+  test('should combine keyword, relation and value', () => {
+    const term = FilterTerm.fromString('apply_overrides=22');
+
+    expect(term.keyword).toBeDefined();
+    expect(term.value).toBeDefined();
+    expect(term.relation).toBeDefined();
+
+    expect(term.toString()).toEqual('apply_overrides=1');
+  });
+
+  test('should print value', () => {
+    const term = FilterTerm.fromString('not');
+
+    expect(term.keyword).toBeUndefined();
+    expect(term.value).toBeDefined();
+    expect(term.relation).toBeUndefined();
+
+    expect(term.toString()).toEqual('not');
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
