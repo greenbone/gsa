@@ -717,6 +717,44 @@ describe('Filter getSortBy', () => {
 
 });
 
+describe('Filter simple', () => {
+
+  test('should return copy if first, rows and sort not set', () => {
+    const filter = Filter.fromString('foo=bar');
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(filter.equals(simple)).toBe(true);
+  });
+
+  test('should remove first, rows and sort terms', () => {
+    const filter = Filter.fromString('first=1 rows=10 sort=foo foo=bar');
+
+    expect(filter.has('first')).toEqual(true);
+    expect(filter.has('rows')).toEqual(true);
+    expect(filter.has('sort')).toEqual(true);
+
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(simple.has('first')).toEqual(false);
+    expect(simple.has('rows')).toEqual(false);
+    expect(simple.has('sort')).toEqual(false);
+  });
+
+  test('should remove sort-reverse term', () => {
+    const filter = Filter.fromString('sort-reverse=foo foo=bar');
+
+    expect(filter.has('sort-reverse')).toEqual(true);
+
+    const simple = filter.simple();
+
+    expect(filter).not.toBe(simple);
+    expect(simple.has('sort-reverse')).toEqual(false);
+  });
+
+});
+
 describe('Filter merge extra keywords', () => {
 
   test('should merge extra keywords', () => {
