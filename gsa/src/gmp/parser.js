@@ -100,20 +100,20 @@ export const parseQod = qod => ({
   value: parseFloat(qod.value),
 });
 
+const ENVELOPE_PROPS = [
+  ['version', 'version'],
+  ['backend_operation', 'backendOperation'],
+  ['vendor_version', 'vendorVersion'],
+  ['i18n', 'i18n'],
+  ['time', 'time'],
+  ['timezone', 'timezone'],
+];
+
 export const parseEnvelopeMeta = envelope => {
   const meta = {};
 
-  const props = [
-    'version',
-    'backend_operation',
-    'vendor_version',
-    'i18n',
-    'time',
-    'timezone',
-  ];
-
-  for (const name of props) {
-    meta[name] = envelope[name];
+  for (const [name, to] of ENVELOPE_PROPS) {
+    meta[to] = envelope[name];
   }
   return meta;
 };
