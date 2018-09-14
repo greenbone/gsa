@@ -20,9 +20,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import Filter, {UNKNOWN_FILTER_ID} from '../filter.js';
-import FilterTerm from '../filter/filterterm.js';
+import Filter, {UNKNOWN_FILTER_ID} from '../filter';
+import FilterTerm from '../filter/filterterm';
 
 describe('Filter parse from string tests', () => {
 
