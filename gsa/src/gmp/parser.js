@@ -271,7 +271,7 @@ export const parseCvssBaseVector = ({
 };
 
 export const parseCvssBaseFromVector = vector => {
-  if (!isDefined(vector) && vector.length > 0) {
+  if (!isDefined(vector) || vector.trim().length === 0) {
     return {};
   }
 
