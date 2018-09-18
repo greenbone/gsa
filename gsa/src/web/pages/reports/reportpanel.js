@@ -26,13 +26,13 @@ import glamorous from 'glamorous';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import Divider from '../../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import InfoPanel from '../../components/panel/infopanel.js';
+import InfoPanel from 'web/components/panel/infopanel';
 
 const Content = glamorous.span(
   ({onClick}) => {
