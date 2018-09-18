@@ -24,7 +24,7 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -176,17 +176,18 @@ ReportImage.propTypes = {
   startMinute: PropTypes.number,
 };
 
-const Selector = withClickHandler()(glamorous.span(
-({value, duration}) => {
-  if (value !== duration) {
-    return {
-      color: 'blue',
-      textDecoration: 'underline',
-      cursor: 'pointer',
-    };
-  }
-  return {};
-}));
+const Selector = withClickHandler()(styled.span`
+  ${props => {
+    if (props.value !== props.duration) {
+      return {
+        color: 'blue',
+        textDecoration: 'underline',
+        cursor: 'pointer',
+      };
+    }
+    return {};
+  }}
+`);
 
 
 class PerformancePage extends React.Component {
