@@ -22,7 +22,7 @@
  */
 
 import React from 'react';
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import date from 'gmp/models/date';
 
@@ -68,13 +68,13 @@ ControlledDatePicker.propTypes = {
   value: PropTypes.date,
 };
 
-const StyledDatePicker = glamorous(ControlledDatePicker)({
-  border: '1px solid darkgreen',
-  background: 'lightgreen',
-  boxShadow: '5px 5px 10px black',
-  fontFamily: 'Trebuchet MS,Tahoma,Verdana,Arial,sans-serif',
-  fontSize: '14px',
-});
+const StyledDatePicker = styled(ControlledDatePicker)`
+  border: 1px solid darkgreen;
+  background: lightgreen;
+  box-shadow: 5px 5px 10px black;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  font-size: 14px;
+`;
 
 storiesOf('Form/Datepicker', module)
   .add('default', () => {
