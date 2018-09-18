@@ -23,23 +23,19 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from './layout.js';
+import Layout from './layout';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = glamorous(Layout, {
-  rootEl: 'div',
-})(
-  {
-    '& > *': {
-      display: 'inline-flex',
-    },
-  },
-  props => {
+const DividerComponent = styled(Layout)`
+  & > * {
+    display: inline-flex;
+  };
+  ${props => {
     const edge = props.flex === 'column' ? 'Top' : 'Left';
     return {
       // try to fix flex-wrap indentation at second line and beyond by using a
@@ -50,14 +46,14 @@ const DividerComponent = glamorous(Layout, {
         ['margin' + edge]: props.margin,
       },
     };
-  }
-);
+  }}
+`;
 
 DividerComponent.displayName = 'DividerComponent';
 
-const DividerContainer = glamorous(Layout)({
-  display: 'inline-flex',
-});
+const DividerContainer = styled(Layout)`
+  display: inline-flex;
+`;
 
 DividerContainer.displayName = 'DividerContainer';
 
