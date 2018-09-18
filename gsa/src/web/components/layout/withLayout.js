@@ -22,7 +22,7 @@
  */
 
 import styled from 'styled-components';
-import glamorous from 'glamorous';
+
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
