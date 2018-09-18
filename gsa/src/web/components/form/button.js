@@ -23,72 +23,75 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import compose from '../../utils/compose.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import withLayout from '../layout/withLayout.js';
+import withLayout from 'web/components/layout/withLayout';
 
-import withClickHandler from './withClickHandler.js';
+import withClickHandler from './withClickHandler';
 
-const Button = glamorous(({
+const StyledButton = styled.button`
+  display: inline-block;
+  padding: 0 15px;
+  color: ${Theme.darkGray};
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 30px;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: ${Theme.white};
+  border-radius: 4px;
+  border: 1px solid ${Theme.inputBorderGray};
+  cursor: pointer;
+  overflow: visible;
+  &:focus, &:hover {
+    border: 1px solid ${Theme.darkGreen};
+  };
+  &:hover {
+    text-decoration: none;
+    background: ${Theme.darkGreen};
+    font-weight: bold;
+    color: ${Theme.white};
+  };
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    box-shadow: none;
+  };
+  & img {
+    height: 32px;
+    width: 32px;
+    margin-top: 5px 10px 5px -10px;
+    vertical-align: middle;
+  };
+  &:link {
+    text-decoration: none;
+    color: ${Theme.darkGray};
+  };
+`;
+
+const Button = ({
   title,
   children = title,
   ...other
 }) => (
-  <button
+  <StyledButton
     {...other}
     title={title}
   >
     {children}
-  </button>
-), {
-  rootEl: 'button',
-})({
-  display: 'inline-block',
-  padding: '0 15px',
-  color: '#555',
-  textAlign: 'center',
-  verticalAlign: 'middle',
-  fontSize: '11px',
-  fontWeight: 'bold',
-  lineHeight: '30px',
-  textDecoration: 'none',
-  whiteSpace: 'nowrap',
-  backgroundColor: '#fff',
-  borderRadius: '4px',
-  border: '1px solid #bbb',
-  cursor: 'pointer',
-  overflow: 'visible',
-  '&:focus, &:hover': {
-    border: '1px solid #519032',
-  },
-  '&:hover': {
-    textDecoration: 'none',
-    background: '#519032',
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  '&[disabled]': {
-    cursor: 'not-allowed',
-    opacity: '0.65',
-    filter: 'alpha(opacity=65)',
-    boxShadow: 'none',
-  },
-  '& img': {
-    height: '32px',
-    width: '32px',
-    marginTop: '5px',
-    marginBottom: '5px',
-    marginRight: '10px',
-    marginLeft: '-10px',
-    verticalAlign: 'middle',
-  },
-  '&:link': {
-    textDecoration: 'none',
-    color: '#555',
-  },
-});
+  </StyledButton>
+);
+
+Button.propTypes = {
+  title: PropTypes.string,
+};
 
 export default compose(
   withLayout({align: ['center', 'center']}),
