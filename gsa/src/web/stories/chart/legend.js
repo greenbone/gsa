@@ -22,11 +22,16 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
 import Legend, {Label, Item, Line} from 'web/components/chart/legend';
+
+const Div = styled.div`
+  display: flex;
+  margin: ${props => props.margin};
+`;
 
 const data = [
 {
@@ -61,14 +66,14 @@ const data = [
 storiesOf('Chart/Legend', module)
   .add('default', () => {
     return (
-      <Div display="flex">
+      <Div>
         <Legend data={data}/>
       </Div>
     );
   })
   .add('line', () => {
     return (
-      <Div display="flex" margin="50">
+      <Div margin="50">
         <Legend
           data={[{
             color: 'red',
