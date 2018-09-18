@@ -26,7 +26,7 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import glamorous, {Col, Div} from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
@@ -46,9 +46,16 @@ import TableRow from '../../components/table/row.js';
 
 import DetailsBlock from '../../entity/block.js';
 
-const Action = glamorous.a({
-  cursor: 'pointer',
-});
+const Action = styled.a`
+  cursor: pointer;
+`;
+
+const Col = styled.col`
+  width: ${props => props.width};
+`;
+const Div = styled.div`
+  word-break: break-all;
+`;
 
 const filter_identifiers = (identifiers, latest = true) => {
   if (!latest || !isDefined(identifiers) || identifiers.length === 0) {
@@ -257,7 +264,7 @@ class Identifiers extends React.Component {
                     id={isDefined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
                   >
-                    <Div wordBreak="break-all">
+                    <Div>
                       {identifier.value}
                     </Div>
                   </DetailsLink>
