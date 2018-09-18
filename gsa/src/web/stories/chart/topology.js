@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
@@ -30,6 +30,12 @@ import HostsTopologyChart from 'web/components/chart/topology';
 
 import hosts from './hosts.json';
 import links from './links.json';
+
+const Div = styled.div`
+  border: 1px solid black;
+  margin: 25px;
+  display: inline-flex;
+`;
 
 const simpledata = {
   hosts: [{
@@ -68,11 +74,7 @@ storiesOf('Chart/Topology', module)
   ))
   .add('Big Network', () => {
     return (
-      <Div
-        border="1px solid black"
-        margin="25px"
-        display="inline-flex"
-      >
+      <Div>
         <HostsTopologyChart
           width={500}
           height={300}
