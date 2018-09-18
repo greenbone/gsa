@@ -35,9 +35,9 @@ import TableBody from 'web/components/table/body';
 import PropTypes from 'web/utils/proptypes';
 
 const Margin = styled.div`
-  margin: 10,
+  margin: 10px;
   display: flex;
-  flex-grow: 1,
+  flex-grow: 1;
   overflow-y: auto;
 `;
 
