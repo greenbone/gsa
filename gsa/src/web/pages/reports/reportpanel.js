@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -34,9 +34,9 @@ import Divider from 'web/components/layout/divider';
 
 import InfoPanel from 'web/components/panel/infopanel';
 
-const Content = glamorous.span(
-  ({onClick}) => {
-    if (!isDefined(onClick)) {
+const Content = styled.span`
+  ${props => {
+    if (!isDefined(props.onClick)) {
       return undefined;
     }
 
@@ -46,8 +46,8 @@ const Content = glamorous.span(
       },
       cursor: 'pointer',
     };
-  }
-);
+  }}
+`;
 
 const ReportPanel = ({
   children,
