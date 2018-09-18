@@ -26,6 +26,7 @@
 #include <string.h> /* for strcmp */
 #include <assert.h> /* for assert */
 #include <stdlib.h> /* for abort */
+#include <glib.h> /* for g_file_test */
 
 #include "gsad_http_handler.h"
 #include "gsad_gmp.h" /* for get_system_report_gmp */
@@ -750,6 +751,43 @@ handle_static_file (http_connection_t *connection, const char * method,
   return handler_send_response (connection, response, response_data, NULL);
 }
 
+int
+handle_static_config (http_connection_t *connection, const char * method,
+                      const char *url, gsad_connection_info_t *con_info,
+                      http_handler_t *handler, void * data)
+{
+  gchar* path;
+  http_response_t *response;
+  cmd_response_data_t *response_data;
+
+  /* Ensure that url is relative. */
+  const char *relative_url = url;
+  if (*url == '/')
+   {
+     relative_url = url + 1;
+   }
+  path = g_strconcat(relative_url, NULL);
+
+  g_debug ("Requesting url %s for static config path %s", url, path);
+
+  response_data = cmd_response_data_new ();
+  cmd_response_data_set_allow_caching (response_data, 1);
+
+  if (g_file_test (path, G_FILE_TEST_EXISTS ))
+    {
+      response = file_content_response (connection, url, path, response_data);
+      g_free(path);
+      return handler_send_response(connection, response, response_data, NULL);
+    }
+
+  g_free(path);
+
+  // send empty config
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
+  return handler_create_response (connection, g_strdup(""), response_data,
+                                  NULL);
+}
+
 http_handler_t *
 init_http_handlers()
 {
@@ -775,7 +813,7 @@ init_http_handlers()
   url_handler_add_func (url_handlers, "^/robots.txt$",
                         handle_static_file);
 
-  url_handler_add_func (url_handlers, "^/config.*js$", handle_static_file);
+  url_handler_add_func (url_handlers, "^/config.*js$", handle_static_config);
   url_handler_add_func (url_handlers, "^/static/(img|js|css)/.+$",
                         handle_static_file);
 

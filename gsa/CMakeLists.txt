@@ -874,7 +874,10 @@ add_custom_target (gsa-ng ALL
                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                            ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp)
 
-install (FILES ${GSA_STATIC_SRC_FILES}
+set (GSA_STATIC_BUILD_FILES
+     ${GSA_BUILD_DIR}/index.html)
+
+install (FILES ${GSA_STATIC_BUILD_FILES}
          DESTINATION ${GSA_DEST_DIR})
 
 install (FILES public/robots.txt
