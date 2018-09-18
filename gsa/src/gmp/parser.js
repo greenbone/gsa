@@ -100,25 +100,25 @@ export const parseQod = qod => ({
   value: parseFloat(qod.value),
 });
 
+const ENVELOPE_PROPS = [
+  ['version', 'version'],
+  ['backend_operation', 'backendOperation'],
+  ['vendor_version', 'vendorVersion'],
+  ['i18n', 'i18n'],
+  ['time', 'time'],
+  ['timezone', 'timezone'],
+];
+
 export const parseEnvelopeMeta = envelope => {
   const meta = {};
 
-  const props = [
-    'version',
-    'backend_operation',
-    'vendor_version',
-    'i18n',
-    'time',
-    'timezone',
-  ];
-
-  for (const name of props) {
-    meta[name] = envelope[name];
+  for (const [name, to] of ENVELOPE_PROPS) {
+    meta[to] = envelope[name];
   }
   return meta;
 };
 
-export const parseProperties = (element, object = {}) => {
+export const parseProperties = (element = {}, object = {}) => {
   const copy = {...object, ...element}; // create shallow copy
 
   if (isString(element._id) && element._id.length > 0) {
@@ -166,7 +166,7 @@ export const parseCvssBaseVector = ({
   availabilityImpact,
   confidentialityImpact,
   integrityImpact,
-}) => {
+} = {}) => {
   if (!isDefined(accessVector) &&
     !isDefined(accessComplexity) &&
     !isDefined(authentication) &&
@@ -271,7 +271,7 @@ export const parseCvssBaseVector = ({
 };
 
 export const parseCvssBaseFromVector = vector => {
-  if (!isDefined(vector) && vector.length > 0) {
+  if (!isDefined(vector) || vector.trim().length === 0) {
     return {};
   }
 

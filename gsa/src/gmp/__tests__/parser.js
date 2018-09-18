@@ -20,17 +20,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/object/keys';
+
+import {isDate, isDuration} from 'gmp/models/date';
+
 import {
   parseCsv,
+  parseEnvelopeMeta,
   parseFloat,
   parseInt,
   parseProgressElement,
+  parseQod,
   parseTextElement,
   parseSeverity,
   parseYesNo,
   YES_VALUE,
   NO_VALUE,
-} from '../parser.js';
+  parseDate,
+  parseDuration,
+  setProperties,
+  parseProperties,
+  parseCvssBaseVector,
+  parseCvssBaseFromVector,
+} from '../parser';
 
 describe('parseInt tests', () => {
 
@@ -233,6 +245,515 @@ describe('parseCsv tests', () => {
     expect(parseCsv('foo, bar,,,,')).toEqual(['foo', 'bar', '', '', '', '']);
   });
 
+});
+
+describe('parseQod tests', () => {
+
+  test('should convert value to float', () => {
+    expect(parseQod({
+      value: '55',
+      type: 'remote_vul',
+    })).toEqual({
+      value: 55,
+      type: 'remote_vul',
+    });
+  });
+
+  test('should drop unknown properties', () => {
+    expect(parseQod({
+      value: '55',
+      type: 'remote_vul',
+      foo: 'bar',
+    })).toEqual({
+      value: 55,
+      type: 'remote_vul',
+    });
+  });
+
+});
+
+describe('parseEnvelopeMeta tests', () => {
+
+  test('should parse envelope information', () => {
+    expect(parseEnvelopeMeta({
+      version: '1.0',
+      backend_operation: '0.01',
+      vendor_version: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    })).toEqual({
+      version: '1.0',
+      backendOperation: '0.01',
+      vendorVersion: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    });
+  });
+
+  test('should drop unkown envelope information', () => {
+    expect(parseEnvelopeMeta({
+      version: '1.0',
+      backend_operation: '0.01',
+      vendor_version: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+      foo: 'bar',
+      lorem: 'ipsum',
+    })).toEqual({
+      version: '1.0',
+      backendOperation: '0.01',
+      vendorVersion: '1.1',
+      i18n: 'en',
+      time: 'Fri Sep 14 11:26:40 2018 CEST',
+      timezone: 'Europe/Berlin',
+    });
+  });
+});
+
+describe('setProperties tests', () => {
+
+  test('should create new object', () => {
+    expect(setProperties()).toEqual({});
+  });
+
+  test('should not change object', () => {
+    const obj = {foo: 'bar'};
+    expect(setProperties(undefined, obj)).toBe(obj);
+  });
+
+  test('should set properties on new object', () => {
+    const obj = setProperties({
+      foo: 'bar',
+      lorem: 'ipsum',
+    });
+
+    expect(obj.foo).toEqual('bar');
+    expect(obj.lorem).toEqual('ipsum');
+
+    expect(Object.keys(obj)).toEqual(expect.arrayContaining(['foo', 'lorem']));
+
+    expect(() => {
+      obj.foo = 'a';
+    }).toThrow();
+    expect(() => {
+      obj.lorem = 'a';
+    }).toThrow();
+  });
+
+  test('should skip properties starting with underscore', () => {
+    const obj = setProperties({
+      foo: 'bar',
+      _lorem: 'ipsum',
+    });
+
+    expect(obj.foo).toEqual('bar');
+    expect(obj.lorem).toBeUndefined();
+    expect(obj._lorem).toBeUndefined();
+  });
+
+  test('should set properties on existing object', () => {
+    const orig = {foo: 'bar'};
+    const obj = setProperties({
+      bar: 'foo',
+      lorem: 'ipsum',
+    }, orig);
+
+    expect(obj).toBe(orig);
+    expect(obj.foo).toEqual('bar');
+    expect(obj.bar).toEqual('foo');
+    expect(obj.lorem).toEqual('ipsum');
+
+    expect(Object.keys(obj)).toEqual(
+      expect.arrayContaining(['bar', 'foo', 'lorem']));
+
+    expect(() => {
+      obj.bar = 'a';
+    }).toThrow();
+    expect(() => {
+      obj.lorem = 'a';
+    }).toThrow();
+
+    obj.foo = 1;
+    expect(obj.foo).toEqual(1);
+  });
+
+});
+
+describe('parseProperties tests', () => {
+
+  test('should create new object', () => {
+    expect(parseProperties()).toEqual({});
+  });
+
+  test('should create a shallow copy', () => {
+    const foo = {
+      a: 1,
+    };
+
+    const obj = {
+      foo,
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj);
+
+    expect(parsed).not.toBe(obj);
+    expect(parsed.foo).toBe(obj.foo);
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should copy additional properties', () => {
+    const obj = {
+      foo: 'bar',
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj, {bar: 'foo'});
+
+    expect(parsed.bar).toEqual('foo');
+    expect(parsed.foo).toEqual('bar');
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should not override properties with additional properties', () => {
+    const obj = {
+      foo: 'bar',
+      lorem: 'ipsum',
+    };
+
+    const parsed = parseProperties(obj, {foo: 'foo'});
+
+    expect(parsed.foo).toEqual('bar');
+    expect(parsed.lorem).toEqual('ipsum');
+  });
+
+  test('should parse id', () => {
+    const parsed = parseProperties({_id: 'a1'});
+    expect(parsed.id).toEqual('a1');
+  });
+
+  test('should parse creation_time', () => {
+    const parsed = parseProperties({creation_time: '2018-01-01'});
+
+    expect(parsed.creation_time).toBeUndefined();
+    expect(parsed.creationTime).toBeDefined();
+    expect(isDate(parsed.creationTime)).toEqual(true);
+  });
+
+  test('should parse modification_time', () => {
+    const parsed = parseProperties({modification_time: '2018-01-01'});
+
+    expect(parsed.modification_time).toBeUndefined();
+    expect(parsed.modificationTime).toBeDefined();
+    expect(isDate(parsed.modificationTime)).toEqual(true);
+  });
+
+  test('should prefix type', () => {
+    const parsed = parseProperties({type: 'foo'});
+
+    expect(parsed.type).toBeUndefined();
+    expect(parsed._type).toEqual('foo');
+  });
+
+});
+
+describe('parseDate tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseDate()).toBeUndefined();
+  });
+
+  test('should return a date', () => {
+    const date = parseDate('2018-01-01');
+
+    expect(date).toBeDefined();
+    expect(isDate(date)).toEqual(true);
+  });
+
+});
+
+describe('parseDuration tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseDuration()).toBeUndefined();
+  });
+
+  test('should parse duration', () => {
+    expect(isDuration(parseDuration('666'))).toEqual(true);
+    expect(isDuration(parseDuration(666))).toEqual(true);
+  });
+});
+
+describe('parseCvssBaseVector tests', () => {
+
+  test('should return undefined', () => {
+    expect(parseCvssBaseVector()).toBeUndefined();
+    expect(parseCvssBaseVector({})).toBeUndefined();
+    expect(parseCvssBaseVector({foo: 'bar'})).toBeUndefined();
+  });
+
+  test('should parse accessVector', () => {
+    expect(parseCvssBaseVector({accessVector: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'LOCAL'}))
+      .toEqual('AV:L/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'NETWORK'}))
+      .toEqual('AV:N/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessVector: 'ADJACENT_NETWORK'}))
+      .toEqual('AV:A/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse accessComplexity', () => {
+    expect(parseCvssBaseVector({accessComplexity: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'LOW'}))
+      .toEqual('AV:ERROR/AC:L/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'MEDIUM'}))
+      .toEqual('AV:ERROR/AC:M/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({accessComplexity: 'HIGH'}))
+      .toEqual('AV:ERROR/AC:H/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse authentication', () => {
+    expect(parseCvssBaseVector({authentication: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:N/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'MULTIPLE_INSTANCES'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:M/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({authentication: 'SINGLE_INSTANCES'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:S/C:ERROR/I:ERROR/A:ERROR');
+  });
+
+  test('should parse confidentialityImpact', () => {
+    expect(parseCvssBaseVector({confidentialityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:N/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:P/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({confidentialityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:C/I:ERROR/A:ERROR');
+  });
+
+  test('should parse integrityImpact', () => {
+    expect(parseCvssBaseVector({integrityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:N/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:P/A:ERROR');
+    expect(parseCvssBaseVector({integrityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:C/A:ERROR');
+  });
+
+  test('should parse availabilityImpact', () => {
+    expect(parseCvssBaseVector({availabilityImpact: 'foo'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:ERROR');
+    expect(parseCvssBaseVector({availabilityImpact: 'NONE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:N');
+    expect(parseCvssBaseVector({availabilityImpact: 'PARTIAL'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:P');
+    expect(parseCvssBaseVector({availabilityImpact: 'COMPLETE'}))
+      .toEqual('AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C');
+  });
+
+});
+
+describe('parseCvssBaseFromVector tests', () => {
+
+  test('should return empty object', () => {
+    expect(parseCvssBaseFromVector()).toEqual({});
+    expect(parseCvssBaseFromVector('')).toEqual({});
+    expect(parseCvssBaseFromVector(' ')).toEqual({});
+  });
+
+  test('should set vectors to undefined', () => {
+    expect(parseCvssBaseFromVector('foo')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse av', () => {
+    expect(parseCvssBaseFromVector('AV:L')).toEqual({
+      accessVector: 'LOCAL',
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AV:A')).toEqual({
+      accessVector: 'ADJACENT_NETWORK',
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AV:N')).toEqual({
+      accessVector: 'NETWORK',
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse ac', () => {
+    expect(parseCvssBaseFromVector('AC:L')).toEqual({
+      accessVector: undefined,
+      accessComplexity: 'LOW',
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AC:M')).toEqual({
+      accessVector: undefined,
+      accessComplexity: 'MEDIUM',
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AC:H')).toEqual({
+      accessVector: undefined,
+      accessComplexity: 'HIGH',
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse au', () => {
+    expect(parseCvssBaseFromVector('AU:M')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: 'MULTIPLE_INSTANCES',
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AU:S')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: 'SINGLE_INSTANCES',
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('AU:N')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: 'NONE',
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse c', () => {
+    expect(parseCvssBaseFromVector('C:C')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'COMPLETE',
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('C:P')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'PARTIAL',
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('C:N')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'NONE',
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse i', () => {
+    expect(parseCvssBaseFromVector('I:C')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'COMPLETE',
+    });
+    expect(parseCvssBaseFromVector('I:P')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'PARTIAL',
+    });
+    expect(parseCvssBaseFromVector('I:N')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'NONE',
+    });
+  });
+
+  test('should parse a', () => {
+    expect(parseCvssBaseFromVector('A:C')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: 'COMPLETE',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('A:P')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: 'PARTIAL',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+    expect(parseCvssBaseFromVector('A:N')).toEqual({
+      accessVector: undefined,
+      accessComplexity: undefined,
+      authentication: undefined,
+      availabilityImpact: 'NONE',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+    });
+  });
+
+  test('should parse full vector', () => {
+    expect(parseCvssBaseFromVector('AV:N/AC:H/AU:S/C:C/I:C/A:C')).toEqual({
+      accessVector: 'NETWORK',
+      accessComplexity: 'HIGH',
+      authentication: 'SINGLE_INSTANCES',
+      availabilityImpact: 'COMPLETE',
+      confidentialityImpact: 'COMPLETE',
+      integrityImpact: 'COMPLETE',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
