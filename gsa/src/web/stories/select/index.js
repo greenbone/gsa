@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -32,29 +32,29 @@ import Divider from 'web/components/layout/divider.js';
 
 import os from 'web/utils/os.js';
 
-const Sizer = glamorous.div({
-  width: '300px',
-});
+const Sizer = styled.div`
+  width: 300px;
+`;
 
-const Box = glamorous.div({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '200px',
-  border: '1px solid grey',
-  padding: '5px',
-});
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  border: 1px solid grey;
+  padding: 5px;
+`;
 
-const SelectBox = glamorous.div({
-  width: '100px',
-  border: '1px solid blue',
-  padding: '5px',
-});
+const SelectBox = styled.div`
+  width: 100px;
+  border: 1px solid blue;
+  padding: 5px;
+`;
 
-const StyledSelect = glamorous(Select)({
-  height: '30px',
-});
+const StyledSelect = styled(Select)`
+  height: 30px;
+`;
 
 const items = os.operating_systems.map(o => ({
   value: o.pattern,
