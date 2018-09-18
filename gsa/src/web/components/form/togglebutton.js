@@ -22,43 +22,46 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-const Styled = glamorous.div({
-  borderRadius: '8px',
-  padding: '5px',
-  userSelect: 'none',
-}, ({
-  checked = false,
-  disabled = false,
-  width = '32px',
-}) => {
-  let color;
-  let backgroundColor;
-  if (disabled) {
-    backgroundColor = Theme.lightGray;
-    color = Theme.mediumGray;
-  }
-  else if (checked) {
-    backgroundColor = Theme.lightGreen;
-    color = Theme.white;
-  }
-  else {
-    backgroundColor = Theme.lightGray;
-    color = Theme.darkGray;
-  }
-  return {
-    backgroundColor,
-    color,
-    cursor: disabled ? 'default' : 'pointer',
-    width,
-  };
-});
+const Styled = styled.div`
+  border-radius: 4px;
+  padding: 5px;
+  user-select: none;
+ ${props => {
+    const {
+      checked = false,
+      disabled = false,
+      width = '32px',
+    } = props;
+
+    let color;
+    let backgroundColor;
+    if (disabled) {
+      backgroundColor = Theme.lightGray;
+      color = Theme.mediumGray;
+    }
+    else if (checked) {
+      backgroundColor = Theme.lightGreen;
+      color = Theme.white;
+    }
+    else {
+      backgroundColor = Theme.lightGray;
+      color = Theme.darkGray;
+    }
+    return {
+      backgroundColor,
+      color,
+      cursor: disabled ? 'default' : 'pointer',
+      width,
+    };
+  }}
+`;
 
 const ToggleButton = ({
   name,
