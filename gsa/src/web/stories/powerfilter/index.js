@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
@@ -40,11 +40,11 @@ const fakegmp = {
   },
 };
 
-const Box = glamorous.div({
-  display: 'flex',
-  padding: '5px',
-  border: '1px solid black',
-});
+const Box = styled.div`
+  display: flex;
+  padding: 5px;
+  border: 1px solid black;
+`;
 
 storiesOf('Powerfilter', module)
   .add('default', () => (
