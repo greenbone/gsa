@@ -93,6 +93,11 @@ On Debian Stretch node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
 current installation of node.js, npm and related packages.
 
+
+```sh
+$ sudo apt-get install apt-transport-https
+```
+
 ```sh
 $ curl --silent --show-error https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 $ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
