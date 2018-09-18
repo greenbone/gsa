@@ -37,7 +37,6 @@
     "downshift": "^1.31.6",
     "fast-deep-equal": "^1.1.0",
     "glamor": "^2.20.40",
-    "glamorous": "^4.13.1",
     "history": "^4.7.2",
     "hoist-non-react-statics": "^2.5.5",
     "i18next": "^11.3.3",
