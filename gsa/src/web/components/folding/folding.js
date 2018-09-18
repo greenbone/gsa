@@ -24,13 +24,19 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {css} from 'glamor';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
+
+const Div = styled.div`
+  ${props => {
+    return {...props.styleProps};
+  }
+}`;
 
 const foldDelay = css.keyframes({
   '0%': {minWidth: '0px'},
@@ -116,7 +122,7 @@ export const withFolding = (Component, defaults = {}) => {
 
     return (
       <Div
-        {...styleProps}
+        styleProps={styleProps}
         onTransitionEnd={onFoldStepEnd}
         onAnimationEnd={onFoldStepEnd}
       >
