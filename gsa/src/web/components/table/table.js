@@ -57,7 +57,20 @@ export default styled(Table)`
   font-size: 12px;
   text-align: left;
   table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
-
+  ${props => {
+    const {size = 'full'} = props;
+    if (size === 'auto') {
+      return {};
+    }
+    if (size === 'full') {
+      return {
+        width: '100%',
+      };
+    }
+    return {
+      width: size,
+    };
+  }};
   @media print {
     border-collapse: collapse;
   };
