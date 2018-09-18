@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -21,31 +22,33 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Table from './table.js';
+import Theme from 'web/utils/theme';
 
-import glamorous from 'glamorous';
+import Table from './table';
 
-const StripedTable = glamorous(Table, {
-  displayName: 'StripedTable',
-})('striped-table', {
-  '& th, & td': {
-    padding: '4px',
-  },
-  '& tfoot tr': {
-    background: '#DDDDDD',
-  },
+import styled from 'styled-components';
 
-  '@media screen': {
-    ['& > tbody:nth-of-type(even), ' +
-    '& > tbody:only-of-type > tr:nth-of-type(even)']: {
-      backgroundColor: '#EEEEEE',
-    },
-    ['& > tbody:not(:only-of-type):hover, ' +
-    '& > tbody:only-of-type > tr:hover']: {
-      background: '#DDDDDD',
-    },
-  },
-});
+const StripedTable = styled(Table)`
+  & th, & td {
+    padding: 4px;
+  };
+  & tfoot tr {
+    background: ${Theme.lightGray};
+  };
+
+  @media screen {
+    & > tbody:nth-of-type(even), & > tbody:only-of-type > tr:nth-of-type(even)
+      {
+        background: ${Theme.dialogGray};
+      };
+    & > tbody:not(:only-of-type):hover, & > tbody:only-of-type > tr:hover
+      {
+        background: ${Theme.lightGray};
+      };
+  };
+`;
+
+StripedTable.displayName = 'StripedTable';
 
 export default StripedTable;
 

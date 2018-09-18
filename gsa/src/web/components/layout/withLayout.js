@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
@@ -40,7 +40,7 @@ const set_default_flex = defaults => isDefined(defaults.flex) ?
   defaults.flex : 'row';
 
 const withLayout = (defaults = {}) => Component => {
-  return glamorous(Component, {
+  return styled(Component, {
     displayName: 'withLayout(' + Component.displayName + ')',
     filterProps: ['align', 'basis', 'flex', 'grow', 'shrink', 'wrap'],
     withProps: ({

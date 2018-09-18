@@ -25,7 +25,7 @@ import 'core-js/fn/array/includes';
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
@@ -40,66 +40,67 @@ import withLayout from '../layout/withLayout';
 
 import NumberField from './numberfield';
 
-const StyledSpinner = glamorous.span({
-  borderRadius: '4px',
-  border: '1px solid ' + Theme.lightGray,
-  backgroundColor: Theme.white,
-  fontSize: '1.1em',
-  position: 'relative',
-  display: 'inline-block',
-  overflow: 'hidden',
-  padding: 0,
-  verticalAlign: 'middle',
-},
-  ({disabled}) => disabled ? {
+const StyledSpinner = styled.span`
+  border-radius: 4px;
+  border: 1px solid ${Theme.lightGray};
+  background-color: ${Theme.white};
+  font-size: 1.1em;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: middle;
+  ${props => props.disabled ? {
     color: Theme.lightGray,
     cursor: 'not-allowed',
-  } : undefined,
-);
+  } : undefined};
+`;
 
-const StyledInput = glamorous(NumberField)({
+const StyledInput = styled(NumberField)`
   /* use font and line settings from parents not from browser default */
-  fontamily: 'inherit',
-  fontSize: 'inherit',
-  lineHeight: 'inherit',
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 
-  border: 'none',
-  background: 'none',
-  color: 'inherit',
-  padding: 0,
-  margin: '.2em 0',
-  verticalAlign: 'middle',
-  marginLeft: '.4em',
-  marginRight: '22px',
-});
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin: .2em 0;
+  vertical-align: middle;
+  margin-left: .4em;
+  margin-right: 22px;
+`;
 
-const SpinnerButton = glamorous.span({
-  backgroundColor: Theme.lightGreen,
-  color: Theme.darkGreen,
-  borderLeft: '1px solid ' + Theme.darkGreen,
-  width: '16px',
-  height: '50%',
-  fontSize: '.6em',
-  padding: 0,
-  margin: 0,
-  textAlign: 'center',
-  verticalAlign: 'middle',
-  position: 'absolute',
-  right: 0,
-  cursor: 'default',
-  display: 'block',
-  overflow: 'hidden',
-  textDecoration: 'none',
-  userSelect: 'none', // don't select icon text on double click
-},
-  ({active}) => ({
-    '&:hover': {
-      backgroundColor: active ? Theme.white : Theme.darkGreen,
-      color: active ? Theme.darkGreen : Theme.white,
-      textDecoration: 'none',
-    },
-  }),
-  ({disabled}) => disabled ? {
+const SpinnerButton = styled.span`
+  background-color: ${Theme.lightGreen};
+  color: ${Theme.darkGreen};
+  border-left: 1px solid ${Theme.darkGreen};
+  width: 16px;
+  height: 50%;
+  font-size: .6em;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  cursor: default;
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  user-select: none; /* don't select icon text on double click */
+  &:hover {
+    background-color: ${Theme.darkGreen};
+    color:${Theme.white};
+    text-decoration: none;
+  };
+  &:active {
+    background-color: ${Theme.white};
+    color:${Theme.darkGreen};
+    text-decoration: none;
+  };
+  ${props => props.disabled ? {
     color: Theme.mediumGray,
     background: Theme.lightGray,
     cursor: 'not-allowed',
@@ -108,18 +109,18 @@ const SpinnerButton = glamorous.span({
       background: Theme.lightGray,
       cursor: 'not-allowed',
     },
-  } : undefined,
-);
+  } : undefined}
+`;
 
-const SpinnerButtonUp = glamorous(SpinnerButton)({
-  borderTopRightRadius: '3px',
-  top: 0,
-});
+const SpinnerButtonUp = styled(SpinnerButton)`
+  border-top-right-radius: 3px;
+  top: 0;
+`;
 
-const SpinnerButtonDown = glamorous(SpinnerButton)({
-  borderBottomRightRadius: '3px',
-  bottom: 0,
-});
+const SpinnerButtonDown = styled(SpinnerButton)`
+  border-bottom-right-radius: 3px;
+  bottom: 0;
+`;
 
 class SpinnerComponent extends React.Component {
 

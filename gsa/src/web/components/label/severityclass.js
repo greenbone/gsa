@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
@@ -22,86 +23,85 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-const Label = glamorous.div(
-  'severity-class-label',
-  {
-    textAlign: 'center',
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    color: 'white',
-    padding: 0,
-    borderWidth: '1px',
-    borderStyle: 'outset',
-    display: 'inline-block',
-    width: '60px',
-    height: '1.5em',
-    fontSize: '0.8em',
-  },
-);
+const Label = styled.div`
+  text-align: center;
+  font-weight: normal;
+  font-style: normal;
+  color: white;
+  padding: 0;
+  border-width: 1px;
+  border-style: outset;
+  display: inline-block;
+  width: 60px;
+  height: 1.5em;
+  font-size: 0.8em;
+  background-color: ${props => props.backgroundColor}
+  border-color: ${props => props.borderColor}
+`;
 
-const HighLabel = glamorous(props => (
-  <Label {...props}>
-    {_('High')}
-  </Label>
-))(
-  'high',
-  {
-    backgroundColor: '#C83814',
-    borderColor: '#C83814',
-  }
-);
+const HighLabel = props => {
+  return (
+    <Label
+      {...props}
+      backgroundColor="#C83814"
+      borderColor="#C83814"
+    >
+      {_('High')}
+    </Label>
+  );
+};
 
-const MediumLabel = glamorous(props => (
-  <Label {...props}>
-    {_('Medium')}
-  </Label>
-))(
-  'medium',
-  {
-    backgroundColor: '#F0A519',
-    borderColor: '#F0A519',
-  },
-);
+const MediumLabel = props => {
+  return (
+    <Label
+      {...props}
+      backgroundColor="#F0A519"
+      borderColor="#F0A519"
+    >
+      {_('Medium')}
+    </Label>
+  );
+};
 
-const LowLabel = glamorous(props => (
-  <Label {...props}>
-    {_('Low')}
-  </Label>
-))(
-  'low',
-  {
-    backgroundColor: '#4F91C7',
-    borderColor: '#4F91C7',
-  },
-);
+const LowLabel = props => {
+  return (
+    <Label
+      {...props}
+      backgroundColor="#4F91C7"
+      borderColor="#4F91C7"
+    >
+      {_('Low')}
+    </Label>
+  );
+};
 
-const LogLabel = glamorous(props => (
-  <Label {...props}>
-    {_('Log')}
-  </Label>
-))(
-  'log',
-  {
-    backgroundColor: '#191919',
-    borderColor: '#191919',
-  },
-);
+const LogLabel = props => {
+  return (
+    <Label
+      {...props}
+      backgroundColor="#191919"
+      borderColor="#191919"
+    >
+      {_('Log')}
+    </Label>
+  );
+};
 
-const FalsePositiveLabel = glamorous(props => (
-  <Label {...props}>
-    {_('False Pos.')}
-  </Label>
-))(
-  'false-positive',
-  {
-    backgroundColor: '#191919',
-    borderColor: '#191919',
-  },
-);
+const FalsePositiveLabel = props => {
+  return (
+    <Label
+      {...props}
+      backgroundColor="#191919"
+      borderColor="#191919"
+    >
+      {_('False Pos.')}
+    </Label>
+  );
+};
 
 export const SeverityClassLabels = {
   High: HighLabel,

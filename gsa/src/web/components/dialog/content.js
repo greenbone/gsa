@@ -22,19 +22,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import Theme from '../../utils/theme';
+import Theme from 'web/utils/theme';
 
-const DialogContent = glamorous.div({
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'inherit',
-  padding: '5px 5px 5px 5px',
-  background: Theme.dialogGray,
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-});
+const DialogContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  padding: 5px 5px 5px 5px;
+  background: ${Theme.dialogGray};
+  border: 1px solid ${Theme.dialogGray};
+  border-radius: 4px;
+`;
 
 export default DialogContent;
 

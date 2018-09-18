@@ -23,30 +23,30 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from '../../utils/theme.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import DialogCloseButton from './closebutton.js';
+import DialogCloseButton from './closebutton';
 
-const DialogTitleBar = glamorous(Layout)({
-  padding: '5px 5px 5px 10px',
-  marginBottom: '15px',
-  borderRadius: '4px',
-  border: '1px solid ' + Theme.darkGreen,
-  color: '#fff',
-  fontWeight: 'bold',
-  background: Theme.green,
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  flexShrink: '0',
-  cursor: 'move',
-});
+const DialogTitleBar = styled(Layout)`
+  padding: 5px 5px 5px 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid ${Theme.darkGreen};
+  color: ${Theme.white}
+  font-weight: bold;
+  background: ${Theme.green};
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  cursor: move;
+`;
 
 const DialogTitle = ({
   showClose = true,

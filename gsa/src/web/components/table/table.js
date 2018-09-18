@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const Table = ({
     children,
@@ -51,34 +51,16 @@ Table.propTypes = {
   header: PropTypes.element,
 };
 
-export default glamorous(Table, {
-  displayName: 'Table',
-})(
-  'table',
-  {
-    border: 0,
-    borderSpacing: '2px',
-    fontSize: '12px',
-    textAlign: 'left',
+export default styled(Table)`
+  border: 0;
+  border-spacing: 2px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: ${props => props.fixed ? 'fixed' : 'auto'};
 
-    '@media print': {
-      borderCollapse: 'collapse',
-    },
-  },
-  ({fixed}) => ({tableLayout: fixed ? 'fixed' : 'auto'}),
-  ({size = 'full'}) => {
-    if (size === 'auto') {
-      return {};
-    }
-    if (size === 'full') {
-      return {
-        width: '100%',
-      };
-    }
-    return {
-      width: size,
-    };
-  },
-);
+  @media print {
+    border-collapse: collapse;
+  };
+`;
 
 // vim: set ts=2 sw=2 tw=80:

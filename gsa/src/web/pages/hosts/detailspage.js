@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -56,7 +56,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import EntityPage from 'web/entity/page';
+import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
@@ -157,23 +157,23 @@ ToolBarIcons.propTypes = {
   onHostEditClick: PropTypes.func.isRequired,
 };
 
-const RouteList = glamorous.ul({
-  margin: 0,
-  paddingLeft: '20px',
-});
+const RouteList = styled.ul`
+  margin: 0;
+  padding-left: 20px;
+`;
 
-const Hop = glamorous.div({
-  display: 'inline-flex',
-  '&:not(:last-child) > *': {
-    paddingRight: '5px',
-  },
-  '&:not(:last-child)': {
-    paddingRight: '5px',
-  },
-  '&:not(:last-child)::after': {
-    content: `'►'`, // \u25BA == &#9658;
-  },
-});
+const Hop = styled.div`
+  display: inline-flex;
+  &:not(:last-child) > * {
+    padding-right: 5px;
+  };
+  &:not(:last-child) {
+    padding-right: 5px;
+  };
+  &:not(:last-child)::after {
+    content: '►'; /* \u25BA == &#9658; */
+  };
+`;
 
 const Details = ({
   entity,
@@ -187,6 +187,10 @@ const Details = ({
   return (
     <Layout flex="column">
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>

@@ -23,15 +23,15 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Identifiers from './identifiers.js';
+import Identifiers from './identifiers';
 
 const HostDetails = ({
   entity,
-    onHostIdentifierDeleteClick,
+  onHostIdentifierDeleteClick,
 }) => {
   const {identifiers} = entity;
   return (
