@@ -21,49 +21,52 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {isArray} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withContext from '../../utils/withContext';
+import PropTypes from 'web/utils/proptypes';
+import withContext from 'web/utils/withContext';
 
 const withIconSize = (defaultSize = 'small') => Component => {
 
-  const IconSizeWrapper = glamorous(Component, {
-    displayName: 'withIconSize',
-    filterProps: ['size', 'iconSize'],
-  })(({
-    iconSize = defaultSize,
-    size = iconSize,
-  }) => {
-    let width;
-    let height;
+  const IconSizeWrapper = styled(Component)`
+    ${props => {
+      const {
+        iconSize = defaultSize,
+        size = iconSize,
+      } = props;
 
-    if (size === 'small') {
-      height = width = '16px';
-    }
-    else if (size === 'medium') {
-      height = width = '24px';
-    }
-    else if (size === 'large') {
-      height = width = '50px';
-    }
-    else if (isArray(size)) {
-      width = size[0];
-      height = size[1];
-    }
+      let width;
+      let height;
 
-    return {
-      height,
-      width,
-      lineHeight: height,
-      '& *': {
-        height: 'inherit',
-        width: 'inherit',
-      },
-    };
-  });
+      if (size === 'small') {
+        height = width = '16px';
+      }
+      else if (size === 'medium') {
+        height = width = '24px';
+      }
+      else if (size === 'large') {
+        height = width = '50px';
+      }
+      else if (isArray(size)) {
+        width = size[0];
+        height = size[1];
+      }
+
+      return {
+        height,
+        width,
+        lineHeight: height,
+        '& *': {
+          height: 'inherit',
+          width: 'inherit',
+        },
+      };
+    }}
+  `;
+
+  IconSizeWrapper.displayName = 'withIconSize';
 
   IconSizeWrapper.propTypes = {
     iconSize: PropTypes.iconSize,
