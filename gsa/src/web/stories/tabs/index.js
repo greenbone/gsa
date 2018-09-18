@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
@@ -38,9 +38,9 @@ import TabPanel from '../../components/tab/tabpanel.js';
 import TabPanels from '../../components/tab/tabpanels.js';
 import Tabs from '../../components/tab/tabs.js';
 
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
 
 const TabTitle = ({title, count}) => (
   <Layout flex="column" align={['center', 'center']}>
