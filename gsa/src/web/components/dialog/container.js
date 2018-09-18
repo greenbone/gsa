@@ -21,28 +21,56 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import glamorous from 'glamorous';
 
+import React from 'react';
+
+import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
 
-const DialogContainer = glamorous.div(
-  {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '10% auto',
-    border: 0,
-    outline: '0',
-  },
-  ({width}) => ({
-    width: isDefined(width) ? width : '400px',
-  }),
-  ({height}) => ({
-    height: isDefined(height) ? height : 'auto',
-  }),
-);
+const StyledDialogContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 10% auto;
+  border: 0;
+  outline: 0;
+  width: ${props => isDefined(props.width) ? props.width : '400px'};
+  height: ${props => isDefined(props.height) ? props.height : 'auto'};
+`;
+
+const DialogContainer = ({
+  width = '',
+  height = '',
+  ...other
+}) => {
+  if (!width.toString().endsWith('px')) {
+    width += 'px';
+  }
+  if (!height.toString().endsWith('px')) {
+    height += 'px';
+  }
+  return (
+    <StyledDialogContainer
+      {...other}
+      width={width}
+      height={height}
+    />
+  );
+};
 
 DialogContainer.displayName = 'DialogContainer';
+
+DialogContainer.propTypes = {
+  height: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  width: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+};
 
 export default DialogContainer;
 
