@@ -118,7 +118,8 @@ export const setLocale = lang => {
     }
   });
 };
+const translate = (key, options) => i18next.t(key, options);
 
-export const translate = (key, options) => i18next.t(key, options);
+export {translate as _};
 
 // vim: set ts=2 sw=2 tw=80:
