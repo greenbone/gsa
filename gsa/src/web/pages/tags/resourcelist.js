@@ -52,7 +52,7 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 const Spacer = styled.div`
-  height: 12px,
+  height: 12px;
 `;
 
 const Notification = ({id, resourceType}) => {
