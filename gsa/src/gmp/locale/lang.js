@@ -106,8 +106,22 @@ export const setLocale = lang => {
   });
 };
 
+class LazyTranslate {
+
+  constructor(key, options) {
+    this.key = key;
+    this.options = options;
+  }
+
+  toString() {
+    return i18next.t(this.key, this.options);
+  }
+}
+
 const translate = (key, options) => i18next.t(key, options);
+const translateLazy = (key, options) => new LazyTranslate(key, options);
 
 export {translate as _};
+export {translateLazy as _l};
 
 // vim: set ts=2 sw=2 tw=80:
