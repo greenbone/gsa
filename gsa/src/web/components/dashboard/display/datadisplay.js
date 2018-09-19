@@ -64,7 +64,7 @@ const ownProps = [
 
 const Download = styled.a`
   color: ${Theme.black};
-  text-decoration: none:
+  text-decoration: none;
   display: none;
   &:link {
     color: ${Theme.black};
