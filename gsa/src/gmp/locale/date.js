@@ -35,6 +35,8 @@ export const setLocale = lang => {
   setMomentLocale(lang);
 };
 
+export const getLocale = () => setMomentLocale();
+
 const dateFormat = (date, format) => {
   if (!isDefined(date)) {
     return undefined;
