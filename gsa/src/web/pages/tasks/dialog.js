@@ -99,7 +99,7 @@ class ScannerSelect extends React.Component {
     let config_id;
 
     const scanner = get_scanner(scanners, value);
-    const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
+    const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
 
     if (scanner_type === OPENVAS_SCANNER_TYPE ||
       scanner_type === SLAVE_SCANNER_TYPE) {
@@ -203,7 +203,7 @@ const TaskDialog = ({
   ...data
 }) => {
   const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = isDefined(scanner) ? scanner.scanner_type : undefined;
+  const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
 
   const tag_items = renderSelectItems(tags);
 

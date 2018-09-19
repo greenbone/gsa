@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from '../locale';
+import {_} from '../locale/lang';
 
 import {isDefined, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
@@ -45,25 +45,25 @@ export const PARAM_TYPE_SELECTION = 'osp_selection';
 export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
 export const openVasScannersFilter = config =>
-  config.scanner_type === OPENVAS_SCANNER_TYPE;
+  config.scannerType === OPENVAS_SCANNER_TYPE;
 export const ospScannersFilter = config =>
-  config.scanner_type === OSP_SCANNER_TYPE;
+  config.scannerType === OSP_SCANNER_TYPE;
 
-export function scanner_type_name(scanner_type) {
-  scanner_type = parseInt(scanner_type);
-  if (scanner_type === OSP_SCANNER_TYPE) {
+export function scannerTypeName(scannerType) {
+  scannerType = parseInt(scannerType);
+  if (scannerType === OSP_SCANNER_TYPE) {
     return _('OSP Scanner');
   }
-  else if (scanner_type === OPENVAS_SCANNER_TYPE) {
+  else if (scannerType === OPENVAS_SCANNER_TYPE) {
     return _('OpenVAS Scanner');
   }
-  else if (scanner_type === CVE_SCANNER_TYPE) {
+  else if (scannerType === CVE_SCANNER_TYPE) {
     return _('CVE Scanner');
   }
-  else if (scanner_type === SLAVE_SCANNER_TYPE) {
+  else if (scannerType === SLAVE_SCANNER_TYPE) {
     return _('GMP Scanner');
   }
-  return _('Unknown type ({{type}})', {type: scanner_type});
+  return _('Unknown type ({{type}})', {type: scannerType});
 }
 
 const parse_scanner_info = (info = {}) => {
@@ -86,7 +86,7 @@ class Scanner extends Model {
   parseProperties(elem) {
     const ret = super.parseProperties(elem);
 
-    ret.scanner_type = parseInt(elem.type);
+    ret.scannerType = parseInt(elem.type);
 
     ret.credential = isDefined(ret.credential) &&
       !isEmpty(ret.credential._id) ? new Credential(ret.credential) :
@@ -157,13 +157,13 @@ class Scanner extends Model {
   }
 
   isClonable() {
-    return this.scanner_type !== CVE_SCANNER_TYPE &&
-      this.scanner_type !== OPENVAS_SCANNER_TYPE;
+    return this.scannerType !== CVE_SCANNER_TYPE &&
+      this.scannerType !== OPENVAS_SCANNER_TYPE;
   }
 
   isWritable() {
-    return super.isWritable() && this.scanner_type !== CVE_SCANNER_TYPE &&
-      this.scanner_type !== OPENVAS_SCANNER_TYPE;
+    return super.isWritable() && this.scannerType !== CVE_SCANNER_TYPE &&
+      this.scannerType !== OPENVAS_SCANNER_TYPE;
   }
 
   hasUnixSocket() {

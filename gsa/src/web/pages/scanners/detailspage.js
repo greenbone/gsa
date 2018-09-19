@@ -105,7 +105,7 @@ const ToolBarIcons = ({
         />
         <CloneIcon
           entity={entity}
-          mayClone={entity.scanner_type !== CVE_SCANNER_TYPE}
+          mayClone={entity.scannerType !== CVE_SCANNER_TYPE}
           onClick={onScannerCloneClick}
         />
         <EditIcon

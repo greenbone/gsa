@@ -97,7 +97,7 @@ class ScannerComponent extends React.Component {
           scannerDialogVisible: true,
           scanner,
           title,
-          type: scanner.scanner_type,
+          type: scanner.scannerType,
           which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
         });
       });
