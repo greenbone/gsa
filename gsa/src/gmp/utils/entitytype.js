@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from '../locale';
+import {_l} from '../locale/lang';
 
 import {isDefined} from './identity';
 
@@ -67,39 +67,39 @@ export const normalizeType = type => {
 };
 
 const ENTITY_TYPES = {
-  agent: _('Agent'),
-  alert: _('Alert'),
-  allinfo: _('All SecInfo'),
-  asset: _('Asset'),
-  certbund: _('CERT-Bund Advisory'),
-  cpe: _('CPE'),
-  credential: _('Credential'),
-  cve: _('CVE'),
-  dfncert: _('DFN-CERT Advisory'),
-  filter: _('Filter'),
-  group: _('Group'),
-  host: _('Host'),
-  info: _('Info'),
-  operatingsystem: _('Operating System'),
-  ovaldef: _('OVAL Definition'),
-  override: _('Override'),
-  note: _('Note'),
-  nvt: _('NVT'),
-  permission: _('Permission'),
-  portlist: _('Port List'),
-  portrange: _('Port Range'),
-  report: _('Report'),
-  reportformat: _('Report Format'),
-  result: _('Result'),
-  role: _('Role'),
-  scanconfig: _('Scan Config'),
-  scanner: _('Scanner'),
-  schedule: _('Schedule'),
-  tag: _('Tag'),
-  target: _('Target'),
-  task: _('Task'),
-  user: _('User'),
-  vulnerability: _('Vulnerability'),
+  agent: _l('Agent'),
+  alert: _l('Alert'),
+  allinfo: _l('All SecInfo'),
+  asset: _l('Asset'),
+  certbund: _l('CERT-Bund Advisory'),
+  cpe: _l('CPE'),
+  credential: _l('Credential'),
+  cve: _l('CVE'),
+  dfncert: _l('DFN-CERT Advisory'),
+  filter: _l('Filter'),
+  group: _l('Group'),
+  host: _l('Host'),
+  info: _l('Info'),
+  operatingsystem: _l('Operating System'),
+  ovaldef: _l('OVAL Definition'),
+  override: _l('Override'),
+  note: _l('Note'),
+  nvt: _l('NVT'),
+  permission: _l('Permission'),
+  portlist: _l('Port List'),
+  portrange: _l('Port Range'),
+  report: _l('Report'),
+  reportformat: _l('Report Format'),
+  result: _l('Result'),
+  role: _l('Role'),
+  scanconfig: _l('Scan Config'),
+  scanner: _l('Scanner'),
+  schedule: _l('Schedule'),
+  tag: _l('Tag'),
+  target: _l('Target'),
+  task: _l('Task'),
+  user: _l('User'),
+  vulnerability: _l('Vulnerability'),
 };
 
 /**
@@ -112,7 +112,7 @@ const ENTITY_TYPES = {
 export const typeName = type => {
   type = normalizeType(type);
   const name = ENTITY_TYPES[type];
-  return isDefined(name) ? name : type;
+  return isDefined(name) ? `${name}` : type;
 };
 
 const CMD_TYPES = {
