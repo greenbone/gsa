@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -46,7 +46,10 @@ export const HostsSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) => _('Hosts by Severity Class (Total: {{count}})',
     {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of Hosts')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of Hosts'),
+  ],
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-severity-class-table',
   displayName: 'HostsSeverityClassTableDisplay',
@@ -54,12 +57,12 @@ export const HostsSeverityClassTableDisplay = createDisplay({
 
 registerDisplay(HostsSeverityClassDisplay.displayId,
   HostsSeverityClassDisplay, {
-    title: _('Chart: Hosts by Severity Class'),
+    title: _l('Chart: Hosts by Severity Class'),
   },
 );
 registerDisplay(HostsSeverityClassTableDisplay.displayId,
   HostsSeverityClassTableDisplay, {
-    title: _('Table: Hosts by Severity Class'),
+    title: _l('Table: Hosts by Severity Class'),
   },
 );
 

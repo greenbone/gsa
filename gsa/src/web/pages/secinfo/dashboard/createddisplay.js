@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {SecInfosCreatedLoader} from './loaders';
 export const SecInfosCreatedDisplay = createDisplay({
   loaderComponent: SecInfosCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('SecInfo Items by Creation Time'),
-  yAxisLabel: _('# of created SecInfo Items'),
-  y2AxisLabel: _('Total SecInfo Items'),
-  xAxisLabel: _('Time'),
+  title: () => _('SecInfo Items by Creation Time'),
+  yAxisLabel: _l('# of created SecInfo Items'),
+  y2AxisLabel: _l('Total SecInfo Items'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created SecInfo Items'),
+    label: _l('Created SecInfo Items'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total SecInfo Items'),
+    label: _l('Total SecInfo Items'),
   },
   displayId: 'allinfo-by-created',
   displayName: 'SecInfoCreatedDisplay',
@@ -58,10 +58,12 @@ export const SecInfosCreatedDisplay = createDisplay({
 export const SecInfosCreatedTableDisplay = createDisplay({
   loaderComponent: SecInfosCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('SecInfo Items by Creation Time'),
-    dataTitles: [_('Creation Time'),
-    _('# of SecInfo Items'),
-    _('Total SecInfo Items')],
+  title: () => _('SecInfo Items by Creation Time'),
+  dataTitles: [
+    _l('Creation Time'),
+    _l('# of SecInfo Items'),
+    _l('Total SecInfo Items'),
+  ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'allinfo-by-created-table',
@@ -71,13 +73,13 @@ export const SecInfosCreatedTableDisplay = createDisplay({
 
 registerDisplay(SecInfosCreatedDisplay.displayId,
   SecInfosCreatedDisplay, {
-    title: _('Chart: SecInfo Items by Creation Time'),
+    title: _l('Chart: SecInfo Items by Creation Time'),
   },
 );
 
 registerDisplay(SecInfosCreatedTableDisplay.displayId,
   SecInfosCreatedTableDisplay, {
-    title: _('Table: SecInfo Items by Creation Time'),
+    title: _l('Table: SecInfo Items by Creation Time'),
   },
 );
 

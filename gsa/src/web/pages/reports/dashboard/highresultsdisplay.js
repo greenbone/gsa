@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 import {longDate} from 'gmp/locale/date';
 
 import {parseInt, parseFloat, parseDate} from 'gmp/parser';
@@ -166,25 +166,25 @@ export const ReportsHighResultsTableDisplay = createDisplay({
   filtersFilter: REPORTS_FILTER_FILTER,
   dataTransform: transformHighResults,
   dataTitles: [
-    _('Created Time'),
-    _('Max High'),
-    _('Max High per Host'),
+    _l('Created Time'),
+    _l('Max High'),
+    _l('Max High per Host'),
   ],
   dataRow: row => [row.label, row.y, row.y2],
-  title: ({data: tdata}) => _('Reports with High Results'),
+  title: () => _('Reports with High Results'),
   displayName: 'ReportsHighResultsTableDisplay',
   displayId: 'report-by-high-results-table',
 });
 
 registerDisplay(ReportsHighResultsDisplay.displayId,
   ReportsHighResultsDisplay, {
-    title: _('Chart: Reports with high Results'),
+    title: _l('Chart: Reports with high Results'),
   },
 );
 
 registerDisplay(ReportsHighResultsTableDisplay.displayId,
   ReportsHighResultsTableDisplay, {
-    title: _('Table: Reports with high Results'),
+    title: _l('Table: Reports with high Results'),
   },
 );
 

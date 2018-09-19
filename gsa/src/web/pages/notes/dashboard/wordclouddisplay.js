@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
@@ -107,8 +107,8 @@ export class NotesWordCloudDisplay extends React.Component {
             {...loaderProps}
             filter={filter}
             dataTransform={transformWordCountData}
-            title={({data: tdata}) =>
-            _('Notes Text Word Cloud')}
+            title={() =>
+              _('Notes Text Word Cloud')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
@@ -145,8 +145,8 @@ export const NotesWordCloudTableDisplay = createDisplay({
   dataTransform: transformWordCountData,
   dataRow: row => [row.label, row.value],
   dataTitles: [
-    _('Text'),
-    _('Count'),
+    _l('Text'),
+    _l('Count'),
   ],
   title: ({data: tdata}) => _('Notes Text Word Cloud'),
   displayId: 'note-by-text-words-table',
@@ -155,12 +155,12 @@ export const NotesWordCloudTableDisplay = createDisplay({
 });
 
 registerDisplay(NotesWordCloudDisplay.displayId, NotesWordCloudDisplay, {
-  title: _('Chart: Notes Text Word Cloud'),
+  title: _l('Chart: Notes Text Word Cloud'),
 });
 
 registerDisplay(NotesWordCloudTableDisplay.displayId,
   NotesWordCloudTableDisplay, {
-    title: _('Table: Notes Text Word Cloud'),
+    title: _l('Table: Notes Text Word Cloud'),
   },
 );
 

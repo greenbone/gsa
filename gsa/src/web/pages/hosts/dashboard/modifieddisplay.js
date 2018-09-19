@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 import {shortDate} from 'gmp/locale/date';
 
 import {parseInt, parseDate} from 'gmp/parser';
@@ -184,9 +184,9 @@ export const HostsModifiedTableDisplay = createDisplay({
   title: ({data: tdata}) => _('Hosts by Modification Time (Total: {{count}})',
     {count: tdata.total}),
   dataTitles: [
-    _('Creation Time'),
-    _('# of Modified Hosts'),
-    _('Total Hosts'),
+    _l('Creation Time'),
+    _l('# of Modified Hosts'),
+    _l('Total Hosts'),
   ],
   dataRow: row => [row.label, row.y, row.y2],
   filtersFilter: HOSTS_FILTER_FILTER,
@@ -195,12 +195,12 @@ export const HostsModifiedTableDisplay = createDisplay({
 });
 
 registerDisplay(HostsModifiedDisplay.displayId, HostsModifiedDisplay, {
-  title: _('Chart: Hosts by Modification Time'),
+  title: _l('Chart: Hosts by Modification Time'),
 });
 
 registerDisplay(HostsModifiedTableDisplay.displayId,
   HostsModifiedTableDisplay, {
-    title: _('Table: Hosts by Modification Time'),
+    title: _l('Table: Hosts by Modification Time'),
   },
 );
 

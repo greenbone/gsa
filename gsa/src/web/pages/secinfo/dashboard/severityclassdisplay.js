@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -49,7 +48,10 @@ export const SecInfosSeverityClassTableDisplay = createDisplay({
   title: ({data: tdata}) =>
     _('SecInfo Items by Severity Class (Total: {{count}})',
       {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of SecInfo Items')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of SecInfo Items'),
+  ],
   displayId: 'allinfo-by-severity-table',
   displayName: 'SecInfoSeverityClassTableDisplay',
   filtersFilter: SECINFO_FILTER_FILTER,
@@ -58,12 +60,12 @@ export const SecInfosSeverityClassTableDisplay = createDisplay({
 registerDisplay(
   SecInfosSeverityClassDisplay.displayId,
   SecInfosSeverityClassDisplay, {
-    title: _('Chart: SecInfo Items by Severity Class'),
+    title: _l('Chart: SecInfo Items by Severity Class'),
 });
 
 registerDisplay(SecInfosSeverityClassTableDisplay.displayId,
   SecInfosSeverityClassTableDisplay, {
-    title: _('Table: SecInfo Items by Severity Class'),
+    title: _l('Table: SecInfo Items by Severity Class'),
   },
 );
 

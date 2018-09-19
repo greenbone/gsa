@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {CertBundSeverityLoader} from './loaders';
 export const CertBundCvssDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of CERT-Bund Advs'),
+  yLabel: _l('# of CERT-Bund Advs'),
   title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: CERTBUND_FILTER_FILTER,
@@ -45,7 +45,10 @@ export const CertBundCvssDisplay = createDisplay({
 export const CertBundCvssTableDisplay = createDisplay({
   loaderComponent: CertBundSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of CERT-Bund Advisories')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of CERT-Bund Advisories'),
+  ],
   title: ({data: tdata}) => _('CERT-Bund Advisories by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: CERTBUND_FILTER_FILTER,
@@ -54,11 +57,11 @@ export const CertBundCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(CertBundCvssDisplay.displayId, CertBundCvssDisplay, {
-  title: _('Chart: CERT-Bund Advisories by CVSS'),
+  title: _l('Chart: CERT-Bund Advisories by CVSS'),
 });
 
 registerDisplay(CertBundCvssTableDisplay.displayId, CertBundCvssTableDisplay, {
-  title: _('Table: CERT-Bund Advisories by CVSS'),
+  title: _l('Table: CERT-Bund Advisories by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

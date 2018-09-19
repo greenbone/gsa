@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -47,19 +46,22 @@ export const CpesSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
     _('CPEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of CPEs')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of CPEs'),
+  ],
   displayId: 'cpe-by-severity-table',
   displayName: 'CpesSeverityClassTableDisplay',
   filtersFilter: CPES_FILTER_FILTER,
 });
 
 registerDisplay(CpesSeverityClassDisplay.displayId, CpesSeverityClassDisplay, {
-  title: _('Chart: CPEs by Severity Class'),
+  title: _l('Chart: CPEs by Severity Class'),
 });
 
 registerDisplay(CpesSeverityClassTableDisplay.displayId,
   CpesSeverityClassTableDisplay, {
-    title: _('Table: CPEs by Severity Class'),
+    title: _l('Table: CPEs by Severity Class'),
   },
 );
 

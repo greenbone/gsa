@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -35,7 +34,7 @@ import {NvtsSeverityLoader} from './loaders';
 export const NvtsCvssDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of NVTs'),
+  yLabel: _l('# of NVTs'),
   title: ({data: tdata}) => _('NVTs by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: NVTS_FILTER_FILTER,
@@ -46,7 +45,10 @@ export const NvtsCvssDisplay = createDisplay({
 export const NvtsCvssTableDisplay = createDisplay({
   loaderComponent: NvtsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of NVTs')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of NVTs'),
+  ],
   title: ({data: tdata}) => _('NVTs by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: NVTS_FILTER_FILTER,
@@ -55,11 +57,11 @@ export const NvtsCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(NvtsCvssDisplay.displayId, NvtsCvssDisplay, {
-  title: _('Chart: NVTs by CVSS'),
+  title: _l('Chart: NVTs by CVSS'),
 });
 
 registerDisplay(NvtsCvssTableDisplay.displayId, NvtsCvssTableDisplay, {
-  title: _('Table: NVTs by CVSS'),
+  title: _l('Table: NVTs by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

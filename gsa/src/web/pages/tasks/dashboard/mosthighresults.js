@@ -26,7 +26,7 @@ import {withRouter} from 'react-router-dom';
 
 import {format as d3format} from 'd3-format';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
@@ -146,7 +146,10 @@ TasksMostHighResultsDisplay.displayId = 'task-by-most-high-results';
 export const TasksMostHighResultsTableDisplay = createDisplay({
   loaderComponent: TasksHighResultsLoader,
   displayComponent: DataTableDisplay,
-  dataTitles: [_('Task Name'), _('Max. High per Host')],
+  dataTitles: [
+    _l('Task Name'),
+    _l('Max. High per Host'),
+  ],
   dataRow: row => [row.x, row.y],
   dataTransform: transformHighResultsData,
   title: () => _('Tasks with most High Results per Host'),
@@ -157,13 +160,13 @@ export const TasksMostHighResultsTableDisplay = createDisplay({
 
 registerDisplay(TasksMostHighResultsDisplay.displayId,
   TasksMostHighResultsDisplay, {
-    title: _('Chart: Tasks with most High Results per Host'),
+    title: _l('Chart: Tasks with most High Results per Host'),
   },
 );
 
 registerDisplay(TasksMostHighResultsTableDisplay.displayId,
   TasksMostHighResultsTableDisplay, {
-    title: _('Table: Tasks with most High Results per Host'),
+    title: _l('Table: Tasks with most High Results per Host'),
   },
 );
 

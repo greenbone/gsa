@@ -20,12 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
 import {format as d3format} from 'd3-format';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
@@ -236,7 +235,10 @@ export const VulnsHostsTableDisplay = createDisplay({
   loaderComponent: VulnsHostsLoader,
   displayComponent: DataTableDisplay,
   dataTransform: transformHostsData,
-  dataTitles: [_('# of Hosts'), _('# of Vulnerabilities')],
+  dataTitles: [
+    _l('# of Hosts'),
+    _l('# of Vulnerabilities'),
+  ],
   dataRow: row => [row.x, row.y],
   title: ({data: tdata}) => _('Vulnerabilities by Hosts (Total: {{count}})',
     {count: tdata.total}),
@@ -246,11 +248,11 @@ export const VulnsHostsTableDisplay = createDisplay({
 });
 
 registerDisplay(VulnsHostsDisplay.displayId, VulnsHostsDisplay, {
-  title: _('Chart: Vulnerabilities by Hosts'),
+  title: _l('Chart: Vulnerabilities by Hosts'),
 });
 
 registerDisplay(VulnsHostsTableDisplay.displayId, VulnsHostsTableDisplay, {
-  title: _('Table: Vulnerabilities by Hosts'),
+  title: _l('Table: Vulnerabilities by Hosts'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

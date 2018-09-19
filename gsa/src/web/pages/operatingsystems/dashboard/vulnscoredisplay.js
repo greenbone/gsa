@@ -26,7 +26,7 @@ import {withRouter} from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 import {longDate} from 'gmp/locale/date';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
@@ -164,8 +164,8 @@ export const OsVulnScoreTableDisplay = createDisplay({
   loaderComponent: OsVulnScoreLoader,
   displayComponent: DataTableDisplay,
   dataTitles: [
-    _('Operating Sytem Name'),
-    _('Max. Average Severity Score'),
+    _l('Operating Sytem Name'),
+    _l('Max. Average Severity Score'),
   ],
   dataRow: row => [row.x, row.y],
   dataTransform: transformVulnScoreData,
@@ -177,14 +177,14 @@ export const OsVulnScoreTableDisplay = createDisplay({
 
 registerDisplay(
   OsVulnScoreDisplay.displayId, OsVulnScoreDisplay, {
-    title: _('Chart: Operating Systems by Vulnerability Score'),
+    title: _l('Chart: Operating Systems by Vulnerability Score'),
   },
 );
 
 registerDisplay(
   OsVulnScoreTableDisplay.displayId,
   OsVulnScoreTableDisplay, {
-    title: _('Table: Operating Systems by Vulnerability Score'),
+    title: _l('Table: Operating Systems by Vulnerability Score'),
   }
 );
 

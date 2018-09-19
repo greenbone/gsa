@@ -26,7 +26,7 @@ import {withRouter} from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 import {longDate} from 'gmp/locale/date';
 
 import {parseFloat, parseSeverity} from 'gmp/parser';
@@ -165,8 +165,8 @@ export const HostsVulnScoreTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformVulnScoreData,
   dataTitles: [
-    _('Host Name'),
-    _('Max. average Severity Score'),
+    _l('Host Name'),
+    _l('Max. average Severity Score'),
   ],
   dataRow: row => [row.x, row.y],
   title: () => _('Most Vulnerable Hosts'),
@@ -176,13 +176,13 @@ export const HostsVulnScoreTableDisplay = createDisplay({
 });
 
 registerDisplay(HostsVulnScoreDisplay.displayId, HostsVulnScoreDisplay, {
-    title: _('Chart: Hosts by Vulnerability Score'),
+    title: _l('Chart: Hosts by Vulnerability Score'),
   },
 );
 
 registerDisplay(HostsVulnScoreTableDisplay.displayId,
   HostsVulnScoreTableDisplay, {
-    title: _('Table: Hosts by Vulnerability Score'),
+    title: _l('Table: Hosts by Vulnerability Score'),
   },
 );
 

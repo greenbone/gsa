@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {OverridesCreatedLoader} from './loaders';
 export const OverridesCreatedDisplay = createDisplay({
   loaderComponent: OverridesCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('Overrides by Creation Time'),
-  yAxisLabel: _('# of created Overrides'),
-  y2AxisLabel: _('Total Overrides'),
-  xAxisLabel: _('Time'),
+  title: () => _('Overrides by Creation Time'),
+  yAxisLabel: _l('# of created Overrides'),
+  y2AxisLabel: _l('Total Overrides'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created Overrides'),
+    label: _l('Created Overrides'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total Overrides'),
+    label: _l('Total Overrides'),
   },
   displayId: 'override-by-created',
   displayName: 'OverridesCreatedDisplay',
@@ -57,18 +57,18 @@ export const OverridesCreatedDisplay = createDisplay({
 
 registerDisplay(OverridesCreatedDisplay.displayId,
   OverridesCreatedDisplay, {
-    title: _('Chart: Overrides by Creation Time'),
+    title: _l('Chart: Overrides by Creation Time'),
   },
 );
 
 export const OverridesCreatedTableDisplay = createDisplay({
   loaderComponent: OverridesCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('Overrides by Creation Time'),
+  title: () => _('Overrides by Creation Time'),
   dataTitles: [
-    _('Creation Time'),
-    _('# of created Overrides'),
-    _('Total Overrides'),
+    _l('Creation Time'),
+    _l('# of created Overrides'),
+    _l('Total Overrides'),
   ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
@@ -79,13 +79,13 @@ export const OverridesCreatedTableDisplay = createDisplay({
 
 registerDisplay(OverridesCreatedDisplay.displayId,
   OverridesCreatedDisplay, {
-    title: _('Chart: Overrides by Creation Time'),
+    title: _l('Chart: Overrides by Creation Time'),
   },
 );
 
 registerDisplay(OverridesCreatedTableDisplay.displayId,
   OverridesCreatedTableDisplay, {
-    title: _('Table: Overrides by Creation Time'),
+    title: _l('Table: Overrides by Creation Time'),
   },
 );
 

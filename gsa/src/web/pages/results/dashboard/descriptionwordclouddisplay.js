@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -144,11 +143,11 @@ export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
   dataTitles: [
-    _('Description'),
-    _('Word Count'),
+    _l('Description'),
+    _l('Word Count'),
   ],
   dataRow: row => [row.label, row.value],
-  title: ({data: tdata}) => _('Results Description Word Cloud'),
+  title: () => _('Results Description Word Cloud'),
   displayId: 'result-by-desc-words-table',
   displayName: 'ResultsDescriptionWordCloudTableDisplay',
   filtersFilter: RESULTS_FILTER_FILTER,
@@ -156,13 +155,13 @@ export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
 
 registerDisplay(ResultsDescriptionWordCloudDisplay.displayId,
   ResultsDescriptionWordCloudDisplay, {
-    title: _('Chart: Results Description Word Cloud'),
+    title: _l('Chart: Results Description Word Cloud'),
   },
 );
 
 registerDisplay(ResultsDescriptionWordCloudTableDisplay.displayId,
   ResultsDescriptionWordCloudTableDisplay, {
-    title: _('Table: Results Description Word Cloud'),
+    title: _l('Table: Results Description Word Cloud'),
   },
 );
 

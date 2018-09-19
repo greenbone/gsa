@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -48,19 +48,22 @@ export const OsSeverityClassTableDisplay = createDisplay({
   title: ({data: tdata}) =>
     _('Operating Systems by Severity Class (Total: {{count}})',
       {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of Operating Systems')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of Operating Systems'),
+  ],
   displayId: 'os-by-severity-table',
   displayName: 'OsSeverityClassTableDisplay',
   filtersFilter: OS_FILTER_FILTER,
 });
 
 registerDisplay(OsSeverityClassDisplay.displayId, OsSeverityClassDisplay, {
-  title: _('Chart: Operating Systems by Severity Class'),
+  title: _l('Chart: Operating Systems by Severity Class'),
 });
 
 registerDisplay(OsSeverityClassTableDisplay.displayId,
   OsSeverityClassTableDisplay, {
-    title: _('Table: Operating Systems by Severity Class'),
+    title: _l('Table: Operating Systems by Severity Class'),
   },
 );
 

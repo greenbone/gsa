@@ -26,7 +26,7 @@ import {scaleOrdinal} from 'd3-scale';
 
 import {interpolateHcl} from 'd3-interpolate';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {TASK_STATUS} from 'gmp/models/task';
@@ -186,7 +186,10 @@ export const TasksStatusTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   loaderComponent: TaskStatusLoader,
   dataTransform: transformStatusData,
-  dataTitles: [_('Status'), _('# of Tasks')],
+  dataTitles: [
+    _l('Status'),
+    _l('# of Tasks'),
+  ],
   dataRow: row => [row.label, row.value],
   title: ({data: tdata}) =>
     _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
@@ -196,11 +199,11 @@ export const TasksStatusTableDisplay = createDisplay({
 });
 
 registerDisplay(TasksStatusDisplay.displayId, TasksStatusDisplay, {
-  title: _('Chart: Tasks by Status'),
+  title: _l('Chart: Tasks by Status'),
 });
 
 registerDisplay(TasksStatusTableDisplay.displayId, TasksStatusTableDisplay, {
-  title: _('Table: Tasks by Status'),
+  title: _l('Table: Tasks by Status'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

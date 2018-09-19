@@ -26,7 +26,7 @@ import React from 'react';
 
 import {withRouter} from 'react-router-dom';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
@@ -191,7 +191,7 @@ HostsTopologyDisplay = compose(
 HostsTopologyDisplay.displayId = DISPLAY_ID;
 
 registerDisplay(DISPLAY_ID, HostsTopologyDisplay, {
-  title: _('Chart: Hosts Topology'),
+  title: _l('Chart: Hosts Topology'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

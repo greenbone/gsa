@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -46,19 +46,22 @@ export const CvesSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
     _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of CVEs')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of CVEs'),
+  ],
   displayId: 'cve-by-severity-table',
   displayName: 'CvesSeverityClassTableDisplay',
   filtersFilter: CVES_FILTER_FILTER,
 });
 
 registerDisplay(CvesSeverityClassDisplay.displayId, CvesSeverityClassDisplay, {
-  title: _('Chart: CVEs by Severity Class'),
+  title: _l('Chart: CVEs by Severity Class'),
 });
 
 registerDisplay(CvesSeverityClassTableDisplay.displayId,
   CvesSeverityClassTableDisplay, {
-    title: _('Table: CVEs by Severity Class'),
+    title: _l('Table: CVEs by Severity Class'),
   },
 );
 

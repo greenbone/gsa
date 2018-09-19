@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -49,7 +48,10 @@ export const DfnCertSeverityClassTableDisplay = createDisplay({
   title: ({data: tdata}) =>
     _('DFN-CERT Advisories by Severity Class (Total: {{count}})',
       {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of DFN-CERT Advs')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of DFN-CERT Advs'),
+  ],
   displayId: 'dfn_cert_adv-by-severity-table',
   displayName: 'DfnCertSeverityClassTableDisplay',
   filtersFilter: DFNCERT_FILTER_FILTER,
@@ -58,13 +60,13 @@ export const DfnCertSeverityClassTableDisplay = createDisplay({
 registerDisplay(
   DfnCertSeverityClassDisplay.displayId,
   DfnCertSeverityClassDisplay, {
-  title: _('Chart: DFN-CERT Advisories by Severity Class'),
+  title: _l('Chart: DFN-CERT Advisories by Severity Class'),
 });
 
 registerDisplay(
   DfnCertSeverityClassTableDisplay.displayId,
   DfnCertSeverityClassTableDisplay, {
-    title: _('Table: DFN-CERT Advisories by Severity Class'),
+    title: _l('Table: DFN-CERT Advisories by Severity Class'),
   },
 );
 

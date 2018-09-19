@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
@@ -107,8 +106,7 @@ export class OverridesWordCloudDisplay extends React.Component {
             {...loaderProps}
             filter={filter}
             dataTransform={transformWordCountData}
-            title={({data: tdata}) =>
-            _('Overrides Text Word Cloud')}
+            title={() => _('Overrides Text Word Cloud')}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
@@ -145,10 +143,10 @@ export const OverridesWordCloudTableDisplay = createDisplay({
   dataTransform: transformWordCountData,
   dataRow: row => [row.label, row.value],
   dataTitles: [
-    _('Text'),
-    _('Count'),
+    _l('Text'),
+    _l('Count'),
   ],
-  title: ({data: tdata}) => _('Overrides Text Word Cloud'),
+  title: () => _('Overrides Text Word Cloud'),
   displayId: 'override-by-text-words-table',
   displayName: 'OverridesWordCloudTableDisplay',
   filtersFilter: OVERRIDES_FILTER_FILTER,
@@ -156,13 +154,13 @@ export const OverridesWordCloudTableDisplay = createDisplay({
 
 registerDisplay(OverridesWordCloudDisplay.displayId,
   OverridesWordCloudDisplay, {
-    title: _('Chart: Overrides Text Word Cloud'),
+    title: _l('Chart: Overrides Text Word Cloud'),
   },
 );
 
 registerDisplay(OverridesWordCloudTableDisplay.displayId,
   OverridesWordCloudTableDisplay, {
-    title: _('Table: Overrides Text Word Cloud'),
+    title: _l('Table: Overrides Text Word Cloud'),
   },
 );
 

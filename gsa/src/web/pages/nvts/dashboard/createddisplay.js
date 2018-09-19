@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -38,18 +38,18 @@ import {NvtCreatedLoader} from './loaders';
 export const NvtsCreatedDisplay = createDisplay({
   loaderComponent: NvtCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('NVTs by Creation Time'),
-  yAxisLabel: _('# of created NVTs'),
-  y2AxisLabel: _('Total NVTs'),
-  xAxisLabel: _('Time'),
+  title: () => _('NVTs by Creation Time'),
+  yAxisLabel: _l('# of created NVTs'),
+  y2AxisLabel: _l('Total NVTs'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created NVTs'),
+    label: _l('Created NVTs'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total NVTs'),
+    label: _l('Total NVTs'),
   },
   displayId: 'nvt-by-created',
   displayName: 'NvtCreatedDisplay',
@@ -59,8 +59,12 @@ export const NvtsCreatedDisplay = createDisplay({
 export const NvtsCreatedTableDisplay = createDisplay({
   loaderComponent: NvtCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('NVTs by Creation Time'),
-    dataTitles: [_('Creation Time'), _('# of NVTs'), _('Total NVTs')],
+  title: () => _('NVTs by Creation Time'),
+  dataTitles: [
+    _l('Creation Time'),
+    _l('# of NVTs'),
+    _l('Total NVTs'),
+  ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'nvt-by-created-table',
@@ -70,13 +74,13 @@ export const NvtsCreatedTableDisplay = createDisplay({
 
 registerDisplay(NvtsCreatedDisplay.displayId,
   NvtsCreatedDisplay, {
-    title: _('Chart: NVTs by Creation Time'),
+    title: _l('Chart: NVTs by Creation Time'),
   },
 );
 
 registerDisplay(NvtsCreatedTableDisplay.displayId,
   NvtsCreatedTableDisplay, {
-    title: _('Table: NVTs by Creation Time'),
+    title: _l('Table: NVTs by Creation Time'),
   },
 );
 

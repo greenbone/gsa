@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import SeverityClassDisplay from 'web/components/dashboard/display/severity/severityclassdisplay'; // eslint-disable-line max-len
 import SeverityClassTableDisplay from 'web/components/dashboard/display/severity/severityclasstabledisplay'; // eslint-disable-line max-len
@@ -33,7 +33,10 @@ import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 export const VulnsSeverityDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: SeverityClassDisplay,
-  dataTitles: [_('Severity Class'), _('# of Vulnerabilities')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of Vulnerabilities'),
+  ],
   title: ({data: tdata}) =>
     _('Vulnerabilities by Severity Class (Total: {{count}})',
       {count: tdata.total}),
@@ -45,7 +48,10 @@ export const VulnsSeverityDisplay = createDisplay({
 export const VulnsSeverityTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: SeverityClassTableDisplay,
-  dataTitles: [_('Severity Class'), _('# of Vulnerabilities')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of Vulnerabilities'),
+  ],
   title: ({data: tdata}) =>
     _('Vulnerabilities by Severity Class (Total: {{count}})',
       {count: tdata.total}),
@@ -55,12 +61,12 @@ export const VulnsSeverityTableDisplay = createDisplay({
 });
 
 registerDisplay(VulnsSeverityDisplay.displayId, VulnsSeverityDisplay, {
-  title: _('Chart: Vulnerabilities by Severity Class'),
+  title: _l('Chart: Vulnerabilities by Severity Class'),
 });
 
 registerDisplay(VulnsSeverityTableDisplay.displayId,
   VulnsSeverityTableDisplay, {
-    title: _('Table: Vulnerabilities by Severity Class'),
+    title: _l('Table: Vulnerabilities by Severity Class'),
   },
 );
 

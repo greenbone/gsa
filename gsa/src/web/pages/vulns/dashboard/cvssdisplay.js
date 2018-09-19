@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {VulnsSeverityLoader} from './loaders';
 export const VulnsCvssDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of Vulnerabilities'),
+  yLabel: _l('# of Vulnerabilities'),
   title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
     {count: tdata.total}),
   displayId: 'vuln-by-cvss',
@@ -45,7 +45,10 @@ export const VulnsCvssDisplay = createDisplay({
 export const VulnsCvssTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of Vulnerabilties')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Vulnerabilties'),
+  ],
   title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
     {count: tdata.total}),
   displayId: 'vuln-by-cvss-table',
@@ -54,11 +57,11 @@ export const VulnsCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(VulnsCvssDisplay.displayId, VulnsCvssDisplay, {
-  title: _('Chart: Vulnerabilities by CVSS'),
+  title: _l('Chart: Vulnerabilities by CVSS'),
 });
 
 registerDisplay(VulnsCvssTableDisplay.displayId, VulnsCvssTableDisplay, {
-  title: _('Table: Vulnerabilities by CVSS'),
+  title: _l('Table: Vulnerabilities by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

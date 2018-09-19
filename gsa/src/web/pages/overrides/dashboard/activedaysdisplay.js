@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
@@ -203,8 +202,8 @@ export const OverridesActiveDaysTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataRow: row => [row.label, row.value],
   dataTitles: [
-    _('Active'),
-    _('# of Overrides'),
+    _l('Active'),
+    _l('# of Overrides'),
   ],
   dataTransform: transformActiveDaysData,
   title: ({data: tdata}) => _('Overrides by Active Days (Total: {{count}})',
@@ -216,13 +215,13 @@ export const OverridesActiveDaysTableDisplay = createDisplay({
 
 registerDisplay(OverridesActiveDaysDisplay.displayId,
   OverridesActiveDaysDisplay, {
-    title: _('Chart: Overrides by Active Days'),
+    title: _l('Chart: Overrides by Active Days'),
   },
 );
 
 registerDisplay(OverridesActiveDaysTableDisplay.displayId,
   OverridesActiveDaysTableDisplay, {
-    title: _('Table: Overrides by Active Days'),
+    title: _l('Table: Overrides by Active Days'),
   },
 );
 

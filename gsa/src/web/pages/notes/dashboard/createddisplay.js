@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {NOTES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {NotesCreatedLoader} from './loaders';
 export const NotesCreatedDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('Notes by Creation Time'),
-  yAxisLabel: _('# of Created Notes'),
-  y2AxisLabel: _('Total Notes'),
-  xAxisLabel: _('Time'),
+  title: () => _('Notes by Creation Time'),
+  yAxisLabel: _l('# of Created Notes'),
+  y2AxisLabel: _l('Total Notes'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created Notes'),
+    label: _l('Created Notes'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total Notes'),
+    label: _l('Total Notes'),
   },
   displayName: 'NotesCreatedDisplay',
   displayId: 'note-by-created',
@@ -59,11 +59,11 @@ export const NotesCreatedDisplay = createDisplay({
 export const NotesCreatedTableDisplay = createDisplay({
   loaderComponent: NotesCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('Notes by Creation Time'),
+  title: () => _('Notes by Creation Time'),
   dataTitles: [
-    _('Creation Time'),
-    _('# of Notes'),
-    _('Total Notes'),
+    _l('Creation Time'),
+    _l('# of Notes'),
+    _l('Total Notes'),
   ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
@@ -74,13 +74,13 @@ export const NotesCreatedTableDisplay = createDisplay({
 
 registerDisplay(NotesCreatedDisplay.displayId,
   NotesCreatedDisplay, {
-    title: _('Chart: Notes by Creation Time'),
+    title: _l('Chart: Notes by Creation Time'),
   },
 );
 
 registerDisplay(NotesCreatedTableDisplay.displayId,
   NotesCreatedTableDisplay, {
-    title: _('Table: Notes by Creation Time'),
+    title: _l('Table: Notes by Creation Time'),
   },
 );
 
