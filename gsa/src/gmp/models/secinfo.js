@@ -48,7 +48,7 @@ export const secInfoTypeName = (type, unknown = _('N/A')) => {
   }
 };
 
-export const secInfoType = entity => entity.info_type;
+export const secInfoType = entity => entity.infoType;
 
 class SecInfo extends Info {
 
@@ -67,7 +67,7 @@ class SecInfo extends Info {
       delete ret.allinfo;
     }
 
-    ret.info_type = ret._type;
+    ret.infoType = ret._type;
 
     return ret;
   }

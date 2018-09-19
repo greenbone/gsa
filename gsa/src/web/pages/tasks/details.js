@@ -33,7 +33,7 @@ import {YES_VALUE} from 'gmp/parser.js';
 
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
-import {scanner_type_name} from 'gmp/models/scanner.js';
+import {scannerTypeName} from 'gmp/models/scanner.js';
 
 import {
   loadEntity as loadSchedule,
@@ -177,7 +177,7 @@ class TaskDetails extends React.Component {
                     {_('Type')}
                   </TableData>
                   <TableData>
-                    {scanner_type_name(scanner.scanner_type)}
+                    {scannerTypeName(scanner.scannerType)}
                   </TableData>
                 </TableRow>
                 {isDefined(config) &&

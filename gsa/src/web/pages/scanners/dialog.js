@@ -55,7 +55,7 @@ import Layout from 'web/components/layout/layout';
 import {
   OSP_SCANNER_TYPE,
   SLAVE_SCANNER_TYPE,
-  scanner_type_name,
+  scannerTypeName,
 } from 'gmp/models/scanner';
 
 import {
@@ -69,7 +69,7 @@ const scanner_types = [
 ];
 
 const scannerTypesOptions = map(scanner_types, scannerType => ({
-  label: scanner_type_name(scannerType),
+  label: scannerTypeName(scannerType),
   value: scannerType,
 }));
 
