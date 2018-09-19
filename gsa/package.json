@@ -82,7 +82,9 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}",
-      "!src/web/stories/**"
+      "!src/web/stories/**",
+      "!src/gmp/index.js",
+      "!src/setupTests.js"
     ]
   }
 }
