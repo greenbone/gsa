@@ -137,7 +137,7 @@ export class NvtsQodDisplay extends React.Component {
 
 NvtsQodDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 NvtsQodDisplay = withFilterSelection({
