@@ -33,7 +33,7 @@ import Detector from './detector';
 const log = logger.getLogger('gmp.locale.lang');
 
 let languageChangelisteners = [];
-let lastLanguage;
+let currentLocale;
 
 const notifyLanguageChangeListeners = (lang, initial = false) => {
   for (const listener of languageChangelisteners) {
@@ -54,22 +54,22 @@ const I18N_OPTIONS = {
   },
 };
 
-i18next
-  .use(XHRBackend) // use ajax backend
-  .use(Detector) // use own detector for language detection
-  .init(I18N_OPTIONS, () => {
+i18next.on('languageChanged', lang => {
+  if (currentLocale !== lang) {
+    log.debug('Language changed to', lang);
 
-    /* keep quiet if translations have not be found.
-     * errors can be debugged here */
-
-    const lang = getLocale();
-
-    lastLanguage = lang;
+    currentLocale = lang;
 
     setDateLocale(lang);
 
-    notifyLanguageChangeListeners(lang, true);
-  });
+    notifyLanguageChangeListeners(lang);
+  }
+});
+
+i18next
+  .use(XHRBackend)
+  .use(Detector)
+  .init(I18N_OPTIONS);
 
 /**
  * Subscribe to get notified about locale changes
@@ -90,7 +90,7 @@ export const onLanguageChange = listener => {
  *
  * @returns {String} Language code of the current used language
  */
-export const getLocale = () => i18next.language;
+export const getLocale = () => currentLocale;
 
 /**
  * Change the current used locale
@@ -101,23 +101,11 @@ export const getLocale = () => i18next.language;
 export const setLocale = lang => {
   i18next.changeLanguage(lang, err => {
     if (isDefined(err)) {
-      log.error('Could not set language to', lang, err);
-    }
-    else {
-      lang = getLocale();
-
-      if (lastLanguage !== lang) {
-        log.debug('Language changed to', lang);
-
-        lastLanguage = lang;
-
-        setDateLocale(lang);
-
-        notifyLanguageChangeListeners(lang);
-      }
+      log.error('Error while setting language to', lang, err);
     }
   });
 };
+
 const translate = (key, options) => i18next.t(key, options);
 
 export {translate as _};
