@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -32,34 +32,34 @@ import Divider from 'web/components/layout/divider.js';
 
 import os from 'web/utils/os.js';
 
-const Sizer = glamorous.div({
-  width: '300px',
-});
+const Sizer = styled.div`
+  width: 300px;
+`;
 
-const Box = glamorous.div({
-  width: '150px',
-  height: '50px',
-  border: '1px solid grey',
-  padding: '5px',
-  display: 'flex',
-  alignItems: 'center',
-});
+const Box = styled.div`
+  width: 150px;
+  height: 50px;
+  border: 1px solid grey;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+`;
 
 const items = os.operating_systems.map(o => ({
   value: o.pattern,
   label: o.title,
 }));
 
-const SelectBox = glamorous.div({
-  width: '120px', // this is the recommended minimum for MultiSelect
-  border: '1px solid blue',
-  padding: '5px',
-});
+const SelectBox = styled.div`
+  width: 120px; /* this is the recommended minimum for MultiSelect */
+  border: 1px solid blue;
+  padding: 5px;
+`;
 
-const StyledSelect = glamorous(MultiSelect)({
-  width: '120px',
-  height: '30px',
-});
+const StyledSelect = styled(MultiSelect)`
+  width: 120px;
+  height: 30px;
+`;
 
 class ControlledMultiSelect extends React.Component {
 

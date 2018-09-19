@@ -22,11 +22,15 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
 import BarChart from 'web/components/chart/bar';
+
+const Div = styled.div`
+  color: ${props => props.color}
+`;
 
 const bardata = [{
   label: 'Foo',

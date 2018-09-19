@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -33,6 +33,12 @@ import Display from 'web/components/dashboard/display/display';
 import DisplayMenu from 'web/components/dashboard/display/displaymenu';
 
 const removeaction = action('on remove click');
+
+const Div = styled.div`
+  width: ${props => props.width};
+  height: ${props => props.height};
+  background-color: ${props => props.backgroundColor};
+`;
 
 storiesOf('Dashboard/Display', module)
   .add('default', () => {

@@ -22,11 +22,18 @@
  */
 import React from 'react';
 
-import {Div} from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
 import Resizer from 'web/components/sortable/resizer';
+
+const Div = styled.div`
+  display: flex;
+  width: 400px;
+  background-color: blue;
+  height: ${props => props.height}px;
+`;
 
 class ResizeContainer extends React.Component {
 
@@ -34,7 +41,7 @@ class ResizeContainer extends React.Component {
     super(...args);
 
     this.state = {
-      height: '100px',
+      height: '100',
     };
 
     this.handleResize = this.handleResize.bind(this);
@@ -54,9 +61,6 @@ class ResizeContainer extends React.Component {
     return (
       <div>
         <Div
-          display="flex"
-          width="400px"
-          backgroundColor="blue"
           height={height}
           innerRef={ref => this.div = ref}
         />

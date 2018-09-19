@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
@@ -61,12 +61,12 @@ class ItemController extends React.Component {
   }
 }
 
-const Item = glamorous.span({
-  flexGrow: '1',
-  backgroundColor: 'blue',
-  padding: '5px',
-  color: 'white',
-});
+const Item = styled.span`
+  flex-grow: 1;
+  background-color: blue;
+  padding: 5px;
+  color: white;
+`;
 
 const getItems = (row, count) =>
   Array.from({length: count}, (v, k) => k).map(k =>

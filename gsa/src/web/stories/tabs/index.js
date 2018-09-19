@@ -23,24 +23,24 @@
 
 import React from 'react';
 
-import glamorous from 'glamorous';
+import styled from 'styled-components';
 
 import {storiesOf} from '@storybook/react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from 'web/components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Tab from '../../components/tab/tab.js';
-import TabLayout from '../../components/tab/tablayout.js';
-import TabList from '../../components/tab/tablist.js';
-import TabPanel from '../../components/tab/tabpanel.js';
-import TabPanels from '../../components/tab/tabpanels.js';
-import Tabs from '../../components/tab/tabs.js';
+import Tab from 'web/components/tab/tab';
+import TabLayout from 'web/components/tab/tablayout';
+import TabList from 'web/components/tab/tablist';
+import TabPanel from 'web/components/tab/tabpanel';
+import TabPanels from 'web/components/tab/tabpanels';
+import Tabs from 'web/components/tab/tabs';
 
-const TabTitleCounts = glamorous.span({
-  fontSize: '0.7em',
-});
+const TabTitleCounts = styled.span`
+  font-size: 0.7em;
+`;
 
 const TabTitle = ({title, count}) => (
   <Layout flex="column" align={['center', 'center']}>
