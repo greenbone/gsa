@@ -66,10 +66,14 @@ i18next.on('languageChanged', lang => {
   }
 });
 
-i18next
-  .use(XHRBackend)
-  .use(Detector)
-  .init(I18N_OPTIONS);
+export const initLocale = ({
+  backend = XHRBackend,
+  detector = Detector,
+  options = I18N_OPTIONS,
+} = {}) => i18next
+  .use(backend)
+  .use(detector)
+  .init(options);
 
 /**
  * Subscribe to get notified about locale changes
