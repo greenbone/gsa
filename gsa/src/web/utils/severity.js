@@ -110,7 +110,8 @@ const TRANSLATED_RISK_FACTORS = {
   [DEBUG]: _DEBUG,
 };
 
-export const translateRiskFactor = factor => TRANSLATED_RISK_FACTORS[factor];
+export const translateRiskFactor = factor =>
+  `${TRANSLATED_RISK_FACTORS[factor]}`;
 
 export const translatedResultSeverityRiskFactor = value =>
   translateRiskFactor(resultSeverityRiskFactor(value));
