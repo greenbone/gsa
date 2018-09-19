@@ -71,7 +71,7 @@ const find_item = (items, value) => isDefined(items) ?
 const find_label = (items, value) => {
   const item = find_item(items, value);
   if (isDefined(item)) {
-    return item.label;
+    return React.isValidElement(item.label) ? item.label : `${item.label}`;
   }
   return value;
 };
@@ -216,7 +216,8 @@ class Select extends React.Component {
                           key={key}
                           onMouseDown={() => selectItem(itemValue)}
                         >
-                          {itemLabel}
+                          {React.isValidElement(itemLabel) ?
+                            itemLabel : `${itemLabel}`}
                         </Item>
                       ))
                     }
