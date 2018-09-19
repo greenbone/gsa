@@ -152,7 +152,7 @@ export class NvtsFamilyDisplay extends React.Component {
 
 NvtsFamilyDisplay.propTypes = {
   filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func,
 };
 
 NvtsFamilyDisplay = withFilterSelection({
