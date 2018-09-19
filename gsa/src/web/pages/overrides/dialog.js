@@ -132,19 +132,19 @@ const OverrideDialog = ({
 
   let severity_from_list_items = [{
     value: HIGH_VALUE,
-    label: _HIGH,
+    label: `${_HIGH}`,
   }, {
     value: MEDIUM_VALUE,
-    label: _MEDIUM,
+    label: `${_MEDIUM}`,
   }, {
     value: LOW_VALUE,
-    label: _LOW,
+    label: `${_LOW}`,
   }, {
     value: LOG_VALUE,
-    label: _LOG,
+    label: `${_LOG}`,
   }, {
     value: FALSE_POSITIVE_VALUE,
-    label: _FALSE_POSITIVE,
+    label: `${_FALSE_POSITIVE}`,
   }];
 
   if (is_edit) {
