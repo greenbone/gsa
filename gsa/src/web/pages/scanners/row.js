@@ -140,15 +140,15 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>
-      {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+      {entity.scannerType !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
         entity.host}
     </TableData>
     <TableData>
-      {entity.scanner_type !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
+      {entity.scannerType !== CVE_SCANNER_TYPE && !entity.hasUnixSocket() &&
         entity.port}
     </TableData>
     <TableData>
-      {scannerTypeName(entity.scanner_type)}
+      {scannerTypeName(entity.scannerType)}
     </TableData>
     <TableData>
       {isDefined(entity.credential) &&

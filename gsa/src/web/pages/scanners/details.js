@@ -259,7 +259,7 @@ const ScannerDetails = ({
 }) => {
   const {
     comment,
-    scanner_type,
+    scannerType,
     host,
     port,
     credential,
@@ -290,7 +290,7 @@ const ScannerDetails = ({
               {_('Scanner Type')}
             </TableData>
             <TableData>
-              {scannerTypeName(scanner_type)}
+              {scannerTypeName(scannerType)}
             </TableData>
           </TableRow>
 
@@ -300,7 +300,7 @@ const ScannerDetails = ({
                 {_('Host')}
               </TableData>
               <TableData>
-                {scanner_type === CVE_SCANNER_TYPE ?
+                {scannerType === CVE_SCANNER_TYPE ?
                   <span>{_('N/A (Builtin Scanner)')}</span> :
                   host
                 }
@@ -314,7 +314,7 @@ const ScannerDetails = ({
                 {_('Port')}
               </TableData>
               <TableData>
-                {scanner_type === CVE_SCANNER_TYPE ?
+                {scannerType === CVE_SCANNER_TYPE ?
                   <span>{_('N/A (Builtin Scanner)')}</span> :
                   port
                 }
@@ -382,7 +382,7 @@ const ScannerDetails = ({
         </TableBody>
       </InfoTable>
 
-      {scanner_type === OSP_SCANNER_TYPE && isDefined(info) &&
+      {scannerType === OSP_SCANNER_TYPE && isDefined(info) &&
         <OspScannerDetails
           info={info}
         />

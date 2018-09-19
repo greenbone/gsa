@@ -177,7 +177,7 @@ class TaskDetails extends React.Component {
                     {_('Type')}
                   </TableData>
                   <TableData>
-                    {scannerTypeName(scanner.scanner_type)}
+                    {scannerTypeName(scanner.scannerType)}
                   </TableData>
                 </TableRow>
                 {isDefined(config) &&

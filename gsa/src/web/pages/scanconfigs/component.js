@@ -32,7 +32,7 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
+import {ospScannersFilter} from 'gmp/models/scanner';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -239,8 +239,7 @@ class ScanConfigComponent extends React.Component {
 
     return gmp.scanners.getAll().then(response => {
       let {data: scanners} = response;
-      scanners = scanners.filter(scanner =>
-        scanner.scanner_type === OSP_SCANNER_TYPE);
+      scanners = scanners.filter(ospScannersFilter);
       return {
         scanners,
         scanner_id: selectSaveId(scanners),
