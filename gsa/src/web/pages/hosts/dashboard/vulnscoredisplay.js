@@ -148,7 +148,6 @@ export class HostsVulnScoreDisplay extends React.Component {
 HostsVulnScoreDisplay.propTypes = {
   filter: PropTypes.filter,
   history: PropTypes.object.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
 };
 
 HostsVulnScoreDisplay = compose(
