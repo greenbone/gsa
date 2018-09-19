@@ -138,7 +138,7 @@ export const SEVERITY_CLASSES = [
 
 const getLangNameByCode = code => {
   const language = Languages[code];
-  return isDefined(language) ? language.name : null;
+  return isDefined(language) ? `${language.name}` : null;
 };
 
 const SettingTableRow = ({
