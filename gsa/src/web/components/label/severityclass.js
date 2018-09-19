@@ -39,8 +39,8 @@ const Label = styled.div`
   width: 60px;
   height: 1.5em;
   font-size: 0.8em;
-  background-color: ${props => props.backgroundColor}
-  border-color: ${props => props.borderColor}
+  background-color: ${props => props.backgroundColor};
+  border-color: ${props => props.borderColor};
 `;
 
 const HighLabel = props => {

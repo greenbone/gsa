@@ -63,7 +63,7 @@ const HOST_RADIUS = 5;
 
 const Svg = styled.svg`
   & text {
-    userSelect: 'none',
+    user-select: 'none';
   };
   cursor: ${props => props.dragging ? 'grabbing' : 'grab'};
 `;

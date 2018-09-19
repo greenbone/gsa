@@ -38,8 +38,8 @@ const Styled = styled.span`
   justify-content: center;
   outline: none;
   margin: 1px;
-  userSelect: none;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'}
+  user-select: none;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 `;
 
 const ArrowIcon = ({
