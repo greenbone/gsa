@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {RESULTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -144,23 +143,23 @@ export const ResultsWordCloudTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
   dataTitles: [
-    _('Vulnerability'),
-    _('Word Count'),
+    _l('Vulnerability'),
+    _l('Word Count'),
   ],
   dataRow: row => [row.label, row.value],
-  title: ({data: tdata}) => _('Results Vulnerability Word Cloud'),
+  title: () => _('Results Vulnerability Word Cloud'),
   filtersFilter: RESULTS_FILTER_FILTER,
   displayId: 'result-by-vuln-words-table',
   displayName: 'ResultsWordCloudTableDisplay',
 });
 
 registerDisplay(ResultsWordCloudDisplay.displayId, ResultsWordCloudDisplay, {
-  title: _('Chart: Results Vulnerability Word Cloud'),
+  title: _l('Chart: Results Vulnerability Word Cloud'),
 });
 
 registerDisplay(ResultsWordCloudTableDisplay.displayId,
   ResultsWordCloudTableDisplay, {
-    title: _('Table: Results Vulnerability Word Cloud'),
+    title: _l('Table: Results Vulnerability Word Cloud'),
   },
 );
 // vim: set ts=2 sw=2 tw=80:

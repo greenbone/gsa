@@ -20,20 +20,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-export const _LOG = _('Log');
-export const _LOW = _('Low');
-export const _MEDIUM = _('Medium');
-export const _HIGH = _('High');
-export const _NONE = _('None');
-export const _FALSE_POSITIVE = _('False Positive');
-export const _ERROR = _('Error');
-export const _DEBUG = _('Debug');
+export const _LOG = _l('Log');
+export const _LOW = _l('Low');
+export const _MEDIUM = _l('Medium');
+export const _HIGH = _l('High');
+export const _NONE = _l('None');
+export const _FALSE_POSITIVE = _l('False Positive');
+export const _ERROR = _l('Error');
+export const _DEBUG = _l('Debug');
 
-export const _NA = _('N/A');
+export const _NA = _l('N/A');
 
 export const HIGH = 'High';
 export const MEDIUM = 'Medium';
@@ -110,7 +110,8 @@ const TRANSLATED_RISK_FACTORS = {
   [DEBUG]: _DEBUG,
 };
 
-export const translateRiskFactor = factor => TRANSLATED_RISK_FACTORS[factor];
+export const translateRiskFactor = factor =>
+  `${TRANSLATED_RISK_FACTORS[factor]}`;
 
 export const translatedResultSeverityRiskFactor = value =>
   translateRiskFactor(resultSeverityRiskFactor(value));

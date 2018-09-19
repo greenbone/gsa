@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -35,7 +34,7 @@ import {OvaldefSeverityLoader} from './loaders';
 export const OvaldefCvssDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of OVAL Defs'),
+  yLabel: _l('# of OVAL Defs'),
   title: ({data: tdata}) => _('OVAL Definitions by CVSS (Total: {{count}})',
     {count: tdata.total}),
   displayId: 'ovaldef-by-cvss',
@@ -46,7 +45,10 @@ export const OvaldefCvssDisplay = createDisplay({
 export const OvaldefCvssTableDisplay = createDisplay({
   loaderComponent: OvaldefSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of OVAL Defs')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of OVAL Defs'),
+  ],
   title: ({data: tdata}) => _('OVAL Definitions by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: OVALDEFS_FILTER_FILTER,
@@ -55,11 +57,11 @@ export const OvaldefCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(OvaldefCvssDisplay.displayId, OvaldefCvssDisplay, {
-  title: _('Chart: OVAL Definitions by CVSS'),
+  title: _l('Chart: OVAL Definitions by CVSS'),
 });
 
 registerDisplay(OvaldefCvssTableDisplay.displayId, OvaldefCvssTableDisplay, {
-  title: _('Table: OVAL Definitions by CVSS'),
+  title: _l('Table: OVAL Definitions by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

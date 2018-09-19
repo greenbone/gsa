@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -35,7 +34,7 @@ import {DfnCertSeverityLoader} from './loaders';
 export const DfnCertCvssDisplay = createDisplay({
   loaderComponent: DfnCertSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of DFN-CERT Advs'),
+  yLabel: _l('# of DFN-CERT Advs'),
   title: ({data: tdata}) => _('DFN-CERT Advisories by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: DFNCERT_FILTER_FILTER,
@@ -46,7 +45,10 @@ export const DfnCertCvssDisplay = createDisplay({
 export const DfnCertCvssTableDisplay = createDisplay({
   loaderComponent: DfnCertSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of DFN-CERT Advisories')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of DFN-CERT Advisories'),
+  ],
   title: ({data: tdata}) => _('DFN-CERT Advisories by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: DFNCERT_FILTER_FILTER,
@@ -55,11 +57,11 @@ export const DfnCertCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(DfnCertCvssDisplay.displayId, DfnCertCvssDisplay, {
-  title: _('Chart: DFN-CERT Advisories by CVSS'),
+  title: _l('Chart: DFN-CERT Advisories by CVSS'),
 });
 
 registerDisplay(DfnCertCvssTableDisplay.displayId, DfnCertCvssTableDisplay, {
-  title: _('Table: DFN-CERT Advisories by CVSS'),
+  title: _l('Table: DFN-CERT Advisories by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

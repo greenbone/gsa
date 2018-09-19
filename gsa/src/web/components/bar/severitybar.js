@@ -54,7 +54,7 @@ const SeverityBar = ({severity}) => {
     title = translateRiskFactor(threat);
   }
   else {
-    title = _NA;
+    title = `${_NA}`;
   }
 
   const fill = isDefined(cvss) && cvss > 0 ? cvss * 10 : 0;

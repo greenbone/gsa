@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {OsAverageSeverityLoader} from './loaders';
 export const OsCvssDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of Vulnerabilities'),
+  yLabel: _l('# of Vulnerabilities'),
   title: ({data: tdata}) => _('Operating Systems by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: OS_FILTER_FILTER,
@@ -46,7 +46,10 @@ export const OsCvssTableDisplay = createDisplay({
   loaderComponent: OsAverageSeverityLoader,
   displayComponent: CvssTableDisplay,
   filtersFilter: OS_FILTER_FILTER,
-  dataTitles: [_('Severity'), _('# of Operating Systems')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Operating Systems'),
+  ],
   title: ({data: tdata = {}}) =>
     _('Operating Systems by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'os-by-cvss-table',
@@ -54,11 +57,11 @@ export const OsCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(OsCvssTableDisplay.displayId, OsCvssTableDisplay, {
-  title: _('Table: Operating Systems by CVSS'),
+  title: _l('Table: Operating Systems by CVSS'),
 });
 
 registerDisplay(OsCvssDisplay.displayId, OsCvssDisplay, {
-  title: _('Chart: Operating Systems by CVSS'),
+  title: _l('Chart: Operating Systems by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

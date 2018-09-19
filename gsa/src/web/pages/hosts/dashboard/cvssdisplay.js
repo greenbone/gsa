@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {HostsSeverityLoader} from './loaders';
 export const HostsCvssDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of Hosts'),
+  yLabel: _l('# of Hosts'),
   title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: HOSTS_FILTER_FILTER,
@@ -45,7 +45,10 @@ export const HostsCvssDisplay = createDisplay({
 export const HostsCvssTableDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of Hosts')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Hosts'),
+  ],
   title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: HOSTS_FILTER_FILTER,
@@ -54,11 +57,11 @@ export const HostsCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(HostsCvssDisplay.displayId, HostsCvssDisplay, {
-  title: _('Chart: Hosts by CVSS'),
+  title: _l('Chart: Hosts by CVSS'),
 });
 
 registerDisplay(HostsCvssTableDisplay.displayId, HostsCvssTableDisplay, {
-  title: _('Table: Hosts by CVSS'),
+  title: _l('Table: Hosts by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

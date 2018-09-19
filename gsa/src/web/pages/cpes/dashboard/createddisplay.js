@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {CpesCreatedLoader} from './loaders';
 export const CpesCreatedDisplay = createDisplay({
   loaderComponent: CpesCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('CPEs by Creation Time'),
-  yAxisLabel: _('# of created CPEs'),
-  y2AxisLabel: _('Total CPEs'),
-  xAxisLabel: _('Time'),
+  title: () => _('CPEs by Creation Time'),
+  yAxisLabel: _l('# of created CPEs'),
+  y2AxisLabel: _l('Total CPEs'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created CPEs'),
+    label: _l('Created CPEs'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total CPEs'),
+    label: _l('Total CPEs'),
   },
   displayId: 'cpe-by-created',
   displayName: 'CpeCreatedDisplay',
@@ -58,8 +58,12 @@ export const CpesCreatedDisplay = createDisplay({
 export const CpesCreatedTableDisplay = createDisplay({
   loaderComponent: CpesCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('CPEs by Creation Time'),
-    dataTitles: [_('Creation Time'), _('# of CPEs'), _('Total CPEs')],
+  title: () => _('CPEs by Creation Time'),
+  dataTitles: [
+    _l('Creation Time'),
+    _l('# of CPEs'),
+    _l('Total CPEs'),
+  ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'cpe-by-created-table',
@@ -68,9 +72,9 @@ export const CpesCreatedTableDisplay = createDisplay({
 });
 
 registerDisplay(CpesCreatedDisplay.displayId,
-  CpesCreatedDisplay, {title: _('Chart: CPEs by Creation Time')});
+  CpesCreatedDisplay, {title: _l('Chart: CPEs by Creation Time')});
 
 registerDisplay(CpesCreatedTableDisplay.displayId,
-  CpesCreatedTableDisplay, {title: _('Table: CPEs by Creation Time')});
+  CpesCreatedTableDisplay, {title: _l('Table: CPEs by Creation Time')});
 
 // vim: set ts=2 sw=2 tw=80:

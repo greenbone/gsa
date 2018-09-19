@@ -312,7 +312,7 @@ class DataDisplay extends React.Component {
               }
             </DisplayMenu> : null
         }
-        title={title}
+        title={`${title}`}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
@@ -346,7 +346,7 @@ DataDisplay.propTypes = {
   children: PropTypes.func.isRequired,
   data: PropTypes.any,
   dataRow: PropTypes.func,
-  dataTitles: PropTypes.arrayOf(PropTypes.string),
+  dataTitles: PropTypes.arrayOf(PropTypes.toString),
   dataTransform: PropTypes.func,
   filter: PropTypes.filter,
   height: PropTypes.number.isRequired,

@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CVES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {CvesCreatedLoader} from './loaders';
 export const CvesCreatedDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('CVEs by Creation Time'),
-  yAxisLabel: _('# of created CVEs'),
-  y2AxisLabel: _('Total CVEs'),
-  xAxisLabel: _('Time'),
+  title: () => _('CVEs by Creation Time'),
+  yAxisLabel: _l('# of created CVEs'),
+  y2AxisLabel: _l('Total CVEs'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created CVEs'),
+    label: _l('Created CVEs'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total CVEs'),
+    label: _l('Total CVEs'),
   },
   displayId: 'cve-by-created',
   displayName: 'CveCreatedDisplay',
@@ -58,8 +58,12 @@ export const CvesCreatedDisplay = createDisplay({
 export const CvesCreatedTableDisplay = createDisplay({
   loaderComponent: CvesCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('CVEs by Creation Time'),
-    dataTitles: [_('Creation Time'), _('# of CVEs'), _('Total CVEs')],
+  title: () => _('CVEs by Creation Time'),
+  dataTitles: [
+    _l('Creation Time'),
+    _l('# of CVEs'),
+    _l('Total CVEs'),
+  ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'cve-by-created-table',
@@ -68,9 +72,9 @@ export const CvesCreatedTableDisplay = createDisplay({
 });
 
 registerDisplay(CvesCreatedTableDisplay.displayId,
-  CvesCreatedTableDisplay, {title: _('Table: CVEs by Creation Time')});
+  CvesCreatedTableDisplay, {title: _l('Table: CVEs by Creation Time')});
 
 registerDisplay(CvesCreatedDisplay.displayId,
-  CvesCreatedDisplay, {title: _('Chart: CVEs by Creation Time')});
+  CvesCreatedDisplay, {title: _l('Chart: CVEs by Creation Time')});
 
 // vim: set ts=2 sw=2 tw=80:

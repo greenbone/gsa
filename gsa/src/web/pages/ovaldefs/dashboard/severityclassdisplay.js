@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -49,7 +48,10 @@ export const OvaldefSeverityClassTableDisplay = createDisplay({
   title: ({data: tdata}) =>
     _('OVAL Definitions by Severity Class (Total: {{count}})',
       {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of OVAL Defs')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of OVAL Defs'),
+  ],
   displayId: 'ovaldef-by-severity-table',
   displayName: 'OvaldefsSeverityClassTableDisplay',
   filtersFilter: OVALDEFS_FILTER_FILTER,
@@ -58,12 +60,12 @@ export const OvaldefSeverityClassTableDisplay = createDisplay({
 registerDisplay(
   OvaldefSeverityClassDisplay.displayId,
   OvaldefSeverityClassDisplay, {
-  title: _('Chart: Oval Definitions by Severity Class'),
+  title: _l('Chart: Oval Definitions by Severity Class'),
 });
 
 registerDisplay(OvaldefSeverityClassTableDisplay.displayId,
   OvaldefSeverityClassTableDisplay, {
-    title: _('Table: OVAL Definitions by Severity Class'),
+    title: _l('Table: OVAL Definitions by Severity Class'),
   },
 );
 

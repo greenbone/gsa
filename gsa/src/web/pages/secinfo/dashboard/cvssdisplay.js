@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -35,7 +34,7 @@ import {SecInfosSeverityLoader} from './loaders';
 export const SecInfosCvssDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of SecInfo Items'),
+  yLabel: _l('# of SecInfo Items'),
   title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: SECINFO_FILTER_FILTER,
@@ -46,7 +45,10 @@ export const SecInfosCvssDisplay = createDisplay({
 export const SecInfosCvssTableDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of SecInfo Items')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of SecInfo Items'),
+  ],
   title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: SECINFO_FILTER_FILTER,
@@ -55,13 +57,13 @@ export const SecInfosCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(SecInfosCvssDisplay.displayId, SecInfosCvssDisplay, {
-  title: _('Chart: SecInfo Items by CVSS'),
+  title: _l('Chart: SecInfo Items by CVSS'),
 });
 
 registerDisplay(
   SecInfosCvssTableDisplay.displayId,
   SecInfosCvssTableDisplay, {
-  title: _('Table: SecInfo Items by CVSS'),
+  title: _l('Table: SecInfo Items by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

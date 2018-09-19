@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {ReportsSeverityLoader} from './loaders';
 export const ReportsCvssDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of Reports'),
+  yLabel: _l('# of Reports'),
   title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
     {count: tdata.total}),
   displayId: 'report-by-cvss',
@@ -45,21 +45,24 @@ export const ReportsCvssDisplay = createDisplay({
 export const ReportsCvssTableDisplay = createDisplay({
   loaderComponent: ReportsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  yLabel: _('# of Reports'),
+  yLabel: _l('# of Reports'),
   title: ({data: tdata}) => _('Reports by CVSS (Total: {{count}})',
     {count: tdata.total}),
-  dataTitles: [_('Severity'), _('# of Reports')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Reports'),
+  ],
   displayId: 'report-by-cvss-table',
   displayName: 'ReportsCvssTableDisplay',
   filtersFilter: REPORTS_FILTER_FILTER,
 });
 
 registerDisplay(ReportsCvssDisplay.displayId, ReportsCvssDisplay, {
-  title: _('Chart: Reports by CVSS'),
+  title: _l('Chart: Reports by CVSS'),
 });
 
 registerDisplay(ReportsCvssTableDisplay.displayId, ReportsCvssTableDisplay, {
-  title: _('Table: Reports by CVSS'),
+  title: _l('Table: Reports by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -46,4 +46,4 @@ do
 "
 done
 
-xgettext --from-code=UTF-8 -o "$POT_FILE" -L JavaScript $SOURCES
+xgettext --from-code=UTF-8 --keyword=_l -o "$POT_FILE" -L JavaScript $SOURCES

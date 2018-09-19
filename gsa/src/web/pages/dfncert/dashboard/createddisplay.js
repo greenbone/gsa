@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {DfnCertsCreatedLoader} from './loaders';
 export const DfnCertsCreatedDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('DFN-CERT Advisories by Creation Time'),
-  yAxisLabel: _('# of created DFN-CERT Advs'),
-  y2AxisLabel: _('Total DFN-CERT Advs'),
-  xAxisLabel: _('Time'),
+  title: () => _('DFN-CERT Advisories by Creation Time'),
+  yAxisLabel: _l('# of created DFN-CERT Advs'),
+  y2AxisLabel: _l('Total DFN-CERT Advs'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created DFN-CERT Advs'),
+    label: _l('Created DFN-CERT Advs'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total DFN-CERT Advs'),
+    label: _l('Total DFN-CERT Advs'),
   },
   displayId: 'dfn_cert_adv-by-created',
   displayName: 'DfnCertsCreatedDisplay',
@@ -58,12 +58,12 @@ export const DfnCertsCreatedDisplay = createDisplay({
 export const DfnCertsCreatedTableDisplay = createDisplay({
   loaderComponent: DfnCertsCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('DFN-CERT Advisories by Creation Time'),
-    dataTitles: [
-      _('Creation Time'),
-      _('# of DFN-CERT Advs'),
-      _('Total DFN-CERT Advs'),
-    ],
+  title: () => _('DFN-CERT Advisories by Creation Time'),
+  dataTitles: [
+    _l('Creation Time'),
+    _l('# of DFN-CERT Advs'),
+    _l('Total DFN-CERT Advs'),
+  ],
   dataRow: row => [row.label, row.y, row.y2],
   dataTransform: transformCreated,
   displayId: 'dfn_cert_adv-by-created-table',
@@ -73,12 +73,12 @@ export const DfnCertsCreatedTableDisplay = createDisplay({
 
 registerDisplay(DfnCertsCreatedTableDisplay.displayId,
   DfnCertsCreatedTableDisplay, {
-    title: _('Table: DFN-CERT Advisories by Creation Time'),
+    title: _l('Table: DFN-CERT Advisories by Creation Time'),
   });
 
 registerDisplay(DfnCertsCreatedDisplay.displayId,
   DfnCertsCreatedDisplay, {
-    title: _('Chart: DFN-CERT Advisories by Creation Time'),
+    title: _l('Chart: DFN-CERT Advisories by Creation Time'),
   });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {SECINFO_FILTER_FILTER} from 'gmp/models/filter';
@@ -149,7 +148,10 @@ export const SecInfosTypeTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('SecInfo Items by type (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_('Type'), _('# of SecInfo Items')],
+  dataTitles: [
+    _l('Type'),
+    _l('# of SecInfo Items'),
+  ],
   dataRow: row => [row.label, row.value],
   dataTransform: transformTypeData,
   displayId: 'allinfo-by-type-table',
@@ -158,13 +160,13 @@ export const SecInfosTypeTableDisplay = createDisplay({
 });
 
 registerDisplay(SecInfosTypeDisplay.displayId, SecInfosTypeDisplay, {
-  title: _('Chart: SecInfo Items by Type'),
+  title: _l('Chart: SecInfo Items by Type'),
 });
 
 registerDisplay(
   SecInfosTypeTableDisplay.displayId,
   SecInfosTypeTableDisplay, {
-  title: _('Table: SecInfo Items by Type'),
+  title: _l('Table: SecInfo Items by Type'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

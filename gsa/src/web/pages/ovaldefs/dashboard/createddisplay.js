@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -37,18 +37,18 @@ import {OvaldefCreatedLoader} from './loaders';
 export const OvaldefsCreatedDisplay = createDisplay({
   loaderComponent: OvaldefCreatedLoader,
   displayComponent: CreatedDisplay,
-  title: ({data: tdata}) => _('OVAL Definitions by Creation Time'),
-  yAxisLabel: _('# of created OVAL Definitions'),
-  y2AxisLabel: _('Total OVAL Definitions'),
-  xAxisLabel: _('Time'),
+  title: () => _('OVAL Definitions by Creation Time'),
+  yAxisLabel: _l('# of created OVAL Definitions'),
+  y2AxisLabel: _l('Total OVAL Definitions'),
+  xAxisLabel: _l('Time'),
   yLine: {
     color: Theme.darkGreen,
-    label: _('Created OVAL Defs'),
+    label: _l('Created OVAL Defs'),
   },
   y2Line: {
     color: Theme.darkGreen,
     dashArray: '3, 2',
-    label: _('Total OVAL Defs'),
+    label: _l('Total OVAL Defs'),
   },
   displayId: 'ovaldef-by-created',
   displayName: 'OvaldefsCreatedDisplay',
@@ -58,12 +58,12 @@ export const OvaldefsCreatedDisplay = createDisplay({
 export const OvaldefsCreatedTableDisplay = createDisplay({
   loaderComponent: OvaldefCreatedLoader,
   displayComponent: DataTableDisplay,
-  title: ({data: tdata}) => _('OVAL Definitions by Creation Time'),
+  title: () => _('OVAL Definitions by Creation Time'),
   dataRow: row => [row.label, row.y, row.y2],
   dataTitles: [
-    _('Creation Time'),
-    _('# of OVAL Defs'),
-    _('Total OVAL Defs'),
+    _l('Creation Time'),
+    _l('# of OVAL Defs'),
+    _l('Total OVAL Defs'),
   ],
   dataTransform: transformCreated,
   displayId: 'ovaldef-by-created-table',
@@ -73,12 +73,12 @@ export const OvaldefsCreatedTableDisplay = createDisplay({
 
 registerDisplay(OvaldefsCreatedTableDisplay.displayId,
   OvaldefsCreatedTableDisplay, {
-    title: _('Table: OVAL Definitions by Creation Time'),
+    title: _l('Table: OVAL Definitions by Creation Time'),
   });
 
 registerDisplay(OvaldefsCreatedDisplay.displayId,
   OvaldefsCreatedDisplay, {
-    title: _('Chart: OVAL Definitions by Creation Time'),
+    title: _l('Chart: OVAL Definitions by Creation Time'),
   });
 
 // vim: set ts=2 sw=2 tw=80:

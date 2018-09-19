@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {TasksSeverityLoader} from './loaders';
 export const TasksCvssDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of Tasks'),
+  yLabel: _l('# of Tasks'),
   title: ({data: tdata = {}}) => _('Tasks by CVSS (Total: {{count}})',
     {count: tdata.total}),
   displayId: 'task-by-cvss',
@@ -45,7 +45,10 @@ export const TasksCvssDisplay = createDisplay({
 export const TasksCvssTableDisplay = createDisplay({
   loaderComponent: TasksSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of Tasks')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Tasks'),
+  ],
   title: ({data: tdata = {}}) => _('Tasks by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: TASKS_FILTER_FILTER,
@@ -54,11 +57,11 @@ export const TasksCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(TasksCvssDisplay.displayId, TasksCvssDisplay, {
-  title: _('Chart: Tasks by CVSS'),
+  title: _l('Chart: Tasks by CVSS'),
 });
 
 registerDisplay(TasksCvssTableDisplay.displayId, TasksCvssTableDisplay, {
-  title: _('Table: Tasks by CVSS'),
+  title: _l('Table: Tasks by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

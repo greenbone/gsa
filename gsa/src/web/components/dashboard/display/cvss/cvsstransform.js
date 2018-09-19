@@ -46,13 +46,13 @@ const format = value => value.toFixed(1);
 const getSeverityClassLabel = value => {
   switch (value) {
     case NA_VALUE:
-      return _NA;
+      return `${_NA}`;
     case LOG_VALUE:
-      return _LOG;
+      return `${_LOG}`;
     case ERROR_VALUE:
-      return _ERROR;
+      return `${_ERROR}`;
     case FALSE_POSITIVE_VALUE:
-      return _FALSE_POSITIVE;
+      return `${_FALSE_POSITIVE}`;
     default:
       return value;
   }

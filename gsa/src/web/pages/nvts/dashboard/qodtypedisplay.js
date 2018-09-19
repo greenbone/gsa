@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
@@ -149,7 +149,10 @@ export const NvtsQodTypeTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('NVTs by QoD-Type (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_('QoD-Type'), _('# of NVTs')],
+  dataTitles: [
+    _l('QoD-Type'),
+    _l('# of NVTs'),
+  ],
   dataRow: row => [row.label, row.value],
   dataTransform: transformQodTypeData,
   displayId: 'nvt-by-qod-type-table',
@@ -159,11 +162,11 @@ export const NvtsQodTypeTableDisplay = createDisplay({
 
 
 registerDisplay(NvtsQodTypeDisplay.displayId, NvtsQodTypeDisplay, {
-  title: _('Chart: NVTs by QoD-Type'),
+  title: _l('Chart: NVTs by QoD-Type'),
 });
 
 registerDisplay(NvtsQodTypeTableDisplay.displayId, NvtsQodTypeTableDisplay, {
-  title: _('Table: NVTs by QoD-Type'),
+  title: _l('Table: NVTs by QoD-Type'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

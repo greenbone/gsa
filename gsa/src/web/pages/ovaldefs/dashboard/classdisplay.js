@@ -20,10 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
@@ -152,7 +151,10 @@ export const OvaldefClassTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   title: ({data: tdata}) =>
     _('OVAL Definitions by Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [_('Class'), _('# of OVAL Defs')],
+  dataTitles: [
+    _l('Class'),
+    _l('# of OVAL Defs'),
+  ],
   dataRow: row => [row.label, row.value],
   dataTransform: transformClassData,
   displayId: 'ovaldef-by-class-table',
@@ -161,11 +163,11 @@ export const OvaldefClassTableDisplay = createDisplay({
 });
 
 registerDisplay(OvaldefClassDisplay.displayId, OvaldefClassDisplay, {
-  title: _('Chart: OVAL Definitions by Class'),
+  title: _l('Chart: OVAL Definitions by Class'),
 });
 
 registerDisplay(OvaldefClassTableDisplay.displayId, OvaldefClassTableDisplay, {
-  title: _('Table: OVAL Definitions by Class'),
+  title: _l('Table: OVAL Definitions by Class'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

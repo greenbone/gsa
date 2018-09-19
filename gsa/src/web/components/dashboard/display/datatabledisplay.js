@@ -61,7 +61,7 @@ DataTableDisplay.propTypes = {
   children: PropTypes.func,
   data: PropTypes.any,
   dataRow: PropTypes.func.isRequired,
-  dataTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dataTitles: PropTypes.arrayOf(PropTypes.toString).isRequired,
 };
 
 export default DataTableDisplay;

@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import Filter, {NVTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
@@ -165,7 +165,11 @@ export const NvtsFamilyTableDisplay = createDisplay({
   loaderComponent: NvtsFamilyLoader,
   displayComponent: DataTableDisplay,
   chartComponent: DataTable,
-  dataTitles: [_('NVT Family'), _('# of NVTs'), _('Severity')],
+  dataTitles: [
+    _l('NVT Family'),
+    _l('# of NVTs'),
+    _l('Severity'),
+  ],
   dataRow: row => [row.label, row.value, row.severity],
   dataTransform: transformFamilyData,
   title: ({data}) =>
@@ -176,11 +180,11 @@ export const NvtsFamilyTableDisplay = createDisplay({
 });
 
 registerDisplay(NvtsFamilyDisplay.displayId, NvtsFamilyDisplay, {
-  title: _('Chart: NVTs by Family'),
+  title: _l('Chart: NVTs by Family'),
 });
 
 registerDisplay(NvtsFamilyTableDisplay.displayId, NvtsFamilyTableDisplay, {
-  title: _('Table: NVTs by Family'),
+  title: _l('Table: NVTs by Family'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

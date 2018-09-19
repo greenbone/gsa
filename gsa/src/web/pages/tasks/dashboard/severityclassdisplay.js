@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -44,7 +44,10 @@ export const TasksSeverityDisplay = createDisplay({
 export const TasksSeverityTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   loaderComponent: TasksSeverityLoader,
-  dataTitles: [_('Severity'), _('# of Tasks')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of Tasks'),
+  ],
   title: ({data: tdata}) =>
     _('Tasks by Severity Class (Total: {{count}})', {count: tdata.total}),
   displayId: 'task-by-severity-class-table',
@@ -54,11 +57,11 @@ export const TasksSeverityTableDisplay = createDisplay({
 
 registerDisplay(TasksSeverityTableDisplay.displayId,
   TasksSeverityTableDisplay, {
-  title: _('Table: Tasks by Severity Class'),
+  title: _l('Table: Tasks by Severity Class'),
 });
 
 registerDisplay(TasksSeverityDisplay.displayId, TasksSeverityDisplay, {
-  title: _('Chart: Tasks by Severity Class'),
+  title: _l('Chart: Tasks by Severity Class'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

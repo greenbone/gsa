@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {NOTES_FILTER_FILTER} from 'gmp/models/filter';
@@ -202,8 +202,8 @@ export const NotesActiveDaysTableDisplay = createDisplay({
   loaderComponent: NotesActiveDaysLoader,
   displayComponent: DataTableDisplay,
   dataTitles: [
-    _('Active'),
-    _('# of Notes'),
+    _l('Active'),
+    _l('# of Notes'),
   ],
   dataRow: row => [row.label, row.value],
   dataTransform: transformActiveDaysData,
@@ -215,12 +215,12 @@ export const NotesActiveDaysTableDisplay = createDisplay({
 });
 
 registerDisplay(NotesActiveDaysDisplay.displayId, NotesActiveDaysDisplay, {
-  title: _('Chart: Notes by Active Days'),
+  title: _l('Chart: Notes by Active Days'),
 });
 
 registerDisplay(NotesActiveDaysTableDisplay.displayId,
   NotesActiveDaysTableDisplay, {
-    title: _('Table: Notes by Active Days'),
+    title: _l('Table: Notes by Active Days'),
   },
 );
 

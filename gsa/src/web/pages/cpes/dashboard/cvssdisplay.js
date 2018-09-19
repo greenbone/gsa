@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CPES_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -34,7 +34,7 @@ import {CpesSeverityLoader} from './loaders';
 export const CpesCvssDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
   displayComponent: CvssDisplay,
-  yLabel: _('# of CPEs'),
+  yLabel: _l('# of CPEs'),
   title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: CPES_FILTER_FILTER,
@@ -45,7 +45,10 @@ export const CpesCvssDisplay = createDisplay({
 export const CpesCvssTableDisplay = createDisplay({
   loaderComponent: CpesSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [_('Severity'), _('# of CPEs')],
+  dataTitles: [
+    _l('Severity'),
+    _l('# of CPEs'),
+  ],
   title: ({data: tdata}) => _('CPEs by CVSS (Total: {{count}})',
     {count: tdata.total}),
   filtersFilter: CPES_FILTER_FILTER,
@@ -54,11 +57,11 @@ export const CpesCvssTableDisplay = createDisplay({
 });
 
 registerDisplay(CpesCvssDisplay.displayId, CpesCvssDisplay, {
-  title: _('Chart: CPEs by CVSS'),
+  title: _l('Chart: CPEs by CVSS'),
 });
 
 registerDisplay(CpesCvssTableDisplay.displayId, CpesCvssTableDisplay, {
-  title: _('Table: CPEs by CVSS'),
+  title: _l('Table: CPEs by CVSS'),
 });
 
 // vim: set ts=2 sw=2 tw=80:

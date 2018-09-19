@@ -20,8 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {CERTBUND_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -49,7 +48,10 @@ export const CertBundSeverityClassTableDisplay = createDisplay({
   title: ({data: tdata}) =>
     _('CERT-Bund Advisories by Severity Class (Total: {{count}})',
       {count: tdata.total}),
-  dataTitles: [_('Severity Class'), _('# of CERT-Bund Advisories')],
+  dataTitles: [
+    _l('Severity Class'),
+    _l('# of CERT-Bund Advisories'),
+  ],
   displayId: 'cert_bund_adv-by-severity-table',
   displayName: 'CertBundSeverityClassTableDisplay',
   filtersFilter: CERTBUND_FILTER_FILTER,
@@ -58,12 +60,12 @@ export const CertBundSeverityClassTableDisplay = createDisplay({
 registerDisplay(
   CertBundSeverityClassDisplay.displayId,
   CertBundSeverityClassDisplay, {
-  title: _('Chart: CERT-Bund Advisories by Severity Class'),
+  title: _l('Chart: CERT-Bund Advisories by Severity Class'),
 });
 
 registerDisplay(CertBundSeverityClassTableDisplay.displayId,
   CertBundSeverityClassTableDisplay, {
-    title: _('Table: CERT-Bund Advisories by Severity Class'),
+    title: _l('Table: CERT-Bund Advisories by Severity Class'),
   },
 );
 
