@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {isDefined, isArray} from '../utils/identity';
 import {isEmpty} from '../utils/string';
@@ -63,18 +63,18 @@ export const TASK_STATUS = {
 
 /* eslint-disable quote-props */
 const TASK_STATUS_TRANSLATIONS = {
-  'Running': _('Running'),
-  'Stop Requested': _('Stop Requested'),
-  'Delete Requested': _('Delete Requested'),
-  'Ultimate Delete Requested': _('Ultimate Delete Requested'),
-  'Resume Requested': _('Resume Requested'),
-  'Requested': _('Requested'),
-  'Stopped': _('Stopped'),
-  'New': _('New'),
-  'Interrupted': _('Interrupted'),
-  'Container': _('Container'),
-  'Uploading': _('Uploading'),
-  'Done': _('Done'),
+  'Running': _l('Running'),
+  'Stop Requested': _l('Stop Requested'),
+  'Delete Requested': _l('Delete Requested'),
+  'Ultimate Delete Requested': _l('Ultimate Delete Requested'),
+  'Resume Requested': _l('Resume Requested'),
+  'Requested': _l('Requested'),
+  'Stopped': _l('Stopped'),
+  'New': _l('New'),
+  'Interrupted': _l('Interrupted'),
+  'Container': _l('Container'),
+  'Uploading': _l('Uploading'),
+  'Done': _l('Done'),
 };
 /* eslint-disable quote-props */
 
