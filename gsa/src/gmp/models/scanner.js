@@ -49,21 +49,21 @@ export const openVasScannersFilter = config =>
 export const ospScannersFilter = config =>
   config.scanner_type === OSP_SCANNER_TYPE;
 
-export function scanner_type_name(scanner_type) {
-  scanner_type = parseInt(scanner_type);
-  if (scanner_type === OSP_SCANNER_TYPE) {
+export function scannerTypeName(scannerType) {
+  scannerType = parseInt(scannerType);
+  if (scannerType === OSP_SCANNER_TYPE) {
     return _('OSP Scanner');
   }
-  else if (scanner_type === OPENVAS_SCANNER_TYPE) {
+  else if (scannerType === OPENVAS_SCANNER_TYPE) {
     return _('OpenVAS Scanner');
   }
-  else if (scanner_type === CVE_SCANNER_TYPE) {
+  else if (scannerType === CVE_SCANNER_TYPE) {
     return _('CVE Scanner');
   }
-  else if (scanner_type === SLAVE_SCANNER_TYPE) {
+  else if (scannerType === SLAVE_SCANNER_TYPE) {
     return _('GMP Scanner');
   }
-  return _('Unknown type ({{type}})', {type: scanner_type});
+  return _('Unknown type ({{type}})', {type: scannerType});
 }
 
 const parse_scanner_info = (info = {}) => {

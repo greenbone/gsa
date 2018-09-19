@@ -29,7 +29,7 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import {
-  scanner_type_name,
+  scannerTypeName,
   CVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
   PARAM_TYPE_OVALDEF_FILE,
@@ -290,7 +290,7 @@ const ScannerDetails = ({
               {_('Scanner Type')}
             </TableData>
             <TableData>
-              {scanner_type_name(scanner_type)}
+              {scannerTypeName(scanner_type)}
             </TableData>
           </TableRow>
 

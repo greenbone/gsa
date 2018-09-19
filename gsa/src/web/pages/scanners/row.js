@@ -46,7 +46,7 @@ import Icon from '../../components/icon/icon.js';
 import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
-import {scanner_type_name, CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
+import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
 
 
 const Actions = ({
@@ -148,7 +148,7 @@ const Row = ({
         entity.port}
     </TableData>
     <TableData>
-      {scanner_type_name(entity.scanner_type)}
+      {scannerTypeName(entity.scanner_type)}
     </TableData>
     <TableData>
       {isDefined(entity.credential) &&
