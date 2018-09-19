@@ -52,7 +52,7 @@ const DataTable = ({
         <TableRow>
           {dataTitles.map((head, i) => (
             <TableHead key={i}>
-              {head}
+              {`${head}`}
             </TableHead>
           ))}
         </TableRow>
@@ -78,7 +78,7 @@ const DataTable = ({
 DataTable.propTypes = {
   data: PropTypes.array,
   dataRow: PropTypes.func.isRequired,
-  dataTitles: PropTypes.arrayOf(PropTypes.string),
+  dataTitles: PropTypes.arrayOf(PropTypes.toString),
 };
 
 export default DataTable;

@@ -133,8 +133,8 @@ class CvssDisplay extends React.Component {
 CvssDisplay.propTypes = {
   filter: PropTypes.filter,
   title: PropTypes.func.isRequired,
-  xLabel: PropTypes.string,
-  yLabel: PropTypes.string,
+  xLabel: PropTypes.toString,
+  yLabel: PropTypes.toString,
   onFilterChanged: PropTypes.func,
 };
 

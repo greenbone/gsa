@@ -122,10 +122,10 @@ class CreatedDisplay extends React.Component {
 
 CreatedDisplay.propTypes = {
   filter: PropTypes.filter,
-  xAxisLabel: PropTypes.string,
-  y2AxisLabel: PropTypes.string,
+  xAxisLabel: PropTypes.toString,
+  y2AxisLabel: PropTypes.toString,
   y2Line: lineDataPropType,
-  yAxisLabel: PropTypes.string,
+  yAxisLabel: PropTypes.toString,
   yLine: lineDataPropType,
   onFilterChanged: PropTypes.func,
 };

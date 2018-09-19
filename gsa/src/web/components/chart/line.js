@@ -164,10 +164,10 @@ class LineChart extends React.Component {
     svgRef: PropTypes.ref,
     timeline: PropTypes.bool,
     width: PropTypes.number.isRequired,
-    xAxisLabel: PropTypes.string,
-    y2AxisLabel: PropTypes.string,
+    xAxisLabel: PropTypes.toString,
+    y2AxisLabel: PropTypes.toString,
     y2Line: lineDataPropType,
-    yAxisLabel: PropTypes.string,
+    yAxisLabel: PropTypes.toString,
     yLine: lineDataPropType,
     onRangeSelected: PropTypes.func,
   };
@@ -546,7 +546,7 @@ class LineChart extends React.Component {
                 scale={yScale}
                 top={0}
                 left={0}
-                label={yAxisLabel}
+                label={`${yAxisLabel}`}
                 numTicks={10}
               />
             }
@@ -554,7 +554,7 @@ class LineChart extends React.Component {
               orientation="bottom"
               scale={xScale}
               top={maxHeight}
-              label={xAxisLabel}
+              label={`${xAxisLabel}`}
               numTicks={numTicks}
             />
             {y2Line &&
@@ -563,7 +563,7 @@ class LineChart extends React.Component {
                 scale={y2Scale}
                 top={0}
                 left={maxWidth}
-                label={y2AxisLabel}
+                label={`${y2AxisLabel}`}
                 numTicks={10}
               />
             }
@@ -635,7 +635,9 @@ class LineChart extends React.Component {
                   lineWidth={d.width}
                   dashArray={d.dashArray}
                 />
-                <Label>{d.label}</Label>
+                <Label>
+                  {React.isValidElement(d.label) ? d.label : `${d.label}`}
+                </Label>
               </Item>
             )}
           </Legend>

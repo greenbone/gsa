@@ -123,7 +123,7 @@ export class DashboardControls extends React.Component {
     const displays = displayIds.map(name =>
       getDisplay(name)).filter(isDefined);
     const displayItems = displays.map(display => ({
-      label: display.title,
+      label: `${display.title}`,
       value: display.id,
     }));
     return (
