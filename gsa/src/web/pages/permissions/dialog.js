@@ -154,12 +154,12 @@ const PermissionDialog = ({
     label: _('Super (Has super access)'),
   }];
 
-  capabilities.forEach(cap => {
+  for (const cap of capabilities) {
     permItems.push({
       label: `${cap} ${permissionDescription(cap)}`,
       value: cap,
     });
-  });
+  };
 
   const data = {
     comment,
