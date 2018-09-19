@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -145,7 +145,7 @@ const Footer = createEntitiesFooter({
 });
 
 export default createEntitiesTable({
-  emptyTitle: _('No targets available'),
+  emptyTitle: _l('No targets available'),
   row: TargetRow,
   header: TargetsHeader,
   footer: Footer,

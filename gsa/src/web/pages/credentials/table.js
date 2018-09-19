@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -31,14 +31,14 @@ import CredentialDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '36%'],
-  ['type', _('Type'), '31%'],
-  ['allow_insecure', _('Allow insecure use'), '10%'],
-  ['login', _('Login'), '15%'],
+  ['name', _l('Name'), '36%'],
+  ['type', _l('Type'), '31%'],
+  ['allow_insecure', _l('Allow insecure use'), '10%'],
+  ['login', _l('Login'), '15%'],
 ];
 
 const CredentialsTable = createEntitiesTable({
-  emptyTitle: _('No credentials available'),
+  emptyTitle: _l('No credentials available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('credential', 10)(CredentialDetails),

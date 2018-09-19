@@ -26,7 +26,7 @@ import React from 'react';
 
 import 'core-js/fn/array/includes';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -62,12 +62,14 @@ import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
-const type_names = {
-  up: _('Username + Password'),
-  usk: _('Username + SSH Key'),
-  cc: _('Client Cerficate'),
-  snmp: _('SNMP'),
+const TYPE_NAMES = {
+  up: _l('Username + Password'),
+  usk: _l('Username + SSH Key'),
+  cc: _l('Client Cerficate'),
+  snmp: _l('SNMP'),
 };
+
+const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 
 class CredentialsDialog extends React.Component {
 
@@ -118,7 +120,7 @@ class CredentialsDialog extends React.Component {
     } = this.props;
 
     const typeOptions = map(types, type => ({
-      label: type_names[type],
+      label: getCredentialTypeName(type),
       value: type,
     }));
 

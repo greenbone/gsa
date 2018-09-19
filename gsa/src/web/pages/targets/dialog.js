@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {NO_VALUE} from 'gmp/parser';
 
@@ -76,7 +76,7 @@ const ALIVE_TESTS = [
 
 const ALIVE_TESTS_ITEMS = [{
     value: ALIVE_TESTS_DEFAULT,
-    label: _(ALIVE_TESTS_DEFAULT),
+    label: _l(ALIVE_TESTS_DEFAULT),
   },
   ...ALIVE_TESTS.map(value => ({value, label: value})),
 ];
@@ -84,24 +84,24 @@ const ALIVE_TESTS_ITEMS = [{
 const NEW_SSH = {
   id_field: 'ssh_credential_id',
   types: SSH_CREDENTIAL_TYPES,
-  title: _('Create new SSH credential'),
+  title: _l('Create new SSH credential'),
 };
 
 const NEW_SMB = {
   id_field: 'smb_credential_id',
-  title: _('Create new SMB credential'),
+  title: _l('Create new SMB credential'),
   types: SMB_CREDENTIAL_TYPES,
 };
 
 const NEW_ESXI = {
   id_field: 'esxi_credential_id',
-  title: _('Create new ESXi credential'),
+  title: _l('Create new ESXi credential'),
   types: ESXI_CREDENTIAL_TYPES,
 };
 
 const NEW_SNMP = {
   id_field: 'snmp_credential_id',
-  title: _('Create new SNMP credential'),
+  title: _l('Create new SNMP credential'),
   types: SNMP_CREDENTIAL_TYPES,
 };
 

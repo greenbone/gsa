@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {secInfoType} from 'gmp/models/secinfo';
 
@@ -115,7 +115,7 @@ Header.propTypes = {
 
 export default createEntitiesTable({
   body: false,
-  emptyTitle: _('No SecInfo Information available'),
+  emptyTitle: _l('No SecInfo Information available'),
   row: Row,
   header: withEntitiesHeader(true)(Header),
   rowDetails: withRowDetails(secInfoType)(SecinfoDetails),

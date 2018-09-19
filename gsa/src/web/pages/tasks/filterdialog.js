@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -40,12 +40,12 @@ import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 /* eslint-enable */
 
 const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['status', _('Status')],
-  ['total', _('Reports: Total')],
-  ['last', _('Reports: Last')],
-  ['severity', _('Severity')],
-  ['trend', _('Trend')],
+  ['name', _l('Name')],
+  ['status', _l('Status')],
+  ['total', _l('Reports: Total')],
+  ['last', _l('Reports: Last')],
+  ['severity', _l('Severity')],
+  ['trend', _l('Trend')],
 ];
 
 const TaskFilterDialogComponent = ({

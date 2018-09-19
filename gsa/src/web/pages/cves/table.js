@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -156,7 +156,7 @@ const CvesFooter = createEntitiesFooter({
 export const CvesTable = createEntitiesTable({
   body: false,
   doubleRow: true,
-  emptyTitle: _('No CVEs available'),
+  emptyTitle: _l('No CVEs available'),
   row: CveRow,
   rowDetails: withRowDetails('cve')(CveDetails),
   header: CvesHeader,

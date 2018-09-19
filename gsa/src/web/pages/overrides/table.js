@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -129,7 +129,7 @@ Header.propTypes = {
 };
 
 export default createEntitiesTable({
-  emptyTitle: _('No Overrides available'),
+  emptyTitle: _l('No Overrides available'),
   row: Row,
   rowDetails: withRowDetails('override', 8)(OverrideDetails),
   header: withEntitiesHeader()(Header),

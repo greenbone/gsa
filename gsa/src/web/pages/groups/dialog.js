@@ -40,8 +40,6 @@ import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
 
-const DEFAULTS = {name: _('Unnamed'), users: []};
-
 const Dialog = ({
     allUsers,
     grant_full,
@@ -56,6 +54,8 @@ const Dialog = ({
     value: user.name,
     label: user.name,
   }));
+
+  const DEFAULTS = {name: _('Unnamed'), users: []};
 
   return (
     <SaveDialog

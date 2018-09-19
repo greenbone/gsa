@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -149,7 +149,7 @@ const Footer = createEntitiesFooter({
 });
 
 export const OsTable = createEntitiesTable({
-  emptyTitle: _('No results available'),
+  emptyTitle: _l('No results available'),
   header: Header,
   footer: Footer,
   row: OsRow,

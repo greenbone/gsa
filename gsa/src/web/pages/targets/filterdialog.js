@@ -20,19 +20,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['hosts', _('Hosts')],
-  ['ips', _('IPs')],
-  ['port_list', _('Port List')],
-  ['ssh_credential', _('SSH Credential')],
-  ['smb_credential', _('SMB Credential')],
-  ['esxi_credential', _('ESXi Credential')],
-  ['snmp_credential', _('SNMP Credential')],
+  ['name', _l('Name')],
+  ['hosts', _l('Hosts')],
+  ['ips', _l('IPs')],
+  ['port_list', _l('Port List')],
+  ['ssh_credential', _l('SSH Credential')],
+  ['smb_credential', _l('SMB Credential')],
+  ['esxi_credential', _l('ESXi Credential')],
+  ['snmp_credential', _l('SNMP Credential')],
 ];
 
 export default createFilterDialog({

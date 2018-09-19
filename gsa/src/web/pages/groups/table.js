@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
@@ -31,11 +31,11 @@ import Header from './header.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
+  ['name', _l('Name')],
 ];
 
 const GroupsTable = createEntitiesTable({
-  emptyTitle: _('No Groups available'),
+  emptyTitle: _l('No Groups available'),
   header: Header,
   row: Row,
   rowDetails: withRowDetails('group')(GroupDetails),

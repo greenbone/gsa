@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -118,7 +118,7 @@ const CertBundsFooter = createEntitiesFooter({
 });
 
 export default createEntitiesTable({
-  emptyTitle: _('No CERT-Bund Advisories available'),
+  emptyTitle: _l('No CERT-Bund Advisories available'),
   row: CertBundRow,
   rowDetails: withRowDetails('certbund')(CertBundDetails),
   header: CertBundsHeader,

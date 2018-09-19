@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -41,15 +41,15 @@ import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.
 
 
 const SORT_FIELDS = [
-  ['date', _('Date')],
-  ['status', _('Status')],
-  ['task', _('Task')],
-  ['severity', _('Severity')],
-  ['high', _('Scan Results: High')],
-  ['medium', _('Scan Results: Medium')],
-  ['low', _('Scan Results: Low')],
-  ['log', _('Scan Results: Log')],
-  ['false_positive', _('Scan Results: False Positive')],
+  ['date', _l('Date')],
+  ['status', _l('Status')],
+  ['task', _l('Task')],
+  ['severity', _l('Severity')],
+  ['high', _l('Scan Results: High')],
+  ['medium', _l('Scan Results: Medium')],
+  ['low', _l('Scan Results: Low')],
+  ['log', _l('Scan Results: Log')],
+  ['false_positive', _l('Scan Results: False Positive')],
 ];
 
 const ReportFilterDialogComponent = ({

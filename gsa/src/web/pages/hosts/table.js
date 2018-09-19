@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -191,7 +191,7 @@ const HostsFooter = withEntitiesFooter({
 })(Footer);
 
 export const HostsTable = createEntitiesTable({
-  emptyTitle: _('No hosts available'),
+  emptyTitle: _l('No hosts available'),
   row: HostRow,
   rowDetails: withRowDetails('host', 10)(HostDetails),
   header: HostsHeader,

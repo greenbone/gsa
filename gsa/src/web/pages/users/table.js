@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
@@ -31,15 +31,15 @@ import Header from './header.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['roles', _('Roles')],
-  ['groups', _('Groups')],
-  ['host_access', _('Host Access')],
-  ['ldpa', _('Authentication Type')],
+  ['name', _l('Name')],
+  ['roles', _l('Roles')],
+  ['groups', _l('Groups')],
+  ['host_access', _l('Host Access')],
+  ['ldpa', _l('Authentication Type')],
 ];
 
 const UsersTable = createEntitiesTable({
-  emptyTitle: _('No Users available'),
+  emptyTitle: _l('No Users available'),
   header: Header,
   row: Row,
   rowDetails: withRowDetails('user')(UserDetails),

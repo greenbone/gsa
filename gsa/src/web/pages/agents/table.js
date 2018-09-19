@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -32,12 +32,12 @@ import AgentDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '46%'],
-  ['trust', _('Trust'), '46%'],
+  ['name', _l('Name'), '46%'],
+  ['trust', _l('Trust'), '46%'],
 ];
 
 const AgentsTable = createEntitiesTable({
-  emptyTitle: _('No agents available'),
+  emptyTitle: _l('No agents available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('agent')(AgentDetails),

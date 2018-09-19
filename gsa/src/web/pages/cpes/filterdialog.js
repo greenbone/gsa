@@ -20,16 +20,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['title', _('Title')],
-  ['modified', _('Modified')],
-  ['cves', _('CVEs')],
-  ['severity', _('Severity')],
+  ['name', _l('Name')],
+  ['title', _l('Title')],
+  ['modified', _l('Modified')],
+  ['cves', _l('CVEs')],
+  ['severity', _l('Severity')],
 ];
 
 export default createFilterDialog({

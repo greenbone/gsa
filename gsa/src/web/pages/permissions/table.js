@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -31,16 +31,16 @@ import PermissionDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '16%'],
-  ['description', _('Description'), '28%'],
-  ['type', _('Resource Type'), '12%'],
-  ['_resource', _('Resource'), '12%'],
-  ['subject_type', _('Subject Type'), '12%'],
-  ['_subject', _('Subject'), '12%'],
+  ['name', _l('Name'), '16%'],
+  ['description', _l('Description'), '28%'],
+  ['type', _l('Resource Type'), '12%'],
+  ['_resource', _l('Resource'), '12%'],
+  ['subject_type', _l('Subject Type'), '12%'],
+  ['_subject', _l('Subject'), '12%'],
 ];
 
 const Table = createEntitiesTable({
-  emptyTitle: _('No permissions available'),
+  emptyTitle: _l('No permissions available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('permission')(PermissionDetails),

@@ -21,15 +21,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['total', _('Port Counts: Total')],
-  ['tcp', _('Port Counts: TCP')],
-  ['udp', _('Port Counts: UDP')],
+  ['name', _l('Name')],
+  ['total', _l('Port Counts: Total')],
+  ['tcp', _l('Port Counts: TCP')],
+  ['udp', _l('Port Counts: UDP')],
 ];
 
 export default createFilterDialog({

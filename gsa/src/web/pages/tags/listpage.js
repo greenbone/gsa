@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {TAGS_FILTER_FILTER} from 'gmp/models/filter';
 
@@ -48,11 +48,11 @@ import TagComponent from './component';
 import TagsTable from './table';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '30%'],
-  ['value', _('Value'), '30%'],
-  ['active', _('Active'), '8%'],
-  ['resource_type', _('Resource Type'), '8%'],
-  ['modified', _('Modified'), '8%'],
+  ['name', _l('Name'), '30%'],
+  ['value', _l('Value'), '30%'],
+  ['active', _l('Active'), '8%'],
+  ['resource_type', _l('Resource Type'), '8%'],
+  ['modified', _l('Modified'), '8%'],
 ];
 
 const ToolBarIcons = withCapabilities(({

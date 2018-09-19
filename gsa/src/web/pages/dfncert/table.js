@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -118,7 +118,7 @@ const DfnCertAdvsFooter = createEntitiesFooter({
 });
 
 export default createEntitiesTable({
-  emptyTitle: _('No DFN-CERT Advisories available'),
+  emptyTitle: _l('No DFN-CERT Advisories available'),
   row: DfnCertAdvRow,
   rowDetails: withRowDetails('dfncert')(DfnCertAdvDetails),
   header: DfnCertAdvsHeader,

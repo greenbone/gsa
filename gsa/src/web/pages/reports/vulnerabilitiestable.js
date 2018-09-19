@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -150,7 +150,7 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 export default createEntitiesTable({
-  emptyTitle: _('No Vulnerabilites available'),
+  emptyTitle: _l('No Vulnerabilites available'),
   header: Header,
   row: Row,
 });

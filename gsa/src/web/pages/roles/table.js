@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
@@ -32,11 +32,11 @@ import Row from './row.js';
 import RoleDetails from './details.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '92%'],
+  ['name', _l('Name'), '92%'],
 ];
 
 const RolesTable = createEntitiesTable({
-  emptyTitle: _('No Roles available'),
+  emptyTitle: _l('No Roles available'),
   header: Header,
   row: Row,
   rowDetails: withRowDetails('role')(RoleDetails),

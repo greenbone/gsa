@@ -22,32 +22,32 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import PropTyes from 'web/utils/proptypes';
 
 import Select from 'web/components/form/select';
 
 const DAY_SELECT_ITEMS = [{
-  label: _('Monday'),
+  label: _l('Monday'),
   value: 'monday',
 }, {
-  label: _('Tuesday'),
+  label: _l('Tuesday'),
   value: 'tuesday',
 }, {
-  label: _('Wednesday'),
+  label: _l('Wednesday'),
   value: 'wednesday',
 }, {
-  label: _('Thursday'),
+  label: _l('Thursday'),
   value: 'thursday',
 }, {
-  label: _('Friday'),
+  label: _l('Friday'),
   value: 'friday',
 }, {
-  label: _('Saturday'),
+  label: _l('Saturday'),
   value: 'saturday',
 }, {
-  label: _('Sunday'),
+  label: _l('Sunday'),
   value: 'sunday',
 }];
 

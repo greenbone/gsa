@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -216,7 +216,7 @@ Row.propTypes = {
 
 export default createEntitiesTable({
   header: Header,
-  emptyTitle: _('No Hosts available'),
+  emptyTitle: _l('No Hosts available'),
   row: Row,
 });
 
