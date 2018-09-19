@@ -26,14 +26,12 @@ import {format} from 'd3-format';
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_} from 'gmp/locale/lang';
 
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
-
-export const N_A = _('N/A');
 
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
@@ -111,7 +109,7 @@ export const renderChildren = children => React.Children.count(children) > 1 ?
   children;
 
 export const na = value => {
-  return isEmpty(value) ? N_A : value;
+  return isEmpty(value) ? _('N/A') : value;
 };
 
 export const renderYesNo = value => {
