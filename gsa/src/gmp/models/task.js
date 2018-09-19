@@ -82,9 +82,8 @@ function parse_yes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
 }
 
-export const getTranslatableTaskStatus = status => {
-  return TASK_STATUS_TRANSLATIONS[status];
-};
+export const getTranslatableTaskStatus = status =>
+  `${TASK_STATUS_TRANSLATIONS[status]}`;
 
 export const isActive = status => status === TASK_STATUS.running ||
   status === TASK_STATUS.stoprequested ||
