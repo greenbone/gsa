@@ -77,7 +77,7 @@ const ownPropNames = [
 
 const RowPlaceHolder = styled.div`
   display: flex;
-  grow: 1;
+  flex-grow: 1;
   height: ${DEFAULT_ROW_HEIGHT};
   justify-content: center;
   align-items: center;

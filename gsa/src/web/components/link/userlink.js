@@ -40,7 +40,7 @@ const StyledLink = styled(Link)`
   color: ${Theme.darkGray};
   cursor: pointer;
   font-weight: bold;
-  &:link, &:hover, &:active, &:visited{
+  &:link, &:hover, &:active, &:visited {
     color: ${Theme.darkGray};
   };
 `;
