@@ -36,6 +36,31 @@ describe('setLocale tests', () => {
     expect(getLocale()).toEqual('de');
   });
 
+  test('should log error when changing to unkown locale', () => {
+    const origConsole = global.console;
+    const testConsole = {
+      error: jest.fn(),
+      warn: jest.fn(),
+      info: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+    };
+
+    global.console = testConsole;
+
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+
+    expect(testConsole.error).not.toHaveBeenCalled();
+
+    setLocale('foo');
+    expect(getLocale()).toEqual('foo');
+
+    expect(testConsole.error).toHaveBeenCalled();
+
+    global.console = origConsole;
+  });
+
   test('should notify language change listeners', () => {
     const callback = jest.fn();
 
