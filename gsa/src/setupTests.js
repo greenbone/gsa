@@ -27,8 +27,18 @@ import Adapter from 'enzyme-adapter-react-16';
 import {initLocale} from 'gmp/locale/lang';
 
 class FakeBackend {
-  read() {}
+
+  read(language, namespace, callback) {
+    if (language === 'en' || language === 'de') {
+      // change language by calling the callback functioon
+      return callback();
+    }
+    // change language and pass error message
+    return callback('Unknown lang');
+  }
 };
+
+FakeBackend.type = 'backend';
 
 initLocale({
   backend: FakeBackend,
