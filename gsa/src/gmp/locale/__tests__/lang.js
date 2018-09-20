@@ -36,6 +36,31 @@ describe('setLocale tests', () => {
     expect(getLocale()).toEqual('de');
   });
 
+  test('should log error when changing to unkown locale', () => {
+    const origConsole = global.console;
+    const testConsole = {
+      error: jest.fn(),
+      warn: jest.fn(),
+      info: jest.fn(),
+      debug: jest.fn(),
+      trace: jest.fn(),
+    };
+
+    global.console = testConsole;
+
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+
+    expect(testConsole.error).not.toHaveBeenCalled();
+
+    setLocale('foo');
+    expect(getLocale()).toEqual('foo');
+
+    expect(testConsole.error).toHaveBeenCalled();
+
+    global.console = origConsole;
+  });
+
   test('should notify language change listeners', () => {
     const callback = jest.fn();
 
@@ -48,6 +73,27 @@ describe('setLocale tests', () => {
     setLocale('de');
     expect(getLocale()).toEqual('de');
     expect(callback).toHaveBeenCalledWith('de', false);
+  });
+
+  test('should not be notify when unsubscribed', () => {
+    const callback = jest.fn();
+
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+
+    const unsubscribe = onLanguageChange(callback);
+    expect(isFunction(unsubscribe)).toEqual(true);
+
+    setLocale('de');
+    expect(getLocale()).toEqual('de');
+    expect(callback).toHaveBeenCalledWith('de', false);
+
+    callback.mockClear();
+
+    unsubscribe();
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+    expect(callback).not.toHaveBeenCalled();
   });
 
   test('should change the date locale too', () => {

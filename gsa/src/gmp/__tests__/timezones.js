@@ -20,30 +20,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {isArray} from '../utils/identity';
 
-import {configure} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import timezones from '../timezones';
 
-import {initLocale} from 'gmp/locale/lang';
+describe('timezones tests', () => {
 
-class FakeBackend {
+  test('should be a list of timezone objects', () => {
+    expect(isArray(timezones)).toEqual(true);
+  });
 
-  read(language, namespace, callback) {
-    if (language === 'en' || language === 'de') {
-      // change language by calling the callback functioon
-      return callback();
+  test('should contain objects with name properties', () => {
+    expect(timezones.length).toBeGreaterThan(0);
+
+    for (const zone of timezones) {
+      expect(zone.name).toBeDefined();
     }
-    // change language and pass error message
-    return callback('Unknown lang');
-  }
-};
+  });
 
-FakeBackend.type = 'backend';
-
-initLocale({
-  backend: FakeBackend,
 });
-
-configure({adapter: new Adapter()});
 
 // vim: set ts=2 sw=2 tw=80:
