@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -32,15 +32,15 @@ import ReportFormatDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '35%'],
-  ['extension', _('Extension'), '14%'],
-  ['content_type', _('Content Type'), '18%'],
-  ['trust', _('Trust (Last Verified)'), '15%'],
-  ['active', _('Active'), '10%'],
+  ['name', _l('Name'), '35%'],
+  ['extension', _l('Extension'), '14%'],
+  ['content_type', _l('Content Type'), '18%'],
+  ['trust', _l('Trust (Last Verified)'), '15%'],
+  ['active', _l('Active'), '10%'],
 ];
 
 const ReportFormatsTable = createEntitiesTable({
-  emptyTitle: _('No report formats available'),
+  emptyTitle: _l('No report formats available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('reportformat', 10)(ReportFormatDetails),

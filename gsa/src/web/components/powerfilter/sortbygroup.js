@@ -25,7 +25,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
@@ -36,12 +35,12 @@ import Select from '../form/select.js';
 
 class SortByGroup extends React.Component {
 
-  renderSortFieldOptions() {
-    const {fields} = this.props;
-    return map(fields, field => {
-      const [value, title] = field;
-      return <option key={value} value={value}>{title}</option>;
-    });
+  renderSortFieldItems() {
+    const {fields = []} = this.props;
+    return fields.map(([value, label]) => ({
+      value,
+      label,
+    }));
   }
 
   render() {
@@ -56,10 +55,9 @@ class SortByGroup extends React.Component {
         <Select
           name="sort_by"
           value={by}
+          items={this.renderSortFieldItems()}
           onChange={onSortByChange}
-        >
-          {this.renderSortFieldOptions()}
-        </Select>
+        />
         <Radio
           name="sort_order"
           value="sort"

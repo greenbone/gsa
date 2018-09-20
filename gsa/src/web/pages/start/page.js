@@ -72,7 +72,7 @@ import NewDashboardDialog from './newdashboarddialog';
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
 
-const DEFAULTS = {
+const getDefaults = () => ({
   dashboards: [
     OVERVIEW_DASHBOARD_ID,
   ],
@@ -81,7 +81,7 @@ const DEFAULTS = {
       title: _('Overview'),
     },
   },
-};
+});
 
 const DEFAULT_TAB = 0;
 const MAX_DASHBOARDS = 10;
@@ -296,6 +296,7 @@ class StartPage extends React.Component {
     // currently not assigned to a handler
 
     const {byId, defaults} = this.props;
+    const DEFAULTS = getDefaults();
 
     this.saveSettings({
       ...DEFAULTS,
@@ -456,6 +457,7 @@ const mapStateToProps = rootState => {
   const settings = settingsSelector.getById(DASHBOARD_ID);
   const {rows} = settings || {};
   let {byId, defaults, dashboards} = settings || {};
+  const DEFAULTS = getDefaults();
 
   if (isDefined(rows)) {
     byId = {

@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -147,7 +147,7 @@ const OvaldefsFooter = createEntitiesFooter({
 export const OvaldefsTable = createEntitiesTable({
   body: false,
   doubleRow: true,
-  emptyTitle: _('No OVAL Definitions available'),
+  emptyTitle: _l('No OVAL Definitions available'),
   row: OvaldefRow,
   rowDetails: withRowDetails('ovaldef', 10)(OvaldefDetails),
   header: OvaldefsHeader,

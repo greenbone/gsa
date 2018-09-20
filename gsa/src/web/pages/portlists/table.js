@@ -24,7 +24,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -116,7 +116,7 @@ Header.propTypes = {
 };
 
 export default createEntitiesTable({
-  emptyTitle: _('No port lists available'),
+  emptyTitle: _l('No port lists available'),
   row: Row,
   rowDetails: withRowDetails('portlist', 10)(PortListDetails),
   header: Header,

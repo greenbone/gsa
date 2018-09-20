@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -43,14 +43,14 @@ import AutoFpGroup from '../../components/powerfilter/autofpgroup.js';
 /* eslint-enable */
 
 const SORT_FIELDS = [
-  ['vulnerability', _('Vulnerability')],
-  ['solution_type', _('Solution type')],
-  ['severity', _('Severity')],
-  ['qod', _('QoD')],
-  ['host', _('Host (IP)')],
-  ['hostname', _('Host (Name)')],
-  ['location', _('Location')],
-  ['created', _('Created')],
+  ['vulnerability', _l('Vulnerability')],
+  ['solution_type', _l('Solution type')],
+  ['severity', _l('Severity')],
+  ['qod', _l('QoD')],
+  ['host', _l('Host (IP)')],
+  ['hostname', _l('Host (Name)')],
+  ['location', _l('Location')],
+  ['created', _l('Created')],
 ];
 
 const ResultsFilterDialogComponent = ({

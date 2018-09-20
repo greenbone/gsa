@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -170,7 +170,7 @@ Header.propTypes = {
 };
 
 export default createEntitiesTable({
-  emptyTitle: _('No results available'),
+  emptyTitle: _l('No results available'),
   footer: createEntitiesFooter({
     span: 8,
     download: 'results.xml',

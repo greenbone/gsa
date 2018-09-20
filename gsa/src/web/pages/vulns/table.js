@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -140,7 +140,7 @@ const Footer = createEntitiesFooter({
 });
 
 export const VulnsTable = createEntitiesTable({
-  emptyTitle: _('No Vulnerabilites available'),
+  emptyTitle: _l('No Vulnerabilites available'),
   header: VulnsHeader,
   footer: Footer,
   row: VulnsRow,

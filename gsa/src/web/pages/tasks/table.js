@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -130,7 +130,7 @@ const actionsColumn = (
 );
 
 export default createEntitiesTable({
-  emptyTitle: _('No Tasks available'),
+  emptyTitle: _l('No Tasks available'),
   row: Row,
   rowDetails: withRowDetails('task', 10)(TaskDetails),
   header: withEntitiesHeader(actionsColumn)(Header),

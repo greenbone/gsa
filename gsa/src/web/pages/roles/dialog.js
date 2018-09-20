@@ -51,8 +51,6 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-const DEFAULTS = {name: _('Unnamed')};
-
 const Dialog = ({
   all_groups,
   all_permissions,
@@ -70,6 +68,8 @@ const Dialog = ({
   onErrorClose,
   onSave,
 }) => {
+
+  const DEFAULTS = {name: _('Unnamed')};
 
   const is_edit = isDefined(role);
   const has_groups = isDefined(all_groups) && all_groups.length > 0;

@@ -25,7 +25,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from 'web/utils/proptypes';
@@ -192,7 +192,7 @@ Row.propTypes = {
 
 export default createEntitiesTable({
   header: Header,
-  emptyTitle: _('No TLS Certificates available'),
+  emptyTitle: _l('No TLS Certificates available'),
   row: Row,
 });
 

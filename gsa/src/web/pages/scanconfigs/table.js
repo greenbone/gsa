@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesTable} from '../../entities/table.js';
@@ -31,15 +31,15 @@ import Row from './row.js';
 import ScanConfigDetails from './details.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name')],
-  ['families_total', _('Families: Total')],
-  ['families_trend', _('Families: Trend')],
-  ['nvts_total', _('NVTS: Total')],
-  ['nvts_trend', _('NVTs: Trend')],
+  ['name', _l('Name')],
+  ['families_total', _l('Families: Total')],
+  ['families_trend', _l('Families: Trend')],
+  ['nvts_total', _l('NVTS: Total')],
+  ['nvts_trend', _l('NVTs: Trend')],
 ];
 
 const ScanConfigsTable = createEntitiesTable({
-  emptyTitle: _('No Scan Configs available'),
+  emptyTitle: _l('No Scan Configs available'),
   header: Header,
   row: Row,
   rowDetails: withRowDetails('scanconfig')(ScanConfigDetails),

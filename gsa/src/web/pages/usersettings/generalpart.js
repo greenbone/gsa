@@ -47,7 +47,7 @@ const renderLanguageItems = () =>
   Object.entries(Languages).map(
     ([code, {name, native_name}]) => ({
       value: code,
-      label: isDefined(native_name) ? `${name} | ${native_name}` : name,
+      label: isDefined(native_name) ? `${name} | ${native_name}` : `${name}`,
     })
   );
 

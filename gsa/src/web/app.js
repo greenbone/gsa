@@ -28,6 +28,8 @@ import {Provider as StoreProvider} from 'react-redux';
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';
 
+import {initLocale} from 'gmp/locale/lang';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import LocaleObserver from 'web/components/observer/localeobserver';
@@ -43,6 +45,8 @@ import configureStore from './store';
 import {clearStore} from './store/actions';
 
 import Routes from './routes';
+
+initLocale();
 
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);

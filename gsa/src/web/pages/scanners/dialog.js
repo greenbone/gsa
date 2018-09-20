@@ -63,15 +63,10 @@ import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-const scanner_types = [
+const SCANNER_TYPES = [
   SLAVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
 ];
-
-const scannerTypesOptions = map(scanner_types, scannerType => ({
-  label: scannerTypeName(scannerType),
-  value: scannerType,
-}));
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -175,6 +170,11 @@ class ScannerDialog extends React.Component {
       port,
       which_cert,
     };
+
+    const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
+      label: scannerTypeName(scannerType),
+      value: scannerType,
+    }));
 
     const scanner_credentials = filter_credentials(credentials, type);
     const is_edit = isDefined(scanner);
@@ -335,7 +335,7 @@ ScannerDialog.propTypes = {
   port: PropTypes.string,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.oneOf(scanner_types),
+  type: PropTypes.oneOf(SCANNER_TYPES),
   which_cert: PropTypes.oneOf([
     'default', 'existing', 'new',
   ]),

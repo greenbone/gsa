@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -152,7 +152,7 @@ const NvtsFooter = createEntitiesFooter({
 });
 
 export const NvtsTable = createEntitiesTable({
-  emptyTitle: _('No NVTs available'),
+  emptyTitle: _l('No NVTs available'),
   row: NvtRow,
   rowDetails: withRowDetails('nvt', 10)(NvtDetails),
   header: NvtsHeader,

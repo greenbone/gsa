@@ -162,7 +162,7 @@ class EntitiesTable extends React.Component {
     const filterstring = isDefined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
-      return <div className="entities-table">{emptyTitle}</div>;
+      return <div className="entities-table">{`${emptyTitle}`}</div>;
     }
 
     const rows = [];
@@ -280,7 +280,7 @@ class EntitiesTable extends React.Component {
 EntitiesTable.propTypes = {
   body: PropTypes.componentOrFalse,
   doubleRow: PropTypes.bool,
-  emptyTitle: PropTypes.string,
+  emptyTitle: PropTypes.toString,
   entities: PropTypes.array,
   entitiesCounts: PropTypes.counts,
   filter: PropTypes.filter,

@@ -390,7 +390,7 @@ class TargetComponent extends React.Component {
               <CredentialsDialog
                 types={credentialTypes}
                 base={first(credentialTypes)}
-                title={credentials_title}
+                title={`${credentials_title}`}
                 onClose={this.handleCloseCredentialsDialog}
                 onSave={this.handleCreateCredential}
               />

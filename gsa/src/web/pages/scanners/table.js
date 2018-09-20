@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -32,15 +32,15 @@ import ScannerDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '30%'],
-  ['host', _('Host'), '20%'],
-  ['port', _('Port'), '20%'],
-  ['type', _('Type'), '10%'],
-  ['credential', _('Credential'), '12%'],
+  ['name', _l('Name'), '30%'],
+  ['host', _l('Host'), '20%'],
+  ['port', _l('Port'), '20%'],
+  ['type', _l('Type'), '10%'],
+  ['credential', _l('Credential'), '12%'],
 ];
 
 const ScannersTable = createEntitiesTable({
-  emptyTitle: _('No scanners available'),
+  emptyTitle: _l('No scanners available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('scanner')(ScannerDetails),

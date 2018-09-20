@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -32,13 +32,13 @@ import FilterDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '37%'],
-  ['term', _('Term'), '37%'],
-  ['type', _('Type'), '18%'],
+  ['name', _l('Name'), '37%'],
+  ['term', _l('Term'), '37%'],
+  ['type', _l('Type'), '18%'],
 ];
 
 const FiltersTable = createEntitiesTable({
-  emptyTitle: _('No filters available'),
+  emptyTitle: _l('No filters available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('filter')(FilterDetails),

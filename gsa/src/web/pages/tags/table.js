@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -122,7 +122,7 @@ Header.propTypes = {
 const TagsHeader = withEntitiesHeader()(Header);
 
 const TagsTable = createEntitiesTable({
-  emptyTitle: _('No tags available'),
+  emptyTitle: _l('No tags available'),
   header: TagsHeader,
   row: Row,
   rowDetails: withRowDetails('tag')(TagDetails),

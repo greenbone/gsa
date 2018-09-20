@@ -137,7 +137,7 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
                   sortBy={sort ? column[0] : false}
                   onSortChange={onSortChange}
                 >
-                  {column[1]}
+                  {`${column[1]}`}
                 </TableHead>
               );
             })

@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {createEntitiesFooter} from '../../entities/footer.js';
 import {createEntitiesHeader} from '../../entities/header.js';
@@ -32,16 +32,16 @@ import AlertDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _('Name'), '25%'],
-  ['event', _('Event'), '21%'],
-  ['condition', _('Condition'), '21%'],
-  ['method', _('Method'), '10%'],
-  ['filter', _('Filter'), '10%'],
-  ['active', _('Active'), '5%'],
+  ['name', _l('Name'), '25%'],
+  ['event', _l('Event'), '21%'],
+  ['condition', _l('Condition'), '21%'],
+  ['method', _l('Method'), '10%'],
+  ['filter', _l('Filter'), '10%'],
+  ['active', _l('Active'), '5%'],
 ];
 
 const AlertsTable = createEntitiesTable({
-  emptyTitle: _('No alerts available'),
+  emptyTitle: _l('No alerts available'),
   header: createEntitiesHeader(SORT_FIELDS),
   row: Row,
   rowDetails: withRowDetails('alert')(AlertDetails),

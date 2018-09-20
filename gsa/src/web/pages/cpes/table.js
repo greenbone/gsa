@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -118,7 +118,7 @@ const CpesFooter = createEntitiesFooter({
 });
 
 export const CpesTable = createEntitiesTable({
-  emptyTitle: _('No CPEs available'),
+  emptyTitle: _l('No CPEs available'),
   row: CpeRow,
   rowDetails: withRowDetails('cpe')(CpeDetails),
   header: CpesHeader,

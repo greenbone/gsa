@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -62,48 +62,48 @@ const RECURRENCE_WORKWEEK = 'workweek';
 const RECURRENCE_CUSTOM = 'custom';
 
 const RECURRENCE_TYPE_ITEMS = [{
-  label: _('Once'),
+  label: _l('Once'),
   value: RECURRENCE_ONCE,
 }, {
-  label: _('Hourly'),
+  label: _l('Hourly'),
   value: RECURRENCE_HOURLY,
 }, {
-  label: _('Daily'),
+  label: _l('Daily'),
   value: RECURRENCE_DAILY,
 }, {
-  label: _('Weekly'),
+  label: _l('Weekly'),
   value: RECURRENCE_WEEKLY,
 }, {
-  label: _('Monthly'),
+  label: _l('Monthly'),
   value: RECURRENCE_MONTHLY,
 }, {
-  label: _('Yearly'),
+  label: _l('Yearly'),
   value: RECURRENCE_YEARLY,
 }, {
-  label: _('Workweek (Monday till Friday)'),
+  label: _l('Workweek (Monday till Friday)'),
   value: RECURRENCE_WORKWEEK,
 }, {
-  label: _('Custom...'),
+  label: _l('Custom...'),
   value: RECURRENCE_CUSTOM,
 }];
 
 const NTH_DAY_ITEMS = [{
-  label: _('The First'),
+  label: _l('The First'),
   value: '1',
 }, {
-  label: _('The Second'),
+  label: _l('The Second'),
   value: '2',
 }, {
-  label: _('The Third'),
+  label: _l('The Third'),
   value: '3',
 }, {
-  label: _('The Fourth'),
+  label: _l('The Fourth'),
   value: '4',
 }, {
-  label: _('The Fifth'),
+  label: _l('The Fifth'),
   value: '5',
 }, {
-  label: _('The Last'),
+  label: _l('The Last'),
   value: '-1',
 }];
 

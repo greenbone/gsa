@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import PropTypes from '../../utils/proptypes.js';
 
@@ -144,7 +144,7 @@ Row.propTypes = {
 
 export default createEntitiesTable({
   header: Header,
-  emptyTitle: _('No Operating Systems available'),
+  emptyTitle: _l('No Operating Systems available'),
   row: Row,
 });
 
