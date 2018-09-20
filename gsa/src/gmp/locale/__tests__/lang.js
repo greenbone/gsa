@@ -75,6 +75,27 @@ describe('setLocale tests', () => {
     expect(callback).toHaveBeenCalledWith('de', false);
   });
 
+  test('should not be notify when unsubscribed', () => {
+    const callback = jest.fn();
+
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+
+    const unsubscribe = onLanguageChange(callback);
+    expect(isFunction(unsubscribe)).toEqual(true);
+
+    setLocale('de');
+    expect(getLocale()).toEqual('de');
+    expect(callback).toHaveBeenCalledWith('de', false);
+
+    callback.mockClear();
+
+    unsubscribe();
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+    expect(callback).not.toHaveBeenCalled();
+  });
+
   test('should change the date locale too', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');
