@@ -47,7 +47,6 @@ const dateFormat = (date, format) => {
       date = parseDate(date);
     }
     else {
-      log.error('Invalid date', date);
       return undefined;
     }
   }
