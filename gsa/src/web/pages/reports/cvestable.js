@@ -96,7 +96,7 @@ const Row = ({entity}) => {
   return (
     <TableRow>
       <TableData>
-        <Divider wrap>
+        <Divider wrap="wrap">
           {cves.map(cve => (
             <CveLink
               key={cve}

@@ -189,7 +189,7 @@ const Details = ({
           title={_('Overrides')}
         >
           <Divider
-            wrap
+            wrap="wrap"
             align={['start', 'stretch']}
             width="15px"
           >
@@ -211,7 +211,7 @@ const Details = ({
           title={_('Notes')}
         >
           <Divider
-            wrap
+            wrap="wrap"
             align={['start', 'stretch']}
             width="15px"
           >

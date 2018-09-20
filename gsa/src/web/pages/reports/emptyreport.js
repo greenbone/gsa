@@ -56,7 +56,7 @@ const EmptyReport = ({
             'reasons:')
         }
       />
-      <Divider wrap>
+      <Divider wrap="wrap">
         {!isActiveReport &&
           <ReportPanel
             icon="task.svg"

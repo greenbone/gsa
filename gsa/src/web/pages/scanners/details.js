@@ -344,7 +344,7 @@ const ScannerDetails = ({
                 {_('Tasks using this Scanner')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {tasks.map(task => (
                     <DetailsLink
                       key={task.id}
@@ -365,7 +365,7 @@ const ScannerDetails = ({
                 {_('Scan Configs using this Scanner')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {configs.map(config => (
                     <DetailsLink
                       key={config.id}

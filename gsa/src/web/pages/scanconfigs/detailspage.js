@@ -23,6 +23,11 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+import Theme from 'web/utils/theme';
+
+import {Table as VirtualTable, AutoSizer, Column} from 'react-virtualized';
+
 import _ from 'gmp/locale';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -212,49 +217,119 @@ NvtFamilies.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const ScannerPreferences = ({
-  entity,
-}) => {
-  const {preferences} = entity;
+const StyledVirtualTable = styled(VirtualTable)`
+& th, & td {
+  padding: 4px;
+};
+& tfoot tr {
+  background: ${Theme.lightGray};
+};
 
-  return (
-    <Layout>
-      {preferences.scanner.length > 0 &&
-        <StripedTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                {_('Name')}
-              </TableHead>
-              <TableHead>
-                {_('Value')}
-              </TableHead>
-              <TableHead>
-                {_('Default Value')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {preferences.scanner.map(pref => (
-              <TableRow
-                key={pref.name}
-              >
-                <TableData>
-                  {pref.name}
-                </TableData>
-                <TableData>
-                  {pref.value}
-                </TableData>
-                <TableData>
-                  {pref.default}
-                </TableData>
+@media screen {
+  & > tbody:nth-of-type(even), & > tbody:only-of-type > tr:nth-of-type(even)
+    {
+      background: ${Theme.dialogGray};
+    };
+  & > tbody:not(:only-of-type):hover, & > tbody:only-of-type > tr:hover
+    {
+      background: ${Theme.lightGray};
+    };
+};
+`;
+
+class ScannerPreferences extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+
+    const {entity} = this.props;
+    this.scannerPreferences = entity.preferences.scanner;
+  }
+
+  renderRow = ({index, key, style}) => {
+    console.log('PORPS', index, key, this.scannerPreferences);
+    console.log('ROWINDEX', this.scannerPreferences[0]);
+    return (
+      <TableRow
+        key={key}
+        className="row"
+        style={style}
+      >
+        <TableData>
+          {this.scannerPreferences[index].name}
+        </TableData>
+        <TableData>
+          {this.scannerPreferences[index].value}
+        </TableData>
+        <TableData>
+          {this.scannerPreferences[index].default}
+        </TableData>
+      </TableRow>
+    );
+  };
+
+  // getRow = index => {
+  //   return this.scannerPreferences[index];
+  // };
+
+  render() {
+    // const {preferences} = this.props.entity;
+console.log('PREFS', this.scannerPreferences);
+    return (
+      <Layout>
+        {this.scannerPreferences.length > 0 &&
+          <StripedTable>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {_('Name')}
+                </TableHead>
+                <TableHead>
+                  {_('Value')}
+                </TableHead>
+                <TableHead>
+                  {_('Default Value')}
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </StripedTable>
-      }
-    </Layout>
-  );
+            </TableHeader>
+            <TableBody>
+              <AutoSizer>
+                {({width, height}) => {
+                  return (
+                    <StyledVirtualTable
+                      headerHeight={20}
+                      height={200}
+                      rowGetter={({index}) => this.scannerPreferences[index]}
+                      rowHeight={20}
+                      rowRenderer={this.renderRow}
+                      rowCount={this.scannerPreferences.length}
+                      width={width}
+                    >
+                      <Column
+                        label={_('Name')}
+                        dataKey="name"
+                        width={60}
+                      />
+                      <Column
+                        label={_('Value')}
+                        dataKey="value"
+                        width={60}
+                      />
+                      <Column
+                        label={_('Default Value')}
+                        dataKey="default"
+                        width={210}
+                      />
+                    </StyledVirtualTable>
+                  );
+                }}
+              </AutoSizer>
+            </TableBody>
+          </StripedTable>
+        }
+      </Layout>
+    );
+  };
 };
 
 ScannerPreferences.propTypes = {

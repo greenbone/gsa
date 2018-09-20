@@ -146,7 +146,7 @@ const CredentialDetails = ({
                 {_('Targets using this Credential')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {targets.map(target => (
                     <DetailsLink
                       key={target.id}
@@ -167,7 +167,7 @@ const CredentialDetails = ({
                 {_('Sanners using this Credential')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {scanners.map(scanner => (
                     <DetailsLink
                       key={scanner.id}

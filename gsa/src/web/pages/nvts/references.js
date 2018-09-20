@@ -61,7 +61,7 @@ const References = ({
                 {_('CVE')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {
                     cves.map(cve_id => (
                       <CveLink
@@ -83,7 +83,7 @@ const References = ({
                 {_('BID')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {bids.map(bid => (
                     <span key={bid}>{bid}</span>
                   ))}
@@ -98,7 +98,7 @@ const References = ({
                 {_('CERT')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {certs.map(cert => (
                     <CertLink
                       key={cert.id}
@@ -118,7 +118,7 @@ const References = ({
                 {_('Other')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {
                     xrefs.map(xref => (
                       <ExternalLink

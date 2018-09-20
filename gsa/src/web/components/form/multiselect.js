@@ -227,7 +227,7 @@ class MultiSelect extends React.Component {
                 disabled={disabled}
                 innerRef={ref => this.box = ref}
               >
-                <Layout grow="1" wrap>
+                <Layout grow wrap="wrap">
                   {selectedItems.map(item => this.renderItem(item, items))}
                 </Layout>
                 <Layout align={['center', 'center']}>

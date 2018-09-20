@@ -95,7 +95,7 @@ const FilterDetails = ({
                 {_('Alerts using this Filter')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {alerts.map(alert => (
                     <DetailsLink
                       key={alert.id}
