@@ -37,6 +37,11 @@ describe('dashboard data reducers tests', () => {
     expect(state).toEqual({});
   });
 
+  test('should return the initial state if action with id is passed', () => {
+    const state = dashboardData(undefined, {id: 'foo'});
+    expect(state).toEqual({});
+  });
+
   test('should handle request dashboard data', () => {
     const id = 'a1';
     const action = requestDashboardData(id);
