@@ -30,8 +30,8 @@ const log = logger.getLogger('gmp.locale.detector');
 
 const detectLanguageFromStorage = options => options.storage.locale;
 
-const detectLanguageFromNavigator = () => {
-  if (typeof navigator !== 'undefined') {
+const detectLanguageFromNavigator = ({navigator = global.navigator}) => {
+  if (navigator) {
     if (navigator.languages) {
       return [...navigator.languages];
     }
