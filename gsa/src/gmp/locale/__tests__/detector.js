@@ -98,6 +98,98 @@ describe('LanguageDetector tests', () => {
     expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('en-US');
   });
 
+  test('should return languages from fake navigator', () => {
+    const storage = {};
+    const languageUtils = {
+      formatLanguageCode: jest.fn().mockImplementation(l => l),
+      isWhitelisted: jest.fn().mockReturnValue(true),
+    };
+
+    const detector = new LanguageDetector();
+
+    const navigator = {};
+    const languages = jest.fn().mockReturnValue(['lorem', 'ipsum']);
+    Object.defineProperty(navigator, 'languages', {
+      get: languages,
+    });
+
+    detector.init({languageUtils}, {storage, navigator}, {fallbackLng: 'bar'});
+
+    expect(detector.detect()).toEqual('lorem');
+    expect(languages).toHaveBeenCalled();
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+  });
+
+  test('should return language from fake navigator', () => {
+    const storage = {};
+    const languageUtils = {
+      formatLanguageCode: jest.fn().mockImplementation(l => l),
+      isWhitelisted: jest.fn().mockReturnValue(true),
+    };
+
+    const detector = new LanguageDetector();
+
+    const navigator = {};
+    const language = jest.fn().mockReturnValue('lorem');
+    Object.defineProperty(navigator, 'language', {
+      get: language,
+    });
+
+    detector.init({languageUtils}, {storage, navigator}, {fallbackLng: 'bar'});
+
+    expect(detector.detect()).toEqual('lorem');
+    expect(language).toHaveBeenCalled();
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+  });
+
+  test('should return userLanguage from fake navigator', () => {
+    const storage = {};
+    const languageUtils = {
+      formatLanguageCode: jest.fn().mockImplementation(l => l),
+      isWhitelisted: jest.fn().mockReturnValue(true),
+    };
+
+    const detector = new LanguageDetector();
+
+    const navigator = {};
+    const userLanguage = jest.fn().mockReturnValue('lorem');
+    Object.defineProperty(navigator, 'userLanguage', {
+      get: userLanguage,
+    });
+
+    detector.init({languageUtils}, {storage, navigator}, {fallbackLng: 'bar'});
+
+    expect(detector.detect()).toEqual('lorem');
+    expect(userLanguage).toHaveBeenCalled();
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+  });
+
+  test('should return fallback when navigator is not available', () => {
+    const storage = {};
+    const languageUtils = {
+      formatLanguageCode: jest.fn().mockImplementation(l => l),
+      isWhitelisted: jest.fn().mockReturnValue(true),
+    };
+
+    const detector = new LanguageDetector();
+
+    detector.init({languageUtils}, {storage, navigator: null},
+      {fallbackLng: 'bar'});
+
+    expect(detector.detect()).toEqual('bar');
+    expect(languageUtils.formatLanguageCode).not.toHaveBeenCalled();
+    expect(languageUtils.isWhitelisted).not.toHaveBeenCalled();
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
