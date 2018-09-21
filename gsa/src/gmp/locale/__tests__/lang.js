@@ -36,6 +36,14 @@ describe('setLocale tests', () => {
     expect(getLocale()).toEqual('de');
   });
 
+  test('should allow to use en-US for en', () => {
+    setLocale('en');
+    expect(getLocale()).toEqual('en');
+
+    setLocale('de-CH');
+    expect(getLocale()).toEqual('de-CH');
+  });
+
   test('should fallback to en for unkown locales', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');

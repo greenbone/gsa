@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/starts-with';
 
 import {configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -29,7 +30,7 @@ import {initLocale} from 'gmp/locale/lang';
 class FakeBackend {
 
   read(language, namespace, callback) {
-    if (language === 'en' || language === 'de') {
+    if (language.startsWith('en') || language.startsWith('de')) {
       // change language by calling the callback functioon
       return callback();
     }
