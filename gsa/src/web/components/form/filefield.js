@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import withLayout from 'web/components/layout/withLayout';
 
-import {withLayout} from '../layout/layout.js';
+import PropTypes from 'web/utils/proptypes';
 
 class FileFieldComponent extends React.Component {
 
@@ -65,6 +65,6 @@ FileFieldComponent.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withLayout(FileFieldComponent);
+export default withLayout()(FileFieldComponent);
 
 // vim: set ts=2 sw=2 tw=80:
