@@ -27,6 +27,8 @@ import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
+import PropTypes from 'web/utils/proptypes';
+
 const convertAlign = align => {
   switch (align) {
     case 'end':
@@ -72,6 +74,20 @@ const withLayout = (defaults = {}) => Component => {
   `;
 
   LayoutComponent.displayName = `withLayout(${Component.displayName})`;
+
+  LayoutComponent.propTypes = {
+    basis: PropTypes.string,
+    flex: PropTypes.oneOf([true, 'column', 'row']),
+    grow: PropTypes.oneOfType([
+      PropTypes.oneOf([true]),
+      PropTypes.numberOrNumberString,
+    ]),
+    shrink: PropTypes.oneOfType([
+      PropTypes.oneOf([true]),
+      PropTypes.numberOrNumberString,
+    ]),
+    wrap: PropTypes.oneOf([true, 'wrap', 'nowrap']),
+  };
 
   return LayoutComponent;
 };
