@@ -3,7 +3,7 @@ jobs:
   js_test:
     working_directory: ~/gsa
     docker:
-      - image: circleci/node:6
+      - image: circleci/node:8
         environment:
           ENV: CI
     steps:
@@ -31,7 +31,7 @@ jobs:
   js_lint:
     working_directory: ~/gsa
     docker:
-      - image: circleci/node:6
+      - image: circleci/node:8
         environment:
           ENV: CI
     steps:
