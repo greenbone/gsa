@@ -20,14 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withLayout from './withLayout.js';
 
-import withLayoutNew from './withLayout.js';
-
-export const withLayout = (Component, defaults = {}) => {
-  return withLayoutNew(defaults)(Component);
-};
-
-export const Layout = withLayoutNew()('div');
+export const Layout = withLayout()('div');
 
 Layout.displayName = 'Layout';
 
