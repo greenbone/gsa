@@ -20,6 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/string/includes';
+import 'core-js/fn/array/includes';
+
 import i18next from 'i18next';
 import XHRBackend from 'i18next-xhr-backend';
 
@@ -29,6 +32,8 @@ import {isDefined} from '../utils/identity';
 
 import {setLocale as setDateLocale} from './date';
 import Detector from './detector';
+import {getLanguageCodes} from './languages';
+import {split} from 'gmp/utils/string';
 
 const log = logger.getLogger('gmp.locale.lang');
 
@@ -41,17 +46,22 @@ const notifyLanguageChangeListeners = (lang, initial = false) => {
   }
 };
 
+const fallbackLng = 'en';
+const whitelist = getLanguageCodes();
+
 const I18N_OPTIONS = {
   storage: global.localStorage,
   nsSeparator: false, // don't use a namespace separator in keys
   keySeparator: false, // don't use a key separator in keys
-  fallbackLng: 'en',
+  fallbackLng,
   ns: ['gsa'], // use gsa as namespace
   defaultNS: 'gsa',
   fallbackNS: 'gsa',
   backend: {
     loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
   },
+  whitelist,
+  nonExplicitWhitelist: true,
 };
 
 i18next.on('languageChanged', lang => {
@@ -103,6 +113,16 @@ export const getLocale = () => currentLocale;
  *                      to start automatic detection.
  */
 export const setLocale = lang => {
+  if (isDefined(lang)) {
+    const code = lang.includes('-') ? split(lang, '-', 1)[0] : lang;
+
+    if (!whitelist.includes(lang) && !whitelist.includes(code)) {
+      log.warn(`Unknown locale ${lang}. Possible locales are ${whitelist}
+        Falling back to ${fallbackLng}.`);
+      lang = fallbackLng;
+    }
+  }
+
   i18next.changeLanguage(lang, err => {
     if (isDefined(err)) {
       log.warn('Error while setting language to', lang, err);
