@@ -115,12 +115,6 @@ $ sudo apt-get update
 $ sudo apt-get install nodejs yarn
 ```
 
-When using npm you might need to install the additional nodejs legacy symlink.
-
-```sh
-$ sudo apt-get install nodejs-legacy
-```
-
 Developing Greenbone Security Assistant GUI
 -------------------------------------------
 
