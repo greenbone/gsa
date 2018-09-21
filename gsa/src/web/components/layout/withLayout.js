@@ -52,7 +52,8 @@ const withLayout = (defaults = {}) => Component => {
     flex-basis: ${({basis = defaults.basis}) => basis};
     flex-grow: ${({grow = defaults.grow}) => grow === true ? 1 : grow};
     flex-wrap: ${({wrap = defaults.wrap}) => wrap === true ? 'wrap' : wrap};
-    flex-shrink: ${({shrink = defaults.shrink}) => shrink};
+    flex-shrink: ${({shrink = defaults.shrink}) =>
+      shrink === true ? 1 : shrink};
     ${({
       flex = defaults.flex,
       align = defaults.align,
