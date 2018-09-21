@@ -16,6 +16,9 @@
   "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "GPL-2.0+",
   "main": "src/index.js",
+  "engines": {
+    "node" : ">=8.0"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
