@@ -39,6 +39,10 @@ const convertAlign = align => {
 
 const withLayout = (defaults = {}) => Component => {
   const LayoutComponent = styled(({
+    basis,
+    flex,
+    grow,
+    shrink,
     wrap,
     ...props
   }) => <Component {...props} />)`
