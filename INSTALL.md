@@ -86,7 +86,7 @@ Compiling Greenbone Security Assistant GUI
 ------------------------------------------
 
 Prerequisites for using the GUI:
-* node.js >= 6.0
+* node.js >= 8.0
 * Either yarn or npm. yarn is faster and more reliable, but younger.
 
 On Debian Stretch node.js is too old. Follow these steps for a
@@ -104,7 +104,7 @@ $ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sour
 ```
 ```sh
 $ curl --silent --show-error https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-$ echo "deb https://deb.nodesource.com/node_6.x jessie main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+$ echo "deb https://deb.nodesource.com/node_8.x stretch main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 ```
 
 ```sh
@@ -113,12 +113,6 @@ $ sudo apt-get update
 
 ```sh
 $ sudo apt-get install nodejs yarn
-```
-
-When using npm you might need to install the additional nodejs legacy symlink.
-
-```sh
-$ sudo apt-get install nodejs-legacy
 ```
 
 Developing Greenbone Security Assistant GUI
