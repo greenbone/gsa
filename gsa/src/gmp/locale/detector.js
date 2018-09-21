@@ -20,12 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {BROWSER_LANGUAGE} from './languages';
+
 import logger from '../log';
+
 import {isArray, isDefined} from '../utils/identity';
 
 const log = logger.getLogger('gmp.locale.detector');
-
-export const BROWSER_LANGUAGE = 'Browser Language';
 
 const detectLanguageFromStorage = options => options.storage.locale;
 

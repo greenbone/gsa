@@ -20,15 +20,52 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {_l} from 'gmp/locale/lang';
-import GmpLanguages, {BROWSER_LANGUAGE} from 'gmp/locale/languages';
-
-export {BROWSER_LANGUAGE};
+export const BROWSER_LANGUAGE = 'Browser Language';
 
 const Languages = {
-  ...GmpLanguages,
-  [BROWSER_LANGUAGE]: {
-    name: _l('Browser Language'),
+  ar: {
+    name: 'Arabic',
+    native_name: 'العربية',
+  },
+  de: {
+    name: 'German',
+    native_name: 'Deutsch',
+  },
+  en: {
+    name: 'English',
+    native_name: 'English',
+  },
+  es: {
+    name: 'Spanish',
+    native_name: 'español',
+  },
+  fr: {
+    name: 'French',
+    native_name: 'français',
+  },
+  it: {
+    name: 'Italian',
+    native_name: 'italiano',
+  },
+  ja: {
+    name: 'Japanese',
+    native_name: '日本語',
+  },
+  'pt-BR': {
+    name: 'Portuguese (Brazil)',
+    native_name: 'português (Brasil)',
+  },
+  ru: {
+    name: 'Russian',
+    native_name: 'ру́сский',
+  },
+  tr: {
+    name: 'Turkish',
+    native_name: 'Türkçe',
+  },
+  'zh-CN': {
+    name: 'Chinese (China)',
+    native_name: '中文 (中国)',
   },
 };
 
