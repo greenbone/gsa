@@ -84,7 +84,7 @@ css({
   },
 
   h4: {
-    fontSsize: '14px',
+    fontSize: '14px',
     marginBottom: 0,
   },
 
