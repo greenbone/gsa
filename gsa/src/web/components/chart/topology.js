@@ -44,6 +44,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import {
@@ -54,7 +56,6 @@ import {
 import {setRef} from 'web/utils/render';
 
 import Group from './group';
-import {Layout} from 'web/components/layout/layout';
 
 const MAX_HOSTS = 1000;
 

@@ -37,7 +37,7 @@ import Theme from 'web/utils/theme';
 
 import Loading from 'web/components/loading/loading';
 
-import {Layout} from 'web/components/layout/layout';
+import Layout from 'web/components/layout/layout';
 
 import MenuEntry from 'web/components/menu/menuentry';
 

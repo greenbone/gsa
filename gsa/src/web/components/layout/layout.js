@@ -22,7 +22,7 @@
  */
 import withLayout from './withLayout.js';
 
-export const Layout = withLayout()('div');
+const Layout = withLayout()('div');
 
 Layout.displayName = 'Layout';
 
