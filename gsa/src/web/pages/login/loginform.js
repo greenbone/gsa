@@ -54,7 +54,7 @@ const LoginPanel = Panel.withComponent(Layout);
 const Div = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 0 auto;
+  justify-content: center;
 `;
 
 const Error = styled.p`
