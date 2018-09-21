@@ -105,7 +105,7 @@ export const getLocale = () => currentLocale;
 export const setLocale = lang => {
   i18next.changeLanguage(lang, err => {
     if (isDefined(err)) {
-      log.error('Error while setting language to', lang, err);
+      log.warn('Error while setting language to', lang, err);
     }
   });
 };
