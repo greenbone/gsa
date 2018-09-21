@@ -20,31 +20,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/string/starts-with';
+import 'core-js/fn/object/keys';
+import 'core-js/fn/object/values';
 
-import {configure} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import {isString} from 'gmp/utils/identity';
 
-import {initLocale} from 'gmp/locale/lang';
+import Languages, {getLanguageCodes} from '../languages';
 
-class FakeBackend {
+describe('Language tests', () => {
 
-  read(language, namespace, callback) {
-    if (language.startsWith('en') || language.startsWith('de')) {
-      // change language by calling the callback functioon
-      return callback();
+  test('should contain list of languagegs', () => {
+    expect(Object.keys(Languages).length).toEqual(11);
+
+    let called = false;
+
+    for (const lang of Object.values(Languages)) {
+      called = true;
+
+      expect(isString(lang.name)).toEqual(true);
+      expect(isString(lang.native_name)).toEqual(true);
     }
-    // change language and pass error message
-    return callback('Unknown lang');
-  }
-};
 
-FakeBackend.type = 'backend';
+    expect(called).toEqual(true);
+  });
 
-initLocale({
-  backend: FakeBackend,
 });
 
-configure({adapter: new Adapter()});
+describe('getLanguageCodes test', () => {
+
+  test('should return list of language codes', () => {
+    const codes = getLanguageCodes();
+
+    expect(codes.length).toEqual(11);
+
+    let called = false;
+
+    for (const code of codes) {
+      called = true;
+      expect(isString(code)).toEqual(true);
+    }
+
+    expect(called).toEqual(true);
+  });
+
+});
 
 // vim: set ts=2 sw=2 tw=80:

@@ -73,7 +73,7 @@ import {getCommands} from './command.js';
 import LoginCommand from './commands/login.js';
 
 import {setLocale} from './locale/lang';
-import {BROWSER_LANGUAGE} from './locale/detector';
+import {BROWSER_LANGUAGE} from './locale/languages';
 
 const log = logger.getLogger('gmp');
 
