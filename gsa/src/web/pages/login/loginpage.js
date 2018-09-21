@@ -90,7 +90,7 @@ const MenuSpacer = styled.div`
   left: 0;
   right: 0;
   height: 35px;
-  zIndex: ${Theme.Layers.menu};
+  z-index: ${Theme.Layers.menu};
 `;
 
 const Wrapper = styled.div`
