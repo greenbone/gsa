@@ -20,13 +20,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import React from 'react';
 
 import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
-const convert_align = align => {
+const convertAlign = align => {
   switch (align) {
     case 'end':
     case 'start':
@@ -36,55 +37,38 @@ const convert_align = align => {
   }
 };
 
-const set_default_flex = defaults => isDefined(defaults.flex) ?
-  defaults.flex : 'row';
-
 const withLayout = (defaults = {}) => Component => {
-  return styled(Component, {
-    displayName: 'withLayout(' + Component.displayName + ')',
-    filterProps: ['align', 'basis', 'flex', 'grow', 'shrink', 'wrap'],
-    withProps: ({
-      flex = set_default_flex(defaults),
-    }) => ({className: flex === true ? 'layout-row' : 'layout-' + flex}),
-  })(
-    ({
+  const LayoutComponent = styled(({
+    wrap,
+    ...props
+  }) => <Component {...props} />)`
+    display: flex;
+    flex-direction: ${({flex = defaults.flex}) =>
+      isDefined(flex) && flex !== true ? flex : 'row'};
+    flex-basis: ${({basis = defaults.basis}) => basis};
+    flex-grow: ${({grow = defaults.grow}) => grow === true ? 1 : grow};
+    flex-wrap: ${({wrap = defaults.wrap}) => wrap === true ? 'wrap' : wrap};
+    flex-shrink: ${({shrink = defaults.shrink}) => shrink};
+    ${({
+      flex = defaults.flex,
       align = defaults.align,
-      basis = defaults.basis,
-      flex = set_default_flex(defaults),
-      grow = defaults.grow,
-      shrink = defaults.shrink,
-      wrap = defaults.wrap,
     }) => {
-      if (flex === true) {
-        flex = 'row';
-      }
-
-      if (wrap === true) {
-        wrap = 'wrap';
-      }
-
-      if (grow === true) {
-        grow = 1;
-      }
-
       if (isDefined(align)) {
-        align = map(align, al => convert_align(al));
+        align = map(align, al => convertAlign(al));
       }
       else { // use sane defaults for alignment
         align = flex === 'column' ? ['center', 'stretch'] : ['start', 'center'];
       }
       return {
-        display: 'flex',
-        flexDirection: flex,
-        flexGrow: grow,
-        flexBasis: basis,
-        flexWrap: wrap,
-        flexShrink: shrink,
         justifyContent: align[0],
         alignItems: align[1],
       };
-    },
-  );
+    }}
+  `;
+
+  LayoutComponent.displayName = `withLayout(${Component.displayName})`;
+
+  return LayoutComponent;
 };
 
 export default withLayout;
