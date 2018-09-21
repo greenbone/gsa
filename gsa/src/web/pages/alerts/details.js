@@ -199,7 +199,7 @@ const AlertDetails = ({
                 {_('Task using this Alert')}
               </TableData>
               <TableData>
-                <Divider wrap>
+                <Divider wrap="wrap">
                   {tasks.map(task => (
                     <DetailsLink
                       key={task.id}

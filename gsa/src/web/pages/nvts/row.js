@@ -75,7 +75,7 @@ const Row = ({
         {longDate(entity.modificationTime)}
       </TableData>
       <TableData>
-        <Divider wrap>
+        <Divider wrap="wrap">
           {entity.cves.map(id => (
             <CveLink
               key={id}

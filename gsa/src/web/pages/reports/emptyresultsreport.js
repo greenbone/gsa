@@ -63,7 +63,7 @@ const EmptyResultsReport = ({
         }
       />
 
-      <Divider align={['start', 'stretch']} wrap>
+      <Divider align={['start', 'stretch']} wrap="wrap">
         {!levels.includes('g') &&
           <ReportPanel
             icon="filter.svg"

@@ -62,7 +62,7 @@ const About = () => (
       title={_('About GSA')}
     >
       <StyledLayout
-        wrap
+        wrap="wrap"
         align="center"
       >
         <TextBlock>

@@ -209,7 +209,7 @@ class FeedStatus extends React.Component {
                   {feed.version}
                 </TableData>
                 <TableData>
-                  <Divider wrap>
+                  <Divider wrap="wrap">
                     <strong>{renderFeedStatus(feed)}</strong>
                     <span>{renderCheck(feed)}</span>
                   </Divider>

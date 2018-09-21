@@ -40,13 +40,7 @@ const set_default_flex = defaults => isDefined(defaults.flex) ?
   defaults.flex : 'row';
 
 const withLayout = (defaults = {}) => Component => {
-  return styled(Component, {
-    displayName: 'withLayout(' + Component.displayName + ')',
-    filterProps: ['align', 'basis', 'flex', 'grow', 'shrink', 'wrap'],
-    withProps: ({
-      flex = set_default_flex(defaults),
-    }) => ({className: flex === true ? 'layout-row' : 'layout-' + flex}),
-  })(
+  return styled(Component)(
     ({
       align = defaults.align,
       basis = defaults.basis,
@@ -57,10 +51,6 @@ const withLayout = (defaults = {}) => Component => {
     }) => {
       if (flex === true) {
         flex = 'row';
-      }
-
-      if (wrap === true) {
-        wrap = 'wrap';
       }
 
       if (grow === true) {
