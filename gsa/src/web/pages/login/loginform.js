@@ -49,9 +49,7 @@ const Panel = styled.div`
   font-size: 9pt;
 `;
 
-const LoginPanel = Panel.withComponent(Layout);
-
-const Div = styled.div`
+const LoginPanel = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -65,8 +63,8 @@ const Error = styled.p`
 `;
 
 const StyledIcon = styled(Icon)`
+  display: flex;
   height: 95px;
-  margin-left: 5px;
 `;
 
 class LoginForm extends React.Component {
@@ -121,47 +119,40 @@ class LoginForm extends React.Component {
           </Panel>
         }
 
-        <LoginPanel
-          flex="column"
-          align="space-around"
-        >
-          <Layout flex="row">
-            <Div>
-              <StyledIcon img="login-label.png" size="default"/>
-              <Layout flex="column">
-                <FormGroup title={_('Username')} titleSize="4">
-                  <TextField
-                    name="username"
-                    grow="1"
-                    placeholder={_('e.g. johndoe')}
-                    value={username}
-                    autoFocus="autofocus"
-                    tabIndex="1"
-                    onChange={this.handleValueChange}
-                  />
-                </FormGroup>
-                <FormGroup title={_('Password')} titleSize="4">
-                  <PasswordField
-                    name="password"
-                    grow="1"
-                    placeholder={_('Password')}
-                    value={password}
-                    onKeyDown={this.handleKeyDown}
-                    onChange={this.handleValueChange}
-                  />
-                </FormGroup>
-                <FormGroup size="4" offset="4">
-                  <SubmitButton
-                    flex
-                    grow
-                    title={_('Login')}
-                    onClick={this.handleSubmit}
-                  />
-                </FormGroup>
-              </Layout>
-            </Div>
+        <LoginPanel>
+          <StyledIcon img="login-label.png" size="default"/>
+          <Layout flex="column">
+            <FormGroup title={_('Username')} titleSize="4">
+              <TextField
+                name="username"
+                placeholder={_('e.g. johndoe')}
+                value={username}
+                autoFocus="autofocus"
+                tabIndex="1"
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Password')} titleSize="4">
+              <PasswordField
+                name="password"
+                grow="1"
+                placeholder={_('Password')}
+                value={password}
+                onKeyDown={this.handleKeyDown}
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup size="4" offset="4">
+              <SubmitButton
+                flex
+                grow
+                title={_('Login')}
+                onClick={this.handleSubmit}
+              />
+            </FormGroup>
           </Layout>
         </LoginPanel>
+
         {isDefined(error) &&
           <Panel>
             <Error>{error}</Error>
