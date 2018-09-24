@@ -30,12 +30,7 @@ import configureStore from 'web/store';
 
 import Dashboard from 'web/components/dashboard/dashboard';
 
-import MenuEntry from 'web/components/menu/menuentry';
-
-import DisplayMenu from 'web/components/dashboard/display/displaymenu';
-
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import loader from 'web/components/dashboard/data/loader';
 
 import compose from '../../utils/compose';
 import {withComponentDefaults} from '../../utils/withComponentDefaults';
@@ -46,12 +41,6 @@ let Chart = props => (
   <DataDisplay
     {...props}
     title={({id}) => 'Fake Data (' + id + ')'}
-    menu={
-      <DisplayMenu>
-        <MenuEntry>Download Stuff</MenuEntry>
-        <MenuEntry>Do Something</MenuEntry>
-      </DisplayMenu>
-    }
   >
     {({width, height, data}) => (
       <LineChart
@@ -89,32 +78,29 @@ Chart = compose(
   }),
 )(Chart);
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+// const data = [{
+//   label: 'Foo',
+//   x: 1,
+//   y: [3, 5, 1],
+//   y2: [5],
+// }, {
+//   label: 'Ipsum',
+//   x: 2,
+//   y: [2, 5, 4],
+//   y2: [4],
+// }, {
+//   label: 'Bar',
+//   x: 2.4,
+//   y: [1, 2, 5],
+//   y2: [4],
+// }, {
+//   label: 'Lorem',
+//   x: 3,
+//   y: [5, 1, 7],
+//   y2: [7],
+// },
+// ];
 
-const data = [{
-  label: 'Foo',
-  x: 1,
-  y: [3, 5, 1],
-  y2: [5],
-}, {
-  label: 'Ipsum',
-  x: 2,
-  y: [2, 5, 4],
-  y2: [4],
-}, {
-  label: 'Bar',
-  x: 2.4,
-  y: [1, 2, 5],
-  y2: [4],
-}, {
-  label: 'Lorem',
-  x: 3,
-  y: [5, 1, 7],
-  y2: [7],
-},
-];
-
-const fakeLoader = loader('test-data', () => delay(500).then(() => data));
 
 storiesOf('Dashboard/Dashboard2', module)
   .add('default', () => {
@@ -122,7 +108,6 @@ storiesOf('Dashboard/Dashboard2', module)
       <Provider store={configureStore()}>
         <Dashboard
           loaders={[
-            fakeLoader,
           ]}
           components={{
             'fake-chart-1': Chart,

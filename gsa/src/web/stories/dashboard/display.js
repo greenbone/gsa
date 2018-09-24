@@ -27,10 +27,7 @@ import styled from 'styled-components';
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
 
-import MenuEntry from 'web/components/menu/menuentry';
-
 import Display from 'web/components/dashboard/display/display';
-import DisplayMenu from 'web/components/dashboard/display/displaymenu';
 
 const removeaction = action('on remove click');
 
@@ -56,26 +53,6 @@ storiesOf('Dashboard/Display', module)
         </Display>
       </Div>
     );
-  })
-  .add('with menu', () => (
-    <Div width="500px">
-      <Display
-        title="Foo Bar"
-        onRemoveClick={removeaction}
-        menu={
-          <DisplayMenu>
-            <MenuEntry>Download Stuff</MenuEntry>
-            <MenuEntry>Do Something</MenuEntry>
-          </DisplayMenu>
-        }
-      >
-        <Div
-          backgroundColor="blue"
-          width="400px"
-          height="400px"
-        />
-      </Display>
-    </Div>
-  ));
+  });
 
 // vim: set ts=2 sw=2 tw=80:
