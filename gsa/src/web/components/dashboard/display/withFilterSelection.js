@@ -39,14 +39,12 @@ const withFilterSelection = ({filtersFilter}) => Component => {
         filtersFilter={filtersFilter}
       >
         {({
-          filterSelectionMenuEntry,
           filter,
           selectFilter,
         }) => (
           <Component
             {...props}
             filter={filter}
-            menuEntries={[filterSelectionMenuEntry]}
             showFilterSelection={showFilterSelection}
             onSelectFilterClick={selectFilter}
           />

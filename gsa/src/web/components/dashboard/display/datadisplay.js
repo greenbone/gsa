@@ -32,20 +32,17 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import Icon from 'web/components/icon/icon';
+import IconDivider from 'web/components/layout/icondivider';
 
 import Loading from 'web/components/loading/loading';
 
-import Layout from 'web/components/layout/layout';
-
-import MenuEntry from 'web/components/menu/menuentry';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
-import DisplayMenu from './displaymenu';
-
 
 const ownProps = [
   'title',
@@ -81,6 +78,36 @@ const FilterString = styled.div`
   color: ${Theme.mediumGray};
   padding: 5px;
   overflow: hidden;
+`;
+
+const IconBar = styled.div`
+  height: 26px;
+  width: 100%;
+  min-height: 26px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: ${Theme.Layers.higher};
+  transition: opacity 500ms;
+`;
+
+const DisplayBox = styled.div`
+  display: flex;
+  flex-grow: 1;
+  position: relative;
+
+  ${IconBar} {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &:hover ${IconBar} {
+    visibility: visible;
+    opacity: 1;
+  }
 `;
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
@@ -241,14 +268,15 @@ class DataDisplay extends React.Component {
       width,
       isLoading,
       showFilterString = false,
+      showFilterSelection = false,
     } = this.props;
     const {
       children,
-      menuEntries = [],
       id,
       dataTitles,
       dataRow,
       filter,
+      onSelectFilterClick,
       onRemoveClick,
       ...props
     } = this.props;
@@ -261,7 +289,7 @@ class DataDisplay extends React.Component {
     isLoading = isLoading && !isDefined(originalData);
 
     const otherProps = excludeObjectProps(props, ownProps);
-    const showDataMenus = isDefined(dataRow) && isDefined(dataTitles);
+    const showCsvDownload = isDefined(dataRow) && isDefined(dataTitles);
 
     showFilterString = showFilterString && isDefined(filter);
     if (showFilterString) {
@@ -271,36 +299,48 @@ class DataDisplay extends React.Component {
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
     return (
       <Display
-        menu={
-          showDataMenus || hasSvg || menuEntries.length > 0 ?
-            <DisplayMenu>
-              {menuEntries}
-              {showDataMenus &&
-                <MenuEntry onClick={this.handleDownloadCsv}>
-                  {_('Download CSV')}
-                </MenuEntry>
-              }
-              {hasSvg &&
-                <MenuEntry onClick={this.handleDownloadSvg}>
-                  {_('Download SVG')}
-                </MenuEntry>
-              }
-            </DisplayMenu> : null
-        }
         title={`${title}`}
         onRemoveClick={onRemoveClick}
         {...otherProps}
       >
-        <Layout flex="column" grow="1">
+        <DisplayBox>
           {isLoading ?
             <Loading/> :
-            showContent && children({
-              id,
-              data: transformedData,
-              width,
-              height,
-              svgRef: this.svgRef,
-            })
+            showContent &&
+              <React.Fragment>
+                <IconBar>
+                  <IconDivider>
+                    {showFilterSelection &&
+                      <Icon
+                        img="filter.svg"
+                        title={_('Select Filter')}
+                        onClick={onSelectFilterClick}
+                      />
+                    }
+                    {hasSvg &&
+                      <Icon
+                        img="download.svg"
+                        onClick={this.handleDownloadSvg}
+                        title={_('Download SVG')}
+                      />
+                    }
+                    {showCsvDownload &&
+                      <Icon
+                        img="download.svg"
+                        title={_('Download CSV')}
+                        onClick={this.handleDownloadCsv}
+                      />
+                    }
+                  </IconDivider>
+                </IconBar>
+                {children({
+                  id,
+                  data: transformedData,
+                  width,
+                  height,
+                  svgRef: this.svgRef,
+                })}
+              </React.Fragment>
           }
           {showFilterString &&
             <FilterString>
@@ -309,7 +349,7 @@ class DataDisplay extends React.Component {
               <i>{filter.simple().toFilterString()}</i>)
             </FilterString>
           }
-        </Layout>
+        </DisplayBox>
         <Download innerRef={this.downloadRef}>
         </Download>
       </Display>
@@ -327,11 +367,12 @@ DataDisplay.propTypes = {
   height: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
-  menuEntries: PropTypes.arrayOf(PropTypes.element),
+  showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
+  onSelectFilterClick: PropTypes.func,
 };
 
 export default DataDisplay;

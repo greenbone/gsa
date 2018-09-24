@@ -35,8 +35,6 @@ import SaveDialog from '../../dialog/savedialog';
 import FormGroup from '../../form/formgroup';
 import Select from '../../form/select';
 
-import MenuEntry from '../../menu/menuentry';
-
 import {loadEntities, selector} from 'web/store/entities/filters';
 
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
@@ -102,7 +100,6 @@ class FilterSelection extends React.Component {
       <React.Fragment>
         {children({
           filter,
-          filterSelectionMenuEntry,
           selectFilter: this.handleOpenDialog,
         })}
         {showDialog &&
