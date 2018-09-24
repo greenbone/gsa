@@ -169,7 +169,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
-  loadFilters: () => dispatch(loadEntities({gmp, filter: filtersFilter})),
+  loadFilters: () => dispatch(loadEntities(gmp)(filtersFilter)),
 });
 
 export default compose(
