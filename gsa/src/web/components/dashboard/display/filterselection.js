@@ -96,14 +96,6 @@ class FilterSelection extends React.Component {
       filterId,
     } = this.props;
     const {showDialog} = this.state;
-    const filterSelectionMenuEntry = (
-      <MenuEntry
-        key="filter-selection"
-        onClick={this.handleOpenDialog}
-      >
-        {_('Select Filter')}
-      </MenuEntry>
-    );
     const filter = isDefined(filterId) ?
       filters.find(f => f.id === filterId) : undefined;
     return (
@@ -111,6 +103,7 @@ class FilterSelection extends React.Component {
         {children({
           filter,
           filterSelectionMenuEntry,
+          selectFilter: this.handleOpenDialog,
         })}
         {showDialog &&
           <SaveDialog
