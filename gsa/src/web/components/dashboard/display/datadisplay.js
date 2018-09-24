@@ -100,7 +100,6 @@ class DataDisplay extends React.Component {
       title: this.props.title({data, id: this.props.id}),
     };
 
-    this.handleOpenCopyableSvg = this.handleOpenCopyableSvg.bind(this);
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
   }
@@ -164,25 +163,6 @@ class DataDisplay extends React.Component {
 
     const svg_blob = new Blob([svg_data], {type: 'image/svg+xml'});
     return URL.createObjectURL(svg_blob);
-  }
-
-  handleOpenCopyableSvg() {
-    const {title} = this.state;
-    const {document} = window.open('', '_blank');
-
-    const head = document.querySelector('head');
-
-    // add a title to the new document
-    const titleEl = document.createElement('title');
-    titleEl.appendChild(document.createTextNode(title));
-    head.appendChild(titleEl);
-
-    const body = document.querySelector('body');
-    const img = document.createElement('img');
-
-    img.setAttribute('src', this.createSvgUrl());
-
-    body.appendChild(img);
   }
 
   cleanupDownloadSvg() {
@@ -295,11 +275,6 @@ class DataDisplay extends React.Component {
           showDataMenus || hasSvg || menuEntries.length > 0 ?
             <DisplayMenu>
               {menuEntries}
-              {hasSvg &&
-                <MenuEntry onClick={this.handleOpenCopyableSvg}>
-                  {_('Show copyable SVG')}
-                </MenuEntry>
-              }
               {showDataMenus &&
                 <MenuEntry onClick={this.handleDownloadCsv}>
                   {_('Download CSV')}
