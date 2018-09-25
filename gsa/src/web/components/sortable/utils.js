@@ -51,4 +51,8 @@ export const updateRow = (row, data) => {
   };
 };
 
+export const convertDefaultContent = defaultContent =>
+  defaultContent.map(row => createRow(
+    row.map(item => createItem({name: item}))));
+
 // vim: set ts=2 sw=2 tw=80:

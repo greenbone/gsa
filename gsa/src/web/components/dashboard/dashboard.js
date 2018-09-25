@@ -49,8 +49,7 @@ import Grid, {
 } from 'web/components/sortable/grid';
 import {
   DEFAULT_ROW_HEIGHT,
-  createRow,
-  createItem,
+  convertDefaultContent,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
@@ -84,10 +83,6 @@ const RowPlaceHolder = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-const convertDefaultContent = defaultContent =>
-  defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item}))));
 
 const filterItems = (items, allowed) => items.map(row => {
   const {items: rowItems = []} = row;
