@@ -25,6 +25,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {
+  MENU_PLACEHOLDER_WIDTH,
+} from 'web/components/dashboard/display/datadisplay';
+
 import Table from 'web/components/table/stripedtable';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
@@ -36,6 +40,7 @@ import PropTypes from 'web/utils/proptypes';
 
 const Margin = styled.div`
   margin: 10px;
+  margin-right: ${MENU_PLACEHOLDER_WIDTH + 10}px;
   display: flex;
   flex-grow: 1;
   overflow-y: auto;

@@ -38,6 +38,10 @@ import Theme from 'web/utils/theme';
 import path from './utils/path';
 import arc from './utils/arc';
 
+import {
+  MENU_PLACEHOLDER_WIDTH,
+} from 'web/components/dashboard/display/datadisplay';
+
 import Layout from 'web/components/layout/layout';
 
 import Pie from './pie';
@@ -271,7 +275,7 @@ class Donut3DChart extends React.Component {
     }
 
     const {width: legendWidth} = legend.getBoundingClientRect();
-    return width - legendWidth - LEGEND_MARGIN;
+    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
