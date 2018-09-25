@@ -45,11 +45,13 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import Loading from 'web/components/loading/loading';
 
 import Grid, {
+  itemsPropType,
+} from 'web/components/sortable/grid';
+import {
+  DEFAULT_ROW_HEIGHT,
   createRow,
   createItem,
-  itemsPropType,
-  DEFAULT_ROW_HEIGHT,
-} from 'web/components/sortable/grid';
+} from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
