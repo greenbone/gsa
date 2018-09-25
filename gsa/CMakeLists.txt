@@ -201,7 +201,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/datatable.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/datatabledisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/display.js
-     ${GSA_SRC_DIR}/src/web/components/dashboard/display/displaymenu.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/filterselection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstabledisplay.js
