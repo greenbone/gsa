@@ -38,6 +38,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
+import {MENU_PLACEHOLDER_WIDTH}
+  from 'web/components/dashboard/display/datadisplay';
+
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -288,7 +291,8 @@ class LineChart extends React.Component {
       width = width - legendWidth - LEGEND_MARGIN;
     }
 
-    const maxWidth = width - margin.left - margin.right;
+    const maxWidth =
+      width - margin.left - margin.right - MENU_PLACEHOLDER_WIDTH;
     const maxHeight = height - margin.top - margin.bottom;
 
     const xValues = data.map(d => timeline ? d.x.toDate() : d.x);
