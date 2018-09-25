@@ -277,23 +277,33 @@ class StartPage extends React.Component {
     });
   }
 
-  handleAddNewDashboard({title}) {
-    const {byId, dashboards} = this.props;
+  handleAddNewDashboard({title, defaultDisplays = DEFAULT_DISPLAYS}) {
+    const {byId, dashboards, defaults = {}} = this.props;
 
     const id = uuid();
 
-    this.saveSettings({
+    const rows = convertDefaultContent(defaultDisplays);
+    const newDashboardSetting = {
+      rows,
+      title,
+    };
+
+    const settings = {
       dashboards: [
         ...dashboards,
         id,
       ],
       byId: {
         ...byId,
-        [id]: {
-          title,
-        },
+        [id]: newDashboardSetting,
       },
-    });
+      defaults: {
+        ...defaults,
+        [id]: newDashboardSetting,
+      },
+    };
+
+    this.saveSettings(settings);
 
     this.closeNewDashboardDialog();
 
