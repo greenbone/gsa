@@ -29,8 +29,9 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import {shorten} from 'gmp/utils/string';
 import {isDefined} from 'gmp/utils/identity';
 
-import {MENU_PLACEHOLDER_WIDTH}
-  from 'web/components/dashboard/display/datadisplay';
+import {
+  MENU_PLACEHOLDER_WIDTH,
+} from 'web/components/dashboard/display/datadisplay';
 
 import Layout from 'web/components/layout/layout';
 

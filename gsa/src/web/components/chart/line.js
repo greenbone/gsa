@@ -38,8 +38,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
-import {MENU_PLACEHOLDER_WIDTH}
-  from 'web/components/dashboard/display/datadisplay';
+import {
+  MENU_PLACEHOLDER_WIDTH,
+} from 'web/components/dashboard/display/datadisplay';
 
 import Layout from 'web/components/layout/layout';
 
