@@ -23,7 +23,7 @@
  */
 import 'core-js/fn/object/keys';
 
-import {_, _l} from 'gmp/locale/lang';
+import {_l} from 'gmp/locale/lang';
 
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 
@@ -175,12 +175,12 @@ export const ovalClassColorScale = scaleOrdinal()
   ]);
 
 export const SEC_INFO_TYPES = {
-  cert_bund_adv: _('CERT-Bund Advisories'),
-  cpe: _('CPEs'),
-  cve: _('CVEs'),
-  dfn_cert_adv: _('DFN-CERT Advisories'),
-  nvt: _('NVTs'),
-  ovaldef: _('OVAL Definitions'),
+  cert_bund_adv: _l('CERT-Bund Advisories'),
+  cpe: _l('CPEs'),
+  cve: _l('CVEs'),
+  dfn_cert_adv: _l('DFN-CERT Advisories'),
+  nvt: _l('NVTs'),
+  ovaldef: _l('OVAL Definitions'),
 };
 
 export const secInfoTypeColorScale = scaleOrdinal()
