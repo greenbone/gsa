@@ -220,25 +220,9 @@ class StartPage extends React.Component {
     });
   }
 
-  handleLoadDashboardSettings(dashboardId, defaultSettings) {
-    const {byId, defaults = {}} = this.props;
-
-    this.saveSettings({
-      byId: {
-        ...byId,
-        [dashboardId]: {
-          ...defaultSettings,
-          ...byId[dashboardId],
-        },
-      },
-      defaults: {
-        ...defaults,
-        [dashboardId]: {
-          ...defaults[dashboardId],
-          ...defaultSettings,
-        },
-      },
-    });
+  handleLoadDashboardSettings() {
+    // do nothing
+    // all defaults and settings are already provided
   }
 
   handleResetDashboard(dashboardId) {
