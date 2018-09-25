@@ -31,7 +31,24 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
+/* eslint-disable max-len */
+import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/createddisplay';
+import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/severityclassdisplay';
+import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdisplay';
+import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
+/* eslint-enable max-len */
+
 const MAX_TITLE_LENGTH = 50;
+
+export const DEFAULT_DISPLAYS = [
+  [
+    TasksSeverityDisplay.displayId,
+    TasksStatusDisplay.displayId,
+  ], [
+    CvesCreatedDisplay.displayId,
+    NvtsSeverityClassDisplay.displayId,
+  ],
+];
 
 const NewDashboardDialog = ({
   onClose,
