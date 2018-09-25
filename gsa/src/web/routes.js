@@ -36,11 +36,8 @@ import qhistory from 'qhistory';
 import LocationObserver from 'web/components/observer/locationobserver';
 import SessionObserver from 'web/components/observer/sessionobserver';
 
-import AssetsPage from './pages/assets/page';
 import Page from './pages/page';
 import PageNotFound from './pages/notfoundpage';
-import ScansPage from './pages/scans/page';
-import SecinfoPage from './pages/securityinfo/page';
 import StartPage from './pages/start/page';
 
 import AboutPage from './pages/help/about';
@@ -314,18 +311,6 @@ class Routes extends React.Component {
                   <Route
                     path="/roles"
                     component={RolesPage}
-                  />
-                  <Route
-                    path="/dashboards/scans"
-                    component={ScansPage}
-                  />
-                  <Route
-                    path="/dashboards/assets"
-                    component={AssetsPage}
-                  />
-                  <Route
-                    path="/dashboards/secinfo"
-                    component={SecinfoPage}
                   />
                   <Route
                     path="/result/:id"

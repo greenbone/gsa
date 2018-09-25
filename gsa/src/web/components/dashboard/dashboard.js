@@ -45,11 +45,12 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import Loading from 'web/components/loading/loading';
 
 import Grid, {
-  createRow,
-  createItem,
   itemsPropType,
-  DEFAULT_ROW_HEIGHT,
 } from 'web/components/sortable/grid';
+import {
+  DEFAULT_ROW_HEIGHT,
+  convertDefaultContent,
+} from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -82,10 +83,6 @@ const RowPlaceHolder = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-const convertDefaultContent = defaultContent =>
-  defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item}))));
 
 const filterItems = (items, allowed) => items.map(row => {
   const {items: rowItems = []} = row;
