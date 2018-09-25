@@ -402,8 +402,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
-     ${GSA_SRC_DIR}/src/web/pages/assets/page.js
-     ${GSA_SRC_DIR}/src/web/pages/assets/dashboard.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/component.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/details.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/detailspage.js
@@ -667,8 +665,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/scanners/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/row.js
      ${GSA_SRC_DIR}/src/web/pages/scanners/table.js
-     ${GSA_SRC_DIR}/src/web/pages/scans/page.js
-     ${GSA_SRC_DIR}/src/web/pages/scans/dashboard.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/component.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/dayselect.js
      ${GSA_SRC_DIR}/src/web/pages/schedules/details.js
@@ -692,8 +688,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/loaders.js
      ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/securityinfo/dashboard.js
-     ${GSA_SRC_DIR}/src/web/pages/securityinfo/page.js
      ${GSA_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/dashboard.js
      ${GSA_SRC_DIR}/src/web/pages/start/newdashboarddialog.js
