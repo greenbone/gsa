@@ -24,14 +24,15 @@ import uuid from 'uuid/v4';
 
 export const DEFAULT_ROW_HEIGHT = 250;
 
-export const createRow = (items, height = DEFAULT_ROW_HEIGHT) => ({
-  id: uuid(),
+export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
+  uuidFunc = uuid) => ({
+  id: uuidFunc(),
   height,
   items,
 });
 
-export const createItem = props => {
-  const id = uuid();
+export const createItem = (props, uuidFunc = uuid) => {
+  const id = uuidFunc();
 
   return {
     id,
@@ -44,15 +45,15 @@ export const removeItem = (rows, itemId) => rows.map(row => ({
   items: row.items.filter(item => item.id !== itemId),
 })).filter(row => row.items.length > 0);
 
-export const updateRow = (row, data) => {
-  return {
-    ...row,
-    ...data,
-  };
-};
+export const updateRow = (row, data) => ({
+  ...row,
+  ...data,
+});
 
-export const convertDefaultContent = defaultContent =>
+export const convertDefaultContent = (defaultContent = [], uuidFunc = uuid) =>
   defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item}))));
+    row.map(item => createItem({name: item}, uuidFunc)), undefined, uuidFunc
+  ));
+
 
 // vim: set ts=2 sw=2 tw=80:
