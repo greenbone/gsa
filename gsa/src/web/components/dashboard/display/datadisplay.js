@@ -34,6 +34,7 @@ import {excludeObjectProps} from 'gmp/utils/object';
 
 import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
 import Loading from 'web/components/loading/loading';
 
@@ -43,6 +44,8 @@ import Theme from 'web/utils/theme';
 import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
+
+export const MENU_PLACEHOLDER_WIDTH = 26;
 
 const ownProps = [
   'title',
@@ -81,16 +84,18 @@ const FilterString = styled.div`
 `;
 
 const IconBar = styled.div`
-  height: 26px;
-  width: 100%;
-  min-height: 26px;
+  height: 100%;
+  width: 26px;
   display: flex;
   flex-grow: 1;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 5px 10px;
+  justify-content: center;
+  align-items: start;
+  padding-top: 5px;
   position: absolute;
+  right: 0;
   z-index: ${Theme.Layers.higher};
+  background: ${Theme.lightGray};
+  opacity: 0;
   transition: opacity 500ms;
 `;
 
@@ -99,14 +104,9 @@ const DisplayBox = styled.div`
   flex-grow: 1;
   position: relative;
 
-  ${IconBar} {
-    visibility: hidden;
-    opacity: 0;
-  }
-
   &:hover ${IconBar} {
-    visibility: visible;
     opacity: 1;
+    transition: opacity 500ms;
   }
 `;
 
@@ -304,51 +304,53 @@ class DataDisplay extends React.Component {
         {...otherProps}
       >
         <DisplayBox>
-          {isLoading ?
-            <Loading/> :
-            showContent &&
-              <React.Fragment>
-                <IconBar>
-                  <IconDivider>
-                    {showFilterSelection &&
-                      <Icon
-                        img="filter.svg"
-                        title={_('Select Filter')}
-                        onClick={onSelectFilterClick}
-                      />
-                    }
-                    {hasSvg &&
-                      <Icon
-                        img="download.svg"
-                        onClick={this.handleDownloadSvg}
-                        title={_('Download SVG')}
-                      />
-                    }
-                    {showCsvDownload &&
-                      <Icon
-                        img="download.svg"
-                        title={_('Download CSV')}
-                        onClick={this.handleDownloadCsv}
-                      />
-                    }
-                  </IconDivider>
-                </IconBar>
-                {children({
-                  id,
-                  data: transformedData,
-                  width,
-                  height,
-                  svgRef: this.svgRef,
-                })}
-              </React.Fragment>
-          }
-          {showFilterString &&
-            <FilterString>
-              ({_('Applied filter: ')}
-              <b>{filter.name}</b>&nbsp;
-              <i>{filter.simple().toFilterString()}</i>)
-            </FilterString>
-          }
+          <Layout flex="column" grow="1">
+            {isLoading ?
+              <Loading/> :
+              showContent &&
+                <React.Fragment>
+                  {children({
+                    id,
+                    data: transformedData,
+                    width,
+                    height,
+                    svgRef: this.svgRef,
+                  })}
+                </React.Fragment>
+            }
+            <IconBar>
+              <IconDivider flex="column">
+                {showFilterSelection &&
+                  <Icon
+                    img="filter.svg"
+                    title={_('Select Filter')}
+                    onClick={onSelectFilterClick}
+                  />
+                }
+                {hasSvg &&
+                  <Icon
+                    img="download.svg"
+                    title={_('Download SVG')}
+                    onClick={this.handleDownloadSvg}
+                  />
+                }
+                {showCsvDownload &&
+                  <Icon
+                    img="download.svg"
+                    title={_('Download CSV')}
+                    onClick={this.handleDownloadCsv}
+                  />
+                }
+              </IconDivider>
+            </IconBar>
+            {showFilterString &&
+              <FilterString>
+                ({_('Applied filter: ')}
+                <b>{filter.name}</b>&nbsp;
+                <i>{filter.simple().toFilterString()}</i>)
+              </FilterString>
+            }
+          </Layout>
         </DisplayBox>
         <Download innerRef={this.downloadRef}>
         </Download>
