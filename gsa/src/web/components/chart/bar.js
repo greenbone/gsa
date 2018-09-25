@@ -29,6 +29,9 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import {shorten} from 'gmp/utils/string';
 import {isDefined} from 'gmp/utils/identity';
 
+import {MENU_PLACEHOLDER_WIDTH}
+  from 'web/components/dashboard/display/datadisplay';
+
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -46,14 +49,14 @@ const StyledLayout = styled(Layout)`
 const LEGEND_MARGIN = 20;
 
 const margin = {
-  top: 40,
+  top: 20,
   right: 20,
   bottom: 40,
   left: 60,
 };
 
 const MAX_LABEL_LENGTH = 25;
-const LABEL_HEIGHT = 10;
+const LABEL_HEIGHT = 20;
 
 const tickFormat = val => {
   return shorten(val.toString(), MAX_LABEL_LENGTH);
@@ -98,7 +101,7 @@ class BarChart extends React.Component {
     const marginLeft = horizontal ? margin.left +
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
-    const maxWidth = width - marginLeft - margin.right;
+    const maxWidth = width - marginLeft - margin.right - MENU_PLACEHOLDER_WIDTH;
     let maxHeight = height - margin.top - margin.bottom;
 
     if (isDefined(xLabel)) {
