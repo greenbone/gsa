@@ -58,6 +58,8 @@ import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
 import Section from 'web/components/section/section';
 
+import {convertDefaultContent} from 'web/components/sortable/utils';
+
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -67,7 +69,7 @@ import Tabs from 'web/components/tab/tabs';
 
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
-import NewDashboardDialog from './newdashboarddialog';
+import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -79,6 +81,11 @@ const getDefaults = () => ({
   byId: {
     [OVERVIEW_DASHBOARD_ID]: {
       title: _('Overview'),
+    },
+  },
+  defaults: {
+    [OVERVIEW_DASHBOARD_ID]: {
+      rows: convertDefaultContent(DEFAULT_DISPLAYS),
     },
   },
 });
@@ -144,15 +151,17 @@ class StartPage extends React.Component {
   }
 
   handleRemoveDashboard(dashboardId) {
-    const {byId, dashboards} = this.props;
+    const {byId, dashboards, defaults = {}} = this.props;
 
     if (dashboards.length <= 1) {
       return;
     }
 
-    const copyById = {...byId};
+    const byIdCopy = {...byId};
+    delete byIdCopy[dashboardId];
 
-    delete copyById[dashboardId];
+    const defaultsCopy = {...defaults};
+    delete defaultsCopy[dashboardId];
 
     this.setState({
       showConfirmRemoveDialog: false,
@@ -160,8 +169,9 @@ class StartPage extends React.Component {
     });
 
     this.saveSettings({
-      byId: copyById,
+      byId: byIdCopy,
       dashboards: dashboards.filter(id => id !== dashboardId),
+      defaults: defaultsCopy,
       removeDashboardId: undefined,
     });
   }
@@ -210,25 +220,9 @@ class StartPage extends React.Component {
     });
   }
 
-  handleLoadDashboardSettings(dashboardId, defaultSettings) {
-    const {byId, defaults = {}} = this.props;
-
-    this.saveSettings({
-      byId: {
-        ...byId,
-        [dashboardId]: {
-          ...defaultSettings,
-          ...byId[dashboardId],
-        },
-      },
-      defaults: {
-        ...defaults,
-        [dashboardId]: {
-          ...defaults[dashboardId],
-          ...defaultSettings,
-        },
-      },
-    });
+  handleLoadDashboardSettings() {
+    // do nothing
+    // all defaults and settings are already provided
   }
 
   handleResetDashboard(dashboardId) {
@@ -267,23 +261,33 @@ class StartPage extends React.Component {
     });
   }
 
-  handleAddNewDashboard({title}) {
-    const {byId, dashboards} = this.props;
+  handleAddNewDashboard({title, defaultDisplays = DEFAULT_DISPLAYS}) {
+    const {byId, dashboards, defaults = {}} = this.props;
 
     const id = uuid();
 
-    this.saveSettings({
+    const rows = convertDefaultContent(defaultDisplays);
+    const newDashboardSetting = {
+      rows,
+      title,
+    };
+
+    const settings = {
       dashboards: [
         ...dashboards,
         id,
       ],
       byId: {
         ...byId,
-        [id]: {
-          title,
-        },
+        [id]: newDashboardSetting,
       },
-    });
+      defaults: {
+        ...defaults,
+        [id]: newDashboardSetting,
+      },
+    };
+
+    this.saveSettings(settings);
 
     this.closeNewDashboardDialog();
 

@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import {createRow, createItem} from 'web/components/sortable/grid';
+import {createRow, createItem} from 'web/components/sortable/utils';
 
 import getDashboardSettings from './selectors';
 

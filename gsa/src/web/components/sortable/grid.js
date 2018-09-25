@@ -26,51 +26,26 @@ import 'core-js/library/fn/array/find';
 
 import React from 'react';
 
-import uuid from 'uuid/v4';
-
 import {DragDropContext} from 'react-beautiful-dnd';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import AutoSize from 'web/components/layout/autosize';
+import Layout from 'web/components/layout/layout';
 
-import Layout from '../layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 import EmptyRow from './emptyrow';
 import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
-import AutoSize from '../layout/autosize.js';
+import {
+  updateRow,
+  removeItem,
+  createRow,
+  DEFAULT_ROW_HEIGHT,
+} from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
-
-export const DEFAULT_ROW_HEIGHT = 250;
-
-export const createRow = (items, height = DEFAULT_ROW_HEIGHT) => ({
-  id: uuid(),
-  height,
-  items,
-});
-
-export const createItem = props => {
-  const id = uuid();
-
-  return {
-    id,
-    ...props,
-  };
-};
-
-export const removeItem = (rows, itemId) => rows.map(row => ({
-  ...row,
-  items: row.items.filter(item => item.id !== itemId),
-})).filter(row => row.items.length > 0);
-
-const updateRow = (row, data) => {
-  return {
-    ...row,
-    ...data,
-  };
-};
 
 const itemPropType = PropTypes.shape({
   id: PropTypes.string.isRequired,

@@ -31,11 +31,6 @@ import {DashboardControls} from 'web/components/dashboard/controls';
 
 import Layout from 'web/components/layout/layout';
 
-import {TasksSeverityDisplay} from '../tasks/dashboard/severityclassdisplay';
-import {CvesCreatedDisplay} from '../cves/dashboard/createddisplay';
-import {TasksStatusDisplay} from '../tasks/dashboard/statusdisplay';
-import {NvtsSeverityClassDisplay} from '../nvts/dashboard/severityclassdisplay';
-
 import {TASKS_DISPLAYS} from '../tasks/dashboard';
 import {REPORTS_DISPLAYS} from '../reports/dashboard';
 import {RESULTS_DISPLAYS} from '../results/dashboard';
@@ -52,15 +47,7 @@ import {CPES_DISPLAYS} from '../cpes/dashboard';
 import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
 import {SECINFO_DISPLAYS} from '../secinfo/dashboard';
 
-const DEFAULT_DISPLAYS = [
-  [
-    TasksSeverityDisplay.displayId,
-    TasksStatusDisplay.displayId,
-  ], [
-    CvesCreatedDisplay.displayId,
-    NvtsSeverityClassDisplay.displayId,
-  ],
-];
+import {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
 const ALL_DISPLAYS = [
   ...TASKS_DISPLAYS,

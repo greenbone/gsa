@@ -117,33 +117,30 @@ const MenuBar = ({
           </Menu>
           {may_op_scans &&
             <Menu title={_('Scans')}>
-              <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
-              <MenuSection>
-                {capabilities.mayAccess('tasks') &&
-                  <MenuEntry
-                    title={_('Tasks')}
-                    to="tasks"
-                  />
-                }
-                {capabilities.mayAccess('reports') &&
-                  <MenuEntry
-                    title={_('Reports')}
-                    to="reports"
-                  />
-                }
-                {capabilities.mayAccess('results') &&
-                  <MenuEntry
-                    title={_('Results')}
-                    to="results"
-                  />
-                }
-                {capabilities.mayAccess('vulns') &&
-                  <MenuEntry
-                    title={_('Vulnerabilities')}
-                    to="vulnerabilities"
-                  />
-                }
-              </MenuSection>
+              {capabilities.mayAccess('tasks') &&
+                <MenuEntry
+                  title={_('Tasks')}
+                  to="tasks"
+                />
+              }
+              {capabilities.mayAccess('reports') &&
+                <MenuEntry
+                  title={_('Reports')}
+                  to="reports"
+                />
+              }
+              {capabilities.mayAccess('results') &&
+                <MenuEntry
+                  title={_('Results')}
+                  to="results"
+                />
+              }
+              {capabilities.mayAccess('vulns') &&
+                <MenuEntry
+                  title={_('Vulnerabilities')}
+                  to="vulnerabilities"
+                />
+              }
               <MenuSection>
                 {capabilities.mayAccess('notes') &&
                   <MenuEntry
@@ -163,49 +160,43 @@ const MenuBar = ({
           }
           {capabilities.mayAccess('assets') &&
             <Menu title={_('Assets')}>
-              <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
-              <MenuSection>
-                <MenuEntry
-                  section
-                  title={_('Hosts')}
-                  to="hosts"
-                />
-                <MenuEntry
-                  title={_('Operating Systems')}
-                  to="operatingsystems"
-                />
-              </MenuSection>
+              <MenuEntry
+                section
+                title={_('Hosts')}
+                to="hosts"
+              />
+              <MenuEntry
+                title={_('Operating Systems')}
+                to="operatingsystems"
+              />
             </Menu>
           }
           {capabilities.mayAccess('info') &&
             <Menu title={_('SecInfo')}>
-              <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
-              <MenuSection>
-                <MenuEntry
-                  title={_('NVTs')}
-                  to="nvts"
-                />
-                <MenuEntry
-                  title={_('CVEs')}
-                  to="cves"
-                />
-                <MenuEntry
-                  title={_('CPEs')}
-                  to="cpes"
-                />
-                <MenuEntry
-                  title={_('OVAL Definitions')}
-                  to="ovaldefs"
-                />
-                <MenuEntry
-                  title={_('CERT-Bund Advisories')}
-                  to="certbunds"
-                />
-                <MenuEntry
-                  title={_('DFN-CERT Advisories')}
-                  to="dfncerts"
-                />
-              </MenuSection>
+              <MenuEntry
+                title={_('NVTs')}
+                to="nvts"
+              />
+              <MenuEntry
+                title={_('CVEs')}
+                to="cves"
+              />
+              <MenuEntry
+                title={_('CPEs')}
+                to="cpes"
+              />
+              <MenuEntry
+                title={_('OVAL Definitions')}
+                to="ovaldefs"
+              />
+              <MenuEntry
+                title={_('CERT-Bund Advisories')}
+                to="certbunds"
+              />
+              <MenuEntry
+                title={_('DFN-CERT Advisories')}
+                to="dfncerts"
+              />
               <MenuSection>
                 <MenuEntry
                   title={_('All SecInfo')}
