@@ -30,10 +30,22 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
 
 /* eslint-disable max-len */
+import {CertBundCreatedDisplay} from 'web/pages/certbund/dashboard/createddisplay';
+import {CertBundCvssDisplay} from 'web/pages/certbund/dashboard/cvssdisplay';
 import {CvesCreatedDisplay} from 'web/pages/cves/dashboard/createddisplay';
+import {CvesSeverityClassDisplay} from 'web/pages/cves/dashboard/severityclassdisplay';
+import {HostsModifiedDisplay} from 'web/pages/hosts/dashboard/modifieddisplay';
+import {HostsTopologyDisplay} from 'web/pages/hosts/dashboard/topologydisplay';
+import {HostsVulnScoreDisplay} from 'web/pages/hosts/dashboard/vulnscoredisplay';
 import {NvtsSeverityClassDisplay} from 'web/pages/nvts/dashboard/severityclassdisplay';
+import {OsSeverityClassDisplay} from 'web/pages/operatingsystems/dashboard/severityclassdisplay';
+import {OsVulnScoreDisplay} from 'web/pages/operatingsystems/dashboard/vulnscoredisplay';
+import {ReportsHighResultsDisplay} from 'web/pages/reports/dashboard/highresultsdisplay';
+import {ReportsSeverityDisplay} from 'web/pages/reports/dashboard/severityclassdisplay';
+import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/severityclassdisplay';
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
 /* eslint-enable max-len */
@@ -50,6 +62,41 @@ export const DEFAULT_DISPLAYS = [
   ],
 ];
 
+const SCAN_DEFAULT_DISPLAYS = [
+  [
+    ResultsSeverityDisplay.displayId,
+    ReportsSeverityDisplay.displayId,
+  ], [
+    TasksStatusDisplay.displayId,
+    ReportsHighResultsDisplay.displayId,
+    TasksSeverityDisplay.displayId,
+  ],
+];
+
+const ASSET_DEFAULT_DISPLAYS = [
+  [
+    HostsVulnScoreDisplay.displayId,
+    HostsTopologyDisplay.displayId,
+    OsVulnScoreDisplay.displayId,
+  ], [
+    OsSeverityClassDisplay.displayId,
+    HostsModifiedDisplay.displayId,
+  ],
+];
+
+const SECINFO_DEFAULT_DISPLAYS = [
+  [
+    NvtsSeverityClassDisplay.displayId,
+    CvesCreatedDisplay.displayId,
+    CvesSeverityClassDisplay.displayId,
+  ], [
+    CertBundCreatedDisplay.displayId,
+    CertBundCvssDisplay.displayId,
+  ],
+];
+
+const EMPTY_DISPLAYS = [];
+
 const NewDashboardDialog = ({
   onClose,
   onSave,
@@ -62,6 +109,7 @@ const NewDashboardDialog = ({
     minWidth={340}
     defaultValues={{
       title: _('Unnamed'),
+      defaultDisplays: DEFAULT_DISPLAYS,
     }}
     onClose={onClose}
     onSave={onSave}
@@ -70,18 +118,46 @@ const NewDashboardDialog = ({
       values,
       onValueChange,
     }) => (
-      <FormGroup
-        title={_('Dashboard Title')}
-        titleSize={4}
-      >
-        <TextField
-          grow
-          name="title"
-          maxLength={MAX_TITLE_LENGTH}
-          value={values.title}
-          onChange={onValueChange}
-        />
-      </FormGroup>
+      <React.Fragment>
+        <FormGroup
+          title={_('Dashboard Title')}
+          titleSize={4}
+        >
+          <TextField
+            grow
+            name="title"
+            maxLength={MAX_TITLE_LENGTH}
+            value={values.title}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+        <FormGroup
+          title={_('Initial Displays')}
+          titleSize={4}
+        >
+          <Select
+            name="defaultDisplays"
+            items={[{
+              label: _('Default'),
+              value: DEFAULT_DISPLAYS,
+            }, {
+              label: _('Scan Displays'),
+              value: SCAN_DEFAULT_DISPLAYS,
+            }, {
+              label: _('Asset Displays'),
+              value: ASSET_DEFAULT_DISPLAYS,
+            }, {
+              label: _('SecInfo Displays'),
+              value: SECINFO_DEFAULT_DISPLAYS,
+            }, {
+              label: _('Empty'),
+              value: EMPTY_DISPLAYS,
+            }]}
+            value={values.defaultDisplays}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+      </React.Fragment>
     )}
   </SaveDialog>
 );
