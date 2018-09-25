@@ -144,15 +144,17 @@ class StartPage extends React.Component {
   }
 
   handleRemoveDashboard(dashboardId) {
-    const {byId, dashboards} = this.props;
+    const {byId, dashboards, defaults = {}} = this.props;
 
     if (dashboards.length <= 1) {
       return;
     }
 
-    const copyById = {...byId};
+    const byIdCopy = {...byId};
+    delete byIdCopy[dashboardId];
 
-    delete copyById[dashboardId];
+    const defaultsCopy = {...defaults};
+    delete defaultsCopy[dashboardId];
 
     this.setState({
       showConfirmRemoveDialog: false,
@@ -160,8 +162,9 @@ class StartPage extends React.Component {
     });
 
     this.saveSettings({
-      byId: copyById,
+      byId: byIdCopy,
       dashboards: dashboards.filter(id => id !== dashboardId),
+      defaults: defaultsCopy,
       removeDashboardId: undefined,
     });
   }
