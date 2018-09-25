@@ -55,7 +55,7 @@ const transformClassData = (data = {}) => {
     const perc = percent(count, sum);
     return {
       value: parseFloat(count),
-      label: OVAL_CLASS_TYPES[value],
+      label: `${OVAL_CLASS_TYPES[value]}`,
       toolTip: `${OVAL_CLASS_TYPES[value]}: ${perc}% (${count})`,
       color: ovalClassColorScale(value),
       filterValue: value,

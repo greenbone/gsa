@@ -157,11 +157,11 @@ export const qodTypeColorScale = scaleOrdinal()
   ]);
 
 export const OVAL_CLASS_TYPES = {
-  compliance: _('Compliance'),
-  inventory: _('Inventory'),
-  miscellaneous: _('Miscellaneous'),
-  patch: _('Patch'),
-  vulnerability: _('Vulnerability'),
+  compliance: _l('Compliance'),
+  inventory: _l('Inventory'),
+  miscellaneous: _l('Miscellaneous'),
+  patch: _l('Patch'),
+  vulnerability: _l('Vulnerability'),
 };
 
 export const ovalClassColorScale = scaleOrdinal()
