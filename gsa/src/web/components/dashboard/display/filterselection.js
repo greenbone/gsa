@@ -35,8 +35,6 @@ import SaveDialog from '../../dialog/savedialog';
 import FormGroup from '../../form/formgroup';
 import Select from '../../form/select';
 
-import MenuEntry from '../../menu/menuentry';
-
 import {loadEntities, selector} from 'web/store/entities/filters';
 
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
@@ -96,21 +94,13 @@ class FilterSelection extends React.Component {
       filterId,
     } = this.props;
     const {showDialog} = this.state;
-    const filterSelectionMenuEntry = (
-      <MenuEntry
-        key="filter-selection"
-        onClick={this.handleOpenDialog}
-      >
-        {_('Select Filter')}
-      </MenuEntry>
-    );
     const filter = isDefined(filterId) ?
       filters.find(f => f.id === filterId) : undefined;
     return (
       <React.Fragment>
         {children({
           filter,
-          filterSelectionMenuEntry,
+          selectFilter: this.handleOpenDialog,
         })}
         {showDialog &&
           <SaveDialog
@@ -179,7 +169,7 @@ const mapStateToProps = (state, {filtersFilter}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
-  loadFilters: () => dispatch(loadEntities({gmp, filter: filtersFilter})),
+  loadFilters: () => dispatch(loadEntities(gmp)(filtersFilter)),
 });
 
 export default compose(

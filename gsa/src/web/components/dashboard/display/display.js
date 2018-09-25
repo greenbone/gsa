@@ -105,7 +105,6 @@ const DisplayTitle = styled.div`
 const Display = ({
   children,
   dragHandleProps,
-  menu,
   title,
   onRemoveClick,
 }) => {
@@ -113,7 +112,6 @@ const Display = ({
     <DisplayView>
       <HeaderContainer {...dragHandleProps}>
         <Header>
-          {menu}
           <HeaderContent>
             <DisplayTitle>
               {title}
@@ -135,7 +133,6 @@ const Display = ({
 
 Display.propTypes = {
   dragHandleProps: PropTypes.object,
-  menu: PropTypes.element,
   title: PropTypes.string,
   onRemoveClick: PropTypes.func.isRequired,
 };
