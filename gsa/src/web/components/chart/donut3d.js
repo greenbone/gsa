@@ -267,15 +267,17 @@ class Donut3DChart extends React.Component {
   }
 
   getWidth() {
-    const {width} = this.props;
+    let {width} = this.props;
     const {current: legend} = this.legendRef;
+
+    width = width - MENU_PLACEHOLDER_WIDTH;
 
     if (legend === null) {
       return width;
     }
 
     const {width: legendWidth} = legend.getBoundingClientRect();
-    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
+    return width - legendWidth - LEGEND_MARGIN;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
