@@ -192,6 +192,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/chart/bar.js
      ${GSA_SRC_DIR}/src/web/components/chart/bubble.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut.js
+     ${GSA_SRC_DIR}/src/web/components/chart/donut/arc2d.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/arc3d.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/labels.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/paths.js
