@@ -543,11 +543,13 @@ class LineChart extends React.Component {
       y2AxisLabel,
       yLine,
       y2Line,
+      onRangeSelected,
     } = this.props;
     const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
     const hasLines = isDefined(yLine) && isDefined(y2Line);
+    const showRange = hasValues && isDefined(onRangeSelected);
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -557,8 +559,8 @@ class LineChart extends React.Component {
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
-          onMouseDown={hasValues ? this.startRangeSelection : undefined}
-          onMouseUp={hasValues ? this.endRangeSelection : undefined}
+          onMouseDown={showRange ? this.startRangeSelection : undefined}
+          onMouseUp={showRange ? this.endRangeSelection : undefined}
         >
           <Group
             top={margin.top}
