@@ -31,7 +31,7 @@ import {NA_VALUE} from 'web/utils/severity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from 'web/components/chart/donut3d';
+import DonutChart from 'web/components/chart/donut';
 
 import DataDisplay from '../datadisplay';
 

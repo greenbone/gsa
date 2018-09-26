@@ -37,7 +37,7 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 
 import PropTypes from 'web/utils/proptypes';
 
-import DonutChart from 'web/components/chart/donut3d';
+import DonutChart from 'web/components/chart/donut';
 
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTable from 'web/components/dashboard/display/datatable';

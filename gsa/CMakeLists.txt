@@ -198,7 +198,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/chart/donut/paths.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/pie.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/proptypes.js
-     ${GSA_SRC_DIR}/src/web/components/chart/donut3d.js
      ${GSA_SRC_DIR}/src/web/components/chart/group.js
      ${GSA_SRC_DIR}/src/web/components/chart/label.js
      ${GSA_SRC_DIR}/src/web/components/chart/legend.js

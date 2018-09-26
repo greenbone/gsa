@@ -31,7 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../../utils/proptypes';
 
-import DonutChart from '../../../components/chart/donut3d';
+import DonutChart from '../../../components/chart/donut';
 import DataDisplay from '../../../components/dashboard/display/datadisplay';
 import DataTableDisplay from '../../../components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import {
