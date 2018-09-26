@@ -65,6 +65,7 @@ const Labels = ({
       }
       return (
         <ToolTip
+          key={index}
           content={arcData.toolTip}
         >
           {({targetRef, hide, show}) => (
