@@ -192,6 +192,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/chart/bar.js
      ${GSA_SRC_DIR}/src/web/components/chart/bubble.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut.js
+     ${GSA_SRC_DIR}/src/web/components/chart/donut/labels.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/pie.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut/proptypes.js
      ${GSA_SRC_DIR}/src/web/components/chart/donut3d.js

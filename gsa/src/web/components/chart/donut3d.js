@@ -44,10 +44,10 @@ import {
 
 import Layout from 'web/components/layout/layout';
 
+import Labels from './donut/labels';
 import Pie from './donut/pie';
 import {DataPropType} from './donut/proptypes';
 
-import Label from './label';
 import ToolTip from './tooltip';
 import Legend from './legend';
 import Svg from './svg';
@@ -238,58 +238,6 @@ EmptyDonut.propTypes = {
   top: PropTypes.number.isRequired,
 };
 
-const AllLabels = ({
-  data,
-  centerX,
-  centerY,
-  ...props
-}) => (
-  <Pie
-    data={data}
-    pieValue={d => d.value}
-    top={centerY}
-    left={centerX}
-    {...props}
-  >
-    {({
-      data: arcData,
-      index,
-      startAngle,
-      endAngle,
-      x,
-      y,
-    }) => {
-      const angleAbs = Math.abs(startAngle - endAngle);
-      if (angleAbs < MIN_ANGLE_FOR_LABELS) {
-        return null;
-      }
-      return (
-        <ToolTip
-          content={arcData.toolTip}
-        >
-          {({targetRef, hide, show}) => (
-            <Label
-              x={x}
-              y={y}
-              innerRef={targetRef}
-              key={index}
-              onMouseEnter={show}
-              onMouseLeave={hide}
-            >
-              {arcData.value}
-            </Label>
-          )}
-        </ToolTip>
-      );
-    }}
-  </Pie>
-);
-
-AllLabels.propTypes = {
-  centerX: PropTypes.number.isRequired,
-  centerY: PropTypes.number.isRequired,
-  data: DataPropType,
-};
 
 class Donut3DChart extends React.Component {
 
@@ -523,7 +471,7 @@ class Donut3DChart extends React.Component {
                     );
                 }}
               </Pie>
-              <AllLabels
+              <Labels
                 data={data}
                 centerX={centerX}
                 centerY={centerY}
