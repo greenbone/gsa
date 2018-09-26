@@ -179,6 +179,8 @@ class LineChart extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.legendRef = React.createRef();
+
     this.state = {
       displayInfo: false,
       ...this.updateData(this.props),
@@ -287,8 +289,9 @@ class LineChart extends React.Component {
     height,
     timeline = false,
   }) {
-    if (this.legend) {
-      const {width: legendWidth} = this.legend.getBoundingClientRect();
+    const {current: legend} = this.legendRef;
+    if (legend) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
       width = width - legendWidth - LEGEND_MARGIN;
     }
 
@@ -630,7 +633,7 @@ class LineChart extends React.Component {
         </Svg>
         {hasLines && displayLegend &&
           <Legend
-            innerRef={ref => this.legend = ref}
+            innerRef={this.legendRef}
             data={[yLine, y2Line]}
           >
             {({d, toolTipProps}) => (
