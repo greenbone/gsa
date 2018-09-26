@@ -248,7 +248,6 @@ const AllLabels = ({
 }) => (
   <Pie
     data={data}
-    pieSort={null}
     pieValue={d => d.value}
     arcsSort={sortArcsByStartAngle}
     top={centerY}
@@ -456,7 +455,6 @@ class Donut3DChart extends React.Component {
             <React.Fragment>
               <Pie
                 data={data}
-                pieSort={null}
                 pieValue={d => d.value}
                 arcsSort={sortArcsByStartAngle}
                 top={centerY}
