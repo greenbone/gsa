@@ -246,22 +246,59 @@ EmptyDonut.propTypes = {
 };
 
 const AllLabels = ({
-  allLabels,
-}) => allLabels.map(label => {
-  const {innerRef, value, x, y, show, hide, id} = label;
-  return (
-    <Label
-      x={x}
-      y={y}
-      innerRef={innerRef}
-      key={id}
-      onMouseEnter={show}
-      onMouseLeave={hide}
-    >
-      {value}
-    </Label>
-  );
-});
+  data,
+  centerX,
+  centerY,
+  ...props
+}) => (
+  <Pie
+    data={data}
+    pieSort={null}
+    pieValue={d => d.value}
+    arcsSort={sortArcsByStartAngle}
+    top={centerY}
+    left={centerX}
+    {...props}
+  >
+    {({
+      data: arcData,
+      index,
+      startAngle,
+      endAngle,
+      x,
+      y,
+    }) => {
+      const angleAbs = Math.abs(startAngle - endAngle);
+      if (angleAbs < MIN_ANGLE_FOR_LABELS) {
+        return null;
+      }
+      return (
+        <ToolTip
+          content={arcData.toolTip}
+        >
+          {({targetRef, hide, show}) => (
+            <Label
+              x={x}
+              y={y}
+              innerRef={targetRef}
+              key={index}
+              onMouseEnter={show}
+              onMouseLeave={hide}
+            >
+              {arcData.value}
+            </Label>
+          )}
+        </ToolTip>
+      );
+    }}
+  </Pie>
+);
+
+AllLabels.propTypes = {
+  centerX: PropTypes.number.isRequired,
+  centerY: PropTypes.number.isRequired,
+  data: DataPropType,
+};
 
 class Donut3DChart extends React.Component {
 
@@ -497,14 +534,12 @@ class Donut3DChart extends React.Component {
                     );
                 }}
               </Pie>
-              <Group
-                top={centerY}
-                left={centerX}
-              >
-                <AllLabels
-                  allLabels={allLabels}
-                />
-              </Group>
+              <AllLabels
+                data={data}
+                centerX={centerX}
+                centerY={centerY}
+                {...props}
+              />
             </React.Fragment> :
             <EmptyDonut
               left={centerX}
