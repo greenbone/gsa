@@ -188,6 +188,23 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/bar/statusbar.js
      ${GSA_SRC_DIR}/src/web/components/bar/titlebar.js
      ${GSA_SRC_DIR}/src/web/components/bar/toolbar.js
+     ${GSA_SRC_DIR}/src/web/components/chart/axis.js
+     ${GSA_SRC_DIR}/src/web/components/chart/bar.js
+     ${GSA_SRC_DIR}/src/web/components/chart/bubble.js
+     ${GSA_SRC_DIR}/src/web/components/chart/donut.js
+     ${GSA_SRC_DIR}/src/web/components/chart/donut/pie.js
+     ${GSA_SRC_DIR}/src/web/components/chart/donut3d.js
+     ${GSA_SRC_DIR}/src/web/components/chart/group.js
+     ${GSA_SRC_DIR}/src/web/components/chart/label.js
+     ${GSA_SRC_DIR}/src/web/components/chart/legend.js
+     ${GSA_SRC_DIR}/src/web/components/chart/line.js
+     ${GSA_SRC_DIR}/src/web/components/chart/schedule.js
+     ${GSA_SRC_DIR}/src/web/components/chart/svg.js
+     ${GSA_SRC_DIR}/src/web/components/chart/tooltip.js
+     ${GSA_SRC_DIR}/src/web/components/chart/topology.js
+     ${GSA_SRC_DIR}/src/web/components/chart/utils/arc.js
+     ${GSA_SRC_DIR}/src/web/components/chart/utils/path.js
+     ${GSA_SRC_DIR}/src/web/components/chart/wordcloud.js
      ${GSA_SRC_DIR}/src/web/components/comment/comment.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/controls.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/dashboard.js
