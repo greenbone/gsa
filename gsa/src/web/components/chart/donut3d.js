@@ -54,6 +54,7 @@ import Group from './group';
 const LEGEND_MARGIN = 20;
 const MIN_ANGLE_FOR_LABELS = 0.15;
 const MIN_RATIO = 2.0;
+const MIN_WIDTH = 200;
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
@@ -273,12 +274,16 @@ class Donut3DChart extends React.Component {
 
     width = width - MENU_PLACEHOLDER_WIDTH;
 
-    if (legend === null) {
-      return width;
+    if (legend !== null) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
     }
 
-    const {width: legendWidth} = legend.getBoundingClientRect();
-    return width - legendWidth - LEGEND_MARGIN;
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    return width;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
