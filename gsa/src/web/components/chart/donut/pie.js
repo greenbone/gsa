@@ -76,6 +76,9 @@ const Pie = ({
 
   const pie = d3pie();
 
+  // don't sort values. default is descending
+  pie.sortValues(null);
+
   if (isDefined(pieSort)) {
     pie.sort(pieSort);
   }
