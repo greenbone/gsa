@@ -4401,7 +4401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="gsa:i18n ('Your last filter change may be too restrictive.')"/>
                     </div>
                     <p class="panel-body">
-                      <a href="/omp?token={/envelope/token}&amp;cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;filt_id=--"
+                      <a href="/omp?token={/envelope/token}&amp;cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;filt_id=-2"
                         title="{gsa:i18n ('Reset filter')}">
                         <img src="/img/delete.svg" class="valign-middle icon icon-lg"/>
                         <span>
