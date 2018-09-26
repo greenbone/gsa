@@ -56,7 +56,7 @@ const transformQodTypeData = (data = {}) => {
     const perc = percent(count, sum);
     return {
       value: count,
-      label: QOD_TYPES[value],
+      label: `${QOD_TYPES[value]}`,
       toolTip: `${QOD_TYPES[value]}: ${perc}% (${count})`,
       color: qodTypeColorScale(value),
       filterValue: value,

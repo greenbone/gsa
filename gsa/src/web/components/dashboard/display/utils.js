@@ -23,7 +23,7 @@
  */
 import 'core-js/fn/object/keys';
 
-import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {scaleOrdinal, scaleLinear} from 'd3-scale';
 
@@ -105,20 +105,20 @@ export const vulnsByHostsColorScale = scaleLinear()
   ]);
 
 export const QOD_TYPES = {
-  '': _('None'),
-  general_note: _('General note'),
-  executable_version: _('Executable version'),
-  package: _('Package check'),
-  registry: _('Registry check'),
-  remote_active: _('Remote active'),
-  remote_analysis: _('Remote analysis'),
-  remote_app: _('Remote app'),
-  remote_banner: _('Remote banner'),
-  remote_probe: _('Remote probe'),
-  remote_banner_unreliable: _('Unreliable rem. banner'),
-  executable_version_unreliable: _('Unreliable exec. version'),
-  remote_vul: _('Remote vulnerability'),
-  exploit: _('Exploit'),
+  '': _l('None'),
+  general_note: _l('General note'),
+  executable_version: _l('Executable version'),
+  package: _l('Package check'),
+  registry: _l('Registry check'),
+  remote_active: _l('Remote active'),
+  remote_analysis: _l('Remote analysis'),
+  remote_app: _l('Remote app'),
+  remote_banner: _l('Remote banner'),
+  remote_probe: _l('Remote probe'),
+  remote_banner_unreliable: _l('Unreliable rem. banner'),
+  executable_version_unreliable: _l('Unreliable exec. version'),
+  remote_vul: _l('Remote vulnerability'),
+  exploit: _l('Exploit'),
 };
 
 export const qodColorScale = scaleOrdinal()
@@ -157,11 +157,11 @@ export const qodTypeColorScale = scaleOrdinal()
   ]);
 
 export const OVAL_CLASS_TYPES = {
-  compliance: _('Compliance'),
-  inventory: _('Inventory'),
-  miscellaneous: _('Miscellaneous'),
-  patch: _('Patch'),
-  vulnerability: _('Vulnerability'),
+  compliance: _l('Compliance'),
+  inventory: _l('Inventory'),
+  miscellaneous: _l('Miscellaneous'),
+  patch: _l('Patch'),
+  vulnerability: _l('Vulnerability'),
 };
 
 export const ovalClassColorScale = scaleOrdinal()
@@ -175,12 +175,12 @@ export const ovalClassColorScale = scaleOrdinal()
   ]);
 
 export const SEC_INFO_TYPES = {
-  cert_bund_adv: _('CERT-Bund Advisories'),
-  cpe: _('CPEs'),
-  cve: _('CVEs'),
-  dfn_cert_adv: _('DFN-CERT Advisories'),
-  nvt: _('NVTs'),
-  ovaldef: _('OVAL Definitions'),
+  cert_bund_adv: _l('CERT-Bund Advisories'),
+  cpe: _l('CPEs'),
+  cve: _l('CVEs'),
+  dfn_cert_adv: _l('DFN-CERT Advisories'),
+  nvt: _l('NVTs'),
+  ovaldef: _l('OVAL Definitions'),
 };
 
 export const secInfoTypeColorScale = scaleOrdinal()

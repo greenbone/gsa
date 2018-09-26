@@ -54,7 +54,7 @@ const transformTypeData = (data = {}) => {
     const perc = percent(count, sum);
     return {
       value: count,
-      label: SEC_INFO_TYPES[value],
+      label: `${SEC_INFO_TYPES[value]}`,
       toolTip: `${SEC_INFO_TYPES[value]}: ${perc}% (${count})`,
       color: secInfoTypeColorScale(value),
       filterValue: value,
