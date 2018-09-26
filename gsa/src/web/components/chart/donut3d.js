@@ -44,7 +44,8 @@ import {
 
 import Layout from 'web/components/layout/layout';
 
-import Pie from './pie';
+import Pie from './donut/pie';
+
 import Label from './label';
 import ToolTip from './tooltip';
 import Legend from './legend';

@@ -26,11 +26,11 @@ import {pie as d3pie} from 'd3-shape';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import arc from './utils/arc';
+import arc from 'web/components/chart/utils/arc';
 
-import Group from './group';
+import Group from 'web/components/chart/group';
 
 const Pie = ({
   className,

@@ -28,8 +28,9 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
+import Pie from './donut/pie';
+
 import Legend from './legend';
-import Pie from './pie';
 import ToolTip from './tooltip';
 import Label from './label';
 import Svg from './svg';
