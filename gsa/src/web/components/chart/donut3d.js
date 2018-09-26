@@ -53,6 +53,7 @@ import Group from './group';
 
 const LEGEND_MARGIN = 20;
 const MIN_ANGLE_FOR_LABELS = 0.15;
+const MIN_RATIO = 2.0;
 
 const StyledLayout = styled(Layout)`
   overflow: hidden;
@@ -378,11 +379,15 @@ class Donut3DChart extends React.Component {
 
     const innerRadius = 0.5;
 
+    let donutWidth = width;
+    if (width / height > MIN_RATIO) {
+      donutWidth = height * MIN_RATIO;
+    }
     const centerX = width / 2;
     const centerY = height / 2 - donutHeight / 2;
-    const outerRadiusX = width / 2 - horizontalMargin;
-    const outerRadiusY = (Math.min(height / 2, width / 2) - donutHeight / 2) -
-      verticalMargin;
+    const outerRadiusX = donutWidth / 2 - horizontalMargin;
+    const outerRadiusY = (Math.min(height / 2, donutWidth / 2) -
+      donutHeight / 2) - verticalMargin;
     const innerRadiusX = outerRadiusX * innerRadius;
     const innerRadiusY = outerRadiusY * innerRadius;
 
