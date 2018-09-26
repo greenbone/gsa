@@ -32,6 +32,8 @@ import arc from 'web/components/chart/utils/arc';
 
 import Group from 'web/components/chart/group';
 
+const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
+
 const Pie = ({
   className,
   top = 0,
@@ -48,7 +50,7 @@ const Pie = ({
   padRadius,
   pieSort,
   pieValue,
-  arcsSort,
+  arcsSort = sortArcsByStartAngle,
   children,
 }) => {
   const arcPath = arc();
@@ -93,9 +95,7 @@ const Pie = ({
 
   const arcs = pie(data);
 
-  if (isDefined(arcsSort)) {
-    arcs.sort(arcsSort);
-  }
+  arcs.sort(arcsSort);
   return (
     <Group
       className={className}

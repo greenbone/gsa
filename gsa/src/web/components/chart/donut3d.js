@@ -73,8 +73,6 @@ const PI2 = 2 * Math.PI;
 const emptyColor = Theme.lightGray;
 const darkEmptyColor = d3color(emptyColor).darker();
 
-const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
-
 const PieTopPath = ({
   color,
   path, // eslint-disable-line no-shadow
@@ -249,7 +247,6 @@ const AllLabels = ({
   <Pie
     data={data}
     pieValue={d => d.value}
-    arcsSort={sortArcsByStartAngle}
     top={centerY}
     left={centerX}
     {...props}
@@ -456,7 +453,6 @@ class Donut3DChart extends React.Component {
               <Pie
                 data={data}
                 pieValue={d => d.value}
-                arcsSort={sortArcsByStartAngle}
                 top={centerY}
                 left={centerX}
                 svgElement={this.svg}
