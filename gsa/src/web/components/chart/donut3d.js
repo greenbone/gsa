@@ -43,6 +43,7 @@ import {
 
 import Layout from 'web/components/layout/layout';
 
+import Arc2d from './donut/arc2d';
 import Arc3d from './donut/arc3d';
 import Labels from './donut/labels';
 import {PieInnerPath, PieTopPath, PieOuterPath} from './donut/paths';
@@ -154,7 +155,8 @@ class Donut3DChart extends React.Component {
     return nextProps.data !== this.props.data ||
       nextProps.width !== this.props.width ||
       nextProps.height !== this.props.height ||
-      nextState.width !== this.state.width;
+      nextState.width !== this.state.width ||
+      nextProps.show3d !== this.props.show3d;
   }
 
   update() {
@@ -237,6 +239,7 @@ class Donut3DChart extends React.Component {
       data = [],
       height,
       svgRef,
+      show3d = false,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -268,6 +271,7 @@ class Donut3DChart extends React.Component {
       innerRadiusY,
     };
 
+    const Arc = show3d ? Arc3d : Arc2d;
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
@@ -293,7 +297,7 @@ class Donut3DChart extends React.Component {
                   x,
                   y,
                 }) => (
-                  <Arc3d
+                  <Arc
                     key={index}
                     index={index}
                     data={arcData}
@@ -336,6 +340,7 @@ class Donut3DChart extends React.Component {
 Donut3DChart.propTypes = {
   data: DataPropType,
   height: PropTypes.number.isRequired,
+  show3d: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,
