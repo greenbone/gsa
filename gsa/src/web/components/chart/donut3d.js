@@ -71,6 +71,13 @@ const PI2 = 2 * Math.PI;
 const emptyColor = Theme.lightGray;
 const darkEmptyColor = d3color(emptyColor).darker();
 
+const DataPropType = PropTypes.arrayOf(PropTypes.shape({
+  color: PropTypes.toString.isRequired,
+  value: PropTypes.numberOrNumberString.isRequired,
+  label: PropTypes.any,
+  toolTip: PropTypes.elementOrString,
+}));
+
 const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
 
 const PieTopPath = ({
@@ -519,12 +526,7 @@ class Donut3DChart extends React.Component {
 }
 
 Donut3DChart.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    color: PropTypes.toString.isRequired,
-    value: PropTypes.numberOrNumberString.isRequired,
-    label: PropTypes.any,
-    toolTip: PropTypes.elementOrString,
-  })),
+  data: DataPropType,
   height: PropTypes.number.isRequired,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
