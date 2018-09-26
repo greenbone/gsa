@@ -63,6 +63,7 @@ const margin = {
 };
 
 const MIN_WIDTH = 100 + margin.right + margin.left;
+const MIN_TICK_WIDTH = 75;
 
 const findX = (timeline, value) => d => timeline ?
   d.x.isSame(value) : d.x === value;
@@ -292,6 +293,15 @@ class LineChart extends React.Component {
     const xV2 = values[index - 1]; // get the x value before
 
     return xV1 - xV < xV - xV2 ? xV1 : xV2; // return nearest value
+  }
+
+  getXAxisTicks() {
+    const {width} = this.state;
+    let {numTicks = 10} = this.props;
+    while (width / numTicks < MIN_TICK_WIDTH) {
+      numTicks--;
+    }
+    return numTicks;
   }
 
   getWidth() {
@@ -541,7 +551,6 @@ class LineChart extends React.Component {
     const {
       data = [],
       displayLegend = true,
-      numTicks,
       svgRef,
       xAxisLabel,
       yAxisLabel,
@@ -555,6 +564,7 @@ class LineChart extends React.Component {
     const hasOneValue = data.length === 1;
     const hasLines = isDefined(yLine) && isDefined(y2Line);
     const showRange = hasValues && isDefined(onRangeSelected);
+    const xAxisTicks = this.getXAxisTicks();
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -586,7 +596,7 @@ class LineChart extends React.Component {
               scale={xScale}
               top={maxHeight}
               label={`${xAxisLabel}`}
-              numTicks={numTicks}
+              numTicks={xAxisTicks}
             />
             {y2Line &&
               <Axis
