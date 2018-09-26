@@ -22,11 +22,13 @@
  */
 import PropTypes from 'web/utils/proptypes';
 
-export const DataPropType = PropTypes.arrayOf(PropTypes.shape({
+export const ArcDataPropType = PropTypes.shape({
   color: PropTypes.toString.isRequired,
   value: PropTypes.numberOrNumberString.isRequired,
   label: PropTypes.any,
   toolTip: PropTypes.elementOrString,
-}));
+});
+
+export const DataPropType = PropTypes.arrayOf(ArcDataPropType);
 
 // vim: set ts=2 sw=2 tw=80:
