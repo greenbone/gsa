@@ -282,7 +282,6 @@ class Donut3DChart extends React.Component {
                 pieValue={d => d.value}
                 top={centerY}
                 left={centerX}
-                svgElement={this.svg}
                 {...donutProps}
               >
                 {({
