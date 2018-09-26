@@ -43,18 +43,17 @@ import {
 
 import Layout from 'web/components/layout/layout';
 
+import Arc3d from './donut/arc3d';
 import Labels from './donut/labels';
 import {PieInnerPath, PieTopPath, PieOuterPath} from './donut/paths';
 import Pie from './donut/pie';
 import {DataPropType} from './donut/proptypes';
 
-import ToolTip from './tooltip';
 import Legend from './legend';
 import Svg from './svg';
 import Group from './group';
 
 const LEGEND_MARGIN = 20;
-const MIN_ANGLE_FOR_LABELS = 0.15;
 const MIN_RATIO = 2.0;
 const MIN_WIDTH = 200;
 
@@ -120,7 +119,6 @@ EmptyDonut.propTypes = {
   outerRadiusY: PropTypes.number.isRequired,
   top: PropTypes.number.isRequired,
 };
-
 
 class Donut3DChart extends React.Component {
 
@@ -262,7 +260,7 @@ class Donut3DChart extends React.Component {
     const innerRadiusX = outerRadiusX * innerRadius;
     const innerRadiusY = outerRadiusY * innerRadius;
 
-    const props = {
+    const donutProps = {
       outerRadiusX,
       outerRadiusY,
       donutHeight,
@@ -287,7 +285,7 @@ class Donut3DChart extends React.Component {
                 top={centerY}
                 left={centerX}
                 svgElement={this.svg}
-                {...props}
+                {...donutProps}
               >
                 {({
                   data: arcData,
@@ -297,74 +295,33 @@ class Donut3DChart extends React.Component {
                   path: arcPath,
                   x,
                   y,
-                }) => {
-                  const {color = Theme.lightGray, toolTip} = arcData;
-                  const darker = d3color(color).darker();
-                  const angleAbs = Math.abs(startAngle - endAngle);
-                    return (
-                      <ToolTip
-                        key={index}
-                        content={toolTip}
-                      >
-                        {({targetRef, hide, show}) => {
-                          if (angleAbs > MIN_ANGLE_FOR_LABELS) {
-                            allLabels.push({
-                              x,
-                              y,
-                              id: index,
-                              show,
-                              hide,
-                              value: arcData.value,
-                            });
-                          }
-                          return (
-                            <Group
-                              onMouseEnter={show}
-                              onMouseLeave={hide}
-                              onClick={isDefined(onDataClick) ?
-                                () => onDataClick(arcData) : undefined}
-                            >
-                              <PieInnerPath
-                                startAngle={startAngle}
-                                endAngle={endAngle}
-                                color={darker}
-                                {...props}
-                              />
-                              <PieTopPath
-                                color={color}
-                                path={arcPath}
-                              />
-                              <PieOuterPath
-                                startAngle={startAngle}
-                                endAngle={endAngle}
-                                color={darker}
-                                {...props}
-                              />
-                              <circle // used as positioning ref for tooltips
-                                ref={targetRef}
-                                cx={x}
-                                cy={y}
-                                r="1"
-                                visibility="hidden"
-                              />
-                            </Group>
-                          );
-                        }}
-                      </ToolTip>
-                    );
-                }}
+                }) => (
+                  <Arc3d
+                    key={index}
+                    index={index}
+                    data={arcData}
+                    path={arcPath}
+                    startAngle={startAngle}
+                    endAngle={endAngle}
+                    labels={allLabels}
+                    x={x}
+                    y={y}
+                    {...donutProps}
+                    onDataClick={onDataClick}
+                  />
+                )}
               </Pie>
               <Labels
                 data={data}
                 centerX={centerX}
                 centerY={centerY}
-                {...props}
+                {...donutProps}
               />
             </React.Fragment> :
             <EmptyDonut
               left={centerX}
               top={centerY}
-              {...props}
+              {...donutProps}
             />
           }
         </Svg>
