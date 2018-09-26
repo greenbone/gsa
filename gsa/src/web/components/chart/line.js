@@ -62,6 +62,8 @@ const margin = {
   left: 60,
 };
 
+const MIN_WIDTH = 100 + margin.right + margin.left;
+
 const findX = (timeline, value) => d => timeline ?
   d.x.isSame(value) : d.x === value;
 
@@ -311,7 +313,10 @@ class LineChart extends React.Component {
       timeline = false,
     } = this.props;
 
-    const width = this.getWidth();
+    let width = this.getWidth();
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
 
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
