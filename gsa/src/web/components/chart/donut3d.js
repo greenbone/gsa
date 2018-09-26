@@ -268,8 +268,6 @@ class Donut3DChart extends React.Component {
       innerRadiusY,
     };
 
-    const allLabels = [];
-
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
@@ -303,7 +301,6 @@ class Donut3DChart extends React.Component {
                     path={arcPath}
                     startAngle={startAngle}
                     endAngle={endAngle}
-                    labels={allLabels}
                     x={x}
                     y={y}
                     {...donutProps}
