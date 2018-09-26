@@ -237,8 +237,8 @@ class LineChart extends React.Component {
   }
 
   endRangeSelection(event) {
-    const {rangeX, infoX, data} = this.state;
-    const {onRangeSelected, timeline = false} = this.props;
+    const {rangeX, infoX} = this.state;
+    const {onRangeSelected, timeline = false, data} = this.props;
 
     if (onRangeSelected) {
       const direction = infoX >= rangeX;
@@ -344,7 +344,6 @@ class LineChart extends React.Component {
       .nice();
 
     return {
-      data,
       xScale,
       yScale,
       y2Scale,
@@ -360,12 +359,12 @@ class LineChart extends React.Component {
 
   renderInfo() {
     const {
+      data,
       timeline,
       yLine,
       y2Line,
     } = this.props;
     const {
-      data,
       displayInfo,
       infoX,
       mouseY,
@@ -509,7 +508,6 @@ class LineChart extends React.Component {
 
   render() {
     const {
-      data,
       xScale,
       yScale,
       y2Scale,
@@ -519,6 +517,7 @@ class LineChart extends React.Component {
       width,
     } = this.state;
     const {
+      data = [],
       displayLegend = true,
       numTicks,
       svgRef,
