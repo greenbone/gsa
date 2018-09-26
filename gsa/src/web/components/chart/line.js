@@ -181,11 +181,6 @@ class LineChart extends React.Component {
 
     this.legendRef = React.createRef();
 
-    this.state = {
-      displayInfo: false,
-      ...this.updateData(this.props),
-    };
-
     this.hideInfo = this.hideInfo.bind(this);
     this.showInfo = this.showInfo.bind(this);
 
@@ -193,18 +188,32 @@ class LineChart extends React.Component {
     this.endRangeSelection = this.endRangeSelection.bind(this);
 
     this.handleMouseMove = this.handleMouseMove.bind(this);
+
+    this.state = {
+      displayInfo: false,
+      ...this.update(),
+    };
+  }
+
+  componentDidUpdate() {
+
+    this.setState(this.update());
   }
 
   componentDidMount() {
-    this.setState(this.updateData(this.props));
+    this.setState(this.update());
   }
 
-  componentWillReceiveProps(next) {
-    const {width, height, data} = this.props;
-
-    if (width !== next.width || height !== next.height || data !== next.data) {
-      this.setState(this.updateData(next));
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.data !== this.props.data ||
+      nextProps.width !== this.props.width ||
+      nextProps.height !== this.props.height ||
+      nextState.width !== this.state.width ||
+      nextState.rangeX !== this.state.rangeX ||
+      nextState.infoX !== this.state.infoX ||
+      nextState.mouseX !== this.state.mouseX ||
+      nextState.mouseY !== this.state.mouseY ||
+      nextState.displayInfo !== this.state.displayInfo;
   }
 
   hideInfo() {
@@ -283,20 +292,28 @@ class LineChart extends React.Component {
     return xV1 - xV < xV - xV2 ? xV1 : xV2; // return nearest value
   }
 
-  updateData({
-    data = [],
-    width,
-    height,
-    timeline = false,
-  }) {
+  getWidth() {
+    const {width} = this.props;
     const {current: legend} = this.legendRef;
-    if (legend) {
-      const {width: legendWidth} = legend.getBoundingClientRect();
-      width = width - legendWidth - LEGEND_MARGIN;
+
+    if (legend === null) {
+      return width;
     }
 
-    const maxWidth =
-      width - margin.left - margin.right - MENU_PLACEHOLDER_WIDTH;
+    const {width: legendWidth} = legend.getBoundingClientRect();
+    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
+  }
+
+  update() {
+    const {
+      data = [],
+      height,
+      timeline = false,
+    } = this.props;
+
+    const width = this.getWidth();
+
+    const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
     const xValues = data.map(d => timeline ? d.x.toDate() : d.x);
