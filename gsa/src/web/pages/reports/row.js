@@ -31,24 +31,24 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
-import StatusBar from '../../components/bar/statusbar.js';
+import SeverityBar from 'web/components/bar/severitybar';
+import StatusBar from 'web/components/bar/statusbar';
 
-import DeleteIcon from '../../components/icon/deleteicon.js';
-import Icon from '../../components/icon/icon.js';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 const IconActions = ({
   entity,

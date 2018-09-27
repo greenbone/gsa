@@ -35,7 +35,7 @@ import {renderComponent} from 'web/utils/render';
 import {withEntityActions} from 'web/entities/actions';
 import {withEntityRow} from 'web/entities/row';
 
-import EntityNameTableData from 'web/entities/entitynametabledata.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';

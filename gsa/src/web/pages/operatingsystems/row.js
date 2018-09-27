@@ -26,25 +26,25 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import CpeIcon from '../../components/icon/cpeicon.js';
-import DeleteIcon from '../../components/icon/deleteicon.js';
-import ExportIcon from '../../components/icon/exporticon.js';
+import CpeIcon from 'web/components/icon/cpeicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 const IconActions = ({
   entity,

@@ -24,28 +24,28 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import FootNote from '../../components/footnote/footnote.js';
+import FootNote from 'web/components/footnote/footnote';
 
-import ExportIcon from '../../components/icon/exporticon.js';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import CredentialDownloadIcon from './downloadicon.js';
+import CredentialDownloadIcon from './downloadicon';
 
 const Actions = ({
   entity,
