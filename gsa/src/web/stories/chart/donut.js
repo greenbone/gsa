@@ -25,7 +25,6 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 
 import DonutChart from 'web/components/chart/donut';
-import Donut3DChart from 'web/components/chart/donut3d';
 
 const data = [
 {
@@ -71,7 +70,8 @@ storiesOf('Chart/Donut', module)
 storiesOf('Chart/Donut3D', module)
   .add('default', () => {
     return (
-      <Donut3DChart
+      <DonutChart
+        show3d
         width={500}
         height={300}
         data={data}
@@ -86,7 +86,8 @@ storiesOf('Chart/Donut3D', module)
       toolTip: 'Foo',
     }];
     return (
-      <Donut3DChart
+      <DonutChart
+        show3d
         width={500}
         height={300}
         data={singledata}
@@ -95,7 +96,8 @@ storiesOf('Chart/Donut3D', module)
   })
   .add('No Data', () => {
     return (
-      <Donut3DChart
+      <DonutChart
+        show3d
         width={500}
         height={300}
       />

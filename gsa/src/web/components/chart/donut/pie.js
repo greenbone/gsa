@@ -26,11 +26,13 @@ import {pie as d3pie} from 'd3-shape';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
-import arc from './utils/arc';
+import arc from 'web/components/chart/utils/arc';
 
-import Group from './group';
+import Group from 'web/components/chart/group';
+
+const sortArcsByStartAngle = (a, b) => a.startAngle > b.startAngle ? -1 : 1;
 
 const Pie = ({
   className,
@@ -48,7 +50,7 @@ const Pie = ({
   padRadius,
   pieSort,
   pieValue,
-  arcsSort,
+  arcsSort = sortArcsByStartAngle,
   children,
 }) => {
   const arcPath = arc();
@@ -76,6 +78,9 @@ const Pie = ({
 
   const pie = d3pie();
 
+  // don't sort values. default is descending
+  pie.sortValues(null);
+
   if (isDefined(pieSort)) {
     pie.sort(pieSort);
   }
@@ -90,9 +95,7 @@ const Pie = ({
 
   const arcs = pie(data);
 
-  if (isDefined(arcsSort)) {
-    arcs.sort(arcsSort);
-  }
+  arcs.sort(arcsSort);
   return (
     <Group
       className={className}
