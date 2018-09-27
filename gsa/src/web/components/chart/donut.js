@@ -240,7 +240,7 @@ class DonutChart extends React.Component {
       innerRadius = 0,
       height,
       svgRef,
-      show3d = false,
+      show3d = true,
       onDataClick,
       onLegendItemClick,
     } = this.props;
