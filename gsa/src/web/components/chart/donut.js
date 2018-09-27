@@ -237,36 +237,48 @@ class DonutChart extends React.Component {
     const {width} = this.state;
     const {
       data = [],
+      innerRadius = 0,
       height,
       svgRef,
-      show3d = false,
+      show3d = true,
       onDataClick,
       onLegendItemClick,
     } = this.props;
 
     const horizontalMargin = margin.left + margin.right;
-    const verticalMargin = margin.top + margin.left;
+    const verticalMargin = margin.top + margin.bottom;
 
-    const donutHeight = Math.min(height, width) / 8;
-
-    const innerRadius = 0.5;
+    // thickness of the donut
+    const donutThickness = show3d ? Math.min(height, width) / 8 : 0;
 
     let donutWidth = width;
-    if (width / height > MIN_RATIO) {
+    let donutHeight = height;
+
+    if (show3d && width / height > MIN_RATIO) {
+      // dont allow 3d donut to be stretch horizontally anymore
       donutWidth = height * MIN_RATIO;
     }
+    else if (!show3d && width > height) {
+      // don't allow the 2d donut to be stretched horizontally
+      donutWidth = height;
+    }
+    if (height > width) {
+      // never stretch the donut chart vertically
+      donutHeight = width;
+    }
+
+    // x,y position of the donut
     const centerX = width / 2;
-    const centerY = height / 2 - donutHeight / 2;
+    const centerY = (height - donutThickness) / 2;
+
     const outerRadiusX = donutWidth / 2 - horizontalMargin;
-    const outerRadiusY = (Math.min(height / 2, donutWidth / 2) -
-      donutHeight / 2) - verticalMargin;
+    const outerRadiusY = (donutHeight - donutThickness) / 2 - verticalMargin;
     const innerRadiusX = outerRadiusX * innerRadius;
     const innerRadiusY = outerRadiusY * innerRadius;
 
     const donutProps = {
       outerRadiusX,
       outerRadiusY,
-      donutHeight,
       innerRadiusX,
       innerRadiusY,
     };
@@ -306,6 +318,7 @@ class DonutChart extends React.Component {
                     endAngle={endAngle}
                     x={x}
                     y={y}
+                    donutHeight={donutThickness}
                     {...donutProps}
                     onDataClick={onDataClick}
                   />
@@ -321,6 +334,7 @@ class DonutChart extends React.Component {
             <EmptyDonut
               left={centerX}
               top={centerY}
+              donutHeight={donutThickness}
               {...donutProps}
             />
           }
@@ -340,6 +354,7 @@ class DonutChart extends React.Component {
 DonutChart.propTypes = {
   data: DataPropType,
   height: PropTypes.number.isRequired,
+  innerRadius: PropTypes.number,
   show3d: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
