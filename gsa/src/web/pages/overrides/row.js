@@ -137,7 +137,7 @@ const Row = ({
       <TableData>
         {render_severity(entity.severity)}
       </TableData>
-      <TableData flex align={['center', 'center']}>
+      <TableData>
         <SeverityBar severity={entity.new_severity}/>
       </TableData>
       <TableData>

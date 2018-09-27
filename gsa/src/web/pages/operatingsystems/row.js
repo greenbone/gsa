@@ -100,16 +100,16 @@ const Row = ({entity, links = true, actions, ...props}) => {
       <TableData>
         {entity.title}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.latest_severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.highest_severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.average_severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <Link
           to={'hosts'}
           filter={'os~"' + entity.name + '"'}

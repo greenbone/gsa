@@ -57,7 +57,7 @@ const Header = ({
           width="10%"
           colSpan="2"
         >
-          {_('Familiy')}
+          {_('Family')}
         </TableHead>
         <TableHead
           width="10%"
@@ -66,7 +66,13 @@ const Header = ({
           {_('NVTs')}
         </TableHead>
         {actions &&
-          <TableHead rowSpan="2" width="8%">{_('Actions')}</TableHead>
+          <TableHead
+            rowSpan="2"
+            width="8%"
+            align="center"
+          >
+            {_('Actions')}
+          </TableHead>
         }
       </TableRow>
 

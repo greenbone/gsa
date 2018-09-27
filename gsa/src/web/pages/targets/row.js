@@ -148,7 +148,7 @@ const Row = ({
       <TableData>
         {shorten(entity.hosts.join(', '), 500)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {entity.max_hosts}
       </TableData>
       <TableData>

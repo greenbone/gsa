@@ -99,12 +99,16 @@ const Header = ({
         </TableHead>
         {isDefined(actionsColumn) ?
           actionsColumn :
-          <TableHead rowSpan="2" width="5em">{_('Actions')}</TableHead>
+          <TableHead
+            rowSpan="2"
+            width="8%"
+            align="center"
+          >{_('Actions')}</TableHead>
         }
       </TableRow>
       <TableRow>
         <TableHead
-          width="4%"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'high' : false}
@@ -113,7 +117,7 @@ const Header = ({
           <SeverityClassLabel.High/>
         </TableHead>
         <TableHead
-          width="4%"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'medium' : false}
@@ -122,7 +126,7 @@ const Header = ({
           <SeverityClassLabel.Medium/>
         </TableHead>
         <TableHead
-          width="4%"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'low' : false}
@@ -131,7 +135,7 @@ const Header = ({
           <SeverityClassLabel.Low/>
         </TableHead>
         <TableHead
-          width="4%"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'log' : false}
@@ -140,7 +144,7 @@ const Header = ({
           <SeverityClassLabel.Log/>
         </TableHead>
         <TableHead
-          width="4%"
+          width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'false_positive' : false}

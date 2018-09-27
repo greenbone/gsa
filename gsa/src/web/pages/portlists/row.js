@@ -103,17 +103,17 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData
-      flex align="end"
+      flex align="start"
     >
       {entity.port_count.all}
     </TableData>
     <TableData
-      flex align="end"
+      flex align="start"
     >
       {entity.port_count.tcp}
     </TableData>
     <TableData
-      flex align="end"
+      flex align="start"
     >
       {entity.port_count.udp}
     </TableData>

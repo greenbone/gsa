@@ -61,10 +61,10 @@ const Row = ({
       <TableData>
         {longDate(entity.creationTime)}
       </TableData>
-      <TableData flex align="end">
+      <TableData>
         {entity.cve_refs}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
       {renderComponent(actions, {...other, entity})}

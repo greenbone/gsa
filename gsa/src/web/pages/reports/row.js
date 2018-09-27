@@ -144,7 +144,7 @@ const Row = ({entity, links = true, actions, ...other}) => {
           {entity.task.name}
         </DetailsLink>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.report.severity.filtered}/>
       </TableData>
       <TableData flex align="end">

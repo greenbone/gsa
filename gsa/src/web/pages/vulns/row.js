@@ -62,13 +62,13 @@ const Row = ({
       <TableData>
         {longDate(results.newest)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData flex align="center">
         {entity.qod} %
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <Link
           to="results"
           filter={'nvt=' + entity.id}
@@ -77,7 +77,7 @@ const Row = ({
           {results.count}
         </Link>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {hosts.count}
       </TableData>
       {renderComponent(actions, {...other, entity})}

@@ -104,10 +104,10 @@ const Row = ({
         displayName={_('Scan Config')}
         onToggleDetailsClick={onToggleDetailsClick}
       />
-      <TableData flex align="end">
+      <TableData>
         {na(entity.families.count)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <Trend
           trend={entity.families.trend}
           titleDynamic={_('The family selection is DYNAMIC. New families ' +
@@ -116,10 +116,10 @@ const Row = ({
             'will NOT automatically be added and considered.')}
         />
       </TableData>
-      <TableData flex align="end">
+      <TableData>
         {na(entity.nvts.count)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <Trend
           trend={entity.nvts.trend}
           titleDynamic={_('The NVT selection is DYNAMIC. New NVTs of ' +

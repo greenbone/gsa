@@ -70,7 +70,13 @@ const Header = ({
         </TableHead>
         {isDefined(actionsColumn) ?
           actionsColumn :
-          <TableHead rowSpan="2" width="6em">{_('Actions')}</TableHead>
+          <TableHead
+            rowSpan="2"
+            width="6em"
+            align="center"
+          >
+            {_('Actions')}
+          </TableHead>
         }
       </TableRow>
       <TableRow>

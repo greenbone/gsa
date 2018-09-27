@@ -90,10 +90,10 @@ const Row = ({
           <SolutionTypeIcon type={entity.tags.solution_type}/>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData flex align="end">
         {entity.qod && entity.qod.value} %
       </TableData>
       {renderComponent(actions, {...other, entity})}

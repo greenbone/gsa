@@ -36,7 +36,7 @@ import TableHeader from '../components/table/header.js';
 import TableRow from '../components/table/row.js';
 
 const defaultactions = (
-  <TableHead width="8%">{_('Actions')}</TableHead>
+  <TableHead width="8%" align="center">{_('Actions')}</TableHead>
 );
 
 /**

@@ -78,7 +78,7 @@ const render_report_total = (entity, links) => {
     return null;
   }
   return (
-    <Layout flex align={['center', 'center']}>
+    <Layout>
       <Link
         to={'reports'}
         filter={'task_id=' + entity.id + ' and status=Done ' +
@@ -174,7 +174,7 @@ const Row = ({
           <Comment>({entity.comment})</Comment>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <TaskStatus task={entity} links={links}/>
       </TableData>
       <TableData>
@@ -183,12 +183,12 @@ const Row = ({
       <TableData>
         {render_report(entity.last_report, links)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {!entity.isContainer() && isDefined(entity.last_report) &&
           <SeverityBar severity={entity.last_report.severity}/>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {!entity.isContainer() &&
           <Trend name={entity.trend} />
         }
