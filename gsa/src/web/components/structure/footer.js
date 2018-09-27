@@ -25,11 +25,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import ExternalLink from 'web/components/link/externallink';
-
 import Theme from 'web/utils/theme';
 
-const Link = styled(ExternalLink)`
+const Link = styled.a`
   color: ${Theme.mediumGray};
 `;
 
@@ -51,8 +49,14 @@ const GreenboneFooter = () => {
   return (
     <Footer>
       Greenbone Security Assistant (GSA) Copyright 2009-2018 by
-      Greenbone Networks GmbH, <Link to="http://www.greenbone.net">
-        www.greenbone.net</Link>
+      Greenbone Networks GmbH,&nbsp;
+      <Link
+        target="_blank"
+        rel="noopener noreferrer"
+        href="http://www.greenbone.net"
+      >
+        www.greenbone.net
+      </Link>
     </Footer>
   );
 };
