@@ -109,8 +109,9 @@ TableHead.propTypes = {
 };
 
 export default styled(TableHead)`
-  background-color: ${Theme.darkGray};
-  color: ${Theme.white};
+  background-color: ${Theme.white};
+  color: ${Theme.black};
+  border-top: 1px solid ${Theme.lightGray}
   font-weight: bold;
   width: ${props => props.width};
 

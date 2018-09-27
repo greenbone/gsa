@@ -28,12 +28,12 @@ import Theme from 'web/utils/theme';
 const TableHeader = styled.thead`
   & a {
     text-decoration: none;
-    color: ${Theme.white};
+    color: ${Theme.black};
   };
 
   & a:hover {
     text-decoration: underline;
-    color: ${Theme.white};
+    color: ${Theme.black};
   };
 
   @media print {

@@ -66,6 +66,10 @@ const DetailsIcon = styled(FoldIcon)`
   margin-left: 2px;
 `;
 
+const TableBox = styled(Layout)`
+  margin-top: 20px;
+`;
+
 class EntitiesTable extends React.Component {
 
   constructor(...args) {
@@ -244,7 +248,7 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <Layout
+      <TableBox
         flex="column"
         grow="1"
         className="entities-table"
@@ -272,7 +276,7 @@ class EntitiesTable extends React.Component {
           </Layout> :
           pagination
         }
-      </Layout>
+      </TableBox>
     );
   }
 }
