@@ -237,6 +237,7 @@ class DonutChart extends React.Component {
     const {width} = this.state;
     const {
       data = [],
+      innerRadius = 0,
       height,
       svgRef,
       show3d = false,
@@ -248,8 +249,6 @@ class DonutChart extends React.Component {
     const verticalMargin = margin.top + margin.left;
 
     const donutHeight = Math.min(height, width) / 8;
-
-    const innerRadius = 0.5;
 
     let donutWidth = width;
     if (width / height > MIN_RATIO) {
@@ -340,6 +339,7 @@ class DonutChart extends React.Component {
 DonutChart.propTypes = {
   data: DataPropType,
   height: PropTypes.number.isRequired,
+  innerRadius: PropTypes.number,
   show3d: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
