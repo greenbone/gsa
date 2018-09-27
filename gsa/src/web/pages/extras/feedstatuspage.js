@@ -28,26 +28,26 @@ import {parseInt} from 'gmp/parser';
 
 import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
-import ManualIcon from '../../components/icon/manualicon.js';
-import Icon from '../../components/icon/icon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import Icon from 'web/components/icon/icon';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import Link from '../../components/link/link.js';
+import Link from 'web/components/link/link';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Section from '../../components/section/section.js';
+import Section from 'web/components/section/section';
 
-import Table from '../../components/table/stripedtable.js';
-import TableBody from '../../components/table/body.js';
-import TableRow from '../../components/table/row.js';
-import TableHead from '../../components/table/head.js';
-import TableData from '../../components/table/data.js';
+import Table from 'web/components/table/stripedtable';
+import TableBody from 'web/components/table/body';
+import TableRow from 'web/components/table/row';
+import TableHead from 'web/components/table/head';
+import TableData from 'web/components/table/data';
 
-import withGmp from '../../utils/withGmp.js';
+import withGmp from 'web/utils/withGmp';
 
 const ToolBarIcons = () => (
   <ManualIcon
