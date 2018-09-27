@@ -246,7 +246,7 @@ class DonutChart extends React.Component {
     } = this.props;
 
     const horizontalMargin = margin.left + margin.right;
-    const verticalMargin = margin.top + margin.left;
+    const verticalMargin = margin.top + margin.bottom;
 
     const donutHeight = Math.min(height, width) / 8;
 
