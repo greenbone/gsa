@@ -1,4 +1,10 @@
-# Greenbone Security Assistant [![CircleCI](https://circleci.com/gh/greenbone/gsa/tree/master.svg?style=svg)](https://circleci.com/gh/greenbone/gsa/tree/master)
+<img src="https://www.greenbone.net/wp-content/uploads/01_Logo-mit-Schriftzug_500px_on_white_horiz1.jpg" alt="Greenbone Logo" width="400px"/>
+
+# Greenbone Security Assistant
+
+[![GitHub release](https://img.shields.io/github/release/greenbone/gsa.svg)](https://github.com/greenbone/gsa/releases)
+[![codecov](https://codecov.io/gh/greenbone/gsa/branch/master/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
+[![CircleCI](https://circleci.com/gh/greenbone/gsa/tree/master.svg?style=svg)](https://circleci.com/gh/greenbone/gsa/tree/master)
 
 ## About
 

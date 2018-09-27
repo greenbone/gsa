@@ -62,6 +62,9 @@ const margin = {
   left: 60,
 };
 
+const MIN_WIDTH = 100 + margin.right + margin.left;
+const MIN_TICK_WIDTH = 75;
+
 const findX = (timeline, value) => d => timeline ?
   d.x.isSame(value) : d.x === value;
 
@@ -179,10 +182,7 @@ class LineChart extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {
-      displayInfo: false,
-      ...this.updateData(this.props),
-    };
+    this.legendRef = React.createRef();
 
     this.hideInfo = this.hideInfo.bind(this);
     this.showInfo = this.showInfo.bind(this);
@@ -191,18 +191,32 @@ class LineChart extends React.Component {
     this.endRangeSelection = this.endRangeSelection.bind(this);
 
     this.handleMouseMove = this.handleMouseMove.bind(this);
+
+    this.state = {
+      displayInfo: false,
+      ...this.update(),
+    };
+  }
+
+  componentDidUpdate() {
+
+    this.setState(this.update());
   }
 
   componentDidMount() {
-    this.setState(this.updateData(this.props));
+    this.setState(this.update());
   }
 
-  componentWillReceiveProps(next) {
-    const {width, height, data} = this.props;
-
-    if (width !== next.width || height !== next.height || data !== next.data) {
-      this.setState(this.updateData(next));
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.data !== this.props.data ||
+      nextProps.width !== this.props.width ||
+      nextProps.height !== this.props.height ||
+      nextState.width !== this.state.width ||
+      nextState.rangeX !== this.state.rangeX ||
+      nextState.infoX !== this.state.infoX ||
+      nextState.mouseX !== this.state.mouseX ||
+      nextState.mouseY !== this.state.mouseY ||
+      nextState.displayInfo !== this.state.displayInfo;
   }
 
   hideInfo() {
@@ -235,8 +249,8 @@ class LineChart extends React.Component {
   }
 
   endRangeSelection(event) {
-    const {rangeX, infoX, data} = this.state;
-    const {onRangeSelected, timeline = false} = this.props;
+    const {rangeX, infoX} = this.state;
+    const {onRangeSelected, timeline = false, data} = this.props;
 
     if (onRangeSelected) {
       const direction = infoX >= rangeX;
@@ -281,19 +295,40 @@ class LineChart extends React.Component {
     return xV1 - xV < xV - xV2 ? xV1 : xV2; // return nearest value
   }
 
-  updateData({
-    data = [],
-    width,
-    height,
-    timeline = false,
-  }) {
-    if (this.legend) {
-      const {width: legendWidth} = this.legend.getBoundingClientRect();
-      width = width - legendWidth - LEGEND_MARGIN;
+  getXAxisTicks() {
+    const {width} = this.state;
+    let {numTicks = 10} = this.props;
+    while (width / numTicks < MIN_TICK_WIDTH) {
+      numTicks--;
+    }
+    return numTicks;
+  }
+
+  getWidth() {
+    const {width} = this.props;
+    const {current: legend} = this.legendRef;
+
+    if (legend === null) {
+      return width;
     }
 
-    const maxWidth =
-      width - margin.left - margin.right - MENU_PLACEHOLDER_WIDTH;
+    const {width: legendWidth} = legend.getBoundingClientRect();
+    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
+  }
+
+  update() {
+    const {
+      data = [],
+      height,
+      timeline = false,
+    } = this.props;
+
+    let width = this.getWidth();
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
 
     const xValues = data.map(d => timeline ? d.x.toDate() : d.x);
@@ -341,7 +376,6 @@ class LineChart extends React.Component {
       .nice();
 
     return {
-      data,
       xScale,
       yScale,
       y2Scale,
@@ -357,12 +391,12 @@ class LineChart extends React.Component {
 
   renderInfo() {
     const {
+      data,
       timeline,
       yLine,
       y2Line,
     } = this.props;
     const {
-      data,
       displayInfo,
       infoX,
       mouseY,
@@ -506,7 +540,6 @@ class LineChart extends React.Component {
 
   render() {
     const {
-      data,
       xScale,
       yScale,
       y2Scale,
@@ -516,19 +549,22 @@ class LineChart extends React.Component {
       width,
     } = this.state;
     const {
+      data = [],
       displayLegend = true,
-      numTicks,
       svgRef,
       xAxisLabel,
       yAxisLabel,
       y2AxisLabel,
       yLine,
       y2Line,
+      onRangeSelected,
     } = this.props;
     const hasValue = data.length > 0;
     const hasValues = data.length > 1;
     const hasOneValue = data.length === 1;
     const hasLines = isDefined(yLine) && isDefined(y2Line);
+    const showRange = hasValues && isDefined(onRangeSelected);
+    const xAxisTicks = this.getXAxisTicks();
     return (
       <Layout align={['start', 'start']}>
         <Svg
@@ -538,8 +574,8 @@ class LineChart extends React.Component {
           onMouseLeave={hasValue ? this.hideInfo : undefined}
           onMouseEnter={hasValue ? this.showInfo : undefined}
           onMouseMove={hasValue ? this.handleMouseMove : undefined}
-          onMouseDown={hasValues ? this.startRangeSelection : undefined}
-          onMouseUp={hasValues ? this.endRangeSelection : undefined}
+          onMouseDown={showRange ? this.startRangeSelection : undefined}
+          onMouseUp={showRange ? this.endRangeSelection : undefined}
         >
           <Group
             top={margin.top}
@@ -560,7 +596,7 @@ class LineChart extends React.Component {
               scale={xScale}
               top={maxHeight}
               label={`${xAxisLabel}`}
-              numTicks={numTicks}
+              numTicks={xAxisTicks}
             />
             {y2Line &&
               <Axis
@@ -630,7 +666,7 @@ class LineChart extends React.Component {
         </Svg>
         {hasLines && displayLegend &&
           <Legend
-            innerRef={ref => this.legend = ref}
+            innerRef={this.legendRef}
             data={[yLine, y2Line]}
           >
             {({d, toolTipProps}) => (
