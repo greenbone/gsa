@@ -24,22 +24,22 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EditIcon from 'web/entity/icon/editicon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import ExportIcon from '../../components/icon/exporticon.js';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import TableRow from '../../components/table/row.js';
+import TableRow from 'web/components/table/row';
 
 const IconActions = ({
     entity,

@@ -178,31 +178,31 @@ const Row = ({
       <TableData>
         <i>{entity.hostname}</i>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <OsIcon
           osCpe={best_os_cpe}
           osTxt={best_os_txt}
         />
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.hole}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.warning}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.info}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.log}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.false_positive}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {result_counts.total}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>

@@ -64,7 +64,7 @@ export const EntitiesFooter = ({
       <TableRow>
         <td colSpan={span}>
           {actions ?
-            <Layout flex align={['end', 'center']}>
+            <Layout align={['end', 'center']}>
               <Divider>
                 {selection &&
                   <Select

@@ -218,7 +218,7 @@ const OverrideDialog = ({
               />
               {is_edit && override.isActive() &&
                 isDefined(override.endTime) &&
-                <Layout flex box>
+                <Layout>
                   <Divider>
                     <Radio
                       name="active"
@@ -267,7 +267,7 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Layout flex box>
+              <Layout>
                 <Radio
                   name="hosts"
                   title={fixed ? state.hosts_manual : ''}
@@ -294,7 +294,7 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Layout flex box>
+              <Layout>
                 <Radio
                   name="port"
                   title={fixed ? state.port_manual : ''}
@@ -322,7 +322,7 @@ const OverrideDialog = ({
                 onChange={onValueChange}
               />
               {isDefined(severity) &&
-                <Layout flex>
+                <Layout>
                   {severity > 0 ?
                     <Radio
                       name="severity"
@@ -345,7 +345,7 @@ const OverrideDialog = ({
                 </Layout>
               }
               {!isDefined(severity) &&
-                <Layout flex box>
+                <Layout>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
@@ -409,7 +409,7 @@ const OverrideDialog = ({
                 value={TASK_ANY}
                 onChange={onValueChange}
               />
-              <Layout flex box>
+              <Layout>
                 <Radio
                   name="task_id"
                   title={fixed ? state.task_name : ''}

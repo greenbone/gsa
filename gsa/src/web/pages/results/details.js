@@ -147,7 +147,7 @@ const ResultDetails = ({
         title={detection_title}
       >
         <Layout flex="column">
-          <Layout flex box>
+          <Layout>
             {tags.vuldetect}
           </Layout>
           <InfoTable>

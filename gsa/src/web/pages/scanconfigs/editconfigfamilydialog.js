@@ -106,7 +106,7 @@ class Nvt extends React.Component {
         <TableData>
           {pref_count}
         </TableData>
-        <TableData flex align="center">
+        <TableData align="center">
           <Checkbox
             checked={selected === YES_VALUE}
             name={oid}
@@ -115,7 +115,7 @@ class Nvt extends React.Component {
             onChange={onSelectedChange}
           />
         </TableData>
-        <TableData flex align="center">
+        <TableData align="center">
           <EditIcon
             title={_('Select and edit NVT details')}
             value={{config, nvt}}

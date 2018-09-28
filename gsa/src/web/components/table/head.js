@@ -46,6 +46,7 @@ const TableHead = ({
   currentSortDir,
   sort = true,
   sortBy,
+  title,
   width,
   onSortChange,
   ...other
@@ -74,7 +75,9 @@ const TableHead = ({
       );
     }
   }
-
+  if (isDefined(title)) {
+    children = `${title}`;
+  }
   return (
     <th
       className={className}
@@ -104,13 +107,15 @@ TableHead.propTypes = {
   rowSpan: PropTypes.numberString,
   sort: PropTypes.bool,
   sortBy: PropTypes.stringOrFalse,
+  title: PropTypes.toString,
   width: PropTypes.string,
   onSortChange: PropTypes.func,
 };
 
 export default styled(TableHead)`
-  background-color: ${Theme.darkGray};
-  color: ${Theme.white};
+  background-color: ${Theme.white};
+  color: ${Theme.black};
+  border-top: 1px solid ${Theme.lightGray}
   font-weight: bold;
   width: ${props => props.width};
 

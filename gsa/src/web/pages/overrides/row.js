@@ -29,29 +29,29 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {severityValue} from 'gmp/utils/number';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 import {
   extraRiskFactor,
   translateRiskFactor,
   LOG_VALUE,
-} from '../../utils/severity';
+} from 'web/utils/severity';
 
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
-import TrashIcon from '../../entity/icon/trashicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import ExportIcon from '../../components/icon/exporticon.js';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
 
 const render_severity = severity => {
@@ -137,7 +137,7 @@ const Row = ({
       <TableData>
         {render_severity(entity.severity)}
       </TableData>
-      <TableData flex align={['center', 'center']}>
+      <TableData>
         <SeverityBar severity={entity.new_severity}/>
       </TableData>
       <TableData>

@@ -83,7 +83,7 @@ const Row = ({
           name={entity.id}
           onClick={onToggleDetailsClick}
         >
-          <Layout flex align="space-between">
+          <Layout align="space-between">
             <span>
               {shown_name}
             </span>
@@ -104,15 +104,15 @@ const Row = ({
           </Layout>
         </RowDetailsToggle>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {has_tags &&
           <SolutionTypeIcon type={entity.nvt.tags.solution_type}/>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="end">
         {entity.qod.value} %
       </TableData>
       <TableData colSpan="2">

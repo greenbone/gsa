@@ -104,8 +104,8 @@ const CertStatus = ({
     info,
   }) => {
   return (
-    <FootNote flex box>
-      <Layout flex box>
+    <FootNote>
+      <Layout>
         <Icon img="key.svg"/>
       </Layout>
       <span>
@@ -254,10 +254,10 @@ class ScannerDialog extends React.Component {
               </FormGroup>
 
               <FormGroup title={_('CA Certificate')} flex="column">
-                <Layout flex box>
+                <Layout>
                   <Divider>
                     {is_edit &&
-                      <Layout flex box>
+                      <Layout>
                         {isDefined(state.ca_pub) &&
                           <Radio
                             title={_('Existing')}
@@ -303,7 +303,7 @@ class ScannerDialog extends React.Component {
                     value={credential_id}
                     onChange={onCredentialChange}
                   />
-                  <Layout flex box>
+                  <Layout>
                     <NewIcon
                       value={type}
                       title={_('Create a new Credential')}

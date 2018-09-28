@@ -27,28 +27,28 @@ import _ from 'gmp/locale';
 
 import {map} from 'gmp/utils/array';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import EntityNameTableData from '../../entities/entitynametabledata.js';
-import {withEntityActions} from '../../entities/actions.js';
-import {withEntityRow} from '../../entities/row.js';
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import {withEntityActions} from 'web/entities/actions';
+import {withEntityRow} from 'web/entities/row';
 
-import CloneIcon from '../../entity/icon/cloneicon.js';
-import DeleteIcon from '../../entity/icon/deleteicon.js';
-import EditIcon from '../../entity/icon/editicon.js';
+import CloneIcon from 'web/entity/icon/cloneicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
+import EditIcon from 'web/entity/icon/editicon';
 
-import ExportIcon from '../../components/icon/exporticon.js';
+import ExportIcon from 'web/components/icon/exporticon';
 
-import Divider from '../../components/layout/divider.js';
-import IconDivider from '../../components/layout/icondivider.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import {convert_auth_method, convert_allow} from './details.js';
+import {convert_auth_method, convert_allow} from './details';
 
 const IconActions = ({
   entity,

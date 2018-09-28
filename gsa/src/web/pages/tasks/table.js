@@ -126,7 +126,12 @@ Header.propTypes = {
 };
 
 const actionsColumn = (
-  <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
+  <TableHead
+    rowSpan="2"
+    width="10em"
+    title={_l('Actions')}
+    align="center"
+  />
 );
 
 export default createEntitiesTable({

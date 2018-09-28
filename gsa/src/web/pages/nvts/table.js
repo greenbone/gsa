@@ -102,7 +102,7 @@ const Header = ({
           {_('CVE')}
         </TableHead>
         <TableHead width="1%">
-          <Layout flex align="center">
+          <Layout align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
                 <Icon title={_('Solution type')} img="solution_type.svg"/>

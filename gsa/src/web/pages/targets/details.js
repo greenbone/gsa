@@ -82,7 +82,7 @@ const TargetDetails = ({
                 {_('Included')}
               </TableData>
               <TableData>
-                <Divider flex wrap>
+                <Divider wrap>
                   {hosts.map(host => (
                     <span key={host}>{host}</span>
                   ))}

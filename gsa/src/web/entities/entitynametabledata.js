@@ -52,7 +52,7 @@ const EntityNameTableData = ({
   onToggleDetailsClick,
 }) => (
   <TableData flex="column">
-    <Layout flex align="space-between">
+    <Layout align="space-between">
       <Layout flex="column">
         {entity.isOrphan() &&
           <b>{_('Orphan')}</b>

@@ -81,7 +81,7 @@ const PortRangesTable = ({
               {range.protocol_type}
             </TableData>
             {actions &&
-              <TableData flex align="center">
+              <TableData align="center">
                 <DeleteIcon
                   title={_('Delete Port Range')}
                   value={range}

@@ -192,7 +192,7 @@ class ScannerPreference extends React.Component {
         </TableData>
         <TableData>
           {is_radio ?
-            <Layout flex>
+            <Layout>
               <YesNoRadio
                 yesValue="yes"
                 noValue="no"
@@ -327,11 +327,11 @@ class NvtFamily extends React.Component {
           {name}
         </TableData>
         <TableData>
-          <Layout flex align="end">
+          <Layout align="end">
             {_('{{count}} of {{max}}', counts)}
           </Layout>
         </TableData>
-        <TableData flex align={['center', 'center']}>
+        <TableData align={['center', 'center']}>
           <Radio
             flex
             name={name}
@@ -351,7 +351,7 @@ class NvtFamily extends React.Component {
           />
           <Trend trend="0"/>
         </TableData>
-        <TableData flex align={['center', 'center']}>
+        <TableData align={['center', 'center']}>
           <Checkbox
             flex
             name={name}
@@ -361,7 +361,7 @@ class NvtFamily extends React.Component {
             onChange={onSelectChange}
           />
         </TableData>
-        <TableData flex align="center">
+        <TableData align="center">
           <EditIcon
             title={_('Edit Scan Config Family')}
             value={{name, config}}
@@ -464,7 +464,7 @@ class NvtFamilies extends React.Component {
               <TableData>
                 {_('Total: {{count}}', {count: config.families.count})}
               </TableData>
-              <TableData flex align="end">
+              <TableData align="end">
                 {_('{{known}} of {{max}}', config.nvts)}
               </TableData>
             </TableRow>

@@ -186,7 +186,7 @@ const NvtFamilies = ({
                   {family.name}
                 </TableData>
                 <TableData align={['center', 'end']}>
-                  <Layout flex align="end">
+                  <Layout align="end">
                     {_('{{count}} of {{max}}', family.nvts)}
                   </Layout>
                 </TableData>

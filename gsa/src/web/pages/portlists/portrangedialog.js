@@ -91,7 +91,7 @@ const PortRangeDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Protocol')} flex>
+            <FormGroup title={_('Protocol')}>
               <Radio
                 title={_('TCP')}
                 name="port_type"

@@ -25,22 +25,22 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
+import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
-import Divider from '../../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import CveLink from '../../components/link/cvelink.js';
-import Link from '../../components/link/link.js';
+import CveLink from 'web/components/link/cvelink';
+import Link from 'web/components/link/link';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
 const Row = ({
   entity,
@@ -85,15 +85,15 @@ const Row = ({
           ))}
         </Divider>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity && entity.tags &&
           <SolutionTypeIcon type={entity.tags.solution_type}/>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="end">
         {entity.qod && entity.qod.value} %
       </TableData>
       {renderComponent(actions, {...other, entity})}

@@ -71,7 +71,7 @@ const FilterCountChangedConditionPart = ({
         min="0" size="5"
         onChange={onChange}
       />
-      <Layout flex box>
+      <Layout>
         {_('result(s) more than previous scan')}
       </Layout>
     </Divider>

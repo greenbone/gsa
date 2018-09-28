@@ -67,7 +67,7 @@ const withRowDetails = (type, colSpan = '10') => Component => {
         align={['start', 'stretch']}
       >
         {links &&
-          <Layout flex align={['start', 'start']}>
+          <Layout align={['start', 'start']}>
             <DetailsLink
               type={isFunction(type) ? type(entity) : type}
               id={entity.id}

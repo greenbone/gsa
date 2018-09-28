@@ -278,7 +278,7 @@ class Identifiers extends React.Component {
                   />
                 </TableData>
                 {displayActions &&
-                  <TableData flex align={['center', 'center']}>
+                  <TableData align={['center', 'center']}>
                     <DeleteIcon
                       title={_('Delete Identifier')}
                       value={identifier}

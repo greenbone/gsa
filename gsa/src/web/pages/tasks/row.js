@@ -28,34 +28,34 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
-import withUserName from '../../utils/withUserName.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
+import withUserName from 'web/utils/withUserName';
 
-import {withEntityRow, RowDetailsToggle} from '../../entities/row.js';
+import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
-import ObserverIcon from '../../entity/icon/observericon.js';
+import ObserverIcon from 'web/entity/icon/observericon';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import Comment from '../../components/comment/comment.js';
+import Comment from 'web/components/comment/comment';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
-import Layout from '../../components/layout/layout.js';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
-import Actions from './actions.js';
-import TaskStatus from './status.js';
-import Trend from './trend.js';
+import Actions from './actions';
+import TaskStatus from './status';
+import Trend from './trend';
 
-import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner.js';
+import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 const render_report = (report, links) => {
   if (!isDefined(report)) {
@@ -78,7 +78,7 @@ const render_report_total = (entity, links) => {
     return null;
   }
   return (
-    <Layout flex align={['center', 'center']}>
+    <Layout>
       <Link
         to={'reports'}
         filter={'task_id=' + entity.id + ' and status=Done ' +
@@ -132,7 +132,7 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <Layout flex align="space-between">
+        <Layout align="space-between">
           <RowDetailsToggle
             name={entity.id}
             onClick={onToggleDetailsClick}
@@ -174,7 +174,7 @@ const Row = ({
           <Comment>({entity.comment})</Comment>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <TaskStatus task={entity} links={links}/>
       </TableData>
       <TableData>
@@ -183,12 +183,12 @@ const Row = ({
       <TableData>
         {render_report(entity.last_report, links)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {!entity.isContainer() && isDefined(entity.last_report) &&
           <SeverityBar severity={entity.last_report.severity}/>
         }
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {!entity.isContainer() &&
           <Trend name={entity.trend} />
         }

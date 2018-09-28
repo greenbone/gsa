@@ -40,7 +40,7 @@ import withLayout from 'web/components/layout/withLayout';
 const HeaderLayout = styled(Layout)`
   margin: 10px 0px;
   padding-bottom: 1px;
-  border-bottom: 2px solid ${Theme.black};
+  border-bottom: 2px solid ${Theme.lightGray};
   position: relative;
 `;
 
@@ -66,7 +66,7 @@ const SectionHeader = ({
       align={align}
       className="section-header"
     >
-      <HeaderHeading flex align={['start', 'stretch']}>
+      <HeaderHeading align={['start', 'stretch']}>
         {isDefined(img) &&
           <HeaderIconLayout
             flex
@@ -78,7 +78,7 @@ const SectionHeader = ({
           </HeaderIconLayout>
         }
         {isDefined(title) &&
-          <Layout flex align={['start', 'end']}>
+          <Layout align={['start', 'end']}>
             {title}
           </Layout>
         }

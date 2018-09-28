@@ -71,7 +71,7 @@ const EntityBox = ({
       flex="column"
       align="space-between"
     >
-      <Layout flex align={['space-between', 'start']}>
+      <Layout align={['space-between', 'start']}>
         <h3>{title}</h3>
         {isDefined(toolbox) && toolbox}
       </Layout>

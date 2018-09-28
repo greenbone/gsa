@@ -125,7 +125,7 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout flex align="start">
+      <Layout align="start">
         <InfoComponent
           entity={entity}
         />

@@ -54,13 +54,13 @@ const Row = ({
           {entity.name}
         </DetailsLink>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity.qod.value} %
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <Link
           to="results"
           filter={'nvt=' + entity.id}
@@ -69,7 +69,7 @@ const Row = ({
           {entity.results.count}
         </Link>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity.hosts.count}
       </TableData>
     </TableRow>

@@ -247,9 +247,9 @@ class PowerFilter extends React.Component {
         align={['start', 'stetch']}
         className="powerfilter"
       >
-        <Layout flex align={['space-between', 'center']}>
+        <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
-            <Layout flex align={['start', 'center']}>
+            <Layout align={['start', 'center']}>
               <Label>
                 <b>{_('Filter')}</b>
               </Label>
@@ -262,7 +262,7 @@ class PowerFilter extends React.Component {
                 onChange={this.handleValueChange}
               />
             </Layout>
-            <IconDivider flex align={['start', 'center']}>
+            <IconDivider align={['start', 'center']}>
               <Icon
                 img="refresh.svg"
                 title={_('Update Filter')}

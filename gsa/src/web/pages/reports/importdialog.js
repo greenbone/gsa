@@ -72,7 +72,7 @@ const ImportDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
-          <FormGroup title={_('Container Task')} flex>
+          <FormGroup title={_('Container Task')}>
             <Divider>
               <Select
                 name="task_id"

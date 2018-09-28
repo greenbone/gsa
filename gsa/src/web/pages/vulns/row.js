@@ -25,18 +25,18 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderComponent} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderComponent} from 'web/utils/render';
 
-import {withEntityRow} from '../../entities/row.js';
+import {withEntityRow} from 'web/entities/row';
 
-import DetailsLink from '../../components/link/detailslink.js';
-import Link from '../../components/link/link.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
 const Row = ({
   entity,
@@ -62,13 +62,13 @@ const Row = ({
       <TableData>
         {longDate(results.newest)}
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity.qod} %
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         <Link
           to="results"
           filter={'nvt=' + entity.id}
@@ -77,7 +77,7 @@ const Row = ({
           {results.count}
         </Link>
       </TableData>
-      <TableData flex align="center">
+      <TableData>
         {hosts.count}
       </TableData>
       {renderComponent(actions, {...other, entity})}

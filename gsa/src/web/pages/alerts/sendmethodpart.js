@@ -59,7 +59,7 @@ const SendMethodPart = ({
             maxLength="256"
             onChange={onChange}
           />
-          <Layout flex box>
+          <Layout>
             {_('on port')}
           </Layout>
           <TextField

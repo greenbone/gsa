@@ -31,11 +31,14 @@ import styled from 'styled-components';
 const StripedTable = styled(Table)`
   & th, & td {
     padding: 4px;
+    border-bottom: 1px solid ${Theme.lightGray};
   };
   & tfoot tr {
-    background: ${Theme.lightGray};
+    background: ${Theme.white};
   };
-
+  & tfoot tr td {
+    border-bottom: 1px solid ${Theme.lightGray};
+  };
   @media screen {
     & > tbody:nth-of-type(even), & > tbody:only-of-type > tr:nth-of-type(even)
       {

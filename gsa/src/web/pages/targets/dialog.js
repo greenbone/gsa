@@ -246,7 +246,7 @@ const TargetDialog = ({
               </Divider>
 
               {state.hosts_count &&
-                <Layout flex box>
+                <Layout>
                   <Radio
                     title={_('From host assets ({{count}} hosts)',
                       {count: state.hosts_count})}
@@ -403,7 +403,7 @@ const TargetDialog = ({
                     onChange={onSmbCredentialChange}
                   />
                   {!in_use &&
-                    <Layout box flex>
+                    <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
                         value={NEW_SMB}
@@ -426,7 +426,7 @@ const TargetDialog = ({
                     onChange={onEsxiCredentialChange}
                   />
                   {!state.in_use &&
-                    <Layout box flex>
+                    <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
                         value={NEW_ESXI}
@@ -449,7 +449,7 @@ const TargetDialog = ({
                     onChange={onSnmpCredentialChange}
                   />
                   {!in_use &&
-                    <Layout box flex>
+                    <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
                         value={NEW_SNMP}

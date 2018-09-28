@@ -179,7 +179,7 @@ SettingTableRow.propTypes = {
 };
 
 const ToolBarIcons = ({onEditSettingsClick}) => (
-  <Layout flex>
+  <Layout>
     <IconDivider>
       <ManualIcon
         size="medium"

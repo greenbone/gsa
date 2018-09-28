@@ -154,7 +154,7 @@ const Dialog = ({
 
                 <FormGroup
                   title={_('Name')}
-                  flex align={['space-between', 'center']}
+                  align={['space-between', 'center']}
                 >
                   <Select
                     name="permission_name"
@@ -174,7 +174,7 @@ const Dialog = ({
 
                 <FormGroup
                   title={_('Group')}
-                  flex align={['space-between', 'center']}
+                  align={['space-between', 'center']}
                 >
                   <Select
                     name="group_id"
@@ -219,7 +219,7 @@ const Dialog = ({
                                   permission.resource)
                               }
                             </TableData>
-                            <TableData flex align="center">
+                            <TableData align="center">
                               {!permission.isInUse() &&
                                 <TrashIcon
                                   title={_('Move permission to trashcan')}
