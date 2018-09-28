@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -36,7 +36,11 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 const defaultactions = (
-  <TableHead width="8%" align="center">`${_l('Actions')}`</TableHead>
+  <TableHead
+    width="8%"
+    align="center"
+    title={_l('Actions')}
+  />
 );
 
 /**
@@ -74,7 +78,7 @@ export const withEntitiesHeader = (actions_column = defaultactions,
 
     if (actions_column === true) {
       if (selectionType === SelectionType.SELECTION_USER) {
-        column = <TableHead width="6em">`${_l('Actions')}`</TableHead>;
+        column = <TableHead width="6em">{_('Actions')}</TableHead>;
       }
       else {
         column = null;
