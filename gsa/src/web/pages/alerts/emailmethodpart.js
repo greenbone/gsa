@@ -135,8 +135,8 @@ const EmailMethodPart = ({
           }
 
           {capabilities.mayOp('get_report_formats') &&
-            <Layout flex="column" box>
-              <Layout flex box>
+            <Layout flex="column">
+              <Layout>
                 <Divider>
                   <Radio
                     name={prefix + 'notice'}

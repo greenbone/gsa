@@ -102,7 +102,7 @@ const Header = ({
         >
           {_('Port List')}
         </TableHead>
-        <TableHead flex width="22%">
+        <TableHead width="22%">
           <Divider>
             <Sort by={sort ? selectSort : false} onClick={onSortChange}>
               {_('Credentials')}

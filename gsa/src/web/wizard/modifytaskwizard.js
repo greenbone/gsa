@@ -85,7 +85,7 @@ const ModifyTaskWizard = ({
         values: state,
         onValueChange,
       }) => (
-        <Layout flex align={['start', 'start']}>
+        <Layout align={['start', 'start']}>
           <Layout basis="40%">
             <Wizardess/>
             <WizardContent>

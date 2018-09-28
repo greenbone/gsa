@@ -72,7 +72,7 @@ const FilterCountLeastConditionPart = ({
         size="5"
         onChange={onChange}
       />
-      <Layout flex box>
+      <Layout>
         {_('result(s) NVT(s)')}
       </Layout>
     </Divider>

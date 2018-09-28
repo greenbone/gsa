@@ -168,7 +168,7 @@ const Details = ({entity}) => {
               {_('Name')}
             </TableData>
             <TableData>
-              <IconDivider flex align={['start', 'center']}>
+              <IconDivider align={['start', 'center']}>
                 <CpeIcon name={name}/>
                 <span>{name}</span>
               </IconDivider>

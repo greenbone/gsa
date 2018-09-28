@@ -107,7 +107,7 @@ const Cred = ({
     return null;
   }
   return (
-    <Layout flex box>
+    <Layout>
       <span>{title}: </span>
       <Layout box>
         <DetailsLink

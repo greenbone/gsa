@@ -96,7 +96,7 @@ class NvtPreference extends React.Component {
     }
     else if (type === 'password') {
       input = (
-        <Layout flex>
+        <Layout>
           <Checkbox
             title={_('Replace existing password with')}
             checked={checked}
@@ -112,7 +112,7 @@ class NvtPreference extends React.Component {
     }
     else if (type === 'file') {
       input = (
-        <Layout flex>
+        <Layout>
           <Checkbox
             title={
               isEmpty(preference.value) ?

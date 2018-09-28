@@ -102,19 +102,13 @@ const Row = ({
       displayName={_('Port List')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData
-      flex align="start"
-    >
+    <TableData align="start">
       {entity.port_count.all}
     </TableData>
-    <TableData
-      flex align="start"
-    >
+    <TableData align="start">
       {entity.port_count.tcp}
     </TableData>
-    <TableData
-      flex align="start"
-    >
+    <TableData align="start">
       {entity.port_count.udp}
     </TableData>
     {renderComponent(actions, {...props, entity})}

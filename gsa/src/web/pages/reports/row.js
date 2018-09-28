@@ -147,19 +147,19 @@ const Row = ({entity, links = true, actions, ...other}) => {
       <TableData>
         <SeverityBar severity={entity.report.severity.filtered}/>
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {report.result_count.hole.filtered}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {report.result_count.warning.filtered}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {report.result_count.info.filtered}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {report.result_count.log.filtered}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {report.result_count.false_positive.filtered}
       </TableData>
       {renderComponent(actions, {...other, entity})}

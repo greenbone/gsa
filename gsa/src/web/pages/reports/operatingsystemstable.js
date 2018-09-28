@@ -127,10 +127,10 @@ const Row = ({
           {cpe}
         </Link>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {hosts.count}
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>

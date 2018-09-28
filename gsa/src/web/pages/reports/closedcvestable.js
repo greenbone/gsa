@@ -115,7 +115,7 @@ const Row = ({entity}) => {
           {source.description}
         </DetailsLink>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>

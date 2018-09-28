@@ -85,7 +85,7 @@ const Row = ({
           ))}
         </Divider>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity && entity.tags &&
           <SolutionTypeIcon type={entity.tags.solution_type}/>
         }
@@ -93,7 +93,7 @@ const Row = ({
       <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {entity.qod && entity.qod.value} %
       </TableData>
       {renderComponent(actions, {...other, entity})}

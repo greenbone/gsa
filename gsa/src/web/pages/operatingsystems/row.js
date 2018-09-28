@@ -86,7 +86,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
   return (
     <TableRow>
       <TableData>
-        <IconDivider flex align={['start', 'center']}>
+        <IconDivider align={['start', 'center']}>
           <CpeIcon name={entity.name}/>
           <DetailsLink
             type="os"

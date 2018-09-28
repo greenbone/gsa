@@ -368,7 +368,7 @@ const PageContent = ({
           onReportDownloadClick={onReportDownloadClick}
           onReportFormatChange={onReportFormatChange}
         />
-        <Layout flex align="end">
+        <Layout align="end">
           <Powerfilter
             createFilterType="result"
             filter={filter}

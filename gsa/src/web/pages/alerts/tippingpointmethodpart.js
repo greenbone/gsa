@@ -78,7 +78,7 @@ const TippingPointMethodPart = ({
             value={tpSmsCredential}
             onChange={onCredentialChange}
           />
-          <Layout flex box>
+          <Layout>
             <NewIcon
               size="small"
               title={_('Create a credential')}

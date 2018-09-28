@@ -184,7 +184,7 @@ const Details = ({
               <TableData>
                 {_('Severity')}
               </TableData>
-              <TableData flex align={['start', 'center']}>
+              <TableData align={['start', 'center']}>
                 <Divider>
                   <SeverityBar severity={entity.severity}/>
                   {active_overrides.length > 0 &&

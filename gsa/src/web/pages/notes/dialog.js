@@ -284,7 +284,7 @@ const NoteDialog = ({
                 onChange={onValueChange}
               />
               {isDefined(severity) &&
-                <Layout flex>
+                <Layout>
                   {severity > LOG_VALUE ?
                     <Radio
                       name="severity"
@@ -307,7 +307,7 @@ const NoteDialog = ({
                 </Layout>
               }
               {!isDefined(severity) &&
-                <Layout flex>
+                <Layout>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}

@@ -83,7 +83,7 @@ const Row = ({
           name={entity.id}
           onClick={onToggleDetailsClick}
         >
-          <Layout flex align="space-between">
+          <Layout align="space-between">
             <span>
               {shown_name}
             </span>

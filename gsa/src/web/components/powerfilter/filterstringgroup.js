@@ -36,7 +36,7 @@ const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
   const filterstring = isString(filter) ?
     filter : filter.toFilterCriteriaString();
   return (
-    <FormGroup title={_('Filter')} flex>
+    <FormGroup title={_('Filter')}>
       <TextField
         name={name}
         grow="1"

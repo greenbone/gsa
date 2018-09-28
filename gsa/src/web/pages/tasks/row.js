@@ -132,7 +132,7 @@ const Row = ({
   return (
     <TableRow>
       <TableData>
-        <Layout flex align="space-between">
+        <Layout align="space-between">
           <RowDetailsToggle
             name={entity.id}
             onClick={onToggleDetailsClick}

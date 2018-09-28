@@ -69,7 +69,7 @@ const SolutionType = ({
 
   if (displayTitleText) {
     return (
-      <Divider flex align={['start', 'center']}>
+      <Divider align={['start', 'center']}>
         <Icon
           img={img}
           title={title}

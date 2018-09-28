@@ -27,12 +27,12 @@ import _ from 'gmp/locale';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Radio from './radio.js';
+import Radio from './radio';
 
 const YesNoRadio = ({
     convert = parseYesNo,
@@ -45,7 +45,7 @@ const YesNoRadio = ({
     ...other
   }) => {
   return (
-    <Layout {...other} flex>
+    <Layout {...other}>
       <Divider>
         <Radio
           title={_('Yes')}

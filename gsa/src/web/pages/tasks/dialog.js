@@ -308,7 +308,7 @@ const TaskDialog = ({
                   onChange={onTargetChange}
                 />
                 {change_task &&
-                  <Layout flex>
+                  <Layout>
                     <NewIcon
                       title={_('Create a new target')}
                       onClick={onNewTargetClick}
@@ -329,7 +329,7 @@ const TaskDialog = ({
                   value={state.alert_ids}
                   onChange={onAlertsChange}
                 />
-                <Layout flex>
+                <Layout>
                   <NewIcon
                     title={_('Create a new alert')}
                     onClick={onNewAlertClick}
@@ -357,7 +357,7 @@ const TaskDialog = ({
                   title={_('Once')}
                   onChange={onValueChange}
                 />
-                <Layout flex>
+                <Layout>
                   <NewIcon
                     title={_('Create a new schedule')}
                     onClick={onNewScheduleClick}

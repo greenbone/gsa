@@ -65,7 +65,7 @@ const Row = ({
       <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <TableData flex align="center">
+      <TableData align="center">
         {entity.qod} %
       </TableData>
       <TableData>

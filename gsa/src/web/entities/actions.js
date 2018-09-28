@@ -49,7 +49,7 @@ const EntityActions = ({
   return (
     <td className="table-actions">
       {selectionType === SelectionType.SELECTION_USER ?
-        <Layout flex align={['center', 'center']}>
+        <Layout align={['center', 'center']}>
           <EntitySelection
             entity={entity}
             onSelected={onEntitySelected}

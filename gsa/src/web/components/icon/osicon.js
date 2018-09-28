@@ -83,7 +83,7 @@ const OsIcon = ({
   }
 
   return (
-    <Layout flex>
+    <Layout>
       <Divider title={title}>
         <Icon
           {...props}

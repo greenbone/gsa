@@ -268,7 +268,7 @@ class EntitiesTable extends React.Component {
           {body}
         </UpdatingStripedTable>
         {footnote ?
-          <Layout flex align="space-between">
+          <Layout align="space-between">
             <FootNote>
               {_('(Applied filter: {{- filter}})', {filter: filterstring})}
             </FootNote>

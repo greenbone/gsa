@@ -147,10 +147,10 @@ const Row = ({
       <TableData>
         {serial}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {shortDate(notbefore)}
       </TableData>
-      <TableData flex align="end">
+      <TableData align="end">
         {shortDate(notafter)}
       </TableData>
       <TableData>
@@ -170,7 +170,7 @@ const Row = ({
         {port}
       </TableData>
       {actions &&
-        <TableData flex align="center">
+        <TableData align="center">
           <Icon
             img="download.svg"
             title={_('Download TLS Certificate')}

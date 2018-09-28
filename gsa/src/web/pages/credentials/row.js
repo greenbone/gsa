@@ -117,7 +117,7 @@ const Row = ({
       displayName={_('Credential')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData flex>
+    <TableData>
       <Divider>
         <span>
           {entity.credential_type}

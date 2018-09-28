@@ -80,7 +80,7 @@ const Header = ({
           {_('Vulnerability')}
         </TableHead>
         <TableHead width="2%" rowSpan="2">
-          <Layout flex align="center">
+          <Layout align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
                 <Icon title={_('Solution type')} img="solution_type.svg"/>
