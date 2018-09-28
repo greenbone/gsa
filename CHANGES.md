@@ -9,8 +9,9 @@ $ cd gsa && git log
 ## Unreleased
 
 Many thanks to everyone who has contributed to this release:
-Christian Fischer, Matthew Mundell, Timo Pollmeier, Bjoern Ricks,
-Steffen Waterkamp and Michael Wiegand.
+Christian Fischer (cfi-gb), Matthew Mundell (mattmundell), Timo Pollmeier
+(timopollmeier), Bjoern Ricks (bjoernricks), Steffen Waterkamp (swaterkamp),
+Michael Wiegand (wiegandm) and asmaack.
 
 Main changes compared to 8.0+beta1
 
