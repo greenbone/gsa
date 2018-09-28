@@ -14,6 +14,7 @@ Steffen Waterkamp and Michael Wiegand.
 
 Main changes compared to 8.0+beta1
 
+  * Changed visual appearance of Tables #983
   * Changed Donut Chart to a Pie Chart #982
   * Improved visual appearance of Donut Charts while resizing #979
   * Set min size for Line Charts and reduce number of x-axis labels to not
