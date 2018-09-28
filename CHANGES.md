@@ -6,6 +6,61 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
+## Unreleased
+
+Many thanks to everyone who has contributed to this release:
+Christian Fischer (cfi-gb), Matthew Mundell (mattmundell), Timo Pollmeier
+(timopollmeier), Bjoern Ricks (bjoernricks), Steffen Waterkamp (swaterkamp),
+Michael Wiegand (wiegandm) and asmaack.
+
+Main changes compared to 8.0+beta1
+
+  * Changed visual appearance of Tables #983
+  * Changed Donut Chart to a Pie Chart #982
+  * Improved visual appearance of Donut Charts while resizing #979
+  * Set min size for Line Charts and reduce number of x-axis labels to not
+    overlap #977
+  * Removed Scan, Asset, SecInfo Dashboards and added Dashboard "templates" to
+    the main dashboard #974
+  * Removed Dashboard Display menus with an icon overlay #971, #972
+  * Don't set an unkown locale #966
+  * Require NodeJS >= 8 #964
+  * Replaced glamorous with styled-components for settings styles
+    #913, #919, #922, #924, #925, #929, #934, #938, #948, #949, #950
+  * Support for cmake and cmake3 executables #936
+  * Support for yarn offline mode #935
+  * Fixed sorting of tables at Report details #929
+  * Use Tabs for structuring data at User Settings #927
+  * Adjusted auto reload interval automatically #917
+  * Automatically logout user after session has timed out #908
+  * Fixed saving the default severity #907
+  * Allow to filter results by solution type via powerfilter dialog #906
+  * Extend the session timeout on user interaction
+    #865, #902, #905
+  * Don't show external link dialog when clicking on Greenbone links #904
+  * Added indicators for notes and overrides applied to results #898
+  * Always load data into the redux store
+    #748, #753, #776, #777, #828, #833, #836, #853, #861, #897, #923, #939
+  * Fixed displaying Nvt tags #880
+  * Added comments to Target table #870
+  * Added remove filter button to powerfilters #863, #893
+  * Improved login page layout #859
+  * Removed sticky menu in header #857
+  * Update locales if they are changed at the User Settings #856
+  * Refined the menu appappearance #852, #869
+  * Reduced default max height for dialogs to 400px #843
+  * Show Report page header before report is loaded #825
+  * Clear/Flush redux store on logout #797
+  * Allow to add multiple tags simultaneously
+    #701, #723, #728, #748, #752, #768, #771, #786, #871, #887
+  * Added hostname to result hosts #765
+  * Added delta reports to alerts #743, #754
+  * Extended Schedules based on ical data
+    #720, #724, #729, #731, #739
+  * Renamed Task status "Internal Error" to "Interrupted" #718, #719
+  * Don't show default dashboard if settings haven't been loaded yet #714
+  * Allow to add Tags to scanners #702
+  * Removed support for severity class OpenVAS Classic #709
 
 ## gsa 8.0+beta1 (2018-05-25)
 
