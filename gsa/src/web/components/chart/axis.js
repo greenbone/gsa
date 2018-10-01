@@ -81,6 +81,7 @@ const TICK_LABEL_PROPS_FUNC = {
 };
 
 const Axis = ({
+  hideTickLabels = false,
   orientation = 'bottom',
   labelOffset = orientation === 'bottom' || orientation === 'top' ? 8 : 36,
   tickLabelProps = TICK_LABEL_PROPS_FUNC[orientation],
@@ -98,13 +99,14 @@ const Axis = ({
     rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
     tickLength={tickLength}
-    tickComponent={({formattedValue, ...tickProps}) => (
+    tickComponent={({formattedValue, ...tickProps}) => hideTickLabels ? null : (
       <text {...tickProps}>{formattedValue}</text>
     )}
   />
 );
 
 Axis.propTypes = {
+  hideTickLabels: PropTypes.bool,
   labelOffset: PropTypes.number,
   orientation: PropTypes.oneOf(['bottom', 'top', 'left', 'right']),
   rangePadding: PropTypes.number,
