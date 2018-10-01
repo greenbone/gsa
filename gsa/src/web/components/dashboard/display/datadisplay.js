@@ -32,7 +32,6 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
@@ -44,6 +43,7 @@ import Theme from 'web/utils/theme';
 import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
+import DataDisplayIcons from './datadisplayicons';
 
 export const MENU_PLACEHOLDER_WIDTH = 26;
 
@@ -320,27 +320,14 @@ class DataDisplay extends React.Component {
             }
             <IconBar>
               <IconDivider flex="column">
-                {showFilterSelection &&
-                  <Icon
-                    img="filter.svg"
-                    title={_('Select Filter')}
-                    onClick={onSelectFilterClick}
-                  />
-                }
-                {hasSvg &&
-                  <Icon
-                    img="download.svg"
-                    title={_('Download SVG')}
-                    onClick={this.handleDownloadSvg}
-                  />
-                }
-                {showCsvDownload &&
-                  <Icon
-                    img="download.svg"
-                    title={_('Download CSV')}
-                    onClick={this.handleDownloadCsv}
-                  />
-                }
+                <DataDisplayIcons
+                  showCsvDownload={showCsvDownload}
+                  showFilterSelection={showFilterSelection}
+                  showSvgDownload={hasSvg}
+                  onDownloadCsvClick={this.handleDownloadCsv}
+                  onDownloadSvgClick={this.handleDownloadSvg}
+                  onSelectFilterClick={onSelectFilterClick}
+                />
               </IconDivider>
             </IconBar>
             {showFilterString &&

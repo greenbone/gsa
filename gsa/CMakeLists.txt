@@ -219,6 +219,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/cvss/cvsstabledisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/cvss/cvsstransform.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/datadisplay.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/display/datadisplayicons.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/datatable.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/datatabledisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/display.js
