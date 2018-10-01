@@ -161,19 +161,10 @@ class DataDisplay extends React.Component {
     this.cleanupDownloadSvg();
   }
 
-  componentDidUpdate() {
-    this.setHasSvg();
-  }
-
-  componentDidMount() {
-    this.setHasSvg();
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
-      nextState.hasSvg !== this.state.hasSvg ||
       nextProps.showFilterString !== this.props.showFilterString ||
       this.hasFilterChanged(nextProps);
   }
@@ -184,14 +175,6 @@ class DataDisplay extends React.Component {
     }
 
     return isDefined(nextProps.filter);
-  }
-
-  setHasSvg() {
-    this.setState(prevState => {
-      const {current: svg} = this.svgRef;
-      const hasSvg = svg !== null;
-      return prevState.hasSvg === hasSvg ? null : {hasSvg};
-    });
   }
 
   createSvgUrl() {
@@ -276,12 +259,11 @@ class DataDisplay extends React.Component {
       dataTitles,
       dataRow,
       filter,
+      icons,
       onSelectFilterClick,
       onRemoveClick,
       ...props
     } = this.props;
-
-    const {hasSvg = false} = this.state;
 
     height = height - DISPLAY_HEADER_HEIGHT;
     width = width - DISPLAY_BORDER_WIDTH;
@@ -297,6 +279,8 @@ class DataDisplay extends React.Component {
     }
 
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
+    const {current: svg} = this.svgRef;
+    const hasSvg = !!svg;
     return (
       <Display
         title={`${title}`}
