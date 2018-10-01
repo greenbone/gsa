@@ -45,7 +45,7 @@ const DialogTitleBar = styled(Layout)`
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  cursor: move;
+  cursor: grab;
 `;
 
 const DialogTitle = ({
