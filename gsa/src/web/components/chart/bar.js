@@ -58,6 +58,8 @@ const margin = {
 
 const MAX_LABEL_LENGTH = 25;
 const LABEL_HEIGHT = 20;
+const MIN_WIDTH = 250;
+const MIN_TICK_WIDTH = 20;
 
 const tickFormat = val => {
   return shorten(val.toString(), MAX_LABEL_LENGTH);
@@ -88,6 +90,10 @@ class BarChart extends React.Component {
     if (this.legend) {
       const {width: legendWidth} = this.legend.getBoundingClientRect();
       width = width - legendWidth - LEGEND_MARGIN;
+    }
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
     }
 
     const xValues = data.map(d => d.x);
@@ -126,6 +132,10 @@ class BarChart extends React.Component {
       */
       .nice();
 
+    const tickValues = horizontal ? yScale.ticks(10) : xScale.domain();
+    const numTicks = tickValues.length;
+
+    const hideTickLabels = maxWidth / numTicks < MIN_TICK_WIDTH;
     return (
       <StyledLayout align={['start', 'start']}>
         <Svg
@@ -148,6 +158,8 @@ class BarChart extends React.Component {
               scale={horizontal ? yScale : xScale}
               top={maxHeight}
               label={`${xLabel}`}
+              tickValues={tickValues}
+              hideTickLabels={hideTickLabels}
             />
             {data.map((d, i) => (
               <ToolTip
