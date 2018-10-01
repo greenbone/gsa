@@ -29,11 +29,11 @@ import Button from 'web/components/form/button';
 import Theme from 'web/utils/theme';
 
 const DialogButton = styled(Button)`
-  border: 1px solid ${Theme.darkGreen};
-  color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGreen};
+  border: 1px solid ${Theme.mediumGray};
+  color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGray};
   background: ${props => props.loading ?
-    Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat' :
-    Theme.lightGreen
+    Theme.lightGray + ' url(/img/loading.gif) center center no-repeat' :
+    Theme.lightGray
   };
 
   /* when hovering these settings have to be overwritten explicitly */
@@ -41,7 +41,7 @@ const DialogButton = styled(Button)`
     color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white};
     background: ${props => props.loading ?
       Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat' :
-      Theme.darkGreen
+      Theme.green
     };
   };
 `;

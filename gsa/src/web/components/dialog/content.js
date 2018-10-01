@@ -30,10 +30,10 @@ const DialogContent = styled.div`
   display: flex;
   flex-direction: column;
   height: inherit;
-  padding: 5px 5px 5px 5px;
-  background: ${Theme.dialogGray};
-  border: 1px solid ${Theme.dialogGray};
-  border-radius: 4px;
+  padding: 0;
+  background: ${Theme.white};
+  box-shadow: 5px 5px 10px ${Theme.mediumGray};
+  border-radius: 3px;
 `;
 
 export default DialogContent;

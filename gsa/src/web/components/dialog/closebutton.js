@@ -40,13 +40,11 @@ let StyledCloseButton = styled.div`
   font-family: ${Theme.Font.default};
   color: ${Theme.darkGreen};
   cursor: pointer;
-  background: ${Theme.lighGreen};
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 0;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-
   :hover {
     color: ${Theme.white};
     background: ${Theme.darkGreen};

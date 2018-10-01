@@ -53,7 +53,7 @@ const Header = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
   background-color: ${Theme.green};
-  border: 1px solid ${Theme.darkGreen};
+  border: 1px solid ${Theme.mediumGray};
   color: ${Theme.white};
   text-overflow: ellipsis;
   padding: 0px 5px;
@@ -79,6 +79,7 @@ const DisplayView = styled.div`
   flex-shrink: 1;
   flex-basis: 0;
   background-color: ${Theme.white};
+  box-shadow: 5px 5px 10px ${Theme.lightGray};
 `;
 
 const DisplayContent = styled.div`
