@@ -30,7 +30,7 @@ import styled from 'styled-components';
 
 const StripedTable = styled(Table)`
   & th, & td {
-    padding: 4px;
+    padding: 4px 10px;
     border-bottom: 1px solid ${Theme.lightGray};
   };
   & tfoot tr {
