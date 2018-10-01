@@ -56,6 +56,9 @@ const StyledTableRow = styled(TableRow)`
   &, &:hover {
     background-color: ${Theme.white} !important;
   };
+  & td {
+    border-bottom: none;
+  }
 `;
 
 const withRowDetails = (type, colSpan = '10') => Component => {
