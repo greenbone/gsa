@@ -157,12 +157,16 @@ class DataDisplay extends React.Component {
       dataTransform(data, tprops) : data;
   }
 
-  hasFilterChanged(nextProps) {
-    if (isDefined(this.props.filter)) {
-      return this.props.filter.equals(nextProps.filter);
-    }
+  componentWillUnmount() {
+    this.cleanupDownloadSvg();
+  }
 
-    return isDefined(nextProps.filter);
+  componentDidUpdate() {
+    this.setHasSvg();
+  }
+
+  componentDidMount() {
+    this.setHasSvg();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -172,6 +176,22 @@ class DataDisplay extends React.Component {
       nextState.hasSvg !== this.state.hasSvg ||
       nextProps.showFilterString !== this.props.showFilterString ||
       this.hasFilterChanged(nextProps);
+  }
+
+  hasFilterChanged(nextProps) {
+    if (isDefined(this.props.filter)) {
+      return this.props.filter.equals(nextProps.filter);
+    }
+
+    return isDefined(nextProps.filter);
+  }
+
+  setHasSvg() {
+    this.setState(prevState => {
+      const {current: svg} = this.svgRef;
+      const hasSvg = svg !== null;
+      return prevState.hasSvg === hasSvg ? null : {hasSvg};
+    });
   }
 
   createSvgUrl() {
@@ -238,26 +258,6 @@ class DataDisplay extends React.Component {
     download.setAttribute('href', this.downloadCsvUrl);
     download.setAttribute('download', 'data.csv');
     download.click();
-  }
-
-  componentWillUnmount() {
-    this.cleanupDownloadSvg();
-  }
-
-  setHasSvg() {
-    this.setState(prevState => {
-      const {current: svg} = this.svgRef;
-      const hasSvg = svg !== null;
-      return prevState.hasSvg === hasSvg ? null : {hasSvg};
-    });
-  }
-
-  componentDidUpdate() {
-    this.setHasSvg();
-  }
-
-  componentDidMount() {
-    this.setHasSvg();
   }
 
   render() {
