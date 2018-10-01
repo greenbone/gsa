@@ -73,9 +73,9 @@ const StyledInput = styled(NumberField)`
 `;
 
 const SpinnerButton = styled.span`
-  background-color: ${Theme.lightGreen};
-  color: ${Theme.darkGreen};
-  border-left: 1px solid ${Theme.darkGreen};
+  background-color: ${Theme.lightGray};
+  color: ${Theme.mediumGray};
+  border-left: 1px solid ${Theme.darkGray};
   width: 16px;
   height: 50%;
   font-size: .6em;
@@ -91,7 +91,7 @@ const SpinnerButton = styled.span`
   text-decoration: none;
   user-select: none; /* don't select icon text on double click */
   &:hover {
-    background-color: ${Theme.darkGreen};
+    background-color: ${Theme.green};
     color:${Theme.white};
     text-decoration: none;
   };
@@ -101,8 +101,8 @@ const SpinnerButton = styled.span`
     text-decoration: none;
   };
   ${props => props.disabled ? {
-    color: Theme.mediumGray,
-    background: Theme.lightGray,
+    color: Theme.lightGray,
+    background: Theme.dialogGray,
     cursor: 'not-allowed',
     '&:hover': {
       color: Theme.mediumGray,
