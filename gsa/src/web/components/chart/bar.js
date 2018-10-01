@@ -58,6 +58,7 @@ const margin = {
 
 const MAX_LABEL_LENGTH = 25;
 const LABEL_HEIGHT = 20;
+const MIN_WIDTH = 250;
 
 const tickFormat = val => {
   return shorten(val.toString(), MAX_LABEL_LENGTH);
@@ -88,6 +89,10 @@ class BarChart extends React.Component {
     if (this.legend) {
       const {width: legendWidth} = this.legend.getBoundingClientRect();
       width = width - legendWidth - LEGEND_MARGIN;
+    }
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
     }
 
     const xValues = data.map(d => d.x);
