@@ -45,16 +45,17 @@ const StyledButton = styled.button`
   text-decoration: none;
   white-space: nowrap;
   background-color: ${Theme.white};
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid ${Theme.inputBorderGray};
   cursor: pointer;
   overflow: visible;
+  z-index: ${Theme.Layers.higher}; /* Don't interfere with dialog resizer */
   &:focus, &:hover {
-    border: 1px solid ${Theme.darkGreen};
+    border: 1px solid ${Theme.darkGray};
   };
   &:hover {
     text-decoration: none;
-    background: ${Theme.darkGreen};
+    background: ${Theme.green};
     font-weight: bold;
     color: ${Theme.white};
   };

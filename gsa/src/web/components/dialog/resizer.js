@@ -33,13 +33,13 @@ const ResizerSymbol = styled.div`
   cursor: nwse-resize;
   border-right: 20px solid transparent;
   border-bottom: 20px solid transparent;
-  border-top: 20px solid ${Theme.dialogGray};
+  border-top: 20px solid ${Theme.white};
 `;
 
 const ResizerBox = styled.div`
   position: absolute;
-  bottom: 6px;
-  right: 6px;
+  bottom: 3px;
+  right: 3px;
   width: 20px;
   height: 20px;
   background: repeating-linear-gradient(
