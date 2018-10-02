@@ -120,7 +120,7 @@ export class OvaldefClassDisplay extends React.Component {
             title={({data: tdata}) =>
               _('OVAL Definitions by Class (Total: {{count}})',
               {count: tdata.total})}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             icons={renderDonutChartIcons}

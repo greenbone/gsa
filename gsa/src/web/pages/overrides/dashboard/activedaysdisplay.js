@@ -169,7 +169,7 @@ export class OverridesActiveDaysDisplay extends React.Component {
             dataTransform={transformActiveDaysData}
             title={({data: tdata}) => _('Overrides by Active Days (Total: ' +
               '{{count}})', {count: tdata.total})}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             icons={renderDonutChartIcons}

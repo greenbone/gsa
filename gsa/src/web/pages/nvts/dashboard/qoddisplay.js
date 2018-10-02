@@ -118,7 +118,7 @@ export class NvtsQodDisplay extends React.Component {
             dataTransform={transformQodData}
             title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
               {count: tdata.total})}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             icons={renderDonutChartIcons}

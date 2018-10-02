@@ -171,7 +171,7 @@ export class NotesActiveDaysDisplay extends React.Component {
             dataTransform={transformActiveDaysData}
             title={({data: tdata}) => _('Notes by Active Days (Total: ' +
               '{{count}})', {count: tdata.total})}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             icons={renderDonutChartIcons}

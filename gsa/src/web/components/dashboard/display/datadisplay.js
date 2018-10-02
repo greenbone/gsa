@@ -125,16 +125,16 @@ class DataDisplay extends React.Component {
       data,
       originalData: this.props.data,
       title: this.props.title({data, id: this.props.id}),
-      chartState: {
+      childState: {
         showLegend: true,
-        ...this.props.initialChartState,
+        ...this.props.initialState,
       },
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
     this.handleToggleLegend = this.handleToggleLegend.bind(this);
-    this.handleSetChartState = this.setChartState.bind(this);
+    this.handleSetChildState = this.setChildState.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -216,19 +216,19 @@ class DataDisplay extends React.Component {
     }
   }
 
-  setChartState(state) {
+  setChildState(state) {
     if (isFunction(state)) {
-      this.setState(({chartState}) => ({
-        chartState: {
-          ...chartState,
-          ...state(chartState),
+      this.setState(({childState}) => ({
+        childState: {
+          ...childState,
+          ...state(childState),
         },
       }));
     }
     else {
-      this.setState(({chartState}) => ({
-        chartState: {
-          ...chartState,
+      this.setState(({childState}) => ({
+        childState: {
+          ...childState,
           ...state,
         },
       }));
@@ -281,7 +281,7 @@ class DataDisplay extends React.Component {
 
   render() {
     const {
-      chartState,
+      childState,
       data: transformedData,
       title,
     } = this.state;
@@ -339,7 +339,7 @@ class DataDisplay extends React.Component {
                     width,
                     height,
                     svgRef: this.svgRef,
-                    state: chartState,
+                    state: childState,
                     setState: this.handleSetChartState,
                   })}
                 </React.Fragment>
@@ -347,8 +347,8 @@ class DataDisplay extends React.Component {
             <IconBar>
               <IconDivider flex="column">
                 {icons && icons({
-                  state: chartState,
-                  setState: this.handleSetChartState,
+                  state: childState,
+                  setState: this.handleSetChildState,
                   showFilterSelection,
                   showCsvDownload,
                   showSvgDownload,
@@ -386,7 +386,7 @@ DataDisplay.propTypes = {
   height: PropTypes.number.isRequired,
   icons: PropTypes.func,
   id: PropTypes.string.isRequired,
-  initialChartState: PropTypes.object,
+  initialState: PropTypes.object,
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,

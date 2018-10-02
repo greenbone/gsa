@@ -149,7 +149,7 @@ export class TasksStatusDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             filter={filter}

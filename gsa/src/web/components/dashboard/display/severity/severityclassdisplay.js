@@ -102,7 +102,7 @@ class SeverityClassDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
-        initialChartState={{
+        initialState={{
           show3d: true,
         }}
         dataTransform={transformSeverityData}

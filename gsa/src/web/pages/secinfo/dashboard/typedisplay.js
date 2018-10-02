@@ -116,7 +116,7 @@ export class SecInfosTypeDisplay extends React.Component {
             title={({data: tdata}) =>
               _('SecInfo Items by Type (Total: {{count}})',
               {count: tdata.total})}
-            initialChartState={{
+            initialState={{
               show3d: true,
             }}
             icons={renderDonutChartIcons}
