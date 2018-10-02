@@ -36,7 +36,7 @@ import Portal from 'web/components/portal/portal';
 
 export const Box = styled.div`
   border: 1px solid ${Theme.inputBorderGray};
-  border-radius: 4px;
+  border-radius: 2px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -45,7 +45,7 @@ export const Box = styled.div`
   background-color: ${Theme.white};
   color: ${Theme.black};
   font-weight: normal;
-  border-radius: ${props => props.isOpen ? '4px 4px 0 0' : null};
+  border-radius: ${props => props.isOpen ? '2px 2px 0 0' : null};
   background-color: ${props => props.disabled ? Theme.dialogGray : null};
 `;
 

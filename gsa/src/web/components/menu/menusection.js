@@ -28,11 +28,13 @@ import {hasValue} from 'gmp/utils/identity';
 
 import {StyledMenuEntry} from 'web/components/menu/menu';
 
+import Theme from 'web/utils/theme';
+
 const MSection = styled.ul`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  border-top: 1px solid #b0b0b0;
+  border-top: 1px solid ${Theme.lightGray};
   padding: 0;
 `;
 

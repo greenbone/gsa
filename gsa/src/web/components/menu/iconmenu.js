@@ -61,8 +61,8 @@ const List = styled.ul`
 const Entry = styled.li`
   height: 22px;
   width: 255px;
-  border-left: 1px solid ${Theme.darkGray};
-  border-right: 1px solid ${Theme.darkGray};
+  border-left: 1px solid ${Theme.mediumGray};
+  border-right: 1px solid ${Theme.mediumGray};
   display: flex;
   align-items: stretch;
   background-color: ${Theme.white};
@@ -71,10 +71,10 @@ const Entry = styled.li`
   text-align: left;
 
   &:first-child {
-    border-top: 1px solid ${Theme.darkGray};
+    border-top: 1px solid ${Theme.mediumGray};
   };
   &:last-child {
-    border-bottom: 1px solid ${Theme.darkGray};
+    border-bottom: 1px solid ${Theme.mediumGray};
   };
   &:hover {
     background: ${Theme.green};

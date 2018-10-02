@@ -39,9 +39,9 @@ import CloseButton from './closebutton';
 
 const StyledLayout = styled(Layout)`
   padding: 15px;
-  margin: 20px 1em;
+  margin: 0px 15px 20px 15px;
   border: 1px solid ${Theme.mediumLightRed};
-  border-radius: 4px;
+  border-radius: 2px;
   color: ${Theme.darkRed};
   background-color: ${Theme.lightRed};
 `;

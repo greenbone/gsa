@@ -42,7 +42,7 @@ const StyledInput = styled.input`
   background-color: ${Theme.white};
   background-image: none;
   border: 1px solid ${Theme.inputBorderGray};
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 1px 8px;
   /* "hack" to overshadow default color in Chrome's autofilled input fields */
   &:-webkit-autofill {
