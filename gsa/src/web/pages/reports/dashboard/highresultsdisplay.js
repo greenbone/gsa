@@ -118,10 +118,9 @@ export class ReportsHighResultsDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformHighResults}
             filter={filter}
-            title={({data: tdata}) =>
-              _('Reports with High Results')}
+            title={() => _('Reports with High Results')}
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <LineChart
                 timeline
                 svgRef={svgRef}
@@ -140,6 +139,7 @@ export class ReportsHighResultsDisplay extends React.Component {
                   dashArray: '3, 2',
                   label: _('Max High per Host'),
                 }}
+                showLegend={state.showLegend}
                 onRangeSelected={this.handleRangeSelect}
               />
             )}

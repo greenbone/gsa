@@ -103,12 +103,13 @@ class SeverityClassDisplay extends React.Component {
         {...props}
         dataTransform={transformSeverityData}
       >
-        {({width, height, data, svgRef}) => (
+        {({width, height, data, svgRef, state}) => (
           <DonutChart
             svgRef={svgRef}
             width={width}
             height={height}
             data={data}
+            showLegend={state.showLegend}
             onDataClick={isDefined(onFilterChanged) ?
               this.handleDataClick : undefined}
             onLegendItemClick={isDefined(onFilterChanged) ?

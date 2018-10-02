@@ -151,12 +151,13 @@ export class TasksStatusDisplay extends React.Component {
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
                 svgRef={svgRef}
                 width={width}
                 height={height}
                 data={tdata}
+                showLegend={state.showLegend}
                 onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
                 onLegendItemClick={isDefined(onFilterChanged) ?

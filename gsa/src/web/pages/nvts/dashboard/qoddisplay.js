@@ -118,12 +118,13 @@ export class NvtsQodDisplay extends React.Component {
             title={({data: tdata}) => _('NVTs by QoD (Total: {{count}})',
               {count: tdata.total})}
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
                 svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}
+                showLegend={state.showLegend}
                 onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />
