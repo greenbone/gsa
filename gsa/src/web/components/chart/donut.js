@@ -161,7 +161,7 @@ class DonutChart extends React.Component {
     if (width !== this.state.width) {
       this.setState({width});
     }
-   this.separateLabels();
+    this.separateLabels();
   }
 
   componentDidUpdate() {
