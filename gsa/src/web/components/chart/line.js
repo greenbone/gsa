@@ -170,16 +170,16 @@ class LineChart extends React.Component {
 
     this.state = {
       displayInfo: false,
-      ...this.update(),
+      ...this.stateFromWidth(this.getWidth()),
     };
   }
 
   componentDidUpdate() {
-    this.setState(this.update());
+    this.update();
   }
 
   componentDidMount() {
-    this.setState(this.update());
+    this.update();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -282,28 +282,36 @@ class LineChart extends React.Component {
   }
 
   getWidth() {
-    const {width} = this.props;
+    let {width} = this.props;
     const {current: legend} = this.legendRef;
 
-    if (legend === null) {
-      return width;
+    width = width - MENU_PLACEHOLDER_WIDTH;
+
+    if (legend !== null) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
     }
 
-    const {width: legendWidth} = legend.getBoundingClientRect();
-    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    return width;
   }
 
   update() {
+    const width = this.getWidth();
+    if (width !== this.state.width) {
+      this.setState(this.stateFromWidth(width));
+    }
+  }
+
+  stateFromWidth(width) {
     const {
       data = [],
       height,
       timeline = false,
     } = this.props;
-
-    let width = this.getWidth();
-    if (width < MIN_WIDTH) {
-      width = MIN_WIDTH;
-    }
 
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
