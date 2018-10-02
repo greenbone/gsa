@@ -112,6 +112,8 @@ const DisplayBox = styled.div`
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
 
+const renderIcons = props => <DataDisplayIcons {...props} />;
+
 class DataDisplay extends React.Component {
 
   constructor(...args) {
@@ -270,7 +272,7 @@ class DataDisplay extends React.Component {
       dataTitles,
       dataRow,
       filter,
-      icons,
+      icons = renderIcons,
       showToggleLegend,
       onSelectFilterClick,
       onRemoveClick,
@@ -317,16 +319,16 @@ class DataDisplay extends React.Component {
             }
             <IconBar>
               <IconDivider flex="column">
-                <DataDisplayIcons
-                  showCsvDownload={showCsvDownload}
-                  showFilterSelection={showFilterSelection}
-                  showSvgDownload={hasSvg}
-                  showToggleLegend={showToggleLegend}
-                  onDownloadCsvClick={this.handleDownloadCsv}
-                  onDownloadSvgClick={this.handleDownloadSvg}
-                  onSelectFilterClick={onSelectFilterClick}
-                  onToggleLegendClick={this.handleToggleLegend}
-                />
+                {icons && icons({
+                  showFilterSelection,
+                  showCsvDownload,
+                  showSvgDownload: hasSvg,
+                  showToggleLegend,
+                  onDownloadCsvClick: this.handleDownloadSvg,
+                  onDownloadSvgClick: this.handleDownloadSvg,
+                  onToggleLegendClick: this.handleToggleLegend,
+                  onSelectFilterClick,
+                })}
               </IconDivider>
             </IconBar>
             {showFilterString &&
@@ -353,6 +355,7 @@ DataDisplay.propTypes = {
   dataTransform: PropTypes.func,
   filter: PropTypes.filter,
   height: PropTypes.number.isRequired,
+  icons: PropTypes.func,
   id: PropTypes.string.isRequired,
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
