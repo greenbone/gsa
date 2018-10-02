@@ -172,7 +172,7 @@ class DataDisplay extends React.Component {
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
       nextProps.showFilterString !== this.props.showFilterString ||
-      nextState.chartState !== this.state.chartState ||
+      nextState.childState !== this.state.childState ||
       this.hasFilterChanged(nextProps);
   }
 
@@ -276,7 +276,7 @@ class DataDisplay extends React.Component {
   }
 
   handleToggleLegend() {
-    this.setChartState(({showLegend}) => ({showLegend: !showLegend}));
+    this.setChildState(({showLegend}) => ({showLegend: !showLegend}));
   }
 
   render() {
@@ -340,7 +340,7 @@ class DataDisplay extends React.Component {
                     height,
                     svgRef: this.svgRef,
                     state: childState,
-                    setState: this.handleSetChartState,
+                    setState: this.handleSetChildState,
                   })}
                 </React.Fragment>
             }
