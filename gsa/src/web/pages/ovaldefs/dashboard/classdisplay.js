@@ -26,23 +26,26 @@ import {_, _l} from 'gmp/locale/lang';
 
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {parseFloat} from 'gmp/parser';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes';
-
-import DonutChart from '../../../components/chart/donut';
-import DataDisplay from '../../../components/dashboard/display/datadisplay';
-import DataTableDisplay from '../../../components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+import DonutChart from 'web/components/chart/donut';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons'; // eslint-disable-line max-len
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   totalCount,
   percent,
   ovalClassColorScale,
   OVAL_CLASS_TYPES,
-} from '../../../components/dashboard/display/utils';
-import {registerDisplay} from '../../../components/dashboard/registry';
+} from 'web/components/dashboard/display/utils';
+import {registerDisplay} from 'web/components/dashboard/registry';
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
+
+import PropTypes from 'web/utils/proptypes';
 
 import {OvaldefClassLoader} from './loaders';
 
@@ -117,13 +120,19 @@ export class OvaldefClassDisplay extends React.Component {
             title={({data: tdata}) =>
               _('OVAL Definitions by Class (Total: {{count}})',
               {count: tdata.total})}
+            initialState={{
+              show3d: true,
+            }}
+            icons={renderDonutChartIcons}
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
                 svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}
+                show3d={state.show3d}
+                showLegend={state.showLegend}
                 onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />

@@ -31,7 +31,9 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import DonutChart from 'web/components/chart/donut';
+
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons'; // eslint-disable-line max-len
 import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {
@@ -114,13 +116,19 @@ export class SecInfosTypeDisplay extends React.Component {
             title={({data: tdata}) =>
               _('SecInfo Items by Type (Total: {{count}})',
               {count: tdata.total})}
+            initialState={{
+              show3d: true,
+            }}
+            icons={renderDonutChartIcons}
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
                 svgRef={svgRef}
                 data={tdata}
                 height={height}
                 width={width}
+                show3d={state.show3d}
+                showLegend={state.showLegend}
                 onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}
               />

@@ -36,10 +36,8 @@ import {setRef} from 'web/utils/render';
 import Theme from 'web/utils/theme';
 
 import arc from './utils/arc';
-
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Layout from 'web/components/layout/layout';
 
@@ -152,9 +150,7 @@ class DonutChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.data !== this.props.data ||
-      nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height ||
+    return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
       nextProps.show3d !== this.props.show3d;
   }
@@ -165,7 +161,7 @@ class DonutChart extends React.Component {
     if (width !== this.state.width) {
       this.setState({width});
     }
-   this.separateLabels();
+    this.separateLabels();
   }
 
   componentDidUpdate() {
@@ -241,6 +237,7 @@ class DonutChart extends React.Component {
       height,
       svgRef,
       show3d = true,
+      showLegend = true,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -339,7 +336,7 @@ class DonutChart extends React.Component {
             />
           }
         </Svg>
-        {data.length > 0 &&
+        {data.length > 0 && showLegend &&
           <Legend
             data={data}
             innerRef={this.legendRef}
@@ -356,6 +353,7 @@ DonutChart.propTypes = {
   height: PropTypes.number.isRequired,
   innerRadius: PropTypes.number,
   show3d: PropTypes.bool,
+  showLegend: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,

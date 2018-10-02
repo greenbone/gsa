@@ -99,7 +99,7 @@ class CreatedDisplay extends React.Component {
         dataTransform={transformCreated}
         filter={filter}
       >
-        {({width, height, data: tdata, svgRef}) => (
+        {({width, height, data: tdata, svgRef, state}) => (
           <LineChart
             timeline
             svgRef={svgRef}
@@ -111,6 +111,7 @@ class CreatedDisplay extends React.Component {
             xAxisLabel={xAxisLabel}
             yLine={yLine}
             y2Line={y2Line}
+            showLegend={state.showLegend}
             onRangeSelected={isDefined(onFilterChanged) ?
               this.handleRangeSelect : undefined}
           />

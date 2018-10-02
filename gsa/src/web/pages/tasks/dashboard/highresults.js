@@ -113,6 +113,7 @@ export class TasksHighResultsDisplay extends React.Component {
             filter={filter}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks by High Results per Host')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BubbleChart

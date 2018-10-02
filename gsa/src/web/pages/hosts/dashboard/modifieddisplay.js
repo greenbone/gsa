@@ -132,7 +132,7 @@ export class HostsModifiedDisplay extends React.Component {
                 {count: tdata.total})
             }
           >
-            {({width, height, data: tdata, svgRef}) => (
+            {({width, height, data: tdata, svgRef, state}) => (
               <LineChart
                 timeline
                 svgRef={svgRef}
@@ -151,6 +151,7 @@ export class HostsModifiedDisplay extends React.Component {
                   dashArray: '3, 2',
                   label: _('Total Hosts'),
                 }}
+                showLegend={state.showLegend}
                 onRangeSelected={this.handleRangeSelect}
               />
             )}

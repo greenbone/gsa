@@ -29,10 +29,9 @@ import equal from 'fast-deep-equal';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
@@ -44,8 +43,7 @@ import Theme from 'web/utils/theme';
 import Display, {
   DISPLAY_HEADER_HEIGHT, DISPLAY_BORDER_WIDTH,
 } from './display';
-
-export const MENU_PLACEHOLDER_WIDTH = 26;
+import DataDisplayIcons from './datadisplayicons';
 
 const ownProps = [
   'title',
@@ -112,6 +110,8 @@ const DisplayBox = styled.div`
 
 const escapeCsv = value => '"' + `${value}`.replace('"', '""') + '"';
 
+const renderIcons = props => <DataDisplayIcons {...props} />;
+
 class DataDisplay extends React.Component {
 
   constructor(...args) {
@@ -125,10 +125,16 @@ class DataDisplay extends React.Component {
       data,
       originalData: this.props.data,
       title: this.props.title({data, id: this.props.id}),
+      childState: {
+        showLegend: true,
+        ...this.props.initialState,
+      },
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
+    this.handleToggleLegend = this.handleToggleLegend.bind(this);
+    this.handleSetChildState = this.setChildState.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -157,21 +163,25 @@ class DataDisplay extends React.Component {
       dataTransform(data, tprops) : data;
   }
 
-  hasFilterChanged(nextProps) {
-    if (isDefined(this.props.filter)) {
-      return this.props.filter.equals(nextProps.filter);
-    }
-
-    return isDefined(nextProps.filter);
+  componentWillUnmount() {
+    this.cleanupDownloadSvg();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
-      nextState.hasSvg !== this.state.hasSvg ||
       nextProps.showFilterString !== this.props.showFilterString ||
+      nextState.chartState !== this.state.chartState ||
       this.hasFilterChanged(nextProps);
+  }
+
+  hasFilterChanged(nextProps) {
+    if (isDefined(this.props.filter)) {
+      return this.props.filter.equals(nextProps.filter);
+    }
+
+    return isDefined(nextProps.filter);
   }
 
   createSvgUrl() {
@@ -206,8 +216,33 @@ class DataDisplay extends React.Component {
     }
   }
 
+  setChildState(state) {
+    if (isFunction(state)) {
+      this.setState(({childState}) => ({
+        childState: {
+          ...childState,
+          ...state(childState),
+        },
+      }));
+    }
+    else {
+      this.setState(({childState}) => ({
+        childState: {
+          ...childState,
+          ...state,
+        },
+      }));
+    }
+  }
+
   handleDownloadSvg() {
     const {current: download} = this.downloadRef;
+    const {current: svg} = this.svgRef;
+
+    if (!svg || !download) {
+      // don't crash if refs haven't been set in some way
+      return;
+    }
 
     this.cleanupDownloadSvg();
 
@@ -240,28 +275,16 @@ class DataDisplay extends React.Component {
     download.click();
   }
 
-  componentWillUnmount() {
-    this.cleanupDownloadSvg();
-  }
-
-  setHasSvg() {
-    this.setState(prevState => {
-      const {current: svg} = this.svgRef;
-      const hasSvg = svg !== null;
-      return prevState.hasSvg === hasSvg ? null : {hasSvg};
-    });
-  }
-
-  componentDidUpdate() {
-    this.setHasSvg();
-  }
-
-  componentDidMount() {
-    this.setHasSvg();
+  handleToggleLegend() {
+    this.setChartState(({showLegend}) => ({showLegend: !showLegend}));
   }
 
   render() {
-    const {data: transformedData, title} = this.state;
+    const {
+      childState,
+      data: transformedData,
+      title,
+    } = this.state;
     let {
       data: originalData,
       height,
@@ -276,12 +299,13 @@ class DataDisplay extends React.Component {
       dataTitles,
       dataRow,
       filter,
+      icons = renderIcons,
+      showSvgDownload,
+      showToggleLegend,
       onSelectFilterClick,
       onRemoveClick,
       ...props
     } = this.props;
-
-    const {hasSvg = false} = this.state;
 
     height = height - DISPLAY_HEADER_HEIGHT;
     width = width - DISPLAY_BORDER_WIDTH;
@@ -315,32 +339,25 @@ class DataDisplay extends React.Component {
                     width,
                     height,
                     svgRef: this.svgRef,
+                    state: childState,
+                    setState: this.handleSetChartState,
                   })}
                 </React.Fragment>
             }
             <IconBar>
               <IconDivider flex="column">
-                {showFilterSelection &&
-                  <Icon
-                    img="filter.svg"
-                    title={_('Select Filter')}
-                    onClick={onSelectFilterClick}
-                  />
-                }
-                {hasSvg &&
-                  <Icon
-                    img="download.svg"
-                    title={_('Download SVG')}
-                    onClick={this.handleDownloadSvg}
-                  />
-                }
-                {showCsvDownload &&
-                  <Icon
-                    img="download.svg"
-                    title={_('Download CSV')}
-                    onClick={this.handleDownloadCsv}
-                  />
-                }
+                {icons && icons({
+                  state: childState,
+                  setState: this.handleSetChildState,
+                  showFilterSelection,
+                  showCsvDownload,
+                  showSvgDownload,
+                  showToggleLegend,
+                  onDownloadCsvClick: this.handleDownloadSvg,
+                  onDownloadSvgClick: this.handleDownloadSvg,
+                  onToggleLegendClick: this.handleToggleLegend,
+                  onSelectFilterClick,
+                })}
               </IconDivider>
             </IconBar>
             {showFilterString &&
@@ -367,10 +384,14 @@ DataDisplay.propTypes = {
   dataTransform: PropTypes.func,
   filter: PropTypes.filter,
   height: PropTypes.number.isRequired,
+  icons: PropTypes.func,
   id: PropTypes.string.isRequired,
+  initialState: PropTypes.object,
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,
+  showSvgDownload: PropTypes.bool,
+  showToggleLegend: PropTypes.bool,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,

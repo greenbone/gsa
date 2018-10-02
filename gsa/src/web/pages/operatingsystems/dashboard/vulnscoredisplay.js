@@ -126,12 +126,13 @@ export class OsVulnScoreDisplay extends React.Component {
             filter={filter}
             dataTransform={transformVulnScoreData}
             title={() => _('Most Vulnerable Operating Systems')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart
                 svgRef={svgRef}
                 horizontal
-                displayLegend={false}
+                showLegend={false}
                 width={width}
                 height={height}
                 data={tdata}

@@ -38,15 +38,14 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
-
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import {setRef} from 'web/utils/render';
+
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';
@@ -156,29 +155,6 @@ CrossY2.propTypes = crossPropTypes;
 
 class LineChart extends React.Component {
 
-   static propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape({
-      x: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.date,
-      ]).isRequired,
-      y: PropTypes.number.isRequired,
-      y2: PropTypes.number.isRequired,
-    })),
-    displayLegend: PropTypes.bool,
-    height: PropTypes.number.isRequired,
-    numTicks: PropTypes.number,
-    svgRef: PropTypes.ref,
-    timeline: PropTypes.bool,
-    width: PropTypes.number.isRequired,
-    xAxisLabel: PropTypes.toString,
-    y2AxisLabel: PropTypes.toString,
-    y2Line: lineDataPropType,
-    yAxisLabel: PropTypes.toString,
-    yLine: lineDataPropType,
-    onRangeSelected: PropTypes.func,
-  };
-
   constructor(...args) {
     super(...args);
 
@@ -194,23 +170,20 @@ class LineChart extends React.Component {
 
     this.state = {
       displayInfo: false,
-      ...this.update(),
+      ...this.stateFromWidth(this.getWidth()),
     };
   }
 
   componentDidUpdate() {
-
-    this.setState(this.update());
+    this.update();
   }
 
   componentDidMount() {
-    this.setState(this.update());
+    this.update();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.data !== this.props.data ||
-      nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height ||
+    return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
       nextState.rangeX !== this.state.rangeX ||
       nextState.infoX !== this.state.infoX ||
@@ -228,6 +201,10 @@ class LineChart extends React.Component {
   }
 
   handleMouseMove(event) {
+    if (!this.svg) {
+      return;
+    }
+
     const box = this.svg.getBoundingClientRect();
     const mouseX = event.clientX - box.left -
       margin.left - 1;
@@ -305,28 +282,36 @@ class LineChart extends React.Component {
   }
 
   getWidth() {
-    const {width} = this.props;
+    let {width} = this.props;
     const {current: legend} = this.legendRef;
 
-    if (legend === null) {
-      return width;
+    width = width - MENU_PLACEHOLDER_WIDTH;
+
+    if (legend !== null) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
     }
 
-    const {width: legendWidth} = legend.getBoundingClientRect();
-    return width - legendWidth - LEGEND_MARGIN - MENU_PLACEHOLDER_WIDTH;
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    return width;
   }
 
   update() {
+    const width = this.getWidth();
+    if (width !== this.state.width) {
+      this.setState(this.stateFromWidth(width));
+    }
+  }
+
+  stateFromWidth(width) {
     const {
       data = [],
       height,
       timeline = false,
     } = this.props;
-
-    let width = this.getWidth();
-    if (width < MIN_WIDTH) {
-      width = MIN_WIDTH;
-    }
 
     const maxWidth = width - margin.left - margin.right;
     const maxHeight = height - margin.top - margin.bottom;
@@ -550,7 +535,7 @@ class LineChart extends React.Component {
     } = this.state;
     const {
       data = [],
-      displayLegend = true,
+      showLegend = true,
       svgRef,
       xAxisLabel,
       yAxisLabel,
@@ -664,7 +649,7 @@ class LineChart extends React.Component {
             {this.renderRange()}
           </Group>
         </Svg>
-        {hasLines && displayLegend &&
+        {hasLines && showLegend &&
           <Legend
             innerRef={this.legendRef}
             data={[yLine, y2Line]}
@@ -687,6 +672,30 @@ class LineChart extends React.Component {
     );
   }
 }
+
+LineChart.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.date,
+    ]).isRequired,
+    y: PropTypes.number.isRequired,
+    y2: PropTypes.number.isRequired,
+  })),
+  height: PropTypes.number.isRequired,
+  numTicks: PropTypes.number,
+  showLegend: PropTypes.bool,
+  svgRef: PropTypes.ref,
+  timeline: PropTypes.bool,
+  width: PropTypes.number.isRequired,
+  xAxisLabel: PropTypes.toString,
+  y2AxisLabel: PropTypes.toString,
+  y2Line: lineDataPropType,
+  yAxisLabel: PropTypes.toString,
+  yLine: lineDataPropType,
+  onRangeSelected: PropTypes.func,
+};
+
 
 export default LineChart;
 

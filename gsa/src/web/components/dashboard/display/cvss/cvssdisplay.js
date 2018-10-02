@@ -111,11 +111,12 @@ class CvssDisplay extends React.Component {
         {...props}
         dataTransform={transformCvssData}
         title={title}
+        showToggleLegend={false}
       >
         {({width, height, data, svgRef}) => (
           <BarChart
             svgRef={svgRef}
-            displayLegend={false}
+            showLegend={false}
             width={width}
             height={height}
             data={data}

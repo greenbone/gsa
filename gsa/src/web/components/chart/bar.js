@@ -29,13 +29,12 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import {shorten} from 'gmp/utils/string';
 import {isDefined} from 'gmp/utils/identity';
 
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
-
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
+
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Axis from './axis';
 import Group from './group';
@@ -67,16 +66,58 @@ const tickFormat = val => {
 
 class BarChart extends React.Component {
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.width !== nextProps.width ||
-      this.props.height !== nextProps.height ||
-      this.props.data !== nextProps.data;
+  constructor(...args) {
+    super(...args);
+
+    this.legendRef = React.createRef();
+
+    this.state = {
+      width: this.getWidth(),
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate(nextProps, this.props) ||
+      nextState.width !== this.state.width;
+  }
+
+  componentDidMount() {
+    this.update();
+  }
+
+  componentDidUpdate() {
+    this.update();
+  }
+
+  update() {
+    const width = this.getWidth();
+    if (width !== this.state.width) {
+      this.setState({width});
+    }
+  }
+
+  getWidth() {
+    let {width} = this.props;
+    const {current: legend} = this.legendRef;
+
+    width = width - MENU_PLACEHOLDER_WIDTH;
+
+    if (legend !== null) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
+    }
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    return width;
   }
 
   render() {
     const {
       data = [],
-      displayLegend = true,
+      showLegend = true,
       height,
       xLabel = '',
       yLabel = '',
@@ -85,16 +126,7 @@ class BarChart extends React.Component {
       onDataClick,
       onLegendItemClick,
     } = this.props;
-    let {width} = this.props;
-
-    if (this.legend) {
-      const {width: legendWidth} = this.legend.getBoundingClientRect();
-      width = width - legendWidth - LEGEND_MARGIN;
-    }
-
-    if (width < MIN_WIDTH) {
-      width = MIN_WIDTH;
-    }
+    const {width} = this.state;
 
     const xValues = data.map(d => d.x);
     const yValues = data.map(d => d.y);
@@ -108,7 +140,7 @@ class BarChart extends React.Component {
     const marginLeft = horizontal ? margin.left +
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
-    const maxWidth = width - marginLeft - margin.right - MENU_PLACEHOLDER_WIDTH;
+    const maxWidth = width - marginLeft - margin.right;
     let maxHeight = height - margin.top - margin.bottom;
 
     if (isDefined(xLabel)) {
@@ -195,9 +227,9 @@ class BarChart extends React.Component {
             ))}
           </Group>
         </Svg>
-        {displayLegend && data.length > 0 &&
+        {showLegend && data.length > 0 &&
           <Legend
-            innerRef={ref => this.legend = ref}
+            innerRef={this.legendRef}
             data={data}
             onItemClick={onLegendItemClick}
           />
@@ -226,9 +258,9 @@ BarChart.propTypes = {
     color: PropTypes.toString.isRequired,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
-  displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
+  showLegend: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.toString,

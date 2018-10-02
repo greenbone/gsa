@@ -107,6 +107,7 @@ export class OverridesWordCloudDisplay extends React.Component {
             filter={filter}
             dataTransform={transformWordCountData}
             title={() => _('Overrides Text Word Cloud')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
