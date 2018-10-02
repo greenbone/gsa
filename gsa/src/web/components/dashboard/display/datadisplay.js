@@ -300,6 +300,7 @@ class DataDisplay extends React.Component {
       dataRow,
       filter,
       icons = renderIcons,
+      showSvgDownload,
       showToggleLegend,
       onSelectFilterClick,
       onRemoveClick,
@@ -320,8 +321,6 @@ class DataDisplay extends React.Component {
     }
 
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
-    const {current: svg} = this.svgRef;
-    const hasSvg = !!svg;
     return (
       <Display
         title={`${title}`}
@@ -352,7 +351,7 @@ class DataDisplay extends React.Component {
                   setState: this.handleSetChartState,
                   showFilterSelection,
                   showCsvDownload,
-                  showSvgDownload: hasSvg,
+                  showSvgDownload,
                   showToggleLegend,
                   onDownloadCsvClick: this.handleDownloadSvg,
                   onDownloadSvgClick: this.handleDownloadSvg,
@@ -391,6 +390,7 @@ DataDisplay.propTypes = {
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,
+  showSvgDownload: PropTypes.bool,
   showToggleLegend: PropTypes.bool,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
