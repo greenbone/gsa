@@ -40,6 +40,8 @@ import Theme from '../../utils/theme';
 import Layout from '../layout/layout';
 
 import path from './utils/path';
+import {shouldUpdate} from './utils/update';
+
 import Axis from './axis';
 import Svg from './svg';
 import ToolTip from './tooltip';
@@ -191,9 +193,7 @@ Triangle.propTypes = {
 class ScheduleChart extends React.Component {
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.data !== this.props.data ||
-      nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height;
+    return shouldUpdate(nextProps, this.props);
   }
 
   render() {
