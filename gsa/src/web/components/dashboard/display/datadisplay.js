@@ -29,7 +29,7 @@ import equal from 'fast-deep-equal';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -127,12 +127,16 @@ class DataDisplay extends React.Component {
       data,
       originalData: this.props.data,
       title: this.props.title({data, id: this.props.id}),
-      showLegend: true,
+      chartState: {
+        showLegend: true,
+        ...this.props.initialChartState,
+      },
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
     this.handleToggleLegend = this.handleToggleLegend.bind(this);
+    this.handleSetChartState = this.setChartState.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -169,8 +173,8 @@ class DataDisplay extends React.Component {
     return nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
-      nextState.showLegend !== this.state.showLegend ||
       nextProps.showFilterString !== this.props.showFilterString ||
+      nextState.chartState !== this.state.chartState ||
       this.hasFilterChanged(nextProps);
   }
 
@@ -214,6 +218,26 @@ class DataDisplay extends React.Component {
     }
   }
 
+  setChartState(state) {
+    if (isFunction(state)) {
+      this.setState(({chartState}) => ({
+        chartState: {
+          ...chartState,
+          ...state(chartState),
+        },
+      }));
+    }
+    else {
+      this.setState(({chartState}) => ({
+        chartState: {
+          ...chartState,
+          ...state,
+        },
+      }));
+    }
+  }
+
+
   handleDownloadSvg() {
     const {current: download} = this.downloadRef;
 
@@ -249,14 +273,14 @@ class DataDisplay extends React.Component {
   }
 
   handleToggleLegend() {
-    this.setState(({showLegend}) => ({showLegend: !showLegend}));
+    this.setChartState(({showLegend}) => ({showLegend: !showLegend}));
   }
 
   render() {
     const {
+      chartState,
       data: transformedData,
       title,
-      showLegend,
     } = this.state;
     let {
       data: originalData,
@@ -313,13 +337,16 @@ class DataDisplay extends React.Component {
                     width,
                     height,
                     svgRef: this.svgRef,
-                    showLegend,
+                    state: chartState,
+                    setState: this.handleSetChartState,
                   })}
                 </React.Fragment>
             }
             <IconBar>
               <IconDivider flex="column">
                 {icons && icons({
+                  state: chartState,
+                  setState: this.handleSetChartState,
                   showFilterSelection,
                   showCsvDownload,
                   showSvgDownload: hasSvg,
@@ -357,6 +384,7 @@ DataDisplay.propTypes = {
   height: PropTypes.number.isRequired,
   icons: PropTypes.func,
   id: PropTypes.string.isRequired,
+  initialChartState: PropTypes.object,
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,
