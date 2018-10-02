@@ -37,7 +37,7 @@ export const renderDonutChartIcons = ({
       {...iconsProps}
     />
     <Icon
-      img="edit.svg"
+      img="st_vendorfix.svg"
       title={_('Toggle 2D/3D view')}
       onClick={() => setState(({show3d}) => ({show3d: !show3d}))}
     />
@@ -78,7 +78,7 @@ const DataDisplayIcons = ({
     }
     {showToggleLegend &&
       <Icon
-        img="edit.svg"
+        img="list.svg"
         title={_('Toggle Legend')}
         onClick={onToggleLegendClick}
       />
