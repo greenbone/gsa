@@ -175,7 +175,6 @@ class LineChart extends React.Component {
   }
 
   componentDidUpdate() {
-
     this.setState(this.update());
   }
 
@@ -202,6 +201,10 @@ class LineChart extends React.Component {
   }
 
   handleMouseMove(event) {
+    if (!this.svg) {
+      return;
+    }
+
     const box = this.svg.getBoundingClientRect();
     const mouseX = event.clientX - box.left -
       margin.left - 1;
