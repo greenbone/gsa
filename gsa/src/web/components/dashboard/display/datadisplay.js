@@ -125,10 +125,12 @@ class DataDisplay extends React.Component {
       data,
       originalData: this.props.data,
       title: this.props.title({data, id: this.props.id}),
+      showLegend: true,
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
+    this.handleToggleLegend = this.handleToggleLegend.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -165,6 +167,7 @@ class DataDisplay extends React.Component {
     return nextProps.height !== this.props.height ||
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
+      nextState.showLegend !== this.state.showLegend ||
       nextProps.showFilterString !== this.props.showFilterString ||
       this.hasFilterChanged(nextProps);
   }
@@ -243,8 +246,16 @@ class DataDisplay extends React.Component {
     download.click();
   }
 
+  handleToggleLegend() {
+    this.setState(({showLegend}) => ({showLegend: !showLegend}));
+  }
+
   render() {
-    const {data: transformedData, title} = this.state;
+    const {
+      data: transformedData,
+      title,
+      showLegend,
+    } = this.state;
     let {
       data: originalData,
       height,
@@ -260,6 +271,7 @@ class DataDisplay extends React.Component {
       dataRow,
       filter,
       icons,
+      showToggleLegend,
       onSelectFilterClick,
       onRemoveClick,
       ...props
@@ -299,6 +311,7 @@ class DataDisplay extends React.Component {
                     width,
                     height,
                     svgRef: this.svgRef,
+                    showLegend,
                   })}
                 </React.Fragment>
             }
@@ -308,9 +321,11 @@ class DataDisplay extends React.Component {
                   showCsvDownload={showCsvDownload}
                   showFilterSelection={showFilterSelection}
                   showSvgDownload={hasSvg}
+                  showToggleLegend={showToggleLegend}
                   onDownloadCsvClick={this.handleDownloadCsv}
                   onDownloadSvgClick={this.handleDownloadSvg}
                   onSelectFilterClick={onSelectFilterClick}
+                  onToggleLegendClick={this.handleToggleLegend}
                 />
               </IconDivider>
             </IconBar>
@@ -342,6 +357,7 @@ DataDisplay.propTypes = {
   isLoading: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showFilterString: PropTypes.bool,
+  showToggleLegend: PropTypes.bool,
   title: PropTypes.func.isRequired,
   width: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,

@@ -32,9 +32,11 @@ const DataDisplayIcons = ({
   showCsvDownload = true,
   showSvgDownload = true,
   showFilterSelection = true,
+  showToggleLegend = true,
   onDownloadCsvClick,
   onDownloadSvgClick,
   onSelectFilterClick,
+  onToggleLegendClick,
 }) => (
   <React.Fragment>
     {showFilterSelection &&
@@ -58,6 +60,13 @@ const DataDisplayIcons = ({
         onClick={onDownloadCsvClick}
       />
     }
+    {showToggleLegend &&
+      <Icon
+        img="edit.svg"
+        title={_('Toggle Legend')}
+        onClick={onToggleLegendClick}
+      />
+    }
   </React.Fragment>
 );
 
@@ -65,9 +74,11 @@ DataDisplayIcons.propTypes = {
   showCsvDownload: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showSvgDownload: PropTypes.bool,
+  showToggleLegend: PropTypes.bool,
   onDownloadCsvClick: PropTypes.func,
   onDownloadSvgClick: PropTypes.func,
   onSelectFilterClick: PropTypes.func,
+  onToggleLegendClick: PropTypes.func,
 };
 
 export default DataDisplayIcons;
