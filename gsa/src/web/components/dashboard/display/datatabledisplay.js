@@ -40,6 +40,7 @@ const DataTableDisplay = ({
     {...props}
     dataRow={dataRow}
     dataTitles={dataTitles}
+    showSvgDownload={false}
     showToggleLegend={false}
   >
     {({data}) => (
