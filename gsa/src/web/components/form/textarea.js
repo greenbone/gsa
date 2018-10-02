@@ -38,7 +38,7 @@ const StyledTextArea = styled.textarea`
   background-color: ${Theme.white};
   background-image: none;
   border: 1px solid ${Theme.inputBorderGray};
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 4px 8px;
   cursor: ${props => props.disabled ? 'not-allowed' : null};
   background-color: ${props => props.disabled || props.readonly ?

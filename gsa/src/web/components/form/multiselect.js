@@ -56,7 +56,7 @@ const DEFAULT_WIDTH = '250px';
 export const MultiSelectedValue = styled(SelectedValue)`
   display: inline;
   border: 1px solid ${Theme.inputBorderGray};
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 0 3px;
   margin-right: 4px;
   margin-top: 1px;

@@ -30,7 +30,7 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const Styled = styled.div`
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 5px;
   user-select: none;
  ${props => {

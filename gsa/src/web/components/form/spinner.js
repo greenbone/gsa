@@ -41,7 +41,7 @@ import withLayout from '../layout/withLayout';
 import NumberField from './numberfield';
 
 const StyledSpinner = styled.span`
-  border-radius: 4px;
+  border-radius: 2px;
   border: 1px solid ${Theme.lightGray};
   background-color: ${Theme.white};
   font-size: 1.1em;
@@ -113,12 +113,12 @@ const SpinnerButton = styled.span`
 `;
 
 const SpinnerButtonUp = styled(SpinnerButton)`
-  border-top-right-radius: 3px;
+  border-top-right-radius: 1px;
   top: 0;
 `;
 
 const SpinnerButtonDown = styled(SpinnerButton)`
-  border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 1px;
   bottom: 0;
 `;
 
