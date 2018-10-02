@@ -155,29 +155,6 @@ CrossY2.propTypes = crossPropTypes;
 
 class LineChart extends React.Component {
 
-   static propTypes = {
-    data: PropTypes.arrayOf(PropTypes.shape({
-      x: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.date,
-      ]).isRequired,
-      y: PropTypes.number.isRequired,
-      y2: PropTypes.number.isRequired,
-    })),
-    displayLegend: PropTypes.bool,
-    height: PropTypes.number.isRequired,
-    numTicks: PropTypes.number,
-    svgRef: PropTypes.ref,
-    timeline: PropTypes.bool,
-    width: PropTypes.number.isRequired,
-    xAxisLabel: PropTypes.toString,
-    y2AxisLabel: PropTypes.toString,
-    y2Line: lineDataPropType,
-    yAxisLabel: PropTypes.toString,
-    yLine: lineDataPropType,
-    onRangeSelected: PropTypes.func,
-  };
-
   constructor(...args) {
     super(...args);
 
@@ -684,6 +661,30 @@ class LineChart extends React.Component {
     );
   }
 }
+
+LineChart.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.date,
+    ]).isRequired,
+    y: PropTypes.number.isRequired,
+    y2: PropTypes.number.isRequired,
+  })),
+  displayLegend: PropTypes.bool,
+  height: PropTypes.number.isRequired,
+  numTicks: PropTypes.number,
+  svgRef: PropTypes.ref,
+  timeline: PropTypes.bool,
+  width: PropTypes.number.isRequired,
+  xAxisLabel: PropTypes.toString,
+  y2AxisLabel: PropTypes.toString,
+  y2Line: lineDataPropType,
+  yAxisLabel: PropTypes.toString,
+  yLine: lineDataPropType,
+  onRangeSelected: PropTypes.func,
+};
+
 
 export default LineChart;
 
