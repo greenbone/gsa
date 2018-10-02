@@ -66,8 +66,52 @@ const tickFormat = val => {
 
 class BarChart extends React.Component {
 
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate(nextProps, this.props);
+  constructor(...args) {
+    super(...args);
+
+    this.legendRef = React.createRef();
+
+    this.state = {
+      width: this.getWidth(),
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate(nextProps, this.props) ||
+      nextState.width !== this.state.width;
+  }
+
+  componentDidMount() {
+    this.update();
+  }
+
+  componentDidUpdate() {
+    this.update();
+  }
+
+  update() {
+    const width = this.getWidth();
+    if (width !== this.state.width) {
+      this.setState({width});
+    }
+  }
+
+  getWidth() {
+    let {width} = this.props;
+    const {current: legend} = this.legendRef;
+
+    width = width - MENU_PLACEHOLDER_WIDTH;
+
+    if (legend !== null) {
+      const {width: legendWidth} = legend.getBoundingClientRect();
+      width = width - legendWidth - LEGEND_MARGIN;
+    }
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    return width;
   }
 
   render() {
@@ -82,16 +126,7 @@ class BarChart extends React.Component {
       onDataClick,
       onLegendItemClick,
     } = this.props;
-    let {width} = this.props;
-
-    if (this.legend) {
-      const {width: legendWidth} = this.legend.getBoundingClientRect();
-      width = width - legendWidth - LEGEND_MARGIN;
-    }
-
-    if (width < MIN_WIDTH) {
-      width = MIN_WIDTH;
-    }
+    const {width} = this.state;
 
     const xValues = data.map(d => d.x);
     const yValues = data.map(d => d.y);
@@ -105,7 +140,7 @@ class BarChart extends React.Component {
     const marginLeft = horizontal ? margin.left +
       Math.min(MAX_LABEL_LENGTH, maxLabelLength) * 4 : margin.left;
 
-    const maxWidth = width - marginLeft - margin.right - MENU_PLACEHOLDER_WIDTH;
+    const maxWidth = width - marginLeft - margin.right;
     let maxHeight = height - margin.top - margin.bottom;
 
     if (isDefined(xLabel)) {
@@ -194,7 +229,7 @@ class BarChart extends React.Component {
         </Svg>
         {showLegend && data.length > 0 &&
           <Legend
-            innerRef={ref => this.legend = ref}
+            innerRef={this.legendRef}
             data={data}
             onItemClick={onLegendItemClick}
           />
