@@ -73,7 +73,7 @@ class BarChart extends React.Component {
   render() {
     const {
       data = [],
-      displayLegend = true,
+      showLegend = true,
       height,
       xLabel = '',
       yLabel = '',
@@ -192,7 +192,7 @@ class BarChart extends React.Component {
             ))}
           </Group>
         </Svg>
-        {displayLegend && data.length > 0 &&
+        {showLegend && data.length > 0 &&
           <Legend
             innerRef={ref => this.legend = ref}
             data={data}
@@ -223,9 +223,9 @@ BarChart.propTypes = {
     color: PropTypes.toString.isRequired,
     toolTip: PropTypes.elementOrString,
   })).isRequired,
-  displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   horizontal: PropTypes.bool,
+  showLegend: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   xLabel: PropTypes.toString,

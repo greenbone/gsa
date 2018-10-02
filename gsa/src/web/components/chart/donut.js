@@ -152,6 +152,7 @@ class DonutChart extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
+      nextProps.showLegend !== this.props.showLegend ||
       nextProps.show3d !== this.props.show3d;
   }
 
@@ -237,6 +238,7 @@ class DonutChart extends React.Component {
       height,
       svgRef,
       show3d = true,
+      showLegend = true,
       onDataClick,
       onLegendItemClick,
     } = this.props;
@@ -335,7 +337,7 @@ class DonutChart extends React.Component {
             />
           }
         </Svg>
-        {data.length > 0 &&
+        {data.length > 0 && showLegend &&
           <Legend
             data={data}
             innerRef={this.legendRef}
@@ -352,6 +354,7 @@ DonutChart.propTypes = {
   height: PropTypes.number.isRequired,
   innerRadius: PropTypes.number,
   show3d: PropTypes.bool,
+  showLegend: PropTypes.bool,
   svgRef: PropTypes.ref,
   width: PropTypes.number.isRequired,
   onDataClick: PropTypes.func,

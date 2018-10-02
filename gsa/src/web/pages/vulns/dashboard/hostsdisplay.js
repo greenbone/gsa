@@ -204,7 +204,7 @@ export class VulnsHostsDisplay extends React.Component {
               <BarChart
                 svgRef={svgRef}
                 data={tdata}
-                displayLegend={false}
+                showLegend={false}
                 height={height}
                 width={width}
                 xLabel={_('# of Hosts')}

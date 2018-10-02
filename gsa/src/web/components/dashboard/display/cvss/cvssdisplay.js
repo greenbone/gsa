@@ -115,7 +115,7 @@ class CvssDisplay extends React.Component {
         {({width, height, data, svgRef}) => (
           <BarChart
             svgRef={svgRef}
-            displayLegend={false}
+            showLegend={false}
             width={width}
             height={height}
             data={data}

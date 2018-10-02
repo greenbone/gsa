@@ -130,7 +130,7 @@ export class HostsVulnScoreDisplay extends React.Component {
               <BarChart
                 svgRef={svgRef}
                 horizontal
-                displayLegend={false}
+                showLegend={false}
                 width={width}
                 height={height}
                 data={tdata}
