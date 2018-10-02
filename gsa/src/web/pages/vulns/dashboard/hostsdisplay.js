@@ -197,8 +197,9 @@ export class VulnsHostsDisplay extends React.Component {
             filter={filter}
             dataTransform={transformHostsData}
             title={({data: tdata}) =>
-            _('Vulnerabilities by Hosts (Total: {{count}})',
-              {count: tdata.total})}
+              _('Vulnerabilities by Hosts (Total: {{count}})',
+                {count: tdata.total})}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart

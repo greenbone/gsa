@@ -40,6 +40,7 @@ const DataTableDisplay = ({
     {...props}
     dataRow={dataRow}
     dataTitles={dataTitles}
+    showToggleLegend={false}
   >
     {({data}) => (
       isDefined(children) ?

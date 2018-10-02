@@ -131,7 +131,8 @@ export class NvtsFamilyDisplay extends React.Component {
             {...loaderProps}
             dataTransform={transformFamilyData}
             title={({data: tdata}) =>
-            _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
+              _('NVTS by Family (Total: {{count}})', {count: tdata.total})}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BubbleChart

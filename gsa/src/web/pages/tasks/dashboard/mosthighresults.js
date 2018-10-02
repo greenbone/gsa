@@ -109,6 +109,7 @@ export class TasksMostHighResultsDisplay extends React.Component {
             dataRow={row => [row.x, row.y]}
             dataTransform={transformHighResultsData}
             title={() => _('Tasks with most High Results per Host')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart

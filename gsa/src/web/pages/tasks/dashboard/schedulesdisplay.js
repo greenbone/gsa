@@ -82,6 +82,7 @@ export const TasksSchedulesDisplay = createDisplay({
   filtersFilter: TASKS_FILTER_FILTER,
   startDate: today,
   endDate: week,
+  showToggleLegend: false,
 });
 
 export const TasksSchedulesTableDisplay = createDisplay({

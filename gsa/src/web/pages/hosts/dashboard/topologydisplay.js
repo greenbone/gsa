@@ -157,6 +157,7 @@ export class HostsTopologyDisplay extends React.Component {
             filter={filter}
             dataTransform={transformTopologyData}
             title={() => _('Hosts Topology')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <TopologyChart

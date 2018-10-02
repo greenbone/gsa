@@ -107,8 +107,8 @@ export class NotesWordCloudDisplay extends React.Component {
             {...loaderProps}
             filter={filter}
             dataTransform={transformWordCountData}
-            title={() =>
-              _('Notes Text Word Cloud')}
+            title={() => _('Notes Text Word Cloud')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart

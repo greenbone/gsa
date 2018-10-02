@@ -125,6 +125,7 @@ export class HostsVulnScoreDisplay extends React.Component {
             filter={filter}
             dataTransform={transformVulnScoreData}
             title={() => _('Most Vulnerable Hosts')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <BarChart

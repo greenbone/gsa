@@ -106,14 +106,13 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
             {...loaderProps}
             filter={filter}
             dataTransform={transformWordCountData}
-            title={({data: tdata}) =>
-            _('Results Description Word Cloud')}
+            title={() => _('Results Description Word Cloud')}
+            showToggleLegend={false}
           >
             {({width, height, data: tdata, svgRef}) => (
               <WordCloudChart
                 svgRef={svgRef}
                 data={tdata}
-                displayLegend={false}
                 height={height}
                 width={width}
                 onDataClick={isDefined(onFilterChanged) ?
