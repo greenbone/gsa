@@ -235,9 +235,14 @@ class DataDisplay extends React.Component {
     }
   }
 
-
   handleDownloadSvg() {
     const {current: download} = this.downloadRef;
+    const {current: svg} = this.svgRef;
+
+    if (!svg || !download) {
+      // don't crash if refs haven't been set in some way
+      return;
+    }
 
     this.cleanupDownloadSvg();
 
