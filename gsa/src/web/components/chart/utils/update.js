@@ -34,6 +34,7 @@
 export const shouldUpdate = (nextProps, props) =>
   nextProps.data !== props.data ||
   nextProps.width !== props.width ||
-  nextProps.height !== props.height;
+  nextProps.height !== props.height ||
+  nextProps.showLegend !== props.showLegend;
 
 // vim: set ts=2 sw=2 tw=80:

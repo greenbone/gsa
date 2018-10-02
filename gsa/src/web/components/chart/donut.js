@@ -152,7 +152,6 @@ class DonutChart extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
-      nextProps.showLegend !== this.props.showLegend ||
       nextProps.show3d !== this.props.show3d;
   }
 

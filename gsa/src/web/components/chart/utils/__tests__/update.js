@@ -36,6 +36,10 @@ describe('shouldUpdate tests', () => {
     expect(shouldUpdate({height: 100}, {height: 200})).toEqual(true);
   });
 
+  test('should update if showLegend has changed', () => {
+    expect(shouldUpdate({showLegend: false}, {showLegend: true})).toEqual(true);
+  });
+
   test('should not update if data identity has not changed', () => {
     const data = {foo: 1};
     expect(shouldUpdate({data}, {data})).toEqual(false);
@@ -47,6 +51,14 @@ describe('shouldUpdate tests', () => {
 
   test('should not update if height has not changed', () => {
     expect(shouldUpdate({height: 100}, {height: 100})).toEqual(false);
+  });
+
+  test('should not update if showLegend has not changed', () => {
+    expect(shouldUpdate({showLegend: true}, {showLegend: true})).toEqual(false);
+  });
+
+  test('should not update if unkown prop has changed', () => {
+    expect(shouldUpdate({foo: false}, {foo: true})).toEqual(false);
   });
 
 });
