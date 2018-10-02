@@ -37,6 +37,7 @@ import Theme from 'web/utils/theme';
 
 import arc from './utils/arc';
 import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Layout from 'web/components/layout/layout';
 
@@ -149,9 +150,7 @@ class DonutChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.data !== this.props.data ||
-      nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height ||
+    return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
       nextProps.show3d !== this.props.show3d;
   }

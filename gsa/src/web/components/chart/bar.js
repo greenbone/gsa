@@ -34,6 +34,7 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
 import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Axis from './axis';
 import Group from './group';
@@ -66,9 +67,7 @@ const tickFormat = val => {
 class BarChart extends React.Component {
 
   shouldComponentUpdate(nextProps) {
-    return this.props.width !== nextProps.width ||
-      this.props.height !== nextProps.height ||
-      this.props.data !== nextProps.data;
+    return shouldUpdate(nextProps, this.props);
   }
 
   render() {

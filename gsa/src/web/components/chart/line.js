@@ -45,6 +45,7 @@ import Theme from 'web/utils/theme';
 import {setRef} from 'web/utils/render';
 
 import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';
@@ -206,9 +207,7 @@ class LineChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.data !== this.props.data ||
-      nextProps.width !== this.props.width ||
-      nextProps.height !== this.props.height ||
+    return shouldUpdate(nextProps, this.props) ||
       nextState.width !== this.state.width ||
       nextState.rangeX !== this.state.rangeX ||
       nextState.infoX !== this.state.infoX ||
