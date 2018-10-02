@@ -207,6 +207,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/chart/tooltip.js
      ${GSA_SRC_DIR}/src/web/components/chart/topology.js
      ${GSA_SRC_DIR}/src/web/components/chart/utils/arc.js
+     ${GSA_SRC_DIR}/src/web/components/chart/utils/constants.js
      ${GSA_SRC_DIR}/src/web/components/chart/utils/path.js
      ${GSA_SRC_DIR}/src/web/components/chart/wordcloud.js
      ${GSA_SRC_DIR}/src/web/components/comment/comment.js

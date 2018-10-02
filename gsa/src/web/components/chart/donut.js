@@ -36,10 +36,7 @@ import {setRef} from 'web/utils/render';
 import Theme from 'web/utils/theme';
 
 import arc from './utils/arc';
-
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
 
 import Layout from 'web/components/layout/layout';
 

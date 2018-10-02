@@ -25,9 +25,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
+import {MENU_PLACEHOLDER_WIDTH} from 'web/components/chart/utils/constants';
 
 import Table from 'web/components/table/stripedtable';
 import TableHeader from 'web/components/table/header';

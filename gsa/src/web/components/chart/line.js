@@ -38,15 +38,13 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 
-import {
-  MENU_PLACEHOLDER_WIDTH,
-} from 'web/components/dashboard/display/datadisplay';
-
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import {setRef} from 'web/utils/render';
+
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
 
 import Legend, {Item, Label, Line as LegendLine} from './legend';
 import Axis from './axis';

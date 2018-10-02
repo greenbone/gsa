@@ -45,8 +45,6 @@ import Display, {
 } from './display';
 import DataDisplayIcons from './datadisplayicons';
 
-export const MENU_PLACEHOLDER_WIDTH = 26;
-
 const ownProps = [
   'title',
   'dataTransform',
