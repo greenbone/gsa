@@ -524,7 +524,7 @@ class LineChart extends React.Component {
     } = this.state;
     const {
       data = [],
-      displayLegend = true,
+      showLegend = true,
       svgRef,
       xAxisLabel,
       yAxisLabel,
@@ -638,7 +638,7 @@ class LineChart extends React.Component {
             {this.renderRange()}
           </Group>
         </Svg>
-        {hasLines && displayLegend &&
+        {hasLines && showLegend &&
           <Legend
             innerRef={this.legendRef}
             data={[yLine, y2Line]}
@@ -671,9 +671,9 @@ LineChart.propTypes = {
     y: PropTypes.number.isRequired,
     y2: PropTypes.number.isRequired,
   })),
-  displayLegend: PropTypes.bool,
   height: PropTypes.number.isRequired,
   numTicks: PropTypes.number,
+  showLegend: PropTypes.bool,
   svgRef: PropTypes.ref,
   timeline: PropTypes.bool,
   width: PropTypes.number.isRequired,
