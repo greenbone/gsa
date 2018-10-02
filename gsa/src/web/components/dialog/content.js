@@ -34,6 +34,7 @@ const DialogContent = styled.div`
   background: ${Theme.white};
   box-shadow: 5px 5px 10px ${Theme.mediumGray};
   border-radius: 3px;
+  border: 1px solid ${Theme.mediumGray};
 `;
 
 export default DialogContent;

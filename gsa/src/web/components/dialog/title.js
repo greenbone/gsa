@@ -38,7 +38,7 @@ const DialogTitleBar = styled(Layout)`
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border: 1px solid ${Theme.mediumGray};
+  border-bottom: 1px solid ${Theme.mediumGray};
   color: ${Theme.white};
   font-weight: bold;
   background: ${Theme.green};
