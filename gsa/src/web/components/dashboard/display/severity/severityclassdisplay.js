@@ -34,6 +34,7 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut';
 
 import DataDisplay from '../datadisplay';
+import {renderDonutChartIcons} from '../datadisplayicons';
 
 import transformSeverityData from './severityclasstransform';
 
@@ -101,7 +102,11 @@ class SeverityClassDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
+        initialChartState={{
+          show3d: true,
+        }}
         dataTransform={transformSeverityData}
+        icons={renderDonutChartIcons}
       >
         {({width, height, data, svgRef, state}) => (
           <DonutChart
@@ -109,6 +114,7 @@ class SeverityClassDisplay extends React.Component {
             width={width}
             height={height}
             data={data}
+            show3d={state.show3d}
             showLegend={state.showLegend}
             onDataClick={isDefined(onFilterChanged) ?
               this.handleDataClick : undefined}

@@ -40,6 +40,9 @@ import PropTypes from 'web/utils/proptypes';
 import DonutChart from 'web/components/chart/donut';
 
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {
+  renderDonutChartIcons,
+} from 'web/components/dashboard/display/datadisplayicons';
 import DataTable from 'web/components/dashboard/display/datatable';
 import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
@@ -146,10 +149,14 @@ export class TasksStatusDisplay extends React.Component {
           <DataDisplay
             {...props}
             {...loaderProps}
+            initialChartState={{
+              show3d: true,
+            }}
             filter={filter}
             dataTransform={transformStatusData}
             title={({data: tdata}) =>
               _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
+            icons={renderDonutChartIcons}
           >
             {({width, height, data: tdata, svgRef, state}) => (
               <DonutChart
@@ -157,6 +164,7 @@ export class TasksStatusDisplay extends React.Component {
                 width={width}
                 height={height}
                 data={tdata}
+                show3d={state.show3d}
                 showLegend={state.showLegend}
                 onDataClick={isDefined(onFilterChanged) ?
                   this.handleDataClick : undefined}

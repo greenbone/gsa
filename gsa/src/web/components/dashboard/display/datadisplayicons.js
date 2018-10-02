@@ -28,6 +28,22 @@ import Icon from 'web/components/icon/icon';
 
 import PropTypes from 'web/utils/proptypes';
 
+export const renderDonutChartIcons = ({
+  setState, // eslint-disable-line react/prop-types
+  ...iconsProps
+}) => (
+  <React.Fragment>
+    <DataDisplayIcons
+      {...iconsProps}
+    />
+    <Icon
+      img="edit.svg"
+      title={_('Toggle 2D/3D view')}
+      onClick={() => setState(({show3d}) => ({show3d: !show3d}))}
+    />
+  </React.Fragment>
+);
+
 const DataDisplayIcons = ({
   showCsvDownload = true,
   showSvgDownload = true,
