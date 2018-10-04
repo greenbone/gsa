@@ -41,6 +41,7 @@ import {
   loadSettings,
   saveSettings,
   resetSettings,
+  addDisplay,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -409,6 +410,221 @@ describe('resetSttings tests', () => {
       }]);
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
+    });
+  });
+
+});
+
+describe('addDisplay tests', () => {
+
+  test('should add display successfully', () => {
+    const displayId = 'a1';
+    const dashboardId = 'dash1';
+    const uuid = 'uuid1';
+    const uuidFunc = () => uuid;
+
+    const settings = {
+      rows: [{
+        items: [{
+          id: uuid,
+          name: displayId,
+        }],
+      }],
+    };
+    const rootState = createRootState();
+
+    const dispatch = jest.fn();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(addDisplay)).toEqual(true);
+    return addDisplay(gmp)(dashboardId, displayId, uuidFunc)(dispatch,
+      getState).then(() => {
+
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id: dashboardId,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+      }]);
+      expect(getState).toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, settings);
+    });
+  });
+
+  test('should not add display if no dashboard id is provided', () => {
+    const displayId = 'a1';
+    const dashboardId = undefined;
+    const uuid = 'uuid1';
+    const uuidFunc = () => uuid;
+
+    const rootState = createRootState();
+
+    const dispatch = jest.fn();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(addDisplay)).toEqual(true);
+    return addDisplay(gmp)(dashboardId, displayId, uuidFunc)(dispatch,
+      getState).then(() => {
+
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(getState).not.toHaveBeenCalled();
+      expect(saveSettingsPromise).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should not add display if no display id is provided', () => {
+    const displayId = undefined;
+    const dashboardId = 'dash1';
+    const uuid = 'uuid1';
+    const uuidFunc = () => uuid;
+
+    const rootState = createRootState();
+
+    const dispatch = jest.fn();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(addDisplay)).toEqual(true);
+    return addDisplay(gmp)(dashboardId, displayId, uuidFunc)(dispatch,
+      getState).then(() => {
+
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(getState).not.toHaveBeenCalled();
+      expect(saveSettingsPromise).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should not add display', () => {
+    const displayId = 'a1';
+    const dashboardId = 'dash1';
+    const uuid = 'uuid1';
+    const uuidFunc = () => uuid;
+
+    const rootState = createRootState({
+      byId: {
+        [dashboardId]: {
+          maxItemsPerRow: 1,
+          maxRows: 1,
+          rows: [{
+            items: [{
+              id: 'b1',
+            }],
+          }],
+        },
+      },
+    });
+
+    const dispatch = jest.fn();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(addDisplay)).toEqual(true);
+    return addDisplay(gmp)(dashboardId, displayId, uuidFunc)(dispatch,
+      getState).then(() => {
+
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(getState).toHaveBeenCalled();
+      expect(saveSettingsPromise).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should fail adding a display', () => {
+    const displayId = 'a1';
+    const dashboardId = 'dash1';
+    const uuid = 'uuid1';
+    const uuidFunc = () => uuid;
+
+    const rootState = createRootState();
+    const settings = {
+      rows: [{
+        items: [{
+          id: uuid,
+          name: displayId,
+        }],
+      }],
+    };
+
+    const dispatch = jest.fn();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const error = 'An error';
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.reject(error));
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(addDisplay)).toEqual(true);
+    return addDisplay(gmp)(dashboardId, displayId, uuidFunc)(dispatch,
+      getState).then(() => {
+
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id: dashboardId,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_ERROR,
+        error,
+      }]);
+      expect(getState).toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, settings);
     });
   });
 
