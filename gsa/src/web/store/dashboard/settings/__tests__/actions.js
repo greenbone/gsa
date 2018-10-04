@@ -39,6 +39,7 @@ import {
   savedDashboardSettings,
   saveDashboardSettingsError,
   loadSettings,
+  saveSettings,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -234,6 +235,88 @@ describe('loadSettings tests', () => {
       }]);
       expect(getState).toHaveBeenCalled();
       expect(currentSettings).toHaveBeenCalled();
+    });
+  });
+
+});
+
+describe('saveSettings tests', () => {
+
+  test('should save settings successfully', () => {
+    const id = 'a1';
+    const dispatch = jest.fn();
+    const rootState = createRootState();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const settings = {
+      foo: 'bar',
+    };
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(saveSettings)).toEqual(true);
+    return saveSettings(gmp)(id, settings)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+      }]);
+      expect(getState).not.toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
+    });
+  });
+
+  test('should fail saving settings', () => {
+    const id = 'a1';
+    const dispatch = jest.fn();
+    const rootState = createRootState();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const settings = {
+      foo: 'bar',
+    };
+
+    const error = 'An error';
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.reject(error));
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(saveSettings)).toEqual(true);
+    return saveSettings(gmp)(id, settings)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_ERROR,
+        error,
+      }]);
+      expect(getState).not.toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
   });
 
