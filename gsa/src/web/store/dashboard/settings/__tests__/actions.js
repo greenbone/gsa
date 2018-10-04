@@ -41,6 +41,7 @@ import {
   loadSettings,
   saveSettings,
   resetSettings,
+  canAddDisplay,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -114,6 +115,86 @@ describe('dashboard settings action tests', () => {
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
     });
+  });
+
+});
+
+describe('canAddDisplay helper function tests', () => {
+
+  test('should allow to add display without settings', () => {
+    expect(canAddDisplay()).toEqual(true);
+  });
+
+  test('should allow to add display without existing rows', () => {
+    const rows = [];
+    expect(canAddDisplay({
+      rows,
+      maxItemsPerRow: 3,
+      maxRows: 1,
+    })).toEqual(true);
+  });
+
+  test('should allow to add display without maxItemsPerRow', () => {
+    const rows = [
+      {
+        items: [1, 2, 3],
+      },
+    ];
+    expect(canAddDisplay({
+      rows,
+      maxRows: 1,
+    })).toEqual(true);
+  });
+
+  test('should allow to add display without maxRows', () => {
+    const rows = [
+      {
+        items: [1, 2, 3],
+      },
+    ];
+    expect(canAddDisplay({
+      rows,
+      maxItemsPerRow: 3,
+    })).toEqual(true);
+  });
+
+  test('should allow to add display if last row is not full', () => {
+    const rows = [
+      {
+        items: [1, 2],
+      },
+    ];
+    expect(canAddDisplay({
+      rows,
+      maxItemsPerRow: 3,
+      maxRows: 1,
+    })).toEqual(true);
+  });
+
+  test('should allow to add display if another row is possible', () => {
+    const rows = [
+      {
+        items: [1, 2, 3],
+      },
+    ];
+    expect(canAddDisplay({
+      rows,
+      maxItemsPerRow: 3,
+      maxRows: 2,
+    })).toEqual(true);
+  });
+
+  test('should not be able to add display if last row is full', () => {
+    const rows = [
+      {
+        items: [1, 2, 3],
+      },
+    ];
+    expect(canAddDisplay({
+      rows,
+      maxItemsPerRow: 3,
+      maxRows: 1,
+    })).toEqual(false);
   });
 
 });
