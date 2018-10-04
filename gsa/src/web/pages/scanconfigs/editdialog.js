@@ -330,10 +330,8 @@ class NvtFamily extends React.Component {
         <TableData>
           {name}
         </TableData>
-        <TableData>
-          <Layout align="start">
-            {_('{{count}} of {{max}}', counts)}
-          </Layout>
+        <TableData align="start">
+          {_('{{count}} of {{max}}', counts)}
         </TableData>
         <TableData align={['center', 'start']}>
           <Divider>
