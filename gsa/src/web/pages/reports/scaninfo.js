@@ -30,16 +30,16 @@ import {duration as createDuration} from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import StatusBar from '../../components/bar/statusbar.js';
+import StatusBar from 'web/components/bar/statusbar';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import Table from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableRow from '../../components/table/row.js';
-import TableData from '../../components/table/data.js';
+import Table from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableRow from 'web/components/table/row';
+import TableData from 'web/components/table/data';
 
 import {Col} from 'web/entity/page';
 

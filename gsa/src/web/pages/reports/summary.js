@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import ScanInfo from './scaninfo.js';
+import ScanInfo from './scaninfo';
 
 const Summary = ({
   report,

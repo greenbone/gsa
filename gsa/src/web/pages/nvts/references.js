@@ -24,20 +24,20 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import CertLink from '../../components/link/certlink.js';
-import CveLink from '../../components/link/cvelink.js';
-import ExternalLink from '../../components/link/externallink.js';
+import CertLink from 'web/components/link/certlink';
+import CveLink from 'web/components/link/cvelink';
+import ExternalLink from 'web/components/link/externallink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 const References = ({
   nvt,
