@@ -126,7 +126,7 @@ export const resetSettings = gmp => id =>
 export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   (dispatch, getState) => {
   if (!isDefined(displayId) || !isDefined(dashboardId)) {
-    return;
+    return Promise.resolve();
   }
 
   const rootState = getState();
@@ -134,7 +134,7 @@ export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   const settings = settingsSelector.getById(dashboardId);
 
   if (!canAddDisplay(settings)) {
-    return;
+    return Promise.resolve();
   }
 
   const newSettings = addDisplayToSettings(settings, displayId, uuidFunc);
