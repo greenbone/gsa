@@ -106,7 +106,7 @@ class Cve extends Info {
       accessComplexity: ret.complexity,
       accessVector: ret.vector,
       authentication: ret.authentication,
-      availabilityImpact: ret.confidentiality_impact,
+      availabilityImpact: ret.availability_impact,
       confidentialityImpact: ret.confidentiality_impact,
       integrityImpact: ret.integrity_impact,
     });
