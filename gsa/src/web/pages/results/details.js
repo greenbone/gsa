@@ -71,8 +71,6 @@ const ResultDetails = ({
   const {nvt} = result;
   const {oid, tags} = nvt;
 
-  const detection_title = result.severity > 0 || result.nvt.severity > 0 ?
-    _('Vulnerability Detection Method') : _('Log Method');
   const is_oval = isDefined(oid) && oid.startsWith('oval:');
   const has_detection = isDefined(result.detection) &&
     isDefined(result.detection.result);
@@ -96,14 +94,14 @@ const ResultDetails = ({
       </DetailsBlock>
 
       <DetailsBlock
-        title={_('Vulnerability Detection Result')}
+        title={_('Detection Result')}
       >
         {!isEmpty(result.description) && result.description.length > 1 ?
           (
             <Pre>
               {result.description}
             </Pre>
-          ) : _('Vulnerability was detected according to the Vulnerability ' +
+          ) : _('Vulnerability was detected according to the ' +
             'Detection Method.')
         }
       </DetailsBlock>
@@ -135,7 +133,7 @@ const ResultDetails = ({
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
-          title={_('Vulnerability Insight')}
+          title={_('Insight')}
         >
           <P>
             {tags.insight}
@@ -144,7 +142,7 @@ const ResultDetails = ({
       }
 
       <DetailsBlock
-        title={detection_title}
+        title={_('Detection Method')}
       >
         <Layout flex="column">
           <Layout>

@@ -62,10 +62,10 @@ const Row = ({
           <Comment text={entity.comment}/>
         </TableData>
         <TableData>
-          {na(entity.cvssBaseVector)}
+          {na(entity.cvssAccessVector)}
         </TableData>
         <TableData>
-          {na(entity.cvssComplexity)}
+          {na(entity.cvssAccessComplexity)}
         </TableData>
         <TableData>
           {na(entity.cvssAuthentication)}
