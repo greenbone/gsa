@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/entries';
-
-import {isDefined, isArray} from 'gmp/utils/identity';
-
-import {createRow, createItem} from 'web/components/sortable/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import getDashboardSettings from './selectors';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+} from './utils';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';
@@ -121,46 +121,6 @@ export const resetSettings = gmp => id =>
       response => dispatch(savedDashboardSettings()),
       error => dispatch(saveDashboardSettingsError(error)),
     );
-};
-
-export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
-  if (isArray(rows) && rows.length > 0 &&
-    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
-    const lastRow = rows[rows.length - 1];
-    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
-  }
-  return true;
-};
-
-export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
-  const {rows: currentRows = [], maxItemsPerRow} = settings || {};
-
-  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
-    currentRows[currentRows.length - 1] : {items: []};
-
-  const rows = isArray(currentRows) ? [...currentRows] : [];
-  let newRow;
-  if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
-    // create new row
-    newRow = createRow([createItem({name: displayId}, uuidFunc)], undefined,
-      uuidFunc);
-  }
-  else {
-    // add new display to last row
-    newRow = {
-      ...lastRow,
-      items: [...lastRow.items, createItem({name: displayId}, uuidFunc)],
-    };
-
-    rows.pop();
-  }
-
-  rows.push(newRow);
-
-  return {
-    ...settings,
-    rows,
-  };
 };
 
 export const addDisplay = gmp => (dashboardId, displayId) =>

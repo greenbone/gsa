@@ -34,11 +34,11 @@ import withGmp from '../../utils/withGmp.js';
 import PropTypes from '../../utils/proptypes.js';
 
 import {
-  resetSettings,
   addDisplay,
-  canAddDisplay,
+  resetSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {canAddDisplay} from 'web/store/dashboard/settings/utils';
 
 import SaveDialog from '../dialog/savedialog';
 
@@ -51,6 +51,7 @@ import NewIcon from '../icon/newicon';
 import Icon from '../icon/icon';
 
 import {getDisplay} from './registry';
+
 export class DashboardControls extends React.Component {
 
   constructor(...args) {

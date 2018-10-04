@@ -37,12 +37,14 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import {
-  canAddDisplay,
-  addDisplayToSettings,
   loadSettings,
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {
+  canAddDisplay,
+  addDisplayToSettings,
+} from 'web/store/dashboard/settings/utils';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
