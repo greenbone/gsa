@@ -96,7 +96,7 @@ describe('dashboard settings reducers tests for loading requests', () => {
     });
   });
 
-  test('should override defaults', () => {
+  test('should override existing defaults', () => {
     const id = 'a1';
     const state = {
       defaults: {
