@@ -23,6 +23,7 @@
  */
 import {normalizeType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import {parseInt} from 'gmp/parser';
 
@@ -42,6 +43,8 @@ class Tag extends Model {
     else {
       ret.resourceCount = 0;
     }
+    ret.value = isEmpty(elem.value) ? undefined : elem.value;
+
     return ret;
   }
 }

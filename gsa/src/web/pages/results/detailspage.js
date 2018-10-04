@@ -239,7 +239,7 @@ const Details = ({
         >
           <Divider>
             {userTags.map(tag => {
-              const valueString = tag.value === '' ? '' : '=' + tag.value;
+              const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
               return (
                 <DetailsLink
                   key={tag.id}
