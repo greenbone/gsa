@@ -33,6 +33,7 @@ const BlankLink = ({
     {...props}
     href={to}
     target="_blank"
+    rel="noopener noreferrer" // https://mathiasbynens.github.io/rel-noopener
   >
     {children}
   </a>

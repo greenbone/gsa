@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
