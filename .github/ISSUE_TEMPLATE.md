@@ -3,14 +3,15 @@ If reporting an issue please try to provide the information asked below.
 
 Before reporting an issue please:
 
-1. be aware that this is not a support forum. If your issue is more a question
+1. Be aware that this is not a support forum. If your issue is rather a question
    than a bug report, please use our community forum at
    https://community.greenbone.net/c/gse instead.
-2. make sure that you're using the latest published GVM components for the
+2. Make sure that you're using the latest published GVM components for the
    release you are using: https://community.greenbone.net/t/about-the-source-edition-gse-category/176
-3. check the list of issues whether it isn't already reported.
-4. read 1. again and if you still belive you found a software bug please keep
-   on. If you are in doubt use https://community.greenbone.net/c/gse instead.
+3. Check the list of issues whether it isn't already reported.
+4. Read 1. again and if you still believe you found a software bug please
+   continue to file this issue. If you are in doubt use
+   https://community.greenbone.net/c/gse instead.
 
 Thanks for your help to keep the communication channels clean and consistent!
 -->
@@ -36,7 +37,7 @@ Thanks for your help to keep the communication channels clean and consistent!
 ### Steps to reproduce
 
 <!--
-  How would you describe your issue to someone who doesn’t know GSA.
+  How would you describe your issue to someone who doesn’t know GSA?
   Try to write a sequence of steps that anybody can repeat to see the issue.
 -->
 
