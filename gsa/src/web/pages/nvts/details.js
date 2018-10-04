@@ -79,7 +79,7 @@ const NvtDetails = ({
       }
 
       <DetailsBlock
-        title={_('Vulnerability Scoring')}
+        title={_('Scoring')}
       >
         <InfoTable>
           <TableBody>
@@ -114,7 +114,7 @@ const NvtDetails = ({
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
-          title={_('Vulnerability Insight')}
+          title={_('Insight')}
         >
           <Pre>
             {tags.insight}
@@ -125,7 +125,7 @@ const NvtDetails = ({
       {(isDefined(qod) ||
       (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
         <DetailsBlock
-          title={_('Vulnerability Detection Method')}
+          title={_('Detection Method')}
         >
           {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
             <Pre>
