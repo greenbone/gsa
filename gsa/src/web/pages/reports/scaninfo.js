@@ -36,10 +36,12 @@ import StatusBar from '../../components/bar/statusbar.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
-import Table from '../../components/table/detailstable.js';
+import Table from '../../components/table/infotable.js';
 import TableBody from '../../components/table/body.js';
 import TableRow from '../../components/table/row.js';
 import TableData from '../../components/table/data.js';
+
+import {Col} from 'web/entity/page';
 
 const scanDuration = (start, end) => {
   const dur = createDuration(end.diff(start));
@@ -105,6 +107,10 @@ const ReportScanInfoTable = ({
   const is_ended = isDefined(scan_end) && scan_end.isValid();
   return (
     <Table>
+      <colgroup>
+        <Col width="10%"/>
+        <Col width="90%"/>
+      </colgroup>
       <TableBody>
         <TableRow>
           <TableData>
