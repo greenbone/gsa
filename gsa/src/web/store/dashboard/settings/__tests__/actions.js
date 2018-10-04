@@ -25,6 +25,8 @@
 
 import {isFunction} from 'gmp/utils/identity';
 
+import {DEFAULT_ROW_HEIGHT} from 'web/components/sortable/utils';
+
 import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
@@ -42,6 +44,7 @@ import {
   saveSettings,
   resetSettings,
   canAddDisplay,
+  addDisplayToSettings,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -195,6 +198,121 @@ describe('canAddDisplay helper function tests', () => {
       maxItemsPerRow: 3,
       maxRows: 1,
     })).toEqual(false);
+  });
+
+});
+
+describe('addDisplayToSettings tests', () => {
+
+  test('should create new settings', () => {
+    const uuid = 'foo1';
+    const uuidFunc = () => uuid;
+
+    expect(addDisplayToSettings(undefined, 'a1', uuidFunc)).toEqual({
+      rows: [{
+        items: [{
+          id: uuid,
+          name: 'a1',
+        }],
+      }],
+    });
+
+    expect(addDisplayToSettings({rows: {}}, 'a1', uuidFunc)).toEqual({
+      rows: [{
+        items: [{
+          id: uuid,
+          name: 'a1',
+        }],
+      }],
+    });
+
+    expect(addDisplayToSettings({rows: []}, 'a1', uuidFunc)).toEqual({
+      rows: [{
+        items: [{
+          id: uuid,
+          name: 'a1',
+        }],
+      }],
+    });
+  });
+
+  test('should add display to last row', () => {
+    const uuid = 'foo1';
+    const uuidFunc = () => uuid;
+    const settings = {
+      rows: [{
+        items: [{
+          id: 'u1',
+        }],
+      }, {
+        items: [{
+          id: 'u2',
+        }],
+      }],
+      maxItemsPerRow: 2,
+    };
+
+    const newSettings = addDisplayToSettings(settings, 'a1', uuidFunc);
+    expect(newSettings).toEqual({
+      rows: [{
+        items: [{
+          id: 'u1',
+        }],
+      }, {
+        items: [{
+          id: 'u2',
+        }, {
+          id: uuid,
+          name: 'a1',
+        }],
+      }],
+      maxItemsPerRow: 2,
+    });
+    expect(settings).not.toBe(newSettings);
+    // ensure changed row has copied instead of mutated
+    expect(settings.rows[0]).toBe(newSettings.rows[0]);
+    expect(settings.rows[0].items).toBe(newSettings.rows[0].items);
+    expect(settings.rows[1]).not.toBe(newSettings.rows[1]);
+    expect(settings.rows[1].items).not.toBe(newSettings.rows[1].items);
+  });
+
+  test('should add display to new row', () => {
+    const uuid = 'foo1';
+    const uuidFunc = () => uuid;
+    const settings = {
+      rows: [{
+        items: [{
+          id: 'u1',
+        }],
+      }, {
+        items: [{
+          id: 'u2',
+        }],
+      }],
+      maxItemsPerRow: 1,
+    };
+
+    const newSettings = addDisplayToSettings(settings, 'a1', uuidFunc);
+    expect(newSettings).toEqual({
+      rows: [{
+        items: [{
+          id: 'u1',
+        }],
+      }, {
+        items: [{
+          id: 'u2',
+        }],
+      }, {
+        id: uuid,
+        height: DEFAULT_ROW_HEIGHT,
+        items: [{
+          id: uuid,
+          name: 'a1',
+        }],
+      }],
+      maxItemsPerRow: 1,
+    });
+    expect(settings).not.toBe(newSettings);
   });
 
 });
