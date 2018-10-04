@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../layout/layout.js';
+import Layout from '../layout/layout';
 
 const TableData = ({
     children,

@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -65,6 +67,10 @@ import {
   OSP_SCAN_CONFIG_TYPE,
 } from 'gmp/models/scanconfig';
 
+const StyledTableData = styled(TableData)`
+  overflow-wrap: break-word;
+`;
+
 class NvtPreferenceDisplay extends React.Component {
 
   shouldComponentUpdate(nextProps) {
@@ -79,15 +85,15 @@ class NvtPreferenceDisplay extends React.Component {
     } = this.props;
     return (
       <TableRow>
-        <TableData style={{overflowWrap: 'break-word'}}>
+        <StyledTableData>
           {preference.nvt.name}
-        </TableData>
-        <TableData style={{overflowWrap: 'break-word'}}>
+        </StyledTableData>
+        <StyledTableData>
           {preference.name}
-        </TableData>
-        <TableData style={{overflowWrap: 'break-word'}}>
+        </StyledTableData>
+        <StyledTableData>
           {preference.value}
-        </TableData>
+        </StyledTableData>
         <TableData align="center">
           <EditIcon
             title={_('Edit Scan Config NVT Details')}
