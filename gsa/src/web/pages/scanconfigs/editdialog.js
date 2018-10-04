@@ -259,9 +259,6 @@ class ScannerPreferences extends React.Component {
               <TableHead>
                 {_('Default Value')}
               </TableHead>
-              <TableHead>
-                {_('Actions')}
-              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
