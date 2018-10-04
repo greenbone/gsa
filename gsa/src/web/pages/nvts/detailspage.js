@@ -166,22 +166,13 @@ const Details = ({
 }) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
-  const {preferences, default_timeout} = entity;
+
   return (
     <Layout flex="column">
 
       <NvtDetails
         entity={entity}
       />
-
-      <DetailsBlock
-        title={_('Preferences')}
-      >
-        <Preferences
-          preferences={preferences}
-          default_timeout={default_timeout}
-        />
-      </DetailsBlock>
 
       {overrides.length > 0 &&
         <DetailsBlock
@@ -245,7 +236,7 @@ const open_dialog = (nvt, func) => {
 };
 
 const Page = ({
-  entity,
+  entity = {},
   notes,
   overrides,
   onChanged,
@@ -253,80 +244,98 @@ const Page = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <NvtComponent
-    onChanged={onChanged}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-  >
-    {({
-      notecreate,
-      overridecreate,
-      download,
-    }) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        toolBarIcons={ToolBarIcons}
-        title={_('NVT')}
-        sectionIcon="nvt.svg"
-        onChanged={onChanged}
-        onInteraction={onInteraction}
-        onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
-        onNvtDownloadClick={download}
-        onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
-      >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
-          return (
-            <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={onActivateTab}
-                >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
-                  <EntitiesTab entities={entity.userTags}>
-                    {_('User Tags')}
-                  </EntitiesTab>
-                </TabList>
-              </TabLayout>
+}) => {
+  const {
+    default_timeout,
+    preferences = [],
+    userTags,
+  } = entity;
+  const numPreferences = preferences.length;
 
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  <TabPanel>
-                    <Details
-                      notes={notes}
-                      overrides={overrides}
-                      entity={entity}
-                    />
-                  </TabPanel>
-                  <TabPanel>
-                    <EntityTags
-                      entity={entity}
-                      onChanged={onChanged}
-                      onError={onError}
-                      onInteraction={onInteraction}
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Layout>
-          );
-        }}
-      </EntityPage>
-    )}
-  </NvtComponent>
-);
+  return (
+    <NvtComponent
+      onChanged={onChanged}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+    >
+      {({
+        notecreate,
+        overridecreate,
+        download,
+      }) => (
+        <EntityPage
+          {...props}
+          entity={entity}
+          toolBarIcons={ToolBarIcons}
+          title={_('NVT')}
+          sectionIcon="nvt.svg"
+          onChanged={onChanged}
+          onInteraction={onInteraction}
+          onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
+          onNvtDownloadClick={download}
+          onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+        >
+          {({
+            activeTab = 0,
+            onActivateTab,
+          }) => {
+            return (
+              <Layout grow="1" flex="column">
+                <TabLayout
+                  grow="1"
+                  align={['start', 'end']}
+                >
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>
+                      {_('Information')}
+                    </Tab>
+                    <EntitiesTab count={numPreferences}>
+                      {_('Preferences')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
+
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details
+                        notes={notes}
+                        overrides={overrides}
+                        entity={entity}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <Preferences
+                        preferences={preferences}
+                        default_timeout={default_timeout}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            );
+          }}
+        </EntityPage>
+      )}
+    </NvtComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,
