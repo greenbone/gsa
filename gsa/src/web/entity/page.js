@@ -27,17 +27,17 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Toolbar from '../components/bar/toolbar.js';
+import Toolbar from 'web/components/bar/toolbar';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Loading from '../components/loading/loading.js';
+import Loading from 'web/components/loading/loading';
 
-import Section from '../components/section/section.js';
+import Section from 'web/components/section/section';
 
-import EntityInfo from './info.js';
+import EntityInfo from './info';
 
 export const Col = styled.col`
   width: ${props => props.width};

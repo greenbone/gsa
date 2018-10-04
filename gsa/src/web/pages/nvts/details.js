@@ -28,23 +28,23 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
 
-import Severitybar from '../../components/bar/severitybar.js';
+import Severitybar from 'web/components/bar/severitybar';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Link from '../../components/link/link.js';
+import Link from 'web/components/link/link';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import References from './references.js';
-import Solution from './solution.js';
+import References from './references';
+import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({
@@ -79,7 +79,7 @@ const NvtDetails = ({
       }
 
       <DetailsBlock
-        title={_('Vulnerability Scoring')}
+        title={_('Scoring')}
       >
         <InfoTable>
           <TableBody>
@@ -114,7 +114,7 @@ const NvtDetails = ({
 
       {isDefined(tags.insight) && tags.insight !== TAG_NA &&
         <DetailsBlock
-          title={_('Vulnerability Insight')}
+          title={_('Insight')}
         >
           <Pre>
             {tags.insight}
@@ -125,7 +125,7 @@ const NvtDetails = ({
       {(isDefined(qod) ||
       (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) &&
         <DetailsBlock
-          title={_('Vulnerability Detection Method')}
+          title={_('Detection Method')}
         >
           {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA &&
             <Pre>

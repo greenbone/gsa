@@ -15,6 +15,8 @@ Michael Wiegand (wiegandm) and asmaack.
 
 Main changes compared to 8.0+beta1
 
+  * Put NVT preferences into own tab on detailspage #991
+  * Change report summary table appearance #991
   * Changed visual appearance of Tables #983
   * Changed Donut Chart to a Pie Chart #982
   * Improved visual appearance of Donut Charts while resizing #979
@@ -47,7 +49,7 @@ Main changes compared to 8.0+beta1
   * Improved login page layout #859
   * Removed sticky menu in header #857
   * Update locales if they are changed at the User Settings #856
-  * Refined the menu appappearance #852, #869
+  * Refined the menu appearance #852, #869
   * Reduced default max height for dialogs to 400px #843
   * Show Report page header before report is loaded #825
   * Clear/Flush redux store on logout #797
@@ -269,7 +271,7 @@ Main changes since 6.1+beta1:
 * Add subject and message input for email alerts and allow the use of
   various variables in the message text.
 * Various extensions to support OSP 1.0 and first 1.1 features.
-* Add charts to reports section. 
+* Add charts to reports section.
 * Split any dual form pages into separate ones for using the popup
   dialogs (for example new/upload combinations).
 * Add an upload icon to the Reports page header.
@@ -1040,7 +1042,7 @@ Security Assistant (GSA). It is the web client that makes the full feature set
 of OpenVAS Manager available in a web browser.
 
 This release -- in combination with the OpenVAS Manager 4.0+beta1 release --
-introduces the renaming of "Escalator" to "Alert" and an improved handling 
+introduces the renaming of "Escalator" to "Alert" and an improved handling
 of the Targets list.
 
 Many thanks to everyone who has contributed to this release:

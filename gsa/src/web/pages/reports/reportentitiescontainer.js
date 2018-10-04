@@ -197,7 +197,7 @@ ReportEntitiesContainer.propTypes = {
   filter: PropTypes.filter,
   sortField: PropTypes.string.isRequired,
   sortFunctions: PropTypes.object,
-  sortReverse: PropTypes.func.isRequired,
+  sortReverse: PropTypes.bool.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
