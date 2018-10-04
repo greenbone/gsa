@@ -38,6 +38,7 @@ import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
+import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
@@ -96,7 +97,7 @@ class NvtPreference extends React.Component {
     }
     else if (type === 'password') {
       input = (
-        <Layout>
+        <Divider>
           <Checkbox
             title={_('Replace existing password with')}
             checked={checked}
@@ -107,12 +108,12 @@ class NvtPreference extends React.Component {
             value={value}
             onChange={this.onPreferenceChange}
           />
-        </Layout>
+        </Divider>
       );
     }
     else if (type === 'file') {
       input = (
-        <Layout>
+        <Divider>
           <Checkbox
             title={
               isEmpty(preference.value) ?
@@ -126,7 +127,7 @@ class NvtPreference extends React.Component {
             disabled={!checked}
             onChange={this.onPreferenceChange}
           />
-        </Layout>
+        </Divider>
       );
     }
     else if (type === 'radio') {
