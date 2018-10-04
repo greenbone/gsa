@@ -23,6 +23,8 @@
 
 /* eslint-disable max-len */
 
+import {isFunction} from 'gmp/utils/identity';
+
 import {
   DASHBOARD_SETTINGS_LOADING_ERROR,
   DASHBOARD_SETTINGS_LOADING_REQUEST,
@@ -36,7 +38,14 @@ import {
   saveDashboardSettings,
   savedDashboardSettings,
   saveDashboardSettingsError,
+  loadSettings,
 } from '../actions';
+
+const createRootState = (state = {byId: {}}) => ({
+  dashboardSettings: {
+    ...state,
+  },
+});
 
 describe('dashboard settings action tests', () => {
 
@@ -102,6 +111,129 @@ describe('dashboard settings action tests', () => {
     expect(saveDashboardSettingsError(error)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
+    });
+  });
+
+});
+
+describe('loadSettings tests', () => {
+
+  test('should load settings successfully', () => {
+    const id = 'a1';
+    const dispatch = jest.fn();
+    const rootState = createRootState();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const data = {
+      foo: 'bar',
+    };
+
+    const currentSettings = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({data}));
+
+    const gmp = {
+      dashboards: {
+        currentSettings,
+      },
+    };
+    const defaults = {
+      lorem: 'ipsum',
+    };
+
+    expect(isFunction(loadSettings)).toEqual(true);
+    return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        defaults,
+        type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        id,
+        settings: data,
+        type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+      }]);
+      expect(getState).toHaveBeenCalled();
+      expect(currentSettings).toHaveBeenCalled();
+    });
+  });
+
+  test('should not load settings if isLoading is true', () => {
+    const id = 'a1';
+    const dispatch = jest.fn();
+    const rootState = createRootState({
+      isLoading: true,
+    });
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const data = {
+      foo: 'bar',
+    };
+
+    const currentSettings = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({data}));
+
+    const gmp = {
+      dashboards: {
+        currentSettings,
+      },
+    };
+    const defaults = {
+      lorem: 'ipsum',
+    };
+
+    expect(isFunction(loadSettings)).toEqual(true);
+    return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(0);
+      expect(getState).toHaveBeenCalled();
+      expect(currentSettings).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should fail loading settings with an error', () => {
+    const id = 'a1';
+    const dispatch = jest.fn();
+    const rootState = createRootState();
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const error = 'An error';
+
+    const currentSettings = jest
+      .fn()
+      .mockReturnValue(Promise.reject(error));
+
+    const gmp = {
+      dashboards: {
+        currentSettings,
+      },
+    };
+    const defaults = {
+      lorem: 'ipsum',
+    };
+
+    expect(isFunction(loadSettings)).toEqual(true);
+    return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        defaults,
+        type: DASHBOARD_SETTINGS_LOADING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        id,
+        error,
+        type: DASHBOARD_SETTINGS_LOADING_ERROR,
+      }]);
+      expect(getState).toHaveBeenCalled();
+      expect(currentSettings).toHaveBeenCalled();
     });
   });
 
