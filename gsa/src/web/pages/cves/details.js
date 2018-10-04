@@ -24,7 +24,7 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -45,12 +45,12 @@ import TableData from '../../components/table/data.js';
 import TableRow from '../../components/table/row.js';
 
 const CVSS_PROPS = {
-  cvssAccessVector: _('Access Vector'),
-  cvssAccessComplexity: _('Access Complexity'),
-  cvssAuthentication: _('Authentication'),
-  cvssConfidentialityImpact: _('Confidentiality Impact'),
-  cvssIntegrityImpact: _('Integrity Impact'),
-  cvssAvailabilityImpact: _('Availability Impact'),
+  cvssAccessVector: _l('Access Vector'),
+  cvssAccessComplexity: _l('Access Complexity'),
+  cvssAuthentication: _l('Authentication'),
+  cvssConfidentialityImpact: _l('Confidentiality Impact'),
+  cvssIntegrityImpact: _l('Integrity Impact'),
+  cvssAvailabilityImpact: _l('Availability Impact'),
 };
 
 const CveDetails = ({
@@ -128,7 +128,7 @@ const CveDetails = ({
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>
-                    {title}
+                    {`${title}`}
                   </TableData>
                   <TableData>
                     {entity[name]}
