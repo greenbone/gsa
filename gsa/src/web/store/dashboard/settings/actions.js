@@ -75,7 +75,7 @@ export const saveDashboardSettings = (id, settings) => ({
   id,
 });
 
-export const loadSettings = ({gmp}) => (id, defaults) =>
+export const loadSettings = gmp => (id, defaults) =>
   (dispatch, getState) => {
 
   const rootState = getState();
@@ -95,7 +95,7 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
   );
 };
 
-export const saveSettings = ({gmp}) => (id, settings) =>
+export const saveSettings = gmp => (id, settings) =>
   (dispatch, getState) => {
 
   dispatch(saveDashboardSettings(id, settings));
@@ -107,7 +107,7 @@ export const saveSettings = ({gmp}) => (id, settings) =>
     );
 };
 
-export const resetSettings = ({gmp}) => id =>
+export const resetSettings = gmp => id =>
   (dispatch, getState) => {
 
   const rootState = getState();
@@ -162,7 +162,7 @@ export const addDisplayToSettings = (settings, displayId) => {
   };
 };
 
-export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
+export const addDisplay = gmp => (dashboardId, displayId) =>
   (dispatch, getState) => {
   if (!isDefined(displayId) || !isDefined(dashboardId)) {
     return;

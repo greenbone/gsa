@@ -197,8 +197,8 @@ const mapStateToProps = (rootState, {dashboardId}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onResetClick: (...args) => dispatch(resetSettings({gmp})(...args)),
-  onNewDisplay: (...args) => dispatch(addDisplay({gmp})(...args)),
+  onResetClick: (...args) => dispatch(resetSettings(gmp)(...args)),
+  onNewDisplay: (...args) => dispatch(addDisplay(gmp)(...args)),
 });
 
 export default compose(
