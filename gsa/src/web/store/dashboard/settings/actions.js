@@ -132,7 +132,7 @@ export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   return true;
 };
 
-export const addDisplayToSettings = (settings, displayId) => {
+export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
   const {rows: currentRows = [], maxItemsPerRow} = settings || {};
 
   const lastRow = isArray(currentRows) && currentRows.length > 0 ?
@@ -141,14 +141,15 @@ export const addDisplayToSettings = (settings, displayId) => {
   let rows;
   if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
-    const newRow = createRow([createItem({name: displayId})]);
+    const newRow = createRow([createItem({name: displayId}, uuidFunc)],
+      undefined, uuidFunc);
     rows = [...currentRows, newRow];
   }
   else {
     // add new display to last row
     const newRow = {
       ...lastRow,
-      items: [...lastRow.items, createItem({name: displayId})],
+      items: [...lastRow.items, createItem({name: displayId}, uuidFunc)],
     };
 
     rows = [...currentRows];
