@@ -46,11 +46,12 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 
 import EditIcon from 'web/components/icon/editicon';
 
+import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
-import Table from 'web/components/table/table';
+import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
@@ -84,10 +85,10 @@ class NvtPreferenceDisplay extends React.Component {
         <TableData style={{overflowWrap: 'break-word'}}>
           {preference.name}
         </TableData>
-        <TableData>
+        <TableData style={{overflowWrap: 'break-word'}}>
           {preference.value}
         </TableData>
-        <TableData>
+        <TableData align="center">
           <EditIcon
             title={_('Edit Scan Config NVT Details')}
             value={{config, nvt: preference.nvt}}
@@ -127,7 +128,7 @@ const NvtPreferences = ({
             <TableHead width="30%">
               {_('Value')}
             </TableHead>
-            <TableHead width="10%">
+            <TableHead width="10%" align="center">
               {_('Actions')}
             </TableHead>
           </TableRow>
@@ -327,31 +328,33 @@ class NvtFamily extends React.Component {
           {name}
         </TableData>
         <TableData>
-          <Layout align="end">
+          <Layout align="start">
             {_('{{count}} of {{max}}', counts)}
           </Layout>
         </TableData>
-        <TableData align={['center', 'center']}>
-          <Radio
-            flex
-            name={name}
-            checked={trend === YES_VALUE}
-            convert={parseYesNo}
-            value={YES_VALUE}
-            onChange={onTrendChange}
-          />
-          <Trend trend="1"/>
-          <Radio
-            flex
-            name={name}
-            checked={trend === NO_VALUE}
-            convert={parseYesNo}
-            value={NO_VALUE}
-            onChange={onTrendChange}
-          />
-          <Trend trend="0"/>
+        <TableData align={['center', 'start']}>
+          <Divider>
+            <Radio
+              flex
+              name={name}
+              checked={trend === YES_VALUE}
+              convert={parseYesNo}
+              value={YES_VALUE}
+              onChange={onTrendChange}
+            />
+            <Trend trend="1"/>
+            <Radio
+              flex
+              name={name}
+              checked={trend === NO_VALUE}
+              convert={parseYesNo}
+              value={NO_VALUE}
+              onChange={onTrendChange}
+            />
+            <Trend trend="0"/>
+          </Divider>
         </TableData>
-        <TableData align={['center', 'center']}>
+        <TableData align={['start', 'center']}>
           <Checkbox
             flex
             name={name}
@@ -434,10 +437,10 @@ class NvtFamilies extends React.Component {
               <TableHead>
                 {_('Trend')}
               </TableHead>
-              <TableHead width="8em">
+              <TableHead width="9em">
                 {_('Select all NVTs')}
               </TableHead>
-              <TableHead>
+              <TableHead align="center">
                 {_('Actions')}
               </TableHead>
             </TableRow>
@@ -464,9 +467,13 @@ class NvtFamilies extends React.Component {
               <TableData>
                 {_('Total: {{count}}', {count: config.families.count})}
               </TableData>
-              <TableData align="end">
+              <TableData align="start">
                 {_('{{known}} of {{max}}', config.nvts)}
               </TableData>
+              {/* add empty cells to spread row to end of table */}
+              <TableData/>
+              <TableData/>
+              <TableData/>
             </TableRow>
           </TableBody>
         </Table>
