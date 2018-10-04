@@ -24,33 +24,33 @@ import 'core-js/fn/object/entries';
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import DetailsBlock from 'web/entity/block';
 
-import DetailsBlock from '../../entity/block.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import Layout from 'web/components/layout/layout';
 
-import Layout from '../../components/layout/layout.js';
+import ExternalLink from 'web/components/link/externallink';
+import Link from 'web/components/link/link';
 
-import ExternalLink from '../../components/link/externallink.js';
-import Link from '../../components/link/link.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import PropTypes from 'web/utils/proptypes';
 
 const CVSS_PROPS = {
-  cvssAccessVector: _('Access Vector'),
-  cvssAccessComplexity: _('Access Complexity'),
-  cvssAuthentication: _('Authentication'),
-  cvssConfidentialityImpact: _('Confidentiality Impact'),
-  cvssIntegrityImpact: _('Integrity Impact'),
-  cvssAvailabilityImpact: _('Availability Impact'),
+  cvssAccessVector: _l('Access Vector'),
+  cvssAccessComplexity: _l('Access Complexity'),
+  cvssAuthentication: _l('Authentication'),
+  cvssConfidentialityImpact: _l('Confidentiality Impact'),
+  cvssIntegrityImpact: _l('Integrity Impact'),
+  cvssAvailabilityImpact: _l('Availability Impact'),
 };
 
 const CveDetails = ({
@@ -128,7 +128,7 @@ const CveDetails = ({
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>
-                    {title}
+                    {`${title}`}
                   </TableData>
                   <TableData>
                     {entity[name]}
