@@ -123,7 +123,7 @@ export const resetSettings = gmp => id =>
     );
 };
 
-export const addDisplay = gmp => (dashboardId, displayId) =>
+export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   (dispatch, getState) => {
   if (!isDefined(displayId) || !isDefined(dashboardId)) {
     return;
@@ -137,7 +137,7 @@ export const addDisplay = gmp => (dashboardId, displayId) =>
     return;
   }
 
-  const newSettings = addDisplayToSettings(settings, displayId);
+  const newSettings = addDisplayToSettings(settings, displayId, uuidFunc);
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
