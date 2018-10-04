@@ -59,9 +59,12 @@ Thanks for your help to keep the communication channels clean and consistent!
 
 **Operating system:**
 
+<!-- e.g. paste output of uname -a and cat /etc/lsb-release -->
+
 **Installation method / source:** (packages, source installation)
 
 ### Logfiles
+
 <!-- in most cases you'll find the logs in /var/log/gvm/ -->
 ```
 ```
