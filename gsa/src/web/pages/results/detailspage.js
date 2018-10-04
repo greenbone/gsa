@@ -238,15 +238,18 @@ const Details = ({
           title={_('Tags')}
         >
           <Divider>
-            {userTags.map(tag => (
-              <DetailsLink
-                key={tag.id}
-                id={tag.id}
-                type="tag"
-              >
-                {tag.name + '=' + tag.value}
-              </DetailsLink>
-            ))}
+            {userTags.map(tag => {
+              const valueString = tag.value === '' ? '' : '=' + tag.value;
+              return (
+                <DetailsLink
+                  key={tag.id}
+                  id={tag.id}
+                  type="tag"
+                >
+                  {tag.name + valueString}
+                </DetailsLink>
+              );
+            })}
           </Divider>
         </DetailsBlock>
       }
