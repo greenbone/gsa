@@ -32,12 +32,11 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
-
-import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import withDownload from 'web/components/form/withDownload';
 
@@ -80,7 +79,7 @@ const log = logger.getLogger('web.pages.report.detailspage');
 
 const DEFAULT_FILTER = Filter.fromString('rows=100');
 
-const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1');
+const REPORT_FORMATS_FILTER = Filter.fromString('active=1 trust=1 rows=-1');
 
 const getTarget = (entity = {}) => {
   const {report = {}} = entity;
