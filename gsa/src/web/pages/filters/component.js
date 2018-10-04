@@ -23,7 +23,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
@@ -37,27 +37,27 @@ import EntityComponent from 'web/entity/component';
 import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
-  ['agent', _('Agent')],
-  ['alert', _('Alert')],
-  ['asset', _('Asset')],
-  ['credential', _('Credential')],
-  ['filter', _('Filter')],
-  ['group', _('Group')],
-  ['note', _('Note')],
-  ['override', _('Override')],
-  ['permission', _('Permission')],
-  ['port_list', _('Port List')],
-  ['report', _('Report')],
-  ['report_format', _('Report Format')],
-  ['result', _('Result')],
-  ['role', _('Role')],
-  ['schedule', _('Schedule')],
-  ['info', _('SecInfo')],
-  ['config', _('Scan Config')],
-  ['tag', _('Tag')],
-  ['target', _('Target')],
-  ['task', _('Task')],
-  ['user', _('User')],
+  ['agent', _l('Agent')],
+  ['alert', _l('Alert')],
+  ['asset', _l('Asset')],
+  ['credential', _l('Credential')],
+  ['filter', _l('Filter')],
+  ['group', _l('Group')],
+  ['note', _l('Note')],
+  ['override', _l('Override')],
+  ['permission', _l('Permission')],
+  ['port_list', _l('Port List')],
+  ['report', _l('Report')],
+  ['report_format', _l('Report Format')],
+  ['result', _l('Result')],
+  ['role', _l('Role')],
+  ['schedule', _l('Schedule')],
+  ['info', _l('SecInfo')],
+  ['config', _l('Scan Config')],
+  ['tag', _l('Tag')],
+  ['target', _l('Target')],
+  ['task', _l('Task')],
+  ['user', _l('User')],
 ];
 
 const filter_types = (caps, name) => {
