@@ -40,6 +40,7 @@ import {
   saveDashboardSettingsError,
   loadSettings,
   saveSettings,
+  resetSettings,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -316,6 +317,96 @@ describe('saveSettings tests', () => {
         error,
       }]);
       expect(getState).not.toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
+    });
+  });
+
+});
+
+describe('resetSttings tests', () => {
+
+  test('should reset settings successfully', () => {
+    const id = 'a1';
+    const settings = {
+      foo: 'bar',
+    };
+
+    const dispatch = jest.fn();
+    const rootState = createRootState({
+      defaults: {
+        [id]: settings,
+      },
+    });
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.resolve());
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(resetSettings)).toEqual(true);
+    return resetSettings(gmp)(id)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+      }]);
+      expect(getState).toHaveBeenCalled();
+      expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
+    });
+  });
+
+  test('should fail resetting settings', () => {
+    const id = 'a1';
+    const settings = {
+      foo: 'bar',
+    };
+
+    const dispatch = jest.fn();
+    const rootState = createRootState({
+      defaults: {
+        [id]: settings,
+      },
+    });
+    const getState = jest
+      .fn()
+      .mockReturnValue(rootState);
+
+    const error = 'An error';
+    const saveSettingsPromise = jest
+      .fn()
+      .mockReturnValue(Promise.reject(error));
+
+    const gmp = {
+      dashboard: {
+        saveSetting: saveSettingsPromise,
+      },
+    };
+
+    expect(isFunction(resetSettings)).toEqual(true);
+    return resetSettings(gmp)(id)(dispatch, getState).then(() => {
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([{
+        id,
+        settings,
+        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
+      }]);
+      expect(dispatch.mock.calls[1]).toEqual([{
+        type: DASHBOARD_SETTINGS_SAVING_ERROR,
+        error,
+      }]);
+      expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
   });
