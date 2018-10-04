@@ -138,24 +138,24 @@ export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
   const lastRow = isArray(currentRows) && currentRows.length > 0 ?
     currentRows[currentRows.length - 1] : {items: []};
 
-  let rows;
+  const rows = isArray(currentRows) ? [...currentRows] : [];
+  let newRow;
   if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
-    const newRow = createRow([createItem({name: displayId}, uuidFunc)],
-      undefined, uuidFunc);
-    rows = [...currentRows, newRow];
+    newRow = createRow([createItem({name: displayId}, uuidFunc)], undefined,
+      uuidFunc);
   }
   else {
     // add new display to last row
-    const newRow = {
+    newRow = {
       ...lastRow,
       items: [...lastRow.items, createItem({name: displayId}, uuidFunc)],
     };
 
-    rows = [...currentRows];
     rows.pop();
-    rows.push(newRow);
   }
+
+  rows.push(newRow);
 
   return {
     ...settings,
