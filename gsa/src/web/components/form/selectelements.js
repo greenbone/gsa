@@ -148,7 +148,7 @@ const getScrollParent = element => {
   }
 
   const {overflow, overflowX, overflowY} = getStyleComputedProperty(element);
-  if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
+  if ((/(auto|scroll|overlay)/).test(overflow + overflowY + overflowX)) {
     return element;
   }
 
