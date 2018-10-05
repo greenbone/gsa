@@ -70,7 +70,7 @@ const Header = ({
           </TableHead>
         }
         <TableHead
-          width="55%"
+          width="45%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -111,7 +111,7 @@ const Header = ({
         </TableHead>
         <TableHead
           colSpan="2"
-          width="13%"
+          width="23%"
         >
           {_('Host')}
         </TableHead>
