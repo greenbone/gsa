@@ -37,22 +37,21 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import SaveDialog from '../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Divider from '../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import Select from '../components/form/select.js';
-import Spinner from '../components/form/spinner.js';
-import FormGroup from '../components/form/formgroup.js';
-import TextField from '../components/form/textfield.js';
-import Radio from '../components/form/radio.js';
-import Datepicker from '../components/form/datepicker.js';
-import TimeZoneSelect from '../components/form/timezoneselect.js';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import Datepicker from 'web/components/form/datepicker';
+import TimeZoneSelect from 'web/components/form/timezoneselect';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import {WizardContent} from './taskwizard';
-import Wizardess from './wizardess';
+import {WizardContent, WizardIcon} from './taskwizard';
 
 const IMMEDIATELY_START_VALUE = '2';
 const SCHEDULE_START_VALUE = '1';
@@ -126,11 +125,12 @@ const AdvancedTaskWizard = ({
         onValueChange,
       }) => (
         <Layout align={['start', 'start']}>
-          <Layout basis="40%">
-            <Wizardess/>
+          <WizardIcon/>
+          <Layout basis="35%">
             <WizardContent>
+              <p><b>{_('Quick start: Create a new task')}</b></p>
               <p>
-                {_('I can help you by creating a new scan task and ' +
+                {_('GSA can help you by creating a new scan task and ' +
                   'automatically starting it.')}
               </p>
               <p>
@@ -139,7 +139,7 @@ const AdvancedTaskWizard = ({
                   ' scan configuration.')}
               </p>
               <p>
-                {_('You can choose if you want me to run the scan ' +
+                {_('You can choose, whether you want GSA to run the scan ' +
                   'immediately, schedule the task for a later date and ' +
                   'time, or just create the task so you can run it manually' +
                   ' later.')}
@@ -178,9 +178,7 @@ const AdvancedTaskWizard = ({
             basis="0"
             flex="column"
           >
-            <FormGroup>
-              <h3>{_('Quick start: Create a new task')}</h3>
-            </FormGroup>
+
 
             <FormGroup title={_('Task Name')} titleSize="3">
               <TextField
@@ -234,14 +232,14 @@ const AdvancedTaskWizard = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup offset="2" box>
+              <FormGroup offset="1" box>
                 <Datepicker
                   name="start_date"
                   value={state.start_date}
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup offset="2">
+              <FormGroup offset="1">
                 <Divider>
                   <span>{_('at')}</span>
                   <Spinner
@@ -266,7 +264,7 @@ const AdvancedTaskWizard = ({
                   <span>{_('m')}</span>
                 </Divider>
               </FormGroup>
-              <FormGroup offset="2">
+              <FormGroup offset="1">
                 <TimeZoneSelect
                   name="start_timezone"
                   value={state.start_timezone}

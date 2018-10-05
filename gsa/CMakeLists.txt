@@ -864,7 +864,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${GSA_SRC_DIR}/src/web/wizard/modifytaskwizard.js
      ${GSA_SRC_DIR}/src/web/wizard/taskwizard.js
-     ${GSA_SRC_DIR}/src/web/wizard/wizardess.js
      )
 
 set (GSA_JS_SRC_FILES
