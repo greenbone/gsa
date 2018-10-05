@@ -51,7 +51,7 @@ import TimeZoneSelect from '../components/form/timezoneselect.js';
 
 import Layout from '../components/layout/layout.js';
 
-import {WizardContent} from './taskwizard';
+import {WizardContent, WizardIcon} from './taskwizard';
 
 const IMMEDIATELY_START_VALUE = '2';
 const SCHEDULE_START_VALUE = '1';
@@ -125,10 +125,12 @@ const AdvancedTaskWizard = ({
         onValueChange,
       }) => (
         <Layout align={['start', 'start']}>
-          <Layout basis="40%">
+          <WizardIcon/>
+          <Layout basis="35%">
             <WizardContent>
+              <p><b>{_('Quick start: Create a new task')}</b></p>
               <p>
-                {_('I can help you by creating a new scan task and ' +
+                {_('GSA can help you by creating a new scan task and ' +
                   'automatically starting it.')}
               </p>
               <p>
@@ -137,7 +139,7 @@ const AdvancedTaskWizard = ({
                   ' scan configuration.')}
               </p>
               <p>
-                {_('You can choose if you want me to run the scan ' +
+                {_('You can choose, whether you want GSA to run the scan ' +
                   'immediately, schedule the task for a later date and ' +
                   'time, or just create the task so you can run it manually' +
                   ' later.')}
@@ -176,9 +178,7 @@ const AdvancedTaskWizard = ({
             basis="0"
             flex="column"
           >
-            <FormGroup>
-              <h3>{_('Quick start: Create a new task')}</h3>
-            </FormGroup>
+
 
             <FormGroup title={_('Task Name')} titleSize="3">
               <TextField
@@ -232,14 +232,14 @@ const AdvancedTaskWizard = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup offset="2" box>
+              <FormGroup offset="1" box>
                 <Datepicker
                   name="start_date"
                   value={state.start_date}
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup offset="2">
+              <FormGroup offset="1">
                 <Divider>
                   <span>{_('at')}</span>
                   <Spinner
@@ -264,7 +264,7 @@ const AdvancedTaskWizard = ({
                   <span>{_('m')}</span>
                 </Divider>
               </FormGroup>
-              <FormGroup offset="2">
+              <FormGroup offset="1">
                 <TimeZoneSelect
                   name="start_timezone"
                   value={state.start_timezone}
