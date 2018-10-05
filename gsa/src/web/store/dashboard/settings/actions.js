@@ -71,7 +71,6 @@ export const receivedDashboardSettingsLoadingError = (id, error) => ({
 export const requestDashboardSettings = (id, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
-  defaults,
 });
 
 export const savedDashboardSettings = () => ({
@@ -106,7 +105,7 @@ export const loadSettings = gmp => (id, defaults) =>
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardSettings(id, defaults));
+  dispatch(requestDashboardSettings(id));
 
   const promise = gmp.dashboards.currentSettings();
   return promise.then(

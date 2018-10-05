@@ -56,10 +56,8 @@ describe('requestDashboardSettings tests', () => {
 
   test('should create an action to request dashboard settings', () => {
     const id = 'a1';
-    const defaults = {abc: 'def'};
 
-    expect(requestDashboardSettings(id, defaults)).toEqual({
-      defaults,
+    expect(requestDashboardSettings(id)).toEqual({
       id,
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
@@ -190,7 +188,6 @@ describe('loadSettings tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id,
-        defaults: defaultSettings,
         type: DASHBOARD_SETTINGS_LOADING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
@@ -267,7 +264,6 @@ describe('loadSettings tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id,
-        defaults,
         type: DASHBOARD_SETTINGS_LOADING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
