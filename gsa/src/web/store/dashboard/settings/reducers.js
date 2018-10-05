@@ -30,7 +30,7 @@ import {
   DASHBOARD_SETTINGS_SET_DEFAULTS,
 } from './actions';
 
-import {combineReducers} from 'redux';
+import {combineReducers} from 'web/store/utils';
 
 const defaults = (state = {}, action) => {
   switch (action.type) {
@@ -74,11 +74,11 @@ const byId = (state = {}, action) => {
   }
 };
 
-const error = (state = null, action) => {
+const error = (state, action) => {
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_REQUEST:
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
-      return null; // reset error
+      return undefined; // reset error
     case DASHBOARD_SETTINGS_LOADING_ERROR:
       return action.error;
     default:

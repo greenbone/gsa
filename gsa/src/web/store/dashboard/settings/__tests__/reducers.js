@@ -40,7 +40,6 @@ describe('dashboard settings reducers tests for initial state', () => {
     expect(state).toEqual({
       byId: {},
       isLoading: false,
-      error: null,
       defaults: {},
     });
   });
@@ -56,7 +55,6 @@ describe('dashboard settings reducers tests for loading requests', () => {
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
       isLoading: true,
-      error: null,
       defaults: {
         a1: undefined,
       },
@@ -70,7 +68,6 @@ describe('dashboard settings reducers tests for loading requests', () => {
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
       isLoading: true,
-      error: null,
       defaults: {},
     });
   });
@@ -86,10 +83,7 @@ describe('dashboard settings reducers tests for loading requests', () => {
     expect(dashboardSettings(state, action)).toEqual({
       byId: {},
       isLoading: true,
-      error: null,
-      defaults: {
-        a1: undefined,
-      },
+      defaults: {},
     });
   });
 
@@ -110,7 +104,6 @@ describe('dashboard settings reducers tests for loading success', () => {
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
-      error: null,
       byId: {
         a1: {
           height: 100,
@@ -143,7 +136,6 @@ describe('dashboard settings reducers tests for loading success', () => {
         },
       },
       isLoading: false,
-      error: null,
       defaults: {},
     });
   });
@@ -161,7 +153,6 @@ describe('dashboard settings reducers tests for loading success', () => {
 
     expect(dashboardSettings({}, action)).toEqual({
       isLoading: false,
-      error: null,
       defaults: {},
       byId: {
         a1: {
@@ -196,7 +187,6 @@ describe('dashboard settings reducers tests for loading success', () => {
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
-      error: null,
       byId: {
         a1: {
           height: 100,
@@ -233,7 +223,6 @@ describe('dashboard settings reducers tests for loading success', () => {
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
-      error: null,
       byId: {
         a1: {
           other: 'ipsum',
@@ -273,7 +262,6 @@ describe('dashboard settings reducers tests for loading success', () => {
 
     expect(dashboardSettings(state, action)).toEqual({
       isLoading: false,
-      error: null,
       byId: {
         a1: {
           other: 'ipsum',
@@ -374,7 +362,6 @@ describe('dashboard settings reducers test for saving', () => {
     };
 
     expect(dashboardSettings(undefined, saveDashboardSettings(id, settings))).toEqual({
-      error: null,
       isLoading: false,
       byId: {
         a1: {
@@ -402,7 +389,6 @@ describe('dashboard settings reducers test for saving', () => {
     };
 
     expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
-      error: null,
       isLoading: false,
       byId: {
         a1: {
@@ -433,7 +419,6 @@ describe('dashboard settings reducers test for saving', () => {
     };
 
     expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
-      error: null,
       isLoading: false,
       byId: {
         a1: {
@@ -462,7 +447,6 @@ describe('dashboard settings reducers test for saving', () => {
     };
 
     expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
-      error: null,
       isLoading: false,
       byId: {
         a1: {
@@ -486,7 +470,6 @@ describe('dashboard settings reducers test for setting defaults', () => {
     const action = setDashboardSettingDefaults(id, defaults);
 
     expect(dashboardSettings(undefined, action)).toEqual({
-      error: null,
       isLoading: false,
       byId: {},
       defaults: {
@@ -510,7 +493,6 @@ describe('dashboard settings reducers test for setting defaults', () => {
     const action = setDashboardSettingDefaults(id, defaults);
 
     expect(dashboardSettings(state, action)).toEqual({
-      error: null,
       isLoading: false,
       byId: {},
       defaults: {
