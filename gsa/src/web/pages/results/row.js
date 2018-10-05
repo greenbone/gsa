@@ -115,7 +115,7 @@ const Row = ({
       <TableData align="end">
         {entity.qod.value} %
       </TableData>
-      <TableData colSpan="2">
+      <TableData>
         <DetailsLink
           type="host"
           id={host.id}
@@ -123,6 +123,8 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
+      </TableData>
+      <TableData>
         {host.hostname.length > 0 &&
           <span title={host.hostname}>
             ({shorten(host.hostname, 40)})
