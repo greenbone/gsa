@@ -42,6 +42,9 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
+export const DASHBOARD_SETTINGS_SET_DEFAULTS =
+  'DASHBOARD_SETTINGS_SET_DEFAULTS';
+
 /**
  * Create an action to receive dashboard settings
  *
@@ -68,7 +71,6 @@ export const receivedDashboardSettingsLoadingError = (id, error) => ({
 export const requestDashboardSettings = (id, defaults) => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
-  defaults,
 });
 
 export const savedDashboardSettings = () => ({
@@ -86,6 +88,12 @@ export const saveDashboardSettings = (id, settings) => ({
   id,
 });
 
+export const setDashboardSettingDefaults = (id, defaults) => ({
+  type: DASHBOARD_SETTINGS_SET_DEFAULTS,
+  id,
+  defaults,
+});
+
 export const loadSettings = gmp => (id, defaults) =>
   (dispatch, getState) => {
 
@@ -97,7 +105,7 @@ export const loadSettings = gmp => (id, defaults) =>
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardSettings(id, defaults));
+  dispatch(requestDashboardSettings(id));
 
   const promise = gmp.dashboards.currentSettings();
   return promise.then(
