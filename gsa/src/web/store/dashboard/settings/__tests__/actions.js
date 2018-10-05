@@ -50,7 +50,7 @@ const createRootState = (state = {byId: {}}) => ({
   },
 });
 
-describe('dashboard settings action tests', () => {
+describe('requestDashboardSettings tests', () => {
 
   test('should create an action to request dashboard settings', () => {
     const id = 'a1';
@@ -62,6 +62,10 @@ describe('dashboard settings action tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
   });
+
+});
+
+describe('receivedDashboardSettings tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
@@ -81,6 +85,10 @@ describe('dashboard settings action tests', () => {
     });
   });
 
+});
+
+describe('receivedDashboardSettingsLoadingError tests', () => {
+
   test('should create an action to receive an error during loading', () => {
     const error = 'An error occured';
     const id = 'a1';
@@ -91,6 +99,10 @@ describe('dashboard settings action tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });
   });
+
+});
+
+describe('saveDashboardSettings tests', () => {
 
   test('should create an action to save dashboard settings', () => {
     const id = 'a1';
@@ -111,6 +123,10 @@ describe('dashboard settings action tests', () => {
       type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
     });
   });
+
+});
+
+describe('saveDashboardSettingsError tests', () => {
 
   test('should create an action if an error has occurred during saving', () => {
     const error = 'An error';
