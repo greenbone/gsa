@@ -63,8 +63,8 @@
     "x2js": "^3.2.1"
   },
   "scripts": {
-    "test": "NODE_PATH=src react-scripts test --env=jsdom",
-    "test:coverage": "NODE_PATH=src react-scripts test --env=jsdom --coverage --maxWorkers 2",
+    "test": "NODE_PATH=src react-scripts test",
+    "test:coverage": "NODE_PATH=src react-scripts test --coverage --maxWorkers 2",
     "lint": "NODE_PATH=src eslint --max-warnings 0 src",
     "start": "NODE_PATH=src react-scripts start",
     "build": "NODE_PATH=src react-scripts build",
