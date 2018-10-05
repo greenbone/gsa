@@ -33,16 +33,26 @@ import SaveDialog from '../components/dialog/savedialog.js';
 
 import TextField from '../components/form/textfield.js';
 
+import Icon from '../components/icon/icon.js';
 import NewIcon from '../components/icon/newicon.js';
 
+import Divider from '../components/layout/divider.js';
 import Layout from '../components/layout/layout.js';
 
 export const WizardContent = styled.div`
-  & > p img {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
+  margin: 0 20px;
 `;
+
+const IconContainer = styled.div`
+  align-self: flex-start;
+`;
+
+export const WizardIcon = () => (
+  <IconContainer>
+    <Icon img="wizard.svg" size="large"/>
+  </IconContainer>
+);
+
 
 const TaskWizard = ({
   hosts,
@@ -63,54 +73,58 @@ const TaskWizard = ({
       onValueChange,
     }) => (
       <Layout>
+        <WizardIcon/>
         <WizardContent>
-          <p>
-            <b>{_('Quick start: Immediately scan an IP address')}</b>
-          </p>
-          <div>
-            {_('IP address or hostname:')}
-            <TextField
-              value={state.hosts}
-              name="hosts"
-              size="40"
-              maxLength="2000"
-              onChange={onValueChange}
-            />
-          </div>
-          <div>
-            {_('The default address is either your computer' +
-              ' or your network gateway.')}
-          </div>
-          <div>
-            {_('As a short-cut I will do the following for you:')}
-            <ol>
-              <li>{_('Create a new Target')}</li>
-              <li>{_('Create a new Task')}</li>
-              <li>{_('Start this scan task right away')}</li>
-              <li>
-                {_('Switch the view to reload every 30 seconds so you can' +
-                  ' lean back and watch the scan progress')}
-              </li>
-            </ol>
-          </div>
-          <p>
-            {_('In fact, you must not lean back. As soon as the scan ' +
-              'progress is beyond 1%, you can already jump into the scan ' +
-              'report via the link in the Reports Total column and ' +
-              'review the results collected so far.')}
-          </p>
-          <p>
-            {_('When creating the Target and Task I will use the defaults' +
-              ' as configured in "My Settings".')}
-          </p>
-          <p>
-            {_('By clicking the New Task icon')}
-            <NewIcon
-              title={_('New Task')}
-              onClick={onNewClick}
-            />
-            {_('you can create a new Task yourself.')}
-          </p>
+          <Divider flex="column">
+            <p>
+              <b>{_('Quick start: Immediately scan an IP address')}</b>
+            </p>
+            <Divider>
+              <span>
+                {_('IP address or hostname:')}
+              </span>
+              <TextField
+                value={state.hosts}
+                name="hosts"
+                size="30"
+                maxLength="2000"
+                onChange={onValueChange}
+              />
+            </Divider>
+            <div>
+              {_('The default address is either your computer' +
+                ' or your network gateway.')}
+            </div>
+            <Layout flex="column">
+              {_('As a short-cut GSA will do the following for you:')}
+              <ol>
+                <li>{_('Create a new Target')}</li>
+                <li>{_('Create a new Task')}</li>
+                <li>{_('Start this scan task right away')}</li>
+              </ol>
+            </Layout>
+            <p>
+              {_('As soon as the scan progress is beyond 1%, you can already ' +
+                'jump to the scan report via the link in the Reports Total ' +
+                'column and review the results collected so far.')}
+            </p>
+            <p>
+              {_('When creating the Target and Task GSA will use the defaults' +
+                ' as configured in "My Settings".')}
+            </p>
+            <Divider>
+              <span>
+                {_('By clicking the New Task icon')}
+              </span>
+              <NewIcon
+                title={_('New Task')}
+                onClick={onNewClick}
+              />
+              <span>
+                {_('you can create a new Task yourself.')}
+              </span>
+            </Divider>
+          </Divider>
         </WizardContent>
       </Layout>
     )}
