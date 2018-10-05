@@ -7,6 +7,11 @@
 
 module.exports = {
   extends: 'react-app',
+  settings: {
+    react: {
+      version: "16",
+    },
+  },
   rules: {
     'accessor-pairs': 'error', // require get xyz if set xyz is defined
     'array-bracket-spacing': [ // disallow spaces inside of arrays

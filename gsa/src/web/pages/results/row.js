@@ -123,11 +123,11 @@ const Row = ({
         >
           {host.name}
         </DetailsLink>
-        {host.hostname.length > 0 ?
+        {host.hostname.length > 0 &&
           <span title={host.hostname}>
-              ({shorten(host.hostname, 40)})
-            </span> :
-          false}
+            ({shorten(host.hostname, 40)})
+          </span>
+         }
       </TableData>
       <TableData>
         {entity.port}

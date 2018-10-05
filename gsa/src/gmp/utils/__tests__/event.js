@@ -65,6 +65,8 @@ describe('throttleAnimation function tests', () => {
   jest.useFakeTimers();
 
   test('should throttle running callback', () => {
+    global.requestAnimationFrame = cb => setTimeout(cb, 0);
+
     const callback = jest.fn();
     const func = throttleAnimation(callback);
 

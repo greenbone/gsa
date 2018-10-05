@@ -17,7 +17,7 @@
   "license": "GPL-2.0+",
   "main": "src/index.js",
   "engines": {
-    "node" : ">=8.0"
+    "node": ">=8.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -26,8 +26,6 @@
     "@vx/axis": "^0.0.160",
     "@vx/gradient": "^0.0.153",
     "@vx/shape": "^0.0.160",
-    "babel-core": "^6.26.3",
-    "babel-runtime": ">=6.0.0",
     "core-js": "^2.5.7",
     "d3-cloud": "^1.2.5",
     "d3-color": "^1.2.0",
@@ -56,7 +54,7 @@
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.4",
+    "react-scripts": "^2.0.4",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
@@ -65,19 +63,14 @@
     "x2js": "^3.2.1"
   },
   "scripts": {
-    "test": "NODE_PATH=src react-scripts test --env=jsdom",
-    "test:coverage": "NODE_PATH=src react-scripts test --env=jsdom --coverage --maxWorkers 2",
+    "test": "NODE_PATH=src react-scripts test",
+    "test:coverage": "NODE_PATH=src react-scripts test --coverage --maxWorkers 2",
     "lint": "NODE_PATH=src eslint --max-warnings 0 src",
     "start": "NODE_PATH=src react-scripts start",
     "build": "NODE_PATH=src react-scripts build",
-    "eject": "NODE_PATH=src react-scripts eject",
-    "storybook": "NODE_PATH=src start-storybook -p 9009 -s public -c src/web/stories",
-    "build-storybook": "NODE_PATH=src build-storybook -s public -c src/web/stories"
+    "eject": "NODE_PATH=src react-scripts eject"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.4.8",
-    "@storybook/addons": "^3.3.0",
-    "@storybook/react": "^3.4.8",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest-styled-components": "^6.2.0",
@@ -90,5 +83,11 @@
       "!src/gmp/index.js",
       "!src/setupTests.js"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie < 11",
+    "not op_mini all"
+  ]
 }
