@@ -46,7 +46,7 @@ import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
 
 import SimpleTable from 'web/components/table/simpletable';
-import Table from 'web/components/table/table';
+import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
@@ -107,13 +107,16 @@ class Nvt extends React.Component {
           {pref_count}
         </TableData>
         <TableData align="center">
-          <Checkbox
-            checked={selected === YES_VALUE}
-            name={oid}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            onChange={onSelectedChange}
-          />
+          {/* wrap in span to allow centering */}
+          <div>
+            <Checkbox
+              checked={selected === YES_VALUE}
+              name={oid}
+              checkedValue={YES_VALUE}
+              unCheckedValue={NO_VALUE}
+              onChange={onSelectedChange}
+            />
+          </div>
         </TableData>
         <TableData align="center">
           <EditIcon
@@ -227,10 +230,10 @@ class EditDialogComponent extends React.Component {
                       <TableHead>
                         {_('Prefs')}
                       </TableHead>
-                      <TableHead>
+                      <TableHead align="center">
                         {_('Selected')}
                       </TableHead>
-                      <TableHead>
+                      <TableHead align="center">
                         {_('Actions')}
                       </TableHead>
                     </TableRow>
