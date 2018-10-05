@@ -32,6 +32,7 @@ import {
   DASHBOARD_SETTINGS_SAVING_REQUEST,
   DASHBOARD_SETTINGS_SAVING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_ERROR,
+  DASHBOARD_SETTINGS_SET_DEFAULTS,
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
@@ -42,6 +43,7 @@ import {
   saveSettings,
   resetSettings,
   addDisplay,
+  setDashboardSettingDefaults,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -50,18 +52,20 @@ const createRootState = (state = {byId: {}}) => ({
   },
 });
 
-describe('dashboard settings action tests', () => {
+describe('requestDashboardSettings tests', () => {
 
   test('should create an action to request dashboard settings', () => {
     const id = 'a1';
-    const defaults = {abc: 'def'};
 
-    expect(requestDashboardSettings(id, defaults)).toEqual({
-      defaults,
+    expect(requestDashboardSettings(id)).toEqual({
       id,
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
   });
+
+});
+
+describe('receivedDashboardSettings tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
@@ -81,6 +85,10 @@ describe('dashboard settings action tests', () => {
     });
   });
 
+});
+
+describe('receivedDashboardSettingsLoadingError tests', () => {
+
   test('should create an action to receive an error during loading', () => {
     const error = 'An error occured';
     const id = 'a1';
@@ -91,6 +99,10 @@ describe('dashboard settings action tests', () => {
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
     });
   });
+
+});
+
+describe('saveDashboardSettings tests', () => {
 
   test('should create an action to save dashboard settings', () => {
     const id = 'a1';
@@ -112,12 +124,32 @@ describe('dashboard settings action tests', () => {
     });
   });
 
+});
+
+describe('saveDashboardSettingsError tests', () => {
+
   test('should create an action if an error has occurred during saving', () => {
     const error = 'An error';
 
     expect(saveDashboardSettingsError(error)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
+    });
+  });
+
+});
+
+describe('setDashboardSettingDefaults', () => {
+
+  test('should create an action to set dashboard setting defaults', () => {
+    const id = 'a1';
+    const defaults = {
+      foo: 'bar',
+    };
+    expect(setDashboardSettingDefaults(id, defaults)).toEqual({
+      type: DASHBOARD_SETTINGS_SET_DEFAULTS,
+      id,
+      defaults,
     });
   });
 
@@ -156,7 +188,6 @@ describe('loadSettings tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id,
-        defaults: defaultSettings,
         type: DASHBOARD_SETTINGS_LOADING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
@@ -233,7 +264,6 @@ describe('loadSettings tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id,
-        defaults,
         type: DASHBOARD_SETTINGS_LOADING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{

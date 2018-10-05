@@ -39,6 +39,7 @@ import {excludeObjectProps} from 'gmp/utils/object';
 import {
   loadSettings,
   saveSettings,
+  setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
@@ -147,6 +148,7 @@ export class Dashboard extends React.Component {
       maxRows,
     };
 
+    this.props.setDefaultSettings(id, defaults);
     this.props.loadSettings(id, defaults);
   }
 
@@ -249,6 +251,7 @@ Dashboard.propTypes = {
   maxRows: PropTypes.number,
   permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
   saveSettings: PropTypes.func.isRequired,
+  setDefaultSettings: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func,
   onInteraction: PropTypes.func,
 };
@@ -280,6 +283,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
     dispatch(loadSettings(gmp)(id, defaults)),
   saveSettings: (id, settings) =>
     dispatch(saveSettings(gmp)(id, settings)),
+  setDefaultSettings: (id, settings) =>
+    dispatch(setDashboardSettingDefaults(id, settings)),
 });
 
 export default compose(
