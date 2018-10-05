@@ -45,7 +45,7 @@ import Layout from '../components/layout/layout.js';
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import {WizardContent} from './taskwizard';
+import {WizardContent, WizardIcon} from './taskwizard';
 
 const ModifyTaskWizard = ({
   alert_email,
@@ -73,7 +73,7 @@ const ModifyTaskWizard = ({
 
   return (
     <SaveDialog
-      buttonTitle={_('Modify')}
+      buttonTitle={_('Modify Task')}
       defaultValues={data}
       title={_('Modify Task Wizard')}
       width="900px"
@@ -85,24 +85,26 @@ const ModifyTaskWizard = ({
         onValueChange,
       }) => (
         <Layout align={['start', 'start']}>
+          <WizardIcon/>
           <Layout basis="40%">
             <WizardContent>
+              <p><b>{_('Quick edit: Modify a task')}</b></p>
               <div>
-                {_('I will modify an existing task for you. The difference ' +
-                  ' to the Edit Task dialog is that here you can enter ' +
-                  'values for associated objects directly. I will then ' +
-                  'create them for you automatically and assign them to the' +
+                {_('GSA will modify an existing task for you. The difference ' +
+                  'to the Edit Task dialog is that you can enter ' +
+                  'values for associated objects directly here. GSA will then' +
+                  ' create them for you automatically and assign them to the' +
                   ' selected task.')}
               </div>
               <div>
-                {_('Please be aware that')}
+                {_('Please be aware that:')}
                 <ul>
                   <li>
-                    {_('setting a start time overwrites a possibly already ' +
-                      'existing one,')}
+                    {_('Setting a start time overwrites a possibly already ' +
+                      'existing one.')}
                   </li>
                   <li>
-                    {_('setting an Email Address means adding an additional' +
+                    {_('Setting an email Address means adding an additional' +
                       ' Alert, not replacing an existing one.')}
                   </li>
                 </ul>
@@ -114,7 +116,6 @@ const ModifyTaskWizard = ({
             grow="1"
             flex="column"
           >
-            <h1>{_('Quick edit: Modify a task')}</h1>
             <FormGroup title={_('Task')} titleSize="3">
               <Select
                 name="task_id"
