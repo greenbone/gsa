@@ -48,6 +48,7 @@ describe('dashboard settings reducers tests for initial state', () => {
 });
 
 describe('dashboard settings reducers tests for loading requests', () => {
+
   test('should handle request dashboard settings with id', () => {
     const id = 'a1';
     const action = requestDashboardSettings(id);
@@ -64,18 +65,13 @@ describe('dashboard settings reducers tests for loading requests', () => {
 
   test('should handle request dashboard settings with id and defaults', () => {
     const id = 'a1';
-    const defaults = {foo: 'bar'};
-    const action = requestDashboardSettings(id, defaults);
+    const action = requestDashboardSettings(id);
 
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
       isLoading: true,
       error: null,
-      defaults: {
-        a1: {
-          foo: 'bar',
-        },
-      },
+      defaults: {},
     });
   });
 
@@ -93,37 +89,6 @@ describe('dashboard settings reducers tests for loading requests', () => {
       error: null,
       defaults: {
         a1: undefined,
-      },
-    });
-  });
-
-  test('should override existing defaults', () => {
-    const id = 'a1';
-    const state = {
-      defaults: {
-        [id]: {
-          width: 200,
-        },
-      },
-    };
-    const defaults = {
-      other: 'ipsum',
-      data: ['abc', 'def'],
-      width: 100,
-    };
-
-    const action = requestDashboardSettings(id, defaults);
-
-    expect(dashboardSettings(state, action)).toEqual({
-      isLoading: true,
-      error: null,
-      byId: {},
-      defaults: {
-        [id]: {
-          other: 'ipsum',
-          data: ['abc', 'def'],
-          width: 100,
-        },
       },
     });
   });
