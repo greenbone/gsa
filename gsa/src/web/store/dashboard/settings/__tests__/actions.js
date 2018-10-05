@@ -69,11 +69,15 @@ describe('dashboard settings action tests', () => {
     const settings = {
       items: data,
     };
+    const defaultSettings = {
+      foo: 'bar',
+    };
 
-    expect(receivedDashboardSettings(id, settings)).toEqual({
+    expect(receivedDashboardSettings(id, settings, defaultSettings)).toEqual({
       settings,
       id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+      defaultSettings,
     });
   });
 
@@ -143,22 +147,23 @@ describe('loadSettings tests', () => {
         currentSettings,
       },
     };
-    const defaults = {
+    const defaultSettings = {
       lorem: 'ipsum',
     };
 
     expect(isFunction(loadSettings)).toEqual(true);
-    return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
+    return loadSettings(gmp)(id, defaultSettings)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id,
-        defaults,
+        defaults: defaultSettings,
         type: DASHBOARD_SETTINGS_LOADING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
         id,
         settings: data,
         type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
+        defaultSettings,
       }]);
       expect(getState).toHaveBeenCalled();
       expect(currentSettings).toHaveBeenCalled();

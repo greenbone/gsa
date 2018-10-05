@@ -56,6 +56,7 @@ const byId = (state = {}, action) => {
         ...settings,
         [id]: {
           ...state[id],
+          ...action.defaultSettings,
           ...settings[id],
         },
       };

@@ -279,6 +279,48 @@ describe('dashboard settings reducers tests for loading success', () => {
     });
   });
 
+  test('should handle receive dashboard settings and merge defaults', () => {
+    const id = 'a1';
+    const state = {
+      byId: {
+        [id]: {
+          other: 'ipsum',
+          rows: ['abc', 'def'],
+        },
+      },
+    };
+
+    const defaults = {
+      height: 200,
+      foo: 'bar',
+      maxRows: 4,
+    };
+
+    const settings = {
+      [id]: {
+        height: 100,
+        rows: ['foo', 'bar'],
+      },
+    };
+
+    const action = receivedDashboardSettings(id, settings, defaults);
+
+    expect(dashboardSettings(state, action)).toEqual({
+      isLoading: false,
+      error: null,
+      byId: {
+        a1: {
+          other: 'ipsum',
+          height: 100,
+          rows: ['foo', 'bar'],
+          maxRows: 4,
+          foo: 'bar',
+        },
+      },
+      defaults: {},
+    });
+  });
+
   test('should handle receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
