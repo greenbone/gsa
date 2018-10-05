@@ -37,8 +37,6 @@ import NewIcon from '../components/icon/newicon.js';
 
 import Layout from '../components/layout/layout.js';
 
-import Wizardess from './wizardess.js';
-
 export const WizardContent = styled.div`
   & > p img {
     margin-left: 5px;
@@ -65,7 +63,6 @@ const TaskWizard = ({
       onValueChange,
     }) => (
       <Layout>
-        <Wizardess/>
         <WizardContent>
           <p>
             <b>{_('Quick start: Immediately scan an IP address')}</b>

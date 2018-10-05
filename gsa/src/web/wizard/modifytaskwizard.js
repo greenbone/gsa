@@ -46,7 +46,6 @@ import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import {WizardContent} from './taskwizard';
-import Wizardess from './wizardess';
 
 const ModifyTaskWizard = ({
   alert_email,
@@ -87,7 +86,6 @@ const ModifyTaskWizard = ({
       }) => (
         <Layout align={['start', 'start']}>
           <Layout basis="40%">
-            <Wizardess/>
             <WizardContent>
               <div>
                 {_('I will modify an existing task for you. The difference ' +

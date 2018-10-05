@@ -52,7 +52,6 @@ import TimeZoneSelect from '../components/form/timezoneselect.js';
 import Layout from '../components/layout/layout.js';
 
 import {WizardContent} from './taskwizard';
-import Wizardess from './wizardess';
 
 const IMMEDIATELY_START_VALUE = '2';
 const SCHEDULE_START_VALUE = '1';
@@ -127,7 +126,6 @@ const AdvancedTaskWizard = ({
       }) => (
         <Layout align={['start', 'start']}>
           <Layout basis="40%">
-            <Wizardess/>
             <WizardContent>
               <p>
                 {_('I can help you by creating a new scan task and ' +
