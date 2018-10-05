@@ -235,7 +235,7 @@ class EditDialog extends React.Component {
                     <TableHead>
                       {_('Default Value')}
                     </TableHead>
-                    <TableHead>
+                    <TableHead align="center">
                       {_('Actions')}
                     </TableHead>
                   </TableRow>

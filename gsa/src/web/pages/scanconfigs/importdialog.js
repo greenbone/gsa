@@ -42,6 +42,7 @@ const ImportDialog = ({
     <SaveDialog
       buttonTitle={_('Import')}
       title={_('Import Scan Config')}
+      width="500"
       onClose={onClose}
       onSave={onSave}
     >
@@ -52,7 +53,7 @@ const ImportDialog = ({
           <Layout flex="column">
             <FormGroup
               title={_('Import XML config')}
-              titleSize="3"
+              titleSize="4"
             >
               <FileField
                 name="xml_file"
