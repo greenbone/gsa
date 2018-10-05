@@ -42,6 +42,9 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
+export const DASHBOARD_SETTINGS_SET_DEFAULTS =
+  'DASHBOARD_SETTINGS_SET_DEFAULTS';
+
 /**
  * Create an action to receive dashboard settings
  *
@@ -84,6 +87,12 @@ export const saveDashboardSettings = (id, settings) => ({
   type: DASHBOARD_SETTINGS_SAVING_REQUEST,
   settings,
   id,
+});
+
+export const setDashboardSettingDefaults = (id, defaults) => ({
+  type: DASHBOARD_SETTINGS_SET_DEFAULTS,
+  id,
+  defaults,
 });
 
 export const loadSettings = gmp => (id, defaults) =>

@@ -32,6 +32,7 @@ import {
   DASHBOARD_SETTINGS_SAVING_REQUEST,
   DASHBOARD_SETTINGS_SAVING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_ERROR,
+  DASHBOARD_SETTINGS_SET_DEFAULTS,
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
@@ -42,6 +43,7 @@ import {
   saveSettings,
   resetSettings,
   addDisplay,
+  setDashboardSettingDefaults,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -134,6 +136,22 @@ describe('saveDashboardSettingsError tests', () => {
     expect(saveDashboardSettingsError(error)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
+    });
+  });
+
+});
+
+describe('setDashboardSettingDefaults', () => {
+
+  test('should create an action to set dashboard setting defaults', () => {
+    const id = 'a1';
+    const defaults = {
+      foo: 'bar',
+    };
+    expect(setDashboardSettingDefaults(id, defaults)).toEqual({
+      type: DASHBOARD_SETTINGS_SET_DEFAULTS,
+      id,
+      defaults,
     });
   });
 
