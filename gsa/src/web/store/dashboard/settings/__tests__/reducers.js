@@ -30,6 +30,7 @@ import {
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
   saveDashboardSettings,
+  setDashboardSettingDefaults,
 } from '../actions';
 
 describe('dashboard settings reducers tests for initial state', () => {
@@ -508,6 +509,51 @@ describe('dashboard settings reducers test for saving', () => {
       defaults: {},
     });
   });
+});
+
+describe('dashboard settings reducers test for setting defaults', () => {
+
+  test('should set default settings for dashboard', () => {
+    const id = 'a1';
+    const defaults = {
+      foo: 'bar',
+    };
+    const action = setDashboardSettingDefaults(id, defaults);
+
+    expect(dashboardSettings(undefined, action)).toEqual({
+      error: null,
+      isLoading: false,
+      byId: {},
+      defaults: {
+        [id]: defaults,
+      },
+    });
+  });
+
+  test('should override existing default settings for dashboard', () => {
+    const id = 'a1';
+    const defaults = {
+      foo: 'bar',
+    };
+    const state = {
+      defaults: {
+        [id]: {
+          lorem: 'ipsum',
+        },
+      },
+    };
+    const action = setDashboardSettingDefaults(id, defaults);
+
+    expect(dashboardSettings(state, action)).toEqual({
+      error: null,
+      isLoading: false,
+      byId: {},
+      defaults: {
+        [id]: defaults,
+      },
+    });
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
