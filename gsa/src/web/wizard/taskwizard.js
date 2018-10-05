@@ -29,15 +29,15 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import TextField from '../components/form/textfield.js';
+import TextField from 'web/components/form/textfield';
 
-import Icon from '../components/icon/icon.js';
-import NewIcon from '../components/icon/newicon.js';
+import Icon from 'web/components/icon/icon';
+import NewIcon from 'web/components/icon/newicon';
 
-import Divider from '../components/layout/divider.js';
-import Layout from '../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 export const WizardContent = styled.div`
   margin: 0 20px;

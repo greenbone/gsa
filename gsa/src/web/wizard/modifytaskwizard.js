@@ -27,20 +27,20 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SaveDialog from '../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Select from '../components/form/select.js';
-import Spinner from '../components/form/spinner.js';
-import FormGroup from '../components/form/formgroup.js';
-import Radio from '../components/form/radio.js';
-import TextField from '../components/form/textfield.js';
-import TimeZoneSelect from '../components/form/timezoneselect.js';
-import Datepicker from '../components/form/datepicker.js';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
+import TimeZoneSelect from 'web/components/form/timezoneselect';
+import Datepicker from 'web/components/form/datepicker';
 
-import Divider from '../components/layout/divider.js';
-import Layout from '../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';

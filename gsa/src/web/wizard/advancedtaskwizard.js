@@ -37,19 +37,19 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import SaveDialog from '../components/dialog/savedialog.js';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import Divider from '../components/layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import Select from '../components/form/select.js';
-import Spinner from '../components/form/spinner.js';
-import FormGroup from '../components/form/formgroup.js';
-import TextField from '../components/form/textfield.js';
-import Radio from '../components/form/radio.js';
-import Datepicker from '../components/form/datepicker.js';
-import TimeZoneSelect from '../components/form/timezoneselect.js';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import Datepicker from 'web/components/form/datepicker';
+import TimeZoneSelect from 'web/components/form/timezoneselect';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 
