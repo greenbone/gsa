@@ -133,7 +133,6 @@ class DataDisplay extends React.Component {
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
-    this.handleToggleLegend = this.handleToggleLegend.bind(this);
     this.handleSetChildState = this.setChildState.bind(this);
   }
 
@@ -275,10 +274,6 @@ class DataDisplay extends React.Component {
     download.click();
   }
 
-  handleToggleLegend() {
-    this.setChildState(({showLegend}) => ({showLegend: !showLegend}));
-  }
-
   render() {
     const {
       childState,
@@ -355,7 +350,6 @@ class DataDisplay extends React.Component {
                   showToggleLegend,
                   onDownloadCsvClick: this.handleDownloadSvg,
                   onDownloadSvgClick: this.handleDownloadSvg,
-                  onToggleLegendClick: this.handleToggleLegend,
                   onSelectFilterClick,
                 })}
               </IconDivider>

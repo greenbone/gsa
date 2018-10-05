@@ -26,31 +26,32 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
-
-import compose from '../../utils/compose.js';
-import withGmp from '../../utils/withGmp.js';
-import PropTypes from '../../utils/proptypes.js';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
-  resetSettings,
   addDisplay,
-  canAddDisplay,
+  resetSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {canAddDisplay} from 'web/store/dashboard/settings/utils';
 
-import SaveDialog from '../dialog/savedialog';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import FormGroup from '../form/formgroup';
-import Select from '../form/select';
+import SaveDialog from 'web/components/dialog/savedialog';
 
-import IconDivider from '../layout/icondivider';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
 
-import NewIcon from '../icon/newicon';
-import Icon from '../icon/icon';
+import NewIcon from 'web/components/icon/newicon';
+import Icon from 'web/components/icon/icon';
+
+import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
+
 export class DashboardControls extends React.Component {
 
   constructor(...args) {
@@ -188,7 +189,7 @@ DashboardControls.propTypes = {
 
 const mapStateToProps = (rootState, {dashboardId}) => {
   const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getDefaultsById(dashboardId);
+  const settings = settingsSelector.getById(dashboardId);
   const {permittedDisplays: displayIds} = settings || {};
   return {
     canAdd: canAddDisplay(settings),
@@ -197,8 +198,8 @@ const mapStateToProps = (rootState, {dashboardId}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onResetClick: (...args) => dispatch(resetSettings({gmp})(...args)),
-  onNewDisplay: (...args) => dispatch(addDisplay({gmp})(...args)),
+  onResetClick: (...args) => dispatch(resetSettings(gmp)(...args)),
+  onNewDisplay: (...args) => dispatch(addDisplay(gmp)(...args)),
 });
 
 export default compose(

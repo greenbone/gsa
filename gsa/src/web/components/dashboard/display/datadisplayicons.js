@@ -35,6 +35,7 @@ export const renderDonutChartIcons = ({
   <React.Fragment>
     <DataDisplayIcons
       {...iconsProps}
+      setState={setState}
     />
     <Icon
       img="st_vendorfix.svg"
@@ -45,6 +46,7 @@ export const renderDonutChartIcons = ({
 );
 
 const DataDisplayIcons = ({
+  setState,
   showCsvDownload = true,
   showSvgDownload = true,
   showFilterSelection = true,
@@ -52,7 +54,6 @@ const DataDisplayIcons = ({
   onDownloadCsvClick,
   onDownloadSvgClick,
   onSelectFilterClick,
-  onToggleLegendClick,
 }) => (
   <React.Fragment>
     {showFilterSelection &&
@@ -80,13 +81,14 @@ const DataDisplayIcons = ({
       <Icon
         img="list.svg"
         title={_('Toggle Legend')}
-        onClick={onToggleLegendClick}
+        onClick={() => setState(({showLegend}) => ({showLegend: !showLegend}))}
       />
     }
   </React.Fragment>
 );
 
 DataDisplayIcons.propTypes = {
+  setState: PropTypes.func,
   showCsvDownload: PropTypes.bool,
   showFilterSelection: PropTypes.bool,
   showSvgDownload: PropTypes.bool,
@@ -94,7 +96,6 @@ DataDisplayIcons.propTypes = {
   onDownloadCsvClick: PropTypes.func,
   onDownloadSvgClick: PropTypes.func,
   onSelectFilterClick: PropTypes.func,
-  onToggleLegendClick: PropTypes.func,
 };
 
 export default DataDisplayIcons;

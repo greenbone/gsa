@@ -791,6 +791,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/reducers.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
+     ${GSA_SRC_DIR}/src/web/store/dashboard/settings/utils.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/agents.js

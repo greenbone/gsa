@@ -37,12 +37,14 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import {
-  canAddDisplay,
-  addDisplayToSettings,
   loadSettings,
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
+import {
+  canAddDisplay,
+  addDisplayToSettings,
+} from 'web/store/dashboard/settings/utils';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
@@ -495,9 +497,9 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) =>
-    dispatch(loadSettings({gmp})(id, defaults)),
+    dispatch(loadSettings(gmp)(id, defaults)),
   saveSettings: (id, settings) =>
-    dispatch(saveSettings({gmp})(id, settings)),
+    dispatch(saveSettings(gmp)(id, settings)),
   renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
 });
 

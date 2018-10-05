@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import 'core-js/fn/object/entries';
-
-import {isDefined, isArray} from 'gmp/utils/identity';
-
-import {createRow, createItem} from 'web/components/sortable/utils';
+import {isDefined} from 'gmp/utils/identity';
 
 import getDashboardSettings from './selectors';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+} from './utils';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';
@@ -42,10 +42,21 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
-export const receivedDashboardSettings = (id, settings) => ({
+/**
+ * Create an action to receive dashboard settings
+ *
+ * @param {String} id              ID of the dashboard
+ * @param {Object} settings        Settings loaded for all dashboards
+ * @param {Object} defaultSettings Default settings for the dashboard with the
+ *                                 passed ID
+ *
+ * @returns {Object} The action object
+ */
+export const receivedDashboardSettings = (id, settings, defaultSettings) => ({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
   settings,
+  defaultSettings,
 });
 
 export const receivedDashboardSettingsLoadingError = (id, error) => ({
@@ -75,7 +86,7 @@ export const saveDashboardSettings = (id, settings) => ({
   id,
 });
 
-export const loadSettings = ({gmp}) => (id, defaults) =>
+export const loadSettings = gmp => (id, defaults) =>
   (dispatch, getState) => {
 
   const rootState = getState();
@@ -90,12 +101,13 @@ export const loadSettings = ({gmp}) => (id, defaults) =>
 
   const promise = gmp.dashboards.currentSettings();
   return promise.then(
-    response => dispatch(receivedDashboardSettings(id, response.data)),
+    response => dispatch(receivedDashboardSettings(id, response.data,
+       defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(id, error)),
   );
 };
 
-export const saveSettings = ({gmp}) => (id, settings) =>
+export const saveSettings = gmp => (id, settings) =>
   (dispatch, getState) => {
 
   dispatch(saveDashboardSettings(id, settings));
@@ -107,7 +119,7 @@ export const saveSettings = ({gmp}) => (id, settings) =>
     );
 };
 
-export const resetSettings = ({gmp}) => id =>
+export const resetSettings = gmp => id =>
   (dispatch, getState) => {
 
   const rootState = getState();
@@ -123,49 +135,10 @@ export const resetSettings = ({gmp}) => id =>
     );
 };
 
-export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
-  if (isArray(rows) && rows.length > 0 &&
-    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
-    const lastRow = rows[rows.length - 1];
-    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
-  }
-  return true;
-};
-
-export const addDisplayToSettings = (settings, displayId) => {
-  const {rows: currentRows = [], maxItemsPerRow} = settings || {};
-
-  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
-    currentRows[currentRows.length - 1] : {items: []};
-
-  let rows;
-  if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
-    // create new row
-    const newRow = createRow([createItem({name: displayId})]);
-    rows = [...currentRows, newRow];
-  }
-  else {
-    // add new display to last row
-    const newRow = {
-      ...lastRow,
-      items: [...lastRow.items, createItem({name: displayId})],
-    };
-
-    rows = [...currentRows];
-    rows.pop();
-    rows.push(newRow);
-  }
-
-  return {
-    ...settings,
-    rows,
-  };
-};
-
-export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
+export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   (dispatch, getState) => {
   if (!isDefined(displayId) || !isDefined(dashboardId)) {
-    return;
+    return Promise.resolve();
   }
 
   const rootState = getState();
@@ -173,10 +146,10 @@ export const addDisplay = ({gmp}) => (dashboardId, displayId) =>
   const settings = settingsSelector.getById(dashboardId);
 
   if (!canAddDisplay(settings)) {
-    return;
+    return Promise.resolve();
   }
 
-  const newSettings = addDisplayToSettings(settings, displayId);
+  const newSettings = addDisplayToSettings(settings, displayId, uuidFunc);
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
