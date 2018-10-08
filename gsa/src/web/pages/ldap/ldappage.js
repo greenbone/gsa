@@ -63,7 +63,7 @@ class LdapAuthentication extends React.Component {
       authdn: '',
       ldaphost: '',
       enable: '',
-      certificate_info: {},
+      certificateInfo: {},
       loading: 'true',
     };
 
@@ -83,19 +83,19 @@ class LdapAuthentication extends React.Component {
 
   getLdapAuth() {
     const {gmp} = this.props;
-    const auth_data = gmp.user.currentAuthSettings().then(response => {
+    const authData = gmp.user.currentAuthSettings().then(response => {
       const data = response.data.get('method:ldap_connect');
-      let {authdn, certificate_info, enable, ldaphost} = data;
+      let {authdn, certificateInfo, enable, ldaphost} = data;
       // handle getting enable as "true" but posting it as 1
       enable = enable === 'true' ? YES_VALUE : NO_VALUE;
       this.setState({
         authdn,
-        certificate_info,
+        certificateInfo,
         enable,
         ldaphost,
       });
     });
-    return auth_data;
+    return authData;
   }
 
   handleInteraction() {
@@ -108,13 +108,14 @@ class LdapAuthentication extends React.Component {
   handleSaveSettings() {
     const {
       authdn,
-      certificate_info,
+      certificateInfo,
       enable,
       ldaphost,
     } = this.state;
+
     const data = {
       authdn,
-      certificate_info,
+      certificateInfo,
       enable,
       ldaphost,
     };
@@ -129,8 +130,8 @@ class LdapAuthentication extends React.Component {
     this.setState({[name]: value});
   }
 
-  showCertfificateInfo(certificate_info) {
-    if (isDefined(certificate_info)) {
+  showCertfificateInfo(certificateInfo) {
+    if (isDefined(certificateInfo)) {
       return (
         <Table>
           <TableBody>
@@ -139,7 +140,7 @@ class LdapAuthentication extends React.Component {
                 {_('Activation')}
               </TableData>
               <TableData>
-                {certificate_info.activationTime}
+                {certificateInfo.activationTime}
               </TableData>
             </TableRow>
             <TableRow>
@@ -147,7 +148,7 @@ class LdapAuthentication extends React.Component {
                 {_('Expiration')}
               </TableData>
               <TableData>
-                {certificate_info.expirationTime}
+                {certificateInfo.expirationTime}
               </TableData>
             </TableRow>
             <TableRow>
@@ -155,7 +156,7 @@ class LdapAuthentication extends React.Component {
                 {_('MD5 Fingerprint')}
               </TableData>
               <TableData>
-                {certificate_info.md5_fingerprint}
+                {certificateInfo.md5_fingerprint}
               </TableData>
             </TableRow>
             <TableRow>
@@ -163,7 +164,7 @@ class LdapAuthentication extends React.Component {
                 {_('Issued by')}
               </TableData>
               <TableData>
-                {certificate_info.issuer}
+                {certificateInfo.issuer}
               </TableData>
             </TableRow>
           </TableBody>
@@ -181,7 +182,7 @@ class LdapAuthentication extends React.Component {
 
     const {
       authdn,
-      certificate_info,
+      certificateInfo,
       enable,
       ldaphost,
     } = this.state;
@@ -226,7 +227,7 @@ class LdapAuthentication extends React.Component {
           </FormGroup>
           <FormGroup title={_('CA Certificate')} titlesize="5">
             <Layout flex="column">
-              {this.showCertfificateInfo(certificate_info)}
+              {this.showCertfificateInfo(certificateInfo)}
               <FileField
                 name="certificate"
                 onChange={this.handleValueChange}

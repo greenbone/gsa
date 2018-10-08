@@ -71,7 +71,7 @@ class UserCommand extends EntityCommand {
           forEach(group.auth_conf_setting, setting => {
             values[setting.key] = setting.value;
             if (isDefined(setting.certificate_info)) {
-              values.certificate_info = setting.certificate_info;
+              values.certificateInfo = setting.certificate_info;
             }
           });
 
