@@ -450,6 +450,7 @@ init_validator ()
                          "|(get_schedule)"
                          "|(get_schedules)"
                          "|(get_setting)"
+                         "|(get_settings)"
                          "|(get_system_reports)"
                          "|(get_tag)"
                          "|(get_tags)"
@@ -2170,7 +2171,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_group)
   ELSE (get_groups)
   ELSE (get_info)
-  ELSE (get_my_settings)
   ELSE (get_note)
   ELSE (get_notes)
   ELSE (get_override)
@@ -2193,6 +2193,7 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_schedule)
   ELSE (get_schedules)
   ELSE (get_setting)
+  ELSE (get_settings)
   ELSE (get_system_reports)
   ELSE (get_tag)
   ELSE (get_tags)
