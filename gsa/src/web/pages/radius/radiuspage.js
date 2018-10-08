@@ -171,14 +171,14 @@ class RadiusAuthentication extends React.Component {
             />
           </FormGroup>
         </Layout>
-        <Layout align="center">
+        <FormGroup title=" ">
           <Button
             width="auto"
             onClick={this.handleSaveSettings}
           >
             {_('Save')}
           </Button>
-        </Layout>
+        </FormGroup>
       </Layout>
     );
   }
