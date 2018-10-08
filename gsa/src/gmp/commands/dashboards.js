@@ -131,6 +131,26 @@ class DashboardsCommand extends HttpCommand {
 
 class DashboardCommand extends GmpCommand {
 
+  getSetting(id) {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: id,
+    }).then(response => {
+      const {data} = response;
+      const {setting} = data.get_settings.get_settings_response;
+      const {value, name} = setting;
+      let config;
+      try {
+        config = JSON.parse(value);
+      }
+      catch (e) {
+        log.warn('Could not parse dashboard setting', value);
+        return;
+      }
+      return response.setData(convertLoadedSettings(config, name));
+    });
+  }
+
   saveSetting(id, settings) {
     settings = convertSaveSettings(settings);
 
