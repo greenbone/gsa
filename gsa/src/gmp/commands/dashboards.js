@@ -22,7 +22,6 @@
  */
 import uuid from 'uuid/v4';
 
-import {isArray} from '../utils/identity';
 import {forEach} from '../utils/array';
 
 import logger from '../log';
@@ -67,24 +66,7 @@ const convertLoadedSettings = (settings = {}, name) => {
   };
 };
 
-const dashboardSettings2SettingsV1 = ({rows}) => ({
-  version: 1,
-  data: rows.map(({height, items: rowItems}) => ({
-    height,
-    type: 'row',
-    data: rowItems.map(({id, filterId, ...other}) => ({
-      ...other,
-      filt_id: filterId,
-      type: 'chart',
-    })),
-  })),
-});
-
 const convertSaveSettings = (settings = {}) => {
-  if (isArray(settings.rows)) {
-    // we like have settings which can be stored as version 1 settings
-    return dashboardSettings2SettingsV1(settings);
-  }
   return settings;
 };
 
