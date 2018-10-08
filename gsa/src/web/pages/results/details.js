@@ -39,6 +39,7 @@ import PropTypes from '../../utils/proptypes.js';
 import {renderNvtName} from '../../utils/render.js';
 
 import DetailsBlock from '../../entity/block.js';
+import {Col} from '../../entity/page.js';
 
 import DetailsLink from '../../components/link/detailslink.js';
 
@@ -149,6 +150,10 @@ const ResultDetails = ({
             {tags.vuldetect}
           </Layout>
           <InfoTable>
+            <colgroup>
+              <Col width="10%"/>
+              <Col width="90%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
