@@ -68,7 +68,7 @@ export const receivedDashboardSettingsLoadingError = (id, error) => ({
   error,
 });
 
-export const requestDashboardSettings = (id, defaults) => ({
+export const requestDashboardSettings = id => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
 });
