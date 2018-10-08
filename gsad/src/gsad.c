@@ -349,7 +349,6 @@ init_validator ()
                          "|(edit_credential)"
                          "|(edit_filter)"
                          "|(edit_group)"
-                         "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
                          "|(edit_permission)"
@@ -2003,7 +2002,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (edit_credential)
   ELSE (edit_filter)
   ELSE (edit_group)
-  ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
   ELSE (edit_permission)
