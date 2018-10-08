@@ -73,6 +73,7 @@
   "devDependencies": {
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "jest-junit": "^5.2.0",
     "jest-styled-components": "^6.2.0",
     "react-test-renderer": "^16.4.1"
   },
