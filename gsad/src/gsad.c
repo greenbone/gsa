@@ -449,6 +449,7 @@ init_validator ()
                          "|(get_scanners)"
                          "|(get_schedule)"
                          "|(get_schedules)"
+                         "|(get_setting)"
                          "|(get_system_reports)"
                          "|(get_tag)"
                          "|(get_tags)"
@@ -542,7 +543,6 @@ init_validator ()
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "setting_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "setting_value", "^.*$");
   openvas_validator_add (validator, "setting_name", "^(.*){0,1000}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
@@ -898,6 +898,7 @@ init_validator ()
   openvas_validator_alias (validator, "schedules_only", "boolean");
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "setting_id", "id");
   openvas_validator_alias (validator, "show_all",     "boolean");
   openvas_validator_alias (validator, "slave_id",     "id");
   openvas_validator_alias (validator, "smb_credential_id", "credential_id");
@@ -2191,6 +2192,7 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_scanners)
   ELSE (get_schedule)
   ELSE (get_schedules)
+  ELSE (get_setting)
   ELSE (get_system_reports)
   ELSE (get_tag)
   ELSE (get_tags)

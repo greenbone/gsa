@@ -568,6 +568,8 @@ char * get_my_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 char * save_my_settings_gmp (gvm_connection_t *, credentials_t *,
                              params_t *, const gchar *, cmd_response_data_t*);
+char * get_setting_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                        cmd_response_data_t*);
 
 char * get_info_gmp (gvm_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);

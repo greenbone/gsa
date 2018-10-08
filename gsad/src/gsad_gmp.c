@@ -16733,7 +16733,6 @@ get_my_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
                        response_data);
 }
 
-
 /**
  * @brief Send settings resource filters.
  *
@@ -22363,6 +22362,52 @@ save_setting_gmp (gvm_connection_t *connection,
   g_free (response);
   return html;
 }
+
+char *
+get_setting_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+  const gchar *setting_id = params_value (params, "setting_id");
+  CHECK_VARIABLE_INVALID (setting_id, "Get Setting");
+  GString *xml = g_string_new ("<get_settings>");
+
+  if (gvm_connection_sendf_xml (connection,
+                                "<get_settings"
+                                " setting_id=\"%s\"/>",
+                                setting_id))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "dashboard settings"
+                            "Diagnostics: Failure to send command to manager "
+                            "daemon.",
+                            response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the "
+                           "dashboard settings"
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                            response_data);
+    }
+
+  g_string_append (xml, "</get_settings>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
+
 
 
 /* Wizards. */
