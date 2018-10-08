@@ -418,7 +418,6 @@ init_validator ()
                          "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
-                         "|(get_dashboard_settings)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -1991,7 +1990,6 @@ exec_gmp_get (http_connection_t *con,
 
   ELSE (new_task)
   ELSE (new_alert)
-  ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (delete_user_confirm)
