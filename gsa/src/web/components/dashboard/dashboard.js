@@ -83,6 +83,7 @@ const RowPlaceHolder = styled.div`
   height: ${DEFAULT_ROW_HEIGHT};
   justify-content: center;
   align-items: center;
+  margin: 15px 0;
 `;
 
 const filterItems = (items, allowed) => items.map(row => {
