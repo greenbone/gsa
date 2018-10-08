@@ -46,6 +46,7 @@ const TextBlock = styled.div`
   max-width: 600px;
   min-width: 400px;
   margin-right: 30px;
+  text-align: left;
   @media screen and (max-width: 800px) {
     margin-right: 0px;
   };
@@ -67,7 +68,7 @@ const About = () => (
       >
         <TextBlock>
           <h1>Greenbone Security Assistant</h1>
-          <h3>Version 7.1+beta1</h3>
+          <h3>Version 8.0+beta2</h3>
           <DivP>The Greenbone Security Assistant (GSA) is the web-based
             user interface of the Greenbone Vulnerability Manager (GVM).
           </DivP>
