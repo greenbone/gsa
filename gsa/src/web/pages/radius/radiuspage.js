@@ -77,7 +77,7 @@ class RadiusAuthentication extends React.Component {
 
   getRadiusAuth() {
     const {gmp} = this.props;
-    const auth_data = gmp.user.currentAuthSettings().then(response => {
+    const authData = gmp.user.currentAuthSettings().then(response => {
       const data = response.data.get('method:radius_connect');
       let {enable, radiushost, radiuskey} = data;
       // handle getting enable as "true" but posting it as 1
@@ -88,7 +88,7 @@ class RadiusAuthentication extends React.Component {
         radiuskey,
       });
     });
-    return auth_data;
+    return authData;
   }
 
   handleInteraction() {
@@ -104,11 +104,13 @@ class RadiusAuthentication extends React.Component {
       radiushost,
       radiuskey,
     } = this.state;
+
     const data = {
       enable,
       radiushost,
       radiuskey,
     };
+
     const {gmp} = this.props;
 
     this.handleInteraction();
