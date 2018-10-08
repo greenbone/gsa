@@ -20,13 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+
 import {
   convertDefaultContent,
   createItem,
-  createRow,
   removeItem,
   updateRow,
-  DEFAULT_ROW_HEIGHT,
 } from '../utils';
 
 describe('createItem tests', () => {
@@ -44,30 +44,6 @@ describe('createItem tests', () => {
     expect(createItem({foo: 'bar'}, uuid)).toEqual({
       id: 1,
       foo: 'bar',
-    });
-    expect(uuid).toHaveBeenCalled();
-  });
-
-});
-
-describe('createRow tests', () => {
-
-  test('should create row with default height', () => {
-    const uuid = jest.fn().mockReturnValue(1);
-    expect(createRow(['foo', 'bar'], undefined, uuid)).toEqual({
-      id: 1,
-      items: ['foo', 'bar'],
-      height: DEFAULT_ROW_HEIGHT,
-    });
-    expect(uuid).toHaveBeenCalled();
-  });
-
-  test('should create row with height', () => {
-    const uuid = jest.fn().mockReturnValue(1);
-    expect(createRow(['foo', 'bar'], 100, uuid)).toEqual({
-      id: 1,
-      items: ['foo', 'bar'],
-      height: 100,
     });
     expect(uuid).toHaveBeenCalled();
   });

@@ -28,6 +28,11 @@ import React from 'react';
 
 import {DragDropContext} from 'react-beautiful-dnd';
 
+import {
+  DEFAULT_ROW_HEIGHT,
+  createRow,
+} from 'gmp/commands/dashboards';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import AutoSize from 'web/components/layout/autosize';
@@ -41,8 +46,6 @@ import Row from './row';
 import {
   updateRow,
   removeItem,
-  createRow,
-  DEFAULT_ROW_HEIGHT,
 } from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);

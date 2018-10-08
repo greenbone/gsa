@@ -20,33 +20,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import uuid from 'uuid/v4';
+import {
+  DEFAULT_ROW_HEIGHT,
+  createRow,
+} from '../dashboards';
 
-import {createRow} from 'gmp/commands/dashboards';
+describe('createRow tests', () => {
 
-export const createItem = (props, uuidFunc = uuid) => {
-  const id = uuidFunc();
+  test('should create row with default height', () => {
+    const uuid = jest.fn().mockReturnValue(1);
+    expect(createRow(['foo', 'bar'], undefined, uuid)).toEqual({
+      id: 1,
+      items: ['foo', 'bar'],
+      height: DEFAULT_ROW_HEIGHT,
+    });
+    expect(uuid).toHaveBeenCalled();
+  });
 
-  return {
-    id,
-    ...props,
-  };
-};
+  test('should create row with height', () => {
+    const uuid = jest.fn().mockReturnValue(1);
+    expect(createRow(['foo', 'bar'], 100, uuid)).toEqual({
+      id: 1,
+      items: ['foo', 'bar'],
+      height: 100,
+    });
+    expect(uuid).toHaveBeenCalled();
+  });
 
-export const removeItem = (rows, itemId) => rows.map(row => ({
-  ...row,
-  items: row.items.filter(item => item.id !== itemId),
-})).filter(row => row.items.length > 0);
-
-export const updateRow = (row, data) => ({
-  ...row,
-  ...data,
 });
-
-export const convertDefaultContent = (defaultContent = [], uuidFunc = uuid) =>
-  defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item}, uuidFunc)), undefined, uuidFunc
-  ));
-
-
-// vim: set ts=2 sw=2 tw=80:

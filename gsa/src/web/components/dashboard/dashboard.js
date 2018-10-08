@@ -32,6 +32,8 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {excludeObjectProps} from 'gmp/utils/object';
@@ -49,7 +51,6 @@ import Grid, {
   itemsPropType,
 } from 'web/components/sortable/grid';
 import {
-  DEFAULT_ROW_HEIGHT,
   convertDefaultContent,
 } from 'web/components/sortable/utils';
 

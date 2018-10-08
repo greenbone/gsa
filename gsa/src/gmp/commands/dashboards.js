@@ -32,8 +32,11 @@ import registerCommand from '../command';
 
 const log = logger.getLogger('gmp.commands.dashboards');
 
-const createRow = (items, height) => ({
-  id: uuid(),
+export const DEFAULT_ROW_HEIGHT = 250;
+
+export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
+  uuidFunc = uuid) => ({
+  id: uuidFunc(),
   height,
   items,
 });
