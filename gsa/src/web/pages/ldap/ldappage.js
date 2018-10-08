@@ -234,14 +234,14 @@ class LdapAuthentication extends React.Component {
               />
             </Layout>
           </FormGroup>
-          <Layout align="center">
+          <FormGroup title=" ">
             <Button
               width="auto"
               onClick={this.handleSaveSettings}
             >
               {_('Save')}
             </Button>
-          </Layout>
+          </FormGroup>
         </Layout>
       </Layout>
     );
