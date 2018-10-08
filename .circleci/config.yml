@@ -23,11 +23,17 @@ jobs:
       - run:
           working_directory: ~/gsa/gsa
           name: Run JavaScript tests
-          command: yarn test:coverage
+          command: yarn test:coverage --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: "./reports"
       - run:
           working_directory: ~/gsa/gsa
           name: Submit test coverage to codecov.io
           command: bash <(curl -s https://codecov.io/bash)
+      - store_test_results:
+          path: ~/gsa/gsa/reports
+      - store_artifacts:
+          path: ~/gsa/gsa/reports
   js_lint:
     working_directory: ~/gsa
     docker:
