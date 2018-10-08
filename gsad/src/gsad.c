@@ -349,7 +349,6 @@ init_validator ()
                          "|(edit_credential)"
                          "|(edit_filter)"
                          "|(edit_group)"
-                         "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
                          "|(edit_permission)"
@@ -419,7 +418,6 @@ init_validator ()
                          "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
-                         "|(get_dashboard_settings)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -437,7 +435,6 @@ init_validator ()
                          "|(get_permissions)"
                          "|(get_port_list)"
                          "|(get_port_lists)"
-                         "|(get_protocol_doc)"
                          "|(get_report)"
                          "|(get_reports)"
                          "|(get_report_format)"
@@ -451,6 +448,8 @@ init_validator ()
                          "|(get_scanners)"
                          "|(get_schedule)"
                          "|(get_schedules)"
+                         "|(get_setting)"
+                         "|(get_settings)"
                          "|(get_system_reports)"
                          "|(get_tag)"
                          "|(get_tags)"
@@ -544,7 +543,6 @@ init_validator ()
   openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "setting_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "setting_value", "^.*$");
   openvas_validator_add (validator, "setting_name", "^(.*){0,1000}$");
   openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
@@ -662,7 +660,6 @@ init_validator ()
   openvas_validator_add (validator, "prev_action", "(?s)^.*$");
   openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
-  openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "definitions_file",   "(?s)^.*$");
@@ -901,6 +898,7 @@ init_validator ()
   openvas_validator_alias (validator, "schedules_only", "boolean");
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "setting_id", "id");
   openvas_validator_alias (validator, "show_all",     "boolean");
   openvas_validator_alias (validator, "slave_id",     "id");
   openvas_validator_alias (validator, "smb_credential_id", "credential_id");
@@ -1992,7 +1990,6 @@ exec_gmp_get (http_connection_t *con,
 
   ELSE (new_task)
   ELSE (new_alert)
-  ELSE (get_dashboard_settings)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (delete_user_confirm)
@@ -2005,7 +2002,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (edit_credential)
   ELSE (edit_filter)
   ELSE (edit_group)
-  ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
   ELSE (edit_permission)
@@ -2077,7 +2073,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (export_groups)
   ELSE (export_note)
   ELSE (export_notes)
-  ELSE (export_gmp_doc)
   ELSE (export_override)
   ELSE (export_overrides)
   ELSE (export_permission)
@@ -2174,7 +2169,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_group)
   ELSE (get_groups)
   ELSE (get_info)
-  ELSE (get_my_settings)
   ELSE (get_note)
   ELSE (get_notes)
   ELSE (get_override)
@@ -2196,6 +2190,8 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_scanners)
   ELSE (get_schedule)
   ELSE (get_schedules)
+  ELSE (get_setting)
+  ELSE (get_settings)
   ELSE (get_system_reports)
   ELSE (get_tag)
   ELSE (get_tags)
@@ -2211,7 +2207,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_family)
   ELSE (get_config_nvt)
   ELSE (get_nvts)
-  ELSE (get_protocol_doc)
   ELSE (ping)
   ELSE (sync_config)
   ELSE (wizard)
