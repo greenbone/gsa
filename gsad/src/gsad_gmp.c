@@ -16687,17 +16687,13 @@ get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
  *
  * @return Enveloped XML object.
  */
-static char *
-get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t* response_data)
+char *
+get_my_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                     params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
 
   xml = g_string_new ("<get_my_settings>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
 
   /* Get the settings. */
 
@@ -16735,91 +16731,6 @@ get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE),
                        response_data);
-}
-
-/**
- * @brief Returns page with user's settings.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
-                     credentials, params_t *params,
-                     cmd_response_data_t* response_data)
-{
-  GString *commands;
-  int ret;
-  gchar *response = NULL, *settings;
-
-  commands = g_string_new ("<commands>");
-  if (command_enabled (credentials, "GET_ALERTS"))
-    g_string_append (commands, "<get_alerts/>");
-  if (command_enabled (credentials, "GET_CONFIGS"))
-    g_string_append (commands, "<get_configs/>");
-  if (command_enabled (credentials, "GET_FILTERS"))
-    g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_CREDENTIALS"))
-    g_string_append (commands, "<get_credentials/>");
-  if (command_enabled (credentials, "GET_PORT_LISTS"))
-    g_string_append (commands, "<get_port_lists/>");
-  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
-    g_string_append (commands, "<get_report_formats/>");
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    g_string_append (commands, "<get_scanners/>");
-  if (command_enabled (credentials, "GET_SCHEDULES"))
-    g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_TARGETS"))
-    g_string_append (commands, "<get_targets/>");
-  g_string_append (commands, "</commands>");
-
-  /* Get Filters and other resource lists. */
-  ret = gmp (connection, credentials, &response, NULL, response_data,
-             commands->str);
-  g_string_free (commands, TRUE);
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             response_data);
-      case 2:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             response_data);
-      default:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "It is unclear whether the task has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             response_data);
-    }
-
-  settings = get_my_settings (connection, credentials, params, response,
-                              response_data);
-  g_free (response);
-  return settings;
 }
 
 /**
@@ -17799,13 +17710,14 @@ save_my_settings_gmp (gvm_connection_t *connection,
     }
 
   if (modify_failed)
+    // TODO return 4xx error
     return edit_my_settings (connection, credentials, params,
                              g_string_free (xml, FALSE),
                              response_data);
   else
-    return get_my_settings (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+    // TODO return 200 ok only
+    return get_my_settings_gmp (connection, credentials, params,
+                                response_data);
 }
 
 /**
