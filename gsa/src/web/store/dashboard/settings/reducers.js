@@ -54,11 +54,10 @@ const byId = (state = {}, action) => {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
       return {
         ...state,
-        ...settings,
         [id]: {
           ...state[id],
           ...action.defaultSettings,
-          ...settings[id],
+          ...settings,
         },
       };
     case DASHBOARD_SETTINGS_SAVING_REQUEST:

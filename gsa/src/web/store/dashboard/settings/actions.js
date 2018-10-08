@@ -107,7 +107,7 @@ export const loadSettings = gmp => (id, defaults) =>
 
   dispatch(requestDashboardSettings(id));
 
-  const promise = gmp.dashboards.currentSettings();
+  const promise = gmp.dashboard.getSetting(id);
   return promise.then(
     response => dispatch(receivedDashboardSettings(id, response.data,
        defaults)),

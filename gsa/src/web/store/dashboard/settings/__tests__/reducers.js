@@ -94,10 +94,8 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should handle receive dashboard settings', () => {
     const id = 'a1';
     const settings = {
-      a1: {
-        height: 100,
-        rows: ['foo', 'bar'],
-      },
+      height: 100,
+      rows: ['foo', 'bar'],
     };
 
     const action = receivedDashboardSettings(id, settings);
@@ -117,10 +115,8 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should reset isLoading and error in received dashboard settings', () => {
     const id = 'a1';
     const settings = {
-      a1: {
-        height: 100,
-        rows: ['foo', 'bar'],
-      },
+      height: 100,
+      rows: ['foo', 'bar'],
     };
     const state = {
       isLoading: true,
@@ -140,31 +136,6 @@ describe('dashboard settings reducers tests for loading success', () => {
     });
   });
 
-  test('should handle receive dashboard settings', () => {
-    const id = 'a2';
-
-    const settings = {
-      a1: {
-        height: 100,
-        items: ['foo', 'bar'],
-      },
-    };
-    const action = receivedDashboardSettings(id, settings);
-
-    expect(dashboardSettings({}, action)).toEqual({
-      isLoading: false,
-      defaults: {},
-      byId: {
-        a1: {
-          height: 100,
-          items: ['foo', 'bar'],
-        },
-        a2: {},
-      },
-    });
-  });
-
-
   test('should handle receive dashboard settings and keep state', () => {
     const id = 'a1';
     const state = {
@@ -177,10 +148,8 @@ describe('dashboard settings reducers tests for loading success', () => {
     };
 
     const settings = {
-      [id]: {
-        height: 100,
-        rows: ['foo', 'bar'],
-      },
+      height: 100,
+      rows: ['foo', 'bar'],
     };
 
     const action = receivedDashboardSettings(id, settings);
@@ -213,10 +182,8 @@ describe('dashboard settings reducers tests for loading success', () => {
     };
 
     const settings = {
-      [id]: {
-        height: 100,
-        rows: ['foo', 'bar'],
-      },
+      height: 100,
+      rows: ['foo', 'bar'],
     };
 
     const action = receivedDashboardSettings(id, settings);
@@ -252,10 +219,8 @@ describe('dashboard settings reducers tests for loading success', () => {
     };
 
     const settings = {
-      [id]: {
-        height: 100,
-        rows: ['foo', 'bar'],
-      },
+      height: 100,
+      rows: ['foo', 'bar'],
     };
 
     const action = receivedDashboardSettings(id, settings, defaults);

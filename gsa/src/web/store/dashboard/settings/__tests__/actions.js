@@ -170,13 +170,13 @@ describe('loadSettings tests', () => {
       foo: 'bar',
     };
 
-    const currentSettings = jest
+    const getSetting = jest
       .fn()
       .mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
-      dashboards: {
-        currentSettings,
+      dashboard: {
+        getSetting,
       },
     };
     const defaultSettings = {
@@ -197,7 +197,7 @@ describe('loadSettings tests', () => {
         defaultSettings,
       }]);
       expect(getState).toHaveBeenCalled();
-      expect(currentSettings).toHaveBeenCalled();
+      expect(getSetting).toHaveBeenCalledWith(id);
     });
   });
 
@@ -215,13 +215,13 @@ describe('loadSettings tests', () => {
       foo: 'bar',
     };
 
-    const currentSettings = jest
+    const getSetting = jest
       .fn()
       .mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
-      dashboards: {
-        currentSettings,
+      dashboard: {
+        getSetting,
       },
     };
     const defaults = {
@@ -232,7 +232,7 @@ describe('loadSettings tests', () => {
     return loadSettings(gmp)(id, defaults)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(0);
       expect(getState).toHaveBeenCalled();
-      expect(currentSettings).not.toHaveBeenCalled();
+      expect(getSetting).not.toHaveBeenCalled();
     });
   });
 
@@ -246,13 +246,13 @@ describe('loadSettings tests', () => {
 
     const error = 'An error';
 
-    const currentSettings = jest
+    const getSetting = jest
       .fn()
       .mockReturnValue(Promise.reject(error));
 
     const gmp = {
-      dashboards: {
-        currentSettings,
+      dashboard: {
+        getSetting,
       },
     };
     const defaults = {
@@ -272,7 +272,7 @@ describe('loadSettings tests', () => {
         type: DASHBOARD_SETTINGS_LOADING_ERROR,
       }]);
       expect(getState).toHaveBeenCalled();
-      expect(currentSettings).toHaveBeenCalled();
+      expect(getSetting).toHaveBeenCalled();
     });
   });
 
