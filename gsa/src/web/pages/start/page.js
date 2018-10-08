@@ -135,6 +135,7 @@ class StartPage extends React.Component {
     this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
 
     this.handleResetDashboards = this.handleResetDashboards.bind(this);
+    this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
   }
 
   componentDidMount() {
@@ -225,6 +226,20 @@ class StartPage extends React.Component {
   handleLoadDashboardSettings() {
     // do nothing
     // all defaults and settings are already provided
+  }
+
+  handleSetDefaultSettings(dashboardId, defaultSettings) {
+    const {defaults = {}} = this.props;
+
+    this.saveSettings({
+      defaults: {
+        ...defaults,
+        [dashboardId]: {
+          ...defaults[dashboardId],
+          ...defaultSettings,
+        },
+      },
+    });
   }
 
   handleResetDashboard(dashboardId) {
@@ -415,6 +430,8 @@ class StartPage extends React.Component {
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
                               saveSettings={this.handleSaveDashboardSettings}
+                              setDefaultSettings={
+                                this.handleSetDefaultSettings}
                               onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
