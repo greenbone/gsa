@@ -92,10 +92,11 @@ class DashboardsCommand extends HttpCommand {
 
   currentSettings(options = {}) {
     return this.httpGet({
-      cmd: 'get_dashboard_settings',
+      cmd: 'get_settings',
+      filter: 'name~Dashboard',
     }, options,
     ).then(response => {
-      const {setting: prefs} = response.data.get_dashboard_settings
+      const {setting: prefs} = response.data.get_settings
         .get_settings_response;
 
       log.debug('DashboardSettings loaded', prefs);
