@@ -27,14 +27,14 @@ import {_l} from 'gmp/locale/lang';
 
 import {ReccurenceFrequency} from 'gmp/models/event';
 
-import Select from 'web/components/form/select.js';
+import Select from 'web/components/form/select';
 
 const TIME_UNIT_ITEMS = [
   {value: ReccurenceFrequency.HOURLY, label: _l('hour(s)')},
   {value: ReccurenceFrequency.DAILY, label: _l('day(s)')},
   {value: ReccurenceFrequency.WEEKLY, label: _l('week(s)')},
   {value: ReccurenceFrequency.MONTHLY, label: _l('month(s)')},
-  {value: ReccurenceFrequency.YEARLY, label: _l('years(s)')},
+  {value: ReccurenceFrequency.YEARLY, label: _l('year(s)')},
 ];
 
 const TimeUnitSelect = props => (
