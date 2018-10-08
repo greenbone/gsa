@@ -437,7 +437,6 @@ init_validator ()
                          "|(get_permissions)"
                          "|(get_port_list)"
                          "|(get_port_lists)"
-                         "|(get_protocol_doc)"
                          "|(get_report)"
                          "|(get_reports)"
                          "|(get_report_format)"
@@ -662,7 +661,6 @@ init_validator ()
   openvas_validator_add (validator, "prev_action", "(?s)^.*$");
   openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
-  openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "definitions_file",   "(?s)^.*$");
@@ -2077,7 +2075,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (export_groups)
   ELSE (export_note)
   ELSE (export_notes)
-  ELSE (export_gmp_doc)
   ELSE (export_override)
   ELSE (export_overrides)
   ELSE (export_permission)
@@ -2211,7 +2208,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_config_family)
   ELSE (get_config_nvt)
   ELSE (get_nvts)
-  ELSE (get_protocol_doc)
   ELSE (ping)
   ELSE (sync_config)
   ELSE (wizard)
