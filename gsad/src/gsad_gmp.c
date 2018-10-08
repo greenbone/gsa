@@ -22166,17 +22166,33 @@ get_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
+  gchar *command;
+  const gchar *filter;
 
   xml = g_string_new ("<get_settings>");
 
   /* Get the settings. */
 
-  if (gvm_connection_sendf (connection,
-                            "<get_settings"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
+  filter = params_value (params, "filter");
+  if (filter)
     {
+      command = g_markup_printf_escaped ("<get_settings"
+                                         " filter=\"%s\""
+                                         " sort_field=\"name\""
+                                         " sort_order=\"ascending\"/>",
+                                         filter);
+    }
+  else
+    {
+      command = g_strdup ("<get_settings"
+                          " sort_field=\"name\""
+                          " sort_order=\"ascending\"/>");
+    }
+
+  if (gvm_connection_sendf (connection, command))
+    {
+      g_free(command);
+
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
@@ -22190,6 +22206,7 @@ get_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
   if (read_string_c (connection, &xml))
     {
+      g_free(command);
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
@@ -22201,6 +22218,7 @@ get_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
                            response_data);
     }
 
+  g_free(command);
   g_string_append (xml, "</get_settings>");
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE),
