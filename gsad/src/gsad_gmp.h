@@ -533,14 +533,6 @@ char * get_vulns_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * save_auth_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
-char * save_setting_gmp (gvm_connection_t *, credentials_t *,
-                         params_t *, cmd_response_data_t*);
-char * auth_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                          cmd_response_data_t*);
-char *
-get_dashboard_settings_gmp (gvm_connection_t *,
-                            credentials_t *, params_t *,
-                            cmd_response_data_t*);
 
 char * bulk_delete_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
@@ -564,17 +556,16 @@ char * restore_gmp (gvm_connection_t *, credentials_t *, params_t *,
 char * empty_trashcan_gmp (gvm_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
 
-char * get_protocol_doc_gmp (gvm_connection_t *, credentials_t *,
-                             params_t *, cmd_response_data_t*);
-char * export_gmp_doc_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                           cmd_response_data_t*);
-
-char * edit_my_settings_gmp (gvm_connection_t *, credentials_t *,
-                             params_t *, cmd_response_data_t*);
-char * get_my_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                            cmd_response_data_t*);
+char * get_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                         cmd_response_data_t*);
 char * save_my_settings_gmp (gvm_connection_t *, credentials_t *,
                              params_t *, const gchar *, cmd_response_data_t*);
+char * get_setting_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                        cmd_response_data_t*);
+char * save_setting_gmp (gvm_connection_t *, credentials_t *,
+                         params_t *, cmd_response_data_t*);
+char * auth_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
+                          cmd_response_data_t*);
 
 char * get_info_gmp (gvm_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
