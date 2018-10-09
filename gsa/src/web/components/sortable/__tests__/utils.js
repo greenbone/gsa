@@ -23,7 +23,7 @@
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
-  convertDefaultContent,
+  convertDefaultDisplays,
   createItem,
   removeItem,
   updateRow,
@@ -138,7 +138,7 @@ describe('updateRow tests', () => {
 describe('convertDefaultContent test', () => {
 
   test('should return empty array', () => {
-    expect(convertDefaultContent()).toEqual({
+    expect(convertDefaultDisplays()).toEqual({
       rows: [],
     });
   });
@@ -154,7 +154,7 @@ describe('convertDefaultContent test', () => {
       'lorem',
     ]];
 
-    expect(convertDefaultContent(rows, uuid)).toEqual({
+    expect(convertDefaultDisplays(rows, uuid)).toEqual({
       rows: [{
         height: DEFAULT_ROW_HEIGHT,
         id: 3,

@@ -51,7 +51,7 @@ import Grid, {
   itemsPropType,
 } from 'web/components/sortable/grid';
 import {
-  convertDefaultContent,
+  convertDefaultDisplays,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
@@ -144,7 +144,7 @@ export class Dashboard extends React.Component {
     } = this.props;
 
     const defaults = {
-      ...convertDefaultContent(defaultContent),
+      ...convertDefaultDisplays(defaultContent),
       permittedDisplays,
       maxItemsPerRow,
       maxRows,
