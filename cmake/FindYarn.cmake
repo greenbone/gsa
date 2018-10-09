@@ -31,9 +31,25 @@ find_program (YARN_EXECUTABLE NAMES yarn
 
 include (FindPackageHandleStandardArgs)
 
+if (YARN_EXECUTABLE)
+  execute_process(COMMAND ${YARN_EXECUTABLE} --version
+                  OUTPUT_VARIABLE _VERSION
+                  RESULT_VARIABLE
+                  _YARN_VERSION_RESULT)
+  if (NOT _YARN_VERSION_RESULT)
+    string (REPLACE "\n" "" YARN_VERSION_STRING "${_VERSION}")
+    string (REPLACE "v" "" YARN_VERSION_STRING "${YARN_VERSION_STRING}")
+    string (REPLACE "." ";" _VERSION_LIST "${YARN_VERSION_STRING}")
+    list (GET _VERSION_LIST 0 YARN_VERSION_MAJOR)
+    list (GET _VERSION_LIST 1 YARN_VERSION_MINOR)
+    list (GET _VERSION_LIST 2 YARN_VERSION_PATCH)
+  endif ()
+endif (YARN_EXECUTABLE)
+
 find_package_handle_standard_args (Yarn
   REQUIRED_VARS YARN_EXECUTABLE
-  FAIL_MESSAGE "Could not find yarn executable. Please install yarn (see https://yarnpkg.com/)."
+  VERSION_VAR YARN_VERSION_STRING
+  FAIL_MESSAGE "Could not find yarn executable. Please install yarn (see https://yarnpkg.com/)"
 )
 
 mark_as_advanced (YARN_EXECUTABLE)
