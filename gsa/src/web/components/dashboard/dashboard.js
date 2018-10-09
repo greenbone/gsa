@@ -144,7 +144,7 @@ export class Dashboard extends React.Component {
     } = this.props;
 
     const defaults = {
-      rows: convertDefaultContent(defaultContent),
+      ...convertDefaultContent(defaultContent),
       permittedDisplays,
       maxItemsPerRow,
       maxRows,

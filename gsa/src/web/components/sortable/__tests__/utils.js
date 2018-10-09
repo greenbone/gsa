@@ -138,7 +138,9 @@ describe('updateRow tests', () => {
 describe('convertDefaultContent test', () => {
 
   test('should return empty array', () => {
-    expect(convertDefaultContent()).toEqual([]);
+    expect(convertDefaultContent()).toEqual({
+      rows: [],
+    });
   });
 
   test('should convert array to rows', () => {
@@ -152,24 +154,26 @@ describe('convertDefaultContent test', () => {
       'lorem',
     ]];
 
-    expect(convertDefaultContent(rows, uuid)).toEqual([{
-      height: DEFAULT_ROW_HEIGHT,
-      id: 3,
-      items: [{
-        id: 1,
-        name: 'foo',
+    expect(convertDefaultContent(rows, uuid)).toEqual({
+      rows: [{
+        height: DEFAULT_ROW_HEIGHT,
+        id: 3,
+        items: [{
+          id: 1,
+          name: 'foo',
+        }, {
+          id: 2,
+          name: 'bar',
+        }],
       }, {
-        id: 2,
-        name: 'bar',
+        height: DEFAULT_ROW_HEIGHT,
+        id: 5,
+        items: [{
+          id: 4,
+          name: 'lorem',
+        }],
       }],
-    }, {
-      height: DEFAULT_ROW_HEIGHT,
-      id: 5,
-      items: [{
-        id: 4,
-        name: 'lorem',
-      }],
-    }]);
+    });
   });
 
 });
