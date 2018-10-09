@@ -24,7 +24,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 find_package (Node 8.0 REQUIRED)
-find_package (Yarn QUIET)
+find_package (Yarn 1.0)
 
 set (GSA_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set (GSA_DEST_DIR ${GSAD_DATA_DIR}/web)
