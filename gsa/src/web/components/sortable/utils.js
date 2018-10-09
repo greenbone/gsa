@@ -43,11 +43,13 @@ export const updateRow = (row, data) => ({
   ...data,
 });
 
-export const convertDefaultDisplays = (defaultContent = [],
-   uuidFunc = uuid) => ({
-    rows: defaultContent.map(row => createRow(
+export const convertDefaultDisplays = (defaultDisplays = [],
+   uuidFunc = uuid) => {
+  return {
+    rows: defaultDisplays.map(row => createRow(
       row.map(item => createItem({name: item}, uuidFunc)), undefined, uuidFunc
     )),
-  });
+  };
+};
 
 // vim: set ts=2 sw=2 tw=80:

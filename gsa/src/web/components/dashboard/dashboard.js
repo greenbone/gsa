@@ -66,7 +66,7 @@ const DEFAULT_MAX_ITEMS_PER_ROW = 4;
 const DEFAULT_MAX_ROWS = 4;
 
 const ownPropNames = [
-  'defaultContent',
+  'defaultDisplays',
   'gmp',
   'id',
   'isLoading',
@@ -138,13 +138,13 @@ export class Dashboard extends React.Component {
     const {
       id,
       permittedDisplays,
-      defaultContent,
+      defaultDisplays,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
     } = this.props;
 
     const defaults = {
-      ...convertDefaultDisplays(defaultContent),
+      ...convertDefaultDisplays(defaultDisplays),
       permittedDisplays,
       maxItemsPerRow,
       maxRows,
@@ -242,7 +242,7 @@ export class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  defaultDisplays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
   error: PropTypes.toString,
   filter: PropTypes.filter,
   id: PropTypes.id.isRequired,

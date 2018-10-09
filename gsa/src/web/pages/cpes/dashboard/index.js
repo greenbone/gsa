@@ -48,7 +48,7 @@ const CpesDashboard = props => (
     {...props}
     id={CPES_DASHBOARD_ID}
     permittedDisplays={CPES_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         CpesSeverityClassDisplay.displayId,
         CpesCreatedDisplay.displayId,

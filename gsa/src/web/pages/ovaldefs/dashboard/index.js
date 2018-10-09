@@ -54,7 +54,7 @@ const OvaldefDashboard = props => (
     {...props}
     id={OVALDEF_DASHBOARD_ID}
     permittedDisplays={OVALDEF_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         OvaldefSeverityClassDisplay.displayId,
         OvaldefsCreatedDisplay.displayId,

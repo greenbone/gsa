@@ -51,7 +51,7 @@ const CertBundDashboard = props => (
     {...props}
     id={CERTBUND_DASHBOARD_ID}
     permittedDisplays={CERTBUND_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         CertBundSeverityClassDisplay.displayId,
         CertBundCreatedDisplay.displayId,

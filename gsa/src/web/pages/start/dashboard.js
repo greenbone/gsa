@@ -92,7 +92,7 @@ const StartDashboard = ({
       id={id}
       showFilterSelection
       showFilterString
-      defaultContent={DEFAULT_DISPLAYS}
+      defaultDisplays={DEFAULT_DISPLAYS}
       permittedDisplays={ALL_DISPLAYS}
       loadSettings={loadSettings}
       saveSettings={saveSettings}

@@ -65,7 +65,7 @@ const HostsDashboard = props => (
     {...props}
     id={HOSTS_DASHBOARD_ID}
     permittedDisplays={HOSTS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         HostsSeverityClassDisplay.displayId,
         HostsTopologyDisplay.displayId,

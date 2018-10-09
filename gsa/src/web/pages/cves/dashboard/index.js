@@ -48,7 +48,7 @@ const CvesDashboard = props => (
     {...props}
     id={CVES_DASHBOARD_ID}
     permittedDisplays={CVES_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         CvesSeverityClassDisplay.displayId,
         CvesCreatedDisplay.displayId,

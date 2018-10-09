@@ -51,7 +51,7 @@ const OsDashboard = props => (
     {...props}
     id={OS_DASHBOARD_ID}
     permittedDisplays={OS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         OsSeverityClassDisplay.displayId,
         OsVulnScoreDisplay.displayId,

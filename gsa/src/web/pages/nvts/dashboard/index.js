@@ -57,7 +57,7 @@ const NvtsDashboard = props => (
     {...props}
     id={NVTS_DASHBOARD_ID}
     permittedDisplays={NVTS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         NvtsSeverityClassDisplay.displayId,
         NvtsCreatedDisplay.displayId,
