@@ -34,7 +34,7 @@ import Logger from 'gmp/log';
 
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {excludeObjectProps} from 'gmp/utils/object';
 
@@ -274,7 +274,7 @@ const mapStateToProps = (rootState, {id}) => {
     items = defaults.rows;
   }
   return {
-    error: hasValue(error) ? error : undefined,
+    error,
     isLoading: settingsSelector.getIsLoading(id),
     items,
   };
