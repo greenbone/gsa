@@ -32,63 +32,74 @@ const createState = state => ({
 });
 
 describe('dashboard settings selector init tests', () => {
+
   test('should not crash with undefined state', () => {
+    const id = 'a1';
     const selector = getDashboardSettings();
 
-    expect(selector.getById('a')).toBeUndefined();
-    expect(selector.getIsLoading()).toEqual(false);
-    expect(selector.getError()).toBeUndefined();
-    expect(selector.getDefaultsById('a')).toEqual({});
-    expect(selector.hasSettings('a')).toBe(false);
+    expect(selector.getById(id)).toBeUndefined();
+    expect(selector.getIsLoading(id)).toEqual(false);
+    expect(selector.getError(id)).toBeUndefined();
+    expect(selector.getDefaultsById(id)).toEqual({});
+    expect(selector.hasSettings(id)).toBe(false);
   });
 
   test('should not crash with empty state', () => {
+    const id = 'a1';
     const selector = getDashboardSettings({});
 
-    expect(selector.getById('a')).toBeUndefined();
-    expect(selector.getIsLoading()).toEqual(false);
-    expect(selector.getError()).toBeUndefined();
-    expect(selector.getDefaultsById('a')).toEqual({});
-    expect(selector.hasSettings('a')).toBe(false);
+    expect(selector.getById(id)).toBeUndefined();
+    expect(selector.getIsLoading(id)).toEqual(false);
+    expect(selector.getError(id)).toBeUndefined();
+    expect(selector.getDefaultsById(id)).toEqual({});
+    expect(selector.hasSettings(id)).toBe(false);
   });
 
   test('should not crash with empty dashboadSettings', () => {
+    const id = 'a1';
     const rootState = createState({});
 
     const selector = getDashboardSettings(rootState);
 
-    expect(selector.getById('a')).toBeUndefined();
-    expect(selector.getIsLoading()).toBe(false);
-    expect(selector.getError()).toBeUndefined();
-    expect(selector.getDefaultsById('a')).toEqual({});
-    expect(selector.hasSettings('a')).toBe(false);
+    expect(selector.getById(id)).toBeUndefined();
+    expect(selector.getIsLoading(id)).toBe(false);
+    expect(selector.getError(id)).toBeUndefined();
+    expect(selector.getDefaultsById(id)).toEqual({});
+    expect(selector.hasSettings(id)).toBe(false);
   });
 });
 
 describe('dashboard setting selector isLoading tests', () => {
 
   test('should return isLoading', () => {
+    const id = 'a1';
     const rootState = createState({
-      isLoading: true,
+      isLoading: {
+        [id]: true,
+      },
     });
 
     const selector = getDashboardSettings(rootState);
 
-    expect(selector.getIsLoading()).toBe(true);
+    expect(selector.getIsLoading(id)).toBe(true);
   });
 });
 
-describe('dashboard setting selector getItemsById tests', () => {
+describe('dashboard setting selector getError tests', () => {
 
   test('should return error', () => {
+    const id = 'a1';
     const rootState = createState({
-      error: 'An error',
+      errors: {
+        [id]: 'An error',
+      },
     });
 
     const selector = getDashboardSettings(rootState);
 
-    expect(selector.getError()).toEqual('An error');
+    expect(selector.getError(id)).toEqual('An error');
   });
+
 });
 
 describe('dashboard setting selector getById tests', () => {
@@ -121,6 +132,7 @@ describe('dashboard setting selector getById tests', () => {
 });
 
 describe('dashboard setting selector getDefaultsById tests', () => {
+
   test('should return defaults', () => {
     const id = 'a1';
     const rootState = createState({
@@ -134,7 +146,7 @@ describe('dashboard setting selector getDefaultsById tests', () => {
     expect(selector.getDefaultsById(id)).toEqual(['a', 'b']);
   });
 
-  test('should return null for items if unknown id is passed', () => {
+  test('should return empty object if unknown id is passed', () => {
     const rootState = createState({
       defaults: {
       },

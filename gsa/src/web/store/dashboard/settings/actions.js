@@ -68,7 +68,7 @@ export const receivedDashboardSettingsLoadingError = (id, error) => ({
   error,
 });
 
-export const requestDashboardSettings = (id, defaults) => ({
+export const requestDashboardSettings = id => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
 });
@@ -100,14 +100,14 @@ export const loadSettings = gmp => (id, defaults) =>
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
 
-  if (settingsSelector.getIsLoading()) {
+  if (settingsSelector.getIsLoading(id)) {
     // we are already loading data
     return Promise.resolve();
   }
 
   dispatch(requestDashboardSettings(id));
 
-  const promise = gmp.dashboards.currentSettings();
+  const promise = gmp.dashboard.getSetting(id);
   return promise.then(
     response => dispatch(receivedDashboardSettings(id, response.data,
        defaults)),

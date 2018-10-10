@@ -60,7 +60,7 @@ import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
 import Section from 'web/components/section/section';
 
-import {convertDefaultContent} from 'web/components/sortable/utils';
+import {convertDefaultDisplays} from 'web/components/sortable/utils';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -86,9 +86,7 @@ const getDefaults = () => ({
     },
   },
   defaults: {
-    [OVERVIEW_DASHBOARD_ID]: {
-      rows: convertDefaultContent(DEFAULT_DISPLAYS),
-    },
+    [OVERVIEW_DASHBOARD_ID]: convertDefaultDisplays(DEFAULT_DISPLAYS),
   },
 });
 
@@ -283,9 +281,8 @@ class StartPage extends React.Component {
 
     const id = uuid();
 
-    const rows = convertDefaultContent(defaultDisplays);
     const newDashboardSetting = {
-      rows,
+      ...convertDefaultDisplays(defaultDisplays),
       title,
     };
 
@@ -493,7 +490,7 @@ const mapStateToProps = rootState => {
   }
 
   const props = {
-    isLoading: settingsSelector.getIsLoading(),
+    isLoading: settingsSelector.getIsLoading(DASHBOARD_ID),
     ...DEFAULTS,
     byId: {
       ...DEFAULTS.byId,

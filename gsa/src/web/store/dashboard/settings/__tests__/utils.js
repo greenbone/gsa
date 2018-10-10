@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {DEFAULT_ROW_HEIGHT} from 'web/components/sortable/utils';
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
   addDisplayToSettings,

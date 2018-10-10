@@ -54,7 +54,7 @@ const OverridesDashboard = props => (
     {...props}
     id={OVERRIDES_DASHBOARD_ID}
     permittedDisplays={OVERRIDES_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         OverridesActiveDaysDisplay.displayId,
         OverridesCreatedDisplay.displayId,

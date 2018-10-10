@@ -22,19 +22,18 @@
  */
 import uuid from 'uuid/v4';
 
-import {isArray} from '../utils/identity';
-import {forEach} from '../utils/array';
-
 import logger from '../log';
 
-import HttpCommand from './http';
 import GmpCommand from './gmp';
 import registerCommand from '../command';
 
 const log = logger.getLogger('gmp.commands.dashboards');
 
-const createRow = (items, height) => ({
-  id: uuid(),
+export const DEFAULT_ROW_HEIGHT = 250;
+
+export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
+  uuidFunc = uuid) => ({
+  id: uuidFunc(),
   height,
   items,
 });
@@ -67,73 +66,29 @@ const convertLoadedSettings = (settings = {}, name) => {
   };
 };
 
-const dashboardSettings2SettingsV1 = ({rows}) => ({
-  version: 1,
-  data: rows.map(({height, items: rowItems}) => ({
-    height,
-    type: 'row',
-    data: rowItems.map(({id, filterId, ...other}) => ({
-      ...other,
-      filt_id: filterId,
-      type: 'chart',
-    })),
-  })),
-});
-
-const convertSaveSettings = (settings = {}) => {
-  if (isArray(settings.rows)) {
-    // we like have settings which can be stored as version 1 settings
-    return dashboardSettings2SettingsV1(settings);
-  }
-  return settings;
-};
-
-class DashboardsCommand extends HttpCommand {
-
-  currentSettings(options = {}) {
-    return this.httpGet({
-      cmd: 'get_settings',
-      filter: 'name~Dashboard',
-    }, options,
-    ).then(response => {
-      const {setting: prefs} = response.data.get_settings
-        .get_settings_response;
-
-      log.debug('DashboardSettings loaded', prefs);
-
-      const allSettings = {};
-
-      forEach(prefs, pref => {
-        const {_id: id, value, name} = pref;
-
-        let settings;
-        try {
-          settings = JSON.parse(value);
-        }
-        catch (e) {
-          log.warn('Could not parse dashboard setting', pref);
-          return;
-        }
-
-        try {
-          allSettings[id] = convertLoadedSettings(settings, name);
-        }
-        catch (e) {
-          log.warn('Could not convert dashboard setting', settings);
-          return;
-        }
-      });
-
-      return response.setData(allSettings);
-    });
-  }
-}
-
 class DashboardCommand extends GmpCommand {
 
-  saveSetting(id, settings) {
-    settings = convertSaveSettings(settings);
+  getSetting(id) {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: id,
+    }).then(response => {
+      const {data} = response;
+      const {setting} = data.get_settings.get_settings_response;
+      const {value, name} = setting;
+      let config;
+      try {
+        config = JSON.parse(value);
+      }
+      catch (e) {
+        log.warn('Could not parse dashboard setting', value);
+        return;
+      }
+      return response.setData(convertLoadedSettings(config, name));
+    });
+  }
 
+  saveSetting(id, settings = {}) {
     log.debug('Saving dashboard settings', id, settings);
 
     return this.action({
@@ -146,6 +101,5 @@ class DashboardCommand extends GmpCommand {
 }
 
 registerCommand('dashboard', DashboardCommand);
-registerCommand('dashboards', DashboardsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

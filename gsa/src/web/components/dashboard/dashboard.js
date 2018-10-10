@@ -32,7 +32,9 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+
+import {isDefined} from 'gmp/utils/identity';
 import {debounce} from 'gmp/utils/event';
 import {excludeObjectProps} from 'gmp/utils/object';
 
@@ -49,8 +51,7 @@ import Grid, {
   itemsPropType,
 } from 'web/components/sortable/grid';
 import {
-  DEFAULT_ROW_HEIGHT,
-  convertDefaultContent,
+  convertDefaultDisplays,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
@@ -65,7 +66,7 @@ const DEFAULT_MAX_ITEMS_PER_ROW = 4;
 const DEFAULT_MAX_ROWS = 4;
 
 const ownPropNames = [
-  'defaultContent',
+  'defaultDisplays',
   'gmp',
   'id',
   'isLoading',
@@ -137,13 +138,13 @@ export class Dashboard extends React.Component {
     const {
       id,
       permittedDisplays,
-      defaultContent,
+      defaultDisplays,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
     } = this.props;
 
     const defaults = {
-      rows: convertDefaultContent(defaultContent),
+      ...convertDefaultDisplays(defaultDisplays),
       permittedDisplays,
       maxItemsPerRow,
       maxRows,
@@ -241,7 +242,7 @@ export class Dashboard extends React.Component {
 }
 
 Dashboard.propTypes = {
-  defaultContent: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+  defaultDisplays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
   error: PropTypes.toString,
   filter: PropTypes.filter,
   id: PropTypes.id.isRequired,
@@ -263,7 +264,7 @@ const mapStateToProps = (rootState, {id}) => {
   const settings = settingsSelector.getById(id);
   const hasLoaded = settingsSelector.hasSettings(id);
   const defaults = settingsSelector.getDefaultsById(id);
-  const error = settingsSelector.getError();
+  const error = settingsSelector.getError(id);
 
   let items;
   if (hasLoaded && isDefined(settings.rows)) {
@@ -273,8 +274,8 @@ const mapStateToProps = (rootState, {id}) => {
     items = defaults.rows;
   }
   return {
-    error: hasValue(error) ? error : undefined,
-    isLoading: settingsSelector.getIsLoading(),
+    error,
+    isLoading: settingsSelector.getIsLoading(id),
     items,
   };
 };

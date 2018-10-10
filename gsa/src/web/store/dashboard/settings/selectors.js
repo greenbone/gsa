@@ -47,12 +47,14 @@ class DashboardSetting {
     return isDefined(this.getById(id));
   }
 
-  getError() {
-    return isDefined(this.state) ? this.state.error : undefined;
+  getError(id) {
+    return isDefined(this.state) && isDefined(this.state.errors) ?
+      this.state.errors[id] : undefined;
   }
 
-  getIsLoading() {
-    return isDefined(this.state) ? !!this.state.isLoading : false;
+  getIsLoading(id) {
+    return isDefined(this.state) && isDefined(this.state.isLoading) ?
+      !!this.state.isLoading[id] : false;
   }
 
 }

@@ -22,7 +22,9 @@
  */
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import {createRow, createItem} from 'web/components/sortable/utils';
+import {createRow} from 'gmp/commands/dashboards';
+
+import {createItem} from 'web/components/sortable/utils';
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   if (isArray(rows) && rows.length > 0 &&
