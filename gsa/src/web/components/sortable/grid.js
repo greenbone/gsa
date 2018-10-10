@@ -78,17 +78,11 @@ class Grid extends React.Component {
   }
 
   handleRowResize(rowId, height) {
-    const {items} = this.props;
+    const {onRowResize} = this.props;
 
-    const rowIndex = findRowIndex(items, rowId);
-    const row = items[rowIndex];
-
-    const newItems = [
-      ...items,
-    ];
-    newItems[rowIndex] = updateRow(row, {height});
-
-    this.notifyChange(newItems);
+    if (isDefined(onRowResize)) {
+      onRowResize(rowId, height);
+    }
   }
 
   handleDragStart(drag) {
@@ -248,8 +242,8 @@ Grid.propTypes = {
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
   onChange: PropTypes.func.isRequired,
+  onRowResize: PropTypes.func.isRequired,
 };
-
 
 export default Grid;
 

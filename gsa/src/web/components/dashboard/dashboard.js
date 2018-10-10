@@ -20,6 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import 'core-js/fn/array/find-index';
 import 'core-js/fn/object/entries';
 
 import React from 'react';
@@ -134,6 +135,7 @@ export class Dashboard extends React.Component {
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
+    this.handleRowResize = this.handleRowResize.bind(this);
     this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
     this.handleRemoveDisplay = this.handleRemoveDisplay.bind(this);
 
@@ -216,6 +218,20 @@ export class Dashboard extends React.Component {
     this.update({items: removeItem(items, id)});
   }
 
+  handleRowResize(rowId, height) {
+    const {items = []} = this.state;
+
+    const rowIndex = items.findIndex(row => row.id === rowId);
+    const row = items[rowIndex];
+
+    const newItems = [
+      ...items,
+    ];
+    newItems[rowIndex] = updateRow(row, {height});
+
+    this.update({items: newItems});
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
 
@@ -284,6 +300,7 @@ export class Dashboard extends React.Component {
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
+        onRowResize={this.handleRowResize}
       >
         {({
           id,
