@@ -95,6 +95,14 @@ const filterItems = (items = [], isAllowed) => items.map(row => {
   };
 });
 
+const getDisplaysById = (items = []) => {
+  const displaysById = {};
+  items.forEach(row => row.items.forEach(setting => {
+    displaysById[setting.id] = setting;
+  }));
+  return displaysById;
+};
+
 export class Dashboard extends React.Component {
 
   constructor(...args) {
@@ -203,13 +211,7 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const displaysById = {};
-
-    if (isDefined(items)) {
-      items.forEach(row => row.items.forEach(setting => {
-        displaysById[setting.id] = setting;
-      }));
-    }
+    const displaysById = getDisplaysById(items);
 
     const getDisplayComponent = displayId => this.components[displayId];
     const getDisplaySettings = id => displaysById[id];
