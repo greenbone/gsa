@@ -119,17 +119,17 @@ class Grid extends React.Component {
     this.notifyChange(items);
   }
 
-  handleUpdateItem(row, item, props) {
-    item = {
-      ...item,
-      ...props,
-    };
-
+  handleUpdateItem(row, itemId, props) {
     const rowItems = [
       ...row.items,
     ];
-    const index = rowItems.findIndex(i => i.id === item.id);
-    rowItems[index] = item;
+
+    const index = rowItems.findIndex(i => i.id === itemId);
+
+    rowItems[index] = {
+      ...rowItems[index],
+      ...props,
+    };
 
     const {items} = this.props;
     const rows = [...items];
@@ -241,8 +241,7 @@ class Grid extends React.Component {
                     height={height}
                     onResize={h => this.handleRowResize(row, h)}
                   >
-                    {rowItems.map((item, index) => {
-                      const {id} = item;
+                    {rowItems.map(({id}, index) => {
                       return (
                         <Item
                           key={id}
@@ -252,7 +251,7 @@ class Grid extends React.Component {
                           width={itemWidth}
                           remove={() => this.handleRemoveItem(id)}
                           update={(...args) => this.handleUpdateItem(
-                            row, item, ...args)}
+                            row, id, ...args)}
                         >
                           {children}
                         </Item>
