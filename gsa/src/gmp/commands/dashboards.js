@@ -38,7 +38,7 @@ export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
   items,
 });
 
-export const createItem = (props, uuidFunc = uuid) => {
+export const createDisplay = (props, uuidFunc = uuid) => {
   const id = uuidFunc();
 
   return {
@@ -49,7 +49,7 @@ export const createItem = (props, uuidFunc = uuid) => {
 
 const settingsV1toDashboardSettings = ({data: rows} = {}, name) => ({
   rows: rows.map(({height, data}) =>
-    createRow(data.map(item => createItem({
+    createRow(data.map(item => createDisplay({
       name: item.name,
       filterId: item.filt_id,
     })), height)),
