@@ -490,7 +490,7 @@ const mapStateToProps = rootState => {
   }
 
   const props = {
-    isLoading: settingsSelector.getIsLoading(),
+    isLoading: settingsSelector.getIsLoading(DASHBOARD_ID),
     ...DEFAULTS,
     byId: {
       ...DEFAULTS.byId,

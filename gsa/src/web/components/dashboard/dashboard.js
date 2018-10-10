@@ -264,7 +264,7 @@ const mapStateToProps = (rootState, {id}) => {
   const settings = settingsSelector.getById(id);
   const hasLoaded = settingsSelector.hasSettings(id);
   const defaults = settingsSelector.getDefaultsById(id);
-  const error = settingsSelector.getError();
+  const error = settingsSelector.getError(id);
 
   let items;
   if (hasLoaded && isDefined(settings.rows)) {
@@ -275,7 +275,7 @@ const mapStateToProps = (rootState, {id}) => {
   }
   return {
     error: hasValue(error) ? error : undefined,
-    isLoading: settingsSelector.getIsLoading(),
+    isLoading: settingsSelector.getIsLoading(id),
     items,
   };
 };

@@ -73,25 +73,38 @@ const byId = (state = {}, action) => {
   }
 };
 
-const error = (state, action) => {
+const errors = (state = {}, action) => {
+  const {id} = action;
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_REQUEST:
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
-      return undefined; // reset error
+      const newState = {...state};
+      delete newState[id];
+      return newState;
     case DASHBOARD_SETTINGS_LOADING_ERROR:
-      return action.error;
+      return {
+        ...state,
+        [id]: action.error,
+      };
     default:
       return state;
   }
 };
 
-const isLoading = (state = false, action) => {
+const isLoading = (state = {}, action) => {
+  const {id} = action;
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_REQUEST:
-      return true;
+      return {
+        ...state,
+        [id]: true,
+      };
     case DASHBOARD_SETTINGS_LOADING_ERROR:
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
-      return false;
+      return {
+        ...state,
+        [id]: false,
+      };
     default:
       return state;
   }
@@ -100,7 +113,7 @@ const isLoading = (state = false, action) => {
 const dashboardSettings = combineReducers({
   isLoading,
   byId,
-  error,
+  errors,
   defaults,
 });
 

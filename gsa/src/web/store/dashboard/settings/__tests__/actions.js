@@ -205,7 +205,9 @@ describe('loadSettings tests', () => {
     const id = 'a1';
     const dispatch = jest.fn();
     const rootState = createRootState({
-      isLoading: true,
+      isLoading: {
+        [id]: true,
+      },
     });
     const getState = jest
       .fn()

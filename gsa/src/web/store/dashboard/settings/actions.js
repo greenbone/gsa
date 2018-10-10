@@ -100,7 +100,7 @@ export const loadSettings = gmp => (id, defaults) =>
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
 
-  if (settingsSelector.getIsLoading()) {
+  if (settingsSelector.getIsLoading(id)) {
     // we are already loading data
     return Promise.resolve();
   }
