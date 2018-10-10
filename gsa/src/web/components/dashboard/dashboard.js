@@ -283,7 +283,8 @@ export class Dashboard extends React.Component {
               height={height}
               width={width}
               id={id}
-              onChanged={newProps => this.handleItemUpdate(id, newProps)}
+              onFilterIdChanged={
+                filterId => this.handleItemUpdate(id, {filterId})}
               onInteractive={this.props.onInteraction}
               onRemoveClick={() => this.handleItemRemove(id)}
             />
