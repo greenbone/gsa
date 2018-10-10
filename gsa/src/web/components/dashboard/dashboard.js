@@ -91,8 +91,8 @@ const filterItems = (items, allowed, getDisplaySettings) => items.map(row => {
   const {items: rowItems = []} = row;
   return {
     ...row,
-    items: rowItems.filter(item => {
-      const settings = getDisplaySettings(item);
+    items: rowItems.filter(({id}) => {
+      const settings = getDisplaySettings(id);
       return isDefined(allowed[settings.displayId]);
     }),
   };
@@ -206,8 +206,16 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const getDisplaySettings = display => display;
+    const displaysById = {};
+
+    if (isDefined(items)) {
+      items.forEach(row => row.items.forEach(setting => {
+        displaysById[setting.id] = setting;
+      }));
+    }
+
     const getDisplayComponent = displayId => this.components[displayId];
+    const getDisplaySettings = id => displaysById[id];
 
     const other = excludeObjectProps(props, ownPropNames);
     items = isDefined(items) ?
@@ -223,13 +231,12 @@ export class Dashboard extends React.Component {
         {({
           id,
           dragHandleProps,
-          props: itemProps,
           height,
           width,
           remove,
           update,
         }) => {
-          const {displayId, ...displayProps} = getDisplaySettings(itemProps);
+          const {displayId, ...displayProps} = getDisplaySettings(id);
           const Component = getDisplayComponent(displayId);
           return (
             <Component
