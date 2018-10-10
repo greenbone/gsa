@@ -52,6 +52,7 @@ import Grid, {
 } from 'web/components/sortable/grid';
 import {
   convertDefaultDisplays,
+  updateRow,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
@@ -127,6 +128,8 @@ export class Dashboard extends React.Component {
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
+    this.handleItemUpdate = this.handleItemUpdate.bind(this);
+
     this.save = debounce(this.save, 500);
   }
 
@@ -166,6 +169,31 @@ export class Dashboard extends React.Component {
     this.setState({items});
 
     this.save(items);
+  }
+
+  handleItemUpdate(id, props) {
+    const {items} = this.state;
+
+    const rowIndex = items.findIndex(
+      row => row.items.some(item => item.id === id));
+
+    const row = items[rowIndex];
+
+    const rowItems = [
+      ...row.items,
+    ];
+
+    const itemIndex = rowItems.findIndex(i => i.id === id);
+
+    rowItems[itemIndex] = {
+      ...rowItems[itemIndex],
+      ...props,
+    };
+
+    const rows = [...items];
+    rows[rowIndex] = updateRow(row, {items: rowItems});
+
+    this.handleItemsChange(rows);
   }
 
   handleInteraction() {
@@ -237,7 +265,6 @@ export class Dashboard extends React.Component {
           height,
           width,
           remove,
-          update,
         }) => {
           const {displayId, ...displayProps} = getDisplaySettings(id);
           const Component = getDisplayComponent(displayId);
@@ -249,7 +276,7 @@ export class Dashboard extends React.Component {
               height={height}
               width={width}
               id={id}
-              onChanged={update}
+              onChanged={newProps => this.handleItemUpdate(id, newProps)}
               onInteractive={this.props.onInteraction}
               onRemoveClick={remove}
             />
