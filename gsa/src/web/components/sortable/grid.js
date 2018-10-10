@@ -247,7 +247,7 @@ Grid.propTypes = {
   items: itemsPropType,
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
 };
 
 
