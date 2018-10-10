@@ -177,6 +177,8 @@ class Grid extends React.Component {
       const {height = DEFAULT_ROW_HEIGHT} = dragRow;
       emptyRowHeight = height;
     }
+    const getRowHeight = row => row.height;
+    const getRowItems = row => row.items;
     return (
       <DragDropContext
         onDragEnd={this.handleDragEnd}
@@ -186,7 +188,15 @@ class Grid extends React.Component {
           {({width: fullWidth}) => (
             <Layout flex="column" grow="1">
               {items.map(row => {
-                const {items: rowItems = [], height = DEFAULT_ROW_HEIGHT} = row;
+                let height = getRowHeight(row);
+                if (!isDefined(height)) {
+                  height = DEFAULT_ROW_HEIGHT;
+                }
+                let rowItems = getRowItems(row);
+                if (!isDefined(rowItems)) {
+                  rowItems = [];
+                }
+
                 const {length: itemCount} = rowItems;
 
                 const isRowFull = isDefined(maxItemsPerRow) &&
