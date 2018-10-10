@@ -129,8 +129,8 @@ export class Dashboard extends React.Component {
     };
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
-    this.handleItemUpdate = this.handleItemUpdate.bind(this);
-    this.handleItemRemove = this.handleItemRemove.bind(this);
+    this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
+    this.handleRemoveDisplay = this.handleRemoveDisplay.bind(this);
 
     this.save = debounce(this.save, 500);
   }
@@ -173,7 +173,7 @@ export class Dashboard extends React.Component {
     this.save(items);
   }
 
-  handleItemUpdate(id, props) {
+  handleUpdateDisplay(id, props) {
     const {items} = this.state;
 
     const rowIndex = items.findIndex(
@@ -198,7 +198,7 @@ export class Dashboard extends React.Component {
     this.handleItemsChange(rows);
   }
 
-  handleItemRemove(id) {
+  handleRemoveDisplay(id) {
     const {items} = this.props;
 
     this.handleItemsChange(removeItem(items, id));
@@ -284,9 +284,9 @@ export class Dashboard extends React.Component {
               width={width}
               id={id}
               onFilterIdChanged={
-                filterId => this.handleItemUpdate(id, {filterId})}
+                filterId => this.handleUpdateDisplay(id, {filterId})}
               onInteractive={this.props.onInteraction}
-              onRemoveClick={() => this.handleItemRemove(id)}
+              onRemoveClick={() => this.handleRemoveDisplay(id)}
             />
           );
         }}
