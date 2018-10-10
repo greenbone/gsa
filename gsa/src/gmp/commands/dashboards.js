@@ -22,11 +22,8 @@
  */
 import uuid from 'uuid/v4';
 
-import {forEach} from '../utils/array';
-
 import logger from '../log';
 
-import HttpCommand from './http';
 import GmpCommand from './gmp';
 import registerCommand from '../command';
 
@@ -73,46 +70,6 @@ const convertSaveSettings = (settings = {}) => {
   return settings;
 };
 
-class DashboardsCommand extends HttpCommand {
-
-  currentSettings(options = {}) {
-    return this.httpGet({
-      cmd: 'get_settings',
-      filter: 'name~Dashboard',
-    }, options,
-    ).then(response => {
-      const {setting: prefs} = response.data.get_settings
-        .get_settings_response;
-
-      log.debug('DashboardSettings loaded', prefs);
-
-      const allSettings = {};
-
-      forEach(prefs, pref => {
-        const {_id: id, value, name} = pref;
-
-        let settings;
-        try {
-          settings = JSON.parse(value);
-        }
-        catch (e) {
-          log.warn('Could not parse dashboard setting', pref);
-          return;
-        }
-
-        try {
-          allSettings[id] = convertLoadedSettings(settings, name);
-        }
-        catch (e) {
-          log.warn('Could not convert dashboard setting', settings);
-          return;
-        }
-      });
-
-      return response.setData(allSettings);
-    });
-  }
-}
 
 class DashboardCommand extends GmpCommand {
 
@@ -151,6 +108,5 @@ class DashboardCommand extends GmpCommand {
 }
 
 registerCommand('dashboard', DashboardCommand);
-registerCommand('dashboards', DashboardsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
