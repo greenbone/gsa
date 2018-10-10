@@ -66,11 +66,6 @@ const convertLoadedSettings = (settings = {}, name) => {
   };
 };
 
-const convertSaveSettings = (settings = {}) => {
-  return settings;
-};
-
-
 class DashboardCommand extends GmpCommand {
 
   getSetting(id) {
@@ -93,9 +88,7 @@ class DashboardCommand extends GmpCommand {
     });
   }
 
-  saveSetting(id, settings) {
-    settings = convertSaveSettings(settings);
-
+  saveSetting(id, settings = {}) {
     log.debug('Saving dashboard settings', id, settings);
 
     return this.action({
