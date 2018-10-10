@@ -168,9 +168,7 @@ export class Dashboard extends React.Component {
   }
 
   handleItemsChange(items) {
-    this.setState({items});
-
-    this.save(items);
+    this.update({items});
   }
 
   handleUpdateDisplay(id, props) {
@@ -195,13 +193,13 @@ export class Dashboard extends React.Component {
     const rows = [...items];
     rows[rowIndex] = updateRow(row, {items: rowItems});
 
-    this.handleItemsChange(rows);
+    this.update({items: rows});
   }
 
   handleRemoveDisplay(id) {
     const {items} = this.props;
 
-    this.handleItemsChange(removeItem(items, id));
+    this.update({items: removeItem(items, id)});
   }
 
   handleInteraction() {
@@ -210,6 +208,12 @@ export class Dashboard extends React.Component {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
+  }
+
+  update({items}) {
+    this.setState({items});
+
+    this.save(items);
   }
 
   save(items) {
