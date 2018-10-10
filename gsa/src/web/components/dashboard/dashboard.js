@@ -87,14 +87,11 @@ const RowPlaceHolder = styled.div`
   margin: 15px 0;
 `;
 
-const filterItems = (items, allowed, getDisplaySettings) => items.map(row => {
+const filterItems = (items = [], isAllowed) => items.map(row => {
   const {items: rowItems = []} = row;
   return {
     ...row,
-    items: rowItems.filter(({id}) => {
-      const settings = getDisplaySettings(id);
-      return isDefined(allowed[settings.displayId]);
-    }),
+    items: rowItems.filter(({id}) => isAllowed(id)),
   };
 });
 
@@ -216,11 +213,15 @@ export class Dashboard extends React.Component {
 
     const getDisplayComponent = displayId => this.components[displayId];
     const getDisplaySettings = id => displaysById[id];
+    const isAllowed = id => {
+      const settings = getDisplaySettings(id);
+      return isDefined(settings) &&
+        isDefined(getDisplayComponent(settings.displayId));
+    };
 
     const other = excludeObjectProps(props, ownPropNames);
-    items = isDefined(items) ?
-      filterItems(items, this.components, getDisplaySettings) :
-      [];
+
+    items = filterItems(items, isAllowed);
     return (
       <Grid
         items={items}
