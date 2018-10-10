@@ -57,14 +57,6 @@ export const itemsPropType = PropTypes.arrayOf(rowPropType);
 
 class Grid extends React.Component {
 
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    items: itemsPropType,
-    maxItemsPerRow: PropTypes.number,
-    maxRows: PropTypes.number,
-    onChange: PropTypes.func,
-  }
-
   constructor(props) {
     super(props);
 
@@ -249,6 +241,15 @@ class Grid extends React.Component {
     );
   }
 }
+
+Grid.propTypes = {
+  children: PropTypes.func.isRequired,
+  items: itemsPropType,
+  maxItemsPerRow: PropTypes.number,
+  maxRows: PropTypes.number,
+  onChange: PropTypes.func,
+};
+
 
 export default Grid;
 
