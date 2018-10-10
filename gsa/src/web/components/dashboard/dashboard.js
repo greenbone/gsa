@@ -207,6 +207,8 @@ export class Dashboard extends React.Component {
     }
 
     const getDisplaySettings = display => display;
+    const getDisplayComponent = displayId => this.components[displayId];
+
     const other = excludeObjectProps(props, ownPropNames);
     items = isDefined(items) ?
       filterItems(items, this.components, getDisplaySettings) :
@@ -228,7 +230,7 @@ export class Dashboard extends React.Component {
           update,
         }) => {
           const {displayId, ...displayProps} = getDisplaySettings(itemProps);
-          const Component = this.components[displayId];
+          const Component = getDisplayComponent(displayId);
           return (
             <Component
               {...other}
