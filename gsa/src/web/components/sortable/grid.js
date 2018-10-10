@@ -242,13 +242,12 @@ class Grid extends React.Component {
                     onResize={h => this.handleRowResize(row, h)}
                   >
                     {rowItems.map((item, index) => {
-                      const {id, ...props} = item;
+                      const {id} = item;
                       return (
                         <Item
                           key={id}
                           id={id}
                           index={index}
-                          props={props}
                           height={itemHeight}
                           width={itemWidth}
                           remove={() => this.handleRemoveItem(id)}
