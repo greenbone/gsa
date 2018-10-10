@@ -43,10 +43,7 @@ import PropTypes from 'web/utils/proptypes';
 import EmptyRow from './emptyrow';
 import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
-import {
-  updateRow,
-  removeItem,
-} from './utils';
+import {updateRow} from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
@@ -109,14 +106,6 @@ class Grid extends React.Component {
       isDragging: true,
       dragSourceRowId: rowId,
     });
-  }
-
-  handleRemoveItem(itemId) {
-    let {items} = this.props;
-
-    items = removeItem(items, itemId);
-
-    this.notifyChange(items);
   }
 
   handleDragEnd(result) {
@@ -228,7 +217,6 @@ class Grid extends React.Component {
                           index={index}
                           height={itemHeight}
                           width={itemWidth}
-                          remove={() => this.handleRemoveItem(id)}
                         >
                           {children}
                         </Item>

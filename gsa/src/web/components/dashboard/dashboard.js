@@ -53,6 +53,7 @@ import Grid, {
 import {
   convertDefaultDisplays,
   updateRow,
+  removeItem,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
@@ -129,6 +130,7 @@ export class Dashboard extends React.Component {
 
     this.handleItemsChange = this.handleItemsChange.bind(this);
     this.handleItemUpdate = this.handleItemUpdate.bind(this);
+    this.handleItemRemove = this.handleItemRemove.bind(this);
 
     this.save = debounce(this.save, 500);
   }
@@ -194,6 +196,12 @@ export class Dashboard extends React.Component {
     rows[rowIndex] = updateRow(row, {items: rowItems});
 
     this.handleItemsChange(rows);
+  }
+
+  handleItemRemove(id) {
+    const {items} = this.props;
+
+    this.handleItemsChange(removeItem(items, id));
   }
 
   handleInteraction() {
@@ -264,7 +272,6 @@ export class Dashboard extends React.Component {
           dragHandleProps,
           height,
           width,
-          remove,
         }) => {
           const {displayId, ...displayProps} = getDisplaySettings(id);
           const Component = getDisplayComponent(displayId);
@@ -278,7 +285,7 @@ export class Dashboard extends React.Component {
               id={id}
               onChanged={newProps => this.handleItemUpdate(id, newProps)}
               onInteractive={this.props.onInteraction}
-              onRemoveClick={remove}
+              onRemoveClick={() => this.handleItemRemove(id)}
             />
           );
         }}
