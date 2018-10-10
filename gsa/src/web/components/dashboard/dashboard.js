@@ -105,6 +105,11 @@ const getDisplaysById = (items = []) => {
   return displaysById;
 };
 
+const getGridItems = (items = []) => items.map(row => ({
+  ...row,
+  items: row.items.map(display => display.id),
+}));
+
 export class Dashboard extends React.Component {
 
   constructor(...args) {
@@ -167,8 +172,17 @@ export class Dashboard extends React.Component {
     this.props.loadSettings(id, defaults);
   }
 
-  handleItemsChange(items) {
-    this.update({items});
+  handleItemsChange(gridItems = []) {
+    const {items} = this.props;
+
+    const displaysById = getDisplaysById(items);
+
+    this.update({
+      items: gridItems.map(row => ({
+        ...row,
+        items: row.items.map(id => displaysById[id]),
+      })),
+    });
   }
 
   handleUpdateDisplay(id, props) {
@@ -266,7 +280,7 @@ export class Dashboard extends React.Component {
     items = filterItems(items, isAllowed);
     return (
       <Grid
-        items={items}
+        items={getGridItems(items)}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}

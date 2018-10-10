@@ -47,13 +47,9 @@ import {updateRow} from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-const itemPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-});
-
 const rowPropType = PropTypes.shape({
   id: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(itemPropType).isRequired,
+  items: PropTypes.arrayOf(PropTypes.string).isRequired,
   height: PropTypes.number,
 });
 
@@ -189,7 +185,7 @@ class Grid extends React.Component {
         <AutoSize>
           {({width: fullWidth}) => (
             <Layout flex="column" grow="1">
-              {items.map((row, i) => {
+              {items.map(row => {
                 const {items: rowItems = [], height = DEFAULT_ROW_HEIGHT} = row;
                 const {length: itemCount} = rowItems;
 
@@ -209,7 +205,7 @@ class Grid extends React.Component {
                     height={height}
                     onResize={h => this.handleRowResize(row, h)}
                   >
-                    {rowItems.map(({id}, index) => {
+                    {rowItems.map((id, index) => {
                       return (
                         <Item
                           key={id}
