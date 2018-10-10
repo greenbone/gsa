@@ -207,10 +207,12 @@ class Grid extends React.Component {
                   GRID_ITEM_MARGIN.bottom;
                 const itemWidth = fullWidth / itemCount -
                   (GRID_ITEM_MARGIN.left + GRID_ITEM_MARGIN.right);
+
+                const {id: rowId} = row;
                 return (
                   <Row
-                    key={row.id}
-                    id={row.id}
+                    key={rowId}
+                    id={rowId}
                     dropDisabled={disabled}
                     height={height}
                     onResize={h => this.handleRowResize(row, h)}
