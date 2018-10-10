@@ -106,14 +106,14 @@ export class Dashboard extends React.Component {
     const {permittedDisplays = []} = this.props;
 
     this.components = {};
-    permittedDisplays.forEach(name => {
-      const display = getDisplay(name);
+    permittedDisplays.forEach(displayId => {
+      const display = getDisplay(displayId);
 
       if (isDefined(display)) {
-        this.components[name] = display.component;
+        this.components[displayId] = display.component;
       }
       else {
-        log.warn('Unknown Dashboard display', name);
+        log.warn('Unknown Dashboard display', displayId);
       }
     });
 
