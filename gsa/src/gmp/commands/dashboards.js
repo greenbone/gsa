@@ -38,8 +38,8 @@ export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
   items,
 });
 
-const createItem = props => {
-  const id = uuid();
+export const createItem = (props, uuidFunc = uuid) => {
+  const id = uuidFunc();
 
   return {
     id,

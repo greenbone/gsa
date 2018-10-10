@@ -24,31 +24,9 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
   convertDefaultDisplays,
-  createItem,
   removeItem,
   updateRow,
 } from '../utils';
-
-describe('createItem tests', () => {
-
-  test('should create a new item with empty props', () => {
-    const uuid = jest.fn().mockReturnValue(1);
-    expect(createItem(undefined, uuid)).toEqual({
-      id: 1,
-    });
-    expect(uuid).toHaveBeenCalled();
-  });
-
-  test('should create a new item with props', () => {
-    const uuid = jest.fn().mockReturnValue(1);
-    expect(createItem({foo: 'bar'}, uuid)).toEqual({
-      id: 1,
-      foo: 'bar',
-    });
-    expect(uuid).toHaveBeenCalled();
-  });
-
-});
 
 describe('removeItem tests', () => {
 
