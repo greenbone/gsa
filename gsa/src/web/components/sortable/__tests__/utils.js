@@ -138,17 +138,17 @@ describe('convertDefaultContent test', () => {
         id: 3,
         items: [{
           id: 1,
-          name: 'foo',
+          displayId: 'foo',
         }, {
           id: 2,
-          name: 'bar',
+          displayId: 'bar',
         }],
       }, {
         height: DEFAULT_ROW_HEIGHT,
         id: 5,
         items: [{
           id: 4,
-          name: 'lorem',
+          displayId: 'lorem',
         }],
       }],
     });

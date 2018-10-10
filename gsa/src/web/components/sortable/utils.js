@@ -38,7 +38,7 @@ export const convertDefaultDisplays = (defaultDisplays = [],
    uuidFunc = uuid) => {
   return {
     rows: defaultDisplays.map(row => createRow(
-      row.map(item => createDisplay({name: item}, uuidFunc)),
+      row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
       undefined,
       uuidFunc
     )),

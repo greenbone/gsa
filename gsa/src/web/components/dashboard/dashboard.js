@@ -87,11 +87,14 @@ const RowPlaceHolder = styled.div`
   margin: 15px 0;
 `;
 
-const filterItems = (items, allowed) => items.map(row => {
+const filterItems = (items, allowed, getDisplaySettings) => items.map(row => {
   const {items: rowItems = []} = row;
   return {
     ...row,
-    items: rowItems.filter(item => isDefined(allowed[item.name])),
+    items: rowItems.filter(item => {
+      const settings = getDisplaySettings(item);
+      return isDefined(allowed[settings.displayId]);
+    }),
   };
 });
 
@@ -203,8 +206,11 @@ export class Dashboard extends React.Component {
       );
     }
 
+    const getDisplaySettings = display => display;
     const other = excludeObjectProps(props, ownPropNames);
-    items = isDefined(items) ? filterItems(items, this.components) : [];
+    items = isDefined(items) ?
+      filterItems(items, this.components, getDisplaySettings) :
+      [];
     return (
       <Grid
         items={items}
@@ -213,23 +219,24 @@ export class Dashboard extends React.Component {
         onChange={this.handleItemsChange}
       >
         {({
-          dragHandleProps, id,
+          id,
+          dragHandleProps,
           props: itemProps,
           height,
           width,
           remove,
           update,
         }) => {
-          const {name, filterId} = itemProps;
-          const Component = this.components[name];
+          const {displayId, ...displayProps} = getDisplaySettings(itemProps);
+          const Component = this.components[displayId];
           return (
             <Component
               {...other}
+              {...displayProps}
               dragHandleProps={dragHandleProps}
               height={height}
               width={width}
               id={id}
-              filterId={filterId}
               onChanged={update}
               onInteractive={this.props.onInteraction}
               onRemoveClick={remove}
