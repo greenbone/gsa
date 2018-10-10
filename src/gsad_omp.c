@@ -1361,10 +1361,13 @@ next_page_url (credentials_t *credentials, params_t *params,
   while (params_iterator_next (&iter, &param_name, &current_param))
     {
       if (strcmp (param_name, "asset_type") == 0
+          || strcmp (param_name, "details") == 0
           || strcmp (param_name, "filter") == 0
           || strcmp (param_name, "filt_id") == 0
           || (strstr (param_name, "_id")
                 == param_name + strlen (param_name) - strlen ("_id"))
+          || (strstr (param_name, "_type")
+                == param_name + strlen (param_name) - strlen ("_type"))
           || (strcmp (param_name, "name") == 0
               && (strcasecmp (prev_action, "Run Wizard") == 0
                   || strcasecmp (next_cmd, "auth_settings") == 0))
