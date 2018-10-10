@@ -173,7 +173,7 @@ export class Dashboard extends React.Component {
   }
 
   handleItemsChange(gridItems = []) {
-    const {items} = this.props;
+    const {items} = this.state;
 
     const displaysById = getDisplaysById(items);
 
@@ -211,7 +211,7 @@ export class Dashboard extends React.Component {
   }
 
   handleRemoveDisplay(id) {
-    const {items} = this.props;
+    const {items} = this.state;
 
     this.update({items: removeItem(items, id)});
   }
