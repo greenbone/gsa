@@ -120,7 +120,7 @@ class Grid extends React.Component {
     const sourceRow = items[sourcerowIndex];
     // we are mutating the row => create copy
     const sourceRowItems = [...sourceRow.items];
-    // remove from source row
+    // remove from source row. removed item is returned in an array
     const [item] = sourceRowItems.splice(sourceIndex, 1);
 
     if (destrowId === 'empty') {
