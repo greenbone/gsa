@@ -50,7 +50,8 @@ const Theme = {
   blue: '#0000ff', // used by: links
 
   /* source ? */
-  darkGreen: '#519032',
+  darkGreen: '#519032', // RGB: 81, 144, 50
+  darkGreenTransparent: 'rgba(81, 144, 50, 0.8)', // corresponds to darkGreen
 
   Layers: {
     menu: 600,
