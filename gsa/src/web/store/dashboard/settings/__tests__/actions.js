@@ -39,8 +39,8 @@ import {
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
-  saveDashboardSettings,
-  savedDashboardSettings,
+  saveDashboardSettingsRequest,
+  saveDashboardSettingsSuccess,
   saveDashboardSettingsError,
   loadSettings,
   saveSettings,
@@ -108,7 +108,7 @@ describe('receivedDashboardSettingsLoadingError tests', () => {
 
 });
 
-describe('saveDashboardSettings tests', () => {
+describe('saveDashboardSettingsRequest tests', () => {
 
   test('should create a save dashboard settings request action', () => {
     const id = 'a1';
@@ -117,7 +117,7 @@ describe('saveDashboardSettings tests', () => {
       items,
     };
 
-    expect(saveDashboardSettings(id, settings)).toEqual({
+    expect(saveDashboardSettingsRequest(id, settings)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       id,
       settings,
@@ -126,11 +126,11 @@ describe('saveDashboardSettings tests', () => {
 
 });
 
-describe('savedDashboardSettings tests', () => {
+describe('saveDashboardSettingsSuccess tests', () => {
 
   test('should create a save dashboard settings success action', () => {
     const id = 'a1';
-    expect(savedDashboardSettings(id)).toEqual({
+    expect(saveDashboardSettingsSuccess(id)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
       id,
     });

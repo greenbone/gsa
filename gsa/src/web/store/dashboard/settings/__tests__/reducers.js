@@ -29,7 +29,7 @@ import {
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
-  saveDashboardSettings,
+  saveDashboardSettingsRequest,
   setDashboardSettingDefaults,
 } from '../actions';
 
@@ -378,7 +378,7 @@ describe('dashboard settings reducers test for saving', () => {
       items: ['foo', 'bar'],
     };
 
-    expect(dashboardSettings(undefined, saveDashboardSettings(id, settings))).toEqual({
+    expect(dashboardSettings(undefined, saveDashboardSettingsRequest(id, settings))).toEqual({
       byId: {
         a1: {
           height: 100,
@@ -406,7 +406,7 @@ describe('dashboard settings reducers test for saving', () => {
       rows: ['foo', 'bar'],
     };
 
-    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
+    expect(dashboardSettings(state, saveDashboardSettingsRequest(id, settings))).toEqual({
       byId: {
         a1: {
           height: 100,
@@ -437,7 +437,7 @@ describe('dashboard settings reducers test for saving', () => {
       items: ['foo', 'bar'],
     };
 
-    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
+    expect(dashboardSettings(state, saveDashboardSettingsRequest(id, settings))).toEqual({
       byId: {
         a1: {
           height: 100,
@@ -466,7 +466,7 @@ describe('dashboard settings reducers test for saving', () => {
       thisIsWeird: true,
     };
 
-    expect(dashboardSettings(state, saveDashboardSettings(id, settings))).toEqual({
+    expect(dashboardSettings(state, saveDashboardSettingsRequest(id, settings))).toEqual({
       byId: {
         a1: {
           items: ['abc', 'def'],
