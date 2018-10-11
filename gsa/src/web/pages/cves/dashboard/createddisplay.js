@@ -42,11 +42,11 @@ export const CvesCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total CVEs'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created CVEs'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total CVEs'),
   },
