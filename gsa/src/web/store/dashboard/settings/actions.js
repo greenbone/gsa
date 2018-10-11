@@ -149,11 +149,11 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
   const settingsSelector = getDashboardSettings(rootState);
   const defaults = settingsSelector.getDefaultsById(id);
 
-  dispatch(saveDashboardSettings(id, defaults));
+  dispatch(resetDashboardSettingsRequest(id, defaults));
 
   return gmp.dashboard.saveSetting(id, defaults).then(
-    () => dispatch(savedDashboardSettings()),
-    error => dispatch(saveDashboardSettingsError(error)),
+    () => dispatch(resetDashboardSettingsSuccess(id)),
+    error => dispatch(resetDashboardSettingsError(id, error)),
   );
 };
 

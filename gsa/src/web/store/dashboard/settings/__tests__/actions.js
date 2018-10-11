@@ -194,7 +194,7 @@ describe('resetDashboardSettingsError tests', () => {
   test('should create a reset dashboard settings error action', () => {
     const id = 'a1';
     const error = 'an error';
-    expect(resetDashboardSettingsError(id)).toEqual({
+    expect(resetDashboardSettingsError(id, error)).toEqual({
       type: DASHBOARD_SETTINGS_RESET_ERROR,
       id,
       error,
@@ -409,7 +409,7 @@ describe('saveSettings tests', () => {
 
 });
 
-describe('resetSttings tests', () => {
+describe('resetSettings tests', () => {
 
   test('should reset settings successfully', () => {
     const id = 'a1';
@@ -440,14 +440,15 @@ describe('resetSttings tests', () => {
     expect(isFunction(resetSettings)).toEqual(true);
     return resetSettings(gmp)(id)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
-        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
-      }]);
+        type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+        id,
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
@@ -483,15 +484,16 @@ describe('resetSttings tests', () => {
     expect(isFunction(resetSettings)).toEqual(true);
     return resetSettings(gmp)(id)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
-        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: DASHBOARD_SETTINGS_SAVING_ERROR,
+        type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_SETTINGS_RESET_ERROR,
+        id,
         error,
-      }]);
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
