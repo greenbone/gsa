@@ -45,6 +45,13 @@ export const DASHBOARD_SETTINGS_SAVING_REQUEST =
 export const DASHBOARD_SETTINGS_SET_DEFAULTS =
   'DASHBOARD_SETTINGS_SET_DEFAULTS';
 
+export const DASHBOARD_SETTINGS_RESET_REQUEST =
+  'DASHBOARD_SETTINGS_RESET_REQUEST';
+export const DASHBOARD_SETTINGS_RESET_SUCCESS =
+  'DASHBOARD_SETTINGS_RESET_SUCCESS';
+export const DASHBOARD_SETTINGS_RESET_ERROR =
+  'DASHBOARD_SETTINGS_RESET_ERROR';
+
 /**
  * Create an action to receive dashboard settings
  *
@@ -92,6 +99,23 @@ export const setDashboardSettingDefaults = (id, defaults) => ({
   type: DASHBOARD_SETTINGS_SET_DEFAULTS,
   id,
   defaults,
+});
+
+export const resetDashboardSettingsRequest = (id, settings) => ({
+  type: DASHBOARD_SETTINGS_RESET_REQUEST,
+  id,
+  settings,
+});
+
+export const resetDashboardSettingsSuccess = id => ({
+  type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+  id,
+});
+
+export const resetDashboardSettingsError = (id, error) => ({
+  type: DASHBOARD_SETTINGS_RESET_ERROR,
+  id,
+  error,
 });
 
 export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {

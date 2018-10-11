@@ -33,6 +33,9 @@ import {
   DASHBOARD_SETTINGS_SAVING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_ERROR,
   DASHBOARD_SETTINGS_SET_DEFAULTS,
+  DASHBOARD_SETTINGS_RESET_REQUEST,
+  DASHBOARD_SETTINGS_RESET_SUCCESS,
+  DASHBOARD_SETTINGS_RESET_ERROR,
   receivedDashboardSettings,
   requestDashboardSettings,
   receivedDashboardSettingsLoadingError,
@@ -44,6 +47,9 @@ import {
   resetSettings,
   addDisplay,
   setDashboardSettingDefaults,
+  resetDashboardSettingsRequest,
+  resetDashboardSettingsSuccess,
+  resetDashboardSettingsError,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -155,6 +161,47 @@ describe('setDashboardSettingDefaults', () => {
 
 });
 
+describe('resetDashboardSettingsRequest tests', () => {
+
+  test('should create a reset dashboard setings request action', () => {
+    const id = 'a1';
+    const settings = {
+      foo: 'bar',
+    };
+    expect(resetDashboardSettingsRequest(id, settings)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      id,
+      settings,
+    });
+  });
+
+});
+
+describe('resetDashboardSettingsSuccess tests', () => {
+
+  test('should create a reset dashboard settings success action', () => {
+    const id = 'a1';
+    expect(resetDashboardSettingsSuccess(id)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+      id,
+    });
+  });
+
+});
+
+describe('resetDashboardSettingsError tests', () => {
+
+  test('should create a reset dashboard settings error action', () => {
+    const id = 'a1';
+    const error = 'an error';
+    expect(resetDashboardSettingsError(id)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_ERROR,
+      id,
+      error,
+    });
+  });
+
+});
 
 describe('loadSettings tests', () => {
 
