@@ -94,9 +94,7 @@ export const setDashboardSettingDefaults = (id, defaults) => ({
   defaults,
 });
 
-export const loadSettings = gmp => (id, defaults) =>
-  (dispatch, getState) => {
-
+export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
 
@@ -107,44 +105,37 @@ export const loadSettings = gmp => (id, defaults) =>
 
   dispatch(requestDashboardSettings(id));
 
-  const promise = gmp.dashboard.getSetting(id);
-  return promise.then(
-    response => dispatch(receivedDashboardSettings(id, response.data,
-       defaults)),
+  return gmp.dashboard.getSetting(id).then(
+    ({data}) => dispatch(receivedDashboardSettings(id, data, defaults)),
     error => dispatch(receivedDashboardSettingsLoadingError(id, error)),
   );
 };
 
-export const saveSettings = gmp => (id, settings) =>
-  (dispatch, getState) => {
-
+export const saveSettings = gmp => (id, settings) => dispatch => {
   dispatch(saveDashboardSettings(id, settings));
 
-  return gmp.dashboard.saveSetting(id, settings)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
+  return gmp.dashboard.saveSetting(id, settings).then(
+    () => dispatch(savedDashboardSettings()),
+    error => dispatch(saveDashboardSettingsError(error)),
+  );
 };
 
-export const resetSettings = gmp => id =>
-  (dispatch, getState) => {
-
+export const resetSettings = gmp => id => (dispatch, getState) => {
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
   const defaults = settingsSelector.getDefaultsById(id);
 
   dispatch(saveDashboardSettings(id, defaults));
 
-  return gmp.dashboard.saveSetting(id, defaults)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
+  return gmp.dashboard.saveSetting(id, defaults).then(
+    () => dispatch(savedDashboardSettings()),
+    error => dispatch(saveDashboardSettingsError(error)),
+  );
 };
 
 export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   (dispatch, getState) => {
+
   if (!isDefined(displayId) || !isDefined(dashboardId)) {
     return Promise.resolve();
   }
@@ -161,11 +152,10 @@ export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
 
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
-  return gmp.dashboard.saveSetting(dashboardId, newSettings)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
+  return gmp.dashboard.saveSetting(dashboardId, newSettings).then(
+    response => dispatch(savedDashboardSettings()),
+    error => dispatch(saveDashboardSettingsError(error)),
+  );
 };
 
 // vim: set ts=2 sw=2 tw=80:
