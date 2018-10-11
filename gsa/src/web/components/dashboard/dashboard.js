@@ -142,11 +142,8 @@ export class Dashboard extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     // try to synchronize external and internal state
-    // update state items only if prop items have changed or
-    // prop items are different then already set items
-    return prevState.propItems === nextProps.items ||
-      prevState.propItems === nextProps.items ?
-      null : {
+    // update state items only if prop items have changed
+    return prevState.propItems === nextProps.items ? null : {
         items: nextProps.items,
         propItems: nextProps.items,
       };
