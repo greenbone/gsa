@@ -2,6 +2,7 @@
  *
  * Authors:
  * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -26,24 +27,34 @@ import {css} from 'glamor';
 
 import {Axis as VxAxis} from '@vx/axis';
 
-import PropTypes from '../../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const FONT_SIZE = 10;
 
 const DEFAULT_TICK_LENGTH = 8;
 
+const labelCss = css({
+  fill: Theme.darkGray,
+});
+
 const lineCss = css({
   shapeRendering: 'crispEdges',
+  stroke: Theme.mediumGray,
   strokeWidth: 0.99,
+});
+
+const tickCss = css({
   '& line': {
+    stroke: Theme.mediumGray,
     shapeRendering: 'crispEdges',
     strokeWidth: 0.99,
   },
 });
 
 const DEFAULT_TICK_PROPS = {
-  fill: 'black',
-  fontFamily: 'Arial',
+  fill: Theme.mediumGray,
+  fontFamily: Theme.Font.default,
   fontSize: FONT_SIZE,
 };
 
@@ -93,8 +104,9 @@ const Axis = ({
   <VxAxis
     {...props}
     axisLineClassName={`${lineCss}`}
-    tickClassName={`${lineCss}`}
+    tickClassName={`${tickCss}`}
     labelOffset={labelOffset}
+    labelClassName={`${labelCss}`}
     orientation={orientation}
     rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
