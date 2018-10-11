@@ -36,7 +36,6 @@ import Logger from 'gmp/log';
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {isDefined} from 'gmp/utils/identity';
-import {debounce} from 'gmp/utils/event';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import {
@@ -136,17 +135,6 @@ export class Dashboard extends React.Component {
     this.handleRowResize = this.handleRowResize.bind(this);
     this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
     this.handleRemoveDisplay = this.handleRemoveDisplay.bind(this);
-
-    this.save = debounce(this.save, 500);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // try to synchronize external and internal state
-    // update state items only if prop items have changed
-    return prevState.propItems === nextProps.items ? null : {
-        items: nextProps.items,
-        propItems: nextProps.items,
-      };
   }
 
   componentDidMount() {
@@ -170,7 +158,7 @@ export class Dashboard extends React.Component {
   }
 
   handleItemsChange(gridItems = []) {
-    const {items} = this.state;
+    const {items} = this.props;
 
     const displaysById = getDisplaysById(items);
 
@@ -183,7 +171,7 @@ export class Dashboard extends React.Component {
   }
 
   handleUpdateDisplay(id, props) {
-    const {items} = this.state;
+    const {items} = this.props;
 
     const rowIndex = items.findIndex(
       row => row.items.some(item => item.id === id));
@@ -208,13 +196,13 @@ export class Dashboard extends React.Component {
   }
 
   handleRemoveDisplay(id) {
-    const {items} = this.state;
+    const {items} = this.props;
 
     this.update({items: removeItem(items, id)});
   }
 
   handleRowResize(rowId, height) {
-    const {items = []} = this.state;
+    const {items = []} = this.props;
 
     const rowIndex = items.findIndex(row => row.id === rowId);
     const row = items[rowIndex];
@@ -252,7 +240,7 @@ export class Dashboard extends React.Component {
   render() {
     let {
       items,
-    } = this.state;
+    } = this.props;
     const {
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
