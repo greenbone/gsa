@@ -53,7 +53,7 @@ export const DASHBOARD_SETTINGS_RESET_ERROR =
   'DASHBOARD_SETTINGS_RESET_ERROR';
 
 /**
- * Create an action to receive dashboard settings
+ * Create a load dashboard settings success action
  *
  * @param {String} id              ID of the dashboard
  * @param {Object} settings        Settings loaded for all dashboards
@@ -62,20 +62,21 @@ export const DASHBOARD_SETTINGS_RESET_ERROR =
  *
  * @returns {Object} The action object
  */
-export const receivedDashboardSettings = (id, settings, defaultSettings) => ({
+export const loadDashboardSettingsSuccess = (id, settings, defaultSettings) =>
+({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
   settings,
   defaultSettings,
 });
 
-export const receivedDashboardSettingsLoadingError = (id, error) => ({
+export const loadDashboardSettingsError = (id, error) => ({
   type: DASHBOARD_SETTINGS_LOADING_ERROR,
   id,
   error,
 });
 
-export const requestDashboardSettings = id => ({
+export const loadDashboardSettingsRequest = id => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
 });
@@ -129,11 +130,11 @@ export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardSettings(id));
+  dispatch(loadDashboardSettingsRequest(id));
 
   return gmp.dashboard.getSetting(id).then(
-    ({data}) => dispatch(receivedDashboardSettings(id, data, defaults)),
-    error => dispatch(receivedDashboardSettingsLoadingError(id, error)),
+    ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
+    error => dispatch(loadDashboardSettingsError(id, error)),
   );
 };
 

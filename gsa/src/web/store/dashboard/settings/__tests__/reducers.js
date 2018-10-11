@@ -26,9 +26,9 @@
 import dashboardSettings from '../reducers';
 
 import {
-  receivedDashboardSettings,
-  requestDashboardSettings,
-  receivedDashboardSettingsLoadingError,
+  loadDashboardSettingsSuccess,
+  loadDashboardSettingsRequest,
+  loadDashboardSettingsError,
   saveDashboardSettingsRequest,
   setDashboardSettingDefaults,
 } from '../actions';
@@ -51,7 +51,7 @@ describe('dashboard settings reducers tests for loading requests', () => {
 
   test('should handle request dashboard settings with id', () => {
     const id = 'a1';
-    const action = requestDashboardSettings(id);
+    const action = loadDashboardSettingsRequest(id);
 
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
@@ -67,7 +67,7 @@ describe('dashboard settings reducers tests for loading requests', () => {
 
   test('should handle request dashboard settings with id and defaults', () => {
     const id = 'a1';
-    const action = requestDashboardSettings(id);
+    const action = loadDashboardSettingsRequest(id);
 
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
@@ -81,7 +81,7 @@ describe('dashboard settings reducers tests for loading requests', () => {
 
   test('should reset isLoading and error in request dashboard settings', () => {
     const id = 'a1';
-    const action = requestDashboardSettings(id);
+    const action = loadDashboardSettingsRequest(id);
     const state = {
       isLoading: false,
       errors: {
@@ -110,7 +110,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       rows: ['foo', 'bar'],
     };
 
-    const action = receivedDashboardSettings(id, settings);
+    const action = loadDashboardSettingsSuccess(id, settings);
 
     expect(dashboardSettings({}, action)).toEqual({
       byId: {
@@ -141,7 +141,7 @@ describe('dashboard settings reducers tests for loading success', () => {
         [id]: 'an previous error',
       },
     };
-    const action = receivedDashboardSettings(id, settings);
+    const action = loadDashboardSettingsSuccess(id, settings);
 
     expect(dashboardSettings(state, action)).toEqual({
       byId: {
@@ -174,7 +174,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       rows: ['foo', 'bar'],
     };
 
-    const action = receivedDashboardSettings(id, settings);
+    const action = loadDashboardSettingsSuccess(id, settings);
 
     expect(dashboardSettings(state, action)).toEqual({
       byId: {
@@ -211,7 +211,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       rows: ['foo', 'bar'],
     };
 
-    const action = receivedDashboardSettings(id, settings);
+    const action = loadDashboardSettingsSuccess(id, settings);
 
     expect(dashboardSettings(state, action)).toEqual({
       byId: {
@@ -251,7 +251,7 @@ describe('dashboard settings reducers tests for loading success', () => {
       rows: ['foo', 'bar'],
     };
 
-    const action = receivedDashboardSettings(id, settings, defaults);
+    const action = loadDashboardSettingsSuccess(id, settings, defaults);
 
     expect(dashboardSettings(state, action)).toEqual({
       byId: {
@@ -274,7 +274,7 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should handle receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const action = receivedDashboardSettingsLoadingError(id, error);
+    const action = loadDashboardSettingsError(id, error);
 
     expect(dashboardSettings({}, action)).toEqual({
       byId: {},
@@ -291,7 +291,7 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should reset isLoading in receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const action = receivedDashboardSettingsLoadingError(id, error);
+    const action = loadDashboardSettingsError(id, error);
     const state = {
       isLoading: {
         [id]: true,
@@ -313,7 +313,7 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should reset old error in receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const action = receivedDashboardSettingsLoadingError(id, error);
+    const action = loadDashboardSettingsError(id, error);
     const state = {
       errors: {
         [id]: 'An old error',
@@ -335,7 +335,7 @@ describe('dashboard settings reducers tests for loading success', () => {
   test('should keep state in receive dashboard error', () => {
     const id = 'a1';
     const error = 'An error occured';
-    const action = receivedDashboardSettingsLoadingError(id, error);
+    const action = loadDashboardSettingsError(id, error);
 
     const state = {
       byId: {

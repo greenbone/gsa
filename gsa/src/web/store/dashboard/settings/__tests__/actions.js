@@ -36,9 +36,9 @@ import {
   DASHBOARD_SETTINGS_RESET_REQUEST,
   DASHBOARD_SETTINGS_RESET_SUCCESS,
   DASHBOARD_SETTINGS_RESET_ERROR,
-  receivedDashboardSettings,
-  requestDashboardSettings,
-  receivedDashboardSettingsLoadingError,
+  loadDashboardSettingsSuccess,
+  loadDashboardSettingsRequest,
+  loadDashboardSettingsError,
   saveDashboardSettingsRequest,
   saveDashboardSettingsSuccess,
   saveDashboardSettingsError,
@@ -58,12 +58,12 @@ const createRootState = (state = {byId: {}}) => ({
   },
 });
 
-describe('requestDashboardSettings tests', () => {
+describe('loadDashboardSettingsRequest tests', () => {
 
-  test('should create an action to request dashboard settings', () => {
+  test('should create a load dashboard settings request action', () => {
     const id = 'a1';
 
-    expect(requestDashboardSettings(id)).toEqual({
+    expect(loadDashboardSettingsRequest(id)).toEqual({
       id,
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
@@ -71,7 +71,7 @@ describe('requestDashboardSettings tests', () => {
 
 });
 
-describe('receivedDashboardSettings tests', () => {
+describe('loadDashboardSettingsSuccess tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
@@ -83,7 +83,7 @@ describe('receivedDashboardSettings tests', () => {
       foo: 'bar',
     };
 
-    expect(receivedDashboardSettings(id, settings, defaultSettings)).toEqual({
+    expect(loadDashboardSettingsSuccess(id, settings, defaultSettings)).toEqual({
       settings,
       id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
@@ -93,13 +93,12 @@ describe('receivedDashboardSettings tests', () => {
 
 });
 
-describe('receivedDashboardSettingsLoadingError tests', () => {
+describe('loadDashboardSettingsError tests', () => {
 
   test('should create an action to receive an error during loading', () => {
-    const error = 'An error occured';
     const id = 'a1';
-
-    expect(receivedDashboardSettingsLoadingError(id, error)).toEqual({
+    const error = 'An error occured';
+    expect(loadDashboardSettingsError(id, error)).toEqual({
       error,
       id,
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
