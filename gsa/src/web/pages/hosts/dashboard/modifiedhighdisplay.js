@@ -144,11 +144,11 @@ export class HostsModifiedHighDisplay extends React.Component {
                 y2AxisLabel={_('Total Hosts (High)')}
                 xAxisLabel={_('Time')}
                 yLine={{
-                  color: Theme.darkGreen,
+                  color: Theme.darkGreenTransparent,
                   label: _('Modified Hosts (High)'),
                 }}
                 y2Line={{
-                  color: Theme.darkGreen,
+                  color: Theme.darkGreenTransparent,
                   dashArray: '3, 2',
                   label: _('Total Hosts (High)'),
                 }}

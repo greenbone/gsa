@@ -42,11 +42,11 @@ export const DfnCertsCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total DFN-CERT Advs'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created DFN-CERT Advs'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total DFN-CERT Advs'),
   },
