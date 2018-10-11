@@ -47,14 +47,6 @@ import {updateRow} from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-const rowPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
-  height: PropTypes.number,
-});
-
-export const itemsPropType = PropTypes.arrayOf(rowPropType);
-
 class Grid extends React.Component {
 
   constructor(props) {
@@ -230,9 +222,15 @@ class Grid extends React.Component {
   }
 }
 
+const rowPropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  height: PropTypes.number,
+});
+
 Grid.propTypes = {
   children: PropTypes.func.isRequired,
-  items: itemsPropType,
+  items: PropTypes.arrayOf(rowPropType),
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
   onChange: PropTypes.func.isRequired,

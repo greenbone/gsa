@@ -48,9 +48,7 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
 import Loading from 'web/components/loading/loading';
 
-import Grid, {
-  itemsPropType,
-} from 'web/components/sortable/grid';
+import Grid from 'web/components/sortable/grid';
 import {
   convertDefaultDisplays,
   updateRow,
@@ -330,13 +328,24 @@ export class Dashboard extends React.Component {
   }
 }
 
+const itemPropType = PropTypes.shape({
+  id: PropTypes.id.isRequired,
+  displayId: PropTypes.string.isRequired,
+});
+
+const rowPropType = PropTypes.shape({
+  id: PropTypes.id.isRequired,
+  items: PropTypes.arrayOf(itemPropType).isRequired,
+  height: PropTypes.number,
+});
+
 Dashboard.propTypes = {
   defaultDisplays: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
   error: PropTypes.toString,
   filter: PropTypes.filter,
   id: PropTypes.id.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  items: itemsPropType,
+  items: PropTypes.arrayOf(rowPropType),
   loadSettings: PropTypes.func.isRequired,
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
