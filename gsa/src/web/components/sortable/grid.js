@@ -124,24 +124,14 @@ class Grid extends React.Component {
     const [item] = sourceRowItems.splice(sourceIndex, 1);
 
     if (destrowId === 'empty') {
-      // update row
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
-
       // create new row with the removed item
       items = [...items, createRow([item])];
     }
     else if (destrowId === sourcerowId) {
       // add at position destindex
       sourceRowItems.splice(destIndex, 0, item);
-
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
     }
     else {
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
-
       // add to destination row
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
@@ -149,6 +139,10 @@ class Grid extends React.Component {
       items[destrowIndex] = updateRow(destRow,
         {id: destrowId, items: destrowItems});
     }
+
+    // update source row to actually remove the element
+    items[sourcerowIndex] = updateRow(sourceRow,
+      {id: sourcerowId, items: sourceRowItems});
 
     // remove empty rows
     items = items.filter(row => row.items.length > 0);
