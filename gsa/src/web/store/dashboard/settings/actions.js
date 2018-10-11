@@ -80,12 +80,14 @@ export const requestDashboardSettings = id => ({
   id,
 });
 
-export const savedDashboardSettings = () => ({
+export const savedDashboardSettings = id => ({
   type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+  id,
 });
 
-export const saveDashboardSettingsError = error => ({
+export const saveDashboardSettingsError = (id, error) => ({
   type: DASHBOARD_SETTINGS_SAVING_ERROR,
+  id,
   error,
 });
 
@@ -139,8 +141,8 @@ export const saveSettings = gmp => (id, settings) => dispatch => {
   dispatch(saveDashboardSettings(id, settings));
 
   return gmp.dashboard.saveSetting(id, settings).then(
-    () => dispatch(savedDashboardSettings()),
-    error => dispatch(saveDashboardSettingsError(error)),
+    () => dispatch(savedDashboardSettings(id)),
+    error => dispatch(saveDashboardSettingsError(id, error)),
   );
 };
 
@@ -177,8 +179,8 @@ export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
   dispatch(saveDashboardSettings(dashboardId, newSettings));
 
   return gmp.dashboard.saveSetting(dashboardId, newSettings).then(
-    response => dispatch(savedDashboardSettings()),
-    error => dispatch(saveDashboardSettingsError(error)),
+    () => dispatch(savedDashboardSettings(dashboardId)),
+    error => dispatch(saveDashboardSettingsError(dashboardId, error)),
   );
 };
 
