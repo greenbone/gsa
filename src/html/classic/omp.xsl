@@ -14388,6 +14388,13 @@ should not have received it.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
+  <xsl:if test="$select_type = 'scanner' or gsa:may-op ('get_scanners')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'scanner'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Scanner')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
   <xsl:if test="$select_type = 'schedule' or gsa:may-op ('get_schedules')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'schedule'"/>
