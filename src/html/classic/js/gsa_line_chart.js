@@ -1167,7 +1167,7 @@
     var minutes;
     if (val >= 86400) {
       var days = Math.floor(val / 86400);
-      hours = Math.floor((val - hours * 86400) / 3600);
+      hours = Math.floor((val - days * 86400) / 3600);
       if (hours === 0) {
         return days + 'd';
       }
