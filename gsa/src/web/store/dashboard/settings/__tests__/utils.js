@@ -117,7 +117,7 @@ describe('addDisplayToSettings tests', () => {
       rows: [{
         items: [{
           id: uuid,
-          name: 'a1',
+          displayId: 'a1',
         }],
       }],
     });
@@ -126,7 +126,7 @@ describe('addDisplayToSettings tests', () => {
       rows: [{
         items: [{
           id: uuid,
-          name: 'a1',
+          displayId: 'a1',
         }],
       }],
     });
@@ -135,7 +135,7 @@ describe('addDisplayToSettings tests', () => {
       rows: [{
         items: [{
           id: uuid,
-          name: 'a1',
+          displayId: 'a1',
         }],
       }],
     });
@@ -168,7 +168,7 @@ describe('addDisplayToSettings tests', () => {
           id: 'u2',
         }, {
           id: uuid,
-          name: 'a1',
+          displayId: 'a1',
         }],
       }],
       maxItemsPerRow: 2,
@@ -212,7 +212,7 @@ describe('addDisplayToSettings tests', () => {
         height: DEFAULT_ROW_HEIGHT,
         items: [{
           id: uuid,
-          name: 'a1',
+          displayId: 'a1',
         }],
       }],
       maxItemsPerRow: 1,

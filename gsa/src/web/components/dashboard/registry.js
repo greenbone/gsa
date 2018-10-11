@@ -27,31 +27,33 @@ import {isDefined} from 'gmp/utils/identity';
 const log = Logger.getLogger('web.components.dashboard.registry');
 const registry = {};
 
-export const registerDisplay = (id, component, {title}) => {
-  if (!isDefined(id)) {
+export const registerDisplay = (displayId, component, {title}) => {
+  if (!isDefined(displayId)) {
     log.error('Undefined id passed while registering display');
     return;
   }
 
   if (!isDefined(component)) {
-    log.error('Undefined component passed while registering display', id);
+    log.error('Undefined component passed while registering display',
+      displayId);
     return;
   }
 
   if (!isDefined(title)) {
-    log.error('Undefined title passed while registering display', id);
+    log.error('Undefined title passed while registering display',
+      displayId);
     return;
   }
 
-  registry[id] = {
+  registry[displayId] = {
     component,
     title,
-    id,
+    displayId,
   };
 
-  log.debug('Registered display', id);
+  log.debug('Registered display', displayId);
 };
 
-export const getDisplay = id => registry[id];
+export const getDisplay = displayId => registry[displayId];
 
 // vim: set ts=2 sw=2 tw=80:

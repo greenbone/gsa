@@ -22,6 +22,7 @@
  */
 import {
   DEFAULT_ROW_HEIGHT,
+  createDisplay,
   createRow,
 } from '../dashboards';
 
@@ -48,3 +49,28 @@ describe('createRow tests', () => {
   });
 
 });
+
+describe('createDisplay tests', () => {
+
+  test('should create a new item with empty props', () => {
+    const uuid = jest.fn().mockReturnValue(1);
+    expect(createDisplay('foo1', undefined, uuid)).toEqual({
+      id: 1,
+      displayId: 'foo1',
+    });
+    expect(uuid).toHaveBeenCalled();
+  });
+
+  test('should create a new item with props', () => {
+    const uuid = jest.fn().mockReturnValue(1);
+    expect(createDisplay('foo1', {foo: 'bar'}, uuid)).toEqual({
+      id: 1,
+      displayId: 'foo1',
+      foo: 'bar',
+    });
+    expect(uuid).toHaveBeenCalled();
+  });
+
+});
+
+// vim: set ts=2 sw=2 tw=80:

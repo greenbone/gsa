@@ -22,16 +22,7 @@
  */
 import uuid from 'uuid/v4';
 
-import {createRow} from 'gmp/commands/dashboards';
-
-export const createItem = (props, uuidFunc = uuid) => {
-  const id = uuidFunc();
-
-  return {
-    id,
-    ...props,
-  };
-};
+import {createDisplay, createRow} from 'gmp/commands/dashboards';
 
 export const removeItem = (rows, itemId) => rows.map(row => ({
   ...row,
@@ -47,7 +38,9 @@ export const convertDefaultDisplays = (defaultDisplays = [],
    uuidFunc = uuid) => {
   return {
     rows: defaultDisplays.map(row => createRow(
-      row.map(item => createItem({name: item}, uuidFunc)), undefined, uuidFunc
+      row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
+      undefined,
+      uuidFunc
     )),
   };
 };

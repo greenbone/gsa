@@ -74,16 +74,13 @@ class FilterSelection extends React.Component {
     this.setState({showDialog: true});
   }
 
-  handleSaveDialog({filterId}) {
-    const {onChanged} = this.props;
+  handleSaveDialog({filterId = UNSET_VALUE}) {
+    const {onFilterIdChanged} = this.props;
 
     this.closeDialog();
 
-    if (isDefined(onChanged)) {
-      onChanged({
-        filterId: isDefined(filterId) && filterId !== UNSET_VALUE ?
-          filterId : undefined,
-      });
+    if (isDefined(onFilterIdChanged)) {
+      onFilterIdChanged(filterId === UNSET_VALUE ? undefined : filterId);
     }
   }
 
@@ -151,7 +148,7 @@ FilterSelection.propTypes = {
   ),
   filtersFilter: PropTypes.filter.isRequired,
   loadFilters: PropTypes.func.isRequired,
-  onChanged: PropTypes.func,
+  onFilterIdChanged: PropTypes.func,
 };
 
 const mapStateToProps = (state, {filtersFilter}) => {

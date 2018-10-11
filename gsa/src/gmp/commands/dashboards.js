@@ -38,19 +38,19 @@ export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
   items,
 });
 
-const createItem = props => {
-  const id = uuid();
+export const createDisplay = (displayId, props, uuidFunc = uuid) => {
+  const id = uuidFunc();
 
   return {
     id,
+    displayId,
     ...props,
   };
 };
 
 const settingsV1toDashboardSettings = ({data: rows} = {}, name) => ({
   rows: rows.map(({height, data}) =>
-    createRow(data.map(item => createItem({
-      name: item.name,
+    createRow(data.map(item => createDisplay(item.name, {
       filterId: item.filt_id,
     })), height)),
   name,

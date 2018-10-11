@@ -22,9 +22,7 @@
  */
 import {isDefined, isArray} from 'gmp/utils/identity';
 
-import {createRow} from 'gmp/commands/dashboards';
-
-import {createItem} from 'web/components/sortable/utils';
+import {createDisplay, createRow} from 'gmp/commands/dashboards';
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   if (isArray(rows) && rows.length > 0 &&
@@ -42,17 +40,18 @@ export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
     currentRows[currentRows.length - 1] : {items: []};
 
   const rows = isArray(currentRows) ? [...currentRows] : [];
+  const display = createDisplay(displayId, undefined, uuidFunc);
+
   let newRow;
   if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
     // create new row
-    newRow = createRow([createItem({name: displayId}, uuidFunc)], undefined,
-      uuidFunc);
+    newRow = createRow([display], undefined, uuidFunc);
   }
   else {
     // add new display to last row
     newRow = {
       ...lastRow,
-      items: [...lastRow.items, createItem({name: displayId}, uuidFunc)],
+      items: [...lastRow.items, display],
     };
 
     rows.pop();

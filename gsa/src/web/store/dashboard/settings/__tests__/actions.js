@@ -460,11 +460,11 @@ describe('addDisplay tests', () => {
     const uuid = 'uuid1';
     const uuidFunc = () => uuid;
 
-    const settings = {
+    const expectedSettings = {
       rows: [{
         items: [{
           id: uuid,
-          name: displayId,
+          displayId,
         }],
       }],
     };
@@ -492,14 +492,14 @@ describe('addDisplay tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id: dashboardId,
-        settings,
+        settings: expectedSettings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
         type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
       }]);
       expect(getState).toHaveBeenCalled();
-      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, settings);
+      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, expectedSettings);
     });
   });
 
@@ -621,11 +621,11 @@ describe('addDisplay tests', () => {
     const uuidFunc = () => uuid;
 
     const rootState = createRootState();
-    const settings = {
+    const expectedSettings = {
       rows: [{
         items: [{
           id: uuid,
-          name: displayId,
+          displayId,
         }],
       }],
     };
@@ -653,7 +653,7 @@ describe('addDisplay tests', () => {
       expect(dispatch).toHaveBeenCalledTimes(2);
       expect(dispatch.mock.calls[0]).toEqual([{
         id: dashboardId,
-        settings,
+        settings: expectedSettings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       }]);
       expect(dispatch.mock.calls[1]).toEqual([{
@@ -661,7 +661,7 @@ describe('addDisplay tests', () => {
         error,
       }]);
       expect(getState).toHaveBeenCalled();
-      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, settings);
+      expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, expectedSettings);
     });
   });
 

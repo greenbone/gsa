@@ -121,11 +121,11 @@ export class DashboardControls extends React.Component {
     const {showNewDialog} = this.state;
     const {canAdd, displayIds = []} = this.props;
 
-    const displays = displayIds.map(name =>
-      getDisplay(name)).filter(isDefined);
+    const displays = displayIds.map(displayId =>
+      getDisplay(displayId)).filter(isDefined);
     const displayItems = displays.map(display => ({
       label: `${display.title}`,
-      value: display.id,
+      value: display.displayId,
     }));
     return (
       <React.Fragment>
@@ -152,7 +152,7 @@ export class DashboardControls extends React.Component {
             minHeight={163}
             width="500px"
             defaultValues={{
-              displayId: first(displays).id,
+              displayId: first(displays).displayId,
             }}
             onClose={this.handleNewDialoClose}
             onSave={this.handleNewDisplay}
