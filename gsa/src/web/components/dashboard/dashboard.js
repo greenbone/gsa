@@ -146,14 +146,15 @@ export class Dashboard extends React.Component {
       maxRows = DEFAULT_MAX_ROWS,
     } = this.props;
 
+    const defaultDashboardSettings = convertDefaultDisplays(defaultDisplays);
     const defaults = {
-      ...convertDefaultDisplays(defaultDisplays),
+      ...defaultDashboardSettings,
       permittedDisplays,
       maxItemsPerRow,
       maxRows,
     };
 
-    this.props.setDefaultSettings(id, defaults);
+    this.props.setDefaultSettings(id, defaultDashboardSettings);
     this.props.loadSettings(id, defaults);
   }
 
