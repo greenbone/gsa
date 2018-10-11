@@ -131,11 +131,11 @@ export class ReportsHighResultsDisplay extends React.Component {
                 y2AxisLabel={_('Max High per Host')}
                 xAxisLabel={_('Time')}
                 yLine={{
-                  color: Theme.darkGreen,
+                  color: Theme.darkGreenTransparent,
                   label: _('Max High'),
                 }}
                 y2Line={{
-                  color: Theme.darkGreen,
+                  color: Theme.darkGreenTransparent,
                   dashArray: '3, 2',
                   label: _('Max High per Host'),
                 }}
