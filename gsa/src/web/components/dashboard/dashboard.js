@@ -106,7 +106,7 @@ const getDisplaysById = (items = []) => {
   return displaysById;
 };
 
-const getGridItems = (items = []) => items.map(row => ({
+const convertDisplaysToGridItems = (items = []) => items.map(row => ({
   ...row,
   items: row.items.map(display => display.id),
 }));
@@ -274,7 +274,7 @@ export class Dashboard extends React.Component {
 
     return (
       <Grid
-        items={getGridItems(filterDisplays(rows, isAllowed))}
+        items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
