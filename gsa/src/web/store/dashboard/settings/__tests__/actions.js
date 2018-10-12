@@ -33,17 +33,23 @@ import {
   DASHBOARD_SETTINGS_SAVING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_ERROR,
   DASHBOARD_SETTINGS_SET_DEFAULTS,
-  receivedDashboardSettings,
-  requestDashboardSettings,
-  receivedDashboardSettingsLoadingError,
-  saveDashboardSettings,
-  savedDashboardSettings,
+  DASHBOARD_SETTINGS_RESET_REQUEST,
+  DASHBOARD_SETTINGS_RESET_SUCCESS,
+  DASHBOARD_SETTINGS_RESET_ERROR,
+  loadDashboardSettingsSuccess,
+  loadDashboardSettingsRequest,
+  loadDashboardSettingsError,
+  saveDashboardSettingsRequest,
+  saveDashboardSettingsSuccess,
   saveDashboardSettingsError,
   loadSettings,
   saveSettings,
   resetSettings,
   addDisplay,
   setDashboardSettingDefaults,
+  resetDashboardSettingsRequest,
+  resetDashboardSettingsSuccess,
+  resetDashboardSettingsError,
 } from '../actions';
 
 const createRootState = (state = {byId: {}}) => ({
@@ -52,12 +58,12 @@ const createRootState = (state = {byId: {}}) => ({
   },
 });
 
-describe('requestDashboardSettings tests', () => {
+describe('loadDashboardSettingsRequest tests', () => {
 
-  test('should create an action to request dashboard settings', () => {
+  test('should create a load dashboard settings request action', () => {
     const id = 'a1';
 
-    expect(requestDashboardSettings(id)).toEqual({
+    expect(loadDashboardSettingsRequest(id)).toEqual({
       id,
       type: DASHBOARD_SETTINGS_LOADING_REQUEST,
     });
@@ -65,7 +71,7 @@ describe('requestDashboardSettings tests', () => {
 
 });
 
-describe('receivedDashboardSettings tests', () => {
+describe('loadDashboardSettingsSuccess tests', () => {
 
   test('should create an action after receiving dashboard settings', () => {
     const id = 'a1';
@@ -77,7 +83,7 @@ describe('receivedDashboardSettings tests', () => {
       foo: 'bar',
     };
 
-    expect(receivedDashboardSettings(id, settings, defaultSettings)).toEqual({
+    expect(loadDashboardSettingsSuccess(id, settings, defaultSettings)).toEqual({
       settings,
       id,
       type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
@@ -87,13 +93,12 @@ describe('receivedDashboardSettings tests', () => {
 
 });
 
-describe('receivedDashboardSettingsLoadingError tests', () => {
+describe('loadDashboardSettingsError tests', () => {
 
   test('should create an action to receive an error during loading', () => {
-    const error = 'An error occured';
     const id = 'a1';
-
-    expect(receivedDashboardSettingsLoadingError(id, error)).toEqual({
+    const error = 'An error occured';
+    expect(loadDashboardSettingsError(id, error)).toEqual({
       error,
       id,
       type: DASHBOARD_SETTINGS_LOADING_ERROR,
@@ -102,25 +107,31 @@ describe('receivedDashboardSettingsLoadingError tests', () => {
 
 });
 
-describe('saveDashboardSettings tests', () => {
+describe('saveDashboardSettingsRequest tests', () => {
 
-  test('should create an action to save dashboard settings', () => {
+  test('should create a save dashboard settings request action', () => {
     const id = 'a1';
     const items = ['a', 'b'];
     const settings = {
       items,
     };
 
-    expect(saveDashboardSettings(id, settings)).toEqual({
+    expect(saveDashboardSettingsRequest(id, settings)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_REQUEST,
       id,
       settings,
     });
   });
 
-  test('should create an action after dashboard settings have been saved', () => {
-    expect(savedDashboardSettings()).toEqual({
+});
+
+describe('saveDashboardSettingsSuccess tests', () => {
+
+  test('should create a save dashboard settings success action', () => {
+    const id = 'a1';
+    expect(saveDashboardSettingsSuccess(id)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+      id,
     });
   });
 
@@ -128,12 +139,14 @@ describe('saveDashboardSettings tests', () => {
 
 describe('saveDashboardSettingsError tests', () => {
 
-  test('should create an action if an error has occurred during saving', () => {
+  test('should create a save dashboard setting error action', () => {
+    const id = 'a1';
     const error = 'An error';
 
-    expect(saveDashboardSettingsError(error)).toEqual({
+    expect(saveDashboardSettingsError(id, error)).toEqual({
       type: DASHBOARD_SETTINGS_SAVING_ERROR,
       error,
+      id,
     });
   });
 
@@ -155,6 +168,47 @@ describe('setDashboardSettingDefaults', () => {
 
 });
 
+describe('resetDashboardSettingsRequest tests', () => {
+
+  test('should create a reset dashboard setings request action', () => {
+    const id = 'a1';
+    const settings = {
+      foo: 'bar',
+    };
+    expect(resetDashboardSettingsRequest(id, settings)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      id,
+      settings,
+    });
+  });
+
+});
+
+describe('resetDashboardSettingsSuccess tests', () => {
+
+  test('should create a reset dashboard settings success action', () => {
+    const id = 'a1';
+    expect(resetDashboardSettingsSuccess(id)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+      id,
+    });
+  });
+
+});
+
+describe('resetDashboardSettingsError tests', () => {
+
+  test('should create a reset dashboard settings error action', () => {
+    const id = 'a1';
+    const error = 'an error';
+    expect(resetDashboardSettingsError(id, error)).toEqual({
+      type: DASHBOARD_SETTINGS_RESET_ERROR,
+      id,
+      error,
+    });
+  });
+
+});
 
 describe('loadSettings tests', () => {
 
@@ -307,14 +361,15 @@ describe('saveSettings tests', () => {
     expect(isFunction(saveSettings)).toEqual(true);
     return saveSettings(gmp)(id, settings)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
-      }]);
+        id,
+      });
       expect(getState).not.toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
@@ -346,15 +401,16 @@ describe('saveSettings tests', () => {
     expect(isFunction(saveSettings)).toEqual(true);
     return saveSettings(gmp)(id, settings)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: DASHBOARD_SETTINGS_SAVING_ERROR,
         error,
-      }]);
+        id,
+      });
       expect(getState).not.toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
@@ -362,7 +418,7 @@ describe('saveSettings tests', () => {
 
 });
 
-describe('resetSttings tests', () => {
+describe('resetSettings tests', () => {
 
   test('should reset settings successfully', () => {
     const id = 'a1';
@@ -393,14 +449,15 @@ describe('resetSttings tests', () => {
     expect(isFunction(resetSettings)).toEqual(true);
     return resetSettings(gmp)(id)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
-        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
-      }]);
+        type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+        id,
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
@@ -436,15 +493,16 @@ describe('resetSttings tests', () => {
     expect(isFunction(resetSettings)).toEqual(true);
     return resetSettings(gmp)(id)(dispatch, getState).then(() => {
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id,
         settings,
-        type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: DASHBOARD_SETTINGS_SAVING_ERROR,
+        type: DASHBOARD_SETTINGS_RESET_REQUEST,
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
+        type: DASHBOARD_SETTINGS_RESET_ERROR,
+        id,
         error,
-      }]);
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(id, settings);
     });
@@ -490,14 +548,15 @@ describe('addDisplay tests', () => {
       getState).then(() => {
 
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id: dashboardId,
         settings: expectedSettings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
-      }]);
+        id: dashboardId,
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, expectedSettings);
     });
@@ -651,15 +710,16 @@ describe('addDisplay tests', () => {
       getState).then(() => {
 
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
+      expect(dispatch).toHaveBeenNthCalledWith(1, {
         id: dashboardId,
         settings: expectedSettings,
         type: DASHBOARD_SETTINGS_SAVING_REQUEST,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: DASHBOARD_SETTINGS_SAVING_ERROR,
         error,
-      }]);
+        id: dashboardId,
+      });
       expect(getState).toHaveBeenCalled();
       expect(saveSettingsPromise).toHaveBeenCalledWith(dashboardId, expectedSettings);
     });
