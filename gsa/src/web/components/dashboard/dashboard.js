@@ -111,6 +111,12 @@ const convertDisplaysToGridItems = (items = []) => items.map(row => ({
   items: row.items.map(display => display.id),
 }));
 
+const convertGridItemsToDisplays = (gridItems, displaysById) =>
+  gridItems.map(row => ({
+    ...row,
+    items: row.items.map(id => displaysById[id]),
+  }));
+
 export class Dashboard extends React.Component {
 
   constructor(...args) {
@@ -162,12 +168,7 @@ export class Dashboard extends React.Component {
 
     const displaysById = getDisplaysById(rows);
 
-    this.updateRows(
-      gridItems.map(row => ({
-        ...row,
-        items: row.items.map(id => displaysById[id]),
-      })),
-    );
+    this.updateRows(convertGridItemsToDisplays(gridItems, displaysById));
   }
 
   handleUpdateDisplay(id, props) {
