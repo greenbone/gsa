@@ -22,6 +22,9 @@
  */
 
 import Role from '../role';
+import {testModel} from 'gmp/testing';
+
+testModel(Role, 'role');
 
 describe('Role model tests', () => {
 
