@@ -22,6 +22,9 @@
  */
 
 import Group from '../group';
+import {testModel} from 'gmp/testing';
+
+testModel(Group, 'group');
 
 describe('Group model tests', () => {
 
