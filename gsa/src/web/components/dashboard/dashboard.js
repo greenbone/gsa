@@ -52,9 +52,6 @@ import {
 import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
-import {
-  updateRow,
-} from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -191,7 +188,10 @@ export class Dashboard extends React.Component {
     };
 
     const newRows = [...rows];
-    newRows[rowIndex] = updateRow(row, {rows: rowItems});
+    newRows[rowIndex] = {
+      ...row,
+      rows: rowItems,
+    };
 
     this.updateRows(newRows);
   }
@@ -211,7 +211,10 @@ export class Dashboard extends React.Component {
     const newRows = [
       ...rows,
     ];
-    newRows[rowIndex] = updateRow(row, {height});
+    newRows[rowIndex] = {
+      ...row,
+      height,
+    };
 
     this.updateRows(newRows);
   }
