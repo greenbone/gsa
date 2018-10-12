@@ -232,6 +232,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/utils.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/utils.js
      ${GSA_SRC_DIR}/src/web/components/dialog/button.js
      ${GSA_SRC_DIR}/src/web/components/dialog/container.js
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
