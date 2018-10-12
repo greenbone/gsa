@@ -162,12 +162,12 @@ export class Dashboard extends React.Component {
   }
 
   handleItemsChange(gridItems = []) {
-    const {items} = this.props;
+    const {rows} = this.props;
 
-    const displaysById = getDisplaysById(items);
+    const displaysById = getDisplaysById(rows);
 
     this.update({
-      items: gridItems.map(row => ({
+      rows: gridItems.map(row => ({
         ...row,
         items: row.items.map(id => displaysById[id]),
       })),
@@ -175,48 +175,48 @@ export class Dashboard extends React.Component {
   }
 
   handleUpdateDisplay(id, props) {
-    const {items} = this.props;
+    const {rows} = this.props;
 
-    const rowIndex = items.findIndex(
+    const rowIndex = rows.findIndex(
       row => row.items.some(item => item.id === id));
 
-    const row = items[rowIndex];
+    const row = rows[rowIndex];
 
     const rowItems = [
       ...row.items,
     ];
 
-    const itemIndex = rowItems.findIndex(i => i.id === id);
+    const displayIndex = rowItems.findIndex(i => i.id === id);
 
-    rowItems[itemIndex] = {
-      ...rowItems[itemIndex],
+    rowItems[displayIndex] = {
+      ...rowItems[displayIndex],
       ...props,
     };
 
-    const rows = [...items];
-    rows[rowIndex] = updateRow(row, {items: rowItems});
+    const newRows = [...rows];
+    newRows[rowIndex] = updateRow(row, {rows: rowItems});
 
-    this.update({items: rows});
+    this.update({rows: newRows});
   }
 
   handleRemoveDisplay(id) {
-    const {items} = this.props;
+    const {rows} = this.props;
 
-    this.update({items: removeItem(items, id)});
+    this.update({rows: removeItem(rows, id)});
   }
 
   handleRowResize(rowId, height) {
-    const {items = []} = this.props;
+    const {rows = []} = this.props;
 
-    const rowIndex = items.findIndex(row => row.id === rowId);
-    const row = items[rowIndex];
+    const rowIndex = rows.findIndex(row => row.id === rowId);
+    const row = rows[rowIndex];
 
-    const newItems = [
-      ...items,
+    const newRows = [
+      ...rows,
     ];
-    newItems[rowIndex] = updateRow(row, {height});
+    newRows[rowIndex] = updateRow(row, {height});
 
-    this.update({items: newItems});
+    this.update({rows: newRows});
   }
 
   handleInteraction() {
@@ -227,16 +227,16 @@ export class Dashboard extends React.Component {
     }
   }
 
-  update({items}) {
-    this.setState({items});
+  update({rows}) {
+    this.setState({rows});
 
-    this.save(items);
+    this.save(rows);
   }
 
-  save(items) {
+  save(rows) {
     const {id} = this.props;
 
-    this.props.saveSettings(id, {rows: items});
+    this.props.saveSettings(id, {rows});
 
     this.handleInteraction();
   }
@@ -244,10 +244,10 @@ export class Dashboard extends React.Component {
   render() {
     const {
       error,
-      items,
       isLoading,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
+      rows,
       ...props
     } = this.props;
 
@@ -258,7 +258,7 @@ export class Dashboard extends React.Component {
         </RowPlaceHolder>
       );
     }
-    else if (!isDefined(items) && isLoading) {
+    else if (!isDefined(rows) && isLoading) {
       return (
         <RowPlaceHolder>
           <Loading />
@@ -266,7 +266,7 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const displaysById = getDisplaysById(items);
+    const displaysById = getDisplaysById(rows);
 
     const getDisplayComponent = displayId => this.components[displayId];
     const getDisplaySettings = id => displaysById[id];
@@ -280,7 +280,7 @@ export class Dashboard extends React.Component {
 
     return (
       <Grid
-        items={getGridItems(filterDisplays(items, isAllowed))}
+        items={getGridItems(filterDisplays(rows, isAllowed))}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
@@ -331,11 +331,11 @@ Dashboard.propTypes = {
   filter: PropTypes.filter,
   id: PropTypes.id.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  items: PropTypes.arrayOf(rowPropType),
   loadSettings: PropTypes.func.isRequired,
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
   permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
+  rows: PropTypes.arrayOf(rowPropType),
   saveSettings: PropTypes.func.isRequired,
   setDefaultSettings: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func,
@@ -350,14 +350,14 @@ const mapStateToProps = (rootState, {id}) => {
   const defaults = settingsSelector.getDefaultsById(id);
   const error = settingsSelector.getError(id);
 
-  let items = getRows(settings);
-  if (hasLoaded && !isDefined(items)) {
-    items = getRows(defaults);
+  let rows = getRows(settings);
+  if (hasLoaded && !isDefined(rows)) {
+    rows = getRows(defaults);
   }
   return {
     error,
     isLoading: settingsSelector.getIsLoading(id),
-    items,
+    rows,
   };
 };
 
