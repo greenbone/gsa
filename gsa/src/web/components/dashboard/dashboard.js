@@ -61,6 +61,7 @@ import withGmp from 'web/utils/withGmp';
 import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
+import {getRows} from './utils';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -352,12 +353,9 @@ const mapStateToProps = (rootState, {id}) => {
   const defaults = settingsSelector.getDefaultsById(id);
   const error = settingsSelector.getError(id);
 
-  let items;
-  if (hasLoaded && isDefined(settings.rows)) {
-    items = settings.rows;
-  }
-  else if (hasLoaded) {
-    items = defaults.rows;
+  let items = getRows(settings);
+  if (hasLoaded && !isDefined(items)) {
+    items = getRows(defaults);
   }
   return {
     error,
