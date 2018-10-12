@@ -24,14 +24,13 @@ import 'core-js/shim';
 import 'core-js/library/fn/array/find-index';
 import 'core-js/library/fn/array/find';
 
+import uuid from 'uuid/v4';
+
 import React from 'react';
 
 import {DragDropContext} from 'react-beautiful-dnd';
 
-import {
-  DEFAULT_ROW_HEIGHT,
-  createRow,
-} from 'gmp/commands/dashboards';
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -43,6 +42,12 @@ import PropTypes from 'web/utils/proptypes';
 import EmptyRow from './emptyrow';
 import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
+
+const createNewRow = item => ({
+  id: uuid(),
+  height: DEFAULT_ROW_HEIGHT,
+  items: [item],
+});
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
@@ -116,7 +121,7 @@ class Grid extends React.Component {
 
     if (destrowId === 'empty') {
       // create new row with the removed item
-      items = [...items, createRow([item])];
+      items = [...items, createNewRow(item)];
     }
     else if (destrowId === sourcerowId) {
       // add at position destindex
