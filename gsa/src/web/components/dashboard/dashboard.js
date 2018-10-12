@@ -242,14 +242,12 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    let {
-      items,
-    } = this.props;
     const {
+      error,
+      items,
+      isLoading,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
-      isLoading,
-      error,
       ...props
     } = this.props;
 
@@ -280,10 +278,9 @@ export class Dashboard extends React.Component {
 
     const other = excludeObjectProps(props, ownPropNames);
 
-    items = filterItems(items, isAllowed);
     return (
       <Grid
-        items={getGridItems(items)}
+        items={getGridItems(filterItems(items, isAllowed))}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
