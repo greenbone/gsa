@@ -130,10 +130,6 @@ export class Dashboard extends React.Component {
       }
     });
 
-    this.state = {
-      items: undefined,
-    };
-
     this.handleItemsChange = this.handleItemsChange.bind(this);
     this.handleRowResize = this.handleRowResize.bind(this);
     this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
@@ -228,8 +224,6 @@ export class Dashboard extends React.Component {
   }
 
   updateRows(rows) {
-    this.setState({rows});
-
     this.save({rows});
   }
 
