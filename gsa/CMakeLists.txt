@@ -232,6 +232,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/utils.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/utils.js
      ${GSA_SRC_DIR}/src/web/components/dialog/button.js
      ${GSA_SRC_DIR}/src/web/components/dialog/container.js
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
@@ -344,7 +345,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/sortable/item.js
      ${GSA_SRC_DIR}/src/web/components/sortable/resizer.js
      ${GSA_SRC_DIR}/src/web/components/sortable/row.js
-     ${GSA_SRC_DIR}/src/web/components/sortable/utils.js
      ${GSA_SRC_DIR}/src/web/components/structure/footer.js
      ${GSA_SRC_DIR}/src/web/components/structure/header.js
      ${GSA_SRC_DIR}/src/web/components/structure/main.js
@@ -791,7 +791,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/reducers.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
-     ${GSA_SRC_DIR}/src/web/store/dashboard/settings/utils.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/agents.js

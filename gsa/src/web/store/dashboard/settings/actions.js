@@ -20,13 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
-
 import getDashboardSettings from './selectors';
-import {
-  addDisplayToSettings,
-  canAddDisplay,
-} from './utils';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';
@@ -157,31 +151,6 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
   return gmp.dashboard.saveSetting(id, defaults).then(
     () => dispatch(resetDashboardSettingsSuccess(id)),
     error => dispatch(resetDashboardSettingsError(id, error)),
-  );
-};
-
-export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
-  (dispatch, getState) => {
-
-  if (!isDefined(displayId) || !isDefined(dashboardId)) {
-    return Promise.resolve();
-  }
-
-  const rootState = getState();
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(dashboardId);
-
-  if (!canAddDisplay(settings)) {
-    return Promise.resolve();
-  }
-
-  const newSettings = addDisplayToSettings(settings, displayId, uuidFunc);
-
-  dispatch(saveDashboardSettingsRequest(dashboardId, newSettings));
-
-  return gmp.dashboard.saveSetting(dashboardId, newSettings).then(
-    () => dispatch(saveDashboardSettingsSuccess(dashboardId)),
-    error => dispatch(saveDashboardSettingsError(dashboardId, error)),
   );
 };
 

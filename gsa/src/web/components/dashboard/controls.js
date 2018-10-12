@@ -30,11 +30,10 @@ import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
 import {
-  addDisplay,
   resetSettings,
+  saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-import {canAddDisplay} from 'web/store/dashboard/settings/utils';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -51,6 +50,11 @@ import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  getPermittedDisplayIds,
+} from './utils';
 
 export class DashboardControls extends React.Component {
 
@@ -97,13 +101,14 @@ export class DashboardControls extends React.Component {
   handleNewDisplay({displayId}) {
     const {
       dashboardId,
+      settings,
       onNewDisplay,
     } = this.props;
 
     if (isDefined(onNewDisplay)) {
       this.closeNewDialog();
 
-      onNewDisplay(dashboardId, displayId);
+      onNewDisplay(settings, dashboardId, displayId);
 
       this.handleInteraction();
     }
@@ -182,6 +187,7 @@ DashboardControls.propTypes = {
   canAdd: PropTypes.bool.isRequired,
   dashboardId: PropTypes.id.isRequired,
   displayIds: PropTypes.arrayOf(PropTypes.string),
+  settings: PropTypes.object,
   onInteraction: PropTypes.func,
   onNewDisplay: PropTypes.func.isRequired,
   onResetClick: PropTypes.func.isRequired,
@@ -190,17 +196,22 @@ DashboardControls.propTypes = {
 const mapStateToProps = (rootState, {dashboardId}) => {
   const settingsSelector = getDashboardSettings(rootState);
   const settings = settingsSelector.getById(dashboardId);
-  const {permittedDisplays: displayIds} = settings || {};
   return {
     canAdd: canAddDisplay(settings),
-    displayIds,
+    displayIds: getPermittedDisplayIds(settings),
+    settings,
   };
+};
+
+const addDisplay = gmp => (settings, dashboardId, displayId) => {
+  const newSettings = addDisplayToSettings(settings, displayId);
+  return saveSettings(gmp)(dashboardId, newSettings);
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   onResetClick: dashboardId => dispatch(resetSettings(gmp)(dashboardId)),
-  onNewDisplay: (dashboardId, displayId) =>
-    dispatch(addDisplay(gmp)(dashboardId, displayId)),
+  onNewDisplay: (settings, dashboardId, displayId) =>
+    dispatch(addDisplay(gmp)(settings, dashboardId, displayId)),
 });
 
 export default compose(

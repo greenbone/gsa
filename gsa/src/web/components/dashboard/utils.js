@@ -20,9 +20,71 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined, isArray} from 'gmp/utils/identity';
+import uuid from 'uuid/v4';
 
 import {createDisplay, createRow} from 'gmp/commands/dashboards';
+
+import {isDefined, isArray} from 'gmp/utils/identity';
+
+export const getPermittedDisplayIds = (settings = {}) =>
+  settings.permittedDisplays;
+
+export const getRows = ({rows} = {}, defaultRows) => isDefined(rows) ?
+  rows : defaultRows;
+
+export const convertDefaultDisplays = (defaultDisplays = [],
+   uuidFunc = uuid) => {
+  return {
+    rows: defaultDisplays.map(row => createRow(
+      row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
+      undefined,
+      uuidFunc
+    )),
+  };
+};
+
+export const removeDisplay = (rows = [], id) => rows.map(row => ({
+  ...row,
+  items: row.items.filter(item => item.id !== id),
+})).filter(row => row.items.length > 0);
+
+export const filterDisplays = (rows = [], isAllowed = () => true) =>
+  rows.map(row => {
+    const {items: rowItems = []} = row;
+    return {
+      ...row,
+      items: rowItems.filter(({id}) => isAllowed(id)),
+    };
+  });
+
+export const getDisplaysById = (rows = []) => {
+  const displaysById = {};
+  rows.forEach(row => row.items.forEach(setting => {
+    displaysById[setting.id] = setting;
+  }));
+  return displaysById;
+};
+
+export const convertDisplaysToGridItems = (items = []) => items.map(({
+  id,
+  items: rowItems,
+  height,
+}) => ({
+  height,
+  id,
+  items: rowItems.map(display => display.id),
+}));
+
+export const convertGridItemsToDisplays = (gridItems = [], displaysById = {}) =>
+  gridItems.map(({
+    id,
+    height,
+    items,
+  }) => ({
+    id,
+    height,
+    items: items.map(dId => displaysById[dId]).filter(isDefined),
+  }));
 
 export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
   if (isArray(rows) && rows.length > 0 &&
