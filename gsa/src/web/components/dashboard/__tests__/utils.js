@@ -69,6 +69,10 @@ describe('getRows tests', () => {
     expect(getRows(settings)).toEqual(['foo', 'bar']);
   });
 
+  test('should return default for undefined rows', () => {
+    expect(getRows({}, [])).toEqual([]);
+  });
+
 });
 
 describe('convertDefaultDisplays test', () => {

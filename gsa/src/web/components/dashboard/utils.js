@@ -29,7 +29,8 @@ import {isDefined} from 'gmp/utils/identity';
 export const getPermittedDisplayIds = (settings = {}) =>
   settings.permittedDisplays;
 
-export const getRows = (settings = {}) => settings.rows;
+export const getRows = ({rows} = {}, defaultRows) => isDefined(rows) ?
+  rows : defaultRows;
 
 export const convertDefaultDisplays = (defaultDisplays = [],
    uuidFunc = uuid) => {
