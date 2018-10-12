@@ -345,7 +345,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/sortable/item.js
      ${GSA_SRC_DIR}/src/web/components/sortable/resizer.js
      ${GSA_SRC_DIR}/src/web/components/sortable/row.js
-     ${GSA_SRC_DIR}/src/web/components/sortable/utils.js
      ${GSA_SRC_DIR}/src/web/components/structure/footer.js
      ${GSA_SRC_DIR}/src/web/components/structure/header.js
      ${GSA_SRC_DIR}/src/web/components/structure/main.js
