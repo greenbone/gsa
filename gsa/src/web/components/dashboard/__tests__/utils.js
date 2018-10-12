@@ -20,7 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+
 import {
+  convertDefaultDisplays,
   getPermittedDisplayIds,
   getRows,
 } from '../utils';
@@ -59,6 +62,49 @@ describe('getRows tests', () => {
       rows: ['foo', 'bar'],
     };
     expect(getRows(settings)).toEqual(['foo', 'bar']);
+  });
+
+});
+
+describe('convertDefaultDisplays test', () => {
+
+  test('should return empty array', () => {
+    expect(convertDefaultDisplays()).toEqual({
+      rows: [],
+    });
+  });
+
+  test('should convert array to rows', () => {
+    let i = 1;
+    const uuid = jest.fn().mockImplementation(() => i++);
+
+    const rows = [[
+      'foo',
+      'bar',
+    ], [
+      'lorem',
+    ]];
+
+    expect(convertDefaultDisplays(rows, uuid)).toEqual({
+      rows: [{
+        height: DEFAULT_ROW_HEIGHT,
+        id: 3,
+        items: [{
+          id: 1,
+          displayId: 'foo',
+        }, {
+          id: 2,
+          displayId: 'bar',
+        }],
+      }, {
+        height: DEFAULT_ROW_HEIGHT,
+        id: 5,
+        items: [{
+          id: 4,
+          displayId: 'lorem',
+        }],
+      }],
+    });
   });
 
 });

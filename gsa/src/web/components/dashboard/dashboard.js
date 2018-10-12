@@ -44,12 +44,14 @@ import {
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
+import {
+  convertDefaultDisplays,
+} from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
 import {
-  convertDefaultDisplays,
   updateRow,
   removeItem,
 } from 'web/components/sortable/utils';

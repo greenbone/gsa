@@ -49,6 +49,8 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
 
+import {convertDefaultDisplays} from 'web/components/dashboard/utils';
+
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
@@ -59,8 +61,6 @@ import Loading from 'web/components/loading/loading';
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
 import Section from 'web/components/section/section';
-
-import {convertDefaultDisplays} from 'web/components/sortable/utils';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';

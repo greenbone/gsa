@@ -20,9 +20,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import uuid from 'uuid/v4';
+
+import {createDisplay, createRow} from 'gmp/commands/dashboards';
+
 export const getPermittedDisplayIds = (settings = {}) =>
   settings.permittedDisplays;
 
 export const getRows = (settings = {}) => settings.rows;
+
+export const convertDefaultDisplays = (defaultDisplays = [],
+   uuidFunc = uuid) => {
+  return {
+    rows: defaultDisplays.map(row => createRow(
+      row.map(displayId => createDisplay(displayId, undefined, uuidFunc)),
+      undefined,
+      uuidFunc
+    )),
+  };
+};
+
 
 // vim: set ts=2 sw=2 tw=80:
