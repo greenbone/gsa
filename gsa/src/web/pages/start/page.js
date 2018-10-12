@@ -41,15 +41,15 @@ import {
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-import {
-  canAddDisplay,
-  addDisplayToSettings,
-} from 'web/store/dashboard/settings/utils';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
 
-import {convertDefaultDisplays} from 'web/components/dashboard/utils';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  convertDefaultDisplays,
+} from 'web/components/dashboard/utils';
 
 import NewIcon from 'web/components/icon/newicon';
 

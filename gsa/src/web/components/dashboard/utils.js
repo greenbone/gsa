@@ -24,7 +24,7 @@ import uuid from 'uuid/v4';
 
 import {createDisplay, createRow} from 'gmp/commands/dashboards';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isArray} from 'gmp/utils/identity';
 
 export const getPermittedDisplayIds = (settings = {}) =>
   settings.permittedDisplays;
@@ -85,5 +85,46 @@ export const convertGridItemsToDisplays = (gridItems = [], displaysById = {}) =>
     height,
     items: items.map(dId => displaysById[dId]).filter(isDefined),
   }));
+
+export const canAddDisplay = ({rows, maxItemsPerRow, maxRows} = {}) => {
+  if (isArray(rows) && rows.length > 0 &&
+    isDefined(maxItemsPerRow) && isDefined(maxRows)) {
+    const lastRow = rows[rows.length - 1];
+    return lastRow.items.length < maxItemsPerRow || rows.length < maxRows;
+  }
+  return true;
+};
+
+export const addDisplayToSettings = (settings, displayId, uuidFunc) => {
+  const {rows: currentRows = [], maxItemsPerRow} = settings || {};
+
+  const lastRow = isArray(currentRows) && currentRows.length > 0 ?
+    currentRows[currentRows.length - 1] : {items: []};
+
+  const rows = isArray(currentRows) ? [...currentRows] : [];
+  const display = createDisplay(displayId, undefined, uuidFunc);
+
+  let newRow;
+  if (isDefined(maxItemsPerRow) && lastRow.items.length >= maxItemsPerRow) {
+    // create new row
+    newRow = createRow([display], undefined, uuidFunc);
+  }
+  else {
+    // add new display to last row
+    newRow = {
+      ...lastRow,
+      items: [...lastRow.items, display],
+    };
+
+    rows.pop();
+  }
+
+  rows.push(newRow);
+
+  return {
+    ...settings,
+    rows,
+  };
+};
 
 // vim: set ts=2 sw=2 tw=80:

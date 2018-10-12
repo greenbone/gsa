@@ -34,10 +34,6 @@ import {
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-import {
-  canAddDisplay,
-  addDisplayToSettings,
-} from 'web/store/dashboard/settings/utils';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -54,7 +50,11 @@ import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
-import {getPermittedDisplayIds} from './utils';
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  getPermittedDisplayIds,
+} from './utils';
 
 export class DashboardControls extends React.Component {
 
