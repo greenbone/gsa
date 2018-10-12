@@ -43,7 +43,6 @@ import PropTypes from 'web/utils/proptypes';
 import EmptyRow from './emptyrow';
 import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
-import {updateRow} from './utils';
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
@@ -128,13 +127,19 @@ class Grid extends React.Component {
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
 
-      items[destrowIndex] = updateRow(destRow,
-        {id: destrowId, items: destrowItems});
+      items[destrowIndex] = {
+        ...destRow,
+        id: destrowId,
+        items: destrowItems,
+      };
     }
 
     // update source row to actually remove the element
-    items[sourcerowIndex] = updateRow(sourceRow,
-      {id: sourcerowId, items: sourceRowItems});
+    items[sourcerowIndex] = {
+      ...sourceRow,
+      id: sourcerowId,
+      items: sourceRowItems,
+    };
 
     // remove empty rows
     items = items.filter(row => row.items.length > 0);
