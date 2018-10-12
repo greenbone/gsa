@@ -166,12 +166,12 @@ export class Dashboard extends React.Component {
 
     const displaysById = getDisplaysById(rows);
 
-    this.update({
-      rows: gridItems.map(row => ({
+    this.updateRows(
+      gridItems.map(row => ({
         ...row,
         items: row.items.map(id => displaysById[id]),
       })),
-    });
+    );
   }
 
   handleUpdateDisplay(id, props) {
@@ -196,13 +196,13 @@ export class Dashboard extends React.Component {
     const newRows = [...rows];
     newRows[rowIndex] = updateRow(row, {rows: rowItems});
 
-    this.update({rows: newRows});
+    this.updateRows(newRows);
   }
 
   handleRemoveDisplay(id) {
     const {rows} = this.props;
 
-    this.update({rows: removeItem(rows, id)});
+    this.updateRows(removeItem(rows, id));
   }
 
   handleRowResize(rowId, height) {
@@ -216,7 +216,7 @@ export class Dashboard extends React.Component {
     ];
     newRows[rowIndex] = updateRow(row, {height});
 
-    this.update({rows: newRows});
+    this.updateRows(newRows);
   }
 
   handleInteraction() {
@@ -227,16 +227,16 @@ export class Dashboard extends React.Component {
     }
   }
 
-  update({rows}) {
+  updateRows(rows) {
     this.setState({rows});
 
-    this.save(rows);
+    this.save({rows});
   }
 
-  save(rows) {
+  save(settings) {
     const {id} = this.props;
 
-    this.props.saveSettings(id, {rows});
+    this.props.saveSettings(id, settings);
 
     this.handleInteraction();
   }
