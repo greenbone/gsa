@@ -24,6 +24,7 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
   convertDefaultDisplays,
+  convertDisplaysToGridItems,
   filterDisplays,
   getDisplaysById,
   getPermittedDisplayIds,
@@ -245,6 +246,46 @@ describe('getDisplaysById tests', () => {
         value: 3,
       },
     });
+  });
+
+});
+
+describe('convertDisplaysToGridItems', () => {
+
+  test('should return empty array for undefined', () => {
+    expect(convertDisplaysToGridItems()).toEqual([]);
+  });
+
+  test('should convert displays to grid items', () => {
+    const rows = [{
+      id: 'r1',
+      height: 100,
+      foo: 'bar',
+      items: [{
+        id: 'a1',
+        value: 1,
+      }, {
+        id: 'a2',
+        value: 2,
+      }],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: [{
+        id: 'a3',
+        value: 3,
+      }],
+    }];
+
+    expect(convertDisplaysToGridItems(rows)).toEqual([{
+      id: 'r1',
+      height: 100,
+      items: ['a1', 'a2'],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: ['a3'],
+    }]);
   });
 
 });

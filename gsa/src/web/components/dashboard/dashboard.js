@@ -46,9 +46,10 @@ import {
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
-  removeDisplay,
+  convertDisplaysToGridItems,
   filterDisplays,
   getDisplaysById,
+  removeDisplay,
 } from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
@@ -88,11 +89,6 @@ const RowPlaceHolder = styled.div`
   align-items: center;
   margin: 15px 0;
 `;
-
-const convertDisplaysToGridItems = (items = []) => items.map(row => ({
-  ...row,
-  items: row.items.map(display => display.id),
-}));
 
 const convertGridItemsToDisplays = (gridItems, displaysById) =>
   gridItems.map(row => ({

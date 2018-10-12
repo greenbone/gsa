@@ -62,4 +62,14 @@ export const getDisplaysById = (rows = []) => {
   return displaysById;
 };
 
+export const convertDisplaysToGridItems = (items = []) => items.map(({
+  id,
+  items: rowItems,
+  height,
+}) => ({
+  height,
+  id,
+  items: rowItems.map(display => display.id),
+}));
+
 // vim: set ts=2 sw=2 tw=80:
