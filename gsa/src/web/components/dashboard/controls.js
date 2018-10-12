@@ -51,6 +51,7 @@ import Icon from 'web/components/icon/icon';
 import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
+import {getPermittedDisplayIds} from './utils';
 
 export class DashboardControls extends React.Component {
 
@@ -190,10 +191,9 @@ DashboardControls.propTypes = {
 const mapStateToProps = (rootState, {dashboardId}) => {
   const settingsSelector = getDashboardSettings(rootState);
   const settings = settingsSelector.getById(dashboardId);
-  const {permittedDisplays: displayIds} = settings || {};
   return {
     canAdd: canAddDisplay(settings),
-    displayIds,
+    displayIds: getPermittedDisplayIds(settings),
   };
 };
 
