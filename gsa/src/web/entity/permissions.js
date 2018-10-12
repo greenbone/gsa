@@ -300,6 +300,7 @@ const EntityPermissions = ({
         entity={entity}
         permissions={permissions}
         relatedResourcesLoaders={relatedResourcesLoaders}
+        toggleDetailsIcon={false}
         onChanged={onChanged}
         onInteraction={onInteraction}
         onPermissionCreateClick={create}
