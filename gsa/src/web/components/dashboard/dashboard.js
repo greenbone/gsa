@@ -46,7 +46,7 @@ import {
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
-  removeItem,
+  removeDisplay,
 } from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
@@ -199,7 +199,7 @@ export class Dashboard extends React.Component {
   handleRemoveDisplay(id) {
     const {rows} = this.props;
 
-    this.updateRows(removeItem(rows, id));
+    this.updateRows(removeDisplay(rows, id));
   }
 
   handleRowResize(rowId, height) {

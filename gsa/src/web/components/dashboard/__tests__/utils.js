@@ -26,7 +26,7 @@ import {
   convertDefaultDisplays,
   getPermittedDisplayIds,
   getRows,
-  removeItem,
+  removeDisplay,
 } from '../utils';
 
 describe('getPermittedDisplayIds tests', () => {
@@ -110,7 +110,7 @@ describe('convertDefaultDisplays test', () => {
 
 });
 
-describe('removeItem tests', () => {
+describe('removeDisplay tests', () => {
 
   test('should filter empty rows', () => {
     const rows = [{
@@ -121,7 +121,7 @@ describe('removeItem tests', () => {
       }],
     }];
 
-    const filtered = removeItem(rows);
+    const filtered = removeDisplay(rows);
     expect(filtered.length).toEqual(1);
     expect(filtered).toEqual([{
       items: [{
@@ -143,7 +143,7 @@ describe('removeItem tests', () => {
       }],
     }];
 
-    const filtered = removeItem(rows, 1);
+    const filtered = removeDisplay(rows, 1);
     expect(filtered.length).toEqual(2);
     expect(filtered).toEqual([{
       items: [{

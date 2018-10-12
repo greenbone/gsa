@@ -40,9 +40,9 @@ export const convertDefaultDisplays = (defaultDisplays = [],
   };
 };
 
-export const removeItem = (rows, itemId) => rows.map(row => ({
+export const removeDisplay = (rows, id) => rows.map(row => ({
   ...row,
-  items: row.items.filter(item => item.id !== itemId),
+  items: row.items.filter(item => item.id !== id),
 })).filter(row => row.items.length > 0);
 
 // vim: set ts=2 sw=2 tw=80:
