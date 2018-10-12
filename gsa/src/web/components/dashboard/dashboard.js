@@ -138,7 +138,7 @@ export class Dashboard extends React.Component {
   }
 
   handleItemsChange(gridItems = []) {
-    const {rows} = this.props;
+    const rows = this.getRows();
 
     const displaysById = getDisplaysById(rows);
 
@@ -146,7 +146,7 @@ export class Dashboard extends React.Component {
   }
 
   handleUpdateDisplay(id, props) {
-    const {rows} = this.props;
+    const rows = this.getRows();
 
     const rowIndex = rows.findIndex(
       row => row.items.some(item => item.id === id));
@@ -174,13 +174,13 @@ export class Dashboard extends React.Component {
   }
 
   handleRemoveDisplay(id) {
-    const {rows} = this.props;
+    const rows = this.getRows();
 
     this.updateRows(removeDisplay(rows, id));
   }
 
   handleRowResize(rowId, height) {
-    const {rows = []} = this.props;
+    const rows = this.getRows([]);
 
     const rowIndex = rows.findIndex(row => row.id === rowId);
     const row = rows[rowIndex];
@@ -194,6 +194,10 @@ export class Dashboard extends React.Component {
     };
 
     this.updateRows(newRows);
+  }
+
+  getRows(defaultRows) {
+    return getRows(this.props.settings, defaultRows);
   }
 
   handleInteraction() {
@@ -222,9 +226,9 @@ export class Dashboard extends React.Component {
       isLoading,
       maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
       maxRows = DEFAULT_MAX_ROWS,
-      rows,
       ...props
     } = this.props;
+    const rows = this.getRows();
 
     if (isDefined(error) && !isLoading) {
       return (
@@ -310,9 +314,11 @@ Dashboard.propTypes = {
   maxItemsPerRow: PropTypes.number,
   maxRows: PropTypes.number,
   permittedDisplays: PropTypes.arrayOf(PropTypes.string).isRequired,
-  rows: PropTypes.arrayOf(rowPropType),
   saveSettings: PropTypes.func.isRequired,
   setDefaultSettings: PropTypes.func.isRequired,
+  settings: PropTypes.shape({
+    rows: PropTypes.arrayOf(rowPropType),
+  }),
   onFilterChanged: PropTypes.func,
   onInteraction: PropTypes.func,
 };
@@ -321,18 +327,12 @@ Dashboard.propTypes = {
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
   const settings = settingsSelector.getById(id);
-  const hasLoaded = settingsSelector.hasSettings(id);
-  const defaults = settingsSelector.getDefaultsById(id);
   const error = settingsSelector.getError(id);
-
-  let rows = getRows(settings);
-  if (hasLoaded && !isDefined(rows)) {
-    rows = getRows(defaults);
-  }
+  const isLoading = settingsSelector.getIsLoading(id);
   return {
     error,
-    isLoading: settingsSelector.getIsLoading(id),
-    rows,
+    isLoading,
+    settings,
   };
 };
 
