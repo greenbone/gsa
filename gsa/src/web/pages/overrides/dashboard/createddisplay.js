@@ -42,11 +42,11 @@ export const OverridesCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total Overrides'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created Overrides'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total Overrides'),
   },

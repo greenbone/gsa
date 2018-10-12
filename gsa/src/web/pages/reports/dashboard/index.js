@@ -51,7 +51,7 @@ const ReportsDashboard = props => (
     {...props}
     id={REPORTS_DASHBOARD_ID}
     permittedDisplays={REPORTS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         ReportsSeverityDisplay.displayId,
         ReportsHighResultsDisplay.displayId,

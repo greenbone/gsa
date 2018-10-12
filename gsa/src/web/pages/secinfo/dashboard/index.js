@@ -54,7 +54,7 @@ export const SecInfoDashboard = props => (
     {...props}
     id={SECINFO_DASHBOARD_ID}
     permittedDisplays={SECINFO_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         SecInfosSeverityClassDisplay.displayId,
         SecInfosCreatedDisplay.displayId,

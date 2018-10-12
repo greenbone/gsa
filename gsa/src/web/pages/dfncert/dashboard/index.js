@@ -51,7 +51,7 @@ const DfnCertDashboard = props => (
     {...props}
     id={DFNCERT_DASHBOARD_ID}
     permittedDisplays={DFNCERT_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         DfnCertSeverityClassDisplay.displayId,
         DfnCertsCreatedDisplay.displayId,

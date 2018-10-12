@@ -57,7 +57,7 @@ const ResultsDashboard = props => (
     {...props}
     id={RESULTS_DASHBOARD_ID}
     permittedDisplays={RESULTS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         ResultsSeverityDisplay.displayId,
         ResultsWordCloudDisplay.displayId,

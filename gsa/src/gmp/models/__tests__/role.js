@@ -1,11 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +20,37 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
 
-import styled from 'styled-components';
+import Role from '../role';
 
-import Img from 'web/components/img/img.js';
+describe('Role model tests', () => {
 
-const WizImg = styled(Img)`
-  height: 300px;
-`;
+  test('should parse multiple users', () => {
+    const elem = {users: 'foo, bar'};
+    const role = new Role(elem);
 
-const Wizardess = () => (
-  <WizImg
-    src="enchantress.svg"
-  />
-);
+    expect(role.users).toEqual(['foo', 'bar']);
+  });
 
-export default Wizardess;
+  test('should parse single user', () => {
+    const elem = {users: 'foo'};
+    const role = new Role(elem);
+
+    expect(role.users).toEqual(['foo']);
+  });
+
+  test('should parse empty users string to empty array', () => {
+    const elem = {users: ''};
+    const role = new Role(elem);
+
+    expect(role.users).toEqual([]);
+  });
+
+  test('should parse empty object to have empty users array', () => {
+    const role = new Role({});
+
+    expect(role.users).toEqual([]);
+  });
+});
 
 // vim: set ts=2 sw=2 tw=80:

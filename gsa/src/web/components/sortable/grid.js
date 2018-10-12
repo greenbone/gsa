@@ -24,9 +24,13 @@ import 'core-js/shim';
 import 'core-js/library/fn/array/find-index';
 import 'core-js/library/fn/array/find';
 
+import uuid from 'uuid/v4';
+
 import React from 'react';
 
 import {DragDropContext} from 'react-beautiful-dnd';
+
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -38,36 +42,16 @@ import PropTypes from 'web/utils/proptypes';
 import EmptyRow from './emptyrow';
 import Item, {GRID_ITEM_MARGIN} from './item';
 import Row from './row';
-import {
-  updateRow,
-  removeItem,
-  createRow,
-  DEFAULT_ROW_HEIGHT,
-} from './utils';
+
+const createNewRow = item => ({
+  id: uuid(),
+  height: DEFAULT_ROW_HEIGHT,
+  items: [item],
+});
 
 const findRowIndex = (rows, rowid) => rows.findIndex(row => row.id === rowid);
 
-const itemPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-});
-
-const rowPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(itemPropType).isRequired,
-  height: PropTypes.number,
-});
-
-export const itemsPropType = PropTypes.arrayOf(rowPropType);
-
 class Grid extends React.Component {
-
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-    items: itemsPropType,
-    maxItemsPerRow: PropTypes.number,
-    maxRows: PropTypes.number,
-    onChange: PropTypes.func,
-  }
 
   constructor(props) {
     super(props);
@@ -89,14 +73,12 @@ class Grid extends React.Component {
     }
   }
 
-  handleRowResize(row, height) {
-    let {items} = this.props;
-    items = [...items];
+  handleRowResize(rowId, height) {
+    const {onRowResize} = this.props;
 
-    const rowIndex = findRowIndex(items, row.id);
-    items[rowIndex] = updateRow(row, {height});
-
-    this.notifyChange(items);
+    if (isDefined(onRowResize)) {
+      onRowResize(rowId, height);
+    }
   }
 
   handleDragStart(drag) {
@@ -106,35 +88,6 @@ class Grid extends React.Component {
       isDragging: true,
       dragSourceRowId: rowId,
     });
-  }
-
-  handleRemoveItem(itemId) {
-    let {items} = this.props;
-
-    items = removeItem(items, itemId);
-
-    this.notifyChange(items);
-  }
-
-  handleUpdateItem(row, item, props) {
-    item = {
-      ...item,
-      ...props,
-    };
-
-    const rowItems = [
-      ...row.items,
-    ];
-    const index = rowItems.findIndex(i => i.id === item.id);
-    rowItems[index] = item;
-
-    const {items} = this.props;
-    const rows = [...items];
-
-    const rowIndex = findRowIndex(rows, row.id);
-    rows[rowIndex] = updateRow(row, {items: rowItems});
-
-    this.notifyChange(rows);
   }
 
   handleDragEnd(result) {
@@ -163,35 +116,35 @@ class Grid extends React.Component {
     const sourceRow = items[sourcerowIndex];
     // we are mutating the row => create copy
     const sourceRowItems = [...sourceRow.items];
-    // remove from source row
+    // remove from source row. removed item is returned in an array
     const [item] = sourceRowItems.splice(sourceIndex, 1);
 
     if (destrowId === 'empty') {
-      // update row
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
-
       // create new row with the removed item
-      items = [...items, createRow([item])];
+      items = [...items, createNewRow(item)];
     }
     else if (destrowId === sourcerowId) {
       // add at position destindex
       sourceRowItems.splice(destIndex, 0, item);
-
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
     }
     else {
-      items[sourcerowIndex] = updateRow(sourceRow,
-        {id: sourcerowId, items: sourceRowItems});
-
       // add to destination row
       const destrowItems = [...destRow.items];
       destrowItems.splice(destIndex, 0, item);
 
-      items[destrowIndex] = updateRow(destRow,
-        {id: destrowId, items: destrowItems});
+      items[destrowIndex] = {
+        ...destRow,
+        id: destrowId,
+        items: destrowItems,
+      };
     }
+
+    // update source row to actually remove the element
+    items[sourcerowIndex] = {
+      ...sourceRow,
+      id: sourcerowId,
+      items: sourceRowItems,
+    };
 
     // remove empty rows
     items = items.filter(row => row.items.length > 0);
@@ -210,6 +163,8 @@ class Grid extends React.Component {
       const {height = DEFAULT_ROW_HEIGHT} = dragRow;
       emptyRowHeight = height;
     }
+    const getRowHeight = row => row.height;
+    const getRowItems = row => row.items;
     return (
       <DragDropContext
         onDragEnd={this.handleDragEnd}
@@ -218,8 +173,16 @@ class Grid extends React.Component {
         <AutoSize>
           {({width: fullWidth}) => (
             <Layout flex="column" grow="1">
-              {items.map((row, i) => {
-                const {items: rowItems = [], height = DEFAULT_ROW_HEIGHT} = row;
+              {items.map(row => {
+                let height = getRowHeight(row);
+                if (!isDefined(height)) {
+                  height = DEFAULT_ROW_HEIGHT;
+                }
+                let rowItems = getRowItems(row);
+                if (!isDefined(rowItems)) {
+                  rowItems = [];
+                }
+
                 const {length: itemCount} = rowItems;
 
                 const isRowFull = isDefined(maxItemsPerRow) &&
@@ -230,32 +193,27 @@ class Grid extends React.Component {
                   GRID_ITEM_MARGIN.bottom;
                 const itemWidth = fullWidth / itemCount -
                   (GRID_ITEM_MARGIN.left + GRID_ITEM_MARGIN.right);
+
+                const {id: rowId} = row;
                 return (
                   <Row
-                    key={row.id}
-                    id={row.id}
+                    key={rowId}
+                    id={rowId}
                     dropDisabled={disabled}
                     height={height}
-                    onResize={h => this.handleRowResize(row, h)}
+                    onResize={h => this.handleRowResize(rowId, h)}
                   >
-                    {rowItems.map((item, index) => {
-                      const {id, ...props} = item;
-                      return (
-                        <Item
-                          key={id}
-                          id={id}
-                          index={index}
-                          props={props}
-                          height={itemHeight}
-                          width={itemWidth}
-                          remove={() => this.handleRemoveItem(id)}
-                          update={(...args) => this.handleUpdateItem(
-                            row, item, ...args)}
-                        >
-                          {children}
-                        </Item>
-                      );
-                    })}
+                    {rowItems.map((id, index) => (
+                      <Item
+                        key={id}
+                        id={id}
+                        index={index}
+                        height={itemHeight}
+                        width={itemWidth}
+                      >
+                        {children}
+                      </Item>
+                    ))}
                   </Row>
                 );
               })}
@@ -273,6 +231,21 @@ class Grid extends React.Component {
     );
   }
 }
+
+const rowPropType = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  height: PropTypes.number,
+});
+
+Grid.propTypes = {
+  children: PropTypes.func.isRequired,
+  items: PropTypes.arrayOf(rowPropType),
+  maxItemsPerRow: PropTypes.number,
+  maxRows: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
+  onRowResize: PropTypes.func.isRequired,
+};
 
 export default Grid;
 

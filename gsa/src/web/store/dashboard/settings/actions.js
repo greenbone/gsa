@@ -20,13 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {isDefined} from 'gmp/utils/identity';
-
 import getDashboardSettings from './selectors';
-import {
-  addDisplayToSettings,
-  canAddDisplay,
-} from './utils';
 
 export const DASHBOARD_SETTINGS_LOADING_SUCCESS =
   'DASHBOARD_SETTINGS_LOADING_SUCCESS';
@@ -42,8 +36,18 @@ export const DASHBOARD_SETTINGS_SAVING_ERROR =
 export const DASHBOARD_SETTINGS_SAVING_REQUEST =
   'DASHBOARD_SETTINGS_SAVING_REQUEST';
 
+export const DASHBOARD_SETTINGS_SET_DEFAULTS =
+  'DASHBOARD_SETTINGS_SET_DEFAULTS';
+
+export const DASHBOARD_SETTINGS_RESET_REQUEST =
+  'DASHBOARD_SETTINGS_RESET_REQUEST';
+export const DASHBOARD_SETTINGS_RESET_SUCCESS =
+  'DASHBOARD_SETTINGS_RESET_SUCCESS';
+export const DASHBOARD_SETTINGS_RESET_ERROR =
+  'DASHBOARD_SETTINGS_RESET_ERROR';
+
 /**
- * Create an action to receive dashboard settings
+ * Create a load dashboard settings success action
  *
  * @param {String} id              ID of the dashboard
  * @param {Object} settings        Settings loaded for all dashboards
@@ -52,112 +56,102 @@ export const DASHBOARD_SETTINGS_SAVING_REQUEST =
  *
  * @returns {Object} The action object
  */
-export const receivedDashboardSettings = (id, settings, defaultSettings) => ({
+export const loadDashboardSettingsSuccess = (id, settings, defaultSettings) =>
+({
   type: DASHBOARD_SETTINGS_LOADING_SUCCESS,
   id,
   settings,
   defaultSettings,
 });
 
-export const receivedDashboardSettingsLoadingError = (id, error) => ({
+export const loadDashboardSettingsError = (id, error) => ({
   type: DASHBOARD_SETTINGS_LOADING_ERROR,
   id,
   error,
 });
 
-export const requestDashboardSettings = (id, defaults) => ({
+export const loadDashboardSettingsRequest = id => ({
   type: DASHBOARD_SETTINGS_LOADING_REQUEST,
   id,
-  defaults,
 });
 
-export const savedDashboardSettings = () => ({
+export const saveDashboardSettingsSuccess = id => ({
   type: DASHBOARD_SETTINGS_SAVING_SUCCESS,
+  id,
 });
 
-export const saveDashboardSettingsError = error => ({
+export const saveDashboardSettingsError = (id, error) => ({
   type: DASHBOARD_SETTINGS_SAVING_ERROR,
+  id,
   error,
 });
 
-export const saveDashboardSettings = (id, settings) => ({
+export const saveDashboardSettingsRequest = (id, settings) => ({
   type: DASHBOARD_SETTINGS_SAVING_REQUEST,
   settings,
   id,
 });
 
-export const loadSettings = gmp => (id, defaults) =>
-  (dispatch, getState) => {
+export const setDashboardSettingDefaults = (id, defaults) => ({
+  type: DASHBOARD_SETTINGS_SET_DEFAULTS,
+  id,
+  defaults,
+});
 
+export const resetDashboardSettingsRequest = (id, settings) => ({
+  type: DASHBOARD_SETTINGS_RESET_REQUEST,
+  id,
+  settings,
+});
+
+export const resetDashboardSettingsSuccess = id => ({
+  type: DASHBOARD_SETTINGS_RESET_SUCCESS,
+  id,
+});
+
+export const resetDashboardSettingsError = (id, error) => ({
+  type: DASHBOARD_SETTINGS_RESET_ERROR,
+  id,
+  error,
+});
+
+export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
 
-  if (settingsSelector.getIsLoading()) {
+  if (settingsSelector.getIsLoading(id)) {
     // we are already loading data
     return Promise.resolve();
   }
 
-  dispatch(requestDashboardSettings(id, defaults));
+  dispatch(loadDashboardSettingsRequest(id));
 
-  const promise = gmp.dashboards.currentSettings();
-  return promise.then(
-    response => dispatch(receivedDashboardSettings(id, response.data,
-       defaults)),
-    error => dispatch(receivedDashboardSettingsLoadingError(id, error)),
+  return gmp.dashboard.getSetting(id).then(
+    ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
+    error => dispatch(loadDashboardSettingsError(id, error)),
   );
 };
 
-export const saveSettings = gmp => (id, settings) =>
-  (dispatch, getState) => {
+export const saveSettings = gmp => (id, settings) => dispatch => {
+  dispatch(saveDashboardSettingsRequest(id, settings));
 
-  dispatch(saveDashboardSettings(id, settings));
-
-  return gmp.dashboard.saveSetting(id, settings)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
+  return gmp.dashboard.saveSetting(id, settings).then(
+    () => dispatch(saveDashboardSettingsSuccess(id)),
+    error => dispatch(saveDashboardSettingsError(id, error)),
+  );
 };
 
-export const resetSettings = gmp => id =>
-  (dispatch, getState) => {
-
+export const resetSettings = gmp => id => (dispatch, getState) => {
   const rootState = getState();
   const settingsSelector = getDashboardSettings(rootState);
   const defaults = settingsSelector.getDefaultsById(id);
 
-  dispatch(saveDashboardSettings(id, defaults));
+  dispatch(resetDashboardSettingsRequest(id, defaults));
 
-  return gmp.dashboard.saveSetting(id, defaults)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
-};
-
-export const addDisplay = gmp => (dashboardId, displayId, uuidFunc) =>
-  (dispatch, getState) => {
-  if (!isDefined(displayId) || !isDefined(dashboardId)) {
-    return Promise.resolve();
-  }
-
-  const rootState = getState();
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(dashboardId);
-
-  if (!canAddDisplay(settings)) {
-    return Promise.resolve();
-  }
-
-  const newSettings = addDisplayToSettings(settings, displayId, uuidFunc);
-
-  dispatch(saveDashboardSettings(dashboardId, newSettings));
-
-  return gmp.dashboard.saveSetting(dashboardId, newSettings)
-    .then(
-      response => dispatch(savedDashboardSettings()),
-      error => dispatch(saveDashboardSettingsError(error)),
-    );
+  return gmp.dashboard.saveSetting(id, defaults).then(
+    () => dispatch(resetDashboardSettingsSuccess(id)),
+    error => dispatch(resetDashboardSettingsError(id, error)),
+  );
 };
 
 // vim: set ts=2 sw=2 tw=80:

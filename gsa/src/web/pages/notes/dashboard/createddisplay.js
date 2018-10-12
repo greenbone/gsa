@@ -42,11 +42,11 @@ export const NotesCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total Notes'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created Notes'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total Notes'),
   },

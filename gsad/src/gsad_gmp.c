@@ -16678,300 +16678,6 @@ get_trash_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Returns page with user's settings.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
-                 params_t *params, const char *extra_xml,
-                 cmd_response_data_t* response_data)
-{
-  GString *xml;
-
-  xml = g_string_new ("<get_my_settings>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the settings. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_settings"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the settings. "
-                           "The current list of settings is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the settings. "
-                           "The current list of settings is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  g_string_append (xml, "</get_my_settings>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Returns page with user's settings.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_my_settings_gmp (gvm_connection_t *connection, credentials_t *
-                     credentials, params_t *params,
-                     cmd_response_data_t* response_data)
-{
-  GString *commands;
-  int ret;
-  gchar *response = NULL, *settings;
-
-  commands = g_string_new ("<commands>");
-  if (command_enabled (credentials, "GET_ALERTS"))
-    g_string_append (commands, "<get_alerts/>");
-  if (command_enabled (credentials, "GET_CONFIGS"))
-    g_string_append (commands, "<get_configs/>");
-  if (command_enabled (credentials, "GET_FILTERS"))
-    g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_CREDENTIALS"))
-    g_string_append (commands, "<get_credentials/>");
-  if (command_enabled (credentials, "GET_PORT_LISTS"))
-    g_string_append (commands, "<get_port_lists/>");
-  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
-    g_string_append (commands, "<get_report_formats/>");
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    g_string_append (commands, "<get_scanners/>");
-  if (command_enabled (credentials, "GET_SCHEDULES"))
-    g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_TARGETS"))
-    g_string_append (commands, "<get_targets/>");
-  g_string_append (commands, "</commands>");
-
-  /* Get Filters and other resource lists. */
-  ret = gmp (connection, credentials, &response, NULL, response_data,
-             commands->str);
-  g_string_free (commands, TRUE);
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             response_data);
-      case 2:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             response_data);
-      default:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "It is unclear whether the task has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             response_data);
-    }
-
-  settings = get_my_settings (connection, credentials, params, response,
-                              response_data);
-  g_free (response);
-  return settings;
-}
-
-/**
- * @brief Returns page with user's settings, for editing.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
-                  params_t *params, const char *extra_xml,
-                  cmd_response_data_t* response_data)
-{
-  GString *commands, *xml;
-  int ret;
-  gchar *filters_xml;
-  entity_t entity;
-
-  /* Get the Filters and other resources. */
-  commands = g_string_new ("<commands>");
-  if (command_enabled (credentials, "GET_ALERTS"))
-    g_string_append (commands, "<get_alerts/>");
-  if (command_enabled (credentials, "GET_CONFIGS"))
-    g_string_append (commands, "<get_configs/>");
-  if (command_enabled (credentials, "GET_CREDENTIALS"))
-    g_string_append (commands, "<get_credentials/>");
-  if (command_enabled (credentials, "GET_FILTERS"))
-    g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_PORT_LISTS"))
-    g_string_append (commands, "<get_port_lists/>");
-  if (command_enabled (credentials, "GET_REPORT_FORMAT"))
-    g_string_append (commands, "<get_report_formats/>");
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    g_string_append (commands, "<get_scanners/>");
-  if (command_enabled (credentials, "GET_SCHEDULES"))
-    g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_TARGETS"))
-    g_string_append (commands, "<get_targets/>");
-  g_string_append (commands, "</commands>");
-
-  filters_xml = NULL;
-  entity = NULL;
-  ret = gmp (connection, credentials, &filters_xml, &entity, response_data,
-             commands->str);
-  g_string_free (commands, TRUE);
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             response_data);
-      case 2:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the alert. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             response_data);
-      default:
-        cmd_response_data_set_status_code (response_data,
-                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting resources "
-                             "for the settings. "
-                             "Diagnostics: Internal Error.",
-                             response_data);
-    }
-  free_entity (entity);
-
-  xml = g_string_new ("<edit_my_settings>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  g_string_append (xml, filters_xml);
-  g_free (filters_xml);
-
-  /* Get the settings. */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_settings"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the settings. "
-                           "The current list of settings is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the settings. "
-                           "The current list of settings is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  g_string_append (xml, "</edit_my_settings>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Returns page with user's settings, for editing.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-edit_my_settings_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return edit_my_settings (connection, credentials, params, NULL,
-                           response_data);
-}
-
-/**
  * @brief Send settings resource filters.
  *
  * @param[in]   connection          Connection to Manager.
@@ -17799,176 +17505,10 @@ save_my_settings_gmp (gvm_connection_t *connection,
       session_add_user (user_get_token(user), user);
     }
 
-  if (modify_failed)
-    return edit_my_settings (connection, credentials, params,
-                             g_string_free (xml, FALSE),
-                             response_data);
-  else
-    return get_my_settings (connection, credentials, params,
-                            g_string_free (xml, FALSE),
-                            response_data);
+  return envelope_gmp(connection, credentials, params,
+                      g_string_free(xml, FALSE),
+                      response_data);
 }
-
-/**
- * @brief Get GMP doc.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_protocol_doc_gmp (gvm_connection_t *connection, credentials_t *
-                      credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  GString *xml;
-  entity_t help_response;
-
-  xml = g_string_new ("");
-  g_string_append_printf (xml, "<get_protocol_doc>");
-
-  /* Get the resource. */
-
-  if (gvm_connection_sendf (connection, "<help format=\"XML\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the GMP doc. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  help_response = NULL;
-  if (read_entity_and_string_c (connection, &help_response, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the GMP doc. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-  free_entity (help_response);
-
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append_printf (xml, "</get_protocol_doc>");
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Download the GMP doc.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]   credentials          Username and password for authentication.
- * @param[in]   params               Request parameters.
- * @param[out]  response_data        Extra data return for the HTTP response.
- *
- * @return XML on success.  Enveloped XML on error.
- */
-char *
-export_gmp_doc_gmp (gvm_connection_t *connection,
-                    credentials_t * credentials, params_t *params,
-                    cmd_response_data_t* response_data)
-{
-  entity_t entity, response;
-  char *content = NULL;
-  const char *format;
-  time_t now;
-  struct tm *tm;
-
-  format = params_value (params, "protocol_format")
-            ? params_value (params, "protocol_format")
-            : "xml";
-
-  if (gvm_connection_sendf (connection,
-                            "<help format=\"%s\"/>",
-                            format)
-      == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a list. "
-                           "The list could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  response = NULL;
-  if (read_entity_and_text_c (connection, &response, &content))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting GMP doc. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  if (strcmp (format, "xml") == 0)
-    cmd_response_data_set_content_length (response_data, strlen (content));
-  else
-    {
-      char *content_64;
-      gsize content_length;
-      entity = entity_child (response, "schema");
-      if (entity == NULL)
-        {
-          free_entity (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting GMP doc. "
-                               "Diagnostics: Schema element missing.",
-                               response_data);
-        }
-
-      content_64 = entity_text (entity);
-      if (strlen (content_64) == 0)
-        {
-          free_entity (response);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting GMP doc. "
-                               "Diagnostics: Schema empty.",
-                               response_data);
-        }
-
-      content = (char *) g_base64_decode (content_64, &content_length);
-      cmd_response_data_set_content_length (response_data, content_length);
-    }
-
-  now = time (NULL);
-  tm = localtime (&now);
-  cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
-  cmd_response_data_set_content_disposition
-    (response_data, g_strdup_printf ("attachment; filename=\"gmp-%d-%d-%d.%s\"",
-                                     tm->tm_mday,
-                                     tm->tm_mon + 1,
-                                     tm->tm_year +1900,
-                                     format));
-  free_entity (response);
-  return content;
-}
-
 
 /* Groups. */
 
@@ -22611,56 +22151,76 @@ save_auth_gmp (gvm_connection_t *connection, credentials_t* credentials,
   g_free (response);
   return html;
 }
+
 /**
- * @brief Get all dashboard settings
+ * @brief Get all user defined settings
  *
  * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Enveloped XML object.
  */
 char *
-get_dashboard_settings_gmp (gvm_connection_t *connection,
-                            credentials_t * credentials, params_t *params,
-                            cmd_response_data_t* response_data)
+get_settings_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
+  gchar *command;
+  const gchar *filter;
 
-  xml = g_string_new ("<get_dashboard_settings>");
+  xml = g_string_new ("<get_settings>");
 
-  if (gvm_connection_sendf_xml (connection,
-                              "<get_settings"
-                              " filter='name~\"Dashboard\"'/>"))
+  /* Get the settings. */
+
+  filter = params_value (params, "filter");
+  if (filter)
     {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while getting the "
-                            "dashboard settings"
-                            "Diagnostics: Failure to send command to manager "
-                            "daemon.",
-                            response_data);
+      command = g_markup_printf_escaped ("<get_settings"
+                                         " filter=\"%s\""
+                                         " sort_field=\"name\""
+                                         " sort_order=\"ascending\"/>",
+                                         filter);
+    }
+  else
+    {
+      command = g_strdup ("<get_settings"
+                          " sort_field=\"name\""
+                          " sort_order=\"ascending\"/>");
     }
 
-  if (read_string_c (connection, &xml))
+  if (gvm_connection_sendf (connection, command))
     {
+      g_free(command);
+
       g_string_free (xml, TRUE);
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the "
-                           "dashboard settings"
-                           "Diagnostics: Failure to receive response from "
-                           "manager daemon.",
-                            response_data);
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           response_data);
     }
 
-  g_string_append (xml, "</get_dashboard_settings>");
+  if (read_string_c (connection, &xml))
+    {
+      g_free(command);
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           response_data);
+    }
+
+  g_free(command);
+  g_string_append (xml, "</get_settings>");
   return envelope_gmp (connection, credentials, params,
                        g_string_free (xml, FALSE),
                        response_data);
@@ -22766,6 +22326,52 @@ save_setting_gmp (gvm_connection_t *connection,
   g_free (response);
   return html;
 }
+
+char *
+get_setting_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+  const gchar *setting_id = params_value (params, "setting_id");
+  CHECK_VARIABLE_INVALID (setting_id, "Get Setting");
+  GString *xml = g_string_new ("<get_settings>");
+
+  if (gvm_connection_sendf_xml (connection,
+                                "<get_settings"
+                                " setting_id=\"%s\"/>",
+                                setting_id))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the "
+                            "dashboard settings"
+                            "Diagnostics: Failure to send command to manager "
+                            "daemon.",
+                            response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the "
+                           "dashboard settings"
+                           "Diagnostics: Failure to receive response from "
+                           "manager daemon.",
+                            response_data);
+    }
+
+  g_string_append (xml, "</get_settings>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE),
+                       response_data);
+}
+
 
 
 /* Wizards. */

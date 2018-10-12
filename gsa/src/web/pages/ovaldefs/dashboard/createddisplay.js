@@ -42,11 +42,11 @@ export const OvaldefsCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total OVAL Definitions'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created OVAL Defs'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total OVAL Defs'),
   },

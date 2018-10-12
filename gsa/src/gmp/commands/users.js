@@ -71,7 +71,7 @@ class UserCommand extends EntityCommand {
           forEach(group.auth_conf_setting, setting => {
             values[setting.key] = setting.value;
             if (isDefined(setting.certificate_info)) {
-              values.certificate_info = setting.certificate_info;
+              values.certificateInfo = setting.certificate_info;
             }
           });
 
@@ -85,7 +85,7 @@ class UserCommand extends EntityCommand {
 
   currentSettings(options = {}) {
     return this.httpGet({
-      cmd: 'get_my_settings',
+      cmd: 'get_settings',
     }, options
     ).then(response => {
       const settings = {};
@@ -106,7 +106,7 @@ class UserCommand extends EntityCommand {
 
   currentCapabilities(options = {}) {
     return this.httpGet({
-      cmd: 'get_my_settings',
+      cmd: 'get_settings',
     }, options,
     ).then(response => {
       const {data} = response;

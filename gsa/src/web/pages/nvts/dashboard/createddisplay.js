@@ -43,11 +43,11 @@ export const NvtsCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total NVTs'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created NVTs'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total NVTs'),
   },

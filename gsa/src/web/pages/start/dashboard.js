@@ -24,10 +24,9 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {canAddDisplay} from 'web/store/dashboard/settings/utils';
-
 import {Dashboard} from 'web/components/dashboard/dashboard';
 import {DashboardControls} from 'web/components/dashboard/controls';
+import {canAddDisplay} from 'web/components/dashboard/utils';
 
 import Layout from 'web/components/layout/layout';
 
@@ -92,7 +91,7 @@ const StartDashboard = ({
       id={id}
       showFilterSelection
       showFilterString
-      defaultContent={DEFAULT_DISPLAYS}
+      defaultDisplays={DEFAULT_DISPLAYS}
       permittedDisplays={ALL_DISPLAYS}
       loadSettings={loadSettings}
       saveSettings={saveSettings}

@@ -51,7 +51,7 @@ const NotesDashboard = props => (
     {...props}
     id={NOTES_DASHBOARD_ID}
     permittedDisplays={NOTES_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         NotesActiveDaysDisplay.displayId,
         NotesCreatedDisplay.displayId,

@@ -24,7 +24,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 find_package (Node 8.0 REQUIRED)
-find_package (Yarn QUIET)
+find_package (Yarn 1.0)
 
 set (GSA_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set (GSA_DEST_DIR ${GSAD_DATA_DIR}/web)
@@ -232,6 +232,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/utils.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/utils.js
      ${GSA_SRC_DIR}/src/web/components/dialog/button.js
      ${GSA_SRC_DIR}/src/web/components/dialog/container.js
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
@@ -344,7 +345,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/sortable/item.js
      ${GSA_SRC_DIR}/src/web/components/sortable/resizer.js
      ${GSA_SRC_DIR}/src/web/components/sortable/row.js
-     ${GSA_SRC_DIR}/src/web/components/sortable/utils.js
      ${GSA_SRC_DIR}/src/web/components/structure/footer.js
      ${GSA_SRC_DIR}/src/web/components/structure/header.js
      ${GSA_SRC_DIR}/src/web/components/structure/main.js
@@ -791,7 +791,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/reducers.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/settings/selectors.js
-     ${GSA_SRC_DIR}/src/web/store/dashboard/settings/utils.js
      ${GSA_SRC_DIR}/src/web/store/index.js
      ${GSA_SRC_DIR}/src/web/store/reducers.js
      ${GSA_SRC_DIR}/src/web/store/entities/agents.js
@@ -864,7 +863,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${GSA_SRC_DIR}/src/web/wizard/modifytaskwizard.js
      ${GSA_SRC_DIR}/src/web/wizard/taskwizard.js
-     ${GSA_SRC_DIR}/src/web/wizard/wizardess.js
      )
 
 set (GSA_JS_SRC_FILES

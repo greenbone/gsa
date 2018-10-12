@@ -68,7 +68,7 @@ const TaskDashboard = props => (
     {...props}
     id={TASK_DASHBOARD_ID}
     permittedDisplays={TASKS_DISPLAYS}
-    defaultContent={[
+    defaultDisplays={[
       [
         TasksSeverityDisplay.displayId,
         TasksMostHighResultsDisplay.displayId,

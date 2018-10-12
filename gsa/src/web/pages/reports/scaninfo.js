@@ -166,7 +166,7 @@ const ReportScanInfoTable = ({
         {is_ended &&
           <TableRow>
             <TableData>
-              {delta ? _('Scan  Duration Report 1') : _('Scan Duration')}
+              {delta ? _('Scan Duration Report 1') : _('Scan Duration')}
             </TableData>
             <TableData>
               {scanDuration(scan_start, scan_end)}
@@ -216,7 +216,7 @@ const ReportScanInfoTable = ({
         {delta && delta_report.scan_end.isValid() &&
           <TableRow>
             <TableData>
-              {_('Scan  Duration Report 2')}
+              {_('Scan Duration Report 2')}
             </TableData>
             <TableData>
               {scanDuration(delta_report.scan_start, delta_report.scan_end)}

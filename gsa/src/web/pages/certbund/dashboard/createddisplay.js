@@ -42,11 +42,11 @@ export const CertBundCreatedDisplay = createDisplay({
   y2AxisLabel: _l('Total CERT-Bund Advisories'),
   xAxisLabel: _l('Time'),
   yLine: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     label: _l('Created CERT-Bund Advs'),
   },
   y2Line: {
-    color: Theme.darkGreen,
+    color: Theme.darkGreenTransparent,
     dashArray: '3, 2',
     label: _l('Total CERT-Bund Advs'),
   },

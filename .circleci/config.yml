@@ -23,11 +23,17 @@ jobs:
       - run:
           working_directory: ~/gsa/gsa
           name: Run JavaScript tests
-          command: yarn test:coverage
+          command: yarn test:coverage --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: "./reports"
       - run:
           working_directory: ~/gsa/gsa
           name: Submit test coverage to codecov.io
           command: bash <(curl -s https://codecov.io/bash)
+      - store_test_results:
+          path: ~/gsa/gsa/reports
+      - store_artifacts:
+          path: ~/gsa/gsa/reports
   js_lint:
     working_directory: ~/gsa
     docker:
@@ -43,7 +49,11 @@ jobs:
       - run:
           working_directory: ~/gsa/gsa
           name: Linting JavaScript files
-          command: yarn lint
+          command: yarn lint --format junit -o ~/reports/eslint.xml
+      - store_test_results:
+          path: ~/reports
+      - store_artifacts:
+          path: ~/reports
       - save_cache:
           key: v1-deps-{{ checksum "./gsa/yarn.lock"  }}
           paths:

@@ -33,22 +33,23 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderNvtName} from '../../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderNvtName} from 'web/utils/render';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import References from '../nvts/references.js';
-import Solution from '../nvts/solution.js';
+import References from '../nvts/references';
+import Solution from '../nvts/solution';
 import P from '../nvts/preformatted';
 
 /*
@@ -149,6 +150,10 @@ const ResultDetails = ({
             {tags.vuldetect}
           </Layout>
           <InfoTable>
+            <colgroup>
+              <Col width="10%"/>
+              <Col width="90%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>

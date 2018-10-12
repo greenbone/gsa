@@ -1,7 +1,7 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2018 Greenbone Networks GmbH
@@ -20,40 +20,39 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import uuid from 'uuid/v4';
 
-export const DEFAULT_ROW_HEIGHT = 250;
+import Group from '../group';
 
-export const createRow = (items, height = DEFAULT_ROW_HEIGHT,
-  uuidFunc = uuid) => ({
-  id: uuidFunc(),
-  height,
-  items,
+describe('Group model tests', () => {
+
+  test('should parse multiple users', () => {
+    const elem = {};
+    elem.users = 'foo, bar';
+    const group = new Group(elem);
+
+    expect(group.users).toEqual(['foo', 'bar']);
+  });
+
+  test('should parse single user', () => {
+    const elem = {users: 'foo'};
+    const group = new Group(elem);
+
+    expect(group.users).toEqual(['foo']);
+  });
+
+  test('should parse empty users string to empty array', () => {
+    const elem = {users: ''};
+    const group = new Group(elem);
+
+    expect(group.users).toEqual([]);
+  });
+
+  test('should parse empty object to have empty users array', () => {
+    const group = new Group({});
+
+    expect(group.users).toEqual([]);
+  });
+
 });
-
-export const createItem = (props, uuidFunc = uuid) => {
-  const id = uuidFunc();
-
-  return {
-    id,
-    ...props,
-  };
-};
-
-export const removeItem = (rows, itemId) => rows.map(row => ({
-  ...row,
-  items: row.items.filter(item => item.id !== itemId),
-})).filter(row => row.items.length > 0);
-
-export const updateRow = (row, data) => ({
-  ...row,
-  ...data,
-});
-
-export const convertDefaultContent = (defaultContent = [], uuidFunc = uuid) =>
-  defaultContent.map(row => createRow(
-    row.map(item => createItem({name: item}, uuidFunc)), undefined, uuidFunc
-  ));
-
 
 // vim: set ts=2 sw=2 tw=80:

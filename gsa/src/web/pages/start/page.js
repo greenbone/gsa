@@ -41,13 +41,15 @@ import {
   saveSettings,
 } from 'web/store/dashboard/settings/actions';
 import getDashboardSettings from 'web/store/dashboard/settings/selectors';
-import {
-  canAddDisplay,
-  addDisplayToSettings,
-} from 'web/store/dashboard/settings/utils';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import CloseButton from 'web/components/dialog/closebutton';
+
+import {
+  addDisplayToSettings,
+  canAddDisplay,
+  convertDefaultDisplays,
+} from 'web/components/dashboard/utils';
 
 import NewIcon from 'web/components/icon/newicon';
 
@@ -59,8 +61,6 @@ import Loading from 'web/components/loading/loading';
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 
 import Section from 'web/components/section/section';
-
-import {convertDefaultContent} from 'web/components/sortable/utils';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -86,9 +86,7 @@ const getDefaults = () => ({
     },
   },
   defaults: {
-    [OVERVIEW_DASHBOARD_ID]: {
-      rows: convertDefaultContent(DEFAULT_DISPLAYS),
-    },
+    [OVERVIEW_DASHBOARD_ID]: convertDefaultDisplays(DEFAULT_DISPLAYS),
   },
 });
 
@@ -135,6 +133,7 @@ class StartPage extends React.Component {
     this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
 
     this.handleResetDashboards = this.handleResetDashboards.bind(this);
+    this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
   }
 
   componentDidMount() {
@@ -227,6 +226,20 @@ class StartPage extends React.Component {
     // all defaults and settings are already provided
   }
 
+  handleSetDefaultSettings(dashboardId, defaultSettings) {
+    const {defaults = {}} = this.props;
+
+    this.saveSettings({
+      defaults: {
+        ...defaults,
+        [dashboardId]: {
+          ...defaults[dashboardId],
+          ...defaultSettings,
+        },
+      },
+    });
+  }
+
   handleResetDashboard(dashboardId) {
     const {byId, defaults = {}} = this.props;
 
@@ -268,9 +281,8 @@ class StartPage extends React.Component {
 
     const id = uuid();
 
-    const rows = convertDefaultContent(defaultDisplays);
     const newDashboardSetting = {
-      rows,
+      ...convertDefaultDisplays(defaultDisplays),
       title,
     };
 
@@ -415,6 +427,8 @@ class StartPage extends React.Component {
                               loadSettings={this.handleLoadDashboardSettings}
                               notify={notify}
                               saveSettings={this.handleSaveDashboardSettings}
+                              setDefaultSettings={
+                                this.handleSetDefaultSettings}
                               onInteraction={this.props.renewSessionTimeout}
                               onNewDisplay={this.handleAddNewDisplay}
                               onResetDashboard={this.handleResetDashboard}
@@ -476,7 +490,7 @@ const mapStateToProps = rootState => {
   }
 
   const props = {
-    isLoading: settingsSelector.getIsLoading(),
+    isLoading: settingsSelector.getIsLoading(DASHBOARD_ID),
     ...DEFAULTS,
     byId: {
       ...DEFAULTS.byId,
