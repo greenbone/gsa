@@ -113,6 +113,10 @@ describe('convertDefaultDisplays test', () => {
 
 describe('removeDisplay tests', () => {
 
+  test('should not crash for undefined rows', () => {
+    expect(removeDisplay()).toEqual([]);
+  });
+
   test('should filter empty rows', () => {
     const rows = [{
       items: [],

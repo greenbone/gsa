@@ -40,7 +40,7 @@ export const convertDefaultDisplays = (defaultDisplays = [],
   };
 };
 
-export const removeDisplay = (rows, id) => rows.map(row => ({
+export const removeDisplay = (rows = [], id) => rows.map(row => ({
   ...row,
   items: row.items.filter(item => item.id !== id),
 })).filter(row => row.items.length > 0);
