@@ -38,7 +38,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('tasks')).toEqual(false);
   });
 
-  test('should ignore case for capabilties', () => {
+  test('should ignore case for capabilities', () => {
     const caps = new Capabilities(['GET_TASKS']);
 
     expect(caps.has('get_tasks')).toEqual(true);
@@ -56,7 +56,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayAccess('tasks')).toEqual(true);
   });
 
-  test('should have only access task capabilties', () => {
+  test('should have only access task capabilities', () => {
     const caps = new Capabilities(['get_tasks']);
 
     expect(caps.mayAccess('task')).toEqual(true);
@@ -69,7 +69,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('task')).toEqual(false);
   });
 
-  test('should have only clone and create task capabilties', () => {
+  test('should have only clone and create task capabilities', () => {
     const caps = new Capabilities(['create_task']); // create perm allows also to clone
 
     expect(caps.mayClone('task')).toEqual(true);
@@ -83,7 +83,7 @@ describe('Capabilities tests', () => {
   });
 
 
-  test('should have only delete task capabilties', () => {
+  test('should have only delete task capabilities', () => {
     const caps = new Capabilities(['delete_task']);
 
     expect(caps.mayDelete('task')).toEqual(true);
@@ -96,7 +96,7 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('task')).toEqual(false);
   });
 
-  test('should have only edit task capabilties', () => {
+  test('should have only edit task capabilities', () => {
     const caps = new Capabilities(['modify_task']);
 
     expect(caps.mayEdit('task')).toEqual(true);
