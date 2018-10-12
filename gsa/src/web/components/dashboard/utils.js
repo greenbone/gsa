@@ -45,4 +45,13 @@ export const removeDisplay = (rows, id) => rows.map(row => ({
   items: row.items.filter(item => item.id !== id),
 })).filter(row => row.items.length > 0);
 
+export const filterDisplays = (rows = [], isAllowed = () => true) =>
+  rows.map(row => {
+    const {items: rowItems = []} = row;
+    return {
+      ...row,
+      items: rowItems.filter(({id}) => isAllowed(id)),
+    };
+  });
+
 // vim: set ts=2 sw=2 tw=80:

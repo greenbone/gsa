@@ -47,6 +47,7 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
   removeDisplay,
+  filterDisplays,
 } from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
@@ -86,14 +87,6 @@ const RowPlaceHolder = styled.div`
   align-items: center;
   margin: 15px 0;
 `;
-
-const filterDisplays = (items = [], isAllowed) => items.map(row => {
-  const {items: rowItems = []} = row;
-  return {
-    ...row,
-    items: rowItems.filter(({id}) => isAllowed(id)),
-  };
-});
 
 const getDisplaysById = (items = []) => {
   const displaysById = {};
