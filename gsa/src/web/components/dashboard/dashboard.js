@@ -90,7 +90,7 @@ const RowPlaceHolder = styled.div`
   margin: 15px 0;
 `;
 
-const filterItems = (items = [], isAllowed) => items.map(row => {
+const filterDisplays = (items = [], isAllowed) => items.map(row => {
   const {items: rowItems = []} = row;
   return {
     ...row,
@@ -280,7 +280,7 @@ export class Dashboard extends React.Component {
 
     return (
       <Grid
-        items={getGridItems(filterItems(items, isAllowed))}
+        items={getGridItems(filterDisplays(items, isAllowed))}
         maxItemsPerRow={maxItemsPerRow}
         maxRows={maxRows}
         onChange={this.handleItemsChange}
