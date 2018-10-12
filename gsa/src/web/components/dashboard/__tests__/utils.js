@@ -26,6 +26,7 @@ import {
   convertDefaultDisplays,
   getPermittedDisplayIds,
   getRows,
+  removeItem,
 } from '../utils';
 
 describe('getPermittedDisplayIds tests', () => {
@@ -105,6 +106,54 @@ describe('convertDefaultDisplays test', () => {
         }],
       }],
     });
+  });
+
+});
+
+describe('removeItem tests', () => {
+
+  test('should filter empty rows', () => {
+    const rows = [{
+      items: [],
+    }, {
+      items: [{
+        id: 1,
+      }],
+    }];
+
+    const filtered = removeItem(rows);
+    expect(filtered.length).toEqual(1);
+    expect(filtered).toEqual([{
+      items: [{
+        id: 1,
+      }],
+    }]);
+  });
+
+  test('should remove item with id', () => {
+    const rows = [{
+      items: [{
+        id: 1,
+      }, {
+        id: 2,
+      }],
+    }, {
+      items: [{
+        id: 3,
+      }],
+    }];
+
+    const filtered = removeItem(rows, 1);
+    expect(filtered.length).toEqual(2);
+    expect(filtered).toEqual([{
+      items: [{
+        id: 2,
+      }],
+    }, {
+      items: [{
+        id: 3,
+      }],
+    }]);
   });
 
 });

@@ -21,57 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {
-  removeItem,
   updateRow,
 } from '../utils';
 
-describe('removeItem tests', () => {
-
-  test('should filter empty rows', () => {
-    const rows = [{
-      items: [],
-    }, {
-      items: [{
-        id: 1,
-      }],
-    }];
-
-    const filtered = removeItem(rows);
-    expect(filtered.length).toEqual(1);
-    expect(filtered).toEqual([{
-      items: [{
-        id: 1,
-      }],
-    }]);
-  });
-
-  test('should remove item with id', () => {
-    const rows = [{
-      items: [{
-        id: 1,
-      }, {
-        id: 2,
-      }],
-    }, {
-      items: [{
-        id: 3,
-      }],
-    }];
-
-    const filtered = removeItem(rows, 1);
-    expect(filtered.length).toEqual(2);
-    expect(filtered).toEqual([{
-      items: [{
-        id: 2,
-      }],
-    }, {
-      items: [{
-        id: 3,
-      }],
-    }]);
-  });
-
-});
 
 describe('updateRow tests', () => {
 

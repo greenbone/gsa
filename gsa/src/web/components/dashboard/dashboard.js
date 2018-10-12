@@ -46,6 +46,7 @@ import {
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
+  removeItem,
 } from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
@@ -53,7 +54,6 @@ import Loading from 'web/components/loading/loading';
 import Grid from 'web/components/sortable/grid';
 import {
   updateRow,
-  removeItem,
 } from 'web/components/sortable/utils';
 
 import PropTypes from 'web/utils/proptypes';
