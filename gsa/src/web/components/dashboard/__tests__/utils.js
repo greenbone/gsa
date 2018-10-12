@@ -25,6 +25,7 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {
   convertDefaultDisplays,
   filterDisplays,
+  getDisplaysById,
   getPermittedDisplayIds,
   getRows,
   removeDisplay,
@@ -207,6 +208,45 @@ describe('filterDisplays tests', () => {
       }],
     }]);
   });
+});
+
+describe('getDisplaysById tests', () => {
+
+  test('should not crash for empty argument', () => {
+    expect(getDisplaysById()).toEqual({});
+  });
+
+  test('should convert to id mapping', () => {
+    const rows = [{
+      items: [{
+        id: 'a1',
+        value: 1,
+      }, {
+        id: 'a2',
+        value: 2,
+      }],
+    }, {
+      items: [{
+        id: 'a3',
+        value: 3,
+      }],
+    }];
+    expect(getDisplaysById(rows)).toEqual({
+      a1: {
+        id: 'a1',
+        value: 1,
+      },
+      a2: {
+        id: 'a2',
+        value: 2,
+      },
+      a3: {
+        id: 'a3',
+        value: 3,
+      },
+    });
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -54,4 +54,12 @@ export const filterDisplays = (rows = [], isAllowed = () => true) =>
     };
   });
 
+export const getDisplaysById = (rows = []) => {
+  const displaysById = {};
+  rows.forEach(row => row.items.forEach(setting => {
+    displaysById[setting.id] = setting;
+  }));
+  return displaysById;
+};
+
 // vim: set ts=2 sw=2 tw=80:

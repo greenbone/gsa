@@ -48,6 +48,7 @@ import {
   convertDefaultDisplays,
   removeDisplay,
   filterDisplays,
+  getDisplaysById,
 } from 'web/components/dashboard/utils';
 
 import Loading from 'web/components/loading/loading';
@@ -87,14 +88,6 @@ const RowPlaceHolder = styled.div`
   align-items: center;
   margin: 15px 0;
 `;
-
-const getDisplaysById = (items = []) => {
-  const displaysById = {};
-  items.forEach(row => row.items.forEach(setting => {
-    displaysById[setting.id] = setting;
-  }));
-  return displaysById;
-};
 
 const convertDisplaysToGridItems = (items = []) => items.map(row => ({
   ...row,
