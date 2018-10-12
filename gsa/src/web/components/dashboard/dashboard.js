@@ -47,6 +47,7 @@ import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
+  convertGridItemsToDisplays,
   filterDisplays,
   getDisplaysById,
   removeDisplay,
@@ -89,12 +90,6 @@ const RowPlaceHolder = styled.div`
   align-items: center;
   margin: 15px 0;
 `;
-
-const convertGridItemsToDisplays = (gridItems, displaysById) =>
-  gridItems.map(row => ({
-    ...row,
-    items: row.items.map(id => displaysById[id]),
-  }));
 
 export class Dashboard extends React.Component {
 

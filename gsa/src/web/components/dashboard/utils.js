@@ -24,6 +24,8 @@ import uuid from 'uuid/v4';
 
 import {createDisplay, createRow} from 'gmp/commands/dashboards';
 
+import {isDefined} from 'gmp/utils/identity';
+
 export const getPermittedDisplayIds = (settings = {}) =>
   settings.permittedDisplays;
 
@@ -71,5 +73,16 @@ export const convertDisplaysToGridItems = (items = []) => items.map(({
   id,
   items: rowItems.map(display => display.id),
 }));
+
+export const convertGridItemsToDisplays = (gridItems = [], displaysById = {}) =>
+  gridItems.map(({
+    id,
+    height,
+    items,
+  }) => ({
+    id,
+    height,
+    items: items.map(dId => displaysById[dId]).filter(isDefined),
+  }));
 
 // vim: set ts=2 sw=2 tw=80:

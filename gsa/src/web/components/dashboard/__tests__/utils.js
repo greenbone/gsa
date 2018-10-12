@@ -25,6 +25,7 @@ import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
+  convertGridItemsToDisplays,
   filterDisplays,
   getDisplaysById,
   getPermittedDisplayIds,
@@ -285,6 +286,107 @@ describe('convertDisplaysToGridItems', () => {
       id: 'r2',
       height: 200,
       items: ['a3'],
+    }]);
+  });
+
+});
+
+describe('convertGridItemsToDisplays tests', () => {
+
+  test('should return empty array for undefined arguments', () => {
+    expect(convertGridItemsToDisplays()).toEqual([]);
+  });
+
+  test('should filter displays if displaysById is undefined', () => {
+    const gridItems = [{
+      id: 'r1',
+      height: 100,
+      items: ['a1', 'a2'],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: ['a3'],
+    }];
+    expect(convertGridItemsToDisplays(gridItems)).toEqual([{
+      id: 'r1',
+      height: 100,
+      items: [],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: [],
+    }]);
+  });
+
+  test('should return empty array if displaysById is undefined', () => {
+    const a1 = {
+      value: 1,
+    };
+    const a2 = {
+      value: 2,
+    };
+    const a3 = {
+      value: 3,
+    };
+    const gridItems = [{
+      id: 'r1',
+      height: 100,
+      items: ['a1', 'a2'],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: ['a3'],
+    }];
+    const displaysById = {
+      a1,
+      a2,
+      a3,
+    };
+    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([{
+      id: 'r1',
+      height: 100,
+      items: [a1, a2],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: [a3],
+    }]);
+  });
+
+  test('should not convert unknown row props', () => {
+    const a1 = {
+      value: 1,
+    };
+    const a2 = {
+      value: 2,
+    };
+    const a3 = {
+      value: 3,
+    };
+    const gridItems = [{
+      id: 'r1',
+      foo: 'bar',
+      height: 100,
+      items: ['a1', 'a2'],
+    }, {
+      lorem: 'ipsum',
+      id: 'r2',
+      height: 200,
+      items: ['a3'],
+    }];
+    const displaysById = {
+      a1,
+      a2,
+      a3,
+    };
+    expect(convertGridItemsToDisplays(gridItems, displaysById)).toEqual([{
+      id: 'r1',
+      height: 100,
+      items: [a1, a2],
+    }, {
+      id: 'r2',
+      height: 200,
+      items: [a3],
     }]);
   });
 
