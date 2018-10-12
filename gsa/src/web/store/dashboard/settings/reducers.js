@@ -28,6 +28,7 @@ import {
   DASHBOARD_SETTINGS_LOADING_SUCCESS,
   DASHBOARD_SETTINGS_SAVING_REQUEST,
   DASHBOARD_SETTINGS_SET_DEFAULTS,
+  DASHBOARD_SETTINGS_RESET_REQUEST,
 } from './actions';
 
 import {combineReducers} from 'web/store/utils';
@@ -60,6 +61,7 @@ const byId = (state = {}, action) => {
           ...settings,
         },
       };
+    case DASHBOARD_SETTINGS_RESET_REQUEST:
     case DASHBOARD_SETTINGS_SAVING_REQUEST:
       return {
         ...state,
