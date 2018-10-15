@@ -36,8 +36,8 @@ describe('CPE model tests', () => {
     const cpe2 = new Cpe({max_cvss: '10'});
 
     expect(cpe.max_cvss).toBeUndefined();
-    expect(cpe.severity).toEqual(parseSeverity('5.0'));
-    expect(cpe2.severity).toEqual(parseSeverity('10'));
+    expect(cpe.severity).toEqual(5.0);
+    expect(cpe2.severity).toEqual(10);
   });
 
   test('should parse "(null)" max_cvss as undefined severity', () => {
@@ -81,11 +81,11 @@ describe('CPE model tests', () => {
       [
         {
           id: '1337',
-          severity: parseSeverity('9.0'),
+          severity: 9.0,
         },
         {
           id: '42',
-          severity: parseSeverity('9.5'),
+          severity: 9.5,
         },
       ]
     );
