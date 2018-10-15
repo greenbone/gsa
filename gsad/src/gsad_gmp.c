@@ -8334,8 +8334,9 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *
                        target_snmp_credential);
 
   if (strcmp (target_source, "asset_hosts") == 0)
-    asset_hosts_element = g_strdup_printf ("<asset_hosts filter=\"%s\"/>",
-                                           hosts_filter);
+    asset_hosts_element = g_markup_printf_escaped ("<asset_hosts"
+                                                   " filter=\"%s\"/>",
+                                                   hosts_filter);
   else
     asset_hosts_element = g_strdup ("");
 
