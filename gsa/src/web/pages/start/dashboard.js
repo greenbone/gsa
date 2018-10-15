@@ -91,6 +91,7 @@ const StartDashboard = ({
     <Dashboard
       {...props}
       id={id}
+      isLoading={false}
       settings={settings}
       showFilterSelection
       showFilterString
