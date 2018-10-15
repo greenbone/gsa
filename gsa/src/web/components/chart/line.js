@@ -189,6 +189,7 @@ class LineChart extends React.Component {
       nextState.infoX !== this.state.infoX ||
       nextState.mouseX !== this.state.mouseX ||
       nextState.mouseY !== this.state.mouseY ||
+      nextState.data !== this.state.data ||
       nextState.displayInfo !== this.state.displayInfo;
   }
 
@@ -301,7 +302,10 @@ class LineChart extends React.Component {
 
   update() {
     const width = this.getWidth();
-    if (width !== this.state.width) {
+    if (width !== this.state.width ||
+      this.props.data !== this.state.data ||
+      this.props.height !== this.state.height) {
+      // update state if width, data or height has changed since last render
       this.setState(this.stateFromWidth(width));
     }
   }
@@ -361,6 +365,7 @@ class LineChart extends React.Component {
       .nice();
 
     return {
+      data,
       xScale,
       yScale,
       y2Scale,
