@@ -318,11 +318,6 @@ class StartPage extends React.Component {
     });
   };
 
-  getIsLoading() {
-    const {settings = {}} = this.props;
-    return !!settings.isLoading;
-  }
-
   getDashboards() {
     const {settings = {}} = this.props;
     const {dashboards = [], byId = {}} = settings;
@@ -348,6 +343,9 @@ class StartPage extends React.Component {
 
   render() {
     const {
+      isLoading,
+    } = this.props;
+    const {
       activeTab,
       removeDashboardId,
       showNewDashboardDialog,
@@ -355,7 +353,6 @@ class StartPage extends React.Component {
     } = this.state;
 
     const dashboards = this.getDashboards();
-    const isLoading = this.getIsLoading();
 
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
