@@ -29,7 +29,7 @@ import equal from 'fast-deep-equal';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isFunction} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -125,15 +125,11 @@ class DataDisplay extends React.Component {
       data,
       originalData: this.props.data,
       title: this.props.title({data, id: this.props.id}),
-      childState: {
-        showLegend: true,
-        ...this.props.initialState,
-      },
     };
 
     this.handleDownloadSvg = this.handleDownloadSvg.bind(this);
     this.handleDownloadCsv = this.handleDownloadCsv.bind(this);
-    this.handleSetChildState = this.setChildState.bind(this);
+    this.handleSetState = this.handleSetState.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -171,7 +167,7 @@ class DataDisplay extends React.Component {
       nextProps.width !== this.props.width ||
       nextState.data !== this.state.data ||
       nextProps.showFilterString !== this.props.showFilterString ||
-      nextState.childState !== this.state.childState ||
+      nextProps.state !== this.props.state ||
       this.hasFilterChanged(nextProps);
   }
 
@@ -215,23 +211,12 @@ class DataDisplay extends React.Component {
     }
   }
 
-  setChildState(state) {
-    if (isFunction(state)) {
-      this.setState(({childState}) => ({
-        childState: {
-          ...childState,
-          ...state(childState),
-        },
-      }));
-    }
-    else {
-      this.setState(({childState}) => ({
-        childState: {
-          ...childState,
-          ...state,
-        },
-      }));
-    }
+  getCurrentState(state = this.props.state) {
+    return {
+      showLegend: true,
+      ...this.props.initialState,
+      ...state,
+    };
   }
 
   handleDownloadSvg() {
@@ -274,9 +259,12 @@ class DataDisplay extends React.Component {
     download.click();
   }
 
+  handleSetState(stateFunc) {
+    return this.props.setState(state => stateFunc(this.getCurrentState(state)));
+  }
+
   render() {
     const {
-      childState,
       data: transformedData,
       title,
     } = this.state;
@@ -316,6 +304,7 @@ class DataDisplay extends React.Component {
     }
 
     const showContent = height > 0 && width > 0; // > 0 also checks for null, undefined and null
+    const state = this.getCurrentState();
     return (
       <Display
         title={`${title}`}
@@ -334,16 +323,16 @@ class DataDisplay extends React.Component {
                     width,
                     height,
                     svgRef: this.svgRef,
-                    state: childState,
-                    setState: this.handleSetChildState,
+                    state,
+                    setState: this.handleSetState,
                   })}
                 </React.Fragment>
             }
             <IconBar>
               <IconDivider flex="column">
                 {icons && icons({
-                  state: childState,
-                  setState: this.handleSetChildState,
+                  state,
+                  setState: this.handleSetState,
                   showFilterSelection,
                   showCsvDownload,
                   showSvgDownload,

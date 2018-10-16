@@ -22,7 +22,7 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
-class DashboardSetting {
+export class DashboardSetting {
 
   constructor(rootState) {
     this.state = rootState;
