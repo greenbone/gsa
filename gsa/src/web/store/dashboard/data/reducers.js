@@ -22,6 +22,8 @@
  */
 import {isDefined} from 'gmp/utils/identity';
 
+import {filterIdentifier} from 'web/store/utils';
+
 import {
   DASHBOARD_DATA_LOADING_SUCCESS,
   DASHBOARD_DATA_LOADING_ERROR,
@@ -55,8 +57,7 @@ const dashboardData = (state = {}, action) => {
 };
 
 const dashboardDataForFilter = (state = {}, action) => {
-  const filterString = isDefined(action.filter) ?
-    action.filter.toFilterString() : 'default';
+  const filterString = filterIdentifier(action.filter);
 
   return {
     ...state,

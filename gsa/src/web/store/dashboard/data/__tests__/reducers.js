@@ -22,6 +22,8 @@
  */
 import Filter from 'gmp/models/filter';
 
+import {filterIdentifier} from 'web/store/utils';
+
 import dashboardData from '../reducers';
 
 import {
@@ -59,11 +61,12 @@ describe('dashboard data reducers tests', () => {
   test('should handle request dashboard data with filter', () => {
     const id = 'a1';
     const filter = Filter.fromString('name=foo');
+    const filterString = filterIdentifier(filter);
     const action = requestDashboardData(id, filter);
 
     expect(dashboardData({}, action)).toEqual({
       [id]: {
-        'name=foo': {
+        [filterString]: {
           isLoading: true,
           error: null,
         },
@@ -91,11 +94,12 @@ describe('dashboard data reducers tests', () => {
     const id = 'a1';
     const data = {foo: 'bar'};
     const filter = Filter.fromString('name=foo');
+    const filterString = filterIdentifier(filter);
     const action = receivedDashboardData(id, data, filter);
 
     expect(dashboardData({}, action)).toEqual({
       [id]: {
-        'name=foo': {
+        [filterString]: {
           isLoading: false,
           data,
           error: null,
@@ -123,11 +127,12 @@ describe('dashboard data reducers tests', () => {
     const id = 'a1';
     const error = 'An error occured';
     const filter = Filter.fromString('name=foo');
+    const filterString = filterIdentifier(filter);
     const action = receivedDashboardError(id, error, filter);
 
     expect(dashboardData({}, action)).toEqual({
       [id]: {
-        'name=foo': {
+        [filterString]: {
           isLoading: false,
           error,
         },
