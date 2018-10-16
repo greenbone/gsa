@@ -70,6 +70,7 @@ const StartDashboard = ({
   id,
   loadSettings,
   saveSettings,
+  settings,
   onInteraction,
   onNewDisplay,
   onResetDashboard,
@@ -78,6 +79,7 @@ const StartDashboard = ({
   <Layout flex="column" grow>
     <Layout align="end">
       <DashboardControls
+        settings={settings}
         canAdd={canAddDisplay(props)}
         dashboardId={id}
         displayIds={ALL_DISPLAYS}
@@ -89,6 +91,8 @@ const StartDashboard = ({
     <Dashboard
       {...props}
       id={id}
+      isLoading={false}
+      settings={settings}
       showFilterSelection
       showFilterString
       defaultDisplays={DEFAULT_DISPLAYS}
