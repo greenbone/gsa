@@ -22,7 +22,7 @@
  */
 
 import Asset from 'gmp/models/asset';
-import {testModel} from 'gmp/testing';
+import {testModel} from 'gmp/models/testing';
 
 testModel(Asset, 'asset');
 

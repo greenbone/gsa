@@ -22,7 +22,7 @@
 */
 
 import Model from 'gmp/model';
-import {testModel} from 'gmp/testing';
+import {testModel} from 'gmp/models/testing';
 
 describe('Model tests', () => {
   testModel(Model, 'unknown');

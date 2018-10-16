@@ -23,9 +23,7 @@
 
 import Cpe from 'gmp/models/cpe';
 import {isDate} from 'gmp/models/date';
-import {testModel} from 'gmp/testing';
-import {parseSeverity} from 'gmp/parser';
-
+import {testModel} from 'gmp/models/testing';
 
 testModel(Cpe, 'cpe');
 

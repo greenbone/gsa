@@ -22,7 +22,7 @@
  */
 
 import Role from '../role';
-import {testModel} from 'gmp/testing';
+import {testModel} from 'gmp/models/testing';
 
 testModel(Role, 'role');
 

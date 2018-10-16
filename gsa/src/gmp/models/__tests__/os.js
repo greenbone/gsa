@@ -24,9 +24,7 @@
 import Asset from 'gmp/models/asset';
 import OperatingSystem from 'gmp/models/os';
 
-import {parseSeverity} from 'gmp/parser';
-
-import {testModel} from 'gmp/testing';
+import {testModel} from 'gmp/models/testing';
 
 testModel(OperatingSystem, 'operatingsystem');
 

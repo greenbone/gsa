@@ -25,7 +25,7 @@
 
 import Agent from '../agent';
 import {parseDate} from 'gmp/parser';
-import {testModel} from 'gmp/testing';
+import {testModel} from 'gmp/models/testing';
 
 testModel(Agent, 'agent');
 
