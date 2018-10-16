@@ -120,15 +120,7 @@ class Loader extends React.Component {
   }
 
   load() {
-    const {
-      subscribe,
-      subscriptions,
-      dispatch,
-      load,
-      ...props
-    } = this.props;
-
-    dispatch(load(props));
+    this.props.load();
   }
 
   componentDidUpdate(prevProps) {
@@ -148,9 +140,7 @@ Loader.propTypes = {
   children: PropTypes.func,
   data: PropTypes.any,
   dataId: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
   filter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool.isRequired,
   load: PropTypes.func.isRequired,
   subscribe: PropTypes.func.isRequired,
@@ -165,10 +155,14 @@ const mapStateToProps = (rootState, {dataId, filter}) => {
   };
 };
 
+const mapDispatchToProps = (dispatch, {load, ...props}) => ({
+  load: () => dispatch(load(props)),
+});
+
 export default compose(
   withGmp,
   withSubscription,
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Loader);
 
 // vim: set ts=2 sw=2 tw=80:
