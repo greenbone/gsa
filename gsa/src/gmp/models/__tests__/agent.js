@@ -21,38 +21,36 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Role from '../role';
+/* eslint-disable max-len */
+
+import Agent from '../agent';
+import {parseDate} from 'gmp/parser';
 import {testModel} from 'gmp/models/testing';
 
-testModel(Role, 'role');
+testModel(Agent, 'agent');
 
-describe('Role model tests', () => {
+describe('Agent Model tests', () => {
 
-  test('should parse multiple users', () => {
-    const elem = {users: 'foo, bar'};
-    const role = new Role(elem);
+  test('should parse time and status of trust', () => {
+    const elem = {
+      installer: {
+        trust: {
+          __text: 'status',
+          time: '2018-10-10T11:41:23.022Z',
+        },
+      },
+    };
+    const agent = new Agent(elem);
 
-    expect(role.users).toEqual(['foo', 'bar']);
+    expect(agent.installer).toBeUndefined();
+    expect(agent.trust.time).toEqual(parseDate('2018-10-10T11:41:23.022Z'));
+    expect(agent.trust.status).toEqual('status');
   });
 
-  test('should parse single user', () => {
-    const elem = {users: 'foo'};
-    const role = new Role(elem);
+  test('should return undefined for trust if installer or trust are undefined', () => {
+    const agent = new Agent({});
 
-    expect(role.users).toEqual(['foo']);
-  });
-
-  test('should parse empty users string to empty array', () => {
-    const elem = {users: ''};
-    const role = new Role(elem);
-
-    expect(role.users).toEqual([]);
-  });
-
-  test('should parse empty object to have empty users array', () => {
-    const role = new Role({});
-
-    expect(role.users).toEqual([]);
+    expect(agent.trust).toBeUndefined();
   });
 });
 
