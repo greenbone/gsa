@@ -23,6 +23,8 @@
 import 'core-js/fn/array/find-index';
 import 'core-js/fn/object/entries';
 
+import memoize from 'memoize-one';
+
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -114,6 +116,8 @@ export class Dashboard extends React.Component {
     this.handleRowResize = this.handleRowResize.bind(this);
     this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
     this.handleRemoveDisplay = this.handleRemoveDisplay.bind(this);
+
+    this.getDisplaysById = memoize(rows => getDisplaysById(rows));
   }
 
   componentDidMount() {
@@ -140,37 +144,13 @@ export class Dashboard extends React.Component {
   handleItemsChange(gridItems = []) {
     const rows = this.getRows();
 
-    const displaysById = getDisplaysById(rows);
+    const displaysById = this.getDisplaysById(rows);
 
     this.updateRows(convertGridItemsToDisplays(gridItems, displaysById));
   }
 
   handleUpdateDisplay(id, props) {
-    const rows = this.getRows();
-
-    const rowIndex = rows.findIndex(
-      row => row.items.some(item => item.id === id));
-
-    const row = rows[rowIndex];
-
-    const rowItems = [
-      ...row.items,
-    ];
-
-    const displayIndex = rowItems.findIndex(i => i.id === id);
-
-    rowItems[displayIndex] = {
-      ...rowItems[displayIndex],
-      ...props,
-    };
-
-    const newRows = [...rows];
-    newRows[rowIndex] = {
-      ...row,
-      rows: rowItems,
-    };
-
-    this.updateRows(newRows);
+    this.updateDisplay(id, props);
   }
 
   handleRemoveDisplay(id) {
@@ -188,16 +168,13 @@ export class Dashboard extends React.Component {
     const newRows = [
       ...rows,
     ];
-    newRows[rowIndex] = {
+    const newRow = {
       ...row,
       height,
     };
+    newRows[rowIndex] = newRow;
 
     this.updateRows(newRows);
-  }
-
-  getRows(defaultRows) {
-    return getRows(this.props.settings, defaultRows);
   }
 
   handleInteraction() {
@@ -206,6 +183,63 @@ export class Dashboard extends React.Component {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
+  }
+
+  handleSetDisplayState(id, stateFunc) {
+    const currentState = this.getDisplayState(id);
+    const newState = stateFunc(currentState);
+
+    this.updateDisplayState(id, {
+      ...currentState,
+      ...newState,
+    });
+  };
+
+  getRows(defaultRows) {
+    return getRows(this.props.settings, defaultRows);
+  }
+
+  getDisplayState(id) {
+    const rows = this.getRows();
+    const displaysById = this.getDisplaysById(rows);
+    const display = displaysById[id];
+    return isDefined(display) ? display.state : undefined;
+  }
+
+  updateDisplayState(id, state) {
+    this.updateDisplay(id, {state});
+  }
+
+  updateDisplay(id, props) {
+    const rows = this.getRows();
+
+    const rowIndex = rows.findIndex(
+      row => row.items.some(item => item.id === id));
+
+    const row = rows[rowIndex];
+
+    const rowItems = [
+      ...row.items,
+    ];
+
+    const displayIndex = rowItems.findIndex(i => i.id === id);
+
+    const newDisplay = {
+      ...rowItems[displayIndex],
+      ...props,
+    };
+
+    rowItems[displayIndex] = newDisplay;
+
+    const newRows = [...rows];
+    const newRow = {
+      ...row,
+      items: rowItems,
+    };
+
+    newRows[rowIndex] = newRow;
+
+    this.updateRows(newRows);
   }
 
   updateRows(rows) {
@@ -245,7 +279,7 @@ export class Dashboard extends React.Component {
       );
     }
 
-    const displaysById = getDisplaysById(rows);
+    const displaysById = this.getDisplaysById(rows);
 
     const getDisplayComponent = displayId => this.components[displayId];
     const getDisplaySettings = id => displaysById[id];
@@ -273,6 +307,7 @@ export class Dashboard extends React.Component {
         }) => {
           const {displayId, ...displayProps} = getDisplaySettings(id);
           const Component = getDisplayComponent(displayId);
+          const state = this.getDisplayState(id);
           return (
             <Component
               {...other}
@@ -281,6 +316,8 @@ export class Dashboard extends React.Component {
               height={height}
               width={width}
               id={id}
+              state={state}
+              setState={stateFunc => this.handleSetDisplayState(id, stateFunc)}
               onFilterIdChanged={
                 filterId => this.handleUpdateDisplay(id, {filterId})}
               onInteractive={this.props.onInteraction}

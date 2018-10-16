@@ -154,7 +154,7 @@ class EntityTagsTable extends React.Component {
                 <TableHead>
                   {_('Comment')}
                 </TableHead>
-                <TableHead width="5em">
+                <TableHead width="8%" align="center">
                   {_('Actions')}
                 </TableHead>
               </TableRow>
@@ -180,7 +180,7 @@ class EntityTagsTable extends React.Component {
                         {tag.comment}
                       </TableData>
                       <TableData>
-                        <IconDivider>
+                        <IconDivider align="center" grow>
                           <Icon
                             img="disable.svg"
                             value={tag}
