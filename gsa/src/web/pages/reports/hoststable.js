@@ -184,25 +184,25 @@ const Row = ({
           osTxt={best_os_txt}
         />
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.hole}
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.warning}
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.info}
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.log}
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.false_positive}
       </TableData>
-      <TableData align="center">
+      <TableData>
         {result_counts.total}
       </TableData>
-      <TableData align="center">
+      <TableData>
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>
