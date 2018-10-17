@@ -38,6 +38,8 @@ import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 
+import Link from 'web/components/link/link';
+
 import StripedTable from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -188,7 +190,13 @@ const NvtFamilies = ({
                 key={family.name}
               >
                 <TableData>
-                  {family.name}
+                  <Link
+                    to="nvts"
+                    filter={'family="' + family.name + '"'}
+                    title={_('NVTs of family {{name}}', {name: family.name})}
+                  >
+                    {family.name}
+                  </Link>
                 </TableData>
                 <TableData align={['center', 'start']}>
                   <Layout>
