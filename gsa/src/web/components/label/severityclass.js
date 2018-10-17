@@ -32,9 +32,7 @@ const Label = styled.div`
   font-weight: normal;
   font-style: normal;
   color: white;
-  padding: 0;
-  border-width: 1px;
-  border-style: outset;
+  padding: 1px;
   display: inline-block;
   width: 60px;
   height: 1.5em;
