@@ -205,7 +205,7 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
-          {isDefined(entity.last_report) &&
+          {!isDefined(entity.current_report) && isDefined(entity.last_report) &&
             <DetailsLink
               type="report"
               id={entity.last_report.id}
@@ -227,20 +227,6 @@ const ToolBarIcons = ({
               to="reports"
               filter={'task_id=' + entity.id}
               title={_('Total Reports for Task {{name}}', entity)}
-            >
-              <Icon
-                img="report.svg"
-              />
-            </Link>
-          </Badge>
-
-          <Badge
-            content={entity.report_count.finished}
-          >
-            <Link
-              to="reports"
-              filter={'task_id=' + entity.id + ' and status=Done'}
-              title={_('Finished Reports for Task {{name}}', entity)}
             >
               <Icon
                 img="report.svg"
