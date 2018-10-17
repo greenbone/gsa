@@ -52,7 +52,6 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          rowSpan="2"
           width="25%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -62,7 +61,6 @@ const Header = ({
           {_('Date')}
         </TableHead>
         <TableHead
-          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -73,7 +71,6 @@ const Header = ({
         </TableHead>
         <TableHead
           width="39%"
-          rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'task' : false}
@@ -82,7 +79,6 @@ const Header = ({
           {_('Task')}
         </TableHead>
         <TableHead
-          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -91,22 +87,6 @@ const Header = ({
         >
           {_('Severity')}
         </TableHead>
-        <TableHead
-          width="25%"
-          colSpan="5"
-        >
-          {_('Scan Results')}
-        </TableHead>
-        {isDefined(actionsColumn) ?
-          actionsColumn :
-          <TableHead
-            rowSpan="2"
-            width="8%"
-            align="center"
-          >{_('Actions')}</TableHead>
-        }
-      </TableRow>
-      <TableRow>
         <TableHead
           width="3%"
           currentSortDir={currentSortDir}
@@ -152,6 +132,15 @@ const Header = ({
         >
           <SeverityClassLabel.FalsePositive/>
         </TableHead>
+        {isDefined(actionsColumn) ?
+          actionsColumn :
+          <TableHead
+            width="8%"
+            align="center"
+          >
+            {_('Actions')}
+          </TableHead>
+        }
       </TableRow>
     </TableHeader>
   );
