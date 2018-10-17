@@ -59,7 +59,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import EntityPage from 'web/entity/page';
+import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
@@ -205,7 +205,7 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
-          {isDefined(entity.last_report) &&
+          {!isDefined(entity.current_report) && isDefined(entity.last_report) &&
             <DetailsLink
               type="report"
               id={entity.last_report.id}
@@ -227,20 +227,6 @@ const ToolBarIcons = ({
               to="reports"
               filter={'task_id=' + entity.id}
               title={_('Total Reports for Task {{name}}', entity)}
-            >
-              <Icon
-                img="report.svg"
-              />
-            </Link>
-          </Badge>
-
-          <Badge
-            content={entity.report_count.finished}
-          >
-            <Link
-              to="reports"
-              filter={'task_id=' + entity.id + ' and status=Done'}
-              title={_('Finished Reports for Task {{name}}', entity)}
             >
               <Icon
                 img="report.svg"
@@ -322,6 +308,10 @@ const Details = ({
   return (
     <Layout flex="column">
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           <TableRow>
             <TableData>

@@ -25,19 +25,19 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
 
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import Row from './row.js';
-import TaskDetails from './details.js';
+import Row from './row';
+import TaskDetails from './details';
 
 const Header = ({
   actionsColumn,
@@ -58,7 +58,6 @@ const Header = ({
       <TableRow>
         <TableHead
           {...sortProps}
-          rowSpan="2"
           sortBy="name"
           width="41%"
         >
@@ -66,21 +65,27 @@ const Header = ({
         </TableHead>
         <TableHead
           {...sortProps}
-          rowSpan="2"
           width="8%"
           sortBy="status"
         >
           {_('Status')}
         </TableHead>
         <TableHead
-          width="30%"
-          colSpan="2"
+          {...sortProps}
+          sortBy="total"
+          width="6%"
         >
           {_('Reports')}
         </TableHead>
         <TableHead
           {...sortProps}
-          rowSpan="2"
+          sortBy="last"
+          width="24%"
+        >
+          {_('Last Report')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
           width="8%"
           sortBy="severity"
         >
@@ -88,29 +93,13 @@ const Header = ({
         </TableHead>
         <TableHead
           {...sortProps}
-          rowSpan="2"
+          align="center"
           width="5%"
           sortBy="trend"
         >
           {_('Trend')}
         </TableHead>
         {actionsColumn}
-      </TableRow>
-      <TableRow>
-        <TableHead
-          {...sortProps}
-          sortBy="total"
-          width="6%"
-        >
-          {_('Total')}
-        </TableHead>
-        <TableHead
-          {...sortProps}
-          sortBy="last"
-          width="24%"
-        >
-          {_('Last')}
-        </TableHead>
       </TableRow>
     </TableHeader>
   );
@@ -127,7 +116,6 @@ Header.propTypes = {
 
 const actionsColumn = (
   <TableHead
-    rowSpan="2"
     width="10em"
     title={_l('Actions')}
     align="center"

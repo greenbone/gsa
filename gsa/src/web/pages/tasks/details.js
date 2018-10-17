@@ -29,11 +29,11 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {YES_VALUE} from 'gmp/parser.js';
+import {YES_VALUE} from 'gmp/parser';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig.js';
-import {scannerTypeName} from 'gmp/models/scanner.js';
+import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {scannerTypeName} from 'gmp/models/scanner';
 
 import {
   loadEntity as loadSchedule,
@@ -45,17 +45,17 @@ import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from '../../components/table/infotable.js';
-import TableBody from '../../components/table/body.js';
-import TableData from '../../components/table/data.js';
-import TableRow from '../../components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
-import DetailsBlock from '../../entity/block.js';
+import DetailsBlock from 'web/entity/block';
 
 class TaskDetails extends React.Component {
 

@@ -25,6 +25,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import styled from 'styled-components';
+
 import DetailsLink from 'web/components/link/detailslink';
 
 import Divider from 'web/components/layout/divider';
@@ -35,6 +37,8 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+
+import Link from 'web/components/link/link';
 
 import StripedTable from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
@@ -165,15 +169,18 @@ const NvtFamilies = ({
               <TableHead>
                 {_('NVTs selected')}
               </TableHead>
-              <TableHead align={['space-between', 'center']}>
-                {_('Trend')}
-                <Trend
-                  trend={families.trend}
-                  titleDynamic={_('The families selection is DYNAMIC. New ' +
-                    'families will automatically be added and considered.')}
-                  titleStatic={_('The families selection is STATIC. New ' +
-                    'families will NOT automatically be added and considered.')}
-                />
+              <TableHead align={['center', 'center']}>
+                <Divider>
+                  {_('Trend')}
+                  <Trend
+                    trend={families.trend}
+                    titleDynamic={_('The families selection is DYNAMIC. New ' +
+                      'families will automatically be added and considered.')}
+                    titleStatic={_('The families selection is STATIC. New ' +
+                      'families will NOT automatically be added and considered.'
+                      )}
+                  />
+                </Divider>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -183,10 +190,16 @@ const NvtFamilies = ({
                 key={family.name}
               >
                 <TableData>
-                  {family.name}
+                  <Link
+                    to="nvts"
+                    filter={'family="' + family.name + '"'}
+                    title={_('NVTs of family {{name}}', {name: family.name})}
+                  >
+                    {family.name}
+                  </Link>
                 </TableData>
-                <TableData align={['center', 'end']}>
-                  <Layout align="end">
+                <TableData align={['center', 'start']}>
+                  <Layout>
                     {_('{{count}} of {{max}}', family.nvts)}
                   </Layout>
                 </TableData>
@@ -261,6 +274,10 @@ ScannerPreferences.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
+const StyledTableData = styled(TableData)`
+  word-break: break-all;
+`;
+
 const NvtPreferences = ({
   entity,
 }) => {
@@ -272,13 +289,13 @@ const NvtPreferences = ({
         <StripedTable>
           <TableHeader>
             <TableRow>
-              <TableHead>
+              <TableHead width="25%">
                 {_('NVT')}
               </TableHead>
-              <TableHead>
+              <TableHead width="25%">
                 {_('Name')}
               </TableHead>
-              <TableHead>
+              <TableHead width="15%">
                 {_('Value')}
               </TableHead>
               <TableHead>
@@ -302,12 +319,12 @@ const NvtPreferences = ({
                 <TableData>
                   {pref.name}
                 </TableData>
-                <TableData>
+                <StyledTableData>
                   {pref.value}
-                </TableData>
-                <TableData>
+                </StyledTableData>
+                <StyledTableData>
                   {pref.default}
-                </TableData>
+                </StyledTableData>
               </TableRow>
             ))}
           </TableBody>
