@@ -122,7 +122,7 @@ const Row = ({
       <TableData>
         {occurrences.total}
       </TableData>
-      <TableData align="center">
+      <TableData>
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>
