@@ -58,7 +58,6 @@ const Header = ({
       <TableRow>
         <TableHead
           {...sortProps}
-          rowSpan="2"
           sortBy="name"
           width="41%"
         >
@@ -66,43 +65,17 @@ const Header = ({
         </TableHead>
         <TableHead
           {...sortProps}
-          rowSpan="2"
           width="8%"
           sortBy="status"
         >
           {_('Status')}
         </TableHead>
         <TableHead
-          width="30%"
-          colSpan="2"
-        >
-          {_('Reports')}
-        </TableHead>
-        <TableHead
-          {...sortProps}
-          rowSpan="2"
-          width="8%"
-          sortBy="severity"
-        >
-          {_('Severity')}
-        </TableHead>
-        <TableHead
-          {...sortProps}
-          rowSpan="2"
-          width="5%"
-          sortBy="trend"
-        >
-          {_('Trend')}
-        </TableHead>
-        {actionsColumn}
-      </TableRow>
-      <TableRow>
-        <TableHead
           {...sortProps}
           sortBy="total"
           width="6%"
         >
-          {_('Total')}
+          {_('Reports')}
         </TableHead>
         <TableHead
           {...sortProps}
@@ -111,6 +84,21 @@ const Header = ({
         >
           {_('Last')}
         </TableHead>
+        <TableHead
+          {...sortProps}
+          width="8%"
+          sortBy="severity"
+        >
+          {_('Severity')}
+        </TableHead>
+        <TableHead
+          {...sortProps}
+          width="5%"
+          sortBy="trend"
+        >
+          {_('Trend')}
+        </TableHead>
+        {actionsColumn}
       </TableRow>
     </TableHeader>
   );
@@ -127,7 +115,6 @@ Header.propTypes = {
 
 const actionsColumn = (
   <TableHead
-    rowSpan="2"
     width="10em"
     title={_l('Actions')}
     align="center"
