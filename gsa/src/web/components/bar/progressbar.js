@@ -36,7 +36,6 @@ const ProgressBarBox = styled.div`
   background: ${Theme.darkGray};
   vertical-align: middle;
   text-align: center;
-  border: 1px solid ${Theme.inputBorderGray};
 
   @media print {
     background: none;
