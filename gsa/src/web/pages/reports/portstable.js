@@ -89,7 +89,7 @@ const Row = ({entity}) => {
       <TableData>
         {hosts.count}
       </TableData>
-      <TableData align="center">
+      <TableData>
         <SeverityBar severity={severity}/>
       </TableData>
     </TableRow>
