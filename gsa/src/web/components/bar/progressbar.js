@@ -29,7 +29,7 @@ import PropTypes from 'web/utils/proptypes.js';
 import Theme from 'web/utils/theme.js';
 
 const ProgressBarBox = styled.div`
-  height: 12px;
+  height: 13px;
   box-sizing: content-box; /* height includes border */
   display: inline-block;
   width: 100px;
@@ -50,7 +50,8 @@ const Content = styled.div`
   font-size: 9px;
   margin: 0;
   position: relative;
-  top: -12px;
+  top: -13px;
+  padding-top: 1px;
 
   @media print {
     color: black;
@@ -58,7 +59,7 @@ const Content = styled.div`
 `;
 
 const Progress = styled.div`
-  height: 12px;
+  height: 13px;
 
   @media print {
     background: none;
