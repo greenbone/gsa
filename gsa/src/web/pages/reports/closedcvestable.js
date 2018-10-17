@@ -24,19 +24,19 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SeverityBar from '../../components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
-import CveLink from '../../components/link/cvelink.js';
-import DetailsLink from '../../components/link/detailslink.js';
+import CveLink from 'web/components/link/cvelink';
+import DetailsLink from 'web/components/link/detailslink';
 
-import TableData from '../../components/table/data.js';
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import TableData from 'web/components/table/data';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import {createEntitiesTable} from '../../entities/table.js';
+import {createEntitiesTable} from 'web/entities/table';
 
 const Header = ({
   currentSortDir,
