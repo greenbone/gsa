@@ -188,7 +188,7 @@ const Row = ({
           <SeverityBar severity={entity.last_report.severity}/>
         }
       </TableData>
-      <TableData>
+      <TableData align="center">
         {!entity.isContainer() &&
           <Trend name={entity.trend} />
         }

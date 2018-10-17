@@ -93,6 +93,7 @@ const Header = ({
         </TableHead>
         <TableHead
           {...sortProps}
+          align="center"
           width="5%"
           sortBy="trend"
         >
