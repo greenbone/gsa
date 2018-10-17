@@ -82,7 +82,7 @@ const Header = ({
           sortBy="last"
           width="24%"
         >
-          {_('Last')}
+          {_('Last Report')}
         </TableHead>
         <TableHead
           {...sortProps}
