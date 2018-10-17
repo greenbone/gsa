@@ -109,6 +109,7 @@ const Header = ({
         {actions &&
           <TableHead
             width="5%"
+            align="center"
           >
             {_('Actions')}
           </TableHead>
@@ -147,10 +148,10 @@ const Row = ({
       <TableData>
         {serial}
       </TableData>
-      <TableData align="end">
+      <TableData>
         {shortDate(notbefore)}
       </TableData>
-      <TableData align="end">
+      <TableData>
         {shortDate(notafter)}
       </TableData>
       <TableData>
