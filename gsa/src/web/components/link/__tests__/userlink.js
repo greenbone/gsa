@@ -24,7 +24,11 @@ import {longDate, setLocale} from 'gmp/locale/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWithStoreAndRouter, cleanup} from 'web/utils/testing';
+import {
+  rendererWithStoreAndRouter,
+  cleanup,
+  fireEvent,
+} from 'web/utils/testing';
 
 import UserLink from '../userlink';
 
@@ -58,6 +62,21 @@ describe('UserLink tests', () => {
 
     const {element} = render(<UserLink />);
     expect(element).toMatchSnapshot();
+  });
+
+  test('should route to usersettings on click', () => {
+    const timeout = date('2018-10-10');
+
+    const {store, history, render} = rendererWithStoreAndRouter();
+
+    store.dispatch(setSessionTimeout(timeout));
+    store.dispatch(setUsername('foo'));
+
+    const {element} = render(<UserLink />);
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toMatch('usersettings');
   });
 
 });
