@@ -20,7 +20,7 @@ import 'jest-styled-components';
 
 import React from 'react';
 
-import {render as reactTestingRender, cleanup} from 'react-testing-library';
+import {render as reactTestingRender} from 'react-testing-library';
 
 import {Router} from 'react-router-dom';
 
@@ -32,7 +32,7 @@ import {hasValue} from 'gmp/utils/identity';
 
 import configureStore from 'web/store';
 
-export {cleanup};
+export * from 'react-testing-library';
 
 export const render = ui => {
   const {container, ...other} = reactTestingRender(ui);
