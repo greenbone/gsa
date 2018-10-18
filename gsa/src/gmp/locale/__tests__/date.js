@@ -64,6 +64,11 @@ describe('shortDate tests', () => {
     expect(shortDate()).toBeUndefined();
   });
 
+  test('should not parse invalid date', () => {
+    expect(shortDate({})).toBeUndefined();
+    expect(shortDate(null)).toBeUndefined();
+  });
+
   test('should format date', () => {
     setLocale('en');
     const d = date('2018-01-01');
@@ -89,6 +94,11 @@ describe('longDate tests', () => {
     expect(longDate()).toBeUndefined();
   });
 
+  test('should not parse invalid date', () => {
+    expect(longDate({})).toBeUndefined();
+    expect(longDate(null)).toBeUndefined();
+  });
+
   test('should format date', () => {
     setLocale('en');
     const d = date('2018-01-01');
@@ -112,6 +122,11 @@ describe('dateTimeWithTimeZone tests', () => {
 
   test('should return undefined', () => {
     expect(dateTimeWithTimeZone()).toBeUndefined();
+  });
+
+  test('should not parse invalid date', () => {
+    expect(dateTimeWithTimeZone({})).toBeUndefined();
+    expect(dateTimeWithTimeZone(null)).toBeUndefined();
   });
 
   test('should format date', () => {

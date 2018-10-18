@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Target tests should apply styling 1`] = `
+.c0 {
+  content: '';
+  display: block;
+  height: 35px;
+  z-index: -100;
+  margin: -35px 0 0 0;
+  position: relative;
+}
+
+<div
+  class="c0"
+  id="foo"
+/>
+`;

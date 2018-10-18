@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,26 +16,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {createStore, applyMiddleware} from 'redux';
+import React from 'react';
 
-import thunk from 'redux-thunk';
+import {
+  render,
+  cleanup,
+} from 'web/utils/testing';
 
-import {createLogger} from 'redux-logger';
+import Target from '../target';
 
-import rootReducer from './reducers';
+afterEach(cleanup);
 
-const configureStore = () => {
-  const middlewares = [thunk];
+describe('Target tests', () => {
 
-  if (process.env.NODE_ENV === 'development') {
-    middlewares.push(createLogger());
-  }
+  test('should render Target', () => {
+    const {element} = render(<Target id="foo"/>);
+    expect(element).toHaveAttribute('id', 'foo');
+  });
 
-  return createStore(
-    rootReducer,
-    applyMiddleware(...middlewares)
-  );
-};
+  test('should apply styling', () => {
+    const {element} = render(<Target id="foo"/>);
+    expect(element).toMatchSnapshot();
+  });
 
-export default configureStore;
+});
+
 // vim: set ts=2 sw=2 tw=80:

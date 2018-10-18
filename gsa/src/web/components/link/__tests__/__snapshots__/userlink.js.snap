@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserLink tests should apply styling 1`] = `
+.c1 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c0 {
+  color: #393637;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.c0:link,
+.c0:hover,
+.c0:active,
+.c0:visited {
+  color: #393637;
+}
+
+<a
+  class="c0 c1"
+  href="/usersettings"
+  title="Your session will end at Wed, Oct 10, 2018 12:00 AM"
+>
+  foo
+</a>
+`;
