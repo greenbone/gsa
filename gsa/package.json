@@ -84,7 +84,8 @@
       "src/**/*.{js,jsx,mjs}",
       "!src/web/stories/**",
       "!src/gmp/index.js",
-      "!src/setupTests.js"
+      "!src/setupTests.js",
+      "!src/web/utils/testing.js"
     ]
   },
   "browserslist": [
