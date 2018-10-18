@@ -28,9 +28,19 @@ import {Provider} from 'react-redux';
 
 import {createMemoryHistory} from 'history';
 
+import {
+  toHaveAttribute,
+  toHaveTextContent,
+} from 'jest-dom';
+
 import {hasValue} from 'gmp/utils/identity';
 
 import configureStore from 'web/store';
+
+expect.extend({
+  toHaveAttribute,
+  toHaveTextContent,
+});
 
 export * from 'react-testing-library';
 
