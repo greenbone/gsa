@@ -1,0 +1,135 @@
+/* Copyright (C) 2018 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+import React from 'react';
+
+import {
+  rendererWithRouter,
+  cleanup,
+  fireEvent,
+} from 'web/utils/testing';
+
+import Link from '../link';
+import Filter from 'gmp/models/filter';
+
+afterEach(cleanup);
+
+describe('Link tests', () => {
+
+  test('render Link', () => {
+    const {render} = rendererWithRouter();
+
+    const {element} = render(<Link to="foo">Foo</Link>);
+
+    expect(element).toHaveTextContent('Foo');
+  });
+
+  test('should route to url on click', () => {
+    const {history, render} = rendererWithRouter();
+
+    const {element} = render(<Link to="foo">Foo</Link>);
+
+    expect(history.location.pathname).toEqual('/');
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/foo');
+  });
+
+  test('should route to url with filter on click', () => {
+    const filter = Filter.fromString('foo=bar');
+    const {history, render} = rendererWithRouter();
+
+    const {element} = render(
+      <Link to="foo" filter={filter}>Foo</Link>
+    );
+
+    expect(history.location.pathname).toEqual('/');
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/foo');
+    expect(history.location.query).toEqual({filter: 'foo=bar'});
+  });
+
+  test('should route to url with query on click', () => {
+    const {history, render} = rendererWithRouter();
+    const query = {foo: 'bar'};
+
+    const {element} = render(
+      <Link to="foo" query={query}>Foo</Link>
+    );
+
+    expect(history.location.pathname).toEqual('/');
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/foo');
+    expect(history.location.query).toEqual(query);
+  });
+
+  test('should route to url with anchor on click', () => {
+    const {history, render} = rendererWithRouter();
+
+    const {element} = render(
+      <Link to="foo" anchor="bar">Foo</Link>
+    );
+
+    expect(history.location.pathname).toEqual('/');
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/foo');
+    expect(history.location.hash).toEqual('#bar');
+  });
+
+  test('should not route to url in text mode', () => {
+    const {history, render} = rendererWithRouter();
+
+    const {element} = render(
+      <Link to="foo" textOnly={true}>Foo</Link>
+    );
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/');
+  });
+
+  test('should render styles', () => {
+    const {render} = rendererWithRouter();
+
+    const {element} = render(
+      <Link to="foo">Foo</Link>
+    );
+
+    expect(element).toMatchSnapshot();
+  });
+
+  test('should render styles in text mode', () => {
+    const {render} = rendererWithRouter();
+
+    const {element} = render(
+      <Link to="foo" textOnly={true}>Foo</Link>
+    );
+
+    expect(element).toMatchSnapshot();
+  });
+
+});
+
+// vim: set ts=2 sw=2 tw=80:
