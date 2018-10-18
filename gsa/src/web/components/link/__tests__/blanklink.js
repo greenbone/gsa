@@ -32,10 +32,9 @@ describe('BlankLink tests', () => {
   test('should render BlankLink', () => {
     const {element} = render(<BlankLink to="foo"/>);
 
-    expect(element.getAttribute('href')).toEqual('foo');
-    expect(element.getAttribute('rel')).toMatch('noopener');
-    expect(element.getAttribute('rel')).toMatch('noreferrer');
-    expect(element.getAttribute('target')).toEqual('_blank');
+    expect(element).toHaveAttribute('href', 'foo');
+    expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(element).toHaveAttribute('target', '_blank');
   });
 
   test('should forward props', () => {
@@ -48,9 +47,9 @@ describe('BlankLink tests', () => {
       </BlankLink>
     );
 
-    expect(element.getAttribute('href')).toEqual('foo');
-    expect(element.getAttribute('title')).toEqual('bar');
-    expect(element.textContent).toEqual('Ipsum');
+    expect(element).toHaveAttribute('href', 'foo');
+    expect(element).toHaveAttribute('title', 'bar');
+    expect(element).toHaveTextContent('Ipsum');
   });
 
 });

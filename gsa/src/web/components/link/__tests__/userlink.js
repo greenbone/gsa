@@ -48,7 +48,7 @@ describe('UserLink tests', () => {
 
     const {element} = render(<UserLink />);
 
-    expect(element.textContent).toEqual('foo');
+    expect(element).toHaveTextContent('foo');
     expect(element.title).toMatch(longDate(timeout));
   });
 

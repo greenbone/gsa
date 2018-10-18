@@ -32,7 +32,7 @@ describe('InnerLink tests', () => {
   test('should render InnerLink', () => {
     const {element} = render(<InnerLink to="foo"/>);
 
-    expect(element.getAttribute('href')).toEqual('#foo');
+    expect(element).toHaveAttribute('href', '#foo');
   });
 
   test('should forward props', () => {
@@ -45,9 +45,9 @@ describe('InnerLink tests', () => {
       </InnerLink>
     );
 
-    expect(element.getAttribute('href')).toEqual('#foo');
-    expect(element.getAttribute('title')).toEqual('bar');
-    expect(element.textContent).toEqual('Ipsum');
+    expect(element).toHaveAttribute('href', '#foo');
+    expect(element).toHaveAttribute('title', 'bar');
+    expect(element).toHaveTextContent('Ipsum');
   });
 
 });
