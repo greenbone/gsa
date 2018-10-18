@@ -51,6 +51,18 @@ describe('Link tests', () => {
     expect(history.location.pathname).toEqual('/foo');
   });
 
+  test('should route to absolute url on click', () => {
+    const {history, render} = rendererWithRouter();
+
+    const {element} = render(<Link to="/foo">Foo</Link>);
+
+    expect(history.location.pathname).toEqual('/');
+
+    fireEvent.click(element);
+
+    expect(history.location.pathname).toEqual('/foo');
+  });
+
   test('should route to url with filter on click', () => {
     const filter = Filter.fromString('foo=bar');
     const {history, render} = rendererWithRouter();
