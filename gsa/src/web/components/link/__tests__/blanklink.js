@@ -38,6 +38,21 @@ describe('BlankLink tests', () => {
     expect(element.getAttribute('target')).toEqual('_blank');
   });
 
+  test('should forward props', () => {
+    const {element} = render(
+      <BlankLink
+        to="foo"
+        title="bar"
+      >
+        Ipsum
+      </BlankLink>
+    );
+
+    expect(element.getAttribute('href')).toEqual('foo');
+    expect(element.getAttribute('title')).toEqual('bar');
+    expect(element.textContent).toEqual('Ipsum');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
