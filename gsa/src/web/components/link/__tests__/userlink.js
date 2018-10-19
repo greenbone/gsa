@@ -25,7 +25,7 @@ import {longDate, setLocale} from 'gmp/locale/date';
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
 import {
-  rendererWithStoreAndRouter,
+  rendererWith,
   cleanup,
   fireEvent,
 } from 'web/utils/testing';
@@ -41,7 +41,7 @@ describe('UserLink tests', () => {
   test('should render username and timeout', () => {
     const timeout = date().add(5, 'minutes');
 
-    const {store, render} = rendererWithStoreAndRouter();
+    const {store, render} = rendererWith({store: true, router: true});
 
     store.dispatch(setSessionTimeout(timeout));
     store.dispatch(setUsername('foo'));
@@ -55,7 +55,7 @@ describe('UserLink tests', () => {
   test('should apply styling', () => {
     const timeout = date('2018-10-10');
 
-    const {store, render} = rendererWithStoreAndRouter();
+    const {store, render} = rendererWith({store: true, router: true});
 
     store.dispatch(setSessionTimeout(timeout));
     store.dispatch(setUsername('foo'));
@@ -67,7 +67,7 @@ describe('UserLink tests', () => {
   test('should route to usersettings on click', () => {
     const timeout = date('2018-10-10');
 
-    const {store, history, render} = rendererWithStoreAndRouter();
+    const {store, history, render} = rendererWith({store: true, router: true});
 
     store.dispatch(setSessionTimeout(timeout));
     store.dispatch(setUsername('foo'));

@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable react/prop-types */
+
 import 'jest-styled-components';
 
 import React from 'react';
@@ -33,7 +35,7 @@ import {
   toHaveTextContent,
 } from 'jest-dom';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import configureStore from 'web/store';
 
@@ -53,35 +55,50 @@ export const render = ui => {
   };
 };
 
-export const rendererWithRouter = (
-  history = createMemoryHistory({initialEntries: ['/']}),
-) => ({
-  render: ui => render(
-    <Router history={history}>{ui}</Router>
-  ),
-  history,
-});
-
-export const rendererWithStore = (store = configureStore()) => ({
-  render: ui => render(
-    <Provider store={store}>{ui}</Provider>
-  ),
+const TestingStoreProvider = ({
   store,
-});
+  children,
+}) => isDefined(store) ? (
+  <Provider store={store}>
+    {children}
+  </Provider>
+) : children;
 
-export const rendererWithStoreAndRouter = (
-  store = configureStore(),
-  history = createMemoryHistory({initialEntries: ['/']}),
-) => ({
-  store,
+const TestingRouter = ({
   history,
-  render: ui => render(
-    <Provider store={store}>
-      <Router history={history}>
-        {ui}
-      </Router>
-    </Provider>
-  ),
-});
+  children,
+}) => isDefined(history) ? (
+  <Router history={history}>
+    {children}
+  </Router>
+) : children;
+
+export const rendererWith = ({
+  store,
+  router,
+} = {
+  store: true,
+  router: true,
+}) => {
+  if (store === true) {
+    store = configureStore();
+  }
+
+  let history;
+  if (router === true) {
+    history = createMemoryHistory({initialEntries: ['/']});
+  }
+  return {
+    render: ui => render(
+      <TestingStoreProvider store={store}>
+        <TestingRouter history={history}>
+          {ui}
+        </TestingRouter>
+      </TestingStoreProvider>
+    ),
+    store,
+    history,
+  };
+};
 
 // vim: set ts=2 sw=2 tw=80:

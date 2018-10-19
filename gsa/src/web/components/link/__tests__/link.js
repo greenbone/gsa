@@ -19,7 +19,7 @@
 import React from 'react';
 
 import {
-  rendererWithRouter,
+  rendererWith,
   cleanup,
   fireEvent,
 } from 'web/utils/testing';
@@ -32,7 +32,7 @@ afterEach(cleanup);
 describe('Link tests', () => {
 
   test('render Link', () => {
-    const {render} = rendererWithRouter();
+    const {render} = rendererWith({router: true});
 
     const {element} = render(<Link to="foo">Foo</Link>);
 
@@ -40,7 +40,7 @@ describe('Link tests', () => {
   });
 
   test('should route to url on click', () => {
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
 
     const {element} = render(<Link to="foo">Foo</Link>);
 
@@ -52,7 +52,7 @@ describe('Link tests', () => {
   });
 
   test('should route to absolute url on click', () => {
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
 
     const {element} = render(<Link to="/foo">Foo</Link>);
 
@@ -65,7 +65,7 @@ describe('Link tests', () => {
 
   test('should route to url with filter on click', () => {
     const filter = Filter.fromString('foo=bar');
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" filter={filter}>Foo</Link>
@@ -80,7 +80,7 @@ describe('Link tests', () => {
   });
 
   test('should route to url with query on click', () => {
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
     const query = {foo: 'bar'};
 
     const {element} = render(
@@ -96,7 +96,7 @@ describe('Link tests', () => {
   });
 
   test('should route to url with anchor on click', () => {
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" anchor="bar">Foo</Link>
@@ -111,7 +111,7 @@ describe('Link tests', () => {
   });
 
   test('should not route to url in text mode', () => {
-    const {history, render} = rendererWithRouter();
+    const {render, history} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" textOnly={true}>Foo</Link>
@@ -123,7 +123,7 @@ describe('Link tests', () => {
   });
 
   test('should render styles', () => {
-    const {render} = rendererWithRouter();
+    const {render} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo">Foo</Link>
@@ -133,7 +133,7 @@ describe('Link tests', () => {
   });
 
   test('should render styles in text mode', () => {
-    const {render} = rendererWithRouter();
+    const {render} = rendererWith({router: true});
 
     const {element} = render(
       <Link to="foo" textOnly={true}>Foo</Link>
