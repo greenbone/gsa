@@ -37,6 +37,8 @@ import {
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
+import GmpProvider from 'web/components/provider/gmpprovider';
+
 import configureStore from 'web/store';
 
 expect.extend({
@@ -54,6 +56,15 @@ export const render = ui => {
     ...other,
   };
 };
+
+const TestingGmpPropvider = ({
+  gmp,
+  children,
+}) => isDefined(gmp) ? (
+  <GmpProvider gmp={gmp}>
+    {children}
+  </GmpProvider>
+) : children;
 
 const TestingStoreProvider = ({
   store,
@@ -74,6 +85,7 @@ const TestingRouter = ({
 ) : children;
 
 export const rendererWith = ({
+  gmp,
   store,
   router,
 } = {
@@ -90,12 +102,15 @@ export const rendererWith = ({
   }
   return {
     render: ui => render(
-      <TestingStoreProvider store={store}>
-        <TestingRouter history={history}>
-          {ui}
-        </TestingRouter>
-      </TestingStoreProvider>
+      <TestingGmpPropvider gmp={gmp}>
+        <TestingStoreProvider store={store}>
+          <TestingRouter history={history}>
+            {ui}
+          </TestingRouter>
+        </TestingStoreProvider>
+      </TestingGmpPropvider>
     ),
+    gmp,
     store,
     history,
   };
