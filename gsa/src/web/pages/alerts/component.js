@@ -30,7 +30,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
-import {parseYesNo, NO_VALUE} from 'gmp/parser';
+import {parseInt, parseYesNo, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -296,13 +296,14 @@ class AlertComponent extends React.Component {
           secinfo_filters,
 
           condition: condition.type,
-          condition_data_count: value(condition.data.count, 1),
+          condition_data_count: parseInt(value(condition.data.count, 1)),
           condition_data_direction: value(condition.data.direction,
             DEFAULT_DIRECTION),
           condition_data_filters,
           condition_data_filter_id,
           condition_data_at_least_filter_id: condition_data_filter_id,
-          condition_data_at_least_count: value(condition.data.count, 1),
+          condition_data_at_least_count: parseInt(
+            value(condition.data.count, 1)),
           condition_data_severity: value(condition.data.severity,
             DEFAULT_SEVERITY),
 
