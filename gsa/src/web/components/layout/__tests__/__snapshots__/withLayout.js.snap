@@ -20,7 +20,7 @@ exports[`withLayout HOC tests should create a new component 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -44,7 +44,7 @@ exports[`withLayout HOC tests should create a new component with align: [center,
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -68,7 +68,7 @@ exports[`withLayout HOC tests should create a new component with align: [start, 
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -88,7 +88,7 @@ exports[`withLayout HOC tests should create a new component with align: start 1`
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -115,7 +115,7 @@ exports[`withLayout HOC tests should create a new component with basis: 20% 1`] 
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -142,7 +142,7 @@ exports[`withLayout HOC tests should create a new component with basis: auto 1`]
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -166,7 +166,7 @@ exports[`withLayout HOC tests should create a new component with flex 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -190,7 +190,7 @@ exports[`withLayout HOC tests should create a new component with flex: column 1`
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -214,7 +214,7 @@ exports[`withLayout HOC tests should create a new component with flex: column, a
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -234,7 +234,7 @@ exports[`withLayout HOC tests should create a new component with flex: column, a
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -258,7 +258,7 @@ exports[`withLayout HOC tests should create a new component with flex: row 1`] =
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -286,7 +286,7 @@ exports[`withLayout HOC tests should create a new component with grow 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -314,7 +314,7 @@ exports[`withLayout HOC tests should create a new component with grow: 1 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -342,7 +342,7 @@ exports[`withLayout HOC tests should create a new component with grow: 666 1`] =
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -369,7 +369,7 @@ exports[`withLayout HOC tests should create a new component with shrink 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -396,7 +396,7 @@ exports[`withLayout HOC tests should create a new component with shrink: 1 1`] =
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -423,7 +423,7 @@ exports[`withLayout HOC tests should create a new component with shrink: 666 1`]
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -450,7 +450,7 @@ exports[`withLayout HOC tests should create a new component with wrap 1`] = `
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -477,7 +477,7 @@ exports[`withLayout HOC tests should create a new component with wrap: nowrap 1`
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
 
@@ -504,6 +504,6 @@ exports[`withLayout HOC tests should create a new component with wrap: wrap 1`] 
 }
 
 <div
-  className="c0"
+  class="c0"
 />
 `;
