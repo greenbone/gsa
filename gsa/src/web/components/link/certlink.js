@@ -25,9 +25,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from './detailslink';
 
 const CertLink = ({
     id,
