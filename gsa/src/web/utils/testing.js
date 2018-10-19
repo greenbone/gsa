@@ -57,32 +57,16 @@ export const render = ui => {
   };
 };
 
-const TestingGmpPropvider = ({
-  gmp,
-  children,
-}) => isDefined(gmp) ? (
-  <GmpProvider gmp={gmp}>
-    {children}
-  </GmpProvider>
-) : children;
+const withProvider = name => Component => ({children, ...props}) =>
+  isDefined(props[name]) ?
+    <Component {...{[name]: props[name]}}>
+      {children}
+    </Component> :
+    children;
 
-const TestingStoreProvider = ({
-  store,
-  children,
-}) => isDefined(store) ? (
-  <Provider store={store}>
-    {children}
-  </Provider>
-) : children;
-
-const TestingRouter = ({
-  history,
-  children,
-}) => isDefined(history) ? (
-  <Router history={history}>
-    {children}
-  </Router>
-) : children;
+const TestingGmpPropvider = withProvider('gmp')(GmpProvider);
+const TestingStoreProvider = withProvider('store')(Provider);
+const TestingRouter = withProvider('history')(Router);
 
 export const rendererWith = ({
   gmp,
