@@ -69,6 +69,36 @@ describe('Alert Model tests', () => {
     });
   });
 
+  test('should parse data values', () => {
+    const elem = {
+      method: {
+        __text: 'foo',
+        data: {
+          __text: '42',
+          name: 'bar',
+          foo: {
+            _id: 'a1',
+            lorem: 'ipsum',
+          },
+        },
+      },
+    };
+
+    const alert = new Alert(elem);
+    expect(alert.method).toEqual({
+      data: {
+        bar: {
+          foo: {
+            id: 'a1',
+            lorem: 'ipsum',
+          },
+          value: '42',
+        },
+      },
+      type: 'foo',
+    });
+  });
+
   test('should return given filter as instance of filter model', () => {
     const elem = {filter: 'rows=1337'};
     const alert = new Alert(elem);
