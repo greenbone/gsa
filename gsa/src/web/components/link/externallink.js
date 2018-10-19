@@ -25,11 +25,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import LinkConfirmationDialog from '../dialog/linkconfirmationdialog.js';
+import LinkConfirmationDialog from '../dialog/linkconfirmationdialog';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import {withTextOnly} from './link.js';
+import {withTextOnly} from './link';
 
 class ExternalLink extends React.Component {
   constructor() {
