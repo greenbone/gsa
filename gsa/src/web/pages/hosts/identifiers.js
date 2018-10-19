@@ -260,7 +260,7 @@ class Identifiers extends React.Component {
                 </TableData>
                 <TableData>
                   <DetailsLink
-                    type="os"
+                    type="operatingsystem"
                     id={isDefined(identifier.os) ? identifier.os.id : ''}
                     textOnly={identifier.name !== 'OS'}
                   >

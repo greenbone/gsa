@@ -23,24 +23,10 @@
  */
 import React from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Link from 'web/components/link/link';
-
-const types = {
-  os: 'operatingsystem',
-};
-
-const checkType = type => {
-  const ctype = types[type];
-  if (isDefined(ctype)) {
-    return ctype;
-  }
-  return type;
-};
+import Link from './link';
 
 const DetailsLink = ({
   capabilities,
@@ -56,7 +42,7 @@ const DetailsLink = ({
     <Link
       {...props}
       textOnly={textOnly}
-      to={'/' + checkType(type) + '/' + encodeURIComponent(id)}
+      to={`/${type}/${encodeURIComponent(id)}`}
     />
   );
 };
