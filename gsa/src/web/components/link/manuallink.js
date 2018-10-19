@@ -33,7 +33,10 @@ import withGmp from 'web/utils/withGmp';
 
 import BlankLink from './blanklink';
 
-const LANGUAGE_MAPPING = {};
+const LANGUAGE_MAPPING = {
+  de: 'en', // map de to en currently
+};
+
 const DEFAULT_LANGUAGE_PATH = 'en';
 
 const get_language_path = () => {
