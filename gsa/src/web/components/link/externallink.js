@@ -79,7 +79,7 @@ class ExternalLink extends React.Component {
       'responsibility. Greenbone does not endorse the content you will ' +
       'see there.', {to});
     return (
-      <span>
+      <React.Fragment>
         <a
           {...props}
           href={to}
@@ -97,7 +97,7 @@ class ExternalLink extends React.Component {
             width="500px"
           />
         }
-      </span>
+      </React.Fragment>
     );
   };
 }
