@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import {
   cleanup,
   rendererWith,
@@ -70,6 +72,30 @@ describe('ManualLink tests', () => {
 
     expect(element).toHaveAttribute('href',
       'http://foo.bar/en/search.html?q=bar');
+    expect(element).toHaveAttribute('target', '_blank');
+    expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should render with german locale', () => {
+    setLocale('de');
+
+    const {render} = rendererWith({gmp: createGmp()});
+    const {element} = render(<ManualLink title="Foo" page="foo"/>);
+
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
+    expect(element).toHaveAttribute('target', '_blank');
+    expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  test('should render with english locale', () => {
+    setLocale('en');
+
+    const {render} = rendererWith({gmp: createGmp()});
+    const {element} = render(<ManualLink title="Foo" page="foo"/>);
+
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).toHaveAttribute('href', 'http://foo.bar/en/foo.html');
     expect(element).toHaveAttribute('target', '_blank');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
   });
