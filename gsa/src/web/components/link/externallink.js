@@ -25,11 +25,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import LinkConfirmationDialog from '../dialog/linkconfirmationdialog.js';
+import LinkConfirmationDialog from '../dialog/linkconfirmationdialog';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 
-import {withTextOnly} from './link.js';
+import {withTextOnly} from './link';
 
 class ExternalLink extends React.Component {
   constructor() {
@@ -79,7 +79,7 @@ class ExternalLink extends React.Component {
       'responsibility. Greenbone does not endorse the content you will ' +
       'see there.', {to});
     return (
-      <span>
+      <React.Fragment>
         <a
           {...props}
           href={to}
@@ -97,7 +97,7 @@ class ExternalLink extends React.Component {
             width="500px"
           />
         }
-      </span>
+      </React.Fragment>
     );
   };
 }

@@ -22,120 +22,115 @@
  */
 import React from 'react';
 
-import renderer from 'react-test-renderer';
-
-import 'jest-styled-components';
-
 import Layout from 'web/components/layout/layout';
+
+import {render} from 'web/utils/testing';
 
 describe('Layout tests', () => {
 
   test('should render Layout', () => {
-    const tree = renderer.create(<Layout/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should render Layout with flex', () => {
-    const tree = renderer.create(<Layout flex/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout flex/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should render Layout with flex="row"', () => {
-    const tree = renderer.create(<Layout flex="row" />).toJSON();
-    expect(tree).toMatchSnapshot();
-
+    const {element} = render(<Layout flex="row" />);
+    expect(element).toMatchSnapshot();
   });
 
   test('should render Layout with flex="column"', () => {
-    const tree = renderer.create(<Layout flex="column" />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout flex="column" />);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with wrap', () => {
-    const tree = renderer.create(<Layout wrap/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout wrap/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with wrap=wrap', () => {
-    const tree = renderer.create(<Layout wrap="wrap"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout wrap="wrap"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with wrap=nowrap', () => {
-    const tree = renderer.create(<Layout wrap="nowrap"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout wrap="nowrap"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with grow', () => {
-    const tree = renderer.create(<Layout grow/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout grow/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with grow="1"', () => {
-    const tree = renderer.create(<Layout grow="1"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout grow="1"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with grow="666"', () => {
-    const tree = renderer.create(<Layout grow="666"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout grow="666"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with shrink', () => {
-    const tree = renderer.create(<Layout shrink/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout shrink/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with shrink="1"', () => {
-    const tree = renderer.create(<Layout shrink="1"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout shrink="1"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with shrink="666"', () => {
-    const tree = renderer.create(<Layout shrink="666"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout shrink="666"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with basis="auto"', () => {
-    const tree = renderer.create(<Layout basis="auto"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout basis="auto"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with basis="20%"', () => {
-    const tree = renderer.create(<Layout basis="20%"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout basis="20%"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with align="start"', () => {
-    const tree = renderer.create(<Layout align="start"/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout align="start"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with flex="column" and align="start"', () => {
-    const tree = renderer.create(<Layout flex="column" align="start"/>)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout flex="column" align="start"/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with align=[start, end]', () => {
-    const tree = renderer.create(<Layout align={['start', 'end']}/>).toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout align={['start', 'end']}/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with align=[stretch, center]', () => {
-    const tree = renderer.create(<Layout align={['stretch', 'center']}/>)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const {element} = render(<Layout align={['stretch', 'center']}/>);
+    expect(element).toMatchSnapshot();
   });
 
   test('should create Layout with flex="column" align=[stretch, center]', () => { // eslint-disable-line max-len
-    const tree = renderer.create(
+    const {element} = render(
       <Layout
         flex="column"
         align={['stretch', 'center']}
       />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
+    );
+    expect(element).toMatchSnapshot();
   });
 
 });

@@ -130,7 +130,10 @@ const entitiescommand = ReactPropTypes.instanceOf(EntitiesCommand);
 
 const capabilities = ReactPropTypes.instanceOf(Capabilities);
 
-const gmp = ReactPropTypes.instanceOf(Gmp);
+// allow to fake gmp in tests without getting proptype warnings
+const gmp = process.env.NODE_ENV === 'test' ?
+  ReactPropTypes.object :
+  ReactPropTypes.instanceOf(Gmp);
 
 const settings = ReactPropTypes.instanceOf(Settings);
 

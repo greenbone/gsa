@@ -28,12 +28,15 @@ import {getLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import BlankLink from './blanklink.js';
+import BlankLink from './blanklink';
 
-const LANGUAGE_MAPPING = {};
+const LANGUAGE_MAPPING = {
+  de: 'en', // map de to en currently
+};
+
 const DEFAULT_LANGUAGE_PATH = 'en';
 
 const get_language_path = () => {

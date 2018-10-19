@@ -89,7 +89,7 @@ const Row = ({entity, links = true, actions, ...props}) => {
         <IconDivider align={['start', 'center']}>
           <CpeIcon name={entity.name}/>
           <DetailsLink
-            type="os"
+            type={entity.entityType}
             id={entity.id}
             textOnly={!links}
           >

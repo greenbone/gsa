@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +18,33 @@
  */
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import {
+  cleanup,
+  rendererWith,
+} from 'web/utils/testing';
 
-import BlankLink from './blanklink';
+import ProtocolDocLink from '../protocoldoclink';
 
-const ProtocolDocLink = ({
-  gmp,
-  title,
-}) => {
-  const {protocoldocurl} = gmp.settings;
+afterEach(cleanup);
 
-  return (
-    <BlankLink
-      to={protocoldocurl}
-      title={title}
-    >
-      {title}
-    </BlankLink>
-  );
-};
+describe('ProtocolDocLink tests', () => {
 
-ProtocolDocLink.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  title: PropTypes.string.isRequired,
-};
+  test('should render ProtocolDocLink', () => {
+    const gmp = {
+      settings: {
+        protocoldocurl: 'http://foo.bar',
+      },
+    };
 
-export default withGmp(ProtocolDocLink);
+    const {render} = rendererWith({gmp});
+    const {element} = render(<ProtocolDocLink title="Foo" />);
+
+    expect(element).toHaveAttribute('title', 'Foo');
+    expect(element).toHaveAttribute('href', 'http://foo.bar');
+    expect(element).toHaveAttribute('target', '_blank');
+    expect(element).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+});
 
 // vim: set ts=2 sw=2 tw=80:

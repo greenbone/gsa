@@ -25,16 +25,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsLink from '../../components/link/detailslink.js';
+import DetailsLink from './detailslink';
 
 const CertLink = ({
-    id,
-    textOnly = false,
-    type,
-  }) => {
-
+  id,
+  textOnly = false,
+  type,
+}) => {
   if (type !== 'CERT-Bund' && type !== 'DFN-CERT') {
     return (
       <span><b>?</b>{id}</span>

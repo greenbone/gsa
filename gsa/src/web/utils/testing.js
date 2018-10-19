@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable react/prop-types */
+
 import 'jest-styled-components';
 
 import React from 'react';
@@ -33,7 +35,12 @@ import {
   toHaveTextContent,
 } from 'jest-dom';
 
-import {hasValue} from 'gmp/utils/identity';
+import EverythingCapabilities from 'gmp/capabilities/everything';
+
+import {hasValue, isDefined} from 'gmp/utils/identity';
+
+import GmpProvider from 'web/components/provider/gmpprovider';
+import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
 
 import configureStore from 'web/store';
 
@@ -53,35 +60,56 @@ export const render = ui => {
   };
 };
 
-export const rendererWithRouter = (
-  history = createMemoryHistory({initialEntries: ['/']}),
-) => ({
-  render: ui => render(
-    <Router history={history}>{ui}</Router>
-  ),
-  history,
-});
+const withProvider = name => Component => ({children, ...props}) =>
+  isDefined(props[name]) ?
+    <Component {...{[name]: props[name]}}>
+      {children}
+    </Component> :
+    children;
 
-export const rendererWithStore = (store = configureStore()) => ({
-  render: ui => render(
-    <Provider store={store}>{ui}</Provider>
-  ),
-  store,
-});
+const TestingGmpPropvider = withProvider('gmp')(GmpProvider);
+const TestingStoreProvider = withProvider('store')(Provider);
+const TestingRouter = withProvider('history')(Router);
+const TestingCapabilitiesProvider = withProvider('capabilities')(
+  CapabilitiesProvider);
 
-export const rendererWithStoreAndRouter = (
-  store = configureStore(),
-  history = createMemoryHistory({initialEntries: ['/']}),
-) => ({
+export const rendererWith = ({
+  capabilities,
+  gmp,
   store,
-  history,
-  render: ui => render(
-    <Provider store={store}>
-      <Router history={history}>
-        {ui}
-      </Router>
-    </Provider>
-  ),
-});
+  router,
+} = {
+  store: true,
+  router: true,
+}) => {
+  if (store === true) {
+    store = configureStore();
+  }
+
+  let history;
+  if (router === true) {
+    history = createMemoryHistory({initialEntries: ['/']});
+  }
+
+  if (capabilities === true) {
+    capabilities = new EverythingCapabilities();
+  }
+  return {
+    render: ui => render(
+      <TestingGmpPropvider gmp={gmp}>
+        <TestingCapabilitiesProvider capabilities={capabilities}>
+          <TestingStoreProvider store={store}>
+            <TestingRouter history={history}>
+              {ui}
+            </TestingRouter>
+          </TestingStoreProvider>
+        </TestingCapabilitiesProvider>
+      </TestingGmpPropvider>
+    ),
+    gmp,
+    store,
+    history,
+  };
+};
 
 // vim: set ts=2 sw=2 tw=80:

@@ -20,30 +20,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import DetailsLink from './detailslink.js';
+import DetailsLink from './detailslink';
 
 const CveLink = ({
-    id,
-    ...props
-  }) => {
-  return (
-    <DetailsLink
-      type="cve"
-      id={id}
-      {...props}
-    >
-      {id}
-    </DetailsLink>
-  );
-};
+  id,
+  ...props
+}) => (
+  <DetailsLink
+    {...props}
+    id={id}
+    type="cve"
+  >
+    {id}
+  </DetailsLink>
+);
 
 CveLink.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
 };
 
 export default CveLink;
