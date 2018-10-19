@@ -35,9 +35,12 @@ import {
   toHaveTextContent,
 } from 'jest-dom';
 
+import EverythingCapabilities from 'gmp/capabilities/everything';
+
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import GmpProvider from 'web/components/provider/gmpprovider';
+import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
 
 import configureStore from 'web/store';
 
@@ -67,8 +70,11 @@ const withProvider = name => Component => ({children, ...props}) =>
 const TestingGmpPropvider = withProvider('gmp')(GmpProvider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
+const TestingCapabilitiesProvider = withProvider('capabilities')(
+  CapabilitiesProvider);
 
 export const rendererWith = ({
+  capabilities,
   gmp,
   store,
   router,
@@ -84,14 +90,20 @@ export const rendererWith = ({
   if (router === true) {
     history = createMemoryHistory({initialEntries: ['/']});
   }
+
+  if (capabilities === true) {
+    capabilities = new EverythingCapabilities();
+  }
   return {
     render: ui => render(
       <TestingGmpPropvider gmp={gmp}>
-        <TestingStoreProvider store={store}>
-          <TestingRouter history={history}>
-            {ui}
-          </TestingRouter>
-        </TestingStoreProvider>
+        <TestingCapabilitiesProvider capabilities={capabilities}>
+          <TestingStoreProvider store={store}>
+            <TestingRouter history={history}>
+              {ui}
+            </TestingRouter>
+          </TestingStoreProvider>
+        </TestingCapabilitiesProvider>
       </TestingGmpPropvider>
     ),
     gmp,
