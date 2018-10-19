@@ -16,7 +16,6 @@ exports[`Layout tests should create Layout with align="start" 1`] = `
 }
 
 <div
-  align="start"
   class="c0"
 />
 `;
@@ -41,7 +40,6 @@ exports[`Layout tests should create Layout with align=[start, end] 1`] = `
 }
 
 <div
-  align="start,end"
   class="c0"
 />
 `;
@@ -66,7 +64,6 @@ exports[`Layout tests should create Layout with align=[stretch, center] 1`] = `
 }
 
 <div
-  align="stretch,center"
   class="c0"
 />
 `;
@@ -145,7 +142,6 @@ exports[`Layout tests should create Layout with flex="column" align=[stretch, ce
 }
 
 <div
-  align="stretch,center"
   class="c0"
 />
 `;
@@ -166,7 +162,6 @@ exports[`Layout tests should create Layout with flex="column" and align="start" 
 }
 
 <div
-  align="start"
   class="c0"
 />
 `;
