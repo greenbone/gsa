@@ -27,22 +27,20 @@ import PropTypes from 'web/utils/proptypes';
 import DetailsLink from './detailslink';
 
 const CveLink = ({
-    id,
-    ...props
-  }) => {
-  return (
-    <DetailsLink
-      type="cve"
-      id={id}
-      {...props}
-    >
-      {id}
-    </DetailsLink>
-  );
-};
+  id,
+  ...props
+}) => (
+  <DetailsLink
+    {...props}
+    id={id}
+    type="cve"
+  >
+    {id}
+  </DetailsLink>
+);
 
 CveLink.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
 };
 
 export default CveLink;
