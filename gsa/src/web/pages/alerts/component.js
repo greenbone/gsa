@@ -30,7 +30,12 @@ import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
-import {parseInt, parseYesNo, NO_VALUE} from 'gmp/parser';
+import {
+  parseInt,
+  parseSeverity,
+  parseYesNo,
+  NO_VALUE,
+} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -304,8 +309,8 @@ class AlertComponent extends React.Component {
           condition_data_at_least_filter_id: condition_data_filter_id,
           condition_data_at_least_count: parseInt(
             value(condition.data.count, 1)),
-          condition_data_severity: value(condition.data.severity,
-            DEFAULT_SEVERITY),
+          condition_data_severity: parseSeverity(value(condition.data.severity,
+            DEFAULT_SEVERITY)),
 
           event: event_type,
           event_data_status: value(event.data.status, DEFAULT_EVENT_STATUS),
