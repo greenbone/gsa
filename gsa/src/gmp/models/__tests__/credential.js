@@ -25,10 +25,14 @@
 
 import Model from 'gmp/model';
 import Credential, {
-  ssh_credential_filter,
-  smb_credential_filter,
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  SNMP_CREDENTIAL_TYPE,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   esxi_credential_filter,
+  smb_credential_filter,
   snmp_credential_filter,
+  ssh_credential_filter,
 } from 'gmp/models/credential';
 import {testModel} from 'gmp/models/testing';
 
@@ -37,6 +41,25 @@ import {
   NO_VALUE,
   YES_VALUE,
 } from 'gmp/parser';
+
+const USERNAME_PASSWORD_CREDENTIAL = new Credential({
+  type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
+});
+const USERNAME_SSH_KEY_CREDENTIAL = new Credential({
+  type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+});
+const CLIENT_CERTIFICATE_CREDENTIAL = new Credential({
+  type: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+});
+const SNMP_CREDENTIAL = new Credential({type: SNMP_CREDENTIAL_TYPE});
+
+const createAllCredentials = () => [
+  CLIENT_CERTIFICATE_CREDENTIAL,
+  USERNAME_PASSWORD_CREDENTIAL,
+  USERNAME_SSH_KEY_CREDENTIAL,
+  SNMP_CREDENTIAL,
+];
+
 
 testModel(Credential, 'credential');
 
@@ -110,6 +133,7 @@ describe('Credential Model tests', () => {
   });
 });
 
+
 describe('Credential model function tests', () => {
 
   test('ssh_credential_filter should return filter with correct true/false', () => {
@@ -145,6 +169,37 @@ describe('Credential model function tests', () => {
     expect(snmp_credential_filter(type1)).toEqual(false);
     expect(snmp_credential_filter(type2)).toEqual(true);
   });
+
+  test('should filter non ssh credentials', () => {
+    const allCredentials = createAllCredentials();
+    expect(allCredentials.filter(ssh_credential_filter)).toEqual(
+      expect.arrayContaining([
+        USERNAME_PASSWORD_CREDENTIAL,
+        USERNAME_SSH_KEY_CREDENTIAL,
+      ]));
+  });
+
+  test('should filter non smb credentials', () => {
+    const allCredentials = createAllCredentials();
+    expect(allCredentials.filter(smb_credential_filter)).toEqual([
+      USERNAME_PASSWORD_CREDENTIAL,
+    ]);
+  });
+
+  test('should filter non smb credentials', () => {
+    const allCredentials = createAllCredentials();
+    expect(allCredentials.filter(esxi_credential_filter)).toEqual([
+      USERNAME_PASSWORD_CREDENTIAL,
+    ]);
+  });
+
+  test('should filter non snmp credentials', () => {
+    const allCredentials = createAllCredentials();
+    expect(allCredentials.filter(snmp_credential_filter)).toEqual([
+      SNMP_CREDENTIAL,
+    ]);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
