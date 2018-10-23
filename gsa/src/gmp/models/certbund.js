@@ -54,7 +54,7 @@ class CertBundAdv extends Info {
       ret.risk = advisory.Risk;
       ret.reference_source = advisory.Reference_Source;
       ret.reference_url = advisory.Reference_URL;
-      ret.categories = advisory.CategoryTree;
+      ret.categories = map(advisory.CategoryTree, categoryTree => categoryTree);
 
       if (!isDefined(ret.version) && isDefined(advisory.Ref_Num)) {
         ret.version = advisory.Ref_Num._update;

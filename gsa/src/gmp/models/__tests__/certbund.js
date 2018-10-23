@@ -66,7 +66,7 @@ describe('CertBundAdv model tests', () => {
     expect(certBundAdv.categories).toEqual(['foo', 'bar']);
   });
 
-  test('should return string if single CategoryTree is given', () => {
+  test('should return array also if single CategoryTree is given', () => {
     const elem = {
       raw_data: {
         Advisory: {
@@ -75,7 +75,7 @@ describe('CertBundAdv model tests', () => {
       },
     };
     const certBundAdv = new CertBundAdv(elem);
-    expect(certBundAdv.categories).toEqual('foo');
+    expect(certBundAdv.categories).toEqual(['foo']);
   });
 
   test('should return empty descriptions array if no advisory is given', () => {
