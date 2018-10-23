@@ -54,19 +54,19 @@ const Actions = ({
   <IconDivider grow align={['center', 'center']}>
     <TrashIcon
       displayName={_('Scan Config')}
-      name="alert"
+      name="config"
       entity={entity}
       onClick={onScanConfigDeleteClick}
     />
     <EditIcon
       displayName={_('Scan Config')}
-      name="alert"
+      name="config"
       entity={entity}
       onClick={onScanConfigEditClick}
     />
     <CloneIcon
       displayName={_('Scan Config')}
-      name="alert"
+      name="config"
       entity={entity}
       title={_('Clone Scan Config')}
       value={entity}
