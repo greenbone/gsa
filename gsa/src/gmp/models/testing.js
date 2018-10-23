@@ -27,7 +27,7 @@ import {isDate} from 'gmp/models/date';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 export const testModel = (modelClass, type) => {
-  describe(`${modelClass} Model tests`, () => {
+  describe(`${type} Model tests`, () => {
 
     test('end_time is parsed correctly', () => {
       const elem = {
@@ -124,7 +124,7 @@ export const testModel = (modelClass, type) => {
 
   });
 
-  describe('Model parse_properties function test', () => {
+  describe(`${type} Model parse_properties function test`, () => {
 
     test('should set ID only for proper ID', () => {
       const model1 = new modelClass({_id: '1337'});
@@ -169,7 +169,7 @@ export const testModel = (modelClass, type) => {
     });
   });
 
-  describe('Model set_properties function test', () => {
+  describe(`${type} Model set_properties function test`, () => {
     test('should not allow to overwrite id', () => {
       const model = new modelClass({_id: 'foo'});
 
@@ -177,7 +177,7 @@ export const testModel = (modelClass, type) => {
     });
   });
 
-  describe('Model methods tests', () => {
+  describe(`${type} Model methods tests`, () => {
 
       test('isInUse() should return correct true/false', () => {
         const model1 = new modelClass({in_use: '1'});
