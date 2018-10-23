@@ -44,7 +44,7 @@ export const parseProgressElement = value => {
   return isDefined(progress) ? progress : 0;
 };
 
-export const parseTextElement = text => {
+export const parseTextElement = (text = {}) => {
   if (isDefined(text.__text)) {
     return {
       text: text.__text,
