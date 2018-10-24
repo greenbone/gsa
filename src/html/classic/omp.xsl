@@ -23825,7 +23825,7 @@ should not have received it.
                     <label>
                       <input type="radio" name="hosts" value="--"/>
                     </label>
-                    <input type="text" name="hosts_manual" size="30" maxlength="80" value=""/>
+                    <input type="text" name="hosts_manual" size="30" value=""/>
                   </div>
                 </div>
               </xsl:otherwise>
@@ -24983,7 +24983,7 @@ should not have received it.
                   </div>
                 </div>
                 <div class="form-item">
-                  <input type="text" name="hosts_manual" size="30" maxlength="80" value=""/>
+                  <input type="text" name="hosts_manual" size="30" value=""/>
                 </div>
               </xsl:otherwise>
             </xsl:choose>
