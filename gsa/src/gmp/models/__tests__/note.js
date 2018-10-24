@@ -23,6 +23,7 @@
 
 import Model from 'gmp/model';
 import Note from 'gmp/models/note';
+import Nvt from 'gmp/models/nvt';
 import {testModel} from 'gmp/models/testing';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
@@ -122,6 +123,19 @@ describe('Note model tests', () => {
     expect(note1.result).toBeInstanceOf(Model);
     expect(note2.result).toBeUndefined();
     expect(note3.result).toBeUndefined();
+  });
+
+  test('should parse NVTs', () => {
+    const elem = {
+      nvt: {
+        _id: '123abc',
+        name: 'foo',
+      },
+    };
+    const note = new Note(elem);
+
+    expect(note.nvt).toBeInstanceOf(Nvt);
+    expect(note.name).toEqual('foo');
   });
 
 });
