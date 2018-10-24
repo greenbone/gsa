@@ -243,7 +243,7 @@ class Trashcan extends React.Component {
     const contents_table = this.createContentsTable(trash);
 
     const table_props = {
-      links: true,
+      links: false,
       onEntityRestore: this.handleRestore,
       onEntityDelete: this.handleDelete,
       actions: TrashActions,
