@@ -322,8 +322,8 @@ class AlertComponent extends React.Component {
 
           method_data_defense_center_ip: value(method.data.defense_center_ip,
             ''),
-          method_data_defense_center_port: value(
-            method.data.defense_center_port, DEFAULT_DEFENSE_CENTER_PORT),
+          method_data_defense_center_port: parseInt(value(
+            method.data.defense_center_port, DEFAULT_DEFENSE_CENTER_PORT)),
 
           method_data_details_url: value(method.data.details_url,
             DEFAULT_DETAILS_URL),
