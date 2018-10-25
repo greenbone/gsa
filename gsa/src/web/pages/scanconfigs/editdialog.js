@@ -94,7 +94,7 @@ class NvtPreferenceDisplay extends React.Component {
         <StyledTableData>
           {preference.value}
         </StyledTableData>
-        <TableData align="center">
+        <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Edit Scan Config NVT Details')}
             value={{config, nvt: preference.nvt}}
@@ -365,7 +365,7 @@ class NvtFamily extends React.Component {
             onChange={onSelectChange}
           />
         </TableData>
-        <TableData align="center">
+        <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Edit Scan Config Family')}
             value={{name, config}}

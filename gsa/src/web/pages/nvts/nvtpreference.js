@@ -175,8 +175,6 @@ class NvtPreference extends React.Component {
         <TableData>
           {preference.default}
         </TableData>
-        <TableData>
-        </TableData>
       </TableRow>
     );
   }

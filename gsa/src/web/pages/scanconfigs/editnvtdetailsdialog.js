@@ -43,7 +43,7 @@ import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
 import SimpleTable from 'web/components/table/simpletable';
-import Table from 'web/components/table/table';
+import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
@@ -235,9 +235,6 @@ class EditDialog extends React.Component {
                     <TableHead>
                       {_('Default Value')}
                     </TableHead>
-                    <TableHead align="center">
-                      {_('Actions')}
-                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -286,8 +283,6 @@ class EditDialog extends React.Component {
                             nvt.default_timeout :
                             ''
                       }
-                    </TableData>
-                    <TableData>
                     </TableData>
                   </TableRow>
                   {
