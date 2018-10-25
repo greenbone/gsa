@@ -34,15 +34,15 @@ const get_value = val => {
 
 class Param {
 
-  constructor({name, type, value, options, ...other}) {
+  constructor({name, type, value, ...other}) {
     this.default = get_value(other.default);
     this.name = name;
     this.max = type.max;
     this.min = type.min;
     this.type = get_value(type);
 
-    if (isObject(options)) {
-      this.options = map(options.option, opt => {
+    if (isObject(type.options)) {
+      this.options = map(type.options.option, opt => {
         return {
           value: opt,
           name: opt,
@@ -53,7 +53,7 @@ class Param {
       this.options = [];
     }
 
-    if (type === 'report_format_list') {
+    if (this.type === 'report_format_list') {
       this.value = map(value.report_format, format => format._id);
     }
     else {
