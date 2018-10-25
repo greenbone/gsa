@@ -235,9 +235,6 @@ class EditDialog extends React.Component {
                     <TableHead>
                       {_('Default Value')}
                     </TableHead>
-                    <TableHead align="center">
-                      {_('Actions')}
-                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -286,8 +283,6 @@ class EditDialog extends React.Component {
                             nvt.default_timeout :
                             ''
                       }
-                    </TableData>
-                    <TableData>
                     </TableData>
                   </TableRow>
                   {
