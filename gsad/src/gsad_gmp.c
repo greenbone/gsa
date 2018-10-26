@@ -2334,6 +2334,10 @@ delete_resource (gvm_connection_t *connection, const char *type,
       inheritor_id = params_value (params, "inheritor_id");
       if (inheritor_id)
         extra_attribs = g_strdup_printf ("inheritor_id=\"%s\"", inheritor_id);
+      else if (params_given (params, "inheritor_id"))
+        return message_invalid (connection, credentials, params, response_data,
+                                "Invalid inheritor_id",
+                                "Delete User");
     }
 
   /* Delete the resource and get all resources. */
