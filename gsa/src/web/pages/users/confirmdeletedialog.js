@@ -66,7 +66,7 @@ const ConfirmDeleteDialog = ({
       value: '--',
     }, {
       label: _('Current User'),
-      value: 'self,',
+      value: 'self',
     },
     ...renderSelectItems(inheritorUsers),
   ];
