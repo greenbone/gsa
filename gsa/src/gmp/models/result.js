@@ -59,7 +59,7 @@ class Result extends Model {
 
     const {
       detection,
-      host,
+      host = {},
       name,
       notes,
       nvt = {},
