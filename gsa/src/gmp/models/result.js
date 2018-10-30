@@ -94,7 +94,7 @@ class Result extends Model {
       copy.severity = parseSeverity(severity);
     }
 
-    copy.vulnerability = isDefined(name) ? name : nvt.oid;
+    copy.vulnerability = isDefined(name) ? name : nvt._oid;
 
     if (isDefined(report)) {
       copy.report = new Model(report, 'report');
