@@ -110,7 +110,7 @@ class Scanner extends Model {
         );
         delete ret.ca_pub.info.activation_time;
         delete ret.ca_pub.info.expiration_time;
-        delete ret.ca_pub.info;
+        delete ret.ca_pub_info;
       }
     }
 
