@@ -27,6 +27,9 @@ import Model from 'gmp/model';
 import {isDate} from 'gmp/models/date';
 import Credential from 'gmp/models/credential';
 import Scanner, {
+  scannerTypeName,
+  openVasScannersFilter,
+  ospScannersFilter,
   CVE_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
@@ -38,7 +41,7 @@ import {YES_VALUE} from 'gmp/parser';
 
 testModel(Scanner, 'scanner');
 
-describe('ScanConfig model tests', () => {
+describe('Scanner model tests', () => {
 
   test('should parse type', () => {
     const scanner = new Scanner({type: '42'});
@@ -160,6 +163,12 @@ describe('ScanConfig model tests', () => {
         },
       },
     };
+    const elem2 = {
+      info: {
+        description: '',
+        params: '',
+      },
+    };
     const paramsRes = {
       name: 'ipsum',
       description: 'dolor',
@@ -168,6 +177,7 @@ describe('ScanConfig model tests', () => {
       default: 'amet',
     };
     const scanner = new Scanner(elem);
+    const scanner2 = new Scanner(elem2);
 
     expect(scanner.info.scanner.name).toEqual('foo');
     expect(scanner.info.scanner.version).toEqual('42');
@@ -176,6 +186,8 @@ describe('ScanConfig model tests', () => {
     expect(scanner.info.protocol.name).toEqual('bar');
     expect(scanner.info.protocol.version).toBeUndefined();
     expect(scanner.info.params[0]).toEqual(paramsRes);
+    expect(scanner2.info.description).toBeUndefined();
+    expect(scanner2.info.params).toBeUndefined();
   });
 
   test('isClonable() should return correct true/false', () => {
@@ -221,6 +233,39 @@ describe('ScanConfig model tests', () => {
     expect(scanner2.hasUnixSocket()).toEqual(false);
     expect(scanner3.hasUnixSocket()).toEqual(false);
   });
+
 });
 
+describe('Scanner model function tests', () => {
+
+  test('scannerTypeName() should return scanner type', () => {
+    const type1 = scannerTypeName(OSP_SCANNER_TYPE);
+    const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);
+    const type3 = scannerTypeName(CVE_SCANNER_TYPE);
+    const type4 = scannerTypeName(SLAVE_SCANNER_TYPE);
+    const type5 = scannerTypeName(42);
+
+    expect(type1).toEqual('OSP Scanner');
+    expect(type2).toEqual('OpenVAS Scanner');
+    expect(type3).toEqual('CVE Scanner');
+    expect(type4).toEqual('GMP Scanner');
+    expect(type5).toEqual('Unknown type (42)');
+  });
+
+  test('openVasScannersFilter should return filter with correct true/false', () => {
+    const config1 = {scannerType: 1}; // OSP Scanner
+    const config2 = {scannerType: 2}; // OpenVAS Scanner
+
+    expect(openVasScannersFilter(config1)).toEqual(false);
+    expect(openVasScannersFilter(config2)).toEqual(true);
+  });
+
+  test('ospScannersFilter should return filter with correct true/false', () => {
+    const config1 = {scannerType: 3}; // CVE Scanner
+    const config2 = {scannerType: 1}; // OSP Scanner
+
+    expect(ospScannersFilter(config1)).toEqual(false);
+    expect(ospScannersFilter(config2)).toEqual(true);
+  });
+});
 // vim: set ts=2 sw=2 tw=80:
