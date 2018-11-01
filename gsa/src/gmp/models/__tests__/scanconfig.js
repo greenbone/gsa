@@ -21,8 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* eslint-disable max-len */
+
 import Model from 'gmp/model';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig, {
+  filterEmptyScanConfig,
+  openVasScanConfigsFilter,
+  ospScanConfigsFilter,
+} from 'gmp/models/scanconfig';
 import {testModel} from 'gmp/models/testing';
 
 testModel(ScanConfig, 'scanconfig');
@@ -106,6 +112,20 @@ describe('ScanConfig model tests', () => {
     const scanConfig = new ScanConfig({});
 
     expect(scanConfig.family_list).toEqual([]);
+  });
+
+  test('should parse family_count', () => {
+    const elem = {
+      family_count: {
+        __text: '42',
+        growing: '1',
+      },
+    };
+    const scanConfig = new ScanConfig(elem);
+
+    expect(scanConfig.families.count).toEqual(42);
+    expect(scanConfig.families.trend).toEqual('1');
+    expect(scanConfig.family_count).toBeUndefined();
   });
 
   test('should parse nvt_count', () => {
@@ -233,6 +253,34 @@ describe('ScanConfig model tests', () => {
     const scanConfig = new ScanConfig({});
 
     expect(scanConfig.tasks).toEqual([]);
+  });
+
+});
+
+describe('ScanConfigs model function test', () => {
+
+  test('filterEmptyScanConfig() should return filter with correct true/false', () => {
+    const config1 = {id: '42'};
+    const config2 = {id: '085569ce-73ed-11df-83c3-002264764cea'};
+
+    expect(filterEmptyScanConfig(config1)).toEqual(true);
+    expect(filterEmptyScanConfig(config2)).toEqual(false);
+  });
+
+  test('openVasScanConfigsFilter() should return filter with correct true/false', () => {
+    const config1 = {scan_config_type: 1}; // OSP scanconfig type
+    const config2 = {scan_config_type: 0}; // OpenVAS scanconfig type
+
+    expect(openVasScanConfigsFilter(config1)).toEqual(false);
+    expect(openVasScanConfigsFilter(config2)).toEqual(true);
+  });
+
+  test('ospScanConfigsFilter() should return filter with correct true/false', () => {
+    const config1 = {scan_config_type: 1}; // OSP scanconfig type
+    const config2 = {scan_config_type: 0}; // OpenVAS scanconfig type
+
+    expect(ospScanConfigsFilter(config1)).toEqual(true);
+    expect(ospScanConfigsFilter(config2)).toEqual(false);
   });
 
 });

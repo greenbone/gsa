@@ -24,7 +24,12 @@
 /* eslint-disable max-len */
 
 import Model from 'gmp/model';
-import Credential from 'gmp/models/credential';
+import Credential, {
+  ssh_credential_filter,
+  smb_credential_filter,
+  esxi_credential_filter,
+  snmp_credential_filter,
+} from 'gmp/models/credential';
 import {testModel} from 'gmp/models/testing';
 
 import {
@@ -102,6 +107,43 @@ describe('Credential Model tests', () => {
 
     expect(cred1.isAllowInsecure()).toBe(false);
     expect(cred2.isAllowInsecure()).toBe(true);
+  });
+});
+
+describe('Credential model function tests', () => {
+
+  test('ssh_credential_filter should return filter with correct true/false', () => {
+    const type1 = {credential_type: 'cc'};
+    const type2 = {credential_type: 'usk'};
+    const type3 = {credential_type: 'up'};
+
+    expect(ssh_credential_filter(type1)).toEqual(false);
+    expect(ssh_credential_filter(type2)).toEqual(true);
+    expect(ssh_credential_filter(type3)).toEqual(true);
+  });
+
+  test('smb_credential_filter should return filter with correct true/false', () => {
+    const type1 = {credential_type: 'snmp'};
+    const type2 = {credential_type: 'up'};
+
+    expect(smb_credential_filter(type1)).toEqual(false);
+    expect(smb_credential_filter(type2)).toEqual(true);
+  });
+
+  test('esxi_credential_filter should return filter with correct true/false', () => {
+    const type1 = {credential_type: 'snmp'};
+    const type2 = {credential_type: 'up'};
+
+    expect(esxi_credential_filter(type1)).toEqual(false);
+    expect(esxi_credential_filter(type2)).toEqual(true);
+  });
+
+  test('snmp_credential_filter should return filter with correct true/false', () => {
+    const type1 = {credential_type: 'cc'};
+    const type2 = {credential_type: 'snmp'};
+
+    expect(snmp_credential_filter(type1)).toEqual(false);
+    expect(snmp_credential_filter(type2)).toEqual(true);
   });
 });
 

@@ -82,17 +82,19 @@ class User extends Model {
       };
     }
 
-    const {source} = elem.sources;
-    if (source === 'ldap_connect') {
-      ret.auth_method = AUTH_METHOD_LDAP;
-    }
-    else if (source === 'radius_connect') {
-      ret.auth_method = AUTH_METHOD_RADIUS;
+    if (isDefined(elem.sources)) {
+      const {source} = elem.sources;
+      if (source === 'ldap_connect') {
+        ret.auth_method = AUTH_METHOD_LDAP;
+      }
+      else if (source === 'radius_connect') {
+        ret.auth_method = AUTH_METHOD_RADIUS;
+      }
+      delete ret.sources;
     }
     else {
       ret.auth_method = AUTH_METHOD_PASSWORD;
     }
-    delete ret.sources;
 
     return ret;
   }

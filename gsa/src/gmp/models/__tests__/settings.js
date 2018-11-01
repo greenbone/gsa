@@ -1,10 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
+ * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,33 +21,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import 'core-js/fn/object/entries';
+import Settings from 'gmp/models/settings';
 
-import {isDefined} from '../utils/identity';
+describe('Settings model tests', () => {
 
-class Settings {
+  test('settings have working setters and getters', () => {
+    const settings = new Settings({});
+    settings.set('foo', 'bar');
+    const res = settings.get('foo');
 
-  constructor() {
-    this._settings = {};
-  }
+    expect(res).toEqual('bar');
+  });
 
-  set(name, value) {
-    this._settings[name] = value;
-  }
+  test('getEntries() should return all settings', () => {
+    const settings = new Settings({});
+    settings.set('foo', 'bar');
+    settings.set('lorem', 'ipsum');
 
-  get(name) {
-    const setting = this._settings[name];
-    if (isDefined(setting)) {
-      return setting;
-    }
-    return {};
-  }
+    expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
+  });
 
-  getEntries() {
-    return Object.entries(this._settings);
-  }
-}
-
-export default Settings;
+});
 
 // vim: set ts=2 sw=2 tw=80:
