@@ -29,8 +29,10 @@ describe('Settings model tests', () => {
     const settings = new Settings({});
     settings.set('foo', 'bar');
     const res = settings.get('foo');
+    const res2 = settings.get('');
 
     expect(res).toEqual('bar');
+    expect(res2).toEqual({});
   });
 
   test('getEntries() should return all settings', () => {
