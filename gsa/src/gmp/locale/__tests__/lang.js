@@ -44,7 +44,7 @@ describe('setLocale tests', () => {
     expect(getLocale()).toEqual('de-CH');
   });
 
-  test('should fallback to en for unkown locales', () => {
+  test('should fallback to en for unknown locales', () => {
     setLocale('en');
     expect(getLocale()).toEqual('en');
 

@@ -292,7 +292,7 @@ describe('parseEnvelopeMeta tests', () => {
     });
   });
 
-  test('should drop unkown envelope information', () => {
+  test('should drop unknown envelope information', () => {
     expect(parseEnvelopeMeta({
       version: '1.0',
       backend_operation: '0.01',

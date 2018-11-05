@@ -98,7 +98,7 @@ describe('loadFunc tests', () => {
     });
   });
 
-  test('should faild loading dashboard data', () => {
+  test('should fail loading dashboard data', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar');
     const dispatch = jest.fn();

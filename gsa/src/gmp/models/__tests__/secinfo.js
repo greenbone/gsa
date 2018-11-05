@@ -61,7 +61,7 @@ describe('SecInfo model tests', () => {
 
 });
 
-describe('SecInfo model funtion tests', () => {
+describe('SecInfo model function tests', () => {
 
   test('secInfoType should return infoType', () => {
     const secInfo1 = new SecInfo({allinfo: {type: 'nvt'}});

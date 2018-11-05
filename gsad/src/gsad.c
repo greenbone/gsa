@@ -2513,7 +2513,7 @@ gsad_init ()
 #endif
 
   /* Version check should be the very first call because it makes sure that
-   * important subsystems are intialized.
+   * important subsystems are initialized.
    * We pass NULL to gcry_check_version to disable the internal version mismatch
    * test. */
   if (!gcry_check_version (NULL))
@@ -2528,7 +2528,7 @@ gsad_init ()
 
   /* ... If required, other initialization goes here.  Note that the process
    * might still be running with increased privileges and that the secure
-   * memory has not been intialized. */
+   * memory has not been initialized. */
 
   /* Allocate a pool of 16k secure memory.  This make the secure memory
    * available and also drops privileges where needed. */
@@ -2755,7 +2755,7 @@ gsad_address_set_port (struct sockaddr_storage *address, int port)
 }
 
 /**
- * @brief Initalizes the address to listen on.
+ * @brief Initializes the address to listen on.
  *
  * @param[in]  address_str      Address to listen on.
  * @param[in]  port             Port to listen on.

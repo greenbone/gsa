@@ -105,7 +105,7 @@ const ENTITY_TYPES = {
 /**
  * Get the translateable name for an entity type
  *
- * @param {String} type A entity type. Either an extrenal or GSA entity type.
+ * @param {String} type A entity type. Either an external or GSA entity type.
  *
  * @returns {String} A translated entity type name
  */
