@@ -365,7 +365,7 @@ class Event {
           // See https://github.com/mozilla-comm/ical.js/blob/master/lib/ical/recur_iterator.js#L373
           // But this may be valid e.g. when last day of month and the 31 of a
           // month are set in the rrule. Therefore ignore error and retry to get
-          // a new date. Fail after 5 unsuccessful attemps
+          // a new date. Fail after 5 unsuccessful attempts
           retries++;
           log.warn('Error raised while calculating next date', err);
         }

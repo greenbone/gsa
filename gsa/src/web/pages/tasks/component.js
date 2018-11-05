@@ -228,8 +228,8 @@ class TaskComponent extends React.Component {
     const {data} = resp;
     const {gmp} = this.props;
 
-    gmp.targets.getAll().then(reponse => {
-      const {data: alltargets} = reponse;
+    gmp.targets.getAll().then(response => {
+      const {data: alltargets} = response;
 
       log.debug('adding target to task dialog', alltargets, data.id);
 

@@ -91,7 +91,7 @@ describe('EntitiesSelector isLoadingEntities tests', () => {
     expect(fooSelector.isLoadingEntities(filter)).toEqual(true);
   });
 
-  test('should be false for unkown filter', () => {
+  test('should be false for unknown filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       isLoading: {
@@ -139,7 +139,7 @@ describe('EntitiesSelector isLoadingEntity tests', () => {
     expect(fooSelector.isLoadingEntity(id)).toEqual(false);
   });
 
-  test('should be false for unkown id', () => {
+  test('should be false for unknown id', () => {
     const id = 'a1';
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -296,7 +296,7 @@ describe('EntitiesSelector getEntities tests', () => {
     expect(fooSelector.getEntities()).toBeUndefined();
   });
 
-  test('getEntities should return empty array for unkown filter', () => {
+  test('getEntities should return empty array for unknown filter', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       default: ['foo', 'bar'],
@@ -385,7 +385,7 @@ describe('EntitiesSelector getEntitiesError tests', () => {
     expect(fooSelector.getEntitiesError()).toBeUndefined();
   });
 
-  test('should return undefined for unkown filter', () => {
+  test('should return undefined for unknown filter', () => {
     const otherFilter = Filter.fromString('name=foo');
     const selector = createSelector('foo');
     const rootState = createState('foo', {
@@ -557,7 +557,7 @@ describe('EntitiesSelector getEntity tests', () => {
     expect(fooSelector.getEntity('bar')).toBeUndefined();
   });
 
-  test('should return undefined for unkown id', () => {
+  test('should return undefined for unknown id', () => {
     const selector = createSelector('foo');
     const rootState = createState('foo', {
       byId: {
@@ -635,7 +635,7 @@ describe('EntitiesSelector getEntityError tests', () => {
     expect(fooSelector.getEntityError(id)).toEqual('An error');
   });
 
-  test('should return undefined for unkown id', () => {
+  test('should return undefined for unknown id', () => {
     const id = 'a1';
     const selector = createSelector('foo');
     const rootState = createState('foo', {

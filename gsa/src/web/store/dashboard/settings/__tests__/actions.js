@@ -169,7 +169,7 @@ describe('setDashboardSettingDefaults', () => {
 
 describe('resetDashboardSettingsRequest tests', () => {
 
-  test('should create a reset dashboard setings request action', () => {
+  test('should create a reset dashboard settings request action', () => {
     const id = 'a1';
     const settings = {
       foo: 'bar',

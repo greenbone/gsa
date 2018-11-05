@@ -429,7 +429,7 @@ describe('deltaSelector isLoading tests', () => {
     expect(selector.isLoading(id, deltaId)).toEqual(false);
   });
 
-  test('should be false for unkown id', () => {
+  test('should be false for unknown id', () => {
     const id = 'a1';
     const deltaId = 'a2';
     const rootState = createState('deltaReport', {
@@ -490,7 +490,7 @@ describe('deltaSelector getEntity tests', () => {
     expect(selector.getEntity('bar')).toBeUndefined();
   });
 
-  test('should return undefined for unkown id', () => {
+  test('should return undefined for unknown id', () => {
     const rootState = createState('deltaReport', {
       byId: {
         foo: {
@@ -547,7 +547,7 @@ describe('deltaSelector getError tests', () => {
     expect(selector.getError(id, deltaId)).toBeUndefined();
   });
 
-  test('should return undefined for unkown id', () => {
+  test('should return undefined for unknown id', () => {
     const id = 'a1';
     const deltaId = 'a2';
     const rootState = createState('deltaReport', {

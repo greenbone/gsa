@@ -72,7 +72,7 @@ describe('getProperty tests', () => {
     expect(getProperty({foo: 'bar'}, obj => obj.foo)).toEqual('bar');
   });
 
-  test('should return undefined for unkown properties', () => {
+  test('should return undefined for unknown properties', () => {
     expect(getProperty({value: 1}, 'foo')).toBeUndefined();
     expect(getProperty({value: 1}, obj => obj.foo)).toBeUndefined();
     expect(getProperty(undefined, obj => obj.foo)).toBeUndefined();

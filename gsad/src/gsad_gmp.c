@@ -23711,7 +23711,7 @@ authenticate_gmp (const gchar * username, const gchar * password,
  * @brief Login and create a session
  *
  * @param[in]   con             HTTP Connection
- * @param[in]   params          Request paramters
+ * @param[in]   params          Request parameters
  * @param[out]  response_data   Extra data return for the HTTP response
  * @param[in]   client_address  Client address
  *

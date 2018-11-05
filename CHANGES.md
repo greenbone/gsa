@@ -25,7 +25,7 @@ Main changes compared to 8.0+beta1
   * Removed Scan, Asset, SecInfo Dashboards and added Dashboard "templates" to
     the main dashboard #974
   * Removed Dashboard Display menus with an icon overlay #971, #972
-  * Don't set an unkown locale #966
+  * Don't set an unknown locale #966
   * Require NodeJS >= 8 #964
   * Replaced glamorous with styled-components for settings styles
     #913, #919, #922, #924, #925, #929, #934, #938, #948, #949, #950
@@ -648,7 +648,7 @@ Main changes since 4.0.x:
 * Added support for setting the priorities for cipher suites when using HTTPS.
 * Add --drop option to drop privileges once the chroot is established.
   Attention: This action was previously part of the --chroot parameter, if
-  required, this now needs to be explicitely set.
+  required, this now needs to be explicitly set.
 * Add --face to support switching between different layouts.
 * Code cleanup.
 
@@ -858,7 +858,7 @@ Matthew Mundell, Timo Pollmeier and Hani Benhabiles.
 Main changes since 5.0+beta3:
 * Add --drop option to drop privileges once the chroot is established.
   Attention: This action was previously part of the --chroot parameter, if
-  required, this now needs to be explicitely set.
+  required, this now needs to be explicitly set.
 * The interface has been simplified, improved and made more consistent in a
   number of places.
 * Code cleanup.
@@ -1079,7 +1079,7 @@ Main changes since 2.0.x:
 * New: References info box in results view.
 * New: Product detection info box in results view.
 * New: Allow target list upload from file.
-* New: Support for note/overrrides lifetimes.
+* New: Support for note/overrides lifetimes.
 * New: Support for empty passwords has been added.
 * New: Support for changing user passwords.
 * New: Asset Management.
@@ -1146,7 +1146,7 @@ Main changes since 3.0+beta8:
 
 ## gsa 3.0+beta8 (2011-12-02)
 
-This is the eigth beta version of the upcoming 3.0 release of the Greenbone
+This is the eight beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
 of OpenVAS Manager available in a web browser.
 

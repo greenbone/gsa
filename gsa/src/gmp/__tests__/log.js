@@ -97,7 +97,7 @@ describe('log tests', () => {
     expect(newLogger.defaultLogValue).toEqual(LogLevels.debug);
   });
 
-  test('should ignore unkown levels in RootLoogger setDefaultLogLevel', () => {
+  test('should ignore unknown levels in RootLoogger setDefaultLogLevel', () => {
     const logger = getRootLogger();
     expect(logger.init({loglevel: 'error'})).toEqual(true);
     expect(logger.level).toEqual('error');
@@ -109,7 +109,7 @@ describe('log tests', () => {
     expect(newLogger.defaultLogValue).toEqual(LogLevels.error);
   });
 
-  test('should ignore unkown levels in logger setDefaultLogLevel', () => {
+  test('should ignore unknown levels in logger setDefaultLogLevel', () => {
     const logger = getRootLogger();
     expect(logger.init({loglevel: 'error'})).toEqual(true);
     expect(logger.level).toEqual('error');
