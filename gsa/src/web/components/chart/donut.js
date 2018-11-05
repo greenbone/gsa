@@ -252,7 +252,7 @@ class DonutChart extends React.Component {
     let donutHeight = height;
 
     if (show3d && width / height > MIN_RATIO) {
-      // dont allow 3d donut to be stretch horizontally anymore
+      // don't allow 3d donut to be stretch horizontally anymore
       donutWidth = height * MIN_RATIO;
     }
     else if (!show3d && width > height) {

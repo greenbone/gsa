@@ -57,7 +57,7 @@ describe('shouldUpdate tests', () => {
     expect(shouldUpdate({showLegend: true}, {showLegend: true})).toEqual(false);
   });
 
-  test('should not update if unkown prop has changed', () => {
+  test('should not update if unknown prop has changed', () => {
     expect(shouldUpdate({foo: false}, {foo: true})).toEqual(false);
   });
 

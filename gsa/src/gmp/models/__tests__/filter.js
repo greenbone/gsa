@@ -735,7 +735,7 @@ describe('Filter setSortOrder', () => {
     expect(filter.get('sort-reverse')).toEqual('foo');
   });
 
-  test('should set sort for unkown orders', () => {
+  test('should set sort for unknown orders', () => {
     const filter = Filter.fromString('sort-reverse=foo');
     filter.setSortOrder('foo');
 

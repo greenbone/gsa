@@ -240,7 +240,7 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
  *
  * @param[in]  connection  The connection handle.
  * @param[in]  uri         The full URI to redirect to.
- * @param[in]  sid         Session ID ot add, or NULL.
+ * @param[in]  sid         Session ID to add, or NULL.
  *
  * @return MHD_NO in case of a problem. Else MHD_YES.
  */

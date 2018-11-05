@@ -83,7 +83,7 @@ class FilterTerm {
   /**
    * Return the filter term represented as a string
    *
-   * The fromat is {keyword}{relation}{value}
+   * The format is {keyword}{relation}{value}
    *
    * @return {String} filter term as a String
    */

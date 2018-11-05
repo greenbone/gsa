@@ -102,7 +102,7 @@ describe('normalizeType function tests', () => {
     expect(normalizeType('scanconfig')).toEqual('scanconfig');
   });
 
-  test('should pass through unkown types', () => {
+  test('should pass through unknown types', () => {
     expect(normalizeType('foo')).toEqual('foo');
   });
 
@@ -128,7 +128,7 @@ describe('apiType function tests', () => {
     expect(apiType('config')).toEqual('config');
   });
 
-  test('should pass through unkown types', () => {
+  test('should pass through unknown types', () => {
     expect(apiType('foo')).toEqual('foo');
   });
 
@@ -136,7 +136,7 @@ describe('apiType function tests', () => {
 
 describe('typeName function tests', () => {
 
-  test('should pass through unkown types', () => {
+  test('should pass through unknown types', () => {
     expect(typeName('foo')).toEqual('foo');
   });
 

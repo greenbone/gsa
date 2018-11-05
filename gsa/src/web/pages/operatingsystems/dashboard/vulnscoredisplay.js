@@ -165,7 +165,7 @@ export const OsVulnScoreTableDisplay = createDisplay({
   loaderComponent: OsVulnScoreLoader,
   displayComponent: DataTableDisplay,
   dataTitles: [
-    _l('Operating Sytem Name'),
+    _l('Operating System Name'),
     _l('Max. Average Severity Score'),
   ],
   dataRow: row => [row.x, row.y],

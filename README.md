@@ -21,7 +21,7 @@ It consists of
 
 and
 
-* [GSAD](https://github.com/greenbone/gsa/tree/master/gsad) - The http server talking to the [GVM deamon](https://github.com/greenbone/gvm)
+* [GSAD](https://github.com/greenbone/gsa/tree/master/gsad) - The http server talking to the [GVM daemon](https://github.com/greenbone/gvm)
 
 ## Installation
 

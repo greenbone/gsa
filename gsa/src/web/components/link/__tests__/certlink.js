@@ -94,7 +94,7 @@ describe('CertLink tests', () => {
     expect(history.location.pathname).toEqual('/dfncert/foo');
   });
 
-  test('should not route to unkown type', () => {
+  test('should not route to unknown type', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
     const {element} = render(
       <CertLink
