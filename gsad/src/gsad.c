@@ -425,7 +425,6 @@ init_validator ()
                          "|(get_group)"
                          "|(get_groups)"
                          "|(get_info)"
-                         "|(get_my_settings)"
                          "|(get_note)"
                          "|(get_notes)"
                          "|(get_nvts)"
