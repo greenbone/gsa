@@ -12677,6 +12677,7 @@ save_config_nvt_omp (openvas_connection_t *connection,
   const char *config_id;
   int success;
   char *modify_config_ret;
+  gchar *next_url;
 
   modify_config_ret = NULL;
   config_id = params_value (params, "config_id");
@@ -12876,6 +12877,23 @@ save_config_nvt_omp (openvas_connection_t *connection,
             }
         }
     }
+
+  /* Create a generic success message in case modify_config_ret is NULL,
+   *  which could happen if the last preference is a password and skipped.
+   * This assumes that messages are returned earlier in case of errors. */
+  next_url = next_page_url (credentials, params,
+                            NULL, "get_config_nvt",
+                            "Create Permissions",
+                            G_STRINGIFY (MHD_HTTP_OK),
+                            "All NVT preferences modified successfully");
+  modify_config_ret
+    = action_result_page (connection, credentials, params, response_data,
+                          "Modify Config",
+                          G_STRINGIFY (MHD_HTTP_OK),
+                          "All NVT preferences modified successfully",
+                          NULL,
+                          next_url);
+  g_free (next_url);
 
   return modify_config_ret;
 }
