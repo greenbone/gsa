@@ -314,10 +314,19 @@ send_response (http_connection_t *connection, const char *content,
                size_t content_length)
 {
   http_response_t *response;
-  size_t size = (content_length ? content_length : strlen (content));
+  size_t size;
   int ret;
 
-  response = MHD_create_response_from_buffer (size, (void *) content,
+  if (content)
+    size = (content_length ? content_length : strlen (content));
+  else
+    {
+      g_warning ("%s: content is NULL", __FUNCTION__);
+      status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      size = 0;
+    }
+  response = MHD_create_response_from_buffer (size,
+                                              (void *)(content ? content : ""),
                                               MHD_RESPMEM_MUST_COPY);
 
   gsad_add_content_type_header (response, &content_type);
