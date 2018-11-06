@@ -415,7 +415,8 @@ class ScheduleDialog extends React.Component {
                   size="2"
                   value={state.startHour}
                   onChange={this.handleValueChange}
-                /> h
+                />
+                <span>h</span>
                 <Spinner
                   name="startMinute"
                   type="int"
@@ -424,7 +425,8 @@ class ScheduleDialog extends React.Component {
                   size="2"
                   value={state.startMinute}
                   onChange={this.handleValueChange}
-                /> m
+                />
+                <span>m</span>
               </Divider>
             </FormGroup>
 
@@ -445,7 +447,8 @@ class ScheduleDialog extends React.Component {
                   size="2"
                   value={state.endHour}
                   onChange={this.handleValueChange}
-                /> h
+                />
+                <span>h</span>
                 <Spinner
                   disabled={state.endOpen}
                   name="endMinute"
@@ -455,7 +458,8 @@ class ScheduleDialog extends React.Component {
                   size="2"
                   value={state.endMinute}
                   onChange={this.handleValueChange}
-                /> m
+                />
+                <span>m</span>
                 <CheckBox
                   title={_('Open End')}
                   name="endOpen"
