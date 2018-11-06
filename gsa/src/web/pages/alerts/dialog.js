@@ -30,7 +30,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   CONDITION_TYPE_ALWAYS,
@@ -652,7 +652,8 @@ class AlertDialog extends React.Component {
                 <SourcefireMethodPart
                   prefix="method_data"
                   defenseCenterIp={values.method_data_defense_center_ip}
-                  defenseCenterPort={values.method_data_defense_center_port}
+                  defenseCenterPort={
+                    parseInt(values.method_data_defense_center_port)}
                   onChange={onValueChange}
                 />
               }
