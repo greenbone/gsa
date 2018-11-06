@@ -90,7 +90,7 @@ class UserCommand extends EntityCommand {
     ).then(response => {
       const settings = {};
       const {data} = response;
-      forEach(data.get_my_settings.get_settings_response.setting, setting => {
+      forEach(data.get_settings.get_settings_response.setting, setting => {
         // set setting keys to lowercase and remove '-'
         const keyName = setting.name.toLowerCase().replace(/ |-/g, '');
         settings[keyName] = {

@@ -134,6 +134,10 @@ const OspScannerDetails = ({
           title={_('OSP Scanner Details')}
         >
           <InfoTable>
+            <colgroup>
+              <Col width="10%"/>
+              <Col width="90%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -273,6 +277,10 @@ const ScannerDetails = ({
       grow
     >
       <InfoTable>
+        <colgroup>
+          <Col width="10%"/>
+          <Col width="90%"/>
+        </colgroup>
         <TableBody>
           {isDefined(comment) &&
             <TableRow>
