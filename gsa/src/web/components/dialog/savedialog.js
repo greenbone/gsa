@@ -30,6 +30,8 @@ import {isDefined} from 'gmp/utils/identity';
 import State from '../../utils/state.js';
 import PropTypes from '../../utils/proptypes.js';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import Dialog from '../dialog/dialog.js';
 import DialogContent from '../dialog/content.js';
 import DialogError from '../dialog/error.js';
@@ -125,14 +127,16 @@ class SaveDialogContent extends React.Component {
                   onCloseClick={this.handleErrorClose}
                 />
               }
-              <ScrollableContent
-                {...heightProps}
-              >
-                {children({
-                  values: childValues,
-                  onValueChange,
-                })}
-              </ScrollableContent>
+              <ErrorBoundary errElement={_('dialog')}>
+                <ScrollableContent
+                  {...heightProps}
+                >
+                  {children({
+                    values: childValues,
+                    onValueChange,
+                  })}
+                </ScrollableContent>
+              </ErrorBoundary>
               <DialogFooter
                 title={buttonTitle}
                 loading={this.state.loading}
