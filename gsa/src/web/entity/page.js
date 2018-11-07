@@ -25,11 +25,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import _ from 'gmp/locale';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Toolbar from 'web/components/bar/toolbar';
+
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
 import Layout from 'web/components/layout/layout';
 
@@ -149,16 +153,18 @@ class EntityPage extends React.Component {
     }
 
     return (
-      <Layout
-        flex="column"
-        align="start"
-        grow="1"
-      >
-        <Toolbar>
-          {this.renderToolbarIcons()}
-        </Toolbar>
-        {this.renderSection()}
-      </Layout>
+      <ErrorBoundary errElement={_('page')}>
+        <Layout
+          flex="column"
+          align="start"
+          grow="1"
+        >
+          <Toolbar>
+            {this.renderToolbarIcons()}
+          </Toolbar>
+          {this.renderSection()}
+        </Layout>
+      </ErrorBoundary>
     );
   }
 }

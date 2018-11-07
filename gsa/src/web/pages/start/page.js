@@ -56,6 +56,8 @@ import {
   convertDefaultDisplays,
 } from 'web/components/dashboard/utils';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
@@ -356,7 +358,7 @@ class StartPage extends React.Component {
 
     const canAdd = dashboards.length < MAX_DASHBOARDS;
     return (
-      <React.Fragment>
+      <ErrorBoundary errElement={_('page')}>
         <Section
           title={_('Dashboards')}
           img="dashboard.svg"
@@ -460,7 +462,7 @@ class StartPage extends React.Component {
             onSave={this.handleAddNewDashboard}
           />
         }
-      </React.Fragment>
+      </ErrorBoundary>
     );
   }
 }

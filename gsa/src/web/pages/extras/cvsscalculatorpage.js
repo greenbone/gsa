@@ -38,6 +38,8 @@ import {
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
@@ -203,105 +205,107 @@ class CvssCalculator extends React.Component {
       integrityImpact,
     } = this.state;
     return (
-      <Layout flex="column">
-        <ToolBarIcons/>
-        <Section
-          img="cvss_calculator.svg"
-          title={_('CVSS Base Score Calculator')}
-        />
-
-        <h3>{_('From Metrics')}:</h3>
-        <FormGroup title={_('Access Vector')}>
-          <Select
-            name="accessVector"
-            value={accessVector}
-            menuPosition="adjust"
-            onChange={this.handleMetricsChange}
-          >
-            <option value="LOCAL">{_('Local')}</option>
-            <option value="ADJACENT_NETWORK">{_('Adjacent')}</option>
-            <option value="NETWORK">{_('Network')}</option>
-          </Select>
-        </FormGroup>
-        <FormGroup title={_('Access Complexity')}>
-          <Select
-            name="accessComplexity"
-            value={accessComplexity}
-            menuPosition="adjust"
-            onChange={this.handleMetricsChange}
-          >
-            <option value="LOW">{_('Low')}</option>
-            <option value="MEDIUM">{_('Medium')}</option>
-            <option value="HIGH">{_('High')}</option>
-          </Select>
-        </FormGroup>
-        <FormGroup title={_('Authentication')}>
-          <Select
-            name="authentication"
-            value={authentication}
-            menuPosition="adjust"
-            onChange={this.handleMetricsChange}
-          >
-            <option value="NONE">{_('None')}</option>
-            <option value="SINGLE_INSTANCES">{_('Single')}</option>
-            <option value="MULTIPLE_INSTANCES">{_('Multiple')}</option>
-          </Select>
-        </FormGroup>
-        <FormGroup title={_('Confidentiality')}>
-          <Select
-            name="confidentialityImpact"
-            value={confidentialityImpact}
-            onChange={this.handleMetricsChange}
-          >
-            <option value="NONE">{_('None')}</option>
-            <option value="PARTIAL">{_('Partial')}</option>
-            <option value="COMPLETE">{_('Complete')}</option>
-          </Select>
-        </FormGroup>
-        <FormGroup title={_('Integrity')}>
-          <Select
-            name="integrityImpact"
-            value={integrityImpact}
-            menuPosition="adjust"
-            onChange={this.handleMetricsChange}
-          >
-            <option value="NONE">{_('None')}</option>
-            <option value="PARTIAL">{_('Partial')}</option>
-            <option value="COMPLETE">{_('Complete')}</option>
-          </Select>
-        </FormGroup>
-        <FormGroup title={_('Availability')}>
-          <Select
-            name="availabilityImpact"
-            value={availabilityImpact}
-            menuPosition="adjust"
-            onChange={this.handleMetricsChange}
-          >
-            <option value="NONE">{_('None')}</option>
-            <option value="PARTIAL">{_('Partial')}</option>
-            <option value="COMPLETE">{_('Complete')}</option>
-          </Select>
-        </FormGroup>
-
-        <h3>{_('From Vector')}:</h3>
-        <FormGroup title={_('Vector')}>
-          <StyledTextField
-            name="userVector"
-            value={userVector}
-            onChange={this.handleInputChange}
-            onBlur={this.handleVectorChange}
-            onKeyDown={this.handleKeyDown}
+      <ErrorBoundary errElement={_('page')}>
+        <Layout flex="column">
+          <ToolBarIcons/>
+          <Section
+            img="cvss_calculator.svg"
+            title={_('CVSS Base Score Calculator')}
           />
-        </FormGroup>
 
-        <h3>{_('Results')}:</h3>
-        <FormGroup title={_('CVSS Base Vector')}>
-          <span>{cvssVector}</span>
-        </FormGroup>
-        <FormGroup title={_('Severity')}>
-          <SeverityBar severity={cvssScore}/>
-        </FormGroup>
-      </Layout>
+          <h3>{_('From Metrics')}:</h3>
+          <FormGroup title={_('Access Vector')}>
+            <Select
+              name="accessVector"
+              value={accessVector}
+              menuPosition="adjust"
+              onChange={this.handleMetricsChange}
+            >
+              <option value="LOCAL">{_('Local')}</option>
+              <option value="ADJACENT_NETWORK">{_('Adjacent')}</option>
+              <option value="NETWORK">{_('Network')}</option>
+            </Select>
+          </FormGroup>
+          <FormGroup title={_('Access Complexity')}>
+            <Select
+              name="accessComplexity"
+              value={accessComplexity}
+              menuPosition="adjust"
+              onChange={this.handleMetricsChange}
+            >
+              <option value="LOW">{_('Low')}</option>
+              <option value="MEDIUM">{_('Medium')}</option>
+              <option value="HIGH">{_('High')}</option>
+            </Select>
+          </FormGroup>
+          <FormGroup title={_('Authentication')}>
+            <Select
+              name="authentication"
+              value={authentication}
+              menuPosition="adjust"
+              onChange={this.handleMetricsChange}
+            >
+              <option value="NONE">{_('None')}</option>
+              <option value="SINGLE_INSTANCES">{_('Single')}</option>
+              <option value="MULTIPLE_INSTANCES">{_('Multiple')}</option>
+            </Select>
+          </FormGroup>
+          <FormGroup title={_('Confidentiality')}>
+            <Select
+              name="confidentialityImpact"
+              value={confidentialityImpact}
+              onChange={this.handleMetricsChange}
+            >
+              <option value="NONE">{_('None')}</option>
+              <option value="PARTIAL">{_('Partial')}</option>
+              <option value="COMPLETE">{_('Complete')}</option>
+            </Select>
+          </FormGroup>
+          <FormGroup title={_('Integrity')}>
+            <Select
+              name="integrityImpact"
+              value={integrityImpact}
+              menuPosition="adjust"
+              onChange={this.handleMetricsChange}
+            >
+              <option value="NONE">{_('None')}</option>
+              <option value="PARTIAL">{_('Partial')}</option>
+              <option value="COMPLETE">{_('Complete')}</option>
+            </Select>
+          </FormGroup>
+          <FormGroup title={_('Availability')}>
+            <Select
+              name="availabilityImpact"
+              value={availabilityImpact}
+              menuPosition="adjust"
+              onChange={this.handleMetricsChange}
+            >
+              <option value="NONE">{_('None')}</option>
+              <option value="PARTIAL">{_('Partial')}</option>
+              <option value="COMPLETE">{_('Complete')}</option>
+            </Select>
+          </FormGroup>
+
+          <h3>{_('From Vector')}:</h3>
+          <FormGroup title={_('Vector')}>
+            <StyledTextField
+              name="userVector"
+              value={userVector}
+              onChange={this.handleInputChange}
+              onBlur={this.handleVectorChange}
+              onKeyDown={this.handleKeyDown}
+            />
+          </FormGroup>
+
+          <h3>{_('Results')}:</h3>
+          <FormGroup title={_('CVSS Base Vector')}>
+            <span>{cvssVector}</span>
+          </FormGroup>
+          <FormGroup title={_('Severity')}>
+            <SeverityBar severity={cvssScore}/>
+          </FormGroup>
+        </Layout>
+      </ErrorBoundary>
     );
   }
 }

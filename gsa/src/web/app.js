@@ -32,6 +32,8 @@ import {initLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import LocaleObserver from 'web/components/observer/localeobserver';
 
 import GmpProvider from 'web/components/provider/gmpprovider';
@@ -96,11 +98,13 @@ class App extends React.Component {
   render() {
     return (
       <GmpProvider gmp={gmp}>
-        <StoreProvider store={store}>
-          <LocaleObserver>
-            <Routes />
-          </LocaleObserver>
-        </StoreProvider>
+        <ErrorBoundary>
+          <StoreProvider store={store}>
+            <LocaleObserver>
+              <Routes />
+            </LocaleObserver>
+          </StoreProvider>
+        </ErrorBoundary>
       </GmpProvider>
     );
   }

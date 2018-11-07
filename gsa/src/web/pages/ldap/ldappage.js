@@ -30,6 +30,8 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import Button from 'web/components/form/button';
 import CheckBox from 'web/components/form/checkbox';
 import FileField from 'web/components/form/filefield';
@@ -188,62 +190,64 @@ class LdapAuthentication extends React.Component {
     } = this.state;
 
     return (
-      <Layout flex="column">
-        <ManualIcon
-          page="gui_administration"
-          anchor="ldap"
-          size="medium"
-          title={_('Help: LDAP per-User Authentication')}
-        />
-        <Section
-          img="ldap.svg"
-          title={_('LDAP per-User Authentication')}
-        />
+      <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <FormGroup title={_('Enable')} titlesize="5">
-            <CheckBox
-              name="enable"
-              checked={enable === YES_VALUE}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
-              onChange={this.handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('LDAP Host')} titlesize="5">
-            <TextField
-              name="ldaphost"
-              value={ldaphost}
-              size="30"
-              onChange={this.handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Auth. DN')} titlesize="5">
-            <TextField
-              name="authdn"
-              value={authdn}
-              size="30"
-              onChange={this.handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('CA Certificate')} titlesize="5">
-            <Layout flex="column">
-              {this.showCertfificateInfo(certificateInfo)}
-              <FileField
-                name="certificate"
+          <ManualIcon
+            page="gui_administration"
+            anchor="ldap"
+            size="medium"
+            title={_('Help: LDAP per-User Authentication')}
+          />
+          <Section
+            img="ldap.svg"
+            title={_('LDAP per-User Authentication')}
+          />
+          <Layout flex="column">
+            <FormGroup title={_('Enable')} titlesize="5">
+              <CheckBox
+                name="enable"
+                checked={enable === YES_VALUE}
+                checkedValue={YES_VALUE}
+                unCheckedValue={NO_VALUE}
                 onChange={this.handleValueChange}
               />
-            </Layout>
-          </FormGroup>
-          <FormGroup title=" ">
-            <Button
-              width="auto"
-              onClick={this.handleSaveSettings}
-            >
-              {_('Save')}
-            </Button>
-          </FormGroup>
+            </FormGroup>
+            <FormGroup title={_('LDAP Host')} titlesize="5">
+              <TextField
+                name="ldaphost"
+                value={ldaphost}
+                size="30"
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Auth. DN')} titlesize="5">
+              <TextField
+                name="authdn"
+                value={authdn}
+                size="30"
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('CA Certificate')} titlesize="5">
+              <Layout flex="column">
+                {this.showCertfificateInfo(certificateInfo)}
+                <FileField
+                  name="certificate"
+                  onChange={this.handleValueChange}
+                />
+              </Layout>
+            </FormGroup>
+            <FormGroup title=" ">
+              <Button
+                width="auto"
+                onClick={this.handleSaveSettings}
+              >
+                {_('Save')}
+              </Button>
+            </FormGroup>
+          </Layout>
         </Layout>
-      </Layout>
+      </ErrorBoundary>
     );
   }
 }

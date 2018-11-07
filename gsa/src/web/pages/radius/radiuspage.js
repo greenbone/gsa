@@ -30,6 +30,8 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import Button from 'web/components/form/button';
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
@@ -135,53 +137,55 @@ class RadiusAuthentication extends React.Component {
     } = this.state;
 
     return (
-      <Layout flex="column">
-        <ManualIcon
-          page="gui_administration"
-          anchor="radius"
-          size="medium"
-          title={_('Help: RADIUS Authentication')}
-        />
-        <Section
-          img="radius.svg"
-          title={_('RADIUS Authentication')}
-        />
+      <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <FormGroup title={_('Enable')} titlesize="5">
-            <CheckBox
-              name="enable"
-              checked={enable === YES_VALUE}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
-              onChange={this.handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('RADIUS Host')} titlesize="5">
-            <TextField
-              name="radiushost"
-              value={radiushost}
-              size="30"
-              onChange={this.handleValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Secret Key')} titlesize="5">
-            <PasswordField
-              name="radiuskey"
-              value={radiuskey}
-              size="30"
-              onChange={this.handleValueChange}
-            />
+          <ManualIcon
+            page="gui_administration"
+            anchor="radius"
+            size="medium"
+            title={_('Help: RADIUS Authentication')}
+          />
+          <Section
+            img="radius.svg"
+            title={_('RADIUS Authentication')}
+          />
+          <Layout flex="column">
+            <FormGroup title={_('Enable')} titlesize="5">
+              <CheckBox
+                name="enable"
+                checked={enable === YES_VALUE}
+                checkedValue={YES_VALUE}
+                unCheckedValue={NO_VALUE}
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('RADIUS Host')} titlesize="5">
+              <TextField
+                name="radiushost"
+                value={radiushost}
+                size="30"
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Secret Key')} titlesize="5">
+              <PasswordField
+                name="radiuskey"
+                value={radiuskey}
+                size="30"
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+          </Layout>
+          <FormGroup title=" ">
+            <Button
+              width="auto"
+              onClick={this.handleSaveSettings}
+            >
+              {_('Save')}
+            </Button>
           </FormGroup>
         </Layout>
-        <FormGroup title=" ">
-          <Button
-            width="auto"
-            onClick={this.handleSaveSettings}
-          >
-            {_('Save')}
-          </Button>
-        </FormGroup>
-      </Layout>
+      </ErrorBoundary>
     );
   }
 }

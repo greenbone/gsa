@@ -55,6 +55,8 @@ import {
   removeDisplay,
 } from 'web/components/dashboard/utils';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
@@ -292,40 +294,43 @@ export class Dashboard extends React.Component {
     const other = excludeObjectProps(props, ownPropNames);
 
     return (
-      <Grid
-        items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
-        maxItemsPerRow={maxItemsPerRow}
-        maxRows={maxRows}
-        onChange={this.handleItemsChange}
-        onRowResize={this.handleRowResize}
-      >
-        {({
-          id,
-          dragHandleProps,
-          height,
-          width,
-        }) => {
-          const {displayId, ...displayProps} = getDisplaySettings(id);
-          const Component = getDisplayComponent(displayId);
-          const state = this.getDisplayState(id);
-          return (
-            <Component
-              {...other}
-              {...displayProps}
-              dragHandleProps={dragHandleProps}
-              height={height}
-              width={width}
-              id={id}
-              state={state}
-              setState={stateFunc => this.handleSetDisplayState(id, stateFunc)}
-              onFilterIdChanged={
-                filterId => this.handleUpdateDisplay(id, {filterId})}
-              onInteractive={this.props.onInteraction}
-              onRemoveClick={() => this.handleRemoveDisplay(id)}
-            />
-          );
-        }}
-      </Grid>
+      <ErrorBoundary errElement="dashboard">
+        <Grid
+          items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
+          maxItemsPerRow={maxItemsPerRow}
+          maxRows={maxRows}
+          onChange={this.handleItemsChange}
+          onRowResize={this.handleRowResize}
+        >
+          {({
+            id,
+            dragHandleProps,
+            height,
+            width,
+          }) => {
+            const {displayId, ...displayProps} = getDisplaySettings(id);
+            const Component = getDisplayComponent(displayId);
+            const state = this.getDisplayState(id);
+            return (
+              <Component
+                {...other}
+                {...displayProps}
+                dragHandleProps={dragHandleProps}
+                height={height}
+                width={width}
+                id={id}
+                state={state}
+                setState={stateFunc =>
+                  this.handleSetDisplayState(id, stateFunc)}
+                onFilterIdChanged={
+                  filterId => this.handleUpdateDisplay(id, {filterId})}
+                onInteractive={this.props.onInteraction}
+                onRemoveClick={() => this.handleRemoveDisplay(id)}
+              />
+            );
+          }}
+        </Grid>
+      </ErrorBoundary>
     );
   }
 }

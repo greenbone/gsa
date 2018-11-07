@@ -246,6 +246,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dialog/scrollablecontent.js
      ${GSA_SRC_DIR}/src/web/components/dialog/title.js
      ${GSA_SRC_DIR}/src/web/components/dialog/savedialog.js
+     ${GSA_SRC_DIR}/src/web/components/errorboundary/errorboundary.js
      ${GSA_SRC_DIR}/src/web/components/folding/folding.js
      ${GSA_SRC_DIR}/src/web/components/footnote/footnote.js
      ${GSA_SRC_DIR}/src/web/components/form/button.js

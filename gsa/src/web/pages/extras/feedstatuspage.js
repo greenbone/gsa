@@ -28,6 +28,8 @@ import {parseInt} from 'gmp/parser';
 
 import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
+import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 
@@ -103,122 +105,124 @@ class FeedStatus extends React.Component {
   render() {
     const {feeds} = this.state;
     return (
-      <Layout flex="column">
-        <ToolBarIcons/>
-        <Section
-          img="feed.svg"
-          title={_('Feed Status')}
-        />
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableHead width="3rem">
-                {_('Type')}
-              </TableHead>
-              <TableHead width="21rem">
-                {_('Content')}
-              </TableHead>
-              <TableHead width="9rem">
-                {_('Origin')}
-              </TableHead>
-              <TableHead width="7rem">
-                {_('Version')}
-              </TableHead>
-              <TableHead>
-                {_('Status')}
-              </TableHead>
-            </TableRow>
-
-            {feeds.map(feed => (
-              <TableRow key={feed.feed_type}>
-                <TableData>
-                  {feed.feed_type}
-                </TableData>
-                <TableData>
-                  {feed.feed_type === NVT_FEED &&
-                    <IconDivider>
-                      <Link to="nvts">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="nvt.svg"
-                            size="medium"
-                          />
-                          <span>NVTs</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  }
-                  {feed.feed_type === SCAP_FEED &&
-                    <IconDivider>
-                      <Link to="cves">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="cve.svg"
-                            size="medium"
-                          />
-                          <span>CVEs</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="cpes">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="cpe.svg"
-                            size="medium"
-                          />
-                          <span>CPEs</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="ovaldefs">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="ovaldef.svg"
-                            size="medium"
-                          />
-                          <span>OVAL Definitions</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  }
-                  {feed.feed_type === CERT_FEED &&
-                    <IconDivider>
-                      <Link to="certbunds">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="cert_bund_adv.svg"
-                            size="medium"
-                          />
-                          <span>CERT-Bund Advisories</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="dfncerts">
-                        <IconDivider align={['start', 'center']}>
-                          <Icon
-                            img="dfn_cert_adv.svg"
-                            size="medium"
-                          />
-                          <span>DFN-CERT Advisories</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  }
-                </TableData>
-                <TableData>
-                  {feed.name}
-                </TableData>
-                <TableData>
-                  {feed.version}
-                </TableData>
-                <TableData>
-                  <Divider wrap>
-                    <strong>{renderFeedStatus(feed)}</strong>
-                    <span>{renderCheck(feed)}</span>
-                  </Divider>
-                </TableData>
+      <ErrorBoundary errElement={_('page')}>
+        <Layout flex="column">
+          <ToolBarIcons/>
+          <Section
+            img="feed.svg"
+            title={_('Feed Status')}
+          />
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableHead width="3rem">
+                  {_('Type')}
+                </TableHead>
+                <TableHead width="21rem">
+                  {_('Content')}
+                </TableHead>
+                <TableHead width="9rem">
+                  {_('Origin')}
+                </TableHead>
+                <TableHead width="7rem">
+                  {_('Version')}
+                </TableHead>
+                <TableHead>
+                  {_('Status')}
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Layout>
+
+              {feeds.map(feed => (
+                <TableRow key={feed.feed_type}>
+                  <TableData>
+                    {feed.feed_type}
+                  </TableData>
+                  <TableData>
+                    {feed.feed_type === NVT_FEED &&
+                      <IconDivider>
+                        <Link to="nvts">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="nvt.svg"
+                              size="medium"
+                            />
+                            <span>NVTs</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    }
+                    {feed.feed_type === SCAP_FEED &&
+                      <IconDivider>
+                        <Link to="cves">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="cve.svg"
+                              size="medium"
+                            />
+                            <span>CVEs</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="cpes">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="cpe.svg"
+                              size="medium"
+                            />
+                            <span>CPEs</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="ovaldefs">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="ovaldef.svg"
+                              size="medium"
+                            />
+                            <span>OVAL Definitions</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    }
+                    {feed.feed_type === CERT_FEED &&
+                      <IconDivider>
+                        <Link to="certbunds">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="cert_bund_adv.svg"
+                              size="medium"
+                            />
+                            <span>CERT-Bund Advisories</span>
+                          </IconDivider>
+                        </Link>
+                        <Link to="dfncerts">
+                          <IconDivider align={['start', 'center']}>
+                            <Icon
+                              img="dfn_cert_adv.svg"
+                              size="medium"
+                            />
+                            <span>DFN-CERT Advisories</span>
+                          </IconDivider>
+                        </Link>
+                      </IconDivider>
+                    }
+                  </TableData>
+                  <TableData>
+                    {feed.name}
+                  </TableData>
+                  <TableData>
+                    {feed.version}
+                  </TableData>
+                  <TableData>
+                    <Divider wrap>
+                      <strong>{renderFeedStatus(feed)}</strong>
+                      <span>{renderCheck(feed)}</span>
+                    </Divider>
+                  </TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Layout>
+      </ErrorBoundary>
     );
   }
 };
