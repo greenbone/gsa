@@ -11412,6 +11412,15 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *
 
     }
 
+  /* Create a generic success message in case modify_config_ret is NULL,
+   *  which could happen if the last preference is a password and skipped.
+   * This assumes that messages are returned earlier in case of errors. */
+  modify_config_ret
+    = action_result (connection, credentials, params, response_data,
+                     "Modify Config",
+                     "All NVT preferences modified successfully",
+                     NULL, NULL);
+
   return modify_config_ret;
 }
 
