@@ -62,7 +62,7 @@ class ErrorBoundary extends React.Component {
   render() {
     const {errElement = 'element'} = this.props;
     const message =
-      _('An error occured in this {{eElement}}.', {eElement: errElement});
+      _('An error occurred in this {{eElement}}.', {eElement: errElement});
     if (this.state.hasError) {
       return (
         <ErrorContainer>
