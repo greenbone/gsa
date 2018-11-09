@@ -65,7 +65,7 @@ const DialogTwoButtonFooter = ({
 );
 
 DialogTwoButtonFooter.propTypes = {
-  leftButtonTitle: PropTypes.string.isRequired,
+  leftButtonTitle: PropTypes.string,
   loading: PropTypes.bool,
   rightButtonTitle: PropTypes.string.isRequired,
   onLeftButtonClick: PropTypes.func,
