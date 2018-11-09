@@ -23,33 +23,17 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Theme from 'web/utils/theme';
-
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import DialogTitle from 'web/components/dialog/title';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
-
-import Button from 'web/components/dialog/button';
-
-import Layout from 'web/components/layout/layout';
+import DialogTitle from 'web/components/dialog/title';
+import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
-
-const StyledLayout = styled(Layout)`
-  justify-content: space-between;
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  border-color: ${Theme.lightGray};
-  margin-top: 15px;
-  padding: 10px 15px 10px 15px;
-`;
 
 class ConfirmationDialogContent extends React.Component {
 
@@ -87,20 +71,11 @@ class ConfirmationDialogContent extends React.Component {
         <ScrollableContent>
           {text}
         </ScrollableContent>
-        <StyledLayout >
-          <Button
-            onClick={this.props.close}
-            title={_('Cancel')}
-          >
-            {_('Cancel')}
-          </Button>
-          <Button
-            onClick={this.handleResume}
-            title={_('Follow Link')}
-          >
-            {_('Follow Link')}
-          </Button>
-        </StyledLayout>
+        <DialogTwoButtonFooter
+          rightButtonTitle={_('Follow Link')}
+          onLeftButtonClick={this.props.close}
+          onRightButtonClick={this.handleResume}
+        />
       </DialogContent>
     );
   }

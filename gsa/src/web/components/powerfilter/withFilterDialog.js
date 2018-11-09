@@ -26,15 +26,15 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Filter from 'gmp/models/filter.js';
+import Filter from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Dialog from '../dialog/dialog.js';
-import DialogContent from '../dialog/content.js';
-import DialogTitle from '../dialog/title.js';
-import DialogFooter from '../dialog/footer.js';
-import ScrollableContent from '../dialog/scrollablecontent.js';
+import Dialog from '../dialog/dialog';
+import DialogContent from '../dialog/content';
+import DialogTitle from '../dialog/title';
+import DialogFooter from '../dialog/twobuttonfooter';
+import ScrollableContent from '../dialog/scrollablecontent';
 
 const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
@@ -159,8 +159,9 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
               </ScrollableContent>
 
               <DialogFooter
-                title={_('Update')}
-                onClick={this.handleSave}
+                rightButtonTitle={_('Update')}
+                onLeftButtonClick={close}
+                onRightButtonClick={this.handleSave}
               />
             </DialogContent>
           )}

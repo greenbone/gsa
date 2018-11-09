@@ -1,11 +1,10 @@
 /* Greenbone Security Assistant
  *
  * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
  * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * Copyright (C) 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,47 +25,53 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import _ from 'gmp/locale';
+
 import PropTypes from 'web/utils/proptypes';
 
-import Theme from 'web/utils/theme';
-
-import Layout from 'web/components/layout/layout';
+import {DialogFooterLayout} from 'web/components/dialog/footer';
 
 import Button from './button';
 
-export const DialogFooterLayout = styled(Layout)`
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  border-color: ${Theme.lightGray};
-  margin-top: 15px;
-  padding: 10px 20px 10px 20px;
+const StyledLayout = styled(DialogFooterLayout)`
+  justify-content: space-between;
 `;
 
-const DialogFooter = ({
-  title,
-  onClick,
+const DialogTwoButtonFooter = ({
+  leftButtonTitle = _('Cancel'),
+  rightButtonTitle,
+  onLeftButtonClick,
+  onRightButtonClick,
   loading = false,
 }) => (
-  <DialogFooterLayout
+  <StyledLayout
     align={['end', 'center']}
     shrink="0"
   >
     <Button
-      onClick={onClick}
-      title={title}
+      onClick={onLeftButtonClick}
+      title={leftButtonTitle}
+    >
+      {leftButtonTitle}
+    </Button>
+    <Button
+      onClick={onRightButtonClick}
+      title={rightButtonTitle}
       loading={loading}
     >
-      {title}
+      {rightButtonTitle}
     </Button>
-  </DialogFooterLayout>
+  </StyledLayout>
 );
 
-DialogFooter.propTypes = {
+DialogTwoButtonFooter.propTypes = {
+  leftButtonTitle: PropTypes.string,
   loading: PropTypes.bool,
-  title: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
+  rightButtonTitle: PropTypes.string.isRequired,
+  onLeftButtonClick: PropTypes.func,
+  onRightButtonClick: PropTypes.func,
 };
 
-export default DialogFooter;
+export default DialogTwoButtonFooter;
 
 // vim: set ts=2 sw=2 tw=80:
