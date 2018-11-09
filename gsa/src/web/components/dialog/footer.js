@@ -34,12 +34,12 @@ import Layout from 'web/components/layout/layout';
 
 import Button from './button';
 
-const StyledLayout = styled(Layout)`
+export const DialogFooterLayout = styled(Layout)`
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: ${Theme.lightGray};
   margin-top: 15px;
-  padding: 10px 20px 10px 15px;
+  padding: 10px 20px 10px 20px;
 `;
 
 const DialogFooter = ({
@@ -47,7 +47,7 @@ const DialogFooter = ({
   onClick,
   loading = false,
 }) => (
-  <StyledLayout
+  <DialogFooterLayout
     align={['end', 'center']}
     shrink="0"
   >
@@ -58,7 +58,7 @@ const DialogFooter = ({
     >
       {title}
     </Button>
-  </StyledLayout>
+  </DialogFooterLayout>
 );
 
 DialogFooter.propTypes = {
