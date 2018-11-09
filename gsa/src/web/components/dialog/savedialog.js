@@ -27,17 +27,17 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import State from '../../utils/state.js';
-import PropTypes from '../../utils/proptypes.js';
+import State from 'web/utils/state';
+import PropTypes from 'web/utils/proptypes';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
-import Dialog from '../dialog/dialog.js';
-import DialogContent from '../dialog/content.js';
-import DialogError from '../dialog/error.js';
-import DialogFooter from '../dialog/footer.js';
-import DialogTitle from '../dialog/title.js';
-import ScrollableContent from '../dialog/scrollablecontent.js';
+import Dialog from '../dialog/dialog';
+import DialogContent from '../dialog/content';
+import DialogError from '../dialog/error';
+import DialogFooter from '../dialog/twobuttonfooter';
+import DialogTitle from '../dialog/title';
+import ScrollableContent from '../dialog/scrollablecontent';
 
 class SaveDialogContent extends React.Component {
 
@@ -138,9 +138,10 @@ class SaveDialogContent extends React.Component {
                 </ScrollableContent>
               </ErrorBoundary>
               <DialogFooter
-                title={buttonTitle}
                 loading={this.state.loading}
-                onClick={() => this.handleSaveClick(childValues)}
+                rightButtonTitle={buttonTitle}
+                onLeftButtonClick={close}
+                onRightButtonClick={() => this.handleSaveClick(childValues)}
               />
             </DialogContent>
           );
