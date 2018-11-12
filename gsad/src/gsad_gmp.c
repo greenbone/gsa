@@ -23541,7 +23541,7 @@ connect_unix (const gchar *path)
   strncpy (address.sun_path, path, sizeof (address.sun_path) - 1);
   if (connect (sock, (struct sockaddr *) &address, sizeof (address)) == -1)
     {
-      g_warning ("Failed to connect to server: %s", strerror (errno));
+      g_warning ("Failed to connect to server at %s: %s", path, strerror (errno));
       close (sock);
       return -1;
     }
