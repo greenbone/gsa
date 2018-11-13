@@ -30,7 +30,7 @@
 
 #include "gsad_http_handler.h"
 #include "gsad_gmp.h" /* for get_system_report_gmp */
-#include "validator.h" /* for openvas_validate */
+#include "validator.h" /* for gvm_validate */
 #include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
@@ -385,7 +385,7 @@ get_user_from_connection (http_connection_t *connection, user_t **user)
       return USER_BAD_MISSING_TOKEN;
     }
 
-  if (openvas_validate (http_validator, "token", token))
+  if (gvm_validate (http_validator, "token", token))
     {
       return USER_BAD_MISSING_TOKEN;
     }
@@ -394,7 +394,7 @@ get_user_from_connection (http_connection_t *connection, user_t **user)
                                         MHD_COOKIE_KIND,
                                         SID_COOKIE_NAME);
 
-  if (openvas_validate (http_validator, "token", cookie))
+  if (gvm_validate (http_validator, "token", cookie))
     {
       return USER_BAD_MISSING_COOKIE;
     }
@@ -580,7 +580,7 @@ handle_gmp_post (http_connection_t *connection,
                                      MHD_COOKIE_KIND,
                                      SID_COOKIE_NAME);
 
-  if (openvas_validate (http_validator, "token", sid))
+  if (gvm_validate (http_validator, "token", sid))
     con_info->cookie = NULL;
   else
     con_info->cookie = g_strdup (sid);
@@ -640,7 +640,7 @@ handle_system_report (http_connection_t *connection,
                                           MHD_GET_ARGUMENT_KIND,
                                           "slave_id");
 
-  if (slave_id && openvas_validate (http_validator, "slave_id", slave_id))
+  if (slave_id && gvm_validate (http_validator, "slave_id", slave_id))
     {
       credentials_free (credentials);
       g_warning ("%s: failed to validate slave_id, dropping request",
@@ -796,9 +796,9 @@ init_http_handlers()
   http_handler_t *gmp_post_handler;
   http_handler_t *url_handlers;
 
-  http_validator = openvas_validator_new ();
-  openvas_validator_add (http_validator, "slave_id", SLAVE_ID_REGEXP);
-  openvas_validator_add (http_validator, "token", TOKEN_REGEXP);
+  http_validator = gvm_validator_new ();
+  gvm_validator_add (http_validator, "slave_id", SLAVE_ID_REGEXP);
+  gvm_validator_add (http_validator, "token", TOKEN_REGEXP);
 
   handlers = http_handler_new (handle_validate);
 
@@ -857,7 +857,7 @@ cleanup_http_handlers()
 
   http_handler_free(handlers);
 
-  openvas_validator_free (http_validator);
+  gvm_validator_free (http_validator);
 }
 
 /**

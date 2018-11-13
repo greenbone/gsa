@@ -1,4 +1,4 @@
-/* Greenbone Security Assistant (set for openvas-libraries/base)
+/* Greenbone Security Assistant (set for gvm-libs/base)
  * $Id$
  * Description: String validator.
  *
@@ -40,21 +40,21 @@
  *
  * Defines a mechanism to validate strings according to named rules.
  *
- * \ref openvas_validator_new creates a new validator which must be freed
- * with \ref openvas_validator_free.  \ref openvas_validator_add adds a regular
- * expression to a validator as a rule.  \ref openvas_validate checks that a
+ * \ref gvm_validator_new creates a new validator which must be freed
+ * with \ref gvm_validator_free.  \ref gvm_validator_add adds a regular
+ * expression to a validator as a rule.  \ref gvm_validate checks that a
  * given string matches a given rule.
  */
 
 /**
  * @brief Create a new validator rule.
  *
- * The validator must be freed with \ref openvas_validator_rule_free.
+ * The validator must be freed with \ref gvm_validator_rule_free.
  *
  * @return A newly allocated validator rule.
  */
 validator_rule_t *
-openvas_validator_rule_new (const char *regex)
+gvm_validator_rule_new (const char *regex)
 {
   validator_rule_t *rule;
   rule = g_malloc (sizeof (validator_rule_t));
@@ -67,12 +67,12 @@ openvas_validator_rule_new (const char *regex)
 /**
  * @brief Create a new validator rule for a binary parameter.
  *
- * The validator must be freed with \ref openvas_validator_rule_free.
+ * The validator must be freed with \ref gvm_validator_rule_free.
  *
  * @return A newly allocated validator rule.
  */
 validator_rule_t *
-openvas_validator_rule_new_binary ()
+gvm_validator_rule_new_binary ()
 {
   validator_rule_t *rule;
   rule = g_malloc (sizeof (validator_rule_t));
@@ -88,7 +88,7 @@ openvas_validator_rule_new_binary ()
  * @param  rule  Validator rule.
  */
 void
-openvas_validator_rule_free (validator_rule_t *rule)
+gvm_validator_rule_free (validator_rule_t *rule)
 {
   if (rule)
     {
@@ -101,17 +101,17 @@ openvas_validator_rule_free (validator_rule_t *rule)
 /**
  * @brief Create a new validator.
  *
- * The validator must be freed with \ref openvas_validator_free.
+ * The validator must be freed with \ref gvm_validator_free.
  *
  * @return A newly allocated validator.
  */
 validator_t
-openvas_validator_new ()
+gvm_validator_new ()
 {
   return g_hash_table_new_full (g_str_hash,
                                 g_str_equal,
                                 g_free,
-                                (void (*) (gpointer)) openvas_validator_rule_free);
+                                (void (*) (gpointer)) gvm_validator_rule_free);
 }
 
 /**
@@ -122,13 +122,13 @@ openvas_validator_new ()
  * @param  regex      Validation rule as a regular expression.
  */
 void
-openvas_validator_add (validator_t validator,
-                       const char *name,
-                       const char *regex)
+gvm_validator_add (validator_t validator,
+                   const char *name,
+                   const char *regex)
 {
   g_hash_table_insert (validator,
                        (gpointer) g_strdup (name),
-                       (gpointer) openvas_validator_rule_new (regex));
+                       (gpointer) gvm_validator_rule_new (regex));
 }
 
 /**
@@ -138,12 +138,12 @@ openvas_validator_add (validator_t validator,
  * @param  name       Name of the rule.
  */
 void
-openvas_validator_add_binary (validator_t validator,
-                              const char *name)
+gvm_validator_add_binary (validator_t validator,
+                          const char *name)
 {
   g_hash_table_insert (validator,
                        (gpointer) g_strdup (name),
-                       (gpointer) openvas_validator_rule_new_binary ());
+                       (gpointer) gvm_validator_rule_new_binary ());
 }
 
 /**
@@ -156,9 +156,9 @@ openvas_validator_add_binary (validator_t validator,
  * @return 0 success, -1 error.
  */
 int
-openvas_validator_alias (validator_t validator,
-                         const char *alias,
-                         const char *name)
+gvm_validator_alias (validator_t validator,
+                     const char *alias,
+                     const char *name)
 {
   gpointer key, value_rule;
 
@@ -166,9 +166,9 @@ openvas_validator_alias (validator_t validator,
     {
       validator_rule_t *alias_rule, *rule;
       rule = (validator_rule_t*) value_rule;
-      alias_rule = openvas_validator_rule_new (rule->regex
-                                                ? rule->regex
-                                                : NULL);
+      alias_rule = gvm_validator_rule_new (rule->regex
+                                           ? rule->regex
+                                           : NULL);
       alias_rule->alias_for = g_strdup (name);
       g_hash_table_insert (validator,
                            (gpointer) g_strdup (alias),
@@ -185,10 +185,10 @@ openvas_validator_alias (validator_t validator,
  * @param  alias      Name of alias.
  *
  * @return Rule name if \p alias is an alias, else NULL.  Freed by
- *         openvas_validator_free.
+ *         gvm_validator_free.
  */
 gchar *
-openvas_validator_alias_for (validator_t validator, const char *alias)
+gvm_validator_alias_for (validator_t validator, const char *alias)
 {
   gpointer key, value_rule;
 
@@ -213,7 +213,7 @@ openvas_validator_alias_for (validator_t validator, const char *alias)
  *         validator, 2 if value failed to match the regexp.
  */
 int
-openvas_validate (validator_t validator, const char *name, const char *value)
+gvm_validate (validator_t validator, const char *name, const char *value)
 {
   gpointer key, value_rule;
 
@@ -285,7 +285,7 @@ openvas_validate (validator_t validator, const char *name, const char *value)
  * @param  validator  Validator.
  */
 void
-openvas_validator_free (validator_t validator)
+gvm_validator_free (validator_t validator)
 {
   if (validator) g_hash_table_destroy (validator);
 }

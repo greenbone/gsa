@@ -264,664 +264,664 @@ validator_t validator;
 void
 init_validator ()
 {
-  validator = openvas_validator_new ();
+  validator = gvm_validator_new ();
 
-  openvas_validator_add (validator,
-                         "cmd",
-                         "^((bulk_delete)"
-                         "|(bulk_export)"
-                         "|(clone)"
-                         "|(create_agent)"
-                         "|(create_asset)"
-                         "|(create_config)"
-                         "|(create_container_task)"
-                         "|(create_credential)"
-                         "|(create_alert)"
-                         "|(create_filter)"
-                         "|(create_group)"
-                         "|(create_host)"
-                         "|(create_note)"
-                         "|(create_override)"
-                         "|(create_permission)"
-                         "|(create_permissions)"
-                         "|(create_port_list)"
-                         "|(create_port_range)"
-                         "|(create_report)"
-                         "|(create_role)"
-                         "|(create_scanner)"
-                         "|(create_schedule)"
-                         "|(create_tag)"
-                         "|(create_tags)"
-                         "|(create_target)"
-                         "|(create_task)"
-                         "|(cvss_calculator)"
-                         "|(create_user)"
-                         "|(delete_agent)"
-                         "|(delete_asset)"
-                         "|(delete_config)"
-                         "|(delete_credential)"
-                         "|(delete_alert)"
-                         "|(delete_filter)"
-                         "|(delete_group)"
-                         "|(delete_note)"
-                         "|(delete_override)"
-                         "|(delete_permission)"
-                         "|(delete_port_list)"
-                         "|(delete_port_range)"
-                         "|(delete_report)"
-                         "|(delete_report_format)"
-                         "|(delete_role)"
-                         "|(delete_scanner)"
-                         "|(delete_schedule)"
-                         "|(delete_tag)"
-                         "|(delete_target)"
-                         "|(delete_task)"
-                         "|(delete_trash_agent)"
-                         "|(delete_trash_config)"
-                         "|(delete_trash_alert)"
-                         "|(delete_trash_credential)"
-                         "|(delete_trash_filter)"
-                         "|(delete_trash_group)"
-                         "|(delete_trash_note)"
-                         "|(delete_trash_override)"
-                         "|(delete_trash_permission)"
-                         "|(delete_trash_port_list)"
-                         "|(delete_trash_report_format)"
-                         "|(delete_trash_role)"
-                         "|(delete_trash_scanner)"
-                         "|(delete_trash_schedule)"
-                         "|(delete_trash_tag)"
-                         "|(delete_trash_target)"
-                         "|(delete_trash_task)"
-                         "|(delete_user)"
-                         "|(delete_user_confirm)"
-                         "|(download_agent)"
-                         "|(download_credential)"
-                         "|(download_ssl_cert)"
-                         "|(download_ca_pub)"
-                         "|(download_key_pub)"
-                         "|(edit_agent)"
-                         "|(edit_alert)"
-                         "|(edit_asset)"
-                         "|(edit_config)"
-                         "|(edit_config_family)"
-                         "|(edit_config_nvt)"
-                         "|(edit_credential)"
-                         "|(edit_filter)"
-                         "|(edit_group)"
-                         "|(edit_note)"
-                         "|(edit_override)"
-                         "|(edit_permission)"
-                         "|(edit_port_list)"
-                         "|(edit_report_format)"
-                         "|(edit_role)"
-                         "|(edit_scanner)"
-                         "|(edit_schedule)"
-                         "|(edit_tag)"
-                         "|(edit_target)"
-                         "|(edit_task)"
-                         "|(edit_user)"
-                         "|(auth_settings)"
-                         "|(empty_trashcan)"
-                         "|(alert_report)"
-                         "|(export_agent)"
-                         "|(export_agents)"
-                         "|(export_alert)"
-                         "|(export_alerts)"
-                         "|(export_asset)"
-                         "|(export_assets)"
-                         "|(export_config)"
-                         "|(export_configs)"
-                         "|(export_credential)"
-                         "|(export_credentials)"
-                         "|(export_filter)"
-                         "|(export_filters)"
-                         "|(export_group)"
-                         "|(export_groups)"
-                         "|(export_note)"
-                         "|(export_notes)"
-                         "|(export_omp_doc)"
-                         "|(export_override)"
-                         "|(export_overrides)"
-                         "|(export_permission)"
-                         "|(export_permissions)"
-                         "|(export_port_list)"
-                         "|(export_port_lists)"
-                         "|(export_preference_file)"
-                         "|(export_report_format)"
-                         "|(export_report_formats)"
-                         "|(export_result)"
-                         "|(export_results)"
-                         "|(export_role)"
-                         "|(export_roles)"
-                         "|(export_scanner)"
-                         "|(export_scanners)"
-                         "|(export_schedule)"
-                         "|(export_schedules)"
-                         "|(export_tag)"
-                         "|(export_tags)"
-                         "|(export_target)"
-                         "|(export_targets)"
-                         "|(export_task)"
-                         "|(export_tasks)"
-                         "|(export_user)"
-                         "|(export_users)"
-                         "|(get_agent)"
-                         "|(get_agents)"
-                         "|(get_aggregate)"
-                         "|(get_asset)"
-                         "|(get_assets)"
-                         "|(get_config)"
-                         "|(get_config_family)"
-                         "|(get_config_nvt)"
-                         "|(get_configs)"
-                         "|(get_feeds)"
-                         "|(get_credential)"
-                         "|(get_credentials)"
-                         "|(get_filter)"
-                         "|(get_filters)"
-                         "|(get_alert)"
-                         "|(get_alerts)"
-                         "|(get_group)"
-                         "|(get_groups)"
-                         "|(get_info)"
-                         "|(get_note)"
-                         "|(get_notes)"
-                         "|(get_nvts)"
-                         "|(get_override)"
-                         "|(get_overrides)"
-                         "|(get_permission)"
-                         "|(get_permissions)"
-                         "|(get_port_list)"
-                         "|(get_port_lists)"
-                         "|(get_report)"
-                         "|(get_reports)"
-                         "|(get_report_format)"
-                         "|(get_report_formats)"
-                         "|(get_report_section)"
-                         "|(get_result)"
-                         "|(get_results)"
-                         "|(get_role)"
-                         "|(get_roles)"
-                         "|(get_scanner)"
-                         "|(get_scanners)"
-                         "|(get_schedule)"
-                         "|(get_schedules)"
-                         "|(get_setting)"
-                         "|(get_settings)"
-                         "|(get_system_reports)"
-                         "|(get_tag)"
-                         "|(get_tags)"
-                         "|(get_target)"
-                         "|(get_targets)"
-                         "|(get_task)"
-                         "|(get_tasks)"
-                         "|(get_trash)"
-                         "|(get_user)"
-                         "|(get_users)"
-                         "|(get_vulns)"
-                         "|(import_config)"
-                         "|(import_port_list)"
-                         "|(import_report)"
-                         "|(import_report_format)"
-                         "|(login)"
-                         "|(move_task)"
-                         "|(new_alert)"
-                         "|(new_task)"
-                         "|(ping)"
-                         "|(renew_session)"
-                         "|(report_alert)"
-                         "|(restore)"
-                         "|(resume_task)"
-                         "|(run_wizard)"
-                         "|(test_alert)"
-                         "|(save_agent)"
-                         "|(save_alert)"
-                         "|(save_asset)"
-                         "|(save_auth)"
-                         "|(save_setting)"
-                         "|(save_config)"
-                         "|(save_config_family)"
-                         "|(save_config_nvt)"
-                         "|(save_container_task)"
-                         "|(save_credential)"
-                         "|(save_filter)"
-                         "|(save_group)"
-                         "|(save_my_settings)"
-                         "|(save_note)"
-                         "|(save_override)"
-                         "|(save_permission)"
-                         "|(save_port_list)"
-                         "|(save_report_format)"
-                         "|(save_role)"
-                         "|(save_scanner)"
-                         "|(save_schedule)"
-                         "|(save_tag)"
-                         "|(save_target)"
-                         "|(save_task)"
-                         "|(save_user)"
-                         "|(start_task)"
-                         "|(stop_task)"
-                         "|(sync_feed)"
-                         "|(sync_scap)"
-                         "|(sync_cert)"
-                         "|(sync_config)"
-                         "|(toggle_tag)"
-                         "|(verify_agent)"
-                         "|(verify_report_format)"
-                         "|(verify_scanner)"
-                         "|(wizard)"
-                         "|(wizard_get))$");
+  gvm_validator_add (validator,
+                     "cmd",
+                     "^((bulk_delete)"
+                     "|(bulk_export)"
+                     "|(clone)"
+                     "|(create_agent)"
+                     "|(create_asset)"
+                     "|(create_config)"
+                     "|(create_container_task)"
+                     "|(create_credential)"
+                     "|(create_alert)"
+                     "|(create_filter)"
+                     "|(create_group)"
+                     "|(create_host)"
+                     "|(create_note)"
+                     "|(create_override)"
+                     "|(create_permission)"
+                     "|(create_permissions)"
+                     "|(create_port_list)"
+                     "|(create_port_range)"
+                     "|(create_report)"
+                     "|(create_role)"
+                     "|(create_scanner)"
+                     "|(create_schedule)"
+                     "|(create_tag)"
+                     "|(create_tags)"
+                     "|(create_target)"
+                     "|(create_task)"
+                     "|(cvss_calculator)"
+                     "|(create_user)"
+                     "|(delete_agent)"
+                     "|(delete_asset)"
+                     "|(delete_config)"
+                     "|(delete_credential)"
+                     "|(delete_alert)"
+                     "|(delete_filter)"
+                     "|(delete_group)"
+                     "|(delete_note)"
+                     "|(delete_override)"
+                     "|(delete_permission)"
+                     "|(delete_port_list)"
+                     "|(delete_port_range)"
+                     "|(delete_report)"
+                     "|(delete_report_format)"
+                     "|(delete_role)"
+                     "|(delete_scanner)"
+                     "|(delete_schedule)"
+                     "|(delete_tag)"
+                     "|(delete_target)"
+                     "|(delete_task)"
+                     "|(delete_trash_agent)"
+                     "|(delete_trash_config)"
+                     "|(delete_trash_alert)"
+                     "|(delete_trash_credential)"
+                     "|(delete_trash_filter)"
+                     "|(delete_trash_group)"
+                     "|(delete_trash_note)"
+                     "|(delete_trash_override)"
+                     "|(delete_trash_permission)"
+                     "|(delete_trash_port_list)"
+                     "|(delete_trash_report_format)"
+                     "|(delete_trash_role)"
+                     "|(delete_trash_scanner)"
+                     "|(delete_trash_schedule)"
+                     "|(delete_trash_tag)"
+                     "|(delete_trash_target)"
+                     "|(delete_trash_task)"
+                     "|(delete_user)"
+                     "|(delete_user_confirm)"
+                     "|(download_agent)"
+                     "|(download_credential)"
+                     "|(download_ssl_cert)"
+                     "|(download_ca_pub)"
+                     "|(download_key_pub)"
+                     "|(edit_agent)"
+                     "|(edit_alert)"
+                     "|(edit_asset)"
+                     "|(edit_config)"
+                     "|(edit_config_family)"
+                     "|(edit_config_nvt)"
+                     "|(edit_credential)"
+                     "|(edit_filter)"
+                     "|(edit_group)"
+                     "|(edit_note)"
+                     "|(edit_override)"
+                     "|(edit_permission)"
+                     "|(edit_port_list)"
+                     "|(edit_report_format)"
+                     "|(edit_role)"
+                     "|(edit_scanner)"
+                     "|(edit_schedule)"
+                     "|(edit_tag)"
+                     "|(edit_target)"
+                     "|(edit_task)"
+                     "|(edit_user)"
+                     "|(auth_settings)"
+                     "|(empty_trashcan)"
+                     "|(alert_report)"
+                     "|(export_agent)"
+                     "|(export_agents)"
+                     "|(export_alert)"
+                     "|(export_alerts)"
+                     "|(export_asset)"
+                     "|(export_assets)"
+                     "|(export_config)"
+                     "|(export_configs)"
+                     "|(export_credential)"
+                     "|(export_credentials)"
+                     "|(export_filter)"
+                     "|(export_filters)"
+                     "|(export_group)"
+                     "|(export_groups)"
+                     "|(export_note)"
+                     "|(export_notes)"
+                     "|(export_omp_doc)"
+                     "|(export_override)"
+                     "|(export_overrides)"
+                     "|(export_permission)"
+                     "|(export_permissions)"
+                     "|(export_port_list)"
+                     "|(export_port_lists)"
+                     "|(export_preference_file)"
+                     "|(export_report_format)"
+                     "|(export_report_formats)"
+                     "|(export_result)"
+                     "|(export_results)"
+                     "|(export_role)"
+                     "|(export_roles)"
+                     "|(export_scanner)"
+                     "|(export_scanners)"
+                     "|(export_schedule)"
+                     "|(export_schedules)"
+                     "|(export_tag)"
+                     "|(export_tags)"
+                     "|(export_target)"
+                     "|(export_targets)"
+                     "|(export_task)"
+                     "|(export_tasks)"
+                     "|(export_user)"
+                     "|(export_users)"
+                     "|(get_agent)"
+                     "|(get_agents)"
+                     "|(get_aggregate)"
+                     "|(get_asset)"
+                     "|(get_assets)"
+                     "|(get_config)"
+                     "|(get_config_family)"
+                     "|(get_config_nvt)"
+                     "|(get_configs)"
+                     "|(get_feeds)"
+                     "|(get_credential)"
+                     "|(get_credentials)"
+                     "|(get_filter)"
+                     "|(get_filters)"
+                     "|(get_alert)"
+                     "|(get_alerts)"
+                     "|(get_group)"
+                     "|(get_groups)"
+                     "|(get_info)"
+                     "|(get_note)"
+                     "|(get_notes)"
+                     "|(get_nvts)"
+                     "|(get_override)"
+                     "|(get_overrides)"
+                     "|(get_permission)"
+                     "|(get_permissions)"
+                     "|(get_port_list)"
+                     "|(get_port_lists)"
+                     "|(get_report)"
+                     "|(get_reports)"
+                     "|(get_report_format)"
+                     "|(get_report_formats)"
+                     "|(get_report_section)"
+                     "|(get_result)"
+                     "|(get_results)"
+                     "|(get_role)"
+                     "|(get_roles)"
+                     "|(get_scanner)"
+                     "|(get_scanners)"
+                     "|(get_schedule)"
+                     "|(get_schedules)"
+                     "|(get_setting)"
+                     "|(get_settings)"
+                     "|(get_system_reports)"
+                     "|(get_tag)"
+                     "|(get_tags)"
+                     "|(get_target)"
+                     "|(get_targets)"
+                     "|(get_task)"
+                     "|(get_tasks)"
+                     "|(get_trash)"
+                     "|(get_user)"
+                     "|(get_users)"
+                     "|(get_vulns)"
+                     "|(import_config)"
+                     "|(import_port_list)"
+                     "|(import_report)"
+                     "|(import_report_format)"
+                     "|(login)"
+                     "|(move_task)"
+                     "|(new_alert)"
+                     "|(new_task)"
+                     "|(ping)"
+                     "|(renew_session)"
+                     "|(report_alert)"
+                     "|(restore)"
+                     "|(resume_task)"
+                     "|(run_wizard)"
+                     "|(test_alert)"
+                     "|(save_agent)"
+                     "|(save_alert)"
+                     "|(save_asset)"
+                     "|(save_auth)"
+                     "|(save_setting)"
+                     "|(save_config)"
+                     "|(save_config_family)"
+                     "|(save_config_nvt)"
+                     "|(save_container_task)"
+                     "|(save_credential)"
+                     "|(save_filter)"
+                     "|(save_group)"
+                     "|(save_my_settings)"
+                     "|(save_note)"
+                     "|(save_override)"
+                     "|(save_permission)"
+                     "|(save_port_list)"
+                     "|(save_report_format)"
+                     "|(save_role)"
+                     "|(save_scanner)"
+                     "|(save_schedule)"
+                     "|(save_tag)"
+                     "|(save_target)"
+                     "|(save_task)"
+                     "|(save_user)"
+                     "|(start_task)"
+                     "|(stop_task)"
+                     "|(sync_feed)"
+                     "|(sync_scap)"
+                     "|(sync_cert)"
+                     "|(sync_config)"
+                     "|(toggle_tag)"
+                     "|(verify_agent)"
+                     "|(verify_report_format)"
+                     "|(verify_scanner)"
+                     "|(wizard)"
+                     "|(wizard_get))$");
 
-  openvas_validator_add (validator, "action_message", "(?s)^.*$");
-  openvas_validator_add (validator, "action_status", "(?s)^.*$");
-  openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
-  openvas_validator_add (validator, "agent_format", "^(installer)$");
-  openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
-  openvas_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln)$");
-  openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
-  openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
-  openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
-  openvas_validator_add (validator, "asset_type",   "^(host|os)$");
-  openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
-  openvas_validator_add (validator, "auth_algorithm",   "^(md5|sha1)$");
-  openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
+  gvm_validator_add (validator, "action_message", "(?s)^.*$");
+  gvm_validator_add (validator, "action_status", "(?s)^.*$");
+  gvm_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
+  gvm_validator_add (validator, "agent_format", "^(installer)$");
+  gvm_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
+  gvm_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln)$");
+  gvm_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
+  gvm_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
+  gvm_validator_add (validator, "asset_name",   "(?s)^.*$");
+  gvm_validator_add (validator, "asset_type",   "^(host|os)$");
+  gvm_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
+  gvm_validator_add (validator, "auth_algorithm",   "^(md5|sha1)$");
+  gvm_validator_add (validator, "auth_method",  "^(0|1|2)$");
   /* Defined in RFC 2253. */
-  openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
-  openvas_validator_add (validator, "auto_delete",       "^(no|keep)$");
-  openvas_validator_add (validator, "auto_delete_data",  "^(.*){0,10}$");
-  openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
-  openvas_validator_add (validator, "autofp_value", "^(1|2)$");
-  openvas_validator_add (validator, "boolean",    "^(0|1)$");
-  openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
-  openvas_validator_add (validator, "caller",     "^.*$");
-  openvas_validator_add (validator, "certificate",   "(?s)^.*$");
-  openvas_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "chart_gen:value", "(?s)^.*$");
-  openvas_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
-  openvas_validator_add (validator, "setting_value", "^.*$");
-  openvas_validator_add (validator, "setting_name", "^(.*){0,1000}$");
-  openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
-  openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
-  openvas_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
-  openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
-  openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "condition_data:value", "(?s)^.*$");
-  openvas_validator_add (validator, "cvss_av",       "^(L|A|N)$");
-  openvas_validator_add (validator, "cvss_ac",       "^(H|M|L)$");
-  openvas_validator_add (validator, "cvss_au",       "^(M|S|N)$");
-  openvas_validator_add (validator, "cvss_c",       "^(N|P|C)$");
-  openvas_validator_add (validator, "cvss_i",       "^(N|P|C)$");
-  openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
-  openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
-  openvas_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
-  openvas_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
-  openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
-  openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
-  openvas_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "default_severity", "^(|10\\.0|[0-9]\\.[0-9])$");
-  openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
-  openvas_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
-  openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
-  openvas_validator_add (validator, "email_list", "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
-  openvas_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
-  openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
-  openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
-  openvas_validator_add (validator, "exclude_file",         "(?s)^.*$");
-  openvas_validator_add (validator, "exclude_file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
-  openvas_validator_add (validator, "exclude_file:value",   "^yes$");
-  openvas_validator_add (validator, "file",         "(?s)^.*$");
-  openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
-  openvas_validator_add (validator, "file:value",   "^yes$");
-  openvas_validator_add (validator, "settings_changed:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "settings_default:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "settings_default:value", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "first",        "^[0-9]+$");
-  openvas_validator_add (validator, "first_group", "^[0-9]+$");
-  openvas_validator_add (validator, "first_result", "^[0-9]+$");
-  openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
-  openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
+  gvm_validator_add (validator, "auto_delete",       "^(no|keep)$");
+  gvm_validator_add (validator, "auto_delete_data",  "^(.*){0,10}$");
+  gvm_validator_add (validator, "autofp",       "^(0|1|2)$");
+  gvm_validator_add (validator, "autofp_value", "^(1|2)$");
+  gvm_validator_add (validator, "boolean",    "^(0|1)$");
+  gvm_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
+  gvm_validator_add (validator, "caller",     "^.*$");
+  gvm_validator_add (validator, "certificate",   "(?s)^.*$");
+  gvm_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "chart_gen:value", "(?s)^.*$");
+  gvm_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "chart_init:value", "(?s)^.*$");
+  gvm_validator_add (validator, "setting_value", "^.*$");
+  gvm_validator_add (validator, "setting_name", "^(.*){0,1000}$");
+  gvm_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  gvm_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
+  gvm_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
+  gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
+  gvm_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
+  gvm_validator_add (validator, "cvss_av",       "^(L|A|N)$");
+  gvm_validator_add (validator, "cvss_ac",       "^(H|M|L)$");
+  gvm_validator_add (validator, "cvss_au",       "^(M|S|N)$");
+  gvm_validator_add (validator, "cvss_c",       "^(N|P|C)$");
+  gvm_validator_add (validator, "cvss_i",       "^(N|P|C)$");
+  gvm_validator_add (validator, "cvss_a",       "^(N|P|C)$");
+  gvm_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
+  gvm_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
+  gvm_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
+  gvm_validator_add (validator, "days",         "^(-1|[0-9]+)$");
+  gvm_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "default_severity", "^(|10\\.0|[0-9]\\.[0-9])$");
+  gvm_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
+  gvm_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
+  gvm_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
+  gvm_validator_add (validator, "email_list", "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
+  gvm_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
+  gvm_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "event_data:value", "(?s)^.*$");
+  gvm_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
+  gvm_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
+  gvm_validator_add (validator, "exclude_file",         "(?s)^.*$");
+  gvm_validator_add (validator, "exclude_file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  gvm_validator_add (validator, "exclude_file:value",   "^yes$");
+  gvm_validator_add (validator, "file",         "(?s)^.*$");
+  gvm_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  gvm_validator_add (validator, "file:value",   "^yes$");
+  gvm_validator_add (validator, "settings_changed:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "settings_default:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_default:value", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "first",        "^[0-9]+$");
+  gvm_validator_add (validator, "first_group", "^[0-9]+$");
+  gvm_validator_add (validator, "first_result", "^[0-9]+$");
+  gvm_validator_add (validator, "filter",       "^(.*){0,1000}$");
+  gvm_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap_connect". */
-  openvas_validator_add (validator, "group",        "^method:(ldap_connect|radius_connect)$");
-  openvas_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
-  openvas_validator_add (validator, "max_results",  "^[0-9]+$");
-  openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
-  openvas_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
-  openvas_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
-  openvas_validator_add (validator, "hostpath",   "^[-[:alnum:]\\. :/]{1,80}$");
-  openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]+$");
-  openvas_validator_add (validator, "hosts_allow", "^(0|1)$");
-  openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:],: \\./]*$");
-  openvas_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
-  openvas_validator_add (validator, "hour",        "^([01]?[0-9]|2[0-3])$");
-  openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
-  openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
-  openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "optional_id", "^[a-z0-9\\-]*$");
-  openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
-  openvas_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "ifaces_allow", "^(0|1)$");
-  openvas_validator_add (validator, "include_id_list:name",  "^[[:alnum:]\\-_ ]+$");
-  openvas_validator_add (validator, "include_id_list:value", "^(0|1)$");
-  openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
-  openvas_validator_add (validator, "lang",
-                         "^(Browser Language|"
-                         "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
-                         "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
-  openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
-  openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "group",        "^method:(ldap_connect|radius_connect)$");
+  gvm_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "max",          "^(-?[0-9]+|)$");
+  gvm_validator_add (validator, "max_results",  "^[0-9]+$");
+  gvm_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
+  gvm_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
+  gvm_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
+  gvm_validator_add (validator, "hostpath",   "^[-[:alnum:]\\. :/]{1,80}$");
+  gvm_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]+$");
+  gvm_validator_add (validator, "hosts_allow", "^(0|1)$");
+  gvm_validator_add (validator, "hosts_opt",  "^[-[:alnum:],: \\./]*$");
+  gvm_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
+  gvm_validator_add (validator, "hour",        "^([01]?[0-9]|2[0-3])$");
+  gvm_validator_add (validator, "howto_use",   "(?s)^.*$");
+  gvm_validator_add (validator, "howto_install",  "(?s)^.*$");
+  gvm_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
+  gvm_validator_add (validator, "optional_id", "^[a-z0-9\\-]*$");
+  gvm_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
+  gvm_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
+  gvm_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "ifaces_allow", "^(0|1)$");
+  gvm_validator_add (validator, "include_id_list:name",  "^[[:alnum:]\\-_ ]+$");
+  gvm_validator_add (validator, "include_id_list:value", "^(0|1)$");
+  gvm_validator_add (validator, "installer_sig",  "(?s)^.*$");
+  gvm_validator_add (validator, "lang",
+                     "^(Browser Language|"
+                     "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
+                     "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
+  gvm_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
+  gvm_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for users, credentials, and scanner login name. */
-  openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
-  openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
-  openvas_validator_add (validator, "max_result", "^[0-9]+$");
-  openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
-  openvas_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
-  openvas_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
-  openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
-  openvas_validator_add (validator, "info_name",  "(?s)^.*$");
-  openvas_validator_add (validator, "info_type",  "(?s)^.*$");
-  openvas_validator_add (validator, "info_id",  "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
-  openvas_validator_add (validator, "details", "^[0-1]$");
+  gvm_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
+  gvm_validator_add (validator, "lsc_password", "^.{0,40}$");
+  gvm_validator_add (validator, "max_result", "^[0-9]+$");
+  gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
+  gvm_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
+  gvm_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
+  gvm_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "info_name",  "(?s)^.*$");
+  gvm_validator_add (validator, "info_type",  "(?s)^.*$");
+  gvm_validator_add (validator, "info_id",  "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
+  gvm_validator_add (validator, "details", "^[0-1]$");
   /* Number is special cased in params_mhd_validate to remove the space. */
-  openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
-  openvas_validator_add (validator, "optional_number", "^[0-9]*$");
-  openvas_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
-  openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "package_format", "^(pem|key|rpm|deb|exe)$");
-  openvas_validator_add (validator, "password",   "^.{0,40}$");
-  openvas_validator_add (validator, "password:value", "(?s)^.*$");
-  openvas_validator_add (validator, "port",       "^.{1,60}$");
-  openvas_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
-  openvas_validator_add (validator, "port_type", "^(tcp|udp)$");
+  gvm_validator_add (validator, "number",     "^ *[0-9]+ *$");
+  gvm_validator_add (validator, "optional_number", "^[0-9]*$");
+  gvm_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
+  gvm_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "package_format", "^(pem|key|rpm|deb|exe)$");
+  gvm_validator_add (validator, "password",   "^.{0,40}$");
+  gvm_validator_add (validator, "password:value", "(?s)^.*$");
+  gvm_validator_add (validator, "port",       "^.{1,60}$");
+  gvm_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
+  gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
-  openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
-  openvas_validator_add (validator, "preference:value", "(?s)^.*$");
-  openvas_validator_add (validator, "prev_action", "(?s)^.*$");
-  openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
-  openvas_validator_add (validator, "private_key",      "(?s)^.*$");
-  openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
-  openvas_validator_add (validator, "definitions_file",   "(?s)^.*$");
-  openvas_validator_add (validator, "ca_pub",   "(?s)^.*$");
-  openvas_validator_add (validator, "which_cert",   "^(default|existing|new)$");
-  openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
-  openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
-  openvas_validator_add (validator, "radiuskey",   "^.{0,40}$");
-  openvas_validator_add (validator, "range_type", "^(duration|until_end|from_start|start_to_end)$");
-  openvas_validator_add (validator, "related:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "related:value", "^(.*){0,400}$");
-  openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "report_section",
-                                    "^(summary|results|hosts|ports"
-                                    "|closed_cves|os|apps|errors"
-                                    "|topology|ssl_certs|cves)$");
-  openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "permission",       "^([_a-z]{1,1000}|Super)$");
-  openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "resource_type",
+  gvm_validator_add (validator, "preference_name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+  gvm_validator_add (validator, "preference:value", "(?s)^.*$");
+  gvm_validator_add (validator, "prev_action", "(?s)^.*$");
+  gvm_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
+  gvm_validator_add (validator, "private_key",      "(?s)^.*$");
+  gvm_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
+  gvm_validator_add (validator, "xml_file",   "(?s)^.*$");
+  gvm_validator_add (validator, "definitions_file",   "(?s)^.*$");
+  gvm_validator_add (validator, "ca_pub",   "(?s)^.*$");
+  gvm_validator_add (validator, "which_cert",   "^(default|existing|new)$");
+  gvm_validator_add (validator, "key_pub",   "(?s)^.*$");
+  gvm_validator_add (validator, "key_priv",   "(?s)^.*$");
+  gvm_validator_add (validator, "radiuskey",   "^.{0,40}$");
+  gvm_validator_add (validator, "range_type", "^(duration|until_end|from_start|start_to_end)$");
+  gvm_validator_add (validator, "related:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "related:value", "^(.*){0,400}$");
+  gvm_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "report_section",
+                                "^(summary|results|hosts|ports"
+                                "|closed_cves|os|apps|errors"
+                                "|topology|ssl_certs|cves)$");
+  gvm_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "permission",       "^([_a-z]{1,1000}|Super)$");
+  gvm_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "resource_type",
                          "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
-  openvas_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
-  openvas_validator_add (validator, "resources_action", "^(|add|set|remove)$");
-  openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|vuln|"
-                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|Vulnerability)?$");
-  openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
-  openvas_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
-  openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "method_data:value", "(?s)^.*$");
-  openvas_validator_add (validator, "nvt:name",          "(?s)^.*$");
-  openvas_validator_add (validator, "restrict_credential_type", "^[a-z0-9\\_|]+$");
-  openvas_validator_add (validator, "subject_type",  "^(group|role|user)$");
-  openvas_validator_add (validator, "summary",    "^.{0,400}$");
-  openvas_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
-  openvas_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
-  openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "term",       "^.{0,1000}");
-  openvas_validator_add (validator, "text",       "^.{0,1000}");
-  openvas_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
-  openvas_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
-  openvas_validator_add (validator, "trend",       "^(0|1)$");
-  openvas_validator_add (validator, "trend:value", "^(0|1)$");
-  openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
-  openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
-  openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "sort_order", "^(ascending|descending)$");
-  openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "sort_fields:name", "^[0123456789]{1,5}$");
-  openvas_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "sort_orders:name", "^[0123456789]{1,5}$");
-  openvas_validator_add (validator, "sort_orders:value", "^(ascending|descending)$");
-  openvas_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
-  openvas_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
-  openvas_validator_add (validator, "target_exclude_source", "^(file|manual)$");
-  openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
-  openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
-  openvas_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
-  openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
-  openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
-  openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
+  gvm_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
+  gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
+  gvm_validator_add (validator, "optional_resource_type",
+                     "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|vuln|"
+                     "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|Vulnerability)?$");
+  gvm_validator_add (validator, "select:value", "^(.*){0,400}$");
+  gvm_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
+  gvm_validator_add (validator, "method_data:name", "^(.*){0,400}$");
+  gvm_validator_add (validator, "method_data:value", "(?s)^.*$");
+  gvm_validator_add (validator, "nvt:name",          "(?s)^.*$");
+  gvm_validator_add (validator, "restrict_credential_type", "^[a-z0-9\\_|]+$");
+  gvm_validator_add (validator, "subject_type",  "^(group|role|user)$");
+  gvm_validator_add (validator, "summary",    "^.{0,400}$");
+  gvm_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
+  gvm_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "term",       "^.{0,1000}");
+  gvm_validator_add (validator, "text",       "^.{0,1000}");
+  gvm_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
+  gvm_validator_add (validator, "trend",       "^(0|1)$");
+  gvm_validator_add (validator, "trend:value", "^(0|1)$");
+  gvm_validator_add (validator, "type",       "^(assets|prognostic)$");
+  gvm_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
+  gvm_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "sort_order", "^(ascending|descending)$");
+  gvm_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "sort_fields:name", "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "sort_orders:name", "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "sort_orders:value", "^(ascending|descending)$");
+  gvm_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
+  gvm_validator_add (validator, "target_exclude_source", "^(file|manual)$");
+  gvm_validator_add (validator, "timezone",      "^.{0,1000}$");
+  gvm_validator_add (validator, "token", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
+  gvm_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
+  gvm_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
+  gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
+  gvm_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   /* This must be "login" with space and comma. */
-  openvas_validator_add (validator, "users",      "^[[:alnum:]-_@., ]*$");
-  openvas_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
-  openvas_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "year",       "^[0-9]+$");
-  openvas_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
-  openvas_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
-  openvas_validator_add (validator, "chart_title", "(?s)^.*$");
-  openvas_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
+  gvm_validator_add (validator, "users",      "^[[:alnum:]-_@., ]*$");
+  gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
+  gvm_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "year",       "^[0-9]+$");
+  gvm_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
+  gvm_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
+  gvm_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
+  gvm_validator_add (validator, "chart_title", "(?s)^.*$");
+  gvm_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
 
   /* Binary data params that should not use no UTF-8 validation */
-  openvas_validator_add_binary (validator, "installer");
-  openvas_validator_add_binary (validator, "method_data:pkcs12:");
+  gvm_validator_add_binary (validator, "installer");
+  gvm_validator_add_binary (validator, "method_data:pkcs12:");
 
   /* Beware, the rule must be defined before the alias. */
 
-  openvas_validator_alias (validator, "optional_task_id", "optional_id");
-  openvas_validator_alias (validator, "add_tag", "boolean");
-  openvas_validator_alias (validator, "alert_id_2", "alert_id");
-  openvas_validator_alias (validator, "alert_id_optional:name",  "number");
-  openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
-  openvas_validator_alias (validator, "alerts",     "optional_number");
-  openvas_validator_alias (validator, "alert_ids:name",  "number");
-  openvas_validator_alias (validator, "alert_ids:value", "alert_id_optional");
-  openvas_validator_alias (validator, "allow_insecure", "boolean");
-  openvas_validator_alias (validator, "alterable", "boolean");
-  openvas_validator_alias (validator, "apply_overrides", "boolean");
-  openvas_validator_alias (validator, "autogenerate", "boolean");
-  openvas_validator_alias (validator, "auto_cache_rebuild", "boolean");
-  openvas_validator_alias (validator, "base",            "name");
-  openvas_validator_alias (validator, "build_filter",    "boolean");
+  gvm_validator_alias (validator, "optional_task_id", "optional_id");
+  gvm_validator_alias (validator, "add_tag", "boolean");
+  gvm_validator_alias (validator, "alert_id_2", "alert_id");
+  gvm_validator_alias (validator, "alert_id_optional:name",  "number");
+  gvm_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
+  gvm_validator_alias (validator, "alerts",     "optional_number");
+  gvm_validator_alias (validator, "alert_ids:name",  "number");
+  gvm_validator_alias (validator, "alert_ids:value", "alert_id_optional");
+  gvm_validator_alias (validator, "allow_insecure", "boolean");
+  gvm_validator_alias (validator, "alterable", "boolean");
+  gvm_validator_alias (validator, "apply_overrides", "boolean");
+  gvm_validator_alias (validator, "autogenerate", "boolean");
+  gvm_validator_alias (validator, "auto_cache_rebuild", "boolean");
+  gvm_validator_alias (validator, "base",            "name");
+  gvm_validator_alias (validator, "build_filter",    "boolean");
   /* the "bulk_[...].x" parameters are used to identify the image type
    *  form element used to submit the form for process_bulk */
-  openvas_validator_alias (validator, "bulk_create.x", "number");
-  openvas_validator_alias (validator, "bulk_delete.x", "number");
-  openvas_validator_alias (validator, "bulk_export.x", "number");
-  openvas_validator_alias (validator, "bulk_trash.x",  "number");
-  openvas_validator_alias (validator, "bulk_select",   "number");
-  openvas_validator_alias (validator, "change_community", "boolean");
-  openvas_validator_alias (validator, "change_passphrase", "boolean");
-  openvas_validator_alias (validator, "change_password", "boolean");
-  openvas_validator_alias (validator, "change_privacy_password", "boolean");
-  openvas_validator_alias (validator, "charts", "boolean");
-  openvas_validator_alias (validator, "chart_type", "name");
-  openvas_validator_alias (validator, "chart_template", "name");
-  openvas_validator_alias (validator, "community", "lsc_password");
-  openvas_validator_alias (validator, "custom_severity", "boolean");
-  openvas_validator_alias (validator, "current_user", "boolean");
-  openvas_validator_alias (validator, "dashboard_name", "name");
-  openvas_validator_alias (validator, "debug",           "boolean");
-  openvas_validator_alias (validator, "delta_report_id",     "report_id");
-  openvas_validator_alias (validator, "delta_state_changed", "boolean");
-  openvas_validator_alias (validator, "delta_state_gone", "boolean");
-  openvas_validator_alias (validator, "delta_state_new", "boolean");
-  openvas_validator_alias (validator, "delta_state_same", "boolean");
-  openvas_validator_alias (validator, "duration",     "optional_number");
-  openvas_validator_alias (validator, "duration_unit", "calendar_unit");
-  openvas_validator_alias (validator, "dynamic_severity", "boolean");
-  openvas_validator_alias (validator, "enable",       "boolean");
-  openvas_validator_alias (validator, "enable_stop",             "boolean");
-  openvas_validator_alias (validator, "end_day", "day_of_month");
-  openvas_validator_alias (validator, "end_hour", "hour");
-  openvas_validator_alias (validator, "end_minute", "minute");
-  openvas_validator_alias (validator, "end_month", "month");
-  openvas_validator_alias (validator, "end_year", "year");
-  openvas_validator_alias (validator, "esxi_credential_id", "credential_id");
-  openvas_validator_alias (validator, "filt_id",            "id");
-  openvas_validator_alias (validator, "filter_extra",       "filter");
-  openvas_validator_alias (validator, "filter_id",          "id");
-  openvas_validator_alias (validator, "filterbox",          "boolean");
-  openvas_validator_alias (validator, "from_file",          "boolean");
-  openvas_validator_alias (validator, "force_wizard",       "boolean");
-  openvas_validator_alias (validator, "get_name",           "name");
-  openvas_validator_alias (validator, "grant_full",         "boolean");
-  openvas_validator_alias (validator, "group_id",           "id");
-  openvas_validator_alias (validator, "group_ids:name",     "number");
-  openvas_validator_alias (validator, "group_ids:value",    "id_optional");
-  openvas_validator_alias (validator, "groups",             "optional_number");
-  openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
-  openvas_validator_alias (validator, "host_first_result",  "first_result");
-  openvas_validator_alias (validator, "host_max_results",   "max_results");
-  openvas_validator_alias (validator, "host_levels",        "levels");
-  openvas_validator_alias (validator, "host_count",         "number");
-  openvas_validator_alias (validator, "hosts_manual",       "hosts");
-  openvas_validator_alias (validator, "hosts_filter",       "filter");
-  openvas_validator_alias (validator, "exclude_hosts",      "hosts_opt");
-  openvas_validator_alias (validator, "in_assets",          "boolean");
-  openvas_validator_alias (validator, "in_use",             "boolean");
-  openvas_validator_alias (validator, "include_related",   "number");
-  openvas_validator_alias (validator, "inheritor_id",       "id");
-  openvas_validator_alias (validator, "ignore_pagination",   "boolean");
-  openvas_validator_alias (validator, "event",        "condition");
-  openvas_validator_alias (validator, "access_hosts", "hosts_opt");
-  openvas_validator_alias (validator, "access_ifaces", "hosts_opt");
-  openvas_validator_alias (validator, "max_checks",   "number");
-  openvas_validator_alias (validator, "max_hosts",    "number");
-  openvas_validator_alias (validator, "method",       "condition");
-  openvas_validator_alias (validator, "modify_password", "number");
-  openvas_validator_alias (validator, "ldaphost",     "hostport");
-  openvas_validator_alias (validator, "level_high",   "boolean");
-  openvas_validator_alias (validator, "level_medium", "boolean");
-  openvas_validator_alias (validator, "level_low",    "boolean");
-  openvas_validator_alias (validator, "level_log",    "boolean");
-  openvas_validator_alias (validator, "level_false_positive", "boolean");
-  openvas_validator_alias (validator, "method_data:to_address:", "email_list");
-  openvas_validator_alias (validator, "method_data:from_address:", "email");
-  openvas_validator_alias (validator, "new_severity", "severity_optional");
-  openvas_validator_alias (validator, "new_severity_from_list", "severity_optional");
-  openvas_validator_alias (validator, "new_threat",   "threat");
-  openvas_validator_alias (validator, "next",         "page");
-  openvas_validator_alias (validator, "next_next",    "page");
-  openvas_validator_alias (validator, "next_error",   "page");
-  openvas_validator_alias (validator, "next_id",      "info_id");
-  openvas_validator_alias (validator, "next_type",    "resource_type");
-  openvas_validator_alias (validator, "next_subtype", "info_type");
-  openvas_validator_alias (validator, "next_xml",      "boolean");
-  openvas_validator_alias (validator, "notes",        "boolean");
-  openvas_validator_alias (validator, "no_chart_links",        "boolean");
-  openvas_validator_alias (validator, "no_filter_history", "boolean");
-  openvas_validator_alias (validator, "no_redirect", "boolean");
-  openvas_validator_alias (validator, "nvt:value",         "uuid");
-  openvas_validator_alias (validator, "old_login", "login");
-  openvas_validator_alias (validator, "old_password", "password");
-  openvas_validator_alias (validator, "original_overrides",  "boolean");
-  openvas_validator_alias (validator, "overrides",        "boolean");
-  openvas_validator_alias (validator, "owner", "name");
-  openvas_validator_alias (validator, "passphrase",   "lsc_password");
-  openvas_validator_alias (validator, "password:name", "preference_name");
-  openvas_validator_alias (validator, "permission", "name");
-  openvas_validator_alias (validator, "permission_id", "id");
-  openvas_validator_alias (validator, "permission_group_id", "id");
-  openvas_validator_alias (validator, "permission_role_id",  "id");
-  openvas_validator_alias (validator, "permission_user_id",  "id");
-  openvas_validator_alias (validator, "port_manual",       "port");
-  openvas_validator_alias (validator, "port_range_end",    "number");
-  openvas_validator_alias (validator, "port_range_start",  "number");
-  openvas_validator_alias (validator, "pos",               "number");
-  openvas_validator_alias (validator, "privacy_password", "lsc_password");
-  openvas_validator_alias (validator, "radiushost",     "hostport");
-  openvas_validator_alias (validator, "restrict_type", "resource_type");
-  openvas_validator_alias (validator, "resource_ids:name",     "number");
-  openvas_validator_alias (validator, "resource_ids:value",    "info_id");
-  openvas_validator_alias (validator, "result_hosts_only", "boolean");
-  openvas_validator_alias (validator, "result_task_id", "optional_task_id");
-  openvas_validator_alias (validator, "result_uuid", "optional_id");
-  openvas_validator_alias (validator, "report_result_id",  "result_id");
-  openvas_validator_alias (validator, "report_uuid",  "result_id");
-  openvas_validator_alias (validator, "replace_task_id",   "boolean");
-  openvas_validator_alias (validator, "reverse_lookup_only", "boolean");
-  openvas_validator_alias (validator, "reverse_lookup_unify", "boolean");
-  openvas_validator_alias (validator, "role_id",           "id");
-  openvas_validator_alias (validator, "role_ids:name",  "number");
-  openvas_validator_alias (validator, "role_ids:value", "id_optional");
-  openvas_validator_alias (validator, "roles",             "optional_number");
-  openvas_validator_alias (validator, "period",       "optional_number");
-  openvas_validator_alias (validator, "period_unit",  "calendar_unit");
-  openvas_validator_alias (validator, "scanner_host",     "hostpath");
-  openvas_validator_alias (validator, "scanner_type", "number");
-  openvas_validator_alias (validator, "schedules_only", "boolean");
-  openvas_validator_alias (validator, "schedule_periods", "number");
-  openvas_validator_alias (validator, "select:name",  "family");
-  openvas_validator_alias (validator, "setting_id", "id");
-  openvas_validator_alias (validator, "show_all",     "boolean");
-  openvas_validator_alias (validator, "slave_id",     "id");
-  openvas_validator_alias (validator, "smb_credential_id", "credential_id");
-  openvas_validator_alias (validator, "snmp_credential_id", "credential_id");
-  openvas_validator_alias (validator, "ssh_credential_id", "credential_id");
-  openvas_validator_alias (validator, "start_day", "day_of_month");
-  openvas_validator_alias (validator, "start_hour", "hour");
-  openvas_validator_alias (validator, "start_minute", "minute");
-  openvas_validator_alias (validator, "start_month", "month");
-  openvas_validator_alias (validator, "start_year", "year");
-  openvas_validator_alias (validator, "subgroup_column", "group_column");
-  openvas_validator_alias (validator, "subject_id",   "id");
-  openvas_validator_alias (validator, "subject_id_optional", "id_optional");
-  openvas_validator_alias (validator, "subject_name",   "name");
-  openvas_validator_alias (validator, "subtype", "asset_type");
-  openvas_validator_alias (validator, "task_filter",  "filter");
-  openvas_validator_alias (validator, "task_filt_id", "filt_id");
-  openvas_validator_alias (validator, "task_uuid", "optional_id");
-  openvas_validator_alias (validator, "timeout",      "boolean");
-  openvas_validator_alias (validator, "trend:name",   "family");
-  openvas_validator_alias (validator, "user_id",      "id");
-  openvas_validator_alias (validator, "user_id_optional", "id_optional");
-  openvas_validator_alias (validator, "xml",          "boolean");
-  openvas_validator_alias (validator, "esc_filter",        "filter");
+  gvm_validator_alias (validator, "bulk_create.x", "number");
+  gvm_validator_alias (validator, "bulk_delete.x", "number");
+  gvm_validator_alias (validator, "bulk_export.x", "number");
+  gvm_validator_alias (validator, "bulk_trash.x",  "number");
+  gvm_validator_alias (validator, "bulk_select",   "number");
+  gvm_validator_alias (validator, "change_community", "boolean");
+  gvm_validator_alias (validator, "change_passphrase", "boolean");
+  gvm_validator_alias (validator, "change_password", "boolean");
+  gvm_validator_alias (validator, "change_privacy_password", "boolean");
+  gvm_validator_alias (validator, "charts", "boolean");
+  gvm_validator_alias (validator, "chart_type", "name");
+  gvm_validator_alias (validator, "chart_template", "name");
+  gvm_validator_alias (validator, "community", "lsc_password");
+  gvm_validator_alias (validator, "custom_severity", "boolean");
+  gvm_validator_alias (validator, "current_user", "boolean");
+  gvm_validator_alias (validator, "dashboard_name", "name");
+  gvm_validator_alias (validator, "debug",           "boolean");
+  gvm_validator_alias (validator, "delta_report_id",     "report_id");
+  gvm_validator_alias (validator, "delta_state_changed", "boolean");
+  gvm_validator_alias (validator, "delta_state_gone", "boolean");
+  gvm_validator_alias (validator, "delta_state_new", "boolean");
+  gvm_validator_alias (validator, "delta_state_same", "boolean");
+  gvm_validator_alias (validator, "duration",     "optional_number");
+  gvm_validator_alias (validator, "duration_unit", "calendar_unit");
+  gvm_validator_alias (validator, "dynamic_severity", "boolean");
+  gvm_validator_alias (validator, "enable",       "boolean");
+  gvm_validator_alias (validator, "enable_stop",             "boolean");
+  gvm_validator_alias (validator, "end_day", "day_of_month");
+  gvm_validator_alias (validator, "end_hour", "hour");
+  gvm_validator_alias (validator, "end_minute", "minute");
+  gvm_validator_alias (validator, "end_month", "month");
+  gvm_validator_alias (validator, "end_year", "year");
+  gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
+  gvm_validator_alias (validator, "filt_id",            "id");
+  gvm_validator_alias (validator, "filter_extra",       "filter");
+  gvm_validator_alias (validator, "filter_id",          "id");
+  gvm_validator_alias (validator, "filterbox",          "boolean");
+  gvm_validator_alias (validator, "from_file",          "boolean");
+  gvm_validator_alias (validator, "force_wizard",       "boolean");
+  gvm_validator_alias (validator, "get_name",           "name");
+  gvm_validator_alias (validator, "grant_full",         "boolean");
+  gvm_validator_alias (validator, "group_id",           "id");
+  gvm_validator_alias (validator, "group_ids:name",     "number");
+  gvm_validator_alias (validator, "group_ids:value",    "id_optional");
+  gvm_validator_alias (validator, "groups",             "optional_number");
+  gvm_validator_alias (validator, "host_search_phrase", "search_phrase");
+  gvm_validator_alias (validator, "host_first_result",  "first_result");
+  gvm_validator_alias (validator, "host_max_results",   "max_results");
+  gvm_validator_alias (validator, "host_levels",        "levels");
+  gvm_validator_alias (validator, "host_count",         "number");
+  gvm_validator_alias (validator, "hosts_manual",       "hosts");
+  gvm_validator_alias (validator, "hosts_filter",       "filter");
+  gvm_validator_alias (validator, "exclude_hosts",      "hosts_opt");
+  gvm_validator_alias (validator, "in_assets",          "boolean");
+  gvm_validator_alias (validator, "in_use",             "boolean");
+  gvm_validator_alias (validator, "include_related",   "number");
+  gvm_validator_alias (validator, "inheritor_id",       "id");
+  gvm_validator_alias (validator, "ignore_pagination",   "boolean");
+  gvm_validator_alias (validator, "event",        "condition");
+  gvm_validator_alias (validator, "access_hosts", "hosts_opt");
+  gvm_validator_alias (validator, "access_ifaces", "hosts_opt");
+  gvm_validator_alias (validator, "max_checks",   "number");
+  gvm_validator_alias (validator, "max_hosts",    "number");
+  gvm_validator_alias (validator, "method",       "condition");
+  gvm_validator_alias (validator, "modify_password", "number");
+  gvm_validator_alias (validator, "ldaphost",     "hostport");
+  gvm_validator_alias (validator, "level_high",   "boolean");
+  gvm_validator_alias (validator, "level_medium", "boolean");
+  gvm_validator_alias (validator, "level_low",    "boolean");
+  gvm_validator_alias (validator, "level_log",    "boolean");
+  gvm_validator_alias (validator, "level_false_positive", "boolean");
+  gvm_validator_alias (validator, "method_data:to_address:", "email_list");
+  gvm_validator_alias (validator, "method_data:from_address:", "email");
+  gvm_validator_alias (validator, "new_severity", "severity_optional");
+  gvm_validator_alias (validator, "new_severity_from_list", "severity_optional");
+  gvm_validator_alias (validator, "new_threat",   "threat");
+  gvm_validator_alias (validator, "next",         "page");
+  gvm_validator_alias (validator, "next_next",    "page");
+  gvm_validator_alias (validator, "next_error",   "page");
+  gvm_validator_alias (validator, "next_id",      "info_id");
+  gvm_validator_alias (validator, "next_type",    "resource_type");
+  gvm_validator_alias (validator, "next_subtype", "info_type");
+  gvm_validator_alias (validator, "next_xml",      "boolean");
+  gvm_validator_alias (validator, "notes",        "boolean");
+  gvm_validator_alias (validator, "no_chart_links",        "boolean");
+  gvm_validator_alias (validator, "no_filter_history", "boolean");
+  gvm_validator_alias (validator, "no_redirect", "boolean");
+  gvm_validator_alias (validator, "nvt:value",         "uuid");
+  gvm_validator_alias (validator, "old_login", "login");
+  gvm_validator_alias (validator, "old_password", "password");
+  gvm_validator_alias (validator, "original_overrides",  "boolean");
+  gvm_validator_alias (validator, "overrides",        "boolean");
+  gvm_validator_alias (validator, "owner", "name");
+  gvm_validator_alias (validator, "passphrase",   "lsc_password");
+  gvm_validator_alias (validator, "password:name", "preference_name");
+  gvm_validator_alias (validator, "permission", "name");
+  gvm_validator_alias (validator, "permission_id", "id");
+  gvm_validator_alias (validator, "permission_group_id", "id");
+  gvm_validator_alias (validator, "permission_role_id",  "id");
+  gvm_validator_alias (validator, "permission_user_id",  "id");
+  gvm_validator_alias (validator, "port_manual",       "port");
+  gvm_validator_alias (validator, "port_range_end",    "number");
+  gvm_validator_alias (validator, "port_range_start",  "number");
+  gvm_validator_alias (validator, "pos",               "number");
+  gvm_validator_alias (validator, "privacy_password", "lsc_password");
+  gvm_validator_alias (validator, "radiushost",     "hostport");
+  gvm_validator_alias (validator, "restrict_type", "resource_type");
+  gvm_validator_alias (validator, "resource_ids:name",     "number");
+  gvm_validator_alias (validator, "resource_ids:value",    "info_id");
+  gvm_validator_alias (validator, "result_hosts_only", "boolean");
+  gvm_validator_alias (validator, "result_task_id", "optional_task_id");
+  gvm_validator_alias (validator, "result_uuid", "optional_id");
+  gvm_validator_alias (validator, "report_result_id",  "result_id");
+  gvm_validator_alias (validator, "report_uuid",  "result_id");
+  gvm_validator_alias (validator, "replace_task_id",   "boolean");
+  gvm_validator_alias (validator, "reverse_lookup_only", "boolean");
+  gvm_validator_alias (validator, "reverse_lookup_unify", "boolean");
+  gvm_validator_alias (validator, "role_id",           "id");
+  gvm_validator_alias (validator, "role_ids:name",  "number");
+  gvm_validator_alias (validator, "role_ids:value", "id_optional");
+  gvm_validator_alias (validator, "roles",             "optional_number");
+  gvm_validator_alias (validator, "period",       "optional_number");
+  gvm_validator_alias (validator, "period_unit",  "calendar_unit");
+  gvm_validator_alias (validator, "scanner_host",     "hostpath");
+  gvm_validator_alias (validator, "scanner_type", "number");
+  gvm_validator_alias (validator, "schedules_only", "boolean");
+  gvm_validator_alias (validator, "schedule_periods", "number");
+  gvm_validator_alias (validator, "select:name",  "family");
+  gvm_validator_alias (validator, "setting_id", "id");
+  gvm_validator_alias (validator, "show_all",     "boolean");
+  gvm_validator_alias (validator, "slave_id",     "id");
+  gvm_validator_alias (validator, "smb_credential_id", "credential_id");
+  gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
+  gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
+  gvm_validator_alias (validator, "start_day", "day_of_month");
+  gvm_validator_alias (validator, "start_hour", "hour");
+  gvm_validator_alias (validator, "start_minute", "minute");
+  gvm_validator_alias (validator, "start_month", "month");
+  gvm_validator_alias (validator, "start_year", "year");
+  gvm_validator_alias (validator, "subgroup_column", "group_column");
+  gvm_validator_alias (validator, "subject_id",   "id");
+  gvm_validator_alias (validator, "subject_id_optional", "id_optional");
+  gvm_validator_alias (validator, "subject_name",   "name");
+  gvm_validator_alias (validator, "subtype", "asset_type");
+  gvm_validator_alias (validator, "task_filter",  "filter");
+  gvm_validator_alias (validator, "task_filt_id", "filt_id");
+  gvm_validator_alias (validator, "task_uuid", "optional_id");
+  gvm_validator_alias (validator, "timeout",      "boolean");
+  gvm_validator_alias (validator, "trend:name",   "family");
+  gvm_validator_alias (validator, "user_id",      "id");
+  gvm_validator_alias (validator, "user_id_optional", "id_optional");
+  gvm_validator_alias (validator, "xml",          "boolean");
+  gvm_validator_alias (validator, "esc_filter",        "filter");
 }
 
 /**
@@ -1178,18 +1178,18 @@ params_mhd_validate_values (const char *parent_name, void *params)
           item_name = NULL;
         }
       /* Item specific value validator like "method_data:to_adddress:". */
-      else switch (openvas_validate (validator,
-                                     (item_name = g_strdup_printf ("%s%s:",
-                                                                   parent_name,
-                                                                   name)),
-                                     param->value))
+      else switch (gvm_validate (validator,
+                                 (item_name = g_strdup_printf ("%s%s:",
+                                                               parent_name,
+                                                               name)),
+                                 param->value))
         {
           case 0:
             param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
             break;
           case 1:
             /* General name validator for collection like "method_data:name". */
-            if (openvas_validate (validator, name_name, name))
+            if (gvm_validate (validator, name_name, name))
               {
                 param->original_value = param->value;
                 param->value = NULL;
@@ -1198,7 +1198,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->valid_utf8 = 0;
               }
             /* General value validator like "method_data:value". */
-            else if (openvas_validate (validator, value_name, param->value))
+            else if (gvm_validate (validator, value_name, param->value))
               {
                 param->original_value = param->value;
                 param->value = NULL;
@@ -1213,7 +1213,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->valid = 1;
                 param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
 
-                alias_for = openvas_validator_alias_for (validator, name);
+                alias_for = gvm_validator_alias_for (validator, name);
                 if ((param->value && (strcmp ((gchar*) name, "number") == 0))
                     || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
                   /* Remove any leading or trailing space from numbers. */
@@ -1260,7 +1260,7 @@ params_mhd_validate (void *params)
                                || g_utf8_validate (param->value, -1, NULL)));
 
       if ((!g_str_has_prefix (name, "osp_pref_")
-           && openvas_validate (validator, name, param->value)))
+           && gvm_validate (validator, name, param->value)))
         {
           param->original_value = param->value;
           param->value = NULL;
@@ -1273,7 +1273,7 @@ params_mhd_validate (void *params)
 
           param->valid = 1;
 
-          alias_for = openvas_validator_alias_for (validator, name);
+          alias_for = gvm_validator_alias_for (validator, name);
           if ((param->value && (strcmp ((gchar*) name, "number") == 0))
               || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
             /* Remove any leading or trailing space from numbers. */
@@ -1890,7 +1890,7 @@ exec_gmp_get (http_connection_t *con,
 
   cmd = params_value (params, "cmd");
 
-  if (openvas_validate (validator, "cmd", cmd))
+  if (gvm_validate (validator, "cmd", cmd))
     cmd = NULL;
 
   if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))

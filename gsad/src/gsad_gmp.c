@@ -23559,9 +23559,9 @@ connect_unix (const gchar *path)
  * @return 0 success, -1 failed to connect.
  */
 int
-openvas_connection_open (gvm_connection_t *connection,
-                         const gchar *address,
-                         int port)
+gvm_connection_open (gvm_connection_t *connection,
+                     const gchar *address,
+                     int port)
 {
   if (address == NULL)
     return -1;
@@ -23607,9 +23607,9 @@ authenticate_gmp (const gchar * username, const gchar * password,
   int auth;
   gmp_authenticate_info_opts_t auth_opts;
 
-  if (openvas_connection_open (&connection,
-                               manager_address,
-                               manager_port))
+  if (gvm_connection_open (&connection,
+                           manager_address,
+                           manager_port))
     {
       g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
       return 2;
@@ -23841,9 +23841,9 @@ manager_connect (credentials_t *credentials,
 {
   gmp_authenticate_info_opts_t auth_opts;
 
-  if (openvas_connection_open (connection,
-                               manager_address,
-                               manager_port))
+  if (gvm_connection_open (connection,
+                           manager_address,
+                           manager_port))
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_SERVICE_UNAVAILABLE);
