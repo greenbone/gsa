@@ -44,7 +44,7 @@ const ImportIcon = ({
     <Icon
       value={task}
       size={size}
-      img="upload.svg"
+      img="import.svg"
       onClick={onClick}
       alt={_('Import Report')}
       title={_('Import Report')}
