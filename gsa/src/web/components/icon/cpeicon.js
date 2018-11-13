@@ -28,7 +28,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import Cpe from 'web/utils/cpe';
 
-import Icon from './icon';
+import Img from 'web/components/img/img';
 
 const CpeIcon = ({
   name,
@@ -39,9 +39,10 @@ const CpeIcon = ({
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
   return (
-    <Icon
+    <Img
       {...props}
-      img={icon}
+      width="16px"
+      src={icon}
     />
   );
 };
