@@ -55,7 +55,7 @@ const ToolBarIcons = () => (
   <ManualIcon
     page="search"
     searchTerm="feed"
-    size="medium"
+    size="small"
     title={_('Help: Feed Status')}
   />
 );
