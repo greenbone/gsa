@@ -43,8 +43,9 @@ const StartIcon = ({
   if (!capabilities.mayOp('start_task')) {
     return (
       <Icon
+        active={false}
         size={size}
-        img="start_inactive.svg"
+        img="start.svg"
         title={_('Permission to start Task denied')}
       />
     );
@@ -63,8 +64,9 @@ const StartIcon = ({
   }
   return (
     <Icon
+      active={false}
       size={size}
-      img="start_inactive.svg"
+      img="start.svg"
       title={_('Task is already active')}
     />
   );
