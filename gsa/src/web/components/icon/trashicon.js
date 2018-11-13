@@ -26,11 +26,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const TrashIcon = ({
   active = true,
@@ -52,7 +52,8 @@ const TrashIcon = ({
   return (
     <Icon
       {...other}
-      img={active ? 'trashcan.svg' : 'trashcan_inactive.svg'}
+      active={active}
+      img="trashcan.svg"
       title={title}
     />
   );
@@ -64,7 +65,6 @@ TrashIcon.propTypes = {
   title: PropTypes.string,
   onClick: PropTypes.func,
 };
-
 
 export default TrashIcon;
 

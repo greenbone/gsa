@@ -24,11 +24,11 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Cpe from '../../utils/cpe.js';
+import Cpe from 'web/utils/cpe';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const CpeIcon = ({
   name,

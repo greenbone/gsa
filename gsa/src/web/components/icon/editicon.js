@@ -23,16 +23,20 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const EditIcon = ({
   active = true,
   ...props
 }) => {
   return (
-    <Icon {...props} img={active ? 'edit.svg' : 'edit_inactive.svg'}/>
+    <Icon
+      {...props}
+      active={active}
+      img="edit.svg"
+    />
   );
 };
 

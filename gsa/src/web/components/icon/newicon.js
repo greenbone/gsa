@@ -23,15 +23,16 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 export const NewIcon = ({active = true, ...props}) => {
   return (
     <Icon
       {...props}
-      img={active ? 'new.svg' : 'new_inactive.svg'}
+      active={active}
+      img="new.svg"
     />
   );
 };

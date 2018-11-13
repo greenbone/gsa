@@ -23,12 +23,18 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
-const CloneIcon = ({active = true, ...props}) => {
-  return <Icon {...props} img={active ? 'clone.svg' : 'clone_inactive.svg'}/>;
+const CloneIcon = ({active, ...props}) => {
+  return (
+    <Icon
+      {...props}
+      active={active}
+      img="clone.svg"
+    />
+  );
 };
 
 CloneIcon.propTypes = {
