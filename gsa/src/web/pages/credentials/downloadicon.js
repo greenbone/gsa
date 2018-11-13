@@ -46,7 +46,7 @@ const CredentialDownloadIcon = ({
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
         <Icon
           title={_('Download RPM (.rpm) Package')}
-          img="st_vendorfix.svg"
+          img="dl_rpm.svg"
           value={credential}
           onClick={cred => onDownload(cred, 'rpm')}
         />
