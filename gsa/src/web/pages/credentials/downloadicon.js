@@ -30,11 +30,11 @@ import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 const CredentialDownloadIcon = ({
   credential,
@@ -46,14 +46,14 @@ const CredentialDownloadIcon = ({
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
         <Icon
           title={_('Download RPM (.rpm) Package')}
-          img="rpm.svg"
+          img="st_vendorfix.svg"
           value={credential}
           onClick={cred => onDownload(cred, 'rpm')}
         />
       }
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
         <Icon
-          img="deb.svg"
+          img="dl_deb.svg"
           title={_('Download Debian (.deb) Package')}
           value={credential}
           onClick={cred => onDownload(cred, 'deb')}
@@ -62,7 +62,7 @@ const CredentialDownloadIcon = ({
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
         <Icon
           title={_('Download Public Key')}
-          img="key.svg"
+          img="dl_key.svg"
           value={credential}
           onClick={cred => onDownload(cred, 'key')}
         />
@@ -70,14 +70,14 @@ const CredentialDownloadIcon = ({
       {type === USERNAME_PASSWORD_CREDENTIAL_TYPE &&
         <Icon
           title={_('Download Windows Executable (.exe)')}
-          img="exe.svg"
+          img="dl_exe.svg"
           value={credential}
           onClick={cred => onDownload(cred, 'exe')}
         />
       }
       {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE &&
         <Icon
-          img="key.svg"
+          img="dl_key.svg"
           title={_('Download Certificate (.pem)')}
           value={credential}
           onClick={cred => onDownload(cred, 'pem')}
