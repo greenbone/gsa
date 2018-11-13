@@ -35,7 +35,7 @@ import PasswordField from 'web/components/form/passwordfield';
 import SubmitButton from 'web/components/form/submitbutton';
 import TextField from 'web/components/form/textfield';
 
-import Icon from 'web/components/icon/icon';
+import Img from 'web/components/img/img';
 
 import Layout from 'web/components/layout/layout';
 
@@ -62,7 +62,7 @@ const Error = styled.p`
   margin: 10px;
 `;
 
-const StyledIcon = styled(Icon)`
+const StyledImg = styled(Img)`
   display: flex;
   height: 95px;
 `;
@@ -120,7 +120,7 @@ class LoginForm extends React.Component {
         }
 
         <LoginPanel>
-          <StyledIcon img="login-label.png" size="default"/>
+          <StyledImg src="login-label.png"/>
           <Layout flex="column">
             <FormGroup title={_('Username')} titleSize="4">
               <TextField
