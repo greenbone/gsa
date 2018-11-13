@@ -278,7 +278,7 @@ class PowerFilter extends React.Component {
               }
               {onResetClick &&
                 <Icon
-                  img="first.svg"
+                  img="reset.svg"
                   title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onResetClick : undefined}
@@ -315,8 +315,8 @@ class PowerFilter extends React.Component {
                 title={_('Create new filter from current term')}
                 onClick={this.handleCreateFilter}
               /> :
-              <Icon
-                img="new_inactive.svg"
+              <NewIcon
+                active={false}
                 title={_('Please insert a filter name')}
               />
             }
