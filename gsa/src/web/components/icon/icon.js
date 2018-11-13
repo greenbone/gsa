@@ -54,7 +54,6 @@ class IconComponent extends React.Component {
 
     this.state = {svgComponent: null};
     this.handleClick = this.handleClick.bind(this);
-    this.loadImage = this.loadImage.bind(this);
   }
 
   componentDidMount() {
