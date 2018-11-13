@@ -129,7 +129,7 @@ IconComponent = styled(IconComponent)`
   & svg path {
     fill: ${props => {
       const {active = true} = props;
-      return active ? Theme.black : Theme.inputBorderGray;
+      return active ? undefined : Theme.inputBorderGray;
   }}};
 `;
 
