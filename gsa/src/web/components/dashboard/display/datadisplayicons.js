@@ -38,7 +38,7 @@ export const renderDonutChartIcons = ({
       setState={setState}
     />
     <Icon
-      img="st_vendorfix.svg"
+      img="2d3d.svg"
       title={_('Toggle 2D/3D view')}
       onClick={() => setState(({show3d}) => ({show3d: !show3d}))}
     />
@@ -65,21 +65,21 @@ const DataDisplayIcons = ({
     }
     {showSvgDownload &&
       <Icon
-        img="download.svg"
+        img="dl_svg.svg"
         title={_('Download SVG')}
         onClick={onDownloadSvgClick}
       />
     }
     {showCsvDownload &&
       <Icon
-        img="download.svg"
+        img="dl_csv.svg"
         title={_('Download CSV')}
         onClick={onDownloadCsvClick}
       />
     }
     {showToggleLegend &&
       <Icon
-        img="list.svg"
+        img="legend.svg"
         title={_('Toggle Legend')}
         onClick={() => setState(({showLegend}) => ({showLegend: !showLegend}))}
       />
