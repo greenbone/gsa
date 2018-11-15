@@ -5836,22 +5836,17 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
     {
       xml_string_append (command,
                          "<privacy>");
-      if (privacy_algorithm && strcmp (privacy_algorithm, ""))
+      if (privacy_algorithm)
         {
           xml_string_append (command,
                              "<algorithm>%s</algorithm>",
                              privacy_algorithm);
-          if (change_privacy_password)
-            xml_string_append (command,
-                               "<password>%s</password>",
-                               privacy_password);
         }
-      else if (privacy_algorithm)
+      if (change_privacy_password && privacy_password)
         {
           xml_string_append (command,
-                             "<algorithm></algorithm>");
-          xml_string_append (command,
-                             "<password></password>");
+                             "<password>%s</password>",
+                             privacy_password);
         }
 
       xml_string_append (command,
