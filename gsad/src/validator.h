@@ -1,4 +1,4 @@
-/* Greenbone Security Assistant (set for openvas-libraries/base)
+/* Greenbone Security Assistant (set for gvm-libs/base)
  * $Id$
  * Description: String validator.
  *
@@ -54,12 +54,12 @@ struct validator_rule
  */
 typedef struct validator_rule validator_rule_t;
 
-validator_t openvas_validator_new ();
-void openvas_validator_add (validator_t, const char *, const char *);
-void openvas_validator_add_binary (validator_t, const char *);
-int openvas_validator_alias (validator_t, const char *, const char *);
-gchar *openvas_validator_alias_for (validator_t, const char *);
-int openvas_validate (validator_t, const char *, const char *);
-void openvas_validator_free (validator_t);
+validator_t gvm_validator_new ();
+void gvm_validator_add (validator_t, const char *, const char *);
+void gvm_validator_add_binary (validator_t, const char *);
+int gvm_validator_alias (validator_t, const char *, const char *);
+gchar *gvm_validator_alias_for (validator_t, const char *);
+int gvm_validate (validator_t, const char *, const char *);
+void gvm_validator_free (validator_t);
 
 #endif /* not _VALIDATOR_H */
