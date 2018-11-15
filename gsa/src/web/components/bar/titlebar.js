@@ -30,7 +30,7 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import GBIcon from 'web/components/icon/greenboneicon';
-import Icon from 'web/components/icon/icon';
+import Img from 'web/components/img/img';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -62,10 +62,9 @@ const GreenboneIcon = styled(GBIcon)`
 `;
 
 const GsaIconComponent = props => (
-  <Icon
+  <Img
     {...props}
-    img="gsa.svg"
-    size="default"
+    src="gsa.svg"
     alt={_('Greenbone Security Assistant')}
   />
 );

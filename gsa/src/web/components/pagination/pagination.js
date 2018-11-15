@@ -66,45 +66,37 @@ const Pagination = ({
       flex
       align={['end', 'center']}
     >
-      {counts.hasPrevious() ?
-        <IconDivider>
-          <NavigationIcon
-            img="first.svg"
-            title={_('First')}
-            onClick={onFirstClick}
-          />
-          <NavigationIcon
-            img="previous.svg"
-            title={_('Previous')}
-            onClick={onPreviousClick}
-          />
-        </IconDivider> :
-        <IconDivider>
-          <NavigationIcon img="first_inactive.svg" title={_('First')}/>
-          <NavigationIcon img="previous_inactive.svg" title={_('Previous')}/>
-        </IconDivider>
-      }
+      <IconDivider>
+        <NavigationIcon
+          active={counts.hasPrevious()}
+          img="first.svg"
+          title={_('First')}
+          onClick={onFirstClick}
+        />
+        <NavigationIcon
+          active={counts.hasPrevious()}
+          img="previous.svg"
+          title={_('Previous')}
+          onClick={onPreviousClick}
+        />
+      </IconDivider>
       <PaginationText>
         {_('{{first}} - {{last}} of {{filtered}}', counts)}
       </PaginationText>
-      {counts.hasNext() ?
-        <IconDivider>
-          <NavigationIcon
-            img="next.svg"
-            title={_('Next')}
-            onClick={onNextClick}
-          />
-          <NavigationIcon
-            img="last.svg"
-            title={_('Last')}
-            onClick={onLastClick}
-          />
-        </IconDivider> :
-        <IconDivider>
-          <NavigationIcon img="next_inactive.svg" title={_('Next')}/>
-          <NavigationIcon img="last_inactive.svg" title={_('Last')}/>
-        </IconDivider>
-      }
+      <IconDivider>
+        <NavigationIcon
+          active={counts.hasNext()}
+          img="next.svg"
+          title={_('Next')}
+          onClick={onNextClick}
+        />
+        <NavigationIcon
+          active={counts.hasNext()}
+          img="last.svg"
+          title={_('Last')}
+          onClick={onLastClick}
+        />
+      </IconDivider>
     </PaginationLayout>
   );
 };

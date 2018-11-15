@@ -28,9 +28,9 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities.js';
+import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from 'web/components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 const ResumeIcon = ({
   capabilities,
@@ -41,8 +41,9 @@ const ResumeIcon = ({
   if (task.isContainer()) {
     return (
       <Icon
+        active={false}
         size={size}
-        img="resume_inactive.svg"
+        img="resume.svg"
         alt={_('Resume')}
         title={_('Task is a container')}
       />
@@ -52,8 +53,9 @@ const ResumeIcon = ({
   if (isDefined(task.schedule)) {
     return (
       <Icon
+        active={false}
         size={size}
-        img="resume_inactive.svg"
+        img="resume.svg"
         alt={_('Resume')}
         title={_('Task is scheduled')}
       />
@@ -74,8 +76,9 @@ const ResumeIcon = ({
     }
     return (
       <Icon
+        active={false}
         size={size}
-        img="resume_inactive.svg"
+        img="resume.svg"
         alt={_('Resume')}
         title={_('Permission to resume task denied')}
       />
@@ -84,8 +87,9 @@ const ResumeIcon = ({
 
   return (
     <Icon
+      active={false}
       size={size}
-      img="resume_inactive.svg"
+      img="resume.svg"
       alt={_('Resume')}
       title={_('Task is not stopped')}
     />

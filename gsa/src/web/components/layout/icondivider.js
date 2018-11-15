@@ -21,11 +21,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import withComponentDefaults from '../../utils/withComponentDefaults.js';
+import withComponentDefaults from 'web/utils/withComponentDefaults';
 
-import Divider from './divider.js';
+import Divider from './divider';
 
-const IconDivider = withComponentDefaults({margin: '3px'})(Divider);
+const IconDivider = withComponentDefaults({margin: '5px'})(Divider);
 
 IconDivider.displayName = 'IconDivider';
 

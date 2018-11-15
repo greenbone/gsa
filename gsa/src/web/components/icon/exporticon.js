@@ -25,11 +25,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 export const ExportIcon = ({selectionType, title, ...other}) => {
   let download_title = title;
@@ -44,7 +44,7 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
   }
   return (
     <Icon
-      img="download.svg"
+      img="export.svg"
       title={download_title} {...other}
     />
   );

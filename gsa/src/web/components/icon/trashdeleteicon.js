@@ -24,16 +24,33 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import styled from 'styled-components';
 
-import Icon from './icon.js';
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
+
+import Icon from './icon';
+
+const StyledIcon = styled(Icon)`
+  & svg:hover {
+    background-color: ${Theme.lightRed};
+  }
+  & svg:hover path {
+    fill: ${Theme.darkRed};
+  }
+`;
 
 const TrashDeleteIcon = ({
-  active = true,
+  active,
   ...props
 }) => {
   return (
-    <Icon {...props} img={active ? 'delete.svg' : 'delete_inactive.svg'}/>
+    <StyledIcon
+      {...props}
+      active={active}
+      img="delete.svg"
+    />
   );
 };
 

@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from './icon.js';
+import ManualLink from 'web/components/link/manuallink';
 
-import ManualLink from '../link/manuallink.js';
+import Icon from './icon';
 
 const ManualIcon = ({
   anchor,

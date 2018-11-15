@@ -22,15 +22,28 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon.js';
+import Theme from 'web/utils/theme';
+
+import Icon from './icon';
+
+const StyledIcon = styled(Icon)`
+  & svg:hover {
+    background-color: ${Theme.lightRed};
+  }
+  & svg:hover path {
+    fill: ${Theme.darkRed};
+  }
+`;
 
 const DeleteIcon = ({
   active = true,
@@ -50,9 +63,10 @@ const DeleteIcon = ({
     }
   }
   return (
-    <Icon
+    <StyledIcon
       {...other}
-      img={active ? 'delete.svg' : 'delete_inactive.svg'}
+      active={active}
+      img="delete.svg"
       title={title}
     />
   );

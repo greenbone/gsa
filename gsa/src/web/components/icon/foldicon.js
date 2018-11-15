@@ -26,11 +26,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {FoldState} from '../folding/folding.js';
+import {FoldState} from 'web/components/folding/folding';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 export const FoldIcon = ({
     foldState,

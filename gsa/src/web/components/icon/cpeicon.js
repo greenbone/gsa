@@ -24,11 +24,11 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Cpe from '../../utils/cpe.js';
+import Cpe from 'web/utils/cpe';
 
-import Icon from './icon.js';
+import Img from 'web/components/img/img';
 
 const CpeIcon = ({
   name,
@@ -39,9 +39,10 @@ const CpeIcon = ({
   const icon = isDefined(cpe) ? cpe.icon : 'cpe/other.svg';
 
   return (
-    <Icon
+    <Img
       {...props}
-      img={icon}
+      width="16px"
+      src={icon}
     />
   );
 };

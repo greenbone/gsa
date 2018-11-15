@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
+ <style>.gui_icon_class {
+    stroke-linejoin:miter;
+    font-size:medium;
+    baseline-shift:baseline;
+    color-rendering:auto;
+    text-decoration-color:#000000;
+    color:#000000;
+    font-variant-numeric:normal;
+    letter-spacing:normal;
+    shape-rendering:auto;
+    word-spacing:normal;
+    stroke:none;
+    text-decoration-line:none;
+    text-rendering:auto;
+    stroke-width:16;
+    font-style:normal;
+    fill:#000000;
+    solid-opacity:1;
+    line-height:normal;
+    fill-rule:evenodd;
+    font-variant-position:normal;
+    mix-blend-mode:normal;
+    fill-opacity:1;
+    direction:ltr;
+    solid-color:#000000;
+    color-interpolation-filters:linearRGB;
+    font-stretch:normal;
+    stroke-miterlimit:4;
+    font-feature-settings:normal;
+    font-weight:normal;
+    opacity:1;
+    shape-padding:0;
+    vector-effect:none;
+    font-variant-alternates:normal;
+    font-variant:normal;
+    visibility:visible;
+    text-indent:0;
+    font-variant-ligatures:normal;
+    clip-rule:nonzero;
+    dominant-baseline:auto;
+    font-variant-caps:normal;
+    image-rendering:auto;
+    white-space:normal;
+    overflow:visible;
+    font-family:sans-serif;
+    text-decoration-style:solid;
+    text-align:start;
+    text-orientation:mixed;
+    writing-mode:lr-tb;
+    stroke-opacity:1;
+    isolation:auto;
+    stroke-dashoffset:0;
+    text-anchor:start;
+    text-decoration:none;
+    stroke-linecap:butt;
+    stroke-dasharray:none;
+    enable-background:accumulate;
+    text-transform:none;
+    display:inline;
+    color-interpolation:sRGB;
+}</style>
+ <g transform="translate(0 -229.27)">
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <path d="m-3.7188 254.64-0.040102 28.487" fill="none" stroke-width="0"/>
+   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m208 0.25781-85.518 10.781v54.066h85.518v-64.848zm-96.209 12.127-64.152 7.5469 0.056641 45.174h64.096v-52.721zm-64.105 61.984 0.003906 45.631 64.102 7.6133v-53.244h-64.105zm74.797 0v54.424l85.518 10.424 0.01953-64.848h-85.537zm-10.484 69.631v32h-32l48 48 48-48h-32v-32h-32zm-111.73 31.975-0.30859 80.02h256.07l-0.0293-79.994-16.438 0.04297 0.23242 63.793h-222.85l0.23047-63.793-16.908-0.06836z"/>
+  </g>
+ </g>
+</svg>

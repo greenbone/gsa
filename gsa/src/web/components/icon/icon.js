@@ -21,6 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import styled from 'styled-components';
@@ -29,30 +30,65 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Img from 'web/components/img/img';
+import Theme from 'web/utils/theme';
 
 import withIconSize from 'web/components/icon/withIconSize';
+
+import {get_img_url} from 'web/utils/urls';
 
 const Anchor = styled.a`
   display: flex;
 `;
 
-const StyledIcon = styled.span(
-  ({onClick}) => isDefined(onClick) ? {
-    cursor: 'pointer',
-    '@media print': {
-      display: 'none',
-    },
-  } : undefined,
-);
+const StyledIcon = styled.span`
+  cursor: ${props => isDefined(props.onClick) ? 'pointer' : undefined};
+  & @media print {
+    ${props => isDefined(props.onClick) ? {display: 'none'} : undefined};
+  };
+`;
 
 class IconComponent extends React.Component {
 
   constructor(...args) {
     super(...args);
 
+    this.state = {svgComponent: null};
     this.handleClick = this.handleClick.bind(this);
   }
+
+  componentDidMount() {
+    this.loadImage();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.img !== this.props.img) {
+      try {
+        if (this.svgRef.removeChild(this.state.svgComponent)) {
+          this.loadImage();
+        };
+      }
+      catch (e) {
+        /* Ignore errors here. If the old child couldn't be removed, a new one
+        should not be appended. Therefore do nothing instead of crashing the GUI */
+      };
+    };
+  }
+
+  loadImage() {
+    const {img} = this.props;
+    const iconPath = get_img_url(img);
+    fetch(iconPath)
+      .then(response => response.text()
+      .then(resp => {
+        const parser = new window.DOMParser();
+        const doc = parser.parseFromString(resp, 'image/svg+xml');
+        const svg = doc.documentElement;
+        this.setState({svgComponent: svg});
+        if (this.svgRef !== null) {
+          this.svgRef.appendChild(svg);
+        }
+      }));
+  };
 
   handleClick() {
     const {value, onClick} = this.props;
@@ -62,36 +98,39 @@ class IconComponent extends React.Component {
 
   render() {
     const {
-      img,
+      className,
       to,
-      alt = '',
       value,
       onClick,
       ...other
     } = this.props;
+
     return (
       <StyledIcon
         {...other}
         onClick={isDefined(onClick) ? this.handleClick : undefined}
       >
+
         {isDefined(to) ?
           <Anchor
             href={to}
           >
-            <Img
-              alt={alt}
-              src={img}
-            />
+            <div className={className} ref={ref => this.svgRef = ref}/>
           </Anchor> :
-          <Img
-            alt={alt}
-            src={img}
-          />
+          <div className={className} ref={ref => this.svgRef = ref}/>
         }
       </StyledIcon>
     );
   }
-}
+};
+
+IconComponent = styled(IconComponent)`
+  & svg path {
+    fill: ${props => {
+      const {active = true} = props;
+      return active ? undefined : Theme.inputBorderGray;
+  }}};
+`;
 
 IconComponent.propTypes = {
   alt: PropTypes.string,

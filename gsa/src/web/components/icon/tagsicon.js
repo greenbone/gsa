@@ -26,11 +26,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import SelectionType from '../../utils/selectiontype.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const TagsIcon = ({
   active = true,
@@ -52,7 +52,8 @@ const TagsIcon = ({
   return (
     <Icon
       {...other}
-      img={'tag.svg'}
+      active={active}
+      img={'tags.svg'}
       title={title}
     />
   );

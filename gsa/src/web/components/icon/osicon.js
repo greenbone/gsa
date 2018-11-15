@@ -28,14 +28,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import OperatingSystems from '../../utils/os.js';
+import OperatingSystems from 'web/utils/os';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../layout/divider.js';
-import Layout from '../layout/layout.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const OsIcon = ({
   displayOsCpe = true,
@@ -103,7 +103,6 @@ OsIcon.propTypes = {
   osCpe: PropTypes.string,
   osTxt: PropTypes.string,
 };
-
 
 export default OsIcon;
 

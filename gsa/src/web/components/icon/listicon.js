@@ -23,11 +23,11 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Link from '../link/link.js';
+import Link from 'web/components/link/link';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const ListIcon = ({page, filter, ...props}) => {
   return (

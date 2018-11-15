@@ -26,11 +26,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import DetailsLink from '../../../components/link/detailslink.js';
+import DetailsLink from 'web/components/link/detailslink';
 
 const ScheduleIcon = ({
   size,
@@ -41,8 +41,9 @@ const ScheduleIcon = ({
     schedule.userCapabilities.length === 0) {
     return (
       <Icon
+        active={false}
         size={size}
-        img="scheduled_inactive.svg"
+        img="schedule.svg"
         title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
           {name: schedule.name, id: schedule.id})}
       />
@@ -83,7 +84,7 @@ const ScheduleIcon = ({
     >
       <Icon
         size={size}
-        img="scheduled.svg"
+        img="schedule.svg"
         alt={_('Schedule Details')}
       />
     </DetailsLink>

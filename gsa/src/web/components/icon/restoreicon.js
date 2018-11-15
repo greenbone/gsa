@@ -24,16 +24,20 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const RestoreIcon = ({
   active = true,
   ...props
 }) => {
   return (
-    <Icon {...props} img={active ? 'restore.svg' : 'restore_inactive.svg'}/>
+    <Icon
+      {...props}
+      active={active}
+      img="restore.svg"
+    />
   );
 };
 

@@ -145,7 +145,7 @@ export class DashboardControls extends React.Component {
             onClick={canAdd ? this.handleNewClick : undefined}
           />
           <Icon
-            img="first.svg"
+            img="reset.svg"
             title={_('Reset to Defaults')}
             onClick={this.handleResetClick}
           />

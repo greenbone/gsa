@@ -25,11 +25,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Divider from '../layout/divider.js';
+import Divider from 'web/components/layout/divider';
 
-import Icon from './icon.js';
+import Icon from './icon';
 
 const SolutionType = ({
     type,
@@ -95,7 +95,6 @@ SolutionType.propTypes = {
   displayTitleText: PropTypes.bool,
   type: PropTypes.string,
 };
-
 
 export default SolutionType;
 
