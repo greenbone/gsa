@@ -28,9 +28,9 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
 const ObserverIcon = ({
   entity,
@@ -45,10 +45,10 @@ const ObserverIcon = ({
 
   let title;
   if (isDefined(owner)) {
-    title = _('Global {{type}}', {type: displayName});
+    title = _('{{type}} owned by {{owner}}', {type: displayName, owner});
   }
   else {
-    title = _('{{type}} owned by {{owner}}', {type: displayName, owner});
+    title = _('Global {{type}}', {type: displayName});
   }
   return (
     <Icon
