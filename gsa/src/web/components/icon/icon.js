@@ -24,6 +24,8 @@
 
 import React from 'react';
 
+import 'whatwg-fetch';
+
 import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
