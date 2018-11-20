@@ -142,7 +142,7 @@ class RadiusAuthentication extends React.Component {
           <ManualIcon
             page="gui_administration"
             anchor="radius"
-            size="medium"
+            size="small"
             title={_('Help: RADIUS Authentication')}
           />
           <Section

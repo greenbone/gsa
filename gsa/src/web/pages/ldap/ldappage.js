@@ -195,7 +195,7 @@ class LdapAuthentication extends React.Component {
           <ManualIcon
             page="gui_administration"
             anchor="ldap"
-            size="medium"
+            size="small"
             title={_('Help: LDAP per-User Authentication')}
           />
           <Section
