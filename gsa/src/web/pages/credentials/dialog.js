@@ -43,6 +43,9 @@ import {
   SNMP_PRIVACY_ALOGRITHM_NONE,
   SNMP_PRIVACY_ALGORITHM_AES,
   SNMP_PRIVACY_ALGORITHM_DES,
+  PGP_CREDENTIAL_TYPE,
+  SMIME_CREDENTIAL_TYPE,
+  ALL_CREDENTIAL_TYPES,
 } from 'gmp/models/credential';
 
 import Divider from 'web/components/layout/divider';
@@ -62,11 +65,15 @@ import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
+const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
+
 const TYPE_NAMES = {
   up: _l('Username + Password'),
   usk: _l('Username + SSH Key'),
   cc: _l('Client Cerficate'),
   snmp: _l('SNMP'),
+  pgp: _l('PGP Key'),
+  smime: _l('S/MIME Certificate'),
 };
 
 const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
@@ -76,7 +83,12 @@ class CredentialsDialog extends React.Component {
   constructor(...args) {
     super(...args);
 
+    this.state = {};
+
     this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handlePublicKeyChange = this.handlePublicKeyChange.bind(this);
+    this.handleErrorClose = this.handleErrorClose.bind(this);
+    this.handleError = this.handleError.bind(this);
   }
 
   handleTypeChange(credential_type, autogenerate, onValueChange) {
@@ -91,10 +103,37 @@ class CredentialsDialog extends React.Component {
    }
   }
 
+  handlePublicKeyChange(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const {result} = e.target;
+      if (result.startsWith(PGP_PUBLIC_KEY_LINE)) {
+        this.setState({public_key: result});
+      }
+      else {
+        this.setState({error: _('Not a valid PGP file')});
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  handleErrorClose() {
+    this.setState({error: undefined});
+  }
+
+  handleError(error) {
+    this.setState({error: error.message});
+  }
+
   render() {
     let {
       credential_type,
     } = this.props;
+
+    const {
+      public_key,
+      error,
+    } = this.state;
 
     const {
       credential,
@@ -155,12 +194,20 @@ class CredentialsDialog extends React.Component {
       id: isDefined(credential) ? credential.id : undefined,
     };
 
+    const values = {
+      public_key,
+    };
+
     return (
       <SaveDialog
         title={title}
+        defaultValues={data}
+        error={error}
+        values={values}
+        onErrorClose={this.handleErrorClose}
+        onError={this.handleError}
         onClose={onClose}
         onSave={onSave}
-        defaultValues={data}
       >
         {({
           values: state,
@@ -407,6 +454,26 @@ class CredentialsDialog extends React.Component {
                   onChange={onValueChange}
                 />
               </FormGroup>
+
+              <FormGroup
+                title={_('PGP Public Key')}
+                condition={state.credential_type === PGP_CREDENTIAL_TYPE}
+              >
+                <FileField
+                  name="public_key"
+                  onChange={this.handlePublicKeyChange}
+                />
+              </FormGroup>
+
+              <FormGroup
+                title={_('S/MIME Certificate')}
+                condition={state.credential_type === SMIME_CREDENTIAL_TYPE}
+              >
+                <FileField
+                  name="certificate"
+                  onChange={onValueChange}
+                />
+              </FormGroup>
             </Layout>
           );
         }}
@@ -415,12 +482,7 @@ class CredentialsDialog extends React.Component {
   }
 }
 
-const pwtypes = PropTypes.oneOf([
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  SNMP_CREDENTIAL_TYPE,
-]);
+const pwtypes = PropTypes.oneOf(ALL_CREDENTIAL_TYPES);
 
 CredentialsDialog.propTypes = {
   allow_insecure: PropTypes.yesno,
