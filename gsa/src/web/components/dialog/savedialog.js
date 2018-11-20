@@ -87,10 +87,20 @@ class SaveDialogContent extends React.Component {
   }
 
   setError(error) {
+    const {onError} = this.props;
+
     this.setState({
-      error: error.message,
       loading: false,
     });
+
+    if (onError) {
+      onError(error);
+    }
+    else {
+      this.setState({
+        error: error.message,
+      });
+    }
   }
 
   render() {
@@ -160,6 +170,7 @@ SaveDialogContent.propTypes = {
   moveProps: PropTypes.object,
   title: PropTypes.string.isRequired,
   values: PropTypes.object,
+  onError: PropTypes.func,
   onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
@@ -176,6 +187,7 @@ const SaveDialog = ({
   values,
   width,
   onClose,
+  onError,
   onErrorClose,
   onSave,
 }) => {
@@ -201,6 +213,7 @@ const SaveDialog = ({
           title={title}
           values={values}
           onErrorClose={onErrorClose}
+          onError={onError}
           onSave={onSave}
         >
           {children}
@@ -220,6 +233,7 @@ SaveDialog.propTypes = {
   values: PropTypes.object, // should be used for controlled values
   width: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onError: PropTypes.func,
   onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
