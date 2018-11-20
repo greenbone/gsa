@@ -51,7 +51,8 @@ class CredentialCommand extends EntityCommand {
       passphrase = '',
       privacy_password = '',
       auth_algorithm = 'sha1',
-      certificate, base,
+      certificate,
+      credential_type,
       privacy_algorithm = 'aes',
       private_key,
     } = args;
@@ -60,7 +61,7 @@ class CredentialCommand extends EntityCommand {
       cmd: 'create_credential',
       name,
       comment,
-      base,
+      credential_type,
       allow_insecure,
       autogenerate,
       community,
@@ -79,7 +80,6 @@ class CredentialCommand extends EntityCommand {
     const {
       allow_insecure = 0,
       auth_algorithm,
-      base,
       certificate,
       change_community = 0,
       change_passphrase = 0,
@@ -88,6 +88,7 @@ class CredentialCommand extends EntityCommand {
       comment = '',
       community,
       credential_login,
+      credential_type,
       id,
       name,
       passphrase,
@@ -95,13 +96,13 @@ class CredentialCommand extends EntityCommand {
       privacy_algorithm,
       privacy_password,
       private_key,
+      public_key,
     } = args;
     log.debug('Saving credential', args);
     return this.action({
       cmd: 'save_credential',
       allow_insecure,
       auth_algorithm,
-      base,
       certificate,
       change_community,
       change_passphrase,
@@ -110,6 +111,7 @@ class CredentialCommand extends EntityCommand {
       comment,
       community,
       credential_login,
+      credential_type,
       id,
       password,
       name,

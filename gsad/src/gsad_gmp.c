@@ -5083,7 +5083,7 @@ create_credential_gmp (gvm_connection_t *connection,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
-  type = params_value (params, "base");
+  type = params_value (params, "credential_type");
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
