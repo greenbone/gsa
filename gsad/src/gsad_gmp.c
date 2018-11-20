@@ -5735,17 +5735,18 @@ char *
 save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      params_t *params, cmd_response_data_t* response_data)
 {
-  int ret, change_password, change_passphrase;
+  int ret, change_password, change_ssh_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
   const char  *credential_id;
-  const char *name, *comment, *login, *password, *passphrase;
+  const char *name, *comment, *login, *password, *passphrase, *type;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
   entity_t entity;
 
   credential_id = params_value (params, "credential_id");
+  type = params_value (params, "credential_type");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
@@ -5763,31 +5764,43 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   CHECK_VARIABLE_INVALID (name, "Save Credential");
   CHECK_VARIABLE_INVALID (comment, "Save Credential");
   CHECK_VARIABLE_INVALID (allow_insecure, "Save Credential");
-  if (params_given (params, "certificate"))
-    CHECK_VARIABLE_INVALID (certificate, "Save Credential");
-  if (params_given (params, "private_key"))
-    CHECK_VARIABLE_INVALID (private_key, "Save Credential");
+  CHECK_VARIABLE_INVALID (type, "Save Credential");
+
+  if (str_equal (type, "cc"))
+    {
+      if (params_given (params, "certificate"))
+        CHECK_VARIABLE_INVALID (certificate, "Save Credential");
+
+      if (params_given (params, "private_key"))
+        CHECK_VARIABLE_INVALID (private_key, "Save Credential");
+
+      if (params_given (params, "change_passphrase"))
+        CHECK_VARIABLE_INVALID (passphrase, "Save Credential");
+    }
+  else if (str_equal (type, "snmp"))
+    {
+      if (params_given (params, "auth_algorithm"))
+        CHECK_VARIABLE_INVALID (auth_algorithm, "Save Credential");
+
+      if (params_given (params, "privacy_algorithm"))
+        CHECK_VARIABLE_INVALID (privacy_algorithm, "Save Credential");
+
+      if (params_given (params, "change_privacy_password"))
+        CHECK_VARIABLE_INVALID (privacy_password, "Save Credential");
+
+      if (params_given (params, "change_community"))
+        CHECK_VARIABLE_INVALID (community, "Save Credential");
+    }
+  else if (str_equal (type, "up"))
+    {
+      if (params_given (params, "change_password"))
+        CHECK_VARIABLE_INVALID (password, "Save Credential");
+    }
+
   if (params_given (params, "login"))
     CHECK_VARIABLE_INVALID (login, "Save Credential");
-  if (params_given (params, "auth_algorithm"))
-    CHECK_VARIABLE_INVALID (auth_algorithm, "Save Credential");
-  if (params_given (params, "privacy_algorithm"))
-    CHECK_VARIABLE_INVALID (privacy_algorithm, "Save Credential");
 
-  if (params_given (params, "change_community"))
-    CHECK_VARIABLE_INVALID (community, "Save Credential");
-  if (params_given (params, "change_passphrase"))
-    CHECK_VARIABLE_INVALID (passphrase, "Save Credential");
-  if (params_given (params, "change_password"))
-    CHECK_VARIABLE_INVALID (password, "Save Credential");
-  if (params_given (params, "change_privacy_password"))
-    CHECK_VARIABLE_INVALID (privacy_password, "Save Credential");
-
-  change_community = params_value_bool (params, "change_community");
-  change_passphrase = params_value_bool (params, "change_passphrase");
   change_password = params_value_bool (params, "change_password");
-  change_privacy_password =
-    params_value_bool (params, "change_privacy_password");
 
   /* Prepare command */
   command = g_string_new ("");
@@ -5802,67 +5815,99 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      comment,
                      allow_insecure);
 
-  if (auth_algorithm)
-    xml_string_append (command,
-                       "<auth_algorithm>%s</auth_algorithm>",
-                       auth_algorithm);
+  if (str_equal (type, "snmp"))
+    {
+      change_community = params_value_bool (params, "change_community");
+      change_privacy_password = params_value_bool(params,
+                                                  "change_privacy_password");
 
-  if (certificate && strcmp (certificate, ""))
-    xml_string_append (command,
-                       "<certificate>%s</certificate>",
-                       certificate);
+      if (auth_algorithm)
+        xml_string_append (command,
+                          "<auth_algorithm>%s</auth_algorithm>",
+                          auth_algorithm);
 
-  if (change_community)
-    xml_string_append (command,
-                       "<community>%s</community>",
-                       community);
+      if (change_community)
+        xml_string_append (command,
+                          "<community>%s</community>",
+                          community);
+
+      if (privacy_algorithm || change_privacy_password)
+        {
+          xml_string_append (command,
+                            "<privacy>");
+          if (privacy_algorithm)
+            {
+              xml_string_append (command,
+                                "<algorithm>%s</algorithm>",
+                                privacy_algorithm);
+            }
+          if (change_privacy_password && privacy_password)
+            {
+              xml_string_append (command,
+                                "<password>%s</password>",
+                                privacy_password);
+            }
+
+          xml_string_append (command,
+                            "</privacy>");
+        }
+
+    }
+
+  else if (str_equal (type, "cc"))
+    {
+      if ((certificate && strcmp (certificate, "")))
+        {
+          xml_string_append (command,
+                            "<certificate>%s</certificate>",
+                            certificate);
+        }
+
+      if ((private_key && strcmp (private_key, "")))
+        {
+          xml_string_append (command,
+                            "<key>");
+          xml_string_append (command,
+                            "<private>%s</private>",
+                            private_key);
+          xml_string_append (command,
+                            "</key>");
+        }
+
+    }
+  else if (str_equal (type, "usk"))
+    {
+      change_ssh_passphrase = params_value_bool (params, "change_passphrase");
+
+      if ((private_key && strcmp (private_key, "")) || change_ssh_passphrase)
+        {
+          xml_string_append (command,
+                            "<key>");
+          if (change_ssh_passphrase)
+            xml_string_append (command,
+                              "<phrase>%s</phrase>",
+                              passphrase);
+          if (private_key)
+            xml_string_append (command,
+                              "<private>%s</private>",
+                              private_key);
+          xml_string_append (command,
+                            "</key>");
+        }
+    }
+  else if (str_equal (type, "up"))
+    {
+      if (change_password)
+        xml_string_append(command,
+                          "<password>%s</password>",
+                          password);
+    }
+
 
   if (login && strcmp (login, ""))
     xml_string_append (command,
                        "<login>%s</login>",
                        login);
-
-  if (change_password)
-    xml_string_append (command,
-                       "<password>%s</password>",
-                       password);
-
-  if (privacy_algorithm || change_privacy_password)
-    {
-      xml_string_append (command,
-                         "<privacy>");
-      if (privacy_algorithm)
-        {
-          xml_string_append (command,
-                             "<algorithm>%s</algorithm>",
-                             privacy_algorithm);
-        }
-      if (change_privacy_password && privacy_password)
-        {
-          xml_string_append (command,
-                             "<password>%s</password>",
-                             privacy_password);
-        }
-
-      xml_string_append (command,
-                         "</privacy>");
-    }
-
-  if ((private_key && strcmp (private_key, "")) || change_passphrase)
-    {
-      xml_string_append (command,
-                         "<key>");
-      if (change_passphrase)
-        xml_string_append (command,
-                           "<phrase>%s</phrase>",
-                           passphrase);
-      if (private_key)
-        xml_string_append (command,
-                           "<private>%s</private>",
-                           private_key);
-      xml_string_append (command,
-                         "</key>");
-    }
 
   xml_string_append (command,
                      "</modify_credential>");
