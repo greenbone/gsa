@@ -5077,7 +5077,7 @@ create_credential_gmp (gvm_connection_t *connection,
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
-  int autogenerate;
+  const char *autogenerate;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -5093,20 +5093,15 @@ create_credential_gmp (gvm_connection_t *connection,
   auth_algorithm = params_value (params, "auth_algorithm");
   privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
-
-  if (params_value (params, "autogenerate"))
-    autogenerate = strcmp (params_value (params, "autogenerate"), "0");
-  else
-    return message_invalid (connection, credentials, params, response_data,
-                            "Given autogenerate was invalid",
-                            "Create Credential");
+  autogenerate = params_value (params, "autogenerate");
 
   CHECK_VARIABLE_INVALID (name, "Create Credential");
   CHECK_VARIABLE_INVALID (comment, "Create Credential");
   CHECK_VARIABLE_INVALID (type, "Create Credential");
   CHECK_VARIABLE_INVALID (allow_insecure, "Create Credential");
+  CHECK_VARIABLE_INVALID (autogenerate, "Create Credential");
 
-  if (autogenerate)
+  if (str_equal (autogenerate, "1"))
     {
       if (str_equal (type, "cc"))
         {
