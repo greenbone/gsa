@@ -5108,7 +5108,7 @@ create_credential_gmp (gvm_connection_t *connection,
 
   if (autogenerate)
     {
-      if (type && (strcmp (type, "cc") == 0))
+      if (str_equal (type, "cc"))
         {
           // Auto-generate types without username
           ret = gmpf (connection,
@@ -5152,7 +5152,7 @@ create_credential_gmp (gvm_connection_t *connection,
     }
   else
     {
-      if (type && (strcmp (type, "up") == 0))
+      if (str_equal (type, "up"))
         {
           CHECK_VARIABLE_INVALID (login,
                                 "Create Credential");
@@ -5178,7 +5178,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       password ? password : "",
                       allow_insecure);
         }
-      else if (type && (strcmp (type, "usk") == 0))
+      else if (str_equal (type, "usk"))
         {
           CHECK_VARIABLE_INVALID (login,
                                 "Create Credential");
@@ -5210,7 +5210,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       passphrase ? passphrase : "",
                       allow_insecure);
         }
-      else if (type && (strcmp (type, "cc") == 0))
+      else if (str_equal (type, "cc"))
         {
           CHECK_VARIABLE_INVALID (certificate,
                                 "Create Credential");
@@ -5239,7 +5239,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       allow_insecure);
 
         }
-      else if (type && (strcmp (type, "snmp") == 0))
+      else if (str_equal (type, "snmp"))
         {
           CHECK_VARIABLE_INVALID (community,
                                 "Create Credential");
