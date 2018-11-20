@@ -81,12 +81,12 @@ const ToolBar = ({
       <ManualIcon
         page="performance"
         anchor="appliance-performance"
-        size="medium"
+        size="small"
         title={_('Help: Performance')}
       />
       <IconMenu
         img="wizard.svg"
-        size="medium"
+        size="small"
       >
         <MenuEntry
           title={_('Report for Last Hour')}

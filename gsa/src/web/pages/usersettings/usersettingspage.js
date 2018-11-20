@@ -184,13 +184,13 @@ const ToolBarIcons = ({onEditSettingsClick}) => (
   <Layout>
     <IconDivider>
       <ManualIcon
-        size="medium"
+        size="small"
         page="gui_introduction"
         anchor="my-settings"
         title={_('Help: My Settings')}
       />
       <EditIcon
-        size="medium"
+        size="small"
         title={_('Edit My Settings')}
         onClick={onEditSettingsClick}
       />
