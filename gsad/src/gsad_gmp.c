@@ -5783,7 +5783,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   int ret, change_password, change_ssh_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
-  const char  *credential_id;
+  const char  *credential_id, *public_key;
   const char *name, *comment, *login, *password, *passphrase, *type;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
@@ -5804,6 +5804,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   auth_algorithm = params_value (params, "auth_algorithm");
   privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
+  public_key = params_value (params, "public_key");
 
   CHECK_VARIABLE_INVALID (credential_id, "Save Credential");
   CHECK_VARIABLE_INVALID (name, "Save Credential");
@@ -5841,6 +5842,16 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
       if (params_given (params, "change_password"))
         CHECK_VARIABLE_INVALID (password, "Save Credential");
     }
+  else if (str_equal (type, "smime"))
+    {
+      if (params_given (params, "certificate"))
+        CHECK_VARIABLE_INVALID (certificate, "Save Credential");
+    }
+  else if (str_equal (type, "smime"))
+    {
+      if (params_given (params, "public_key"))
+        CHECK_VARIABLE_INVALID (public_key, "Save Credential");
+    }
 
   if (params_given (params, "login"))
     CHECK_VARIABLE_INVALID (login, "Save Credential");
@@ -5863,8 +5874,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   if (str_equal (type, "snmp"))
     {
       change_community = params_value_bool (params, "change_community");
-      change_privacy_password = params_value_bool(params,
-                                                  "change_privacy_password");
+      change_privacy_password = params_value_bool (params,
+                                                   "change_privacy_password");
 
       if (auth_algorithm)
         xml_string_append (command,
@@ -5879,44 +5890,43 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
       if (privacy_algorithm || change_privacy_password)
         {
           xml_string_append (command,
-                            "<privacy>");
+                             "<privacy>");
           if (privacy_algorithm)
             {
               xml_string_append (command,
-                                "<algorithm>%s</algorithm>",
-                                privacy_algorithm);
+                                 "<algorithm>%s</algorithm>",
+                                 privacy_algorithm);
             }
           if (change_privacy_password && privacy_password)
             {
               xml_string_append (command,
-                                "<password>%s</password>",
-                                privacy_password);
+                                 "<password>%s</password>",
+                                 privacy_password);
             }
 
           xml_string_append (command,
-                            "</privacy>");
+                             "</privacy>");
         }
 
     }
-
   else if (str_equal (type, "cc"))
     {
       if ((certificate && strcmp (certificate, "")))
         {
           xml_string_append (command,
-                            "<certificate>%s</certificate>",
-                            certificate);
+                             "<certificate>%s</certificate>",
+                             certificate);
         }
 
       if ((private_key && strcmp (private_key, "")))
         {
           xml_string_append (command,
-                            "<key>");
+                             "<key>");
           xml_string_append (command,
-                            "<private>%s</private>",
-                            private_key);
+                             "<private>%s</private>",
+                             private_key);
           xml_string_append (command,
-                            "</key>");
+                             "</key>");
         }
 
     }
@@ -5927,17 +5937,17 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
       if ((private_key && strcmp (private_key, "")) || change_ssh_passphrase)
         {
           xml_string_append (command,
-                            "<key>");
+                             "<key>");
           if (change_ssh_passphrase)
             xml_string_append (command,
-                              "<phrase>%s</phrase>",
-                              passphrase);
+                               "<phrase>%s</phrase>",
+                               passphrase);
           if (private_key)
             xml_string_append (command,
-                              "<private>%s</private>",
-                              private_key);
+                               "<private>%s</private>",
+                               private_key);
           xml_string_append (command,
-                            "</key>");
+                             "</key>");
         }
     }
   else if (str_equal (type, "up"))
@@ -5947,7 +5957,28 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                           "<password>%s</password>",
                           password);
     }
-
+  else if (str_equal (type, "smime"))
+    {
+      if ((certificate && strcmp (certificate, "")))
+        {
+          xml_string_append (command,
+                             "<certificate>%s</certificate>",
+                             certificate);
+        }
+    }
+  else if (str_equal (type, "pgp"))
+    {
+      if ((public_key && strcmp (public_key, "")))
+        {
+          xml_string_append (command,
+                             "<key>");
+          xml_string_append (command,
+                             "<public>%s</public>",
+                             public_key);
+          xml_string_append (command,
+                             "</key>");
+        }
+    }
 
   if (login && strcmp (login, ""))
     xml_string_append (command,
