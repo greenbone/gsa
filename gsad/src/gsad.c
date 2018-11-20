@@ -660,6 +660,7 @@ init_validator ()
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
   gvm_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
   gvm_validator_add (validator, "private_key",      "(?s)^.*$");
+  gvm_validator_add (validator, "public_key",      "(?s)^.*$");
   gvm_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   gvm_validator_add (validator, "xml_file",   "(?s)^.*$");
   gvm_validator_add (validator, "definitions_file",   "(?s)^.*$");
