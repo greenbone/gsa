@@ -5075,9 +5075,9 @@ create_credential_gmp (gvm_connection_t *connection,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *login, *type, *password, *passphrase;
-  const char *private_key, *certificate, *community, *privacy_password;
-  const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
-  const char *autogenerate;
+  const char *private_key, *public_key, *certificate, *community;
+  const char *privacy_password, *auth_algorithm, *privacy_algorithm;
+  const char *autogenerate, *allow_insecure;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -5087,6 +5087,7 @@ create_credential_gmp (gvm_connection_t *connection,
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
+  public_key = params_value (params, "public_key");
   certificate = params_value (params, "certificate");
   community = params_value (params, "community");
   privacy_password = params_value (params, "privacy_password");
@@ -5301,6 +5302,50 @@ create_credential_gmp (gvm_connection_t *connection,
                         password ? password : "",
                         auth_algorithm ? auth_algorithm : "",
                         allow_insecure);
+        }
+      else if (str_equal (type, "pgp"))
+        {
+          CHECK_VARIABLE_INVALID (public_key, "Create Credential");
+
+          ret = gmpf (connection, credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<key>"
+                      "<public>%s</public>"
+                      "</key>"
+                      "<allow_insecure>%s</allow_insecure>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      public_key,
+                      allow_insecure);
+        }
+      else if (str_equal (type, "smime"))
+        {
+          CHECK_VARIABLE_INVALID (certificate, "Create Credential");
+
+          ret = gmpf (connection, credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<certificate>%s</certificate>"
+                      "<allow_insecure>%s</allow_insecure>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      certificate,
+                      allow_insecure);
         }
       else
         {
