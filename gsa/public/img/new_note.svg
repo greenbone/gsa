@@ -1,90 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="256"
-   height="256"
-   viewBox="0 0 67.733332 67.733335"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="new_note.svg"
-   inkscape:export-filename="G:\BackUp300714\intevation\green\GUI-Icons_2018\png_16x16\new_note.png"
-   inkscape:export-xdpi="6"
-   inkscape:export-ydpi="6">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.9500333"
-     inkscape:cx="179.76592"
-     inkscape:cy="115.20157"
-     inkscape:document-units="mm"
-     inkscape:current-layer="g1117"
-     showgrid="true"
-     units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="976"
-     inkscape:window-x="1272"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:snap-global="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4616"
-       empspacing="8" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Ebene 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-229.26665)">
-    <g
-       id="g1117"
-       transform="matrix(2.0877771,0,0,2.2336594,41.672512,-337.40901)">
-      <path
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:18;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         d="M 6.5424224e-7,47.999999 0,188.74805 67.251953,256 192,256 V 144 h -16 v 96 l -80,0 V 176 160 H 16 l 1e-6,-96.000001 H 96 v -16 z M 16,176 h 64 v 64 H 76.738281 L 16,179.26172 Z"
-         transform="matrix(0.12672968,0,0,0.11845286,-19.96023,253.69833)"
-         id="rect992"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccccccccccccccccccc" />
-      <path
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538497;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         inkscape:transform-center-x="0.0020198711"
-         inkscape:transform-center-y="-1.8985508"
-         d="m 9.0231953,269.81482 -5.60439,-3.82078 -5.601704,3.82421 2.155833,-6.16267 -5.622206,-3.79783 6.9367669,0.012 2.1269901,-6.17142 2.131326,6.17011 6.9367577,-0.0163 -5.6195357,3.80129 z"
-         id="path826"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       id="layer1-5"
-       inkscape:label="Layer"
-       style="opacity:0.52173911"
-       transform="matrix(0.76331491,0,0,0.76331491,18.102097,283.062)" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
+ <style>.gui_icon_class {
+    opacity:1;
+    stroke-linejoin:miter;
+    stroke-opacity:1;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    paint-order:normal;
+    stroke:none;
+    stroke-linecap:butt;
+    stroke-miterlimit:4;
+    stroke-dasharray:none;
+    stroke-width:18;
+    fill:#000000;
+}</style>
+ <g transform="translate(0 -229.27)">
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m48 0v16h-48v144 15.992 12.756l67.252 67.252h12.744 64.004 96 8 8v-104h-16v88h-144v-64-16h-80v-128h32v16h16v-16h32v-16h-32v-16h-16zm136.45 0-16.783 52.1-54.736-0.10156 44.363 32.062-17.012 52.027 44.203-32.285 44.223 32.256-17.045-52.016 44.342-32.092-54.736 0.13867-16.818-52.09zm-168.45 176h64v64h-3.2617l-60.738-60.738v-3.2617z"/>
   </g>
+ </g>
 </svg>
