@@ -179,63 +179,6 @@ gsad_add_content_type_header (http_response_t *response,
 }
 
 /**
- * @brief Sends an HTTP redirection response to an urn.
- *
- * @param[in]  connection   The connection handle.
- * @param[in]  urn          The full urn to redirect to.
- * @param[in]  user         User to add cookie for, or NULL.
- *
- * @return MHD_NO in case of a problem. Else MHD_YES.
- */
-int
-send_redirect_to_urn (http_connection_t *connection, const char *urn,
-                      user_t *user)
-{
-  const char *host, *protocol;
-  char uri[MAX_HOST_LEN];
-
-  host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
-                                      MHD_HTTP_HEADER_HOST);
-  if (host && g_utf8_validate (host, -1, NULL) == FALSE)
-    {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("'Host' header"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-  if (host == NULL)
-    {
-      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-
-  protocol = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
-                                          "X-Forwarded-Protocol");
-  if (protocol && g_utf8_validate (protocol, -1, NULL) == FALSE)
-    {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("'X-Forwarded-Protocol' header"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-  else if ((protocol == NULL)
-           || (strcmp(protocol, "http") && strcmp(protocol, "https")))
-    {
-      if (is_use_secure_cookie())
-        protocol = "https";
-      else
-        protocol = "http";
-    }
-
-  snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
-  return send_redirect_to_uri (connection, uri,
-                               user ? user_get_cookie(user) : NULL);
-}
-
-/**
  * @brief Sends a HTTP redirection to an uri.
  *
  * @param[in]  connection  The connection handle.
