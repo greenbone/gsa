@@ -386,13 +386,6 @@ handler_create_response (http_connection_t *connection,
 {
   http_response_t *response;
   gsize len = 0;
-  const gchar *redirect;
-
-  redirect = cmd_response_data_get_redirect (response_data);
-  if (redirect)
-    {
-      return send_redirect_to_uri (connection, redirect, sid);
-    }
 
   len = cmd_response_data_get_content_length (response_data);
   if (len == 0 && data)
