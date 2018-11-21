@@ -69,12 +69,6 @@ void cmd_response_data_set_content_disposition
 const gchar * cmd_response_data_get_content_disposition
   (cmd_response_data_t *data);
 
-void cmd_response_data_set_redirect
-  (cmd_response_data_t *data, gchar *url);
-
-const gchar * cmd_response_data_get_redirect
-  (cmd_response_data_t *data);
-
 void cmd_response_data_set_content_type_string
   (cmd_response_data_t *data, gchar *content_type_string);
 
