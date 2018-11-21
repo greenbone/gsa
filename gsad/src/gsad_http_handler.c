@@ -343,15 +343,6 @@ handle_not_found (http_connection_t *connection, const char * method,
 }
 
 int
-handle_redirect_to_login_page (http_connection_t *connection,
-                               const char *method, const char *url,
-                               gsad_connection_info_t *con_info,
-                               http_handler_t *handler, void *data)
-{
-  return send_redirect_to_urn (connection, LOGIN_URL, NULL);
-}
-
-int
 handle_invalid_method (http_connection_t *connection,
                        const char *method, const char *url,
                        gsad_connection_info_t *con_info,
