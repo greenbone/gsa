@@ -122,7 +122,7 @@ export const QOD_TYPES = {
 };
 
 export const qodColorScale = scaleOrdinal()
-  .domain([1, 30, 50, 70, 76, 80, 95, 97, 98, 99, 100])
+  .domain([1, 30, 50, 70, 75, 80, 95, 97, 98, 99, 100])
   .range([
     '#011f4b',
     '#023061',

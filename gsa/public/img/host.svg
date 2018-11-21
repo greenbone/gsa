@@ -1,146 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="256"
-   height="256"
-   viewBox="0 0 67.733332 67.733335"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="host.svg"
-   inkscape:export-filename="G:\BackUp300714\intevation\green\GUI-Icons_2018\png_16x16\host.png"
-   inkscape:export-xdpi="6"
-   inkscape:export-ydpi="6">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="1.82"
-     inkscape:cx="132.74947"
-     inkscape:cy="121.98112"
-     inkscape:document-units="mm"
-     inkscape:current-layer="g1117"
-     showgrid="true"
-     units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="976"
-     inkscape:window-x="1272"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:snap-global="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4616"
-       empspacing="8" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Ebene 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-229.26665)">
-    <g
-       id="g1117"
-       transform="matrix(2.0877771,0,0,2.2336594,41.672512,-337.40901)">
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect886"
-         width="32.442799"
-         height="1.8952458"
-         x="-19.96023"
-         y="282.12701" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect888"
-         width="16.221399"
-         height="1.8952421"
-         x="-11.84953"
-         y="253.69833" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect890"
-         width="2.0276749"
-         height="20.847704"
-         x="2.3441937"
-         y="254.64595" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect892"
-         width="2.0276749"
-         height="20.847704"
-         x="-11.84953"
-         y="254.64595" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect894"
-         width="16.221399"
-         height="1.8952458"
-         x="-11.84953"
-         y="274.54602" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect896"
-         width="2.0276749"
-         height="5.6857371"
-         x="-4.7526684"
-         y="276.44128" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect898"
-         width="8.1106997"
-         height="1.8952458"
-         x="-7.7941809"
-         y="257.48883" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect900"
-         width="8.1106997"
-         height="1.8952458"
-         x="-7.7941809"
-         y="261.27933" />
-      <rect
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="rect902"
-         width="8.1106997"
-         height="1.8952458"
-         x="-7.7941809"
-         y="265.06979" />
-      <ellipse
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.20538521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-         id="path906"
-         cx="-3.8168182"
-         cy="270.78418"
-         rx="2.0276749"
-         ry="1.8952458" />
-    </g>
-    <g
-       id="layer1-5"
-       inkscape:label="Layer"
-       style="opacity:0.52173911"
-       transform="matrix(0.76331491,0,0,0.76331491,18.102097,283.062)" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
+ <style>.gui_icon_class {
+    opacity:1;
+    stroke-linejoin:miter;
+    stroke-opacity:1;
+    fill-opacity:1;
+    fill-rule:nonzero;
+    paint-order:normal;
+    stroke:none;
+    stroke-linecap:butt;
+    stroke-miterlimit:4;
+    stroke-dasharray:none;
+    stroke-width:18;
+    fill:#000000;
+}</style>
+ <g transform="translate(0 -229.27)">
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m64 0v16 168 8h56v48h-120v16h256v-16h-120v-48h56v-16-168-8h-128zm16 16h96v160h-96v-160zm16 16v16h64v-16h-64zm0 32v16h64v-16h-64zm0 32v16h64v-16h-64zm31.385 32.242a16 16 0 0 0-16 16 16 16 0 0 0 16 16 16 16 0 0 0 16-16 16 16 0 0 0-16-16z"/>
   </g>
+ </g>
 </svg>
