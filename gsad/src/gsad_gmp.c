@@ -5075,40 +5075,36 @@ create_credential_gmp (gvm_connection_t *connection,
   int ret;
   gchar *html, *response;
   const char *name, *comment, *login, *type, *password, *passphrase;
-  const char *private_key, *certificate, *community, *privacy_password;
-  const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
-  int autogenerate;
+  const char *private_key, *public_key, *certificate, *community;
+  const char *privacy_password, *auth_algorithm, *privacy_algorithm;
+  const char *autogenerate, *allow_insecure;
   entity_t entity;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
-  type = params_value (params, "base");
+  type = params_value (params, "credential_type");
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
+  public_key = params_value (params, "public_key");
   certificate = params_value (params, "certificate");
   community = params_value (params, "community");
   privacy_password = params_value (params, "privacy_password");
   auth_algorithm = params_value (params, "auth_algorithm");
   privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
-
-  if (params_value (params, "autogenerate"))
-    autogenerate = strcmp (params_value (params, "autogenerate"), "0");
-  else
-    return message_invalid (connection, credentials, params, response_data,
-                            "Given autogenerate was invalid",
-                            "Create Credential");
+  autogenerate = params_value (params, "autogenerate");
 
   CHECK_VARIABLE_INVALID (name, "Create Credential");
   CHECK_VARIABLE_INVALID (comment, "Create Credential");
   CHECK_VARIABLE_INVALID (type, "Create Credential");
   CHECK_VARIABLE_INVALID (allow_insecure, "Create Credential");
+  CHECK_VARIABLE_INVALID (autogenerate, "Create Credential");
 
-  if (autogenerate)
+  if (str_equal (autogenerate, "1"))
     {
-      if (type && (strcmp (type, "cc") == 0))
+      if (str_equal (type, "cc"))
         {
           // Auto-generate types without username
           ret = gmpf (connection,
@@ -5152,7 +5148,7 @@ create_credential_gmp (gvm_connection_t *connection,
     }
   else
     {
-      if (type && (strcmp (type, "up") == 0))
+      if (str_equal (type, "up"))
         {
           CHECK_VARIABLE_INVALID (login,
                                 "Create Credential");
@@ -5178,7 +5174,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       password ? password : "",
                       allow_insecure);
         }
-      else if (type && (strcmp (type, "usk") == 0))
+      else if (str_equal (type, "usk"))
         {
           CHECK_VARIABLE_INVALID (login,
                                 "Create Credential");
@@ -5210,7 +5206,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       passphrase ? passphrase : "",
                       allow_insecure);
         }
-      else if (type && (strcmp (type, "cc") == 0))
+      else if (str_equal (type, "cc"))
         {
           CHECK_VARIABLE_INVALID (certificate,
                                 "Create Credential");
@@ -5239,7 +5235,7 @@ create_credential_gmp (gvm_connection_t *connection,
                       allow_insecure);
 
         }
-      else if (type && (strcmp (type, "snmp") == 0))
+      else if (str_equal (type, "snmp"))
         {
           CHECK_VARIABLE_INVALID (community,
                                 "Create Credential");
@@ -5306,6 +5302,50 @@ create_credential_gmp (gvm_connection_t *connection,
                         password ? password : "",
                         auth_algorithm ? auth_algorithm : "",
                         allow_insecure);
+        }
+      else if (str_equal (type, "pgp"))
+        {
+          CHECK_VARIABLE_INVALID (public_key, "Create Credential");
+
+          ret = gmpf (connection, credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<key>"
+                      "<public>%s</public>"
+                      "</key>"
+                      "<allow_insecure>%s</allow_insecure>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      public_key,
+                      allow_insecure);
+        }
+      else if (str_equal (type, "smime"))
+        {
+          CHECK_VARIABLE_INVALID (certificate, "Create Credential");
+
+          ret = gmpf (connection, credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<certificate>%s</certificate>"
+                      "<allow_insecure>%s</allow_insecure>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      certificate,
+                      allow_insecure);
         }
       else
         {
@@ -5740,17 +5780,18 @@ char *
 save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      params_t *params, cmd_response_data_t* response_data)
 {
-  int ret, change_password, change_passphrase;
+  int ret, change_password, change_ssh_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
-  const char  *credential_id;
-  const char *name, *comment, *login, *password, *passphrase;
+  const char  *credential_id, *public_key;
+  const char *name, *comment, *login, *password, *passphrase, *type;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
   entity_t entity;
 
   credential_id = params_value (params, "credential_id");
+  type = params_value (params, "credential_type");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
@@ -5763,36 +5804,59 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
   auth_algorithm = params_value (params, "auth_algorithm");
   privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
+  public_key = params_value (params, "public_key");
 
   CHECK_VARIABLE_INVALID (credential_id, "Save Credential");
   CHECK_VARIABLE_INVALID (name, "Save Credential");
   CHECK_VARIABLE_INVALID (comment, "Save Credential");
   CHECK_VARIABLE_INVALID (allow_insecure, "Save Credential");
-  if (params_given (params, "certificate"))
-    CHECK_VARIABLE_INVALID (certificate, "Save Credential");
-  if (params_given (params, "private_key"))
-    CHECK_VARIABLE_INVALID (private_key, "Save Credential");
+  CHECK_VARIABLE_INVALID (type, "Save Credential");
+
+  if (str_equal (type, "cc"))
+    {
+      if (params_given (params, "certificate"))
+        CHECK_VARIABLE_INVALID (certificate, "Save Credential");
+
+      if (params_given (params, "private_key"))
+        CHECK_VARIABLE_INVALID (private_key, "Save Credential");
+
+      if (params_given (params, "change_passphrase"))
+        CHECK_VARIABLE_INVALID (passphrase, "Save Credential");
+    }
+  else if (str_equal (type, "snmp"))
+    {
+      if (params_given (params, "auth_algorithm"))
+        CHECK_VARIABLE_INVALID (auth_algorithm, "Save Credential");
+
+      if (params_given (params, "privacy_algorithm"))
+        CHECK_VARIABLE_INVALID (privacy_algorithm, "Save Credential");
+
+      if (params_given (params, "change_privacy_password"))
+        CHECK_VARIABLE_INVALID (privacy_password, "Save Credential");
+
+      if (params_given (params, "change_community"))
+        CHECK_VARIABLE_INVALID (community, "Save Credential");
+    }
+  else if (str_equal (type, "up"))
+    {
+      if (params_given (params, "change_password"))
+        CHECK_VARIABLE_INVALID (password, "Save Credential");
+    }
+  else if (str_equal (type, "smime"))
+    {
+      if (params_given (params, "certificate"))
+        CHECK_VARIABLE_INVALID (certificate, "Save Credential");
+    }
+  else if (str_equal (type, "smime"))
+    {
+      if (params_given (params, "public_key"))
+        CHECK_VARIABLE_INVALID (public_key, "Save Credential");
+    }
+
   if (params_given (params, "login"))
     CHECK_VARIABLE_INVALID (login, "Save Credential");
-  if (params_given (params, "auth_algorithm"))
-    CHECK_VARIABLE_INVALID (auth_algorithm, "Save Credential");
-  if (params_given (params, "privacy_algorithm"))
-    CHECK_VARIABLE_INVALID (privacy_algorithm, "Save Credential");
 
-  if (params_given (params, "change_community"))
-    CHECK_VARIABLE_INVALID (community, "Save Credential");
-  if (params_given (params, "change_passphrase"))
-    CHECK_VARIABLE_INVALID (passphrase, "Save Credential");
-  if (params_given (params, "change_password"))
-    CHECK_VARIABLE_INVALID (password, "Save Credential");
-  if (params_given (params, "change_privacy_password"))
-    CHECK_VARIABLE_INVALID (privacy_password, "Save Credential");
-
-  change_community = params_value_bool (params, "change_community");
-  change_passphrase = params_value_bool (params, "change_passphrase");
   change_password = params_value_bool (params, "change_password");
-  change_privacy_password =
-    params_value_bool (params, "change_privacy_password");
 
   /* Prepare command */
   command = g_string_new ("");
@@ -5807,67 +5871,119 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      comment,
                      allow_insecure);
 
-  if (auth_algorithm)
-    xml_string_append (command,
-                       "<auth_algorithm>%s</auth_algorithm>",
-                       auth_algorithm);
+  if (str_equal (type, "snmp"))
+    {
+      change_community = params_value_bool (params, "change_community");
+      change_privacy_password = params_value_bool (params,
+                                                   "change_privacy_password");
 
-  if (certificate && strcmp (certificate, ""))
-    xml_string_append (command,
-                       "<certificate>%s</certificate>",
-                       certificate);
+      if (auth_algorithm)
+        xml_string_append (command,
+                          "<auth_algorithm>%s</auth_algorithm>",
+                          auth_algorithm);
 
-  if (change_community)
-    xml_string_append (command,
-                       "<community>%s</community>",
-                       community);
+      if (change_community)
+        xml_string_append (command,
+                          "<community>%s</community>",
+                          community);
+
+      if (privacy_algorithm || change_privacy_password)
+        {
+          xml_string_append (command,
+                             "<privacy>");
+          if (privacy_algorithm)
+            {
+              xml_string_append (command,
+                                 "<algorithm>%s</algorithm>",
+                                 privacy_algorithm);
+            }
+          if (change_privacy_password && privacy_password)
+            {
+              xml_string_append (command,
+                                 "<password>%s</password>",
+                                 privacy_password);
+            }
+
+          xml_string_append (command,
+                             "</privacy>");
+        }
+
+    }
+  else if (str_equal (type, "cc"))
+    {
+      if ((certificate && strcmp (certificate, "")))
+        {
+          xml_string_append (command,
+                             "<certificate>%s</certificate>",
+                             certificate);
+        }
+
+      if ((private_key && strcmp (private_key, "")))
+        {
+          xml_string_append (command,
+                             "<key>");
+          xml_string_append (command,
+                             "<private>%s</private>",
+                             private_key);
+          xml_string_append (command,
+                             "</key>");
+        }
+
+    }
+  else if (str_equal (type, "usk"))
+    {
+      change_ssh_passphrase = params_value_bool (params, "change_passphrase");
+
+      if ((private_key && strcmp (private_key, "")) || change_ssh_passphrase)
+        {
+          xml_string_append (command,
+                             "<key>");
+          if (change_ssh_passphrase)
+            xml_string_append (command,
+                               "<phrase>%s</phrase>",
+                               passphrase);
+          if (private_key)
+            xml_string_append (command,
+                               "<private>%s</private>",
+                               private_key);
+          xml_string_append (command,
+                             "</key>");
+        }
+    }
+  else if (str_equal (type, "up"))
+    {
+      if (change_password)
+        xml_string_append(command,
+                          "<password>%s</password>",
+                          password);
+    }
+  else if (str_equal (type, "smime"))
+    {
+      if ((certificate && strcmp (certificate, "")))
+        {
+          xml_string_append (command,
+                             "<certificate>%s</certificate>",
+                             certificate);
+        }
+    }
+  else if (str_equal (type, "pgp"))
+    {
+      if ((public_key && strcmp (public_key, "")))
+        {
+          xml_string_append (command,
+                             "<key>");
+          xml_string_append (command,
+                             "<public>%s</public>",
+                             public_key);
+          xml_string_append (command,
+                             "</key>");
+        }
+    }
 
   if (login && strcmp (login, ""))
     xml_string_append (command,
                        "<login>%s</login>",
                        login);
-
-  if (change_password)
-    xml_string_append (command,
-                       "<password>%s</password>",
-                       password);
-
-  if (privacy_algorithm || change_privacy_password)
-    {
-      xml_string_append (command,
-                         "<privacy>");
-      if (privacy_algorithm)
-        {
-          xml_string_append (command,
-                             "<algorithm>%s</algorithm>",
-                             privacy_algorithm);
-        }
-      if (change_privacy_password && privacy_password)
-        {
-          xml_string_append (command,
-                             "<password>%s</password>",
-                             privacy_password);
-        }
-
-      xml_string_append (command,
-                         "</privacy>");
-    }
-
-  if ((private_key && strcmp (private_key, "")) || change_passphrase)
-    {
-      xml_string_append (command,
-                         "<key>");
-      if (change_passphrase)
-        xml_string_append (command,
-                           "<phrase>%s</phrase>",
-                           passphrase);
-      if (private_key)
-        xml_string_append (command,
-                           "<private>%s</private>",
-                           private_key);
-      xml_string_append (command,
-                         "</key>");
-    }
 
   xml_string_append (command,
                      "</modify_credential>");

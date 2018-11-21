@@ -31,6 +31,8 @@ export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
 export const CLIENT_CERTIFICATE_CREDENTIAL_TYPE = 'cc';
 export const SNMP_CREDENTIAL_TYPE = 'snmp';
+export const SMIME_CREDENTIAL_TYPE = 'smime';
+export const PGP_CREDENTIAL_TYPE = 'pgp';
 
 export const SSH_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -54,6 +56,8 @@ export const ALL_CREDENTIAL_TYPES = [
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
+  SMIME_CREDENTIAL_TYPE,
+  PGP_CREDENTIAL_TYPE,
 ];
 
 export const ssh_credential_filter = credential =>
@@ -68,6 +72,10 @@ export const esxi_credential_filter = credential =>
 
 export const snmp_credential_filter = credential =>
   credential.credential_type === SNMP_CREDENTIAL_TYPE;
+
+export const email_credential_filter = credential =>
+  credential.credential_type === SMIME_CREDENTIAL_TYPE ||
+  credential.credential_type === PGP_CREDENTIAL_TYPE;
 
 export const SNMP_AUTH_ALGORITHM_MD5 = 'md5';
 export const SNMP_AUTH_ALGORITHM_SHA1 = 'sha1';
