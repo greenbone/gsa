@@ -363,7 +363,7 @@ msgid "Error {{omp_status}}: {{omp_status_text}}"
 msgstr ""
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2929
-msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
+msgid "GMP Error {{omp_status}}: {{omp_status_text}}"
 msgstr ""
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3216
