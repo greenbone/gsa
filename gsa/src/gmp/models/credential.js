@@ -92,7 +92,7 @@ export const CERTIFICATE_STATUS_EXPIRED = 'expired';
 const TYPE_NAMES = {
   up: _l('Username + Password'),
   usk: _l('Username + SSH Key'),
-  cc: _l('Client Cerficate'),
+  cc: _l('Client Certificate'),
   snmp: _l('SNMP'),
   pgp: _l('PGP Key'),
   smime: _l('S/MIME Certificate'),
