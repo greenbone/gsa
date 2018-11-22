@@ -18,14 +18,9 @@
  */
 import React from 'react';
 
-import {
-  render,
-  cleanup,
-} from 'web/utils/testing';
+import {render} from 'web/utils/testing';
 
 import Target from '../target';
-
-afterEach(cleanup);
 
 describe('Target tests', () => {
 
