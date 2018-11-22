@@ -28,6 +28,7 @@ import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALOGRITHM_NONE,
+  getCredentialTypeName,
 } from 'gmp/models/credential';
 
 import PropTypes from 'web/utils/proptypes';
@@ -52,7 +53,6 @@ const CredentialDetails = ({
   const {
     comment,
     credential_type,
-    full_type,
     login,
     auth_algorithm,
     privacy = {
@@ -88,10 +88,10 @@ const CredentialDetails = ({
             <TableData>
               <Divider>
                 <span>
-                  {credential_type}
+                  {getCredentialTypeName(credential_type)}
                 </span>
                 <Footnote>
-                  ({full_type})
+                  ({credential_type})
                 </Footnote>
               </Divider>
             </TableData>
