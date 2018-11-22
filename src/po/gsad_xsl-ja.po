@@ -1,20 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-13 09:38+0200\n"
-"PO-Revision-Date: 2018-08-20 21:02+0900\n"
-"Last-Translator: @ kazuo210 <kazu.nito@gmail.com>\n"
+"PO-Revision-Date: 2018-08-20 12:45+0200\n"
+"Last-Translator: Kazuo <kazu.nito@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.1.1\n"
-"X-POOTLE-MTIME: 1534386866.970186\n"
-"Language-Team: \n"
+"X-Generator: Pootle 2.5.1.3\n"
+"X-POOTLE-MTIME: 1534765541.788219\n"
 
-#
+# 
 #: classic/graphics.xsl:87
 msgid "Tasks by CVSS"
 msgstr "CVSSのタスク"
@@ -954,7 +954,8 @@ msgstr "オーバーライドしない"
 msgid "Text phrase"
 msgstr "テキストフレーズ"
 
-#: classic/omp.xsl:3125 classic/omp.xsl:3735
+#: classic/omp.xsl:3125 classic/omp.xsl:3125 classic/omp.xsl:3735
+#: classic/omp.xsl:3735
 msgid "Apply"
 msgstr "適用する"
 
@@ -1034,8 +1035,8 @@ msgid "Vulnerability"
 msgstr "脆弱性"
 
 #: classic/omp.xsl:3929 classic/omp.xsl:21998 classic/omp.xsl:23632
-#: classic/omp.xsl:30825 classic/omp.xsl:30830 classic/omp.xsl:31312
-#: classic/omp.xsl:31964
+#: classic/omp.xsl:30825 classic/omp.xsl:30830 classic/omp.xsl:30830
+#: classic/omp.xsl:31312 classic/omp.xsl:31964
 msgid "Solution type"
 msgstr "ソリューションの種類"
 
@@ -1111,8 +1112,7 @@ msgstr "スキャンが始まったばかりで、まだ結果が届いていま
 
 #: classic/omp.xsl:4265 classic/omp.xsl:4280
 msgid "Click here to reload this page and update the status."
-msgstr ""
-"このページをリロードし、状態を更新するには、ここをクリックしてください。"
+msgstr "このページをリロードし、状態を更新するには、ここをクリックしてください。"
 
 #: classic/omp.xsl:4274
 msgid "The scan is still running and no results have arrived yet."
@@ -1131,8 +1131,8 @@ msgid ""
 "You could change the Alive Test method of the target. However, if the "
 "targets are indeed dead, the scan duration might increase significantly."
 msgstr ""
-"ターゲットの Alive Test メソッドを変更することができます。しかし、ターゲット"
-"が実際に死んでいる場合は、スキャン時間が大幅に長くなる可能性があります。"
+"ターゲットの Alive Test "
+"メソッドを変更することができます。しかし、ターゲットが実際に死んでいる場合は、スキャン時間が大幅に長くなる可能性があります。"
 
 #: classic/omp.xsl:4302
 msgid "Click here to edit the target"
@@ -1186,8 +1186,7 @@ msgstr "最小 QoD を減らす"
 #: classic/omp.xsl:4379
 msgid ""
 "Decrease the minimum QoD in the Filter to 30 percent to see those results."
-msgstr ""
-"これらの結果を見るには、フィルターの最小 QoD を 30％ に減らしてください。"
+msgstr "これらの結果を見るには、フィルターの最小 QoD を 30％ に減らしてください。"
 
 #: classic/omp.xsl:4389
 msgid "You are using keywords setting a lower limit on QoD."
@@ -1292,9 +1291,7 @@ msgstr "スレーブ \"%1\" に移動します"
 msgid ""
 "This is an Alterable Task. Reports may not relate to current Scan Config or "
 "Target!"
-msgstr ""
-"これは変更可能なタスクです。 レポートは現在のスキャン設定またはターゲットに"
-"関連していない可能性があります!"
+msgstr "これは変更可能なタスクです。 レポートは現在のスキャン設定またはターゲットに関連していない可能性があります!"
 
 #: classic/omp.xsl:4679 classic/omp.xsl:6308 classic/omp.xsl:6310
 #: classic/omp.xsl:12920 classic/omp.xsl:16317 classic/omp.xsl:18060
@@ -1688,8 +1685,7 @@ msgstr "デルタのレポートは既に選択されています"
 
 #: classic/omp.xsl:6986
 msgid "Filter must be limited to a single Task to allow delta reports"
-msgstr ""
-"デルタレポートを許可するには、フィルタを1つのタスクに限定する必要があります"
+msgstr "デルタレポートを許可するには、フィルタを1つのタスクに限定する必要があります"
 
 #: classic/omp.xsl:7008
 msgid "Report is observed"
@@ -3039,17 +3035,14 @@ msgstr "NVT 選択は静的です。新しい NVTs は自動的に追加また�
 msgid ""
 "The family selection is DYNAMIC. New families will automatically be added "
 "and considered."
-msgstr ""
-"ファミリの選択は動的です。新しいファミリが自動的に追加され、検討されます。"
+msgstr "ファミリの選択は動的です。新しいファミリが自動的に追加され、検討されます。"
 
 #: classic/omp.xsl:17658 classic/omp.xsl:17738 classic/omp.xsl:17754
 #: classic/omp.xsl:18375 classic/omp.xsl:18469
 msgid ""
-"The family selection is STATIC. New families will NOT automatically be "
-"added or considered."
-msgstr ""
-"ファミリの選択は静的です。 新しいファミリは自動的に追加されたり考慮されたり"
-"しません。"
+"The family selection is STATIC. New families will NOT automatically be added"
+" or considered."
+msgstr "ファミリの選択は静的です。 新しいファミリは自動的に追加されたり考慮されたりしません。"
 
 #: classic/omp.xsl:17665 classic/omp.xsl:17759
 msgid "NVTs selected"
@@ -3167,9 +3160,7 @@ msgstr "動的"
 msgid ""
 "The NVT selection is DYNAMIC. New NVTs of selected families will "
 "automatically be added and considered."
-msgstr ""
-"NVT の選択は動的です。 選択されたファミリの新しい NVTs が自動的に追加され、"
-"検討されます。"
+msgstr "NVT の選択は動的です。 選択されたファミリの新しい NVTs が自動的に追加され、検討されます。"
 
 #: classic/omp.xsl:18518 classic/dynamic_strings.xsl:420
 msgid "Scan Config is still in use"
@@ -3562,10 +3553,8 @@ msgid ""
 "because the CVE number might have been assigned for the issue, but the CVE "
 "not yet published.  Eventually the CVE content will appear in the database."
 msgstr ""
-"このCVEはデータベースに見つかりませんでした。これは必ずしもエラーではありま"
-"せん。なぜならCVE番号は問題に割り当てられている可能性がありますが、CVEはまだ"
-"発行されていないからです。最終的にはCVEのコンテンツがデータベースに表示され"
-"ます。"
+"このCVEはデータベースに見つかりませんでした。これは必ずしもエラーではありません。なぜならCVE番号は問題に割り当てられている可能性がありますが、CVE"
+"はまだ発行されていないからです。最終的にはCVEのコンテンツがデータベースに表示されます。"
 
 #: classic/omp.xsl:22712 classic/dynamic_strings.xsl:185
 msgid "CPE Details"
@@ -3583,8 +3572,7 @@ msgstr "非推奨"
 msgid ""
 "This CPE does not appear in the CPE dictionary but is referenced by one or "
 "more CVE."
-msgstr ""
-"このCPEはCPE辞書には表示されませんが、1つまたは複数CVEによって参照されます。"
+msgstr "このCPEはCPE辞書には表示されませんが、1つまたは複数CVEによって参照されます。"
 
 #: classic/omp.xsl:22820 classic/omp.xsl:22823
 msgid "Reported vulnerabilites"
@@ -3674,8 +3662,7 @@ msgstr "OVAL 定義が見つかりません"
 msgid ""
 "No OVAL definition with the requested ID could be found in the SCAP "
 "database."
-msgstr ""
-"要求された ID を持つ OVAL 定義は SCAP データベースに見つかりませんでした。"
+msgstr "要求された ID を持つ OVAL 定義は SCAP データベースに見つかりませんでした。"
 
 #: classic/omp.xsl:23128
 msgid "CERT-Bund Details"
@@ -3735,9 +3722,7 @@ msgstr "CERT-Bund アドバイザリーが見つかりません"
 msgid ""
 "No CERT-Bund advisory with the requested ID could be found in the SCAP "
 "database."
-msgstr ""
-"要求された ID を持つ CERT-Bund 勧告は SCAP データベースには見つかりませんで"
-"した。"
+msgstr "要求された ID を持つ CERT-Bund 勧告は SCAP データベースには見つかりませんでした。"
 
 #: classic/omp.xsl:23317 classic/dynamic_strings.xsl:188
 msgid "DFN-CERT Advisory Details"
@@ -3760,9 +3745,7 @@ msgstr "DFN-CERT アドバイザリが見つかりません"
 msgid ""
 "No DFN-CERT advisory with the requested ID could be found in the SCAP "
 "database."
-msgstr ""
-"要求された ID を持つ DFN-CERT 勧告は SCAP データベースには見つかりませんでし"
-"た。"
+msgstr "要求された ID を持つ DFN-CERT 勧告は SCAP データベースには見つかりませんでした。"
 
 #: classic/omp.xsl:23468
 msgid "Notes on NVT %1"
@@ -4072,9 +4055,7 @@ msgstr "特別なグループ"
 msgid ""
 "Create permission to grant full read and write access among all group "
 "members and across any resources"
-msgstr ""
-"すべてのグループメンバー間およびすべてのリソース間で完全な読み取りおよび書き"
-"込みアクセスを許可する権限を作成する"
+msgstr "すべてのグループメンバー間およびすべてのリソース間で完全な読み取りおよび書き込みアクセスを許可する権限を作成する"
 
 #: classic/omp.xsl:26583
 msgid "Create Group"
@@ -4641,8 +4622,7 @@ msgstr "オペレーティングシステムに関する情報はありません
 
 #: classic/omp.xsl:31881
 msgid "No information on Operating System was gathered during scan."
-msgstr ""
-"スキャン中にオペレーティングシステムに関する情報は収集されませんでした。"
+msgstr "スキャン中にオペレーティングシステムに関する情報は収集されませんでした。"
 
 #: classic/omp.xsl:32167 classic/omp.xsl:32342 classic/omp.xsl:39120
 #: classic/omp.xsl:39366
@@ -4708,7 +4688,7 @@ msgstr "IANA"
 msgid "Occurrences"
 msgstr "出現数"
 
-#: classic/omp.xsl:33335 classic/omp.xsl:33336
+#: classic/omp.xsl:33335 classic/omp.xsl:33335 classic/omp.xsl:33336
 msgctxt "Report"
 msgid "Unknown"
 msgstr "不明"
@@ -4760,15 +4740,11 @@ msgstr "QoD>=%1%% およびオーバーライドを無効にして資産に追�
 
 #: classic/omp.xsl:33761
 msgid "Report content added to Assets with QoD>=%1%% and Overrides enabled."
-msgstr ""
-"QoD>=%1%% およびオーバーライドを有効にして資産にレポートコンテンツ追加しま"
-"す。"
+msgstr "QoD>=%1%% およびオーバーライドを有効にして資産にレポートコンテンツ追加します。"
 
 #: classic/omp.xsl:33764
 msgid "Report content added to Assets with QoD>=%1%% and Overrides disabled."
-msgstr ""
-"QoD>=%1%% およびオーバーライドを無効にして資産にレポートコンテンツ追加しま"
-"す。"
+msgstr "QoD>=%1%% およびオーバーライドを無効にして資産にレポートコンテンツ追加します。"
 
 #: classic/omp.xsl:33779
 msgid "Report content could not be added to Assets."
@@ -5004,17 +4980,13 @@ msgstr "スレーブのレポート"
 msgid ""
 "The selected Scan Slave can currently not be reached for retrieval of "
 "performance data."
-msgstr ""
-"現在選択されているスキャンスレーブは、パフォーマンスデータの取得には到達でき"
-"ません。"
+msgstr "現在選択されているスキャンスレーブは、パフォーマンスデータの取得には到達できません。"
 
 #: classic/omp.xsl:35474
 msgid ""
 "Please check network connection or Slave configuration.  The problem may "
 "also be temporary, so you could try again at a later time."
-msgstr ""
-"ネットワーク接続またはスレーブ設定を確認してください。この問題は一時的なもの"
-"である場合もあるので、後でもう一度試すことができます。"
+msgstr "ネットワーク接続またはスレーブ設定を確認してください。この問題は一時的なものである場合もあるので、後でもう一度試すことができます。"
 
 #: classic/omp.xsl:35731
 msgctxt "Task|Report"
@@ -5135,9 +5107,7 @@ msgstr "ユーザー \"%1\" が削除されます。"
 msgid ""
 "If no inheriting user is selected, all owned resources will be deleted as "
 "well."
-msgstr ""
-"継承しているユーザーが選択されていない場合、所有するすべてのリソースも同様に"
-"削除されます。"
+msgstr "継承しているユーザーが選択されていない場合、所有するすべてのリソースも同様に削除されます。"
 
 #: classic/omp.xsl:36838 classic/omp.xsl:39790
 msgid "Inheriting user"
@@ -5663,11 +5633,9 @@ msgstr "基本スコア"
 
 #: classic/omp.xsl:40132
 msgid ""
-"Invalid CVSS Base Vector value provided.  Use back button of your browser "
-"to edit the vector."
-msgstr ""
-"指定された CVSS ベースベクトルの値が無効です。 ブラウザの [戻る] ボタンを使"
-"用してベクタを編集します。"
+"Invalid CVSS Base Vector value provided.  Use back button of your browser to"
+" edit the vector."
+msgstr "指定された CVSS ベースベクトルの値が無効です。 ブラウザの [戻る] ボタンを使用してベクタを編集します。"
 
 #: classic/omp.xsl:645
 msgid "%1 day"
@@ -5693,8 +5661,7 @@ msgstr[0] "%1 秒"
 msgid "A Task using this schedule will be affected by changes made here."
 msgid_plural ""
 "%1 Tasks using this schedule will be affected by changes made here."
-msgstr[0] ""
-"このスケジュールを使用する %1 タスクは、ここで行った変更の影響を受けます。"
+msgstr[0] "このスケジュールを使用する %1 タスクは、ここで行った変更の影響を受けます。"
 
 #: classic/omp.xsl:33464
 msgid ""
@@ -5703,9 +5670,7 @@ msgid ""
 msgid_plural ""
 "Includes %1 hosts where CPE was found in inventory, but number of "
 "installations could not be determined"
-msgstr[0] ""
-"インベントリに CPE が見つかった %1 ホストを含みますが、インストール数を特定"
-"できませんでした"
+msgstr[0] "インベントリに CPE が見つかった %1 ホストを含みますが、インストール数を特定できませんでした"
 
 #: classic/omp.xsl:37244
 msgid "Too old (%1 day)"
@@ -5746,16 +5711,13 @@ msgstr "スキャンタスクの管理へようこそ！"
 msgid ""
 "To start your first vulnerability scan, the scan wizard can help you to do "
 "so with just one click."
-msgstr ""
-"最初の脆弱性スキャンを開始するには、スキャンウィザードをワンクリックするだけ"
-"で行うことができます。"
+msgstr "最初の脆弱性スキャンを開始するには、スキャンウィザードをワンクリックするだけで行うことができます。"
 
 #: classic/wizard.xsl:91
 msgid ""
 "Simply select the wizard icon from the icon bar in the top-left of this "
 "page."
-msgstr ""
-"このページの左上にあるアイコンバーからウィザードアイコンを選択するだけです。"
+msgstr "このページの左上にあるアイコンバーからウィザードアイコンを選択するだけです。"
 
 #: classic/wizard.xsl:105
 msgid "Quick start: Immediately scan an IP address"
@@ -5767,9 +5729,7 @@ msgstr "IPアドレスまたはホスト名:"
 
 #: classic/wizard.xsl:131
 msgid "The default address is either your computer or your network gateway."
-msgstr ""
-"デフォルトのアドレスは、コンピュータまたはネットワークゲートウェイのいずれか"
-"です。"
+msgstr "デフォルトのアドレスは、コンピュータまたはネットワークゲートウェイのいずれかです。"
 
 #: classic/wizard.xsl:134
 msgid "As a short-cut I will do the following for you:"
@@ -5791,9 +5751,7 @@ msgstr "すぐにこのスキャンタスクを開始します"
 msgid ""
 "Switch the view to reload every 30 seconds so you can lean back and watch "
 "the scan progress"
-msgstr ""
-"30秒ごとにリロードするようにビューを切り替え、スキャンの進行状況を確認するこ"
-"とができます"
+msgstr "30秒ごとにリロードするようにビューを切り替え、スキャンの進行状況を確認することができます"
 
 #: classic/wizard.xsl:143
 msgid ""
@@ -5801,17 +5759,14 @@ msgid ""
 "you can already jump into the scan report via the link in the Reports Total "
 "column and review the results collected so far."
 msgstr ""
-"事実に、背を向けてはいけません。スキャンの進行状況が 1% を超えるとすぐに、"
-"[レポートの合計] 列のリンクを介してもうスキャンレポートにジャンプでき、これ"
-"までに収集された結果を確認できます。"
+"事実に、背を向けてはいけません。スキャンの進行状況が 1% を超えるとすぐに、[レポートの合計] "
+"列のリンクを介してもうスキャンレポートにジャンプでき、これまでに収集された結果を確認できます。"
 
 #: classic/wizard.xsl:146
 msgid ""
 "When creating the Target and Task I will use the defaults as configured in "
 "\"My Settings\"."
-msgstr ""
-"ターゲットとタスクを作成するときは、「ユーザー設定」で設定したデフォルト値を"
-"使用します。"
+msgstr "ターゲットとタスクを作成するときは、「ユーザー設定」で設定したデフォルト値を使用します。"
 
 #: classic/wizard.xsl:149
 msgid "By clicking the New Task icon"
@@ -5824,26 +5779,20 @@ msgstr "自分で新しいタスクを作成することができます。"
 #: classic/wizard.xsl:196
 msgid ""
 "I can help you by creating a new scan task and automatically starting it."
-msgstr ""
-"私は、新しいスキャンタスクを作成し、それを自動的に開始することによって、あな"
-"たを助けることができます。"
+msgstr "私は、新しいスキャンタスクを作成し、それを自動的に開始することによって、あなたを助けることができます。"
 
 #: classic/wizard.xsl:197
 msgid ""
 "All you need to do is enter a name for the new task and the IP address or "
 "host name of the target, and select a scan configuration."
-msgstr ""
-"新しいタスクの名前とターゲットのIPアドレスまたはホスト名を入力し、スキャン設"
-"定を選択するだけです。"
+msgstr "新しいタスクの名前とターゲットのIPアドレスまたはホスト名を入力し、スキャン設定を選択するだけです。"
 
 #: classic/wizard.xsl:198
 msgid ""
-"You can choose if you want me to run the scan immediately, schedule the "
-"task for a later date and time, or just create the task so you can run it "
+"You can choose if you want me to run the scan immediately, schedule the task"
+" for a later date and time, or just create the task so you can run it "
 "manually later."
-msgstr ""
-"スキャンをすぐに実行するか、後日のタスクをスケジュールするか、あとで手動で実"
-"行できるようにタスクを作成するかを選択できます。"
+msgstr "スキャンをすぐに実行するか、後日のタスクをスケジュールするか、あとで手動で実行できるようにタスクを作成するかを選択できます。"
 
 #: classic/wizard.xsl:199
 msgid ""
@@ -5851,17 +5800,14 @@ msgid ""
 "credentials, but you can also run an unauthenticated scan by not selecting "
 "any credentials."
 msgstr ""
-"認証されたスキャンを実行するには、SSHおよび/またはSMBの資格情報を選択する必"
-"要がありますが、資格情報を選択しないで非認証でスキャンを実行することもできま"
-"す。"
+"認証されたスキャンを実行するには、SSHおよび/またはSMBの資格情報を選択する必要がありますが、資格情報を選択しないで非認証でスキャンを実行することもで"
+"きます。"
 
 #: classic/wizard.xsl:202
 msgid ""
 "If you enter an email address in the \"Email report to\" field, a report of "
 "the scan will be sent to this address once it is finished."
-msgstr ""
-"[レポートの送信先] フィールドにEメールアドレスを入力すると、スキャンのレポー"
-"トが完了した時点でこのアドレスに送信されます。"
+msgstr "[レポートの送信先] フィールドにEメールアドレスを入力すると、スキャンのレポートが完了した時点でこのアドレスに送信されます。"
 
 #: classic/wizard.xsl:206
 msgid "Finally, you can select a slave which will run the scan."
@@ -5910,9 +5856,8 @@ msgid ""
 "will then create them for you automatically and assign them to the selected "
 "task."
 msgstr ""
-"私はあなたのために既存のタスクを変更します。 [タスクの編集]ダイアログとの違"
-"いは、関連するオブジェクトの値を直接入力できることです。 自動的に作成し、選"
-"択されたタスクに割り当てます。"
+"私はあなたのために既存のタスクを変更します。 [タスクの編集]ダイアログとの違いは、関連するオブジェクトの値を直接入力できることです。 "
+"自動的に作成し、選択されたタスクに割り当てます。"
 
 #: classic/wizard.xsl:483
 msgid "Please be aware that"
@@ -5920,16 +5865,13 @@ msgstr "以下にご留意ください"
 
 #: classic/wizard.xsl:486
 msgid "setting a start time overwrites a possibly already existing one,"
-msgstr ""
-"開始時刻を設定することは、おそらく既に存在するものをオーバーライドし、"
+msgstr "開始時刻を設定することは、おそらく既に存在するものをオーバーライドし、"
 
 #: classic/wizard.xsl:489
 msgid ""
 "setting an Email Address means adding an additional Alert, not replacing an "
 "existing one."
-msgstr ""
-"Eメールアドレスを設定すると、既存のアラートを置き換えるのではなく、追加のア"
-"ラートを追加することを意味します。"
+msgstr "Eメールアドレスを設定すると、既存のアラートを置き換えるのではなく、追加のアラートを追加することを意味します。"
 
 #: classic/wizard.xsl:500
 msgid "Quick edit: Modify a task"
@@ -5969,13 +5911,11 @@ msgstr "セッションが終了しました。 もう一度ログインして�
 
 #: classic/dynamic_strings.xsl:53
 msgid "Cookie missing or bad.  Please login again."
-msgstr ""
-"クッキーが見つからないか、正しくありません。 再度ログインしてください。"
+msgstr "クッキーが見つからないか、正しくありません。 再度ログインしてください。"
 
 #: classic/dynamic_strings.xsl:54
 msgid "Token missing or bad.  Please login again."
-msgstr ""
-"トークンが見つからないか、正しくありません。 再度ログインしてください。"
+msgstr "トークンが見つからないか、正しくありません。 再度ログインしてください。"
 
 #: classic/dynamic_strings.xsl:78
 msgid "Scan Configuration"
