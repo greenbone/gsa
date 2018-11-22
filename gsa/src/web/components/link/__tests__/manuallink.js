@@ -20,14 +20,9 @@ import React from 'react';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import {
-  cleanup,
-  rendererWith,
-} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import ManualLink from '../manuallink';
-
-afterEach(cleanup);
 
 const createGmp = () => ({
   settings: {
