@@ -6329,7 +6329,7 @@ msgid "May login"
 msgstr ""
 
 #: ng/src/web/utils/render.js:473
-msgid "May run multiple OMP commands in one"
+msgid "May run multiple GMP commands in one"
 msgstr ""
 
 #: ng/src/web/utils/render.js:475
@@ -6425,7 +6425,7 @@ msgid "{{subject_type}} {{subject_name}} may login"
 msgstr ""
 
 #: ng/src/web/utils/render.js:545
-msgid "{{subject_type}} {{subject_name}} may run multiple OMP commands in one"
+msgid "{{subject_type}} {{subject_name}} may run multiple GMP commands in one"
 msgstr ""
 
 #: ng/src/web/utils/render.js:548
