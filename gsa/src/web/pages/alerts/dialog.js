@@ -292,11 +292,14 @@ class AlertDialog extends React.Component {
       credentials,
       title = _('New Alert'),
       report_formats,
+      method_data_recipient_credential,
       method_data_scp_credential,
       method_data_smb_credential,
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
       onClose,
+      onEmailCredentialChange,
+      onNewEmailCredentialClick,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
@@ -373,6 +376,7 @@ class AlertDialog extends React.Component {
     }
 
     const controlledValues = {
+      method_data_recipient_credential,
       method_data_scp_credential,
       method_data_smb_credential,
       method_data_tp_sms_credential,
@@ -565,6 +569,7 @@ class AlertDialog extends React.Component {
               {values.method === METHOD_TYPE_EMAIL &&
                 <EmailMethodPart
                   prefix="method_data"
+                  credentials={credentials}
                   fromAddress={values.method_data_from_address}
                   message={values.method_data_message}
                   messageAttach={values.method_data_message_attach}
@@ -573,9 +578,12 @@ class AlertDialog extends React.Component {
                   noticeReportFormat={values.method_data_notice_report_format}
                   subject={values.method_data_subject}
                   toAddress={values.method_data_to_address}
+                  recipientCredential={values.method_data_recipient_credential}
                   reportFormats={report_formats}
                   isTaskEvent={is_task_event}
                   onChange={onValueChange}
+                  onCredentialChange={onEmailCredentialChange}
+                  onNewCredentialClick={onNewEmailCredentialClick}
                 />
               }
 
@@ -734,6 +742,7 @@ AlertDialog.propTypes = {
   method_data_notice: PropTypes.string,
   method_data_notice_attach_format: PropTypes.id,
   method_data_notice_report_format: PropTypes.id,
+  method_data_recipient_credential: PropTypes.id,
   method_data_scp_credential: PropTypes.id,
   method_data_scp_host: PropTypes.string,
   method_data_scp_known_hosts: PropTypes.string,
@@ -765,6 +774,8 @@ AlertDialog.propTypes = {
   tasks: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onEmailCredentialChange: PropTypes.func.isRequired,
+  onNewEmailCredentialClick: PropTypes.func.isRequired,
   onNewScpCredentialClick: PropTypes.func.isRequired,
   onNewSmbCredentialClick: PropTypes.func.isRequired,
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,

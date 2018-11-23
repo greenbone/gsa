@@ -245,6 +245,22 @@ const Method = ({
                 </TableData>
               </TableRow>
 
+              {details && isDefined(data.recipient_credential) &&
+                <TableRow>
+                  <TableData>
+                    {_('Email Encryption')}
+                  </TableData>
+                  <TableData>
+                    <DetailsLink
+                      id={data.recipient_credential.value}
+                      type="credential"
+                    >
+                      {_('Credential')}
+                    </DetailsLink>
+                  </TableData>
+                </TableRow>
+              }
+
               {details && isDefined(data.notice) &&
                 isDefined(data.notice.value) &&
                 <TableRow>
@@ -291,7 +307,9 @@ const Method = ({
         </div>
       );
     }
-    return _('Email to {{address}}', {address: data.to_address.value});
+    return isDefined(data.recipient_credential) ?
+      _('Encrypted Email to {{address}}', {address: data.to_address.value}) :
+      _('Email to {{address}}', {address: data.to_address.value});
   }
 
   if (method.type === METHOD_TYPE_START_TASK) {

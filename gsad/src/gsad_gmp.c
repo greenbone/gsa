@@ -7267,7 +7267,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                     || (strcmp (name, "notice_report_format") == 0
                         && notice == 0)
                     || (strcmp (name, "notice_attach_format") == 0
-                        && notice == 2)))
+                        && notice == 2)
+                    || (str_equal (name, "recipient_credential")
+                        && !str_equal (param->value, "0"))))
             || (strcmp (method, "Syslog") == 0
                 && strcmp (name, "submethod") == 0)
             || (strcmp (method, "Start Task") == 0

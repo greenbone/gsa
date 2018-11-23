@@ -138,7 +138,7 @@ msgstr ""
 
 #: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2207
 #: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2249
-msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
+msgid "GMP Error {{omp_status}}: {{omp_status_text}}"
 msgstr ""
 
 #: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2275
