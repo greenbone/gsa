@@ -307,7 +307,9 @@ const Method = ({
         </div>
       );
     }
-    return _('Email to {{address}}', {address: data.to_address.value});
+    return isDefined(data.recipient_credential) ?
+      _('Encrypted Email to {{address}}', {address: data.to_address.value}) :
+      _('Email to {{address}}', {address: data.to_address.value});
   }
 
   if (method.type === METHOD_TYPE_START_TASK) {
