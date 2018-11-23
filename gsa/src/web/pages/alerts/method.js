@@ -245,6 +245,22 @@ const Method = ({
                 </TableData>
               </TableRow>
 
+              {details && isDefined(data.recipient_credential) &&
+                <TableRow>
+                  <TableData>
+                    {_('Email Encryption')}
+                  </TableData>
+                  <TableData>
+                    <DetailsLink
+                      id={data.recipient_credential.value}
+                      type="credential"
+                    >
+                      {_('Credential')}
+                    </DetailsLink>
+                  </TableData>
+                </TableRow>
+              }
+
               {details && isDefined(data.notice) &&
                 isDefined(data.notice.value) &&
                 <TableRow>
