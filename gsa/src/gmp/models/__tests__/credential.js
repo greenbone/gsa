@@ -23,7 +23,10 @@
 
 /* eslint-disable max-len */
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Model from 'gmp/model';
+
 import Credential, {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -36,7 +39,9 @@ import Credential, {
   email_credential_filter,
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
+  getCredentialTypeName,
 } from 'gmp/models/credential';
+
 import {testModel} from 'gmp/models/testing';
 
 import {
@@ -210,6 +215,26 @@ describe('Credential model function tests', () => {
     ]);
   });
 
+});
+
+describe('getCredentialTypeName tests', () => {
+
+  setLocale('en');
+
+  test('should display full name', () => {
+    expect(getCredentialTypeName(USERNAME_PASSWORD_CREDENTIAL_TYPE)).toEqual(
+      'Username + Password');
+    expect(getCredentialTypeName(USERNAME_SSH_KEY_CREDENTIAL_TYPE)).toEqual(
+      'Username + SSH Key');
+    expect(getCredentialTypeName(CLIENT_CERTIFICATE_CREDENTIAL_TYPE)).toEqual(
+      'Client Certificate');
+    expect(getCredentialTypeName(SNMP_CREDENTIAL_TYPE)).toEqual(
+      'SNMP');
+    expect(getCredentialTypeName(SMIME_CREDENTIAL_TYPE)).toEqual(
+      'S/MIME Certificate');
+    expect(getCredentialTypeName(PGP_CREDENTIAL_TYPE)).toEqual(
+      'PGP Key');
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

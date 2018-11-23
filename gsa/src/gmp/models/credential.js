@@ -22,6 +22,8 @@
  */
 import Model from '../model';
 
+import {_l} from '../locale/lang';
+
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
@@ -86,6 +88,17 @@ export const SNMP_PRIVACY_ALGORITHM_DES = 'des';
 
 export const CERTIFICATE_STATUS_INACTIVE = 'inactive';
 export const CERTIFICATE_STATUS_EXPIRED = 'expired';
+
+const TYPE_NAMES = {
+  up: _l('Username + Password'),
+  usk: _l('Username + SSH Key'),
+  cc: _l('Client Certificate'),
+  snmp: _l('SNMP'),
+  pgp: _l('PGP Key'),
+  smime: _l('S/MIME Certificate'),
+};
+
+export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 
 class Credential extends Model {
 
