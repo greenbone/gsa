@@ -18,14 +18,9 @@
  */
 import React from 'react';
 
-import {
-  cleanup,
-  rendererWith,
-} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import ProtocolDocLink from '../protocoldoclink';
-
-afterEach(cleanup);
 
 describe('ProtocolDocLink tests', () => {
 

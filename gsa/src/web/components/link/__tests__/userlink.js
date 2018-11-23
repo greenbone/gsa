@@ -26,15 +26,12 @@ import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
 import {
   rendererWith,
-  cleanup,
   fireEvent,
 } from 'web/utils/testing';
 
 import UserLink from '../userlink';
 
 setLocale('en');
-
-afterEach(cleanup);
 
 describe('UserLink tests', () => {
 

@@ -21,7 +21,6 @@ import React from 'react';
 import {setLocale} from 'gmp/locale/lang';
 
 import {
-  cleanup,
   fireEvent,
   getByRole,
   getByText,
@@ -30,8 +29,6 @@ import {
 } from 'web/utils/testing';
 
 import ExternalLink from '../externallink';
-
-afterEach(cleanup);
 
 setLocale('en');
 

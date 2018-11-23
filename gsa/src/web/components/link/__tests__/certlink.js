@@ -21,14 +21,11 @@ import React from 'react';
 import {setLocale} from 'gmp/locale/lang';
 
 import {
-  cleanup,
   fireEvent,
   rendererWith,
 } from 'web/utils/testing';
 
 import CertLink from '../certlink';
-
-afterEach(cleanup);
 
 setLocale('en');
 
