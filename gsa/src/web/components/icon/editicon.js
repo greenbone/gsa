@@ -25,7 +25,7 @@ import React from 'react';
 
 import SvgIcon from './svgicon';
 
-import {ReactComponent as Icon} from './edit.svg';
+import {ReactComponent as Icon} from './svg/edit.svg';
 
 const EditIcon = props => (
   <SvgIcon
