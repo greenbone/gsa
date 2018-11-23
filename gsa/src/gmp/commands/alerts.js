@@ -47,6 +47,7 @@ const method_data_fields = [
   'message',
   'notice_attach_format',
   'message_attach',
+  'recipient_credential',
   'submethod', // FIXME remove constant submethod!!!
   'URL',
   'snmp_community',
