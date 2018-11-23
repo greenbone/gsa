@@ -44,8 +44,10 @@ const Anchor = styled.a`
 
 const StyledIcon = styled.span`
   cursor: ${props => isDefined(props.onClick) ? 'pointer' : undefined};
-  & @media print {
-    ${props => isDefined(props.onClick) ? {display: 'none'} : undefined};
+  @media print {
+    & {
+      ${props => isDefined(props.onClick) ? {display: 'none'} : undefined};
+    };
   };
 `;
 

@@ -24,6 +24,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {getCredentialTypeName} from 'gmp/models/credential';
+
 import PropTypes from 'web/utils/proptypes';
 import {renderComponent} from 'web/utils/render';
 
@@ -120,10 +122,10 @@ const Row = ({
     <TableData>
       <Divider>
         <span>
-          {entity.credential_type}
+          {getCredentialTypeName(entity.credential_type)}
         </span>
         <FootNote>
-          ({entity.full_type})
+          ({entity.credential_type})
         </FootNote>
       </Divider>
     </TableData>

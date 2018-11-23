@@ -37,14 +37,17 @@ import {
   NO_VALUE,
 } from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import {email_credential_filter} from 'gmp/models/credential';
 
 import EntityComponent from 'web/entity/component';
 
 import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 import CredentialsDialog from '../credentials/dialog';
 
@@ -105,6 +108,8 @@ class AlertComponent extends React.Component {
     };
 
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleEmailCredentialChange = this.handleEmailCredentialChange
+      .bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
@@ -121,6 +126,7 @@ class AlertComponent extends React.Component {
       this);
     this.openTippingPointCredentialDialog =
       this.openTippingPointCredentialDialog.bind(this);
+    this.openEmailCredentialDialog = this.openEmailCredentialDialog.bind(this);
     this.handleCloseCredentialDialog =
       this.handleCloseCredentialDialog.bind(this);
 
@@ -164,6 +170,12 @@ class AlertComponent extends React.Component {
             credentials,
           });
         }
+        else if (this.credentialType === 'email') {
+          this.setState({
+            method_data_recipient_credential: credential_id,
+            credentials,
+          });
+        }
       });
   }
 
@@ -204,16 +216,22 @@ class AlertComponent extends React.Component {
     this.openCredentialDialog({type: 'tippingpoint', types});
   }
 
+  openEmailCredentialDialog(types) {
+    this.openCredentialDialog({type: 'email', types});
+  }
+
   openAlertDialog(alert) {
     const {gmp} = this.props;
 
     this.handleInteraction();
 
+    const credentialPromise = gmp.credentials.getAll().then(r => r.data);
+
     if (isDefined(alert)) {
-      gmp.alert.editAlertSettings(alert).then(response => {
-        const settings = response.data;
+      const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);
+      Promise.all([credentialPromise, alertPromise]).then(
+        ([credentials, settings]) => {
         const {
-          credentials = [],
           filters = [],
           report_formats = [],
           tasks = [],
@@ -221,6 +239,8 @@ class AlertComponent extends React.Component {
         } = settings;
 
         const {method, condition, event} = lalert;
+
+        const emailCredentials = credentials.filter(email_credential_filter);
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -287,6 +307,10 @@ class AlertComponent extends React.Component {
         const tp_sms_credential_id = isDefined(method.data.tp_sms_credential) ?
           value(method.data.tp_sms_credential.credential) : undefined;
 
+        const recipient_credential_id = isDefined(
+          method.data.recipient_credential) ?
+          value(method.data.recipient_credential) : undefined;
+
         this.setState({
           alertDialogVisible: true,
           id: alert.id,
@@ -299,6 +323,7 @@ class AlertComponent extends React.Component {
           credentials,
           result_filters,
           secinfo_filters,
+          report_formats,
 
           condition: condition.type,
           condition_data_count: parseInt(value(condition.data.count, 1)),
@@ -327,7 +352,8 @@ class AlertComponent extends React.Component {
 
           method_data_details_url: value(method.data.details_url,
             DEFAULT_DETAILS_URL),
-          report_formats,
+          method_data_recipient_credential: selectSaveId(emailCredentials,
+            recipient_credential_id, UNSET_VALUE),
           method_data_to_address: value(alert.method.data.to_address, ''),
           method_data_from_address: value(alert.method.data.from_address, ''),
           method_data_subject,
@@ -391,10 +417,10 @@ class AlertComponent extends React.Component {
       });
     }
     else {
-      gmp.alert.newAlertSettings().then(response => {
-        const settings = response.data;
+      const alertPromise = gmp.alert.newAlertSettings().then(r => r.data);
+      Promise.all([credentialPromise, alertPromise]).then(
+        ([credentials, settings]) => {
         const {
-          credentials = [],
           filters = [],
           report_formats = [],
           tasks = [],
@@ -407,40 +433,41 @@ class AlertComponent extends React.Component {
         const report_format_id = selectSaveId(report_formats);
 
         this.setState({
-          id: undefined,
-          alert: undefined,
           active: undefined,
+          alert: undefined,
+          alertDialogVisible: true,
           name: undefined,
           comment: undefined,
-          filter_id: undefined,
           condition: undefined,
+          condition_data_at_least_count: undefined,
+          condition_data_at_least_filter_id: result_filter_id,
           condition_data_count: undefined,
           condition_data_direction: undefined,
-          condition_data_at_least_count: undefined,
+          condition_data_filters: result_filters,
+          condition_data_filt_id: result_filter_id,
           condition_data_severity: undefined,
+          credentials,
           event: undefined,
           event_data_status: DEFAULT_EVENT_STATUS,
           event_data_feed_event: undefined,
           event_data_secinfo_type: undefined,
-          method: undefined,
-          alertDialogVisible: true,
+          filter_id: undefined,
           filters,
-          credentials,
-          result_filters,
-          secinfo_filters,
-          condition_data_filters: result_filters,
-          condition_data_filter_id: result_filter_id,
-          condition_data_at_least_filter_id: result_filter_id,
+          id: undefined,
+          method: undefined,
           method_data_notice_report_format: selectSaveId(report_formats,
             DEFAULT_NOTICE_REPORT_FORMAT),
           method_data_notice_attach_format: selectSaveId(report_formats,
             DEFAULT_NOTICE_ATTACH_FORMAT),
-          method_data_start_task_task: selectSaveId(tasks),
-          report_formats,
+          method_data_recipient_credential: UNSET_VALUE,
           method_data_scp_report_format: report_format_id,
           method_data_send_report_format: report_format_id,
+          method_data_start_task_task: selectSaveId(tasks),
           method_data_verinice_server_report_format: select_verinice_report_id(
             report_formats),
+          result_filters,
+          secinfo_filters,
+          report_formats,
           tasks,
         });
       });
@@ -514,6 +541,10 @@ class AlertComponent extends React.Component {
     this.setState({method_data_verinice_server_credential: credential});
   }
 
+  handleEmailCredentialChange(credential) {
+    this.setState({method_data_recipient_credential: credential});
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
@@ -578,6 +609,7 @@ class AlertComponent extends React.Component {
       method_data_notice,
       method_data_notice_report_format,
       method_data_notice_attach_format,
+      method_data_recipient_credential,
       method_data_scp_credential,
       method_data_scp_report_format,
       method_data_scp_path,
@@ -674,6 +706,9 @@ class AlertComponent extends React.Component {
                   {method_data_notice_report_format}
                 method_data_notice_attach_format=
                   {method_data_notice_attach_format}
+                method_data_recipient_credential={
+                  method_data_recipient_credential
+                }
                 method_data_scp_credential={method_data_scp_credential}
                 method_data_scp_report_format={method_data_scp_report_format}
                 method_data_scp_path={method_data_scp_path}
@@ -705,6 +740,7 @@ class AlertComponent extends React.Component {
                 method_data_delta_report_id={method_data_delta_report_id}
                 tasks={tasks}
                 onClose={this.handleCloseAlertDialog}
+                onNewEmailCredentialClick={this.openEmailCredentialDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
@@ -714,6 +750,7 @@ class AlertComponent extends React.Component {
                   this.handleInteraction();
                   return save(d).then(() => this.closeAlertDialog());
                 }}
+                onEmailCredentialChange={this.handleEmailCredentialChange}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
