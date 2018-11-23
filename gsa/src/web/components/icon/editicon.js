@@ -23,26 +23,17 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import SvgIcon from './svgicon';
 
-import Icon from './icon';
+import {ReactComponent as Icon} from './edit.svg';
 
-const EditIcon = ({
-  active = true,
-  ...props
-}) => {
-  return (
-    <Icon
-      {...props}
-      active={active}
-      img="edit.svg"
-    />
-  );
-};
-
-EditIcon.propTypes = {
-  active: PropTypes.bool,
-};
+const EditIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
 export default EditIcon;
 
