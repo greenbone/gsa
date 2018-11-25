@@ -372,13 +372,13 @@ msgstr "Comando solicitado inválido: \"{{command}}"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2927
 #, fuzzy
-msgid "Error {{omp_status}}: {{omp_status_text}}"
-msgstr "Erro {{omp_status}}: {{omp_status_text}}"
+msgid "Error {{gmp_status}}: {{gmp_status_text}}"
+msgstr "Erro {{gmp_status}}: {{gmp_status_text}}"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2929
 #, fuzzy
-msgid "GMP Error {{omp_status}}: {{omp_status_text}}"
-msgstr "GMP Erro {{omp_status}}: {{omp_status_text}}"
+msgid "GMP Error {{gmp_status}}: {{gmp_status_text}}"
+msgstr "GMP Erro {{gmp_status}}: {{gmp_status_text}}"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3216
 #, fuzzy
