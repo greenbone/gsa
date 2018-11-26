@@ -20,50 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
-import _ from 'gmp/locale';
+import SvgIcon from './svgicon';
 
-import PropTypes from 'web/utils/proptypes';
+import {ReactComponent as Icon} from './svg/trend_nochange.svg';
 
-import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
-import TrendMoreIcon from 'web/components/icon/trendmoreicon';
+const TrendNoChangeIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
-const Trend = ({
-    trend,
-    titleDynamic,
-    titleStatic,
-    ...props
-  }) => {
-  if (trend === '1') {
-    return (
-      <TrendMoreIcon
-        alt={_('Dynamic')}
-        title={titleDynamic}
-        {...props}
-      />
-    );
-  }
-  if (trend === '0') {
-    return (
-      <TrendNoChangeIcon
-        alt={_('Static')}
-        title={titleStatic}
-        {...props}
-      />
-    );
-  }
-  return (
-    <span>{_('N/A')}</span>
-  );
-};
-
-Trend.propTypes = {
-  titleDynamic: PropTypes.string,
-  titleStatic: PropTypes.string,
-  trend: PropTypes.string,
-};
-
-export default Trend;
+export default TrendNoChangeIcon;
 
 // vim: set ts=2 sw=2 tw=80:
