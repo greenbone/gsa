@@ -282,6 +282,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
@@ -296,6 +297,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
      ${GSA_SRC_DIR}/src/web/components/img/img.js
