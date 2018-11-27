@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,15 +27,13 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 
 import EntityInfo from 'web/entity/info';
 
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
-import Select from 'web/components/form/select';
-
+import DownloadIcon from 'web/components/icon/downloadicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
@@ -131,12 +125,9 @@ const ToolBarIcons = ({
   filter,
   loading,
   report,
-  report_formats,
-  report_format_id,
   onAddToAssetsClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
-  onReportFormatChange,
   showError,
   showErrorMessage,
   showSuccessMessage,
@@ -157,21 +148,12 @@ const ToolBarIcons = ({
           page="reports"
         />
       </IconDivider>
-      <IconDivider>
-        <Select
-          name="report_format_id"
-          value={report_format_id}
-          items={renderSelectItems(report_formats)}
-          onChange={onReportFormatChange}
-        />
-        <Icon
-          img="download.svg"
-          title={_('Download filtered Report')}
-          onClick={onReportDownloadClick}
-        />
-      </IconDivider>
       {!loading &&
         <React.Fragment>
+          <DownloadIcon
+            title={_('Download filtered Report')}
+            onClick={onReportDownloadClick}
+          />
           <IconDivider>
             <Icon
               img="add_to_assets.svg"
@@ -234,8 +216,6 @@ ToolBarIcons.propTypes = {
   filter: PropTypes.filter,
   loading: PropTypes.bool,
   report: PropTypes.object.isRequired,
-  report_format_id: PropTypes.id,
-  report_formats: PropTypes.array,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -243,7 +223,6 @@ ToolBarIcons.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
-  onReportFormatChange: PropTypes.func.isRequired,
 };
 
 const PageContent = ({
@@ -252,8 +231,6 @@ const PageContent = ({
   filter,
   filters,
   isLoading = true,
-  reportFormats,
-  reportFormatId,
   sorting,
   showError,
   showErrorMessage,
@@ -273,7 +250,6 @@ const PageContent = ({
   onInteraction,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
-  onReportFormatChange,
   onSortChange,
   onTagSuccess,
   onTargetEditClick,
@@ -357,8 +333,6 @@ const PageContent = ({
           filter={filter}
           loading={isLoading}
           report={report}
-          report_format_id={reportFormatId}
-          report_formats={reportFormats}
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
@@ -366,7 +340,6 @@ const PageContent = ({
           onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
           onReportDownloadClick={onReportDownloadClick}
-          onReportFormatChange={onReportFormatChange}
         />
         <Layout align="end">
           <Powerfilter
@@ -831,8 +804,6 @@ PageContent.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
-  reportFormatId: PropTypes.id,
-  reportFormats: PropTypes.array,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -852,7 +823,6 @@ PageContent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
   onReportDownloadClick: PropTypes.func.isRequired,
-  onReportFormatChange: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
