@@ -1,0 +1,108 @@
+/* Copyright (C) 2018 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+import React from 'react';
+
+import _ from 'gmp/locale';
+
+import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
+
+import PropTypes from 'web/utils/proptypes';
+
+import CheckBox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import TextField from 'web/components/form/textfield';
+
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+
+const ComposerContent = ({
+  applyOverrides,
+  filterString,
+  includeNotes,
+  includeOverrides,
+  onValueChange,
+}) => {
+  return (
+    <Layout flex="column">
+      <FormGroup title={_('Applied Filter')} titleSize="3">
+        <TextField
+          disabled
+          name="filterString"
+          grow="1"
+          value={filterString}
+          title={_('To change the filter, please filter your results on the ' +
+            'report page.')}
+        />
+      </FormGroup>
+      <FormGroup title={_('Severity')} titleSize="3">
+        <Divider>
+          <Radio
+            name="applyOverrides"
+            value={NO_VALUE}
+            checked={!parseYesNo(applyOverrides)}
+            title={_('Original severity')}
+            onChange={onValueChange}
+          />
+          <Radio
+            name="applyOverrides"
+            value={YES_VALUE}
+            checked={parseYesNo(applyOverrides)}
+            title={_('With overrides applied')}
+            onChange={onValueChange}
+          />
+        </Divider>
+      </FormGroup>
+      <FormGroup title={_('Include')} titleSize="3">
+        <Divider>
+          <CheckBox
+            data-testid="includeNotes"
+            name="includeNotes"
+            checked={includeNotes}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            title={_('Notes')}
+            onChange={onValueChange}
+          />
+          <CheckBox
+            name="includeOverrides"
+            checked={includeOverrides}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            title={_('Overrides')}
+            onChange={onValueChange}
+          />
+        </Divider>
+      </FormGroup>
+    </Layout>
+  );
+};
+
+ComposerContent.propTypes = {
+  applyOverrides: PropTypes.numberOrNumberString,
+  filterString: PropTypes.string,
+  includeNotes: PropTypes.number,
+  includeOverrides: PropTypes.number,
+  onValueChange: PropTypes.func.isRequired,
+};
+
+export default ComposerContent;
+
+// vim: set ts=2 sw=2 tw=80:
