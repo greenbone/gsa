@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import 'core-js/fn/string/includes';
 
 import React from 'react';
@@ -41,6 +38,8 @@ import {isDefined} from 'gmp/utils/identity';
 import withDownload from 'web/components/form/withDownload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
+
+import DownloadReportDialog from 'web/components/reportcontentcomposer/downloadreportdialog'; // eslint-disable-line max-len
 
 import {
   loadEntities as loadFilters,
@@ -100,6 +99,7 @@ class ReportDetails extends React.Component {
     this.state = {
       activeTab: 1,
       showFilterDialog: false,
+      showDownloadReportDialog: false,
       sorting: {
         results: {
           sortField: 'created',
@@ -156,7 +156,6 @@ class ReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleReportFormatChange = this.handleReportFormatChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
       .bind(this);
@@ -164,6 +163,11 @@ class ReportDetails extends React.Component {
     this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
+    this.handleOpenDownloadReportDialog =
+      this.handleOpenDownloadReportDialog.bind(this);
+    this.handleCloseDownloadReportDialog =
+      this.handleCloseDownloadReportDialog.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
@@ -319,10 +323,6 @@ class ReportDetails extends React.Component {
     this.setState({activeTab: index});
   }
 
-  handleReportFormatChange(value) {
-    this.setState({reportFormatId: value});
-  }
-
   handleAddToAssets() {
     const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
@@ -361,7 +361,15 @@ class ReportDetails extends React.Component {
     this.setState({showFilterDialog: false});
   }
 
-  handleReportDownload() {
+  handleOpenDownloadReportDialog() {
+    this.setState({showDownloadReportDialog: true});
+  }
+
+  handleCloseDownloadReportDialog() {
+    this.setState({showDownloadReportDialog: false});
+  }
+
+  handleReportDownload(state) {
     const {
       deltaReportId,
       entity,
@@ -371,8 +379,16 @@ class ReportDetails extends React.Component {
       onDownload,
     } = this.props;
     const {
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
       reportFormatId,
-    } = this.state;
+      // storeAsDefault,
+    } = state;
+
+    filter.set('notes', includeNotes);
+    filter.set('overrides', includeOverrides);
+    filter.set('apply_overrides', applyOverrides);
 
     const report_format = reportFormats.find(
       format => reportFormatId === format.id);
@@ -387,6 +403,7 @@ class ReportDetails extends React.Component {
       deltaReportId,
       filter,
     }).then(response => {
+      this.setState({showDownloadReportDialog: false});
       const {data} = response;
       const filename = 'report-' + entity.id + '.' + extension;
       onDownload({filename, data});
@@ -484,6 +501,10 @@ class ReportDetails extends React.Component {
     return this.props.loadTarget(target.id);
   }
 
+  handleValueChange(value, name) {
+    this.setState({[name]: value});
+  }
+
   render() {
     const {
       entity,
@@ -498,9 +519,14 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
       reportFormatId,
       showFilterDialog,
+      showDownloadReportDialog,
       sorting,
+      // storeAsDefault,
     } = this.state;
 
     const {report} = entity || {};
@@ -533,8 +559,7 @@ class ReportDetails extends React.Component {
               onFilterRemoveClick={this.handleFilterRemoveClick}
               onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-              onReportDownloadClick={this.handleReportDownload}
-              onReportFormatChange={this.handleReportFormatChange}
+              onReportDownloadClick={this.handleOpenDownloadReportDialog}
               onSortChange={this.handleSortChange}
               onTagSuccess={this.handleChanged}
               onTargetEditClick={() => this.loadTarget()
@@ -552,6 +577,20 @@ class ReportDetails extends React.Component {
             delta={isDefined(report) && report.isDeltaReport()}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
+          />
+        }
+        {showDownloadReportDialog &&
+          <DownloadReportDialog
+            applyOverrides={applyOverrides}
+            filter={filter}
+            includeNotes={includeNotes}
+            includeOverrides={includeOverrides}
+            reportFormatId={reportFormatId}
+            reportFormats={reportFormats}
+            // storeAsDefault={storeAsDefault}
+            onClose={this.handleCloseDownloadReportDialog}
+            onSave={this.handleReportDownload}
+            onValueChange={this.handleValueChange}
           />
         }
       </React.Fragment>
