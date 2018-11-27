@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,19 +24,18 @@ import _ from 'gmp/locale';
 import logger from 'gmp/log';
 
 import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withGmp from '../../utils/withGmp.js';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Select from '../../components/form/select.js';
+import Icon from 'web/components/icon/icon';
 
-import Icon from '../../components/icon/icon.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import TriggerAlertDialog from 'web/components/reportcontentcomposer/triggeralertdialog'; /* eslint-disable-line max-len */
 
-import AlertComponent from '../alerts/component.js';
+import AlertComponent from 'web/pages/alerts/component';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -51,27 +46,31 @@ class AlertActions extends React.Component {
 
     this.state = {
       alerts: [],
+      showTriggerAlertDialog: false,
     };
 
     this.handleAlertChange = this.handleAlertChange.bind(this);
-    this.handleTestAlert = this.handleTestAlert.bind(this);
+    this.handleTriggerAlert = this.handleTriggerAlert.bind(this);
     this.onAlertCreated = this.onAlertCreated.bind(this);
+    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
+    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
+    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
     const {gmp} = this.props;
     gmp.alerts.getAll().then(response => {
       const {data: alerts} = response;
-      const alert_id = first(alerts).id;
+      const alertId = first(alerts).id;
       this.setState({
         alerts,
-        alert_id,
+        alertId,
       });
     });
   }
 
-  handleAlertChange(alert_id) {
-    this.setState({alert_id});
+  handleAlertChange(alertId) {
+    this.setState({alertId});
   }
 
   handleInteraction() {
@@ -81,49 +80,82 @@ class AlertActions extends React.Component {
     }
   }
 
-  handleTestAlert() {
-    const {alert_id} = this.state;
+  handleTriggerAlert(state) {
     const {
+      alertId,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
+    } = state;
+    const {
+      filter,
       gmp,
       report,
-      filter,
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
+
+    filter.set('notes', includeNotes);
+    filter.set('overrides', includeOverrides);
+    filter.set('apply_overrides', applyOverrides);
 
     this.handleInteraction();
 
     gmp.report.alert({
       report_id: report.id,
-      alert_id,
+      alert_id: alertId,
       filter: filter.simple(),
     }).then(response => {
-      showSuccessMessage(_('Running the alert was successfull'));
+      showSuccessMessage(_('Running the alert was successful'));
+      this.setState({showTriggerAlertDialog: false});
     }, error => {
         log.error('Failed running alert', error);
         showErrorMessage(_('Failed to run alert.'));
+        this.setState({showTriggerAlertDialog: false});
       }
     );
   }
 
+  handleOpenTriggerAlertDialog() {
+    this.setState({showTriggerAlertDialog: true});
+  }
+
+  handleCloseTriggerAlertDialog() {
+    this.setState({
+      showTriggerAlertDialog: false,
+    });
+  }
+
   onAlertCreated(response) {
     const {alerts} = this.state;
-    const alert = response.data;
-
-    this.setState({
-      alerts: [alert, ...alerts],
-      alert_id: alert.id,
+    const {gmp} = this.props;
+    gmp.alert.get({id: response.data.id}).then(resp => {
+      const alert = resp.data;
+      this.setState({
+        alerts: [alert, ...alerts],
+        alertId: alert.id,
+      });
     });
+  }
+
+  handleValueChange(value, name) {
+    this.setState({[name]: value});
   }
 
   render() {
     const {
+      filter,
       showError,
       onInteraction,
     } = this.props;
     const {
-      alert_id,
       alerts,
+      alertId,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
+      showTriggerAlertDialog,
+      storeAsDefault,
     } = this.state;
     return (
       <AlertComponent
@@ -132,24 +164,31 @@ class AlertActions extends React.Component {
         onInteraction={onInteraction}
       >
         {({create}) => (
-          <IconDivider>
-            <Select
-              name="alert_id"
-              value={alert_id}
-              items={renderSelectItems(alerts)}
-              onChange={this.handleAlertChange}
-            />
-            <Icon
-              img="start.svg"
-              title={_('Run Alert')}
-              onClick={this.handleTestAlert}
-            />
-            <Icon
-              img="new.svg"
-              title={_('Create new Alert')}
-              onClick={create}
-            />
-          </IconDivider>
+          <React.Fragment>
+            <IconDivider>
+              <Icon
+                img="start.svg"
+                title={_('Trigger Alert')}
+                onClick={this.handleOpenTriggerAlertDialog}
+              />
+            </IconDivider>
+            {showTriggerAlertDialog &&
+              <TriggerAlertDialog
+                alertId={alertId}
+                alerts={alerts}
+                applyOverrides={applyOverrides}
+                filter={filter}
+                includeNotes={includeNotes}
+                includeOverrides={includeOverrides}
+                storeAsDefault={storeAsDefault}
+                onAlertChange={this.handleAlertChange}
+                onClose={this.handleCloseTriggerAlertDialog}
+                onNewAlertClick={create}
+                onSave={this.handleTriggerAlert}
+                onValueChange={this.handleValueChange}
+              />
+            }
+          </React.Fragment>
         )}
       </AlertComponent>
     );
