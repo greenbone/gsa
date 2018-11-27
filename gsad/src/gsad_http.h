@@ -184,9 +184,6 @@ int send_response (http_connection_t *connection, const char *content,
                    const char *content_disposition,
                    size_t content_length);
 
-int send_redirect_to_urn (http_connection_t *connection, const char *urn,
-                          user_t *user);
-
 int send_redirect_to_uri (http_connection_t *connection, const char *uri,
                           const gchar *sid);
 

@@ -39,7 +39,6 @@
 struct cmd_response_data {
   gboolean allow_caching;      ///> Whether the response may be cached.
   int http_status_code;        ///> HTTP status code.
-  gchar *redirect;             ///> Redirect URL or NULL.
   content_type_t content_type; ///> Content type. Default is text/html
   gchar *content_type_string;  ///> Content type as string. Default is NULL.
   gsize content_length;        ///> Content length of the response
@@ -58,7 +57,6 @@ cmd_response_data_init (cmd_response_data_t* data)
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   data->content_type_string = NULL;
-  data->redirect = NULL;
   data->content_disposition = NULL;
   data->content_length = 0;
 }
@@ -95,11 +93,6 @@ cmd_response_data_free (cmd_response_data_t* data)
   if (data->content_disposition)
     {
       g_free (data->content_disposition);
-    }
-
-  if (data->redirect)
-    {
-      g_free (data->redirect);
     }
 
   if (data->content_type_string)
@@ -238,34 +231,6 @@ const gchar *
 cmd_response_data_get_content_disposition (cmd_response_data_t *data)
 {
   return data->content_disposition;
-}
-
-/**
- * @brief Set response data to redirect to url
- *
- * @param[in]  data  Command response data struct
- * @param[in]  url   URL to redirect
- */
-void
-cmd_response_data_set_redirect (cmd_response_data_t *data, gchar *url)
-{
-  if (url)
-    {
-      data->http_status_code = MHD_HTTP_SEE_OTHER;
-    }
-  data->redirect = url;
-}
-
-/**
- * @brief Get redirect url
- *
- * @param[in]  data  Command response data struct
- * @return URL to redirect
- */
-const gchar *
-cmd_response_data_get_redirect (cmd_response_data_t *data)
-{
-  return data->redirect;
 }
 
 /**
