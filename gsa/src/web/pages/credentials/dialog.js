@@ -26,7 +26,7 @@ import React from 'react';
 
 import 'core-js/fn/array/includes';
 
-import {_, _l} from 'gmp/locale/lang';
+import {_} from 'gmp/locale/lang';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -46,6 +46,7 @@ import {
   PGP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
   ALL_CREDENTIAL_TYPES,
+  getCredentialTypeName,
 } from 'gmp/models/credential';
 
 import Divider from 'web/components/layout/divider';
@@ -67,17 +68,6 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 
 const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 
-const TYPE_NAMES = {
-  up: _l('Username + Password'),
-  usk: _l('Username + SSH Key'),
-  cc: _l('Client Cerficate'),
-  snmp: _l('SNMP'),
-  pgp: _l('PGP Key'),
-  smime: _l('S/MIME Certificate'),
-};
-
-const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
-
 class CredentialsDialog extends React.Component {
 
   constructor(...args) {
@@ -85,22 +75,34 @@ class CredentialsDialog extends React.Component {
 
     this.state = {};
 
-    this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleCredentialTypeChange = this.handleCredentialTypeChange
+      .bind(this);
     this.handlePublicKeyChange = this.handlePublicKeyChange.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
     this.handleError = this.handleError.bind(this);
   }
 
-  handleTypeChange(credential_type, autogenerate, onValueChange) {
+  componentDidMount() {
+    const {autogenerate, credential_type} = this.props;
+
+    this.setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
+  }
+
+  setCredentialTypeAndAutoGenerate(credential_type, autogenerate = NO_VALUE) {
     if (credential_type !== USERNAME_PASSWORD_CREDENTIAL_TYPE &&
       credential_type !== USERNAME_SSH_KEY_CREDENTIAL_TYPE) {
       // autogenerate is only possible with username+password and username+ssh
       autogenerate = NO_VALUE;
     }
-   if (onValueChange) {
-      onValueChange(credential_type, 'credential_type');
-      onValueChange(autogenerate, 'autogenerate');
-   }
+
+    this.setState({
+      autogenerate,
+      credential_type,
+    });
+  }
+
+  handleCredentialTypeChange(credential_type, autogenerate) {
+    this.setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
   }
 
   handlePublicKeyChange(file) {
@@ -128,9 +130,10 @@ class CredentialsDialog extends React.Component {
   render() {
     let {
       credential_type,
-    } = this.props;
+    } = this.state;
 
     const {
+      autogenerate,
       public_key,
       error,
     } = this.state;
@@ -141,7 +144,6 @@ class CredentialsDialog extends React.Component {
       types = [],
       allow_insecure = NO_VALUE,
       auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
-      autogenerate = NO_VALUE,
       change_community = NO_VALUE,
       change_passphrase = NO_VALUE,
       change_password = NO_VALUE,
@@ -177,8 +179,6 @@ class CredentialsDialog extends React.Component {
     const data = {
       allow_insecure,
       auth_algorithm,
-      autogenerate,
-      credential_type,
       change_community,
       change_passphrase,
       change_password,
@@ -195,6 +195,8 @@ class CredentialsDialog extends React.Component {
     };
 
     const values = {
+      autogenerate,
+      credential_type,
       public_key,
     };
 
@@ -243,8 +245,8 @@ class CredentialsDialog extends React.Component {
                   disabled={is_edit}
                   items={typeOptions}
                   value={state.credential_type}
-                  onChange={value => this.handleTypeChange(
-                    value, state.autogenerate, onValueChange)}
+                  onChange={value => this.handleCredentialTypeChange(
+                    value, state.autogenerate)}
                 />
               </FormGroup>
 
@@ -266,7 +268,8 @@ class CredentialsDialog extends React.Component {
                 <YesNoRadio
                   name="autogenerate"
                   value={state.autogenerate}
-                  onChange={onValueChange}
+                  onChange={value => this.handleCredentialTypeChange(
+                    state.credential_type, value)}
                 />
               </FormGroup>
 

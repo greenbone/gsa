@@ -18,14 +18,9 @@
  */
 import React from 'react';
 
-import {
-  render,
-  cleanup,
-} from 'web/utils/testing';
+import {render} from 'web/utils/testing';
 
 import BlankLink from '../blanklink';
-
-afterEach(cleanup);
 
 describe('BlankLink tests', () => {
 

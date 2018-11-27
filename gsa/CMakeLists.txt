@@ -288,10 +288,16 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
      ${GSA_SRC_DIR}/src/web/components/img/img.js
      ${GSA_SRC_DIR}/src/web/components/label/severityclass.js
      ${GSA_SRC_DIR}/src/web/components/layout/divider.js

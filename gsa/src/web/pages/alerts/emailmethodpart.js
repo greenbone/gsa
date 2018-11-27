@@ -26,9 +26,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {
+  EMAIL_CREDENTIAL_TYPES,
+  email_credential_filter,
+} from 'gmp/models/credential';
+
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withPrefix from 'web/utils/withPrefix';
 
@@ -41,26 +46,34 @@ import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
 
-const EmailMethodPart = ({
-    capabilities,
-    fromAddress,
-    isTaskEvent,
-    message,
-    messageAttach,
-    notice,
-    noticeAttachFormat,
-    noticeReportFormat,
-    prefix,
-    reportFormats = [],
-    subject,
-    toAddress,
-    onChange,
-  }) => {
+import IconDivider from 'web/components/layout/icondivider';
 
+import NewIcon from 'web/components/icon/newicon';
+
+const EmailMethodPart = ({
+  capabilities,
+  credentials = [],
+  fromAddress,
+  isTaskEvent,
+  message,
+  messageAttach,
+  notice,
+  noticeAttachFormat,
+  noticeReportFormat,
+  prefix,
+  recipientCredential,
+  reportFormats = [],
+  subject,
+  toAddress,
+  onChange,
+  onCredentialChange,
+  onNewCredentialClick,
+}) => {
   const reportFormatItems = renderSelectItems(
     reportFormats.filter(format =>
       (isTaskEvent && format.content_type.startsWith('text/')) || !isTaskEvent)
   );
+  credentials = credentials.filter(email_credential_filter);
   return (
     <Layout flex="column" grow="1">
 
@@ -91,6 +104,23 @@ const EmailMethodPart = ({
           value={subject}
           onChange={onChange}
         />
+      </FormGroup>
+
+      <FormGroup title={_('Email Encryption')}>
+        <IconDivider>
+          <Select
+            name={prefix + 'recipient_credential'}
+            value={recipientCredential}
+            items={renderSelectItems(credentials, UNSET_VALUE)}
+            onChange={onCredentialChange}
+          />
+          <NewIcon
+            size="small"
+            value={EMAIL_CREDENTIAL_TYPES}
+            title={_('Create a credential')}
+            onClick={onNewCredentialClick}
+          />
+        </IconDivider>
       </FormGroup>
 
       <FormGroup title={_('Content')} flex="column">
@@ -175,6 +205,7 @@ const EmailMethodPart = ({
 
 EmailMethodPart.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
+  credentials: PropTypes.array,
   fromAddress: PropTypes.string.isRequired,
   isTaskEvent: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
@@ -183,10 +214,13 @@ EmailMethodPart.propTypes = {
   noticeAttachFormat: PropTypes.id,
   noticeReportFormat: PropTypes.id,
   prefix: PropTypes.string.isRequired,
+  recipientCredential: PropTypes.id,
   reportFormats: PropTypes.array,
   subject: PropTypes.string.isRequired,
   toAddress: PropTypes.string.isRequired,
   onChange: PropTypes.func,
+  onCredentialChange: PropTypes.func,
+  onNewCredentialClick: PropTypes.func,
 };
 
 export default compose(

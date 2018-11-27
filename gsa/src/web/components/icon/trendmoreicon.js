@@ -1,6 +1,10 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Greenbone Security Assistant
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,24 +20,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
-import {render} from 'web/utils/testing';
+import SvgIcon from './svgicon';
 
-import Target from '../target';
+import {ReactComponent as Icon} from './svg/trend_more.svg';
 
-describe('Target tests', () => {
+const TrendMoreIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
-  test('should render Target', () => {
-    const {element} = render(<Target id="foo"/>);
-    expect(element).toHaveAttribute('id', 'foo');
-  });
-
-  test('should apply styling', () => {
-    const {element} = render(<Target id="foo"/>);
-    expect(element).toMatchSnapshot();
-  });
-
-});
+export default TrendMoreIcon;
 
 // vim: set ts=2 sw=2 tw=80:

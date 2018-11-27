@@ -83,9 +83,9 @@ const withChangeHandler = (options = {}) => Component => {
     }
 
     notifyChange(value) {
-      const {name, onChange} = this.props;
+      const {disabled = false, name, onChange} = this.props;
 
-      if (isDefined(onChange)) {
+      if (isDefined(onChange) && !disabled) {
         onChange(value, name);
       }
     }
@@ -124,6 +124,7 @@ const withChangeHandler = (options = {}) => Component => {
   ChangeHandler.propTypes = {
     convert: PropTypes.func,
     debounce: PropTypes.numberOrNumberString,
+    disabled: PropTypes.bool,
     name: PropTypes.string,
     value: PropTypes.any,
     onChange: PropTypes.func,

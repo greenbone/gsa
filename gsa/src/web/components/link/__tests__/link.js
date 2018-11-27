@@ -20,14 +20,11 @@ import React from 'react';
 
 import {
   rendererWith,
-  cleanup,
   fireEvent,
 } from 'web/utils/testing';
 
 import Link from '../link';
 import Filter from 'gmp/models/filter';
-
-afterEach(cleanup);
 
 describe('Link tests', () => {
 

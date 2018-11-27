@@ -298,7 +298,7 @@ export const simplePermissionDescription = name => {
     case 'authenticate':
       return _('May login');
     case 'commands':
-      return _('May run multiple OMP commands in one');
+      return _('May run multiple GMP commands in one');
     case 'everything':
       return _('Has permission to run all commands');
     case 'empty_trashcan':
@@ -374,7 +374,7 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
     case 'authenticate':
       return _('{{subjectType}} {{subjectName}} may login', type);
     case 'commands':
-      return _('{{subjectType}} {{subjectName}} may run multiple OMP ' +
+      return _('{{subjectType}} {{subjectName}} may run multiple GMP ' +
         'commands in one', type);
     case 'everything':
       return _('{{subjectType}} {{subjectName}} has all permissions', type);

@@ -19,14 +19,11 @@
 import React from 'react';
 
 import {
-  cleanup,
   fireEvent,
   rendererWith,
 } from 'web/utils/testing';
 
 import CveLink from '../cvelink';
-
-afterEach(cleanup);
 
 describe('CveLink tests', () => {
 

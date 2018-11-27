@@ -21,14 +21,11 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import {
-  cleanup,
   fireEvent,
   rendererWith,
 } from 'web/utils/testing';
 
 import DetailsLink from '../detailslink';
-
-afterEach(cleanup);
 
 describe('DetailsLink tests', () => {
 

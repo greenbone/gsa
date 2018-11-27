@@ -24,9 +24,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Icon from '../../components/icon/icon.js';
+import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+import TrendMoreIcon from 'web/components/icon/trendmoreicon';
 
 const Trend = ({
     trend,
@@ -36,8 +37,7 @@ const Trend = ({
   }) => {
   if (trend === '1') {
     return (
-      <Icon
-        img="trend_more.svg"
+      <TrendMoreIcon
         alt={_('Dynamic')}
         title={titleDynamic}
         {...props}
@@ -46,8 +46,7 @@ const Trend = ({
   }
   if (trend === '0') {
     return (
-      <Icon
-        img="trend_nochange.svg"
+      <TrendNoChangeIcon
         alt={_('Static')}
         title={titleStatic}
         {...props}
