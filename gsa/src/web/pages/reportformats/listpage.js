@@ -33,7 +33,7 @@ import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
-import NewIcon from 'web/components/icon/newicon';
+import ImportIcon from 'web/components/icon/importicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -58,7 +58,7 @@ const ToolBarIcons = withCapabilities(({
       title={_('Help: Report Formats')}
     />
     {capabilities.mayCreate('report_format') &&
-      <NewIcon
+      <ImportIcon
         title={_('Import Report Format')}
         onClick={onReportFormatImportClick}
       />
