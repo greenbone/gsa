@@ -56,7 +56,6 @@ class Dialog extends React.Component {
     this.onMouseMoveMove = this.onMouseMoveMove.bind(this);
     this.onMouseMoveResize = this.onMouseMoveResize.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
-    this.onOuterClick = this.onOuterClick.bind(this);
 
     this.state = this.defaultState();
   }
@@ -92,13 +91,6 @@ class Dialog extends React.Component {
     dialog.style.left = `${x}px`;
     dialog.style.top = `${y}px`;
     dialog.style.margin = '0';
-  }
-
-  onOuterClick(event) {
-    if (event.target === event.currentTarget) {
-      this.handleClose();
-      event.preventDefault();
-    }
   }
 
   onKeyDown(event) {
@@ -207,7 +199,6 @@ class Dialog extends React.Component {
     return (
       <Portal>
         <DialogOverlay
-          onClick={this.onOuterClick}
           onKeyDown={this.onKeyDown}
         >
           <DialogContainer
