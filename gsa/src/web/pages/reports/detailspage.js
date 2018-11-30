@@ -39,7 +39,7 @@ import withDownload from 'web/components/form/withDownload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
-import DownloadReportDialog from 'web/components/reportcontentcomposer/downloadreportdialog'; // eslint-disable-line max-len
+import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
 import {
   loadEntities as loadFilters,

@@ -33,7 +33,7 @@ import Icon from 'web/components/icon/icon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
-import TriggerAlertDialog from 'web/components/reportcontentcomposer/triggeralertdialog'; /* eslint-disable-line max-len */
+import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
 
 import AlertComponent from 'web/pages/alerts/component';
 

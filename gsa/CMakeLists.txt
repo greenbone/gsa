@@ -349,8 +349,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
-     ${GSA_SRC_DIR}/src/web/components/reportcontentcomposer/downloadreportdialog.js
-     ${GSA_SRC_DIR}/src/web/components/reportcontentcomposer/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/components/section/header.js
      ${GSA_SRC_DIR}/src/web/components/section/section.js
      ${GSA_SRC_DIR}/src/web/components/sortby/sortby.js
@@ -640,6 +638,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/downloadreportdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/emptyreport.js
      ${GSA_SRC_DIR}/src/web/pages/reports/emptyresultsreport.js
      ${GSA_SRC_DIR}/src/web/pages/reports/errorstable.js
@@ -658,6 +657,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/summary.js
      ${GSA_SRC_DIR}/src/web/pages/reports/table.js
      ${GSA_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/highresultsdisplay.js

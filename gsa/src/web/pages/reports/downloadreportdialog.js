@@ -29,6 +29,7 @@ import {isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
+import ComposerContent from 'web/components/dialog/composercontent';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 // import CheckBox from 'web/components/form/checkbox';
@@ -38,7 +39,6 @@ import Select from 'web/components/form/select';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import ComposerContent from 'web/components/dialog/composercontent';
 
 // const StyledDiv = styled.div`
 //   text-align: end;
