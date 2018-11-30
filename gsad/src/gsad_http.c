@@ -939,33 +939,6 @@ add_forbid_caching_headers (http_response_t *response)
                            "no-cache");
 }
 
-gboolean
-is_export (http_connection_t *connection)
-{
-  const char *cmd;
-
-  cmd = MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND, "cmd");
-
-  if (cmd && g_utf8_validate (cmd, -1, NULL))
-    {
-      if (strncmp (cmd, "export", strlen ("export")) == 0)
-        return 1;
-      else if (strcmp (cmd, "get_report") == 0)
-        {
-          const char *report_format_id;
-
-          report_format_id = MHD_lookup_connection_value
-                              (connection,
-                                MHD_GET_ARGUMENT_KIND,
-                                "report_format_id");
-          if (report_format_id
-              && g_utf8_validate (report_format_id, -1, NULL))
-            return 1;
-        }
-    }
-  return 0;
-}
-
 /**
  * @brief Get the client's address.
  *

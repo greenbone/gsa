@@ -123,17 +123,6 @@ vendor_version_get ()
 }
 
 /**
- * @brief Get the login label name.
- *
- * @return login label name
- */
-const gchar *
-label_name_get ()
-{
-  return label_name;
-}
-
-/**
  * @brief Set the login label.
  *
  * @param[in]  name  New login label name.

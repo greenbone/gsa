@@ -35,8 +35,6 @@ const gchar *vendor_version_get ();
 
 int label_name_set (const gchar *);
 
-const gchar *label_name_get ();
-
 
 void set_session_timeout (int timeout);
 

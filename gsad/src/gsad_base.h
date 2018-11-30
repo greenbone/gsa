@@ -40,9 +40,7 @@
 
 int gsad_base_init ();
 int gsad_base_cleanup ();
-int get_chroot_state ();
 void set_chroot_state (int);
-int get_http_only ();
 void set_http_only (int);
 char *ctime_r_strip_newline (time_t *, char *);
 

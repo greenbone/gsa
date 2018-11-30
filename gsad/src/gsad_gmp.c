@@ -389,19 +389,6 @@ typedef struct
   GList *keys;
 } find_by_value_t;
 
-void
-init_find_by_value (find_by_value_t *find, gchar *value)
-{
-  find->keys = NULL;
-  find->value = value;
-}
-
-void
-free_find_by_value (find_by_value_t *find)
-{
-  g_list_free (find->keys);
-}
-
 /**
  * @brief Check whether a filter exists
  *
