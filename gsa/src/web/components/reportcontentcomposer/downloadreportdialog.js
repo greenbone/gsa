@@ -38,7 +38,7 @@ import Select from 'web/components/form/select';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import ComposerContent from './composercontent';
+import ComposerContent from 'web/components/dialog/composercontent';
 
 // const StyledDiv = styled.div`
 //   text-align: end;

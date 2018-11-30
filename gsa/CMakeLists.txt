@@ -234,6 +234,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/utils.js
      ${GSA_SRC_DIR}/src/web/components/dialog/button.js
+     ${GSA_SRC_DIR}/src/web/components/dialog/composercontent.js
      ${GSA_SRC_DIR}/src/web/components/dialog/container.js
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
      ${GSA_SRC_DIR}/src/web/components/dialog/closebutton.js
@@ -348,7 +349,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
-     ${GSA_SRC_DIR}/src/web/components/reportcontentcomposer/composercontent.js
      ${GSA_SRC_DIR}/src/web/components/reportcontentcomposer/downloadreportdialog.js
      ${GSA_SRC_DIR}/src/web/components/reportcontentcomposer/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/components/section/header.js
