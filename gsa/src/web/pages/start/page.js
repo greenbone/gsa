@@ -48,8 +48,6 @@ import getDashboardSettings, {
 } from 'web/store/dashboard/settings/selectors';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
-import CloseButton from 'web/components/dialog/closebutton';
-
 import {
   addDisplayToSettings,
   canAddDisplay,
@@ -58,9 +56,11 @@ import {
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import DeleteIcon from 'web/components/icon/deleteicon';
+import EditIcon from 'web/components/icon/editicon';
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 
 import Loading from 'web/components/loading/loading';
@@ -79,6 +79,8 @@ import Tabs from 'web/components/tab/tabs';
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
+import EditDashboardDialog from './editdashboarddialog';
+import Divider from 'web/components/layout/divider';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -141,6 +143,10 @@ class StartPage extends React.Component {
     this.handleResetDashboards = this.handleResetDashboards.bind(this);
     this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
 
+    this.handleCloseEditDashboardDialog =
+      this.handleCloseEditDashboardDialog.bind(this);
+    this.handleSaveEditDashboard = this.handleSaveEditDashboard.bind(this);
+
     this.getDashboardSelector = memoize(settings =>
       new DashboardSetting(settings));
   }
@@ -184,10 +190,7 @@ class StartPage extends React.Component {
     });
   }
 
-  handleConfirmRemoveDashboard(event, id) {
-    event.preventDefault();
-    event.stopPropagation(); // don't activate tab
-
+  handleConfirmRemoveDashboard(id) {
     this.setState({
       showConfirmRemoveDialog: true,
       removeDashboardId: id,
@@ -208,6 +211,17 @@ class StartPage extends React.Component {
 
   handleNewDashboardDialogClose() {
     this.closeNewDashboardDialog();
+  }
+
+  handleOpenEditDashboardDialog(id) {
+    this.setState({
+      editDashboardId: id,
+      showEditDashboardDialog: true,
+    });
+  }
+
+  handleCloseEditDashboardDialog() {
+    this.setState({showEditDashboardDialog: false});
   }
 
   handleActivateTab(tab) {
@@ -274,6 +288,11 @@ class StartPage extends React.Component {
 
     // change to new dashboard tab
     this.setState({activeTab: dashboards.length});
+  }
+
+  handleSaveEditDashboard({dashboardId, dashboardTitle}) {
+    this.updateDashboardSettings(dashboardId, {title: dashboardTitle});
+    this.setState({showEditDashboardDialog: false});
   }
 
   handleResetDashboards() {
@@ -349,7 +368,9 @@ class StartPage extends React.Component {
     } = this.props;
     const {
       activeTab,
+      editDashboardId,
       removeDashboardId,
+      showEditDashboardDialog,
       showNewDashboardDialog,
       showConfirmRemoveDialog,
     } = this.state;
@@ -382,15 +403,21 @@ class StartPage extends React.Component {
                       <Tab
                         key={id}
                       >
-                        <Divider>
+                        <Divider margin="15px">
                           <span>{title}</span>
                           {dashboards.length > 1 &&
-                            <CloseButton
-                              size="small"
-                              title={_('Remove Dashboard')}
-                              onClick={event =>
-                                this.handleConfirmRemoveDashboard(event, id)}
-                            />
+                            <IconDivider>
+                              <EditIcon
+                                title={_('Edit Dashboard Title')}
+                                onClick={
+                                  () => this.handleOpenEditDashboardDialog(id)}
+                              />
+                              <DeleteIcon
+                                title={_('Remove Dashboard')}
+                                onClick={() =>
+                                  this.handleConfirmRemoveDashboard(id)}
+                              />
+                            </IconDivider>
                           }
                         </Divider>
                       </Tab>
@@ -460,6 +487,14 @@ class StartPage extends React.Component {
           <NewDashboardDialog
             onClose={this.handleNewDashboardDialogClose}
             onSave={this.handleAddNewDashboard}
+          />
+        }
+        {showEditDashboardDialog &&
+          <EditDashboardDialog
+            dashboardId={editDashboardId}
+            dashboardTitle={this.getDashboardTitle(editDashboardId)}
+            onClose={this.handleCloseEditDashboardDialog}
+            onSave={this.handleSaveEditDashboard}
           />
         }
       </ErrorBoundary>
