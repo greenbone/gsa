@@ -22,8 +22,6 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -32,24 +30,14 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import Theme from 'web/utils/theme';
+import SvgIcon from './svgicon';
 
-import Icon from './icon';
-
-const StyledIcon = styled(Icon)`
-  & svg:hover {
-    background-color: ${Theme.lightRed};
-  }
-  & svg:hover path {
-    fill: ${Theme.darkRed};
-  }
-`;
+import {ReactComponent as Icon} from './svg/delete.svg';
 
 const DeleteIcon = ({
-  active = true,
   selectionType,
   title,
-  ...other
+  ...props
 }) => {
   if (!isDefined(title)) {
     if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
@@ -63,20 +51,18 @@ const DeleteIcon = ({
     }
   }
   return (
-    <StyledIcon
-      {...other}
-      active={active}
-      img="delete.svg"
+    <SvgIcon
+      {...props}
       title={title}
-    />
+    >
+      <Icon/>
+    </SvgIcon>
   );
 };
 
 DeleteIcon.propTypes = {
-  active: PropTypes.bool,
   selectionType: PropTypes.string,
   title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default DeleteIcon;
