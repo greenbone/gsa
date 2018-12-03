@@ -725,6 +725,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${GSA_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/dashboard.js
+     ${GSA_SRC_DIR}/src/web/pages/start/editdashboarddialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/newdashboarddialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/page.js
      ${GSA_SRC_DIR}/src/web/pages/tags/component.js
