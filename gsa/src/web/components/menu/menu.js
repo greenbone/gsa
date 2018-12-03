@@ -47,11 +47,12 @@ const StyledMenu = styled.li`
   & a {
     display: flex;
     flex-grow: 1;
-    align-items: center; ${''/* center text vertically*/}
+    align-items: center ${''/* center text vertically*/};
   };
 
   & a, & a:hover, & a:focus, & a:link {
     text-decoration: none;
+    color: ${Theme.black};
   };
 `;
 
