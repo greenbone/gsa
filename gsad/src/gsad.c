@@ -2329,6 +2329,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
     }
   else if (host == NULL)
     return MHD_NO;
+
   /* [IPv6 or IPv4-mapped IPv6]:port */
   if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
       == 1)
@@ -3299,7 +3300,7 @@ main (int argc, char **argv)
 
       while (list)
         {
-         gsad_address_set_port (list->data, gsad_redirect_port);
+          gsad_address_set_port (list->data, gsad_redirect_port);
           gsad_daemon = start_http_daemon (gsad_redirect_port, redirect_handler,
                                            NULL, list->data);
           list = list->next;
