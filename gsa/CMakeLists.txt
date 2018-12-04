@@ -296,6 +296,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
@@ -724,6 +725,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/secinfo/dashboard/typedisplay.js
      ${GSA_SRC_DIR}/src/web/pages/start/confirmremovedialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/dashboard.js
+     ${GSA_SRC_DIR}/src/web/pages/start/editdashboarddialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/newdashboarddialog.js
      ${GSA_SRC_DIR}/src/web/pages/start/page.js
      ${GSA_SRC_DIR}/src/web/pages/tags/component.js
