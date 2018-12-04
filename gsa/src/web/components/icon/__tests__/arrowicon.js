@@ -22,33 +22,42 @@
  */
 import React from 'react';
 
-import {mount} from 'enzyme';
+import {render, fireEvent} from 'web/utils/testing';
+
 import ArrowIcon from '../arrowicon';
+
+import {ICON_SIZE_SMALL_PIXELS} from '../withIconSize';
 
 describe('ArrowIcon component tests', () => {
 
-  test('should render without crashing', () => {
-    mount(<ArrowIcon/>);
+  test('should render', () => {
+    const {element} = render(<ArrowIcon/>);
+
+    expect(element).toMatchSnapshot();
+
+    expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS)
+    expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS)
   });
 
   test('should render upwards icon', () => {
-    const wrapper = mount(<ArrowIcon/>);
+    const {element} = render(<ArrowIcon/>);
 
-    expect(wrapper.text()).toEqual('▲');
+    expect(element).toHaveTextContent('▲');
   });
 
   test('should render downwards icon', () => {
-    const wrapper = mount(<ArrowIcon down={true}/>);
+    const {element} = render(<ArrowIcon down={true}/>);
 
-    expect(wrapper.text()).toEqual('▼');
+    expect(element).toHaveTextContent('▼');
   });
 
   test('should handle click', () => {
     const handler = jest.fn();
-    const wrapper = mount(<ArrowIcon onClick={handler}/>);
-    wrapper.simulate('click');
+    const {element} = render(<ArrowIcon onClick={handler}/>);
 
-    expect(handler.toHaveBeenCalled);
+    fireEvent.click(element);
+
+    expect(handler).toHaveBeenCalled();
   });
 
 });
