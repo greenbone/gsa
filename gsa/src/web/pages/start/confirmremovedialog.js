@@ -31,20 +31,10 @@ import PropTypes from 'web/utils/proptypes';
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
 import DialogTitle from 'web/components/dialog/title';
-import Button from 'web/components/dialog/button';
-
-import Divider from 'web/components/layout/divider';
-
-const StyledDivider = styled(Divider)`
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  border-color: #ddd;
-  margin-top: 15px;
-  padding: 10px 20px 10px 15px;
-`;
+import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
 
 const Content = styled.div`
-  padding: 5px;
+  padding: 5px 15px;
 `;
 
 const ConfirmRemoveDialog = ({
@@ -60,9 +50,7 @@ const ConfirmRemoveDialog = ({
     onClose={onDeny}
   >
     {({
-      close,
       moveProps,
-      heightProps,
     }) => (
       <DialogContent>
         <DialogTitle
@@ -74,24 +62,11 @@ const ConfirmRemoveDialog = ({
           {_('Do you really want to remove the Dashboard {{name}} and its ' +
              'configuration?', {name: dashboardTitle})}
         </Content>
-        <StyledDivider
-          align={['end', 'center']}
-          shrink="0"
-          grow
-        >
-          <Button
-            title={_('Remove')}
-            onClick={() => onConfirm(dashboardId)}
-          >
-            {_('Remove')}
-          </Button>
-          <Button
-            title={_('Abort')}
-            onClick={onDeny}
-          >
-            {_('Abort')}
-          </Button>
-        </StyledDivider>
+        <DialogTwoButtonFooter
+          rightButtonTitle={_('Remove')}
+          onLeftButtonClick={onDeny}
+          onRightButtonClick={() => onConfirm(dashboardId)}
+        />
       </DialogContent>
     )}
   </Dialog>

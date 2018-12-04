@@ -50,7 +50,7 @@ import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdispl
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
 /* eslint-enable max-len */
 
-const MAX_TITLE_LENGTH = 50;
+export const MAX_TITLE_LENGTH = 50;
 
 export const DEFAULT_DISPLAYS = [
   [

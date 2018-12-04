@@ -57,7 +57,11 @@ const SvgIcon = ({
   <Styled
     {...other}
     active={active}
-    onClick={isDefined(onClick) ? () => onClick(value) : undefined}
+    onClick={isDefined(onClick) ? event => {
+      event.preventDefault();
+      event.stopPropagation();
+      onClick(value);
+    } : undefined}
   >
 
     {isDefined(to) ?

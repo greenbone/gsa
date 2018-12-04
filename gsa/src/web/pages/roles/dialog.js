@@ -219,7 +219,7 @@ const Dialog = ({
                                   permission.resource)
                               }
                             </TableData>
-                            <TableData align="center">
+                            <TableData align={['center', 'center']}>
                               {!permission.isInUse() &&
                                 <TrashIcon
                                   title={_('Move permission to trashcan')}
