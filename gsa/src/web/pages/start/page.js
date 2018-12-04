@@ -118,10 +118,10 @@ class StartPage extends React.Component {
 
     this.handleActivateTab = this.handleActivateTab.bind(this);
 
-    this.handleConfirmRemoveDashboard =
-      this.handleConfirmRemoveDashboard.bind(this);
-    this.handleConfirmRemoveDialogClose =
-      this.handleConfirmRemoveDialogClose.bind(this);
+    this.handleOpenConfirmRemoveDashboardDialog =
+      this.handleOpenConfirmRemoveDashboardDialog.bind(this);
+    this.handleCloseConfirmRemoveDashboardDialog =
+      this.handleCloseConfirmRemoveDashboardDialog.bind(this);
 
     this.handleRemoveDashboard = this.handleRemoveDashboard.bind(this);
 
@@ -135,8 +135,8 @@ class StartPage extends React.Component {
 
     this.handleOpenNewDashboardDialog =
       this.handleOpenNewDashboardDialog.bind(this);
-    this.handleNewDashboardDialogClose =
-      this.handleNewDashboardDialogClose.bind(this);
+    this.handleCloseNewDashboardDialog =
+      this.handleCloseNewDashboardDialog.bind(this);
 
     this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
 
@@ -190,14 +190,14 @@ class StartPage extends React.Component {
     });
   }
 
-  handleConfirmRemoveDashboard(id) {
+  handleOpenConfirmRemoveDashboardDialog(id) {
     this.setState({
       showConfirmRemoveDialog: true,
       removeDashboardId: id,
     });
   }
 
-  handleConfirmRemoveDialogClose() {
+  handleCloseConfirmRemoveDashboardDialog() {
     this.setState({showConfirmRemoveDialog: false});
   }
 
@@ -209,7 +209,7 @@ class StartPage extends React.Component {
     this.setState({showNewDashboardDialog: true});
   }
 
-  handleNewDashboardDialogClose() {
+  handleCloseNewDashboardDialog() {
     this.closeNewDashboardDialog();
   }
 
@@ -409,13 +409,11 @@ class StartPage extends React.Component {
                             <IconDivider>
                               <EditIcon
                                 title={_('Edit Dashboard Title')}
-                                onClick={
-                                  () => this.handleOpenEditDashboardDialog(id)}
+                                onClick={() => this.handleOpenEditDashboardDialog(id)} // eslint-disable-line max-len
                               />
                               <DeleteIcon
                                 title={_('Remove Dashboard')}
-                                onClick={() =>
-                                  this.handleConfirmRemoveDashboard(id)}
+                                onClick={() => this.handleOpenConfirmRemoveDashboardDialog(id)} // eslint-disable-line max-len
                               />
                             </IconDivider>
                           }
@@ -479,13 +477,13 @@ class StartPage extends React.Component {
           <ConfirmRemoveDialog
             dashboardId={removeDashboardId}
             dashboardTitle={this.getDashboardTitle(removeDashboardId)}
-            onDeny={this.handleConfirmRemoveDialogClose}
+            onDeny={this.handleCloseConfirmRemoveDashboardDialog}
             onConfirm={this.handleRemoveDashboard}
           />
         }
         {showNewDashboardDialog &&
           <NewDashboardDialog
-            onClose={this.handleNewDashboardDialogClose}
+            onClose={this.handleCloseNewDashboardDialog}
             onSave={this.handleAddNewDashboard}
           />
         }
