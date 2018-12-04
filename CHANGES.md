@@ -15,8 +15,28 @@ Michael Wiegand (wiegandm) and asmaack.
 
 Main changes compared to 8.0+beta1
 
-  * Put NVT preferences into own tab on detailspage #991
+  * Refined appearance of the GUI #987, #991, #995, #998, #1004, #1021, #1025,
+    #1026, #1030, #1037, #1043, #1053, #1058
+  * Allow rename main dashboards #1076
+  * Don't close dialog on outer clicks #1074
+  * Allow to encrypt alert emails via smime and pgp #1070
+  * New credential types smime and pgp for alert email encryption #1070
+  * Fixed displaying the Observer icon #1053
+  * New reworked icon set #1053
+  * Add cancel button to all dialogs #1048
+  * Don't crash GSA completely if an unexpected error did occur #1046
+  * Fix saving nvt preferences in gsad #1045
+  * Fix "Current User" inheritance on "Delete User" #1038
+  * Don't show links to details pages for entities in Trashcan #1035
+  * Remove maxlength of hosts for notes and overrides #1033
+  * Allow to store dashboard chart specific data #1022
+  * Updated and improved Line Charts #1012 #1022
+  * Cleaned up wizards #1001
+  * Split Results Host column into IP and Name #999 #998
+  * Update to Create React App 2.0 #997
+  * Put NVT preferences into own tab on details page #991
   * Change report summary table appearance #991
+  * Allow to toggle chart legend and 2D/3D view of pie charts #989
   * Changed visual appearance of Tables #983
   * Changed Donut Chart to a Pie Chart #982
   * Improved visual appearance of Donut Charts while resizing #979
