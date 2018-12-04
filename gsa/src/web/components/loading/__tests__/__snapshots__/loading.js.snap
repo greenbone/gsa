@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loading component tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c2 {
+  border: 12px solid #c8d3d9;
+  border-top: 12px solid #66c430;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: iECmZH 2s linear infinite;
+  animation: iECmZH 2s linear infinite;
+}
+
+.c0 {
+  width: 100%;
+}
+
+<div
+  class="c0 c1"
+>
+  <div
+    class="c2"
+  />
+</div>
+`;

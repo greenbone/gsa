@@ -23,13 +23,16 @@
 
 import React from 'react';
 
-import {mount} from 'enzyme';
+import {render} from 'web/utils/testing';
+
 import Loading from '../loading.js';
 
 describe('Loading component tests', () => {
 
-  test('should render without crashing', () => {
-    mount(<Loading/>);
+  test('should render', () => {
+    const {element} = render(<Loading/>);
+
+    expect(element).toMatchSnapshot();
   });
 
 });
