@@ -201,8 +201,6 @@ http_response_t *
 file_content_response (http_connection_t *connection, const char *url,
                        const char *path, cmd_response_data_t *response_data);
 
-gboolean is_export(http_connection_t *connection);
-
 gchar * reconstruct_url (http_connection_t *connection, const char *url);
 
 int get_client_address (http_connection_t *conn, char *client_address);

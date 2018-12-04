@@ -85,17 +85,6 @@ gsad_base_cleanup ()
 }
 
 /**
- * @brief Gets the chroot state.
- *
- * @return  The chroot state: 0 = no chroot, 1 = chroot in effect
- */
-int
-get_chroot_state ()
-{
-  return chroot_state;
-}
-
-/**
  * @brief Sets the chroot state.
  *
  * @param[in]  state The new chroot state.
@@ -104,17 +93,6 @@ void
 set_chroot_state (int state)
 {
   chroot_state = state;
-}
-
-/**
- * @brief Gets the http_only state.
- *
- * @return  The http_only state: 0 = using HTTPS, 1 = HTTP only
- */
-int
-get_http_only ()
-{
-  return http_only;
 }
 
 /**
