@@ -46,13 +46,11 @@ const StyledLayout = styled(Layout)`
   width: 100%;
 `;
 
-const Loading = () => {
-  return (
-    <StyledLayout align={['center', 'center']}>
-      <Loader/>
-    </StyledLayout>
-  );
-};
+const Loading = () => (
+  <StyledLayout align={['center', 'center']}>
+    <Loader/>
+  </StyledLayout>
+);
 
 export default Loading;
 
