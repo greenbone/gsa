@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatePicker component tests should render 1`] = `
+.c2 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c2 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c1 {
+  margin-left: 5px;
+}
+
+.c1:hover {
+  cursor: pointer;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: 5px;
+  width: auto;
+}
+
+<div>
+  <div
+    class="react-datepicker-wrapper"
+  >
+    <div
+      class="react-datepicker__input-container"
+    >
+      <div
+        class="c0"
+        width="auto"
+      >
+        2018/12/04
+        <span
+          class=""
+        >
+          <div
+            class="c1 c2 "
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`DatePicker component tests should render 2`] = `
+<div>
+  <div
+    class="react-datepicker-wrapper"
+  >
+    <div
+      class="react-datepicker__input-container"
+    >
+      <div
+        class="sc-EHOje bgoweR"
+        width="auto"
+      >
+        2018/12/04
+        <span
+          class="sc-bwzfXH gkqBXL"
+        >
+          <div
+            class="sc-ifAKCX hqILdJ sc-bxivhb bwPPCR sc-htpNat jkOTZE"
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;
