@@ -29,7 +29,7 @@ describe('StyledElement tests', () => {
     expect(element).toHaveStyleRule('cursor', 'pointer');
   });
 
-  test('should render in disbled state', () => {
+  test('should render in disabled state', () => {
     const {element} = render(<StyledElement disabled={true}/>);
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
   });
@@ -44,7 +44,7 @@ describe('StyledInput tests', () => {
     expect(element).not.toHaveStyleRule('opacity');
   });
 
-  test('should render in disbled state', () => {
+  test('should render in disabled state', () => {
     const {element} = render(<StyledInput disabled={true}/>);
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
     expect(element).toHaveStyleRule('opacity', '0.7');
@@ -60,7 +60,7 @@ describe('StyledTitle tests', () => {
     expect(element).toHaveStyleRule('opacity', '1');
   });
 
-  test('should render in disbled state', () => {
+  test('should render in disabled state', () => {
     const {element} = render(<StyledTitle disabled={true}/>);
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
     expect(element).toHaveStyleRule('opacity', '0.5');
