@@ -6,7 +6,7 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
-## Unreleased
+## gsa 8.0+beta2 (2018-12-04)
 
 Many thanks to everyone who has contributed to this release:
 Christian Fischer (cfi-gb), Matthew Mundell (mattmundell), Timo Pollmeier
