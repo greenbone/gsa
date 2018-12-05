@@ -184,8 +184,8 @@ class ReportDetails extends React.Component {
       Filter.fromString(filterString) : undefined;
 
     this.load(filter);
-    this.loadFilters();
-    this.loadReportFormats();
+    this.props.loadFilters();
+    this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
   }
 
@@ -241,14 +241,6 @@ class ReportDetails extends React.Component {
 
     this.props.loadReport(reportId, deltaReportId, filter)
       .then(() => this.startTimer());
-  }
-
-  loadReportFormats() {
-    this.props.loadReportFormats();
-  }
-
-  loadFilters() {
-    this.props.loadFilters();
   }
 
   reload() {
@@ -447,7 +439,7 @@ class ReportDetails extends React.Component {
     this.handleInteraction();
 
     this.load(filter);
-    this.loadFilters();
+    this.props.loadFilters();
   }
 
   handleFilterAddLogLevel() {
