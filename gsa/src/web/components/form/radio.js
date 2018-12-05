@@ -81,6 +81,7 @@ const RadioComponent = ({
         {...other}
         disabled={disabled}
         type="radio"
+        data-testid="radio-input"
       />
       {isDefined(title) &&
         <StyledTitle data-testid="radio-title" disabled={disabled}>

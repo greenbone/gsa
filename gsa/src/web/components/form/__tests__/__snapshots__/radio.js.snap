@@ -98,6 +98,7 @@ exports[`Radio tests should render radio 1`] = `
     >
       <input
         class="c4 c5"
+        data-testid="radio-input"
         type="radio"
         value=""
       />
