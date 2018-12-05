@@ -18,12 +18,18 @@
  */
 import React from 'react';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import {render, fireEvent} from 'web/utils/testing';
-import CloseButton from '../closebutton';
+
 import {
   ICON_SIZE_LARGE_PIXELS,
   ICON_SIZE_MEDIUM_PIXELS,
 } from 'web/components/icon/withIconSize';
+
+import CloseButton from '../closebutton';
+
+setLocale('en');
 
 describe('Dialog CloseButton tests', () => {
 
