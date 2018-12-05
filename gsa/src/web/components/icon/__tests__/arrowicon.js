@@ -35,8 +35,8 @@ describe('ArrowIcon component tests', () => {
 
     expect(element).toMatchSnapshot();
 
-    expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS)
-    expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS)
+    expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
+    expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
   });
 
   test('should render upwards icon', () => {
