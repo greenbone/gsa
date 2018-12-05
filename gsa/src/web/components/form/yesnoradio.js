@@ -35,40 +35,38 @@ import Layout from 'web/components/layout/layout';
 import Radio from './radio';
 
 const YesNoRadio = ({
-    convert = parseYesNo,
-    disabled,
-    value,
-    name,
-    yesValue = YES_VALUE,
-    noValue = NO_VALUE,
-    onChange,
-    ...other
-  }) => {
-  return (
-    <Layout {...other}>
-      <Divider>
-        <Radio
-          title={_('Yes')}
-          value={yesValue}
-          name={name}
-          checked={value === yesValue}
-          convert={convert}
-          onChange={onChange}
-          disabled={disabled}
-        />
-        <Radio
-          title={_('No')}
-          value={noValue}
-          name={name}
-          checked={value === noValue}
-          convert={convert}
-          onChange={onChange}
-          disabled={disabled}
-        />
-      </Divider>
-    </Layout>
-  );
-};
+  convert = parseYesNo,
+  disabled,
+  value,
+  name,
+  yesValue = YES_VALUE,
+  noValue = NO_VALUE,
+  onChange,
+  ...other
+}) => (
+  <Layout {...other}>
+    <Divider>
+      <Radio
+        title={_('Yes')}
+        value={yesValue}
+        name={name}
+        checked={value === yesValue}
+        convert={convert}
+        onChange={onChange}
+        disabled={disabled}
+      />
+      <Radio
+        title={_('No')}
+        value={noValue}
+        name={name}
+        checked={value === noValue}
+        convert={convert}
+        onChange={onChange}
+        disabled={disabled}
+      />
+    </Divider>
+  </Layout>
+);
 
 YesNoRadio.propTypes = {
   convert: PropTypes.func,
