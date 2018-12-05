@@ -123,6 +123,30 @@ describe('withChangeHandlerTests', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  test('should allow to set a debounce delay', () => {
+    jest.useFakeTimers();
+
+    const Component = withChangeHandler()(props => <input {...props}/>);
+
+    const onChange = jest.fn();
+    const {element} = render(
+      <Component
+        name="bar"
+        debounce={500}
+        onChange={onChange}
+      />
+    );
+
+    fireEvent.change(element, {target: {value: 1}});
+    fireEvent.change(element, {target: {value: 2}});
+    fireEvent.change(element, {target: {value: 3}});
+
+    jest.runAllTimers();
+
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith('3', 'bar');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
