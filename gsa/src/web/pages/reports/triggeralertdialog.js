@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -32,7 +32,7 @@ import {renderSelectItems} from 'web/utils/render';
 import ComposerContent from 'web/components/dialog/composercontent';
 import SaveDialog from 'web/components/dialog/savedialog';
 
-// import CheckBox from 'web/components/form/checkbox';
+import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
@@ -41,9 +41,9 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-// const StyledDiv = styled.div`
-//   text-align: end;
-// `;
+const StyledDiv = styled.div`
+  text-align: end;
+`;
 
 const TriggerAlertDialog = ({
   alerts,
@@ -52,7 +52,7 @@ const TriggerAlertDialog = ({
   filter = {},
   includeNotes = YES_VALUE,
   includeOverrides = YES_VALUE,
-  // storeAsDefault,
+  storeAsDefault,
   onAlertChange,
   onClose,
   onNewAlertClick,
@@ -66,7 +66,7 @@ const TriggerAlertDialog = ({
     applyOverrides,
     includeNotes,
     includeOverrides,
-    // storeAsDefault,
+    storeAsDefault,
   };
 
   const controlledValues = {
@@ -107,7 +107,7 @@ const TriggerAlertDialog = ({
               />
             </Divider>
           </FormGroup>
-          {/* <StyledDiv>
+          <StyledDiv>
             <CheckBox
               name="storeAsDefault"
               checked={storeAsDefault}
@@ -116,7 +116,7 @@ const TriggerAlertDialog = ({
               title={_('Store as default')}
               onChange={onValueChange}
             />
-          </StyledDiv> */}
+          </StyledDiv>
         </Layout>
       )}
     </SaveDialog>
@@ -126,7 +126,7 @@ const TriggerAlertDialog = ({
 TriggerAlertDialog.propTypes = {
   alertId: PropTypes.id,
   alerts: PropTypes.array,
-  applyOverrides: PropTypes.number,
+  applyOverrides: PropTypes.numberOrNumberString,
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
