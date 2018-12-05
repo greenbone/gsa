@@ -22,29 +22,53 @@
  */
 import React from 'react';
 
-import {mount} from 'enzyme';
+import {render, fireEvent} from 'web/utils/testing';
+
 import Select from '../select.js';
-import {Box, SelectedValue, Item, Input} from '../selectelements.js';
+
+const openSelectElement = element => {
+    const button = element.querySelector('[type="button"]');
+    fireEvent.click(button);
+};
+
+const getItemElements = baseElement => {
+    const portal = baseElement.querySelector('#portals');
+    return portal.querySelectorAll('span');
+};
+
+const getInputBox = baseElement => {
+    const portal = baseElement.querySelector('#portals');
+    return portal.querySelector('[role="combobox"]');
+};
 
 describe('Select component tests', () => {
 
-  test('should render without crashing', () => {
-    mount(<Select/>);
+  test('should render', () => {
+    const {element} = render(<Select/>);
+
+    expect(element).toMatchSnapshot();
   });
 
   test('should render with options', () => {
-    const wrapper = mount(
+    const {baseElement, element} = render(
       <Select>
         <option value="foo">Foo</option>
         <option value="bar">Bar</option>
       </Select>
     );
 
-    wrapper.find(Box).simulate('click');
+    let items = getItemElements(baseElement);
 
-    const elements = wrapper.find(Item);
+    // ensure selection is not shown yet
+    expect(items.length).toEqual(0);
 
-    expect(elements.length).toBe(2);
+    openSelectElement(element);
+
+    items = getItemElements(baseElement);
+
+    expect(items.length).toEqual(2);
+    expect(items[0]).toHaveTextContent('Foo');
+    expect(items[1]).toHaveTextContent('Bar');
   });
 
   test('should render with items', () => {
@@ -55,16 +79,23 @@ describe('Select component tests', () => {
       value: 'foo',
       label: 'Foo',
     }];
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <Select
         items={items}
       />
     );
-    wrapper.find(Box).simulate('click');
 
-    const elements = wrapper.find(Item);
+    let domItems = getItemElements(baseElement);
 
-    expect(elements.length).toBe(2);
+    expect(domItems.length).toEqual(0);
+
+    openSelectElement(element);
+
+    domItems = getItemElements(baseElement);
+
+    expect(domItems.length).toEqual(2);
+    expect(domItems[0]).toHaveTextContent('Bar');
+    expect(domItems[1]).toHaveTextContent('Foo');
   });
 
   test('should call onChange handler', () => {
@@ -78,18 +109,21 @@ describe('Select component tests', () => {
 
     const onChange = jest.fn();
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <Select
         items={items}
         onChange={onChange}
       />
     );
 
-    wrapper.find(Box).simulate('click');
-    wrapper.find(Item).at(1).simulate('click');
+    openSelectElement(element);
+
+    const domItems = getItemElements(baseElement);
+
+    fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith('foo', undefined);
+    expect(onChange).toBeCalledWith('bar', undefined);
   });
 
   test('should call onChange handler with name', () => {
@@ -103,7 +137,7 @@ describe('Select component tests', () => {
 
     const onChange = jest.fn();
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <Select
         name="abc"
         items={items}
@@ -111,14 +145,17 @@ describe('Select component tests', () => {
       />
     );
 
-    wrapper.find(Box).simulate('click');
-    wrapper.find(Item).at(0).simulate('click');
+    openSelectElement(element);
+
+    const domItems = getItemElements(baseElement);
+
+    fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('bar', 'abc');
   });
 
-  test('should change displayed value', () => {
+  test('should change value', () => {
     const items = [{
       value: 'bar',
       label: 'Bar',
@@ -127,17 +164,28 @@ describe('Select component tests', () => {
       label: 'Foo',
     }];
 
-    const wrapper = mount(
+    const onChange = jest.fn();
+
+    const {baseElement, element} = render(
       <Select
         items={items}
         value="bar"
+        onChange={onChange}
       />
     );
 
-    expect(wrapper.find(SelectedValue).text()).toEqual('Bar');
+    const displayedValue = element.querySelector('[type="button"]').firstChild;
 
-    wrapper.setProps({value: 'foo'});
-    expect(wrapper.find(SelectedValue).text()).toEqual('Foo');
+    expect(displayedValue).toHaveTextContent('bar');
+
+    openSelectElement(element);
+
+    const domItems = getItemElements(baseElement);
+
+    fireEvent.click(domItems[1]);
+
+    expect(onChange).toBeCalled();
+    expect(onChange).toBeCalledWith('foo', undefined);
   });
 
   test('should filter items', () => {
@@ -152,28 +200,31 @@ describe('Select component tests', () => {
       label: 'Foo',
     }];
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <Select
         items={items}
         value="bar"
       />
     );
 
-    wrapper.find(Box).simulate('click');
-    expect(wrapper.find(Item).length).toBe(3);
+    openSelectElement(element);
 
-    const fake_event = {target: {value: 'ba'}};
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(3);
 
-    wrapper.find(Input).simulate('change', fake_event);
+    const input = getInputBox(baseElement);
 
-    expect(wrapper.find(Item).length).toBe(2);
+    fireEvent.change(input, {target: {value: 'ba'}});
 
-    fake_event.target.value = 'F';
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(2);
 
-    wrapper.find(Input).simulate('change', fake_event);
+    fireEvent.change(input, {target: {value: 'F'}});
 
-    expect(wrapper.find(Item).length).toBe(1);
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(1);
   });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
