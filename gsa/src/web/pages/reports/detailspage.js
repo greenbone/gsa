@@ -58,7 +58,13 @@ import {
   selector as reportSelector,
 } from 'web/store/entities/reports';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {
+  loadReportComposerDefaults,
+  renewSessionTimeout,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
 import {create_pem_certificate} from 'web/utils/cert';
 import {
@@ -180,6 +186,7 @@ class ReportDetails extends React.Component {
     this.load(filter);
     this.loadFilters();
     this.loadReportFormats();
+    this.props.loadReportComposerDefaults();
   }
 
   componentWillUnmount() {
@@ -362,7 +369,10 @@ class ReportDetails extends React.Component {
   }
 
   handleOpenDownloadReportDialog() {
-    this.setState({showDownloadReportDialog: true});
+    this.setState({
+      ...this.props.reportComposerDefaults,
+      showDownloadReportDialog: true,
+    });
   }
 
   handleCloseDownloadReportDialog() {
@@ -383,12 +393,22 @@ class ReportDetails extends React.Component {
       includeNotes,
       includeOverrides,
       reportFormatId,
-      // storeAsDefault,
+      storeAsDefault,
     } = state;
 
     filter.set('notes', includeNotes);
     filter.set('overrides', includeOverrides);
     filter.set('apply_overrides', applyOverrides);
+
+    if (storeAsDefault) {
+      const defaults = {
+        applyOverrides,
+        includeNotes,
+        includeOverrides,
+      };
+      this.props.saveReportComposerDefaults(defaults)
+      .then(this.props.loadReportComposerDefaults());
+    }
 
     const report_format = reportFormats.find(
       format => reportFormatId === format.id);
@@ -526,7 +546,7 @@ class ReportDetails extends React.Component {
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
-      // storeAsDefault,
+      storeAsDefault,
     } = this.state;
 
     const {report} = entity || {};
@@ -587,7 +607,7 @@ class ReportDetails extends React.Component {
             includeOverrides={includeOverrides}
             reportFormatId={reportFormatId}
             reportFormats={reportFormats}
-            // storeAsDefault={storeAsDefault}
+            storeAsDefault={storeAsDefault}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
             onValueChange={this.handleValueChange}
@@ -607,12 +627,15 @@ ReportDetails.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   loadFilters: PropTypes.func.isRequired,
   loadReport: PropTypes.func.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  reportComposerDefaults: PropTypes.obj,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -631,6 +654,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadReport: (id, deltaId, filter) => dispatch(isDefined(deltaId) ?
       loadDeltaReport(gmp)(id, deltaId, filter) :
       loadReport(gmp)(id, filter)),
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: defaults =>
+      dispatch(saveReportComposerDefaults(gmp)(defaults)),
   };
 };
 
@@ -651,6 +678,7 @@ const mapStateToProps = (rootState, {match}) => {
     reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     deltaReportId: deltaid,
+    reportComposerDefaults: getReportComposerDefaults(rootState),
   };
 };
 
