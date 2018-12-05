@@ -225,6 +225,38 @@ describe('MultiSelect component tests', () => {
     expect(domItems.length).toEqual(1);
   });
 
+  test('should remove selected item', () => {
+    const items = [{
+      value: 'bar',
+      label: 'Bar',
+    }, {
+      value: 'foo',
+      label: 'Foo',
+    }];
+
+    const onChange = jest.fn();
+
+    const {getAllByTestId} = render(
+      <MultiSelect
+        items={items}
+        value={['bar', 'foo']}
+        onChange={onChange}
+      />
+    );
+
+    let selectedItems = getAllByTestId('multiselect-selected-label');
+    expect(selectedItems.length).toEqual(2);
+
+    const deleteIcons = getAllByTestId('multiselect-selected-delete');
+    expect(deleteIcons.length).toEqual(2);
+    fireEvent.click(deleteIcons[0]);
+
+    selectedItems = getAllByTestId('multiselect-selected-label');
+    expect(selectedItems.length).toEqual(1);
+
+    expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
