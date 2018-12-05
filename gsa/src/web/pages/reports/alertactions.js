@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -26,6 +28,7 @@ import logger from 'gmp/log';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
@@ -36,6 +39,14 @@ import IconDivider from 'web/components/layout/icondivider';
 import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
 
 import AlertComponent from 'web/pages/alerts/component';
+
+import {
+  loadReportComposerDefaults,
+  renewSessionTimeout,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -59,6 +70,7 @@ class AlertActions extends React.Component {
 
   componentDidMount() {
     const {gmp} = this.props;
+    this.props.loadReportComposerDefaults();
     gmp.alerts.getAll().then(response => {
       const {data: alerts} = response;
       const alertId = first(alerts).id;
@@ -86,6 +98,7 @@ class AlertActions extends React.Component {
       applyOverrides,
       includeNotes,
       includeOverrides,
+      storeAsDefault,
     } = state;
     const {
       filter,
@@ -100,6 +113,16 @@ class AlertActions extends React.Component {
     filter.set('apply_overrides', applyOverrides);
 
     this.handleInteraction();
+
+    if (storeAsDefault) {
+      const defaults = {
+        applyOverrides,
+        includeNotes,
+        includeOverrides,
+      };
+      this.props.saveReportComposerDefaults(defaults)
+      .then(this.props.loadReportComposerDefaults());
+    }
 
     gmp.report.alert({
       report_id: report.id,
@@ -117,7 +140,10 @@ class AlertActions extends React.Component {
   }
 
   handleOpenTriggerAlertDialog() {
-    this.setState({showTriggerAlertDialog: true});
+    this.setState({
+      ...this.props.reportComposerDefaults,
+      showTriggerAlertDialog: true,
+    });
   }
 
   handleCloseTriggerAlertDialog() {
@@ -198,13 +224,33 @@ class AlertActions extends React.Component {
 AlertActions.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
   report: PropTypes.model.isRequired,
+  reportComposerDefaults: PropTypes.obj,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(AlertActions);
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  return {
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: defaults =>
+      dispatch(saveReportComposerDefaults(gmp)(defaults)),
+  };
+};
+
+const mapStateToProps = rootState => {
+  return {reportComposerDefaults: getReportComposerDefaults(rootState)};
+};
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AlertActions);
 
 // vim: set ts=2 sw=2 tw=80:
