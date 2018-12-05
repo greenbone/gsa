@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -32,17 +32,16 @@ import {renderSelectItems} from 'web/utils/render';
 import ComposerContent from 'web/components/dialog/composercontent';
 import SaveDialog from 'web/components/dialog/savedialog';
 
-// import CheckBox from 'web/components/form/checkbox';
+import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-
-// const StyledDiv = styled.div`
-//   text-align: end;
-// `;
+const StyledDiv = styled.div`
+  text-align: end;
+`;
 
 const DownloadReportDialog = ({
   applyOverrides = NO_VALUE,
@@ -51,7 +50,7 @@ const DownloadReportDialog = ({
   includeOverrides = YES_VALUE,
   reportFormatId,
   reportFormats,
-  // storeAsDefault,
+  storeAsDefault,
   onClose,
   onSave,
 }) => {
@@ -63,7 +62,7 @@ const DownloadReportDialog = ({
     includeNotes,
     includeOverrides,
     reportFormatId,
-    // storeAsDefault,
+    storeAsDefault,
   };
 
   return (
@@ -96,7 +95,7 @@ const DownloadReportDialog = ({
               />
             </Divider>
           </FormGroup>
-          {/* <StyledDiv>
+          <StyledDiv>
             <CheckBox
               name="storeAsDefault"
               checked={storeAsDefault}
@@ -105,7 +104,7 @@ const DownloadReportDialog = ({
               title={_('Store as default')}
               onChange={onValueChange}
             />
-          </StyledDiv> */}
+          </StyledDiv>
         </Layout>
       )}
     </SaveDialog>
@@ -113,13 +112,13 @@ const DownloadReportDialog = ({
 };
 
 DownloadReportDialog.propTypes = {
-  applyOverrides: PropTypes.number,
+  applyOverrides: PropTypes.numberOrNumberString,
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
   reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
-  // storeAsDefault: PropTypes.bool,
+  storeAsDefault: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func.isRequired,
