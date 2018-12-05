@@ -147,6 +147,32 @@ describe('withChangeHandlerTests', () => {
     expect(onChange).toHaveBeenCalledWith('3', 'bar');
   });
 
+  test('should set value on component', () => {
+    const Component = withChangeHandler()(props => <input {...props}/>);
+
+    const {rerender, element} = render(
+      <Component
+        name="bar"
+        value="foo"
+      />
+    );
+
+    expect(element).toHaveAttribute('value', 'foo');
+
+    fireEvent.change(element, {target: {value: 'bar'}});
+
+    expect(element).toHaveAttribute('value', 'bar');
+
+    rerender(
+      <Component
+        name="bar"
+        value="foobar"
+      />
+    );
+
+    expect(element).toHaveAttribute('value', 'foobar');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
