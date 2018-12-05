@@ -47,6 +47,9 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.users');
 
+const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
+  'b6b449ee-5d90-4ff0-af20-7e838c389d39';
+
 class UserCommand extends EntityCommand {
 
   constructor(http) {
@@ -264,6 +267,38 @@ class UserCommand extends EntityCommand {
       'settings_filter:feefe56b-e2da-4913-81cc-1a6ae3b36e64': data.secInfoFilter,
       /* eslint-enable max-len */
       auto_cache_rebuild: data.autoCacheRebuild,
+    });
+  }
+
+  getReportComposerDefaults() {
+    return this.httpGet({
+      cmd: 'get_setting',
+      setting_id: REPORT_COMPOSER_DEFAULTS_SETTING_ID,
+    }).then(response => {
+      const {data} = response;
+      const {setting = {}} = data.get_settings.get_settings_response;
+      const {value} = setting;
+      let defaults;
+
+      try {
+        defaults = JSON.parse(value);
+      }
+      catch (e) {
+        log.warn('Could not parse report composer defaults');
+        return;
+      }
+
+      return response.setData(defaults);
+    });
+  }
+
+  saveReportComposerDefaults(defaults = {}) {
+    log.debug('Saving report composer defaults', defaults);
+
+    return this.action({
+      cmd: 'save_setting',
+      setting_id: REPORT_COMPOSER_DEFAULTS_SETTING_ID,
+      setting_value: JSON.stringify(defaults),
     });
   }
 
