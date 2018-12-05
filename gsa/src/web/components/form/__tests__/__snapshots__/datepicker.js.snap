@@ -40,7 +40,7 @@ exports[`DatePicker component tests should render 1`] = `
         class="c0"
         width="auto"
       >
-        2018/12/04
+        2018/11/11
         <span
           class=""
         >
@@ -66,7 +66,7 @@ exports[`DatePicker component tests should render 2`] = `
         class="sc-EHOje bgoweR"
         width="auto"
       >
-        2018/12/04
+        2018/11/11
         <span
           class="sc-bwzfXH gkqBXL"
         >

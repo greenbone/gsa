@@ -31,7 +31,8 @@ import date from 'gmp/models/date';
 describe('DatePicker component tests', () => {
 
   test('should render', () => {
-    const {element} = render(<DatePicker value={date()}/>);
+    const adate = date('2018-11-11');
+    const {element} = render(<DatePicker value={adate}/>);
 
     expect(element).toMatchSnapshot();
 
