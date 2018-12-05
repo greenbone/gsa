@@ -48,32 +48,32 @@ const convert_checked = (value, props) => {
 };
 
 const CheckboxComponent = ({
-    title,
-    children,
-    disabled,
-    checkedValue,
-    unCheckedValue,
-    ...other
-  }) => {
-
-  return (
-    <StyledElement>
-      <Divider>
-        <StyledInput
-          {...other}
+  title,
+  children,
+  disabled,
+  checkedValue,
+  unCheckedValue,
+  ...other
+}) => (
+  <StyledElement>
+    <Divider>
+      <StyledInput
+        {...other}
+        disabled={disabled}
+        type="checkbox"
+      />
+      {isDefined(title) &&
+        <StyledTitle
+          data-testid="checkbox-title"
           disabled={disabled}
-          type="checkbox"
-        />
-        {isDefined(title) &&
-          <StyledTitle disabled={disabled}>
-            {title}
-          </StyledTitle>
-        }
-      </Divider>
-      {children}
-    </StyledElement>
-  );
-};
+        >
+          {title}
+        </StyledTitle>
+      }
+    </Divider>
+    {children}
+  </StyledElement>
+);
 
 CheckboxComponent.propTypes = {
   checkedValue: PropTypes.any,
