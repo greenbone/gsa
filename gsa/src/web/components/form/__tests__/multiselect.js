@@ -22,31 +22,45 @@
  */
 import React from 'react';
 
-import {mount} from 'enzyme';
+import {render, fireEvent} from 'web/utils/testing';
 
-import ArrowIcon from '../../icon/arrowicon';
+import MultiSelect from '../multiselect.js';
 
-import {Item, Input} from '../selectelements.js';
-import MultiSelect, {MultiSelectedValue} from '../multiselect.js';
+const openInputElement = element => {
+    const button = element.querySelector('[type="button"]');
+    fireEvent.click(button);
+};
+
+const getItemElements = baseElement => {
+    const portal = baseElement.querySelector('#portals');
+    return portal.querySelectorAll('span');
+};
 
 describe('MultiSelect component tests', () => {
 
-  test('should render without crashing', () => {
-    mount(<MultiSelect/>);
+  test('should render', () => {
+    const {element} = render(<MultiSelect/>);
+
+    expect(element).toMatchSnapshot();
   });
 
   test('should render with options', () => {
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <MultiSelect>
         <option value="foo">Foo</option>
         <option value="bar">Bar</option>
       </MultiSelect>
     );
-    wrapper.find(ArrowIcon).simulate('click');
 
-    const elements = wrapper.find(Item);
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
 
-    expect(elements.length).toBe(2);
+    openInputElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(2);
+    expect(domItems[0]).toHaveTextContent('Foo');
+    expect(domItems[1]).toHaveTextContent('Bar');
   });
 
   test('should render with items', () => {
@@ -58,14 +72,19 @@ describe('MultiSelect component tests', () => {
       label: 'Foo',
     }];
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <MultiSelect items={items}/>
     );
-    wrapper.find(ArrowIcon).simulate('click');
 
-    const elements = wrapper.find(Item);
+    let domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(0);
 
-    expect(elements.length).toBe(2);
+    openInputElement(element);
+
+    domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(2);
+    expect(domItems[0]).toHaveTextContent('Bar');
+    expect(domItems[1]).toHaveTextContent('Foo');
   });
 
   test('should call onChange handler', () => {
@@ -79,15 +98,19 @@ describe('MultiSelect component tests', () => {
 
     const onChange = jest.fn();
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <MultiSelect
         items={items}
         onChange={onChange}
       />
     );
 
-    wrapper.find(ArrowIcon).simulate('click');
-    wrapper.find(Item).at(1).simulate('click');
+    openInputElement(element);
+
+    const domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(2);
+
+    fireEvent.click(domItems[1]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(['foo'], undefined);
@@ -104,7 +127,7 @@ describe('MultiSelect component tests', () => {
 
     const onChange = jest.fn();
 
-    const wrapper = mount(
+    const {element, baseElement} = render(
       <MultiSelect
         name="abc"
         items={items}
@@ -112,8 +135,12 @@ describe('MultiSelect component tests', () => {
       />
     );
 
-    wrapper.find(ArrowIcon).simulate('click');
-    wrapper.find(Item).at(0).simulate('click');
+    openInputElement(element);
+
+    const domItems = getItemElements(baseElement);
+    expect(domItems.length).toEqual(2);
+
+    fireEvent.click(domItems[0]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(['bar'], 'abc');
@@ -128,20 +155,39 @@ describe('MultiSelect component tests', () => {
       label: 'Foo',
     }];
 
-    const wrapper = mount(
+    const {rerender, getAllByTestId} = render(
       <MultiSelect
         items={items}
         value={['bar']}
       />
     );
 
-    expect(wrapper.find(MultiSelectedValue).find('span').text()).toEqual('Bar');
+    let displayedItems = getAllByTestId('multiselect-selected-label');
+    expect(displayedItems.length).toEqual(1);
+    expect(displayedItems[0]).toHaveTextContent('Bar');
 
-    wrapper.setProps({value: ['foo']});
-    expect(wrapper.find(MultiSelectedValue).find('span').text()).toEqual('Foo');
+    rerender(
+      <MultiSelect
+        items={items}
+        value={['foo']}
+      />
+    );
 
-    wrapper.setProps({value: ['bar', 'foo']});
-    expect(wrapper.find(MultiSelectedValue).find('span').length).toBe(2);
+    displayedItems = getAllByTestId('multiselect-selected-label');
+    expect(displayedItems.length).toEqual(1);
+    expect(displayedItems[0]).toHaveTextContent('Foo');
+
+    rerender(
+      <MultiSelect
+        items={items}
+        value={['foo', 'bar']}
+      />
+    );
+
+    displayedItems = getAllByTestId('multiselect-selected-label');
+    expect(displayedItems.length).toEqual(2);
+    expect(displayedItems[0]).toHaveTextContent('Foo');
+    expect(displayedItems[1]).toHaveTextContent('Bar');
   });
 
   test('should filter items', () => {
@@ -156,28 +202,29 @@ describe('MultiSelect component tests', () => {
       label: 'Foo',
     }];
 
-    const wrapper = mount(
+    const {element, getByTestId, getAllByTestId} = render(
       <MultiSelect
         items={items}
         value={[]}
       />
     );
 
-    wrapper.find(ArrowIcon).simulate('click');
-    expect(wrapper.find(Item).length).toBe(3);
+    openInputElement(element);
 
-    const fake_event = {target: {value: 'ba'}};
+    let domItems = getAllByTestId('multiselect-item-label');
+    expect(domItems.length).toEqual(3);
 
-    wrapper.find(Input).simulate('change', fake_event);
+    const input = getByTestId('multiselect-input');
 
-    expect(wrapper.find(Item).length).toBe(2);
+    fireEvent.change(input, {target: {value: 'ba'}});
+    domItems = getAllByTestId('multiselect-item-label');
+    expect(domItems.length).toEqual(2);
 
-    fake_event.target.value = 'F';
-
-    wrapper.find(Input).simulate('change', fake_event);
-
-    expect(wrapper.find(Item).length).toBe(1);
+    fireEvent.change(input, {target: {value: 'F'}});
+    domItems = getAllByTestId('multiselect-item-label');
+    expect(domItems.length).toEqual(1);
   });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
