@@ -5796,9 +5796,9 @@ jest-snapshot@^23.6.0:
     semver "^5.5.0"
 
 jest-styled-components@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/jest-styled-components/-/jest-styled-components-6.2.0.tgz#a8cbb39ff21a968e11a154c60b6e8c7b284595ff"
-  integrity sha512-I+7N5QIOnJnRt5dnJvsReTYcnnKsUw0l2J7oeTjDyj8+JEhTX/DutcJ9wq4XF9gBAF3qUwWt3H/MYzcDcAMm2w==
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/jest-styled-components/-/jest-styled-components-6.3.1.tgz#fa21a89bfe8c20081c7c083cbaed2200854b60e3"
+  integrity sha512-zie3ajvJbwlbHCAq8/Bv5jdbcYCz0ZMRNNX6adL7wSRpkCVPQtiJigv1140JN1ZOJIODPn8VKrjeFCN+jlPa7w==
   dependencies:
     css "^2.2.4"
 
