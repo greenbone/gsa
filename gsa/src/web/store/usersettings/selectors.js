@@ -20,6 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+export const getReportComposerDefaults = rootState => {
+  const {userSettings = {}} = rootState;
+  const {reportComposerDefaults} = userSettings;
+  return reportComposerDefaults;
+};
+
 export const getTimezone = rootState => rootState.userSettings.timezone;
 
 export const getLocale = rootState => rootState.userSettings.locale;
