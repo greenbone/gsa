@@ -48,10 +48,9 @@ const StyledInput = styled.input`
   &:-webkit-autofill {
     box-shadow: 0 0 0 1000px white inset;
   };
-  cursor: ${props => props.disabled ? 'not-allowed' : null};
-  background-color: ${props => props.disabled || props.readonly ?
-    Theme.dialogGray : null};
-  opacity: ${props => props.disabled || props.readonly ? 1 : null};
+  cursor: ${props => props.disabled ? 'not-allowed' : undefined};
+  background-color: ${props => props.disabled ? Theme.dialogGray : undefined};
+  opacity: ${props => props.disabled ? 1 : undefined};
 `;
 
 export default compose(
