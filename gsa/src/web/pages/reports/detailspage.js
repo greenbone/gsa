@@ -398,8 +398,7 @@ class ReportDetails extends React.Component {
         includeNotes,
         includeOverrides,
       };
-      this.props.saveReportComposerDefaults(defaults)
-      .then(this.props.loadReportComposerDefaults());
+      this.props.saveReportComposerDefaults(defaults);
     }
 
     const report_format = reportFormats.find(
@@ -624,7 +623,7 @@ ReportDetails.propTypes = {
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  reportComposerDefaults: PropTypes.obj,
+  reportComposerDefaults: PropTypes.object,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
   saveReportComposerDefaults: PropTypes.func.isRequired,
@@ -648,8 +647,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
       loadReport(gmp)(id, filter)),
     loadReportComposerDefaults: () => dispatch(
       loadReportComposerDefaults(gmp)()),
-    saveReportComposerDefaults: defaults =>
-      dispatch(saveReportComposerDefaults(gmp)(defaults)),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
 };
 

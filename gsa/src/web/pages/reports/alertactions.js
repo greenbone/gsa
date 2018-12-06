@@ -120,8 +120,7 @@ class AlertActions extends React.Component {
         includeNotes,
         includeOverrides,
       };
-      this.props.saveReportComposerDefaults(defaults)
-      .then(this.props.loadReportComposerDefaults());
+      this.props.saveReportComposerDefaults(defaults);
     }
 
     gmp.report.alert({
@@ -226,7 +225,7 @@ AlertActions.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   report: PropTypes.model.isRequired,
-  reportComposerDefaults: PropTypes.obj,
+  reportComposerDefaults: PropTypes.object,
   saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
@@ -239,8 +238,8 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadReportComposerDefaults: () => dispatch(
       loadReportComposerDefaults(gmp)()),
-    saveReportComposerDefaults: defaults =>
-      dispatch(saveReportComposerDefaults(gmp)(defaults)),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
 };
 

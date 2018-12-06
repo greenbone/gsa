@@ -54,15 +54,11 @@ export const loadReportComposerDefaults = gmp => () => dispatch => {
   );
 };
 
-export const setReportComposerDefaults = reportComposerDefaults => ({
-  type: USER_SETTINGS_SET_REPORT_COMPOSER_DEFAULTS,
-  reportComposerDefaults,
-});
-
 export const saveReportComposerDefaults = gmp => defaults => dispatch =>
-  gmp.user.saveReportComposerDefaults(defaults).then(response => {
-    dispatch(setReportComposerDefaults(response.data));
-  });
+  gmp.user.saveReportComposerDefaults(defaults).then(response =>
+    dispatch(reportComposerDefaultsLoadingActions.success(defaults)),
+    err => dispatch(reportComposerDefaultsLoadingActions.error(err)),
+  );
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,
