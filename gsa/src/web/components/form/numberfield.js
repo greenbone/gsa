@@ -32,7 +32,7 @@ import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
-class NumberInput extends React.Component {
+class NumberField extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -219,7 +219,7 @@ class NumberInput extends React.Component {
   }
 }
 
-NumberInput.propTypes = {
+NumberField.propTypes = {
   disabled: PropTypes.bool,
   max: PropTypes.numberOrNumberString,
   min: PropTypes.numberOrNumberString,
@@ -232,6 +232,6 @@ NumberInput.propTypes = {
   onUpKeyPressed: PropTypes.func,
 };
 
-export default NumberInput;
+export default NumberField;
 
 // vim: set ts=2 sw=2 tw=80:
