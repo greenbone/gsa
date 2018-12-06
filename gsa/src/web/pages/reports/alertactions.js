@@ -108,9 +108,10 @@ class AlertActions extends React.Component {
       showSuccessMessage,
     } = this.props;
 
-    filter.set('notes', includeNotes);
-    filter.set('overrides', includeOverrides);
-    filter.set('apply_overrides', applyOverrides);
+    const newFilter = filter.copy();
+    newFilter.set('notes', includeNotes);
+    newFilter.set('overrides', includeOverrides);
+    newFilter.set('apply_overrides', applyOverrides);
 
     this.handleInteraction();
 
@@ -126,7 +127,7 @@ class AlertActions extends React.Component {
     gmp.report.alert({
       report_id: report.id,
       alert_id: alertId,
-      filter: filter.simple(),
+      filter: newFilter.simple(),
     }).then(response => {
       showSuccessMessage(_('Running the alert was successful'));
       this.setState({showTriggerAlertDialog: false});

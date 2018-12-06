@@ -388,9 +388,10 @@ class ReportDetails extends React.Component {
       storeAsDefault,
     } = state;
 
-    filter.set('notes', includeNotes);
-    filter.set('overrides', includeOverrides);
-    filter.set('apply_overrides', applyOverrides);
+    const newFilter = filter.copy();
+    newFilter.set('notes', includeNotes);
+    newFilter.set('overrides', includeOverrides);
+    newFilter.set('apply_overrides', applyOverrides);
 
     if (storeAsDefault) {
       const defaults = {
@@ -412,7 +413,7 @@ class ReportDetails extends React.Component {
     gmp.report.download(entity, {
       reportFormatId,
       deltaReportId,
-      filter,
+      filter: newFilter,
     }).then(response => {
       this.setState({showDownloadReportDialog: false});
       const {data} = response;
