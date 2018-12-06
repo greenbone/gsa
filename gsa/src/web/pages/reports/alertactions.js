@@ -116,12 +116,11 @@ class AlertActions extends React.Component {
     this.handleInteraction();
 
     if (storeAsDefault) {
-      const defaults = {
+      this.props.saveReportComposerDefaults({
         applyOverrides,
         includeNotes,
         includeOverrides,
-      };
-      this.props.saveReportComposerDefaults(defaults);
+      });
     }
 
     gmp.report.alert({
