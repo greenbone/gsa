@@ -74,6 +74,22 @@ describe('Field tests', () => {
      expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
 
+  test('should not call change handler if disabled', () => {
+    const onChange = jest.fn();
+
+    const {element} = render(
+      <Field
+        disabled={true}
+        value="foo"
+        onChange={onChange}
+      />
+     );
+
+     fireEvent.change(element, {target: {value: 'bar'}});
+
+     expect(onChange).not.toHaveBeenCalled();
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
