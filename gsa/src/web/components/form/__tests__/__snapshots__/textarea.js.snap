@@ -47,7 +47,7 @@ exports[`TextArea tests should render in disabled state 1`] = `
   padding: 4px 8px;
   cursor: not-allowed;
   background-color: #eeeeee;
-  opacity: 1;
+  opacity: 0.65;
 }
 
 .c0 {

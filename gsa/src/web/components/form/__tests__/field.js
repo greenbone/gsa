@@ -18,10 +18,10 @@
  */
 import React from 'react';
 
+import Theme from 'web/utils/theme';
 import {render, fireEvent} from 'web/utils/testing';
 
-import Field from '../field';
-import Theme from 'web/utils/theme';
+import Field, {DISABLED_OPACTIY} from '../field';
 
 
 describe('Field tests', () => {
@@ -40,7 +40,7 @@ describe('Field tests', () => {
     const {element} = render(<Field disabled={true}/>);
 
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
-    expect(element).toHaveStyleRule('opacity', '1');
+    expect(element).toHaveStyleRule('opacity', `${DISABLED_OPACTIY}`);
     expect(element).toHaveStyleRule('background-color', Theme.dialogGray);
 
     expect(element).toMatchSnapshot();

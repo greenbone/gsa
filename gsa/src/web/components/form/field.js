@@ -31,6 +31,8 @@ import withLayout from 'web/components/layout/withLayout';
 
 import withChangeHandler from './withChangeHandler';
 
+export const DISABLED_OPACTIY = 0.65;
+
 const StyledInput = styled.input`
   /* use font and line settings from parents not from browser default */
   font-family: inherit;
@@ -50,7 +52,7 @@ const StyledInput = styled.input`
   };
   cursor: ${props => props.disabled ? 'not-allowed' : undefined};
   background-color: ${props => props.disabled ? Theme.dialogGray : undefined};
-  opacity: ${props => props.disabled ? 1 : undefined};
+  opacity: ${props => props.disabled ? DISABLED_OPACTIY : undefined};
 `;
 
 export default compose(
