@@ -37,8 +37,6 @@ exports[`Button tests should render button 1`] = `
 .c1[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
-  -webkit-filter: alpha(opacity=65);
-  filter: alpha(opacity=65);
   box-shadow: none;
 }
 

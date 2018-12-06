@@ -58,8 +58,6 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 .c5[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
-  -webkit-filter: alpha(opacity=65);
-  filter: alpha(opacity=65);
   box-shadow: none;
 }
 
@@ -196,8 +194,6 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
 .c5[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
-  -webkit-filter: alpha(opacity=65);
-  filter: alpha(opacity=65);
   box-shadow: none;
 }
 
