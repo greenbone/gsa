@@ -19,6 +19,7 @@
 /* eslint-disable react/prop-types */
 
 import 'jest-styled-components';
+import 'jest-dom/extend-expect';
 
 import React from 'react';
 
@@ -30,11 +31,6 @@ import {Provider} from 'react-redux';
 
 import {createMemoryHistory} from 'history';
 
-import {
-  toHaveAttribute,
-  toHaveTextContent,
-} from 'jest-dom';
-
 import EverythingCapabilities from 'gmp/capabilities/everything';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
@@ -43,11 +39,6 @@ import GmpProvider from 'web/components/provider/gmpprovider';
 import CapabilitiesProvider from 'web/components/provider/capabilitiesprovider';
 
 import configureStore from 'web/store';
-
-expect.extend({
-  toHaveAttribute,
-  toHaveTextContent,
-});
 
 export * from 'react-testing-library';
 
