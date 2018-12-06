@@ -29,7 +29,12 @@ describe('withChangeHandlerTests', () => {
     const Component = withChangeHandler()(props => <input {...props}/>);
 
     const onChange = jest.fn();
-    const {element} = render(<Component onChange={onChange}/>);
+    const {element} = render(
+      <Component
+        value="bar"
+        onChange={onChange}
+      />
+    );
 
     fireEvent.change(element, {target: {value: 'foo'}});
 
@@ -43,6 +48,7 @@ describe('withChangeHandlerTests', () => {
     const {element} = render(
       <Component
         name="bar"
+        value="bar"
         onChange={onChange}
       />
     );
@@ -59,6 +65,7 @@ describe('withChangeHandlerTests', () => {
     const {element} = render(
       <Component
         name="bar"
+        value={1}
         convert={v => v * 2}
         onChange={onChange}
       />
@@ -78,6 +85,7 @@ describe('withChangeHandlerTests', () => {
     const {element} = render(
       <Component
         name="bar"
+        value={0}
         onChange={onChange}
       />
     );
@@ -97,6 +105,7 @@ describe('withChangeHandlerTests', () => {
       <Component
         name="bar"
         foo={42}
+        value={0}
         onChange={onChange}
       />
     );
@@ -113,6 +122,7 @@ describe('withChangeHandlerTests', () => {
     const {element} = render(
       <Component
         name="bar"
+        value="bar"
         disabled={true}
         onChange={onChange}
       />
@@ -132,6 +142,7 @@ describe('withChangeHandlerTests', () => {
     const {element} = render(
       <Component
         name="bar"
+        value={0}
         debounce={500}
         onChange={onChange}
       />
