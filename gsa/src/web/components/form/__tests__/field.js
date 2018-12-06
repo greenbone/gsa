@@ -42,6 +42,8 @@ describe('Field tests', () => {
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
     expect(element).toHaveStyleRule('opacity', '1');
     expect(element).toHaveStyleRule('background-color', Theme.dialogGray);
+
+    expect(element).toMatchSnapshot();
   });
 
   test('should call change handler with value', () => {
