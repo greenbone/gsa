@@ -121,7 +121,6 @@ DownloadReportDialog.propTypes = {
   storeAsDefault: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
-  onValueChange: PropTypes.func.isRequired,
 };
 
 export default DownloadReportDialog;

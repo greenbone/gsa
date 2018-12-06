@@ -173,7 +173,6 @@ class ReportDetails extends React.Component {
       this.handleOpenDownloadReportDialog.bind(this);
     this.handleCloseDownloadReportDialog =
       this.handleCloseDownloadReportDialog.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
@@ -513,10 +512,6 @@ class ReportDetails extends React.Component {
     return this.props.loadTarget(target.id);
   }
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
   render() {
     const {
       entity,
@@ -602,7 +597,6 @@ class ReportDetails extends React.Component {
             storeAsDefault={storeAsDefault}
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
-            onValueChange={this.handleValueChange}
           />
         }
       </React.Fragment>
