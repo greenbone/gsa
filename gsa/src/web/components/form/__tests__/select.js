@@ -176,7 +176,7 @@ describe('Select component tests', () => {
 
     const displayedValue = element.querySelector('[type="button"]').firstChild;
 
-    expect(displayedValue).toHaveTextContent('bar');
+    expect(displayedValue).toHaveTextContent('Bar');
 
     openSelectElement(element);
 
