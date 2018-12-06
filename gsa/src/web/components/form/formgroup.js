@@ -80,7 +80,6 @@ const FormGroupContent = styled(Layout)`
 const FormGroup = ({
   children,
   className,
-  condition,
   flex = 'row',
   offset,
   size,
@@ -89,11 +88,6 @@ const FormGroup = ({
   titleSize = 2,
   ...other
 }) => {
-
-  if (isDefined(condition) && !condition) {
-    return null;
-  }
-
   if (title && !isDefined(size)) {
       size = 12 - titleSize - titleOffset;
   }
@@ -125,7 +119,6 @@ const FormGroup = ({
 
 FormGroup.propTypes = {
   className: PropTypes.string,
-  condition: PropTypes.bool,
   flex: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.bool,
