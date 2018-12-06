@@ -22,10 +22,17 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import withClickHandler from '../withClickHandler';
 
+const TestInput = ({value, ...props}) => (
+  <input
+    {...props}
+    type="text"
+  />
+);
+
 describe('withClickHandler tests', () => {
 
   test('should call click handler with value', () => {
-    const Component = withClickHandler()(props => <input {...props}/>);
+    const Component = withClickHandler()(TestInput);
 
     const onClick = jest.fn();
     const {element} = render(
@@ -41,7 +48,7 @@ describe('withClickHandler tests', () => {
   });
 
   test('should call click handler with value and name', () => {
-    const Component = withClickHandler()(props => <input {...props}/>);
+    const Component = withClickHandler()(TestInput);
 
     const onClick = jest.fn();
     const {element} = render(
@@ -58,7 +65,7 @@ describe('withClickHandler tests', () => {
   });
 
   test('should call click handler with converted value', () => {
-    const Component = withClickHandler()(props => <input {...props}/>);
+    const Component = withClickHandler()(TestInput);
 
     const onClick = jest.fn();
     const {element} = render(
@@ -77,7 +84,7 @@ describe('withClickHandler tests', () => {
   test('should allow to set a pre-defined convert function', () => {
     const Component = withClickHandler({
       convert_func: v => v * 2,
-    })(props => <input {...props}/>);
+    })(TestInput);
 
     const onClick = jest.fn();
     const {element} = render(
@@ -95,7 +102,7 @@ describe('withClickHandler tests', () => {
   test('should allow to set a pre-defined value function', () => {
     const Component = withClickHandler({
       value_func: (event, props) => props.foo,
-    })(props => <input {...props}/>);
+    })(TestInput);
 
     const onClick = jest.fn();
     const {element} = render(
