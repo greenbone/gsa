@@ -144,8 +144,6 @@ class LoginForm extends React.Component {
             </FormGroup>
             <FormGroup size="4" offset="4">
               <Button
-                flex
-                grow
                 title={_('Login')}
                 onClick={this.handleSubmit}
               />
