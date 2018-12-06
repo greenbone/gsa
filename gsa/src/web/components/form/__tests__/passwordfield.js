@@ -23,7 +23,7 @@ import {render, fireEvent} from 'web/utils/testing';
 import PasswordField from '../passwordfield';
 
 
-describe('PasswordPasswordField tests', () => {
+describe('PasswordField tests', () => {
 
   test('should render', () => {
     const {element} = render(<PasswordField/>);
