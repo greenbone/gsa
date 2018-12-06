@@ -91,6 +91,9 @@ const FormGroup = ({
   titleSize = 2,
   ...other
 }) => {
+  titleOffset = parseInt(titleOffset);
+  titleSize = parseInt(titleSize);
+
   if (title && !isDefined(size)) {
       size = 12 - titleSize - titleOffset;
   }
