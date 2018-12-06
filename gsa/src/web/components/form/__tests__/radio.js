@@ -144,6 +144,22 @@ describe('Radio tests', () => {
     expect(titleElement).toHaveTextContent('foo');
   });
 
+  test('should not call change handler if already checked', () => {
+    const onChange = jest.fn();
+
+    const {element} = render(
+      <Radio
+        checked={true}
+        value="foo"
+        onChange={onChange}
+      />
+    );
+
+    fireEvent.click(element);
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
