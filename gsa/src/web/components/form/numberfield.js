@@ -100,7 +100,7 @@ class NumberInput extends React.Component {
     max = isDefined(max) ? parseFloat(max) : Number.POSITIVE_INFINITY;
 
     const update = isDefined(parsedValue) && parsedValue <= max &&
-     parsedValue >= min;
+      parsedValue >= min;
 
     if (update) {
       this.setState({
