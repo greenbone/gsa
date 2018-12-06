@@ -98,6 +98,7 @@ const FormGroup = ({
     <FormGroupLayout>
       {isDefined(title) &&
         <Title
+          data-testid="formgroup-title"
           titleOffset={titleOffset}
           titleSize={titleSize}
         >
@@ -106,6 +107,7 @@ const FormGroup = ({
       }
       <FormGroupContent
         {...other}
+        data-testid="formgroup-content"
         flex={flex}
         offset={offset}
         size={size}
