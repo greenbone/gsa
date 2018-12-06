@@ -84,7 +84,6 @@ const FormGroupContent = styled(Layout)`
 const FormGroup = ({
   children,
   className,
-  flex = 'row',
   offset,
   size,
   title,
@@ -112,7 +111,6 @@ const FormGroup = ({
       <FormGroupContent
         {...other}
         data-testid="formgroup-content"
-        flex={flex}
         offset={offset}
         size={size}
       >
@@ -124,10 +122,6 @@ const FormGroup = ({
 
 FormGroup.propTypes = {
   className: PropTypes.string,
-  flex: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
   offset: PropTypes.numberOrNumberString,
   size: PropTypes.numberOrNumberString,
   title: PropTypes.string,
