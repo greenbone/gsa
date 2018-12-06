@@ -33,6 +33,7 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
 const COLUMNS = [
+  '0',
   '8.33333333%',
   '16.66666667%',
   '25%',
@@ -61,20 +62,20 @@ const Title = styled.label`
   text-align: right;
   padding-left: 10px;
   padding-right: 10px;
-  width: ${props => COLUMNS[parseInt(props.titleSize) - 1]};
-  margin-left: ${props => COLUMNS[parseInt(props.titleOffset) - 1]};
+  width: ${props => COLUMNS[props.titleSize]};
+  margin-left: ${props => COLUMNS[props.titleOffset]};
 `;
 
 const FormGroupContent = styled(Layout)`
   ${props => {
     const ret = {};
     if (isDefined(props.size)) {
-      ret.width = COLUMNS[parseInt(props.size) - 1];
+      ret.width = COLUMNS[parseInt(props.size)];
       ret.paddingLeft = '10px';
       ret.paddingRight = '10px';
     }
     if (isDefined(props.offset)) {
-      ret.marginLeft = COLUMNS[parseInt(props.offset) - 1];
+      ret.marginLeft = COLUMNS[parseInt(props.offset)];
     }
     return ret;
   }}
