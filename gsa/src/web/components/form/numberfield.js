@@ -97,7 +97,7 @@ class NumberInput extends React.Component {
 
     const parsedValue = parseFloat(value);
     min = parseFloat(min);
-    max = parseFloat(max);
+    max = isDefined(max) ? parseFloat(max) : Number.POSITIVE_INFINITY;
 
     const update = isDefined(parsedValue) && parsedValue <= max &&
      parsedValue >= min;
