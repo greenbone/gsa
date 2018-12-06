@@ -47,7 +47,10 @@ const COLUMNS = [
   '100%',
 ];
 
-const FormGroupLayout = styled(Layout)`
+const FormGroupLayout = styled.div`
+  display: flex;
+  align-items: enter;
+  justify-content: start;
   padding-bottom: 10px;
 `;
 
@@ -91,12 +94,8 @@ const FormGroup = ({
   if (title && !isDefined(size)) {
       size = 12 - titleSize - titleOffset;
   }
-
   return (
-    <FormGroupLayout
-      flex
-      align={['start', 'center']}
-    >
+    <FormGroupLayout>
       {isDefined(title) &&
         <Title
           titleOffset={titleOffset}
