@@ -54,65 +54,64 @@ const ComposerContent = ({
   includeNotes,
   includeOverrides,
   onValueChange,
-}) => {
-  return (
-    <Layout flex="column">
-      <FormGroup title={_('Applied Filter')} titleSize="3">
-        <FilterField
-          title={_('To change the filter, please filter your results on the ' +
-            'report page.')}
-        >
-          {filterString}
-        </FilterField>
-      </FormGroup>
-      <FormGroup title={_('Severity')} titleSize="3">
-        <Divider>
-          <Radio
-            name="applyOverrides"
-            value={NO_VALUE}
-            checked={!parseYesNo(applyOverrides)}
-            title={_('Original severity')}
-            onChange={onValueChange}
-          />
-          <Radio
-            name="applyOverrides"
-            value={YES_VALUE}
-            checked={parseYesNo(applyOverrides)}
-            title={_('With overrides applied')}
-            onChange={onValueChange}
-          />
-        </Divider>
-      </FormGroup>
-      <FormGroup title={_('Include')} titleSize="3">
-        <Divider>
-          <CheckBox
-            data-testid="includeNotes"
-            name="includeNotes"
-            checked={includeNotes}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            title={_('Notes')}
-            onChange={onValueChange}
-          />
-          <CheckBox
-            name="includeOverrides"
-            checked={includeOverrides}
-            checkedValue={YES_VALUE}
-            unCheckedValue={NO_VALUE}
-            title={_('Overrides')}
-            onChange={onValueChange}
-          />
-        </Divider>
-      </FormGroup>
-    </Layout>
-  );
-};
+}) => (
+  <Layout flex="column">
+    <FormGroup title={_('Applied Filter')} titleSize="3">
+      <FilterField
+        title={_('To change the filter, please filter your results on the ' +
+          'report page.')}
+      >
+        {filterString}
+      </FilterField>
+    </FormGroup>
+    <FormGroup title={_('Severity')} titleSize="3">
+      <Divider>
+        <Radio
+          name="applyOverrides"
+          value={NO_VALUE}
+          checked={!parseYesNo(applyOverrides)}
+          title={_('Original severity')}
+          onChange={onValueChange}
+        />
+        <Radio
+          name="applyOverrides"
+          value={YES_VALUE}
+          checked={parseYesNo(applyOverrides)}
+          title={_('With overrides applied')}
+          onChange={onValueChange}
+        />
+      </Divider>
+    </FormGroup>
+    <FormGroup title={_('Include')} titleSize="3">
+      <Divider>
+        <CheckBox
+          data-testid="includeNotes"
+          name="includeNotes"
+          checked={includeNotes}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          title={_('Notes')}
+          onChange={onValueChange}
+        />
+        <CheckBox
+          name="includeOverrides"
+          checked={includeOverrides}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          title={_('Overrides')}
+          onChange={onValueChange}
+        />
+      </Divider>
+    </FormGroup>
+  </Layout>
+);
+
 
 ComposerContent.propTypes = {
-  applyOverrides: PropTypes.numberOrNumberString,
-  filterString: PropTypes.string,
-  includeNotes: PropTypes.number,
-  includeOverrides: PropTypes.number,
+  applyOverrides: PropTypes.numberOrNumberString.isRequired,
+  filterString: PropTypes.string.isRequired,
+  includeNotes: PropTypes.number.isRequired,
+  includeOverrides: PropTypes.number.isRequired,
   onValueChange: PropTypes.func.isRequired,
 };
 
