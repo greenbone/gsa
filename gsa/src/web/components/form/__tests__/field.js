@@ -28,11 +28,12 @@ describe('Field tests', () => {
 
   test('should render', () => {
     const {element} = render(<Field/>);
-    expect(element).toMatchSnapshot();
 
     expect(element).not.toHaveStyleRule('cursor');
     expect(element).not.toHaveStyleRule('opacity');
     expect(element).toHaveStyleRule('background-color', Theme.white);
+
+    expect(element).toMatchSnapshot();
   });
 
   test('should render in disabled state', () => {
