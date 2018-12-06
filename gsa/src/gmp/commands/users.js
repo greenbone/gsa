@@ -45,6 +45,8 @@ import {parseInt} from '../parser';
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
+import {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent';
+
 const log = logger.getLogger('gmp.commands.users');
 
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
@@ -284,8 +286,9 @@ class UserCommand extends EntityCommand {
         defaults = JSON.parse(value);
       }
       catch (e) {
-        log.warn('Could not parse report composer defaults');
-        return;
+        log.warn('Could not parse saved report composer defaults, setting ' +
+          'back to default defaults...');
+        defaults = {...COMPOSER_CONTENT_DEFAULTS};
       }
 
       return response.setData(defaults);

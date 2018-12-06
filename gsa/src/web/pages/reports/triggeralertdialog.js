@@ -35,7 +35,7 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
 
-import ComposerContent from 'web/components/dialog/composercontent';
+import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import CheckBox from 'web/components/form/checkbox';
@@ -78,10 +78,10 @@ class TriggerAlertDialog extends React.Component {
   render() {
     const {
       alerts,
-      applyOverrides = NO_VALUE,
+      applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
       filter = {},
-      includeNotes = YES_VALUE,
-      includeOverrides = YES_VALUE,
+      includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+      includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
       storeAsDefault,
       onAlertChange,
       onClose,

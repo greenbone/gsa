@@ -29,7 +29,8 @@ import {isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
-import ComposerContent from 'web/components/dialog/composercontent';
+import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import CheckBox from 'web/components/form/checkbox';
@@ -44,10 +45,10 @@ const StyledDiv = styled.div`
 `;
 
 const DownloadReportDialog = ({
-  applyOverrides = NO_VALUE,
+  applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
   filter = {},
-  includeNotes = YES_VALUE,
-  includeOverrides = YES_VALUE,
+  includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+  includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   reportFormatId,
   reportFormats,
   storeAsDefault,

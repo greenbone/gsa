@@ -36,6 +36,12 @@ import Layout from 'web/components/layout/layout';
 
 import Theme from 'web/utils/theme';
 
+export const COMPOSER_CONTENT_DEFAULTS = {
+  applyOverrides: NO_VALUE,
+  includeNotes: YES_VALUE,
+  includeOverrides: YES_VALUE,
+};
+
 const FilterField = styled.div`
   display: block;
   height: 22px;
