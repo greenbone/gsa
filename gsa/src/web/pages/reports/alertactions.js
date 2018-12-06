@@ -25,7 +25,8 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {first} from 'gmp/utils/array';
+import {ALL_FILTER} from 'gmp/models/filter';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import compose from 'web/utils/compose';
@@ -39,6 +40,12 @@ import IconDivider from 'web/components/layout/icondivider';
 import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
 
 import AlertComponent from 'web/pages/alerts/component';
+
+import {
+  loadEntities as loadAlerts,
+  loadEntity as loadAlert,
+  selector as alertsSelector,
+} from 'web/store/entities/alerts';
 
 import {
   loadReportComposerDefaults,
@@ -69,16 +76,7 @@ class AlertActions extends React.Component {
   }
 
   componentDidMount() {
-    const {gmp} = this.props;
     this.props.loadReportComposerDefaults();
-    gmp.alerts.getAll().then(response => {
-      const {data: alerts} = response;
-      const alertId = first(alerts).id;
-      this.setState({
-        alerts,
-        alertId,
-      });
-    });
   }
 
   handleAlertChange(alertId) {
@@ -152,16 +150,15 @@ class AlertActions extends React.Component {
   }
 
   onAlertCreated(response) {
-    const {alerts} = this.state;
-    const {gmp} = this.props;
-    gmp.alert.get({id: response.data.id}).then(resp => {
-      const alert = resp.data;
-      this.setState({
-        alerts: [alert, ...alerts],
-        alertId: alert.id,
+    this.props.loadAlerts().then(() => {
+      this.props.loadAlert(response.data.id).then(resp => {
+        const alert = resp.data;
+        this.setState({
+          alertId: alert.id,
+        });
       });
     });
-  }
+  };
 
   handleValueChange(value, name) {
     this.setState({[name]: value});
@@ -221,8 +218,11 @@ class AlertActions extends React.Component {
 }
 
 AlertActions.propTypes = {
+  alerts: PropTypes.array,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  loadAlert: PropTypes.func.isRequired,
+  loadAlerts: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   report: PropTypes.model.isRequired,
   reportComposerDefaults: PropTypes.object,
@@ -236,6 +236,8 @@ AlertActions.propTypes = {
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    loadAlert: id => dispatch(loadAlert(gmp)(id)),
+    loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
     loadReportComposerDefaults: () => dispatch(
       loadReportComposerDefaults(gmp)()),
     saveReportComposerDefaults: reportComposerDefaults =>
@@ -244,7 +246,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 };
 
 const mapStateToProps = rootState => {
-  return {reportComposerDefaults: getReportComposerDefaults(rootState)};
+  return {
+    alerts: alertsSelector(rootState).getEntities(ALL_FILTER),
+    reportComposerDefaults: getReportComposerDefaults(rootState),
+  };
 };
 
 export default compose(
