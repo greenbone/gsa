@@ -19,6 +19,8 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
@@ -28,10 +30,23 @@ import PropTypes from 'web/utils/proptypes';
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
-import TextField from 'web/components/form/textfield';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import Theme from 'web/utils/theme';
+
+const FilterField = styled.div`
+  display: block;
+  height: 22px;
+  color: ${Theme.darkGray};
+  border: 1px solid ${Theme.inputBorderGray};
+  border-radius: 2px;
+  padding: 3px 8px;
+  cursor: not-allowed;
+  background-color: ${Theme.dialogGray};
+  width: 100%;
+`;
 
 const ComposerContent = ({
   applyOverrides,
@@ -43,14 +58,12 @@ const ComposerContent = ({
   return (
     <Layout flex="column">
       <FormGroup title={_('Applied Filter')} titleSize="3">
-        <TextField
-          disabled
-          name="filterString"
-          grow="1"
-          value={filterString}
+        <FilterField
           title={_('To change the filter, please filter your results on the ' +
             'report page.')}
-        />
+        >
+          {filterString}
+        </FilterField>
       </FormGroup>
       <FormGroup title={_('Severity')} titleSize="3">
         <Divider>
