@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" version="1.1" viewBox="0 0 67.733 67.733" xmlns="http://www.w3.org/2000/svg">
+ <style>.gui_icon_class {
+    stroke-linejoin:miter;
+    font-size:medium;
+    baseline-shift:baseline;
+    color-rendering:auto;
+    text-decoration-color:#000000;
+    color:#000000;
+    font-variant-numeric:normal;
+    letter-spacing:normal;
+    shape-rendering:auto;
+    word-spacing:normal;
+    stroke:none;
+    text-decoration-line:none;
+    text-rendering:auto;
+    stroke-width:16;
+    font-style:normal;
+    fill:#000000;
+    solid-opacity:1;
+    line-height:normal;
+    fill-rule:evenodd;
+    font-variant-position:normal;
+    mix-blend-mode:normal;
+    fill-opacity:1;
+    direction:ltr;
+    solid-color:#000000;
+    color-interpolation-filters:linearRGB;
+    font-stretch:normal;
+    stroke-miterlimit:4;
+    font-feature-settings:normal;
+    font-weight:normal;
+    opacity:1;
+    shape-padding:0;
+    vector-effect:none;
+    font-variant-alternates:normal;
+    font-variant:normal;
+    visibility:visible;
+    text-indent:0;
+    font-variant-ligatures:normal;
+    clip-rule:nonzero;
+    dominant-baseline:auto;
+    font-variant-caps:normal;
+    image-rendering:auto;
+    white-space:normal;
+    overflow:visible;
+    font-family:sans-serif;
+    text-decoration-style:solid;
+    text-align:start;
+    text-orientation:mixed;
+    writing-mode:lr-tb;
+    stroke-opacity:1;
+    isolation:auto;
+    stroke-dashoffset:0;
+    text-anchor:start;
+    text-decoration:none;
+    stroke-linecap:butt;
+    stroke-dasharray:none;
+    enable-background:accumulate;
+    text-transform:none;
+    display:inline;
+    color-interpolation:sRGB;
+}</style>
+ <g transform="translate(0 -229.27)">
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <g transform="matrix(.90225 0 0 .89532 -5.4307 25.446)" stroke-width="1.1126">
+    <path class="gui_icon_class" transform="matrix(.14046 0 0 .1323 -16.104 254.94)" d="m88.035 16-88.035 175.91 67.57 0.03515-24.562 47.959 212.87 0.0957-106.39-208-27.055 52.824-34.398-68.824zm-7.1504 49.494 25.594 50.484-30.451 59.455-50.164-0.02929 55.021-109.91zm61.158 15.234 74.293 143.21-147.59-0.08984 16.334-31.895 90.92 0.04688-44.918-89.871 10.961-21.4zm-26.854 52.436 21.447 42.307-43.102-0.02539 21.654-42.281z"/>
+   </g>
+  </g>
+ </g>
+</svg>
