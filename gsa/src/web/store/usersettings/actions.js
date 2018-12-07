@@ -28,7 +28,7 @@ export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 export const USER_SETTINGS_SET_SESSION_TIMEOUT =
   'USER_SETTINGS_SET_SESSION_TIMEOUT';
 
-const reportComposerDefaultsLoadingActions = {
+export const reportComposerDefaultsLoadingActions = {
   request: () => ({
     type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_REQUEST,
   }),
