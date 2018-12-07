@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +25,9 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon';
+import SvgIcon from './svgicon';
+
+import {ReactComponent as Icon} from './svg/export.svg';
 
 export const ExportIcon = ({selectionType, title, ...other}) => {
   let download_title = title;
@@ -43,17 +41,18 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
     download_title = _('Export all filtered');
   }
   return (
-    <Icon
-      img="export.svg"
-      title={download_title} {...other}
-    />
+    <SvgIcon
+      {...other}
+      title={download_title}
+    >
+      <Icon/>
+    </SvgIcon>
   );
 };
 
 ExportIcon.propTypes = {
   selectionType: PropTypes.string,
   title: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default ExportIcon;
