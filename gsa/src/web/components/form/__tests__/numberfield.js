@@ -100,6 +100,15 @@ describe('NumberField tests', () => {
 
     rerender(
       <NumberField
+        value={2}
+        onChange={onChange}
+      />
+    );
+
+    expect(element).toHaveAttribute('value', '2');
+
+    rerender(
+      <NumberField
         value={3}
         onChange={onChange}
       />
