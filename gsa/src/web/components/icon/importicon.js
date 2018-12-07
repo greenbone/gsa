@@ -23,15 +23,13 @@ import SvgIcon from './svgicon';
 
 import {ReactComponent as Icon} from './svg/import.svg';
 
-export const ImportIcon = props => {
-  return (
-    <SvgIcon
-      {...props}
-    >
-      <Icon/>
-    </SvgIcon>
-  );
-};
+export const ImportIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
 export default ImportIcon;
 
