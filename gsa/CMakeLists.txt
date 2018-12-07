@@ -258,7 +258,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/field.js
      ${GSA_SRC_DIR}/src/web/components/form/filefield.js
      ${GSA_SRC_DIR}/src/web/components/form/formgroup.js
-     ${GSA_SRC_DIR}/src/web/components/form/form.js
      ${GSA_SRC_DIR}/src/web/components/form/multiselect.js
      ${GSA_SRC_DIR}/src/web/components/form/numberfield.js
      ${GSA_SRC_DIR}/src/web/components/form/passwordfield.js
