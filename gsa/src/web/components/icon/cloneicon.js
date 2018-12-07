@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,23 +19,17 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import SvgIcon from './svgicon';
 
-import Icon from './icon';
+import {ReactComponent as Icon} from './svg/clone.svg';
 
-const CloneIcon = ({active, ...props}) => {
-  return (
-    <Icon
-      {...props}
-      active={active}
-      img="clone.svg"
-    />
-  );
-};
-
-CloneIcon.propTypes = {
-  active: PropTypes.bool,
-};
+const CloneIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
 export default CloneIcon;
 
