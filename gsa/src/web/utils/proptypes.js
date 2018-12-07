@@ -167,7 +167,7 @@ const duration = mayRequire(durationValidator);
 const iconSize = ReactPropTypes.oneOfType([
   ReactPropTypes.array,
   ReactPropTypes.oneOf([
-    'small', 'medium', 'large', 'default',
+    'tiny', 'small', 'medium', 'large', 'default',
   ]),
 ]);
 
