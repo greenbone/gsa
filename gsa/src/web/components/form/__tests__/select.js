@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
 
 import Select from '../select.js';
 
@@ -33,7 +33,7 @@ const openSelectElement = element => {
 
 const getItemElements = baseElement => {
     const portal = baseElement.querySelector('#portals');
-    return portal.querySelectorAll('span');
+    return queryAllByTestId(portal, 'select-item');
 };
 
 const getInputBox = baseElement => {

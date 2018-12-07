@@ -211,6 +211,7 @@ class Select extends React.Component {
                       }, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
+                          data-testid="select-item"
                           isSelected={itemValue === selectedItem}
                           isActive={i === highlightedIndex}
                           key={key}
