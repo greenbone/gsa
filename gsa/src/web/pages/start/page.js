@@ -101,6 +101,15 @@ const StyledNewIcon = styled(NewIcon)`
   margin: 0 10px;
 `;
 
+const StyledTab = styled(Tab)`
+  & svg {
+    opacity: 0.3;
+  }
+  :hover svg {
+    opacity: 1;
+  }
+`;
+
 class StartPage extends React.Component {
 
   constructor(...args) {
@@ -396,13 +405,13 @@ class StartPage extends React.Component {
                   {dashboards.map(id => {
                     const title = this.getDashboardTitle(id);
                     return (
-                      <Tab
+                      <StyledTab
                         key={id}
                       >
-                        <Divider margin="15px">
+                        <Divider margin="13px">
                           <span>{title}</span>
                           {dashboards.length > 1 &&
-                            <IconDivider>
+                            <IconDivider margin="3px">
                               <EditIcon
                                 size="tiny"
                                 title={_('Edit Dashboard Title')}
@@ -416,7 +425,7 @@ class StartPage extends React.Component {
                             </IconDivider>
                           }
                         </Divider>
-                      </Tab>
+                      </StyledTab>
                     );
                   })}
 
