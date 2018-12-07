@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,10 +102,7 @@ class Dialog extends React.Component {
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
 
-      const left = box.left + window.scrollX;
-      const top = box.top + window.scrollY;
-
-      this.setDialogPosition(left, top);
+      this.setDialogPosition(box.left, box.top);
 
       document.addEventListener('mousemove', this.onMouseMoveMove);
       document.addEventListener('mouseup', this.onMouseUp);
