@@ -68,11 +68,11 @@ export const Item = styled.span`
     color: ${Theme.white};
   };
   background-color: ${props => props.isSelected ? Theme.lightGray : null};
-  {$props => props.isActive ?
+  ${props => props.isActive ?
     {
       backgroundColor: Theme.mediumBlue,
       color: Theme.white,
-    } : null;
+    } : null
   };
 `;
 
