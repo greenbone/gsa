@@ -234,6 +234,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/utils.js
      ${GSA_SRC_DIR}/src/web/components/dialog/button.js
+     ${GSA_SRC_DIR}/src/web/components/dialog/composercontent.js
      ${GSA_SRC_DIR}/src/web/components/dialog/container.js
      ${GSA_SRC_DIR}/src/web/components/dialog/content.js
      ${GSA_SRC_DIR}/src/web/components/dialog/closebutton.js
@@ -277,6 +278,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deleteicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
@@ -295,9 +297,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
      ${GSA_SRC_DIR}/src/web/components/img/img.js
@@ -636,6 +638,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/detailscontent.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailsfilterdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/downloadreportdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/emptyreport.js
      ${GSA_SRC_DIR}/src/web/pages/reports/emptyresultsreport.js
      ${GSA_SRC_DIR}/src/web/pages/reports/errorstable.js
@@ -654,6 +657,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/reports/summary.js
      ${GSA_SRC_DIR}/src/web/pages/reports/table.js
      ${GSA_SRC_DIR}/src/web/pages/reports/tlscertificatestable.js
+     ${GSA_SRC_DIR}/src/web/pages/reports/triggeralertdialog.js
      ${GSA_SRC_DIR}/src/web/pages/reports/vulnerabilitiestable.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/reports/dashboard/highresultsdisplay.js

@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import {
+  getReportComposerDefaultsAction,
   setLocale,
   setSessionTimeout,
   setTimezone,
@@ -28,6 +26,7 @@ import {
 } from '../actions';
 import {
   locale,
+  reportComposerDefaults,
   sessionTimeout,
   timezone,
   username,
@@ -100,6 +99,24 @@ describe('settings reducers tests', () => {
     test('should override username in state', () => {
       const action = setSessionTimeout('1234');
       expect(sessionTimeout('54321', action)).toEqual('1234');
+    });
+  });
+
+  describe('reportComposerDefaults reducer tests', () => {
+
+    test('should create initial empty state', () => {
+      expect(reportComposerDefaults(undefined, {})).toEqual({});
+    });
+
+    test('should reduce reportComposerDefaults success action', () => {
+      const action = getReportComposerDefaultsAction({foo: 'bar'});
+      expect(reportComposerDefaults(undefined, action)).toEqual({foo: 'bar'});
+    });
+
+    test('should override existing defaults', () => {
+      const action = getReportComposerDefaultsAction({foo: 'bar'});
+      const state = {toBe: 'deleted'};
+      expect(reportComposerDefaults(state, action)).toEqual({foo: 'bar'});
     });
   });
 });

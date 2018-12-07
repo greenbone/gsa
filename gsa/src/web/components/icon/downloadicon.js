@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +17,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const getReportComposerDefaults = rootState => {
-  const {userSettings = {}} = rootState;
-  const {reportComposerDefaults} = userSettings;
-  return reportComposerDefaults;
-};
+import React from 'react';
 
-export const getTimezone = rootState => rootState.userSettings.timezone;
+import SvgIcon from './svgicon';
 
-export const getLocale = rootState => rootState.userSettings.locale;
+import {ReactComponent as Icon} from './svg/download.svg';
 
-export const getSessionTimeout = rootState =>
-  rootState.userSettings.sessionTimeout;
+const EditIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
-export const getUsername = rootState => rootState.userSettings.username;
+export default EditIcon;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import {
   getLocale,
+  getReportComposerDefaults,
   getSessionTimeout,
   getTimezone,
   getUsername,
@@ -71,5 +69,15 @@ describe('settings selectors tests', () => {
   test('should return session timeout', () => {
     const state = createRootState({sessionTimeout: '1234'});
     expect(getSessionTimeout(state)).toEqual('1234');
+  });
+
+  test('should return undefined reportComposerDefaults for empty state', () => {
+    const state = createRootState({});
+    expect(getReportComposerDefaults(state)).toBeUndefined();
+  });
+
+  test('should return reportComposerDefaults', () => {
+    const state = createRootState({reportComposerDefaults: {foo: 'bar'}});
+    expect(getReportComposerDefaults(state)).toEqual({foo: 'bar'});
   });
 });

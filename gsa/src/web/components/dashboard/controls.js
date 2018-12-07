@@ -67,7 +67,7 @@ export class DashboardControls extends React.Component {
 
     this.handleNewClick = this.handleNewClick.bind(this);
     this.handleResetClick = this.handleResetClick.bind(this);
-    this.handleNewDialoClose = this.handleNewDialoClose.bind(this);
+    this.handleNewDialogClose = this.handleNewDialogClose.bind(this);
     this.handleNewDisplay = this.handleNewDisplay.bind(this);
   }
 
@@ -93,7 +93,7 @@ export class DashboardControls extends React.Component {
     this.setState({showNewDialog: false});
   }
 
-  handleNewDialoClose() {
+  handleNewDialogClose() {
     this.closeNewDialog();
     this.handleInteraction();
   }
@@ -159,7 +159,7 @@ export class DashboardControls extends React.Component {
             defaultValues={{
               displayId: first(displays).displayId,
             }}
-            onClose={this.handleNewDialoClose}
+            onClose={this.handleNewDialogClose}
             onSave={this.handleNewDisplay}
           >
             {({values, onValueChange}) => (

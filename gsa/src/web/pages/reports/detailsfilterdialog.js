@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -52,8 +49,6 @@ const FilterDialog = ({
   onFilterStringChange,
   onFilterValueChange,
 }) => {
-  const notes = filter.get('notes');
-  const overrides = filter.get('overrides');
   const result_hosts_only = filter.get('result_hosts_only');
   return (
     <Layout flex="column">
@@ -80,26 +75,6 @@ const FilterDialog = ({
         filter={filter}
         onChange={onFilterValueChange}
       />
-
-      <FormGroup title={_('Show Notes')}>
-        <Checkbox
-          name="notes"
-          checkedValue={1}
-          unCheckedValue={0}
-          checked={notes === 1}
-          onChange={onFilterValueChange}
-        />
-      </FormGroup>
-
-      <FormGroup title={_('Show Overrides')}>
-        <Checkbox
-          name="overrides"
-          checkedValue={1}
-          unCheckedValue={0}
-          checked={overrides === 1}
-          onChange={onFilterValueChange}
-        />
-      </FormGroup>
 
       <FormGroup title={_('Only show hosts that have results')}>
         <Checkbox

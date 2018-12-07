@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import 'core-js/fn/string/includes';
 
 import React from 'react';
@@ -42,6 +39,8 @@ import withDownload from 'web/components/form/withDownload';
 
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
 
+import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
+
 import {
   loadEntities as loadFilters,
   selector as filterSelector,
@@ -59,7 +58,13 @@ import {
   selector as reportSelector,
 } from 'web/store/entities/reports';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {
+  loadReportComposerDefaults,
+  renewSessionTimeout,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
 import {create_pem_certificate} from 'web/utils/cert';
 import {
@@ -100,6 +105,7 @@ class ReportDetails extends React.Component {
     this.state = {
       activeTab: 1,
       showFilterDialog: false,
+      showDownloadReportDialog: false,
       sorting: {
         results: {
           sortField: 'created',
@@ -156,7 +162,6 @@ class ReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleReportFormatChange = this.handleReportFormatChange.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
     this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
       .bind(this);
@@ -164,6 +169,10 @@ class ReportDetails extends React.Component {
     this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
+    this.handleOpenDownloadReportDialog =
+      this.handleOpenDownloadReportDialog.bind(this);
+    this.handleCloseDownloadReportDialog =
+      this.handleCloseDownloadReportDialog.bind(this);
   }
 
   componentDidMount() {
@@ -174,8 +183,9 @@ class ReportDetails extends React.Component {
       Filter.fromString(filterString) : undefined;
 
     this.load(filter);
-    this.loadFilters();
-    this.loadReportFormats();
+    this.props.loadFilters();
+    this.props.loadReportFormats();
+    this.props.loadReportComposerDefaults();
   }
 
   componentWillUnmount() {
@@ -230,14 +240,6 @@ class ReportDetails extends React.Component {
 
     this.props.loadReport(reportId, deltaReportId, filter)
       .then(() => this.startTimer());
-  }
-
-  loadReportFormats() {
-    this.props.loadReportFormats();
-  }
-
-  loadFilters() {
-    this.props.loadFilters();
   }
 
   reload() {
@@ -319,10 +321,6 @@ class ReportDetails extends React.Component {
     this.setState({activeTab: index});
   }
 
-  handleReportFormatChange(value) {
-    this.setState({reportFormatId: value});
-  }
-
   handleAddToAssets() {
     const {gmp, showSuccessMessage} = this.props;
     const {entity, filter} = this.state;
@@ -361,7 +359,18 @@ class ReportDetails extends React.Component {
     this.setState({showFilterDialog: false});
   }
 
-  handleReportDownload() {
+  handleOpenDownloadReportDialog() {
+    this.setState({
+      ...this.props.reportComposerDefaults,
+      showDownloadReportDialog: true,
+    });
+  }
+
+  handleCloseDownloadReportDialog() {
+    this.setState({showDownloadReportDialog: false});
+  }
+
+  handleReportDownload(state) {
     const {
       deltaReportId,
       entity,
@@ -371,8 +380,26 @@ class ReportDetails extends React.Component {
       onDownload,
     } = this.props;
     const {
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
       reportFormatId,
-    } = this.state;
+      storeAsDefault,
+    } = state;
+
+    const newFilter = filter.copy();
+    newFilter.set('notes', includeNotes);
+    newFilter.set('overrides', includeOverrides);
+    newFilter.set('apply_overrides', applyOverrides);
+
+    if (storeAsDefault) {
+      const defaults = {
+        applyOverrides,
+        includeNotes,
+        includeOverrides,
+      };
+      this.props.saveReportComposerDefaults(defaults);
+    }
 
     const report_format = reportFormats.find(
       format => reportFormatId === format.id);
@@ -385,8 +412,9 @@ class ReportDetails extends React.Component {
     gmp.report.download(entity, {
       reportFormatId,
       deltaReportId,
-      filter,
+      filter: newFilter,
     }).then(response => {
+      this.setState({showDownloadReportDialog: false});
       const {data} = response;
       const filename = 'report-' + entity.id + '.' + extension;
       onDownload({filename, data});
@@ -410,7 +438,7 @@ class ReportDetails extends React.Component {
     this.handleInteraction();
 
     this.load(filter);
-    this.loadFilters();
+    this.props.loadFilters();
   }
 
   handleFilterAddLogLevel() {
@@ -498,9 +526,14 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
       reportFormatId,
       showFilterDialog,
+      showDownloadReportDialog,
       sorting,
+      storeAsDefault,
     } = this.state;
 
     const {report} = entity || {};
@@ -533,8 +566,7 @@ class ReportDetails extends React.Component {
               onFilterRemoveClick={this.handleFilterRemoveClick}
               onInteraction={onInteraction}
               onRemoveFromAssetsClick={this.handleRemoveFromAssets}
-              onReportDownloadClick={this.handleReportDownload}
-              onReportFormatChange={this.handleReportFormatChange}
+              onReportDownloadClick={this.handleOpenDownloadReportDialog}
               onSortChange={this.handleSortChange}
               onTagSuccess={this.handleChanged}
               onTargetEditClick={() => this.loadTarget()
@@ -554,6 +586,19 @@ class ReportDetails extends React.Component {
             onCloseClick={this.handleFilterDialogClose}
           />
         }
+        {showDownloadReportDialog &&
+          <DownloadReportDialog
+            applyOverrides={applyOverrides}
+            filter={filter}
+            includeNotes={includeNotes}
+            includeOverrides={includeOverrides}
+            reportFormatId={reportFormatId}
+            reportFormats={reportFormats}
+            storeAsDefault={storeAsDefault}
+            onClose={this.handleCloseDownloadReportDialog}
+            onSave={this.handleReportDownload}
+          />
+        }
       </React.Fragment>
     );
   }
@@ -568,12 +613,15 @@ ReportDetails.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   loadFilters: PropTypes.func.isRequired,
   loadReport: PropTypes.func.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  reportComposerDefaults: PropTypes.object,
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -592,6 +640,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadReport: (id, deltaId, filter) => dispatch(isDefined(deltaId) ?
       loadDeltaReport(gmp)(id, deltaId, filter) :
       loadReport(gmp)(id, filter)),
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
 };
 
@@ -612,6 +664,7 @@ const mapStateToProps = (rootState, {match}) => {
     reportFormats: reportFormatsSel.getEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     deltaReportId: deltaid,
+    reportComposerDefaults: getReportComposerDefaults(rootState),
   };
 };
 
