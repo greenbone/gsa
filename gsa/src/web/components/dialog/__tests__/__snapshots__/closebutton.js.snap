@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dialog CloseButton tests should render 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border: 1px solid #519032;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana,sans-serif;
+  color: #519032;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.c1:hover {
+  color: #fff;
+  background: #519032;
+}
+
+.c0 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<div
+  class="c0 c1"
+  title="Close"
+>
+  ×
+</div>
+`;

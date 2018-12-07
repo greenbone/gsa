@@ -32,7 +32,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import FormGroup from 'web/components/form/formgroup';
 import PasswordField from 'web/components/form/passwordfield';
-import SubmitButton from 'web/components/form/submitbutton';
+import Button from 'web/components/form/button';
 import TextField from 'web/components/form/textfield';
 
 import Img from 'web/components/img/img';
@@ -143,9 +143,7 @@ class LoginForm extends React.Component {
               />
             </FormGroup>
             <FormGroup size="4" offset="4">
-              <SubmitButton
-                flex
-                grow
+              <Button
                 title={_('Login')}
                 onClick={this.handleSubmit}
               />

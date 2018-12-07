@@ -22,15 +22,23 @@
  */
 import React from 'react';
 
-import {mount} from 'enzyme';
+import {render, fireEvent} from 'web/utils/testing';
+
 import DatePicker from '../datepicker.js';
 
 import date from 'gmp/models/date';
 
 describe('DatePicker component tests', () => {
 
-  test('should render without crashing', () => {
-    mount(<DatePicker value={date()}/>);
+  test('should render', () => {
+    const adate = date('2018-11-11');
+    const {element} = render(<DatePicker value={adate}/>);
+
+    expect(element).toMatchSnapshot();
+
+    fireEvent.click(element);
+
+    expect(element).toMatchSnapshot();
   });
 
 });

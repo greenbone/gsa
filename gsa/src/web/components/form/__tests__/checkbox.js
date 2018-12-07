@@ -98,4 +98,19 @@ describe('CheckBox component tests', () => {
 
     expect(change).not.toHaveBeenCalled();
   });
+
+  test('should render title', () => {
+    const {getByTestId} = render(
+      <CheckBox
+        name="foo"
+        title="bar"
+      />
+    );
+
+    const titleElement = getByTestId('checkbox-title');
+    expect(titleElement).toHaveTextContent('bar');
+  });
+
 });
+
+// vim: set ts=2 sw=2 tw=80:

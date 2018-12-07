@@ -165,11 +165,12 @@ class MultiSelect extends React.Component {
       >
         <Layout>
           <DeleteButton
+            data-testid="multiselect-selected-delete"
             onClick={disabled ? undefined : () => this.handleRemoveItem(value)}
           >
             × {/* Javascript unicode: \u00D7 */}
           </DeleteButton>
-          <Label>{itemLabel}</Label>
+          <Label data-testid="multiselect-selected-label">{itemLabel}</Label>
         </Layout>
       </MultiSelectedValue>
     );
@@ -257,12 +258,14 @@ class MultiSelect extends React.Component {
                     })}
                     disabled={disabled}
                     innerRef={ref => this.input = ref}
+                    data-testid="multiselect-input"
                   />
                   <ItemContainer>
                     {displayedItems
                       .map(({label: itemLabel, value: itemValue}, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
+                          data-testid="multiselect-item-label"
                           isSelected={selectedItems.includes(itemValue)}
                           isActive={i === highlightedIndex}
                           key={itemValue}

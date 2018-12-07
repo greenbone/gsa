@@ -318,53 +318,55 @@ const TaskDialog = ({
               </Divider>
             </FormGroup>
 
-            <FormGroup
-              condition={capabilities.mayOp('get_alerts')}
-              title={_('Alerts')}
-            >
-              <Divider>
-                <MultiSelect
-                  name="alert_ids"
-                  items={alert_items}
-                  value={state.alert_ids}
-                  onChange={onAlertsChange}
-                />
-                <Layout>
-                  <NewIcon
-                    title={_('Create a new alert')}
-                    onClick={onNewAlertClick}
+            {capabilities.mayOp('get_alerts') &&
+              <FormGroup
+                title={_('Alerts')}
+              >
+                <Divider>
+                  <MultiSelect
+                    name="alert_ids"
+                    items={alert_items}
+                    value={state.alert_ids}
+                    onChange={onAlertsChange}
                   />
-                </Layout>
-              </Divider>
-            </FormGroup>
+                  <Layout>
+                    <NewIcon
+                      title={_('Create a new alert')}
+                      onClick={onNewAlertClick}
+                    />
+                  </Layout>
+                </Divider>
+              </FormGroup>
+            }
 
-            <FormGroup
-              condition={capabilities.mayOp('get_schedules')}
-              title={_('Schedule')}
-            >
-              <Divider>
-                <Select
-                  name="schedule_id"
-                  value={state.schedule_id}
-                  items={schedule_items}
-                  onChange={onScheduleChange}
-                />
-                <Checkbox
-                  name="schedule_periods"
-                  checked={state.schedule_periods === YES_VALUE}
-                  checkedValue={YES_VALUE}
-                  unCheckedValue={NO_VALUE}
-                  title={_('Once')}
-                  onChange={onValueChange}
-                />
-                <Layout>
-                  <NewIcon
-                    title={_('Create a new schedule')}
-                    onClick={onNewScheduleClick}
+            {capabilities.mayOp('get_schedules') &&
+              <FormGroup
+                title={_('Schedule')}
+              >
+                <Divider>
+                  <Select
+                    name="schedule_id"
+                    value={state.schedule_id}
+                    items={schedule_items}
+                    onChange={onScheduleChange}
                   />
-                </Layout>
-              </Divider>
-            </FormGroup>
+                  <Checkbox
+                    name="schedule_periods"
+                    checked={state.schedule_periods === YES_VALUE}
+                    checkedValue={YES_VALUE}
+                    unCheckedValue={NO_VALUE}
+                    title={_('Once')}
+                    onChange={onValueChange}
+                  />
+                  <Layout>
+                    <NewIcon
+                      title={_('Create a new schedule')}
+                      onClick={onNewScheduleClick}
+                    />
+                  </Layout>
+                </Divider>
+              </FormGroup>
+            }
 
 
             <AddResultsToAssetsGroup
@@ -397,17 +399,18 @@ const TaskDialog = ({
               <Layout box>%</Layout>
             </FormGroup>
 
-            <FormGroup
-              title={_('Alterable Task')}
-              condition={change_task}
-            >
-              <YesNoRadio
-                name="alterable"
-                disabled={task && !task.isNew()}
-                value={state.alterable}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+            {change_task &&
+              <FormGroup
+                title={_('Alterable Task')}
+              >
+                <YesNoRadio
+                  name="alterable"
+                  disabled={task && !task.isNew()}
+                  value={state.alterable}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            }
 
             <AutoDeleteReportsGroup
               autoDelete={state.auto_delete}
