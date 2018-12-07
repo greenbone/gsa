@@ -16,46 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_REQUEST =
-  'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_REQUEST';
 export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
   'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
-export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_ERROR =
-  'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_ERROR';
 export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
 export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 export const USER_SETTINGS_SET_SESSION_TIMEOUT =
   'USER_SETTINGS_SET_SESSION_TIMEOUT';
 
-export const reportComposerDefaultsLoadingActions = {
-  request: () => ({
-    type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_REQUEST,
-  }),
-  success: data => ({
-    type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
-    data,
-  }),
-  error: err => ({
-    type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_ERROR,
-    error: err,
-  }),
-};
+export const getReportComposerDefaultsAction = data => ({
+  type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
+  data,
+});
 
-export const loadReportComposerDefaults = gmp => () => dispatch => {
-
-  dispatch(reportComposerDefaultsLoadingActions.request());
-
-  return gmp.user.getReportComposerDefaults().then(response =>
-    dispatch(reportComposerDefaultsLoadingActions.success(response.data)),
-    err => dispatch(reportComposerDefaultsLoadingActions.error(err)),
+export const loadReportComposerDefaults = gmp => () => dispatch =>
+  gmp.user.getReportComposerDefaults().then(response =>
+    dispatch(getReportComposerDefaultsAction(response.data)),
   );
-};
 
 export const saveReportComposerDefaults = gmp => defaults => dispatch =>
   gmp.user.saveReportComposerDefaults(defaults).then(response =>
-    dispatch(reportComposerDefaultsLoadingActions.success(defaults)),
-    err => dispatch(reportComposerDefaultsLoadingActions.error(err)),
+    dispatch(getReportComposerDefaultsAction(defaults)),
   );
 
 export const setTimezone = timezone => ({

@@ -18,7 +18,7 @@
  */
 
 import {
-  reportComposerDefaultsLoadingActions,
+  getReportComposerDefaultsAction,
   setLocale,
   setSessionTimeout,
   setTimezone,
@@ -108,24 +108,13 @@ describe('settings reducers tests', () => {
       expect(reportComposerDefaults(undefined, {})).toEqual({});
     });
 
-    test('should reduce reportComposerDefaults request action', () => {
-      const action = reportComposerDefaultsLoadingActions.request();
-      const state = {foo: 'bar'};
-      expect(reportComposerDefaults(state, action)).toEqual({foo: 'bar'});
-    });
-
-    test('should reduce reportComposerDefaults error action', () => {
-      const action = reportComposerDefaultsLoadingActions.error('error');
-      expect(reportComposerDefaults(undefined, action)).toEqual({});
-    });
-
     test('should reduce reportComposerDefaults success action', () => {
-      const action = reportComposerDefaultsLoadingActions.success({foo: 'bar'});
+      const action = getReportComposerDefaultsAction({foo: 'bar'});
       expect(reportComposerDefaults(undefined, action)).toEqual({foo: 'bar'});
     });
 
     test('should override existing defaults', () => {
-      const action = reportComposerDefaultsLoadingActions.success({foo: 'bar'});
+      const action = getReportComposerDefaultsAction({foo: 'bar'});
       const state = {toBe: 'deleted'};
       expect(reportComposerDefaults(state, action)).toEqual({foo: 'bar'});
     });
