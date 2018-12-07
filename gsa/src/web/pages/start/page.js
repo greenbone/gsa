@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -408,10 +404,12 @@ class StartPage extends React.Component {
                           {dashboards.length > 1 &&
                             <IconDivider>
                               <EditIcon
+                                size="tiny"
                                 title={_('Edit Dashboard Title')}
                                 onClick={() => this.handleOpenEditDashboardDialog(id)} // eslint-disable-line max-len
                               />
                               <DeleteIcon
+                                size="tiny"
                                 title={_('Remove Dashboard')}
                                 onClick={() => this.handleOpenConfirmRemoveDashboardDialog(id)} // eslint-disable-line max-len
                               />
