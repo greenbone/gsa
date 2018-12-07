@@ -184,6 +184,28 @@ describe('NumberField tests', () => {
     expect(element).toHaveAttribute('value', '1');
   });
 
+  test('should reset to last valid value', () => {
+    const onChange = jest.fn();
+    const {element} = render(
+      <NumberField
+        value={2}
+        min={1}
+        onChange={onChange}
+      />
+    );
+
+    expect(element).toHaveAttribute('value', '2');
+
+    fireEvent.change(element, {target: {value: 'a'}});
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute('value', 'a');
+
+    fireEvent.keyDown(element, {key: 'Enter', keyCode: KeyCode.ENTER});
+
+    expect(element).toHaveAttribute('value', '2');
+  });
+
   test('should not allow to add letters', () => {
     const handler = jest.fn();
     const {element} = render(
