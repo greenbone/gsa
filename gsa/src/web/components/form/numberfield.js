@@ -127,7 +127,7 @@ class NumberField extends React.Component {
     const {lastValidValue, displayedValue} = this.state;
 
     min = parseFloat(min);
-    max = parseFloat(max);
+    max = isDefined(max) ? parseFloat(max) : Number.POSITIVE_INFINITY;
 
     let parsedValue = parseFloat(displayedValue);
 
