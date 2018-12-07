@@ -32,6 +32,7 @@ import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
+
 class NumberField extends React.Component {
 
   constructor(...args) {
@@ -68,11 +69,16 @@ class NumberField extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const {value, precision} = props;
     if (value !== state.prevValue) {
-      const displayedValue = fixedValue(value, precision);
+      if (value !== state.lastValidValue) {
+        const displayedValue = fixedValue(value, precision);
+        return {
+          prevValue: value,
+          displayedValue,
+          lastValidValue: value,
+        };
+      }
       return {
-        prevValue: value,
-        displayedValue,
-        lastValidValue: value,
+          prevValue: value,
       };
     }
     return null;
@@ -106,7 +112,6 @@ class NumberField extends React.Component {
       this.setState({
         displayedValue: value,
         lastValidValue: parsedValue,
-        prevValue: parsedValue,
       });
 
       this.notifyChange(parsedValue);
