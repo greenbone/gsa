@@ -62,7 +62,6 @@ const StyledButton = styled.button`
   &[disabled] {
     cursor: not-allowed;
     opacity: 0.65;
-    filter: alpha(opacity=65);
     box-shadow: none;
   };
   & img {

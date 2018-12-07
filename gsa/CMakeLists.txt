@@ -265,7 +265,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/select.js
      ${GSA_SRC_DIR}/src/web/components/form/selectelements.js
      ${GSA_SRC_DIR}/src/web/components/form/spinner.js
-     ${GSA_SRC_DIR}/src/web/components/form/submitbutton.js
      ${GSA_SRC_DIR}/src/web/components/form/textarea.js
      ${GSA_SRC_DIR}/src/web/components/form/textfield.js
      ${GSA_SRC_DIR}/src/web/components/form/timezoneselect.js

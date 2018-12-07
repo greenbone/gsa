@@ -70,25 +70,27 @@ export const StyledTitle = styled.span`
   opacity: ${props => props.disabled ? '0.5' : '1'};
 `;
 
-const RadioComponent = ({title, children, disabled, ...other}) => {
-  return (
-    <StyledElement disabled={disabled}>
-      <Divider>
-        <StyledInput
-          {...other}
-          disabled={disabled}
-          type="radio"
-        />
-        {isDefined(title) &&
-          <StyledTitle disabled={disabled}>
-            {title}
-          </StyledTitle>
-        }
-        {children}
-      </Divider>
-    </StyledElement>
-  );
-};
+const RadioComponent = ({
+  title,
+  disabled,
+  ...other
+}) => (
+  <StyledElement disabled={disabled}>
+    <Divider>
+      <StyledInput
+        {...other}
+        disabled={disabled}
+        type="radio"
+        data-testid="radio-input"
+      />
+      {isDefined(title) &&
+        <StyledTitle data-testid="radio-title" disabled={disabled}>
+          {title}
+        </StyledTitle>
+      }
+    </Divider>
+  </StyledElement>
+);
 
 RadioComponent.propTypes = {
   disabled: PropTypes.bool,

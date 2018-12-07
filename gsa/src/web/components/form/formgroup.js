@@ -33,6 +33,7 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 
 const COLUMNS = [
+  '0',
   '8.33333333%',
   '16.66666667%',
   '25%',
@@ -47,7 +48,10 @@ const COLUMNS = [
   '100%',
 ];
 
-const FormGroupLayout = styled(Layout)`
+const FormGroupLayout = styled.div`
+  display: flex;
+  align-items: enter;
+  justify-content: start;
   padding-bottom: 10px;
 `;
 
@@ -58,20 +62,20 @@ const Title = styled.label`
   text-align: right;
   padding-left: 10px;
   padding-right: 10px;
-  width: ${props => COLUMNS[parseInt(props.titleSize) - 1]};
-  margin-left: ${props => COLUMNS[parseInt(props.titleOffset) - 1]};
+  width: ${props => COLUMNS[props.titleSize]};
+  margin-left: ${props => COLUMNS[props.titleOffset]};
 `;
 
 const FormGroupContent = styled(Layout)`
   ${props => {
     const ret = {};
     if (isDefined(props.size)) {
-      ret.width = COLUMNS[parseInt(props.size) - 1];
+      ret.width = COLUMNS[parseInt(props.size)];
       ret.paddingLeft = '10px';
       ret.paddingRight = '10px';
     }
     if (isDefined(props.offset)) {
-      ret.marginLeft = COLUMNS[parseInt(props.offset) - 1];
+      ret.marginLeft = COLUMNS[parseInt(props.offset)];
     }
     return ret;
   }}
@@ -80,8 +84,6 @@ const FormGroupContent = styled(Layout)`
 const FormGroup = ({
   children,
   className,
-  condition,
-  flex = 'row',
   offset,
   size,
   title,
@@ -89,22 +91,17 @@ const FormGroup = ({
   titleSize = 2,
   ...other
 }) => {
-
-  if (isDefined(condition) && !condition) {
-    return null;
-  }
+  titleOffset = parseInt(titleOffset);
+  titleSize = parseInt(titleSize);
 
   if (title && !isDefined(size)) {
       size = 12 - titleSize - titleOffset;
   }
-
   return (
-    <FormGroupLayout
-      flex
-      align={['start', 'center']}
-    >
+    <FormGroupLayout>
       {isDefined(title) &&
         <Title
+          data-testid="formgroup-title"
           titleOffset={titleOffset}
           titleSize={titleSize}
         >
@@ -113,7 +110,7 @@ const FormGroup = ({
       }
       <FormGroupContent
         {...other}
-        flex={flex}
+        data-testid="formgroup-content"
         offset={offset}
         size={size}
       >
@@ -125,11 +122,6 @@ const FormGroup = ({
 
 FormGroup.propTypes = {
   className: PropTypes.string,
-  condition: PropTypes.bool,
-  flex: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
   offset: PropTypes.numberOrNumberString,
   size: PropTypes.numberOrNumberString,
   title: PropTypes.string,

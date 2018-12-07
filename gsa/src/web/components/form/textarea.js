@@ -29,6 +29,8 @@ import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
+import {DISABLED_OPACTIY} from './field';
+
 import withChangeHandler from './withChangeHandler';
 
 const StyledTextArea = styled.textarea`
@@ -40,10 +42,9 @@ const StyledTextArea = styled.textarea`
   border: 1px solid ${Theme.inputBorderGray};
   border-radius: 2px;
   padding: 4px 8px;
-  cursor: ${props => props.disabled ? 'not-allowed' : null};
-  background-color: ${props => props.disabled || props.readonly ?
-    Theme.dialogGray : null};
-  opacity: ${props => props.disabled || props.readonly ? 1 : null};
+  cursor: ${props => props.disabled ? 'not-allowed' : undefined};
+  background-color: ${props => props.disabled ? Theme.dialogGray : undefined};
+  opacity: ${props => props.disabled ? DISABLED_OPACTIY : undefined};
 `;
 
 export default compose(

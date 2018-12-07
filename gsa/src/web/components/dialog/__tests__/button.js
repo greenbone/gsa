@@ -18,16 +18,37 @@
  */
 import React from 'react';
 
-import {render} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
-import Loading from '../loading.js';
+import Button from '../button';
 
-describe('Loading component tests', () => {
+describe('Dialog Button tests', () => {
 
-  test('should render', () => {
-    const {element} = render(<Loading/>);
+  test('should call click handler', () => {
+    const handler = jest.fn();
+
+    const {element} = render(<Button onClick={handler}/>);
+
+    fireEvent.click(element);
+
+    expect(handler).toHaveBeenCalled();
+  });
+
+  test('should render button', () => {
+    const {element} = render(<Button />);
 
     expect(element).toMatchSnapshot();
+
+    expect(element).toHaveStyleRule('background', Theme.lightGreen);
+  });
+
+  test('should render button when loading', () => {
+    const {element} = render(<Button loading={true} />);
+
+    expect(element).toMatchSnapshot();
+    expect(element).toHaveStyleRule('background',
+      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`);
   });
 
 });

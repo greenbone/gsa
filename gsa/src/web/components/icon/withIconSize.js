@@ -28,6 +28,10 @@ import {isArray} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import withContext from 'web/utils/withContext';
 
+export const ICON_SIZE_LARGE_PIXELS = '50px';
+export const ICON_SIZE_MEDIUM_PIXELS = '24px';
+export const ICON_SIZE_SMALL_PIXELS = '16px';
+
 const withIconSize = (defaultSize = 'small') => Component => {
 
   const IconSizeWrapper = styled(Component)`
@@ -41,13 +45,13 @@ const withIconSize = (defaultSize = 'small') => Component => {
       let height;
 
       if (size === 'small') {
-        height = width = '16px';
+        height = width = ICON_SIZE_SMALL_PIXELS;
       }
       else if (size === 'medium') {
-        height = width = '24px';
+        height = width = ICON_SIZE_MEDIUM_PIXELS;
       }
       else if (size === 'large') {
-        height = width = '50px';
+        height = width = ICON_SIZE_LARGE_PIXELS;
       }
       else if (size === 'tiny') {
         height = width = '11px';

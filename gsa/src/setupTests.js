@@ -22,9 +22,6 @@
  */
 import 'core-js/fn/string/starts-with';
 
-import {configure} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
 import {initLocale} from 'gmp/locale/lang';
 
 class FakeBackend {
@@ -44,7 +41,5 @@ FakeBackend.type = 'backend';
 initLocale({
   backend: FakeBackend,
 });
-
-configure({adapter: new Adapter()});
 
 // vim: set ts=2 sw=2 tw=80:

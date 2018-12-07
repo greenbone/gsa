@@ -32,7 +32,7 @@ import Theme from 'web/utils/theme';
 import PropTypes from 'web/utils/proptypes';
 import withIconSize from 'web/components/icon/withIconSize';
 
-let StyledCloseButton = styled.div`
+const StyledCloseButton = styled.div`
   display: flex;
   border: 1px solid ${Theme.darkGreen};
   font-weight: bold;
@@ -51,16 +51,12 @@ let StyledCloseButton = styled.div`
   };
 `;
 
-StyledCloseButton = withIconSize('medium')(StyledCloseButton);
-
 const CloseButton = ({
-  size,
   title = _('Close'),
   ...props
 }) => (
   <StyledCloseButton
     {...props}
-    size={size}
     title={title}
   >
     ×{/* Javascript unicode: \u00D7 */}
@@ -68,11 +64,10 @@ const CloseButton = ({
 );
 
 CloseButton.propTypes = {
-  size: PropTypes.iconSize,
   title: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
 
-export default CloseButton;
+export default withIconSize('medium')(CloseButton);
 
 // vim: set ts=2 sw=2 tw=80:
