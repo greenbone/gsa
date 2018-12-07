@@ -49,6 +49,9 @@ const withIconSize = (defaultSize = 'small') => Component => {
       else if (size === 'large') {
         height = width = '50px';
       }
+      else if (size === 'tiny') {
+        height = width = '11px';
+      }
       else if (isArray(size)) {
         width = size[0];
         height = size[1];
