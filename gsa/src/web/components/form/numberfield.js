@@ -200,6 +200,12 @@ class NumberField extends React.Component {
       default:
         break;
     }
+
+    const {onKeyDown} = this.props;
+    if (isDefined(onKeyDown)) {
+      // should only be used for testing
+      onKeyDown(event);
+    }
   }
 
   render() {
