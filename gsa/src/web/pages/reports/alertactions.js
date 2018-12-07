@@ -43,7 +43,6 @@ import AlertComponent from 'web/pages/alerts/component';
 
 import {
   loadEntities as loadAlerts,
-  loadEntity as loadAlert,
   selector as alertsSelector,
 } from 'web/store/entities/alerts';
 
@@ -63,7 +62,6 @@ class AlertActions extends React.Component {
     super(...args);
 
     this.state = {
-      alerts: [],
       showTriggerAlertDialog: false,
     };
 
@@ -72,7 +70,6 @@ class AlertActions extends React.Component {
     this.onAlertCreated = this.onAlertCreated.bind(this);
     this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
     this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
-    this.handleValueChange = this.handleValueChange.bind(this);
   }
 
   componentDidMount() {
@@ -137,6 +134,7 @@ class AlertActions extends React.Component {
   }
 
   handleOpenTriggerAlertDialog() {
+    this.props.loadAlerts();
     this.setState({
       ...this.props.reportComposerDefaults,
       showTriggerAlertDialog: true,
@@ -150,28 +148,20 @@ class AlertActions extends React.Component {
   }
 
   onAlertCreated(response) {
-    this.props.loadAlerts().then(() => {
-      this.props.loadAlert(response.data.id).then(resp => {
-        const alert = resp.data;
-        this.setState({
-          alertId: alert.id,
-        });
-      });
+    this.props.loadAlerts();
+    this.setState({
+      alertId: response.data.id,
     });
   };
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
   render() {
     const {
+      alerts,
       filter,
       showError,
       onInteraction,
     } = this.props;
     const {
-      alerts,
       alertId,
       applyOverrides,
       includeNotes,
@@ -207,7 +197,6 @@ class AlertActions extends React.Component {
                 onClose={this.handleCloseTriggerAlertDialog}
                 onNewAlertClick={create}
                 onSave={this.handleTriggerAlert}
-                onValueChange={this.handleValueChange}
               />
             }
           </React.Fragment>
@@ -221,7 +210,6 @@ AlertActions.propTypes = {
   alerts: PropTypes.array,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
-  loadAlert: PropTypes.func.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   report: PropTypes.model.isRequired,
@@ -236,7 +224,6 @@ AlertActions.propTypes = {
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-    loadAlert: id => dispatch(loadAlert(gmp)(id)),
     loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
     loadReportComposerDefaults: () => dispatch(
       loadReportComposerDefaults(gmp)()),
