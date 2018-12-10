@@ -201,7 +201,7 @@ export class Menu extends React.Component {
       ...props
     } = this.props;
 
-    if (!isDefined(target)) {
+    if (!hasValue(target)) {
       return null;
     }
 
@@ -223,7 +223,7 @@ export class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  target: PropTypes.object.isRequired,
+  target: PropTypes.object,
 };
 
 export const SelectContainer = styled.div`
