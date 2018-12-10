@@ -170,8 +170,10 @@ class Select extends React.Component {
                 })}
                 isOpen={isOpen}
                 innerRef={ref => this.box = ref}
+                data-testid="select-open-button"
               >
                 <SelectedValue
+                  data-testid="select-selected-value"
                   disabled={disabled}
                   title={label}
                 >

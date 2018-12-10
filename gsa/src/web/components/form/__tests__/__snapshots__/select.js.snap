@@ -120,6 +120,7 @@ exports[`Select component tests should render 1`] = `
     aria-haspopup="true"
     aria-label="open menu"
     class="c1"
+    data-testid="select-open-button"
     data-toggle="true"
     disabled=""
     role="button"
@@ -127,6 +128,7 @@ exports[`Select component tests should render 1`] = `
   >
     <div
       class="c2"
+      data-testid="select-selected-value"
       disabled=""
     />
     <div
