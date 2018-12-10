@@ -243,7 +243,7 @@ export const SelectedValue = styled.div`
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
 `;
 
-export const case_insensitive_filter = search => {
+export const caseInsensitiveFilter = search => {
   if (!isDefined(search) || search.length === 0) {
     return () => true;
   }

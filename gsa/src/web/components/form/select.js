@@ -37,7 +37,7 @@ import Layout from '../../components/layout/layout';
 
 import {
   Box,
-  case_insensitive_filter,
+  caseInsensitiveFilter,
   Input,
   Item,
   ItemContainer,
@@ -131,7 +131,7 @@ class Select extends React.Component {
     disabled = disabled || !isDefined(items) || items.length === 0;
 
     const displayedItems = isDefined(items) ?
-      items.filter(case_insensitive_filter(search)) : [];
+      items.filter(caseInsensitiveFilter(search)) : [];
 
     return (
       <Downshift
