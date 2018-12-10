@@ -278,6 +278,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deleteicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
@@ -297,9 +299,16 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
      ${GSA_SRC_DIR}/src/web/components/img/img.js

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -21,9 +21,9 @@ import React from 'react';
 
 import SvgIcon from './svgicon';
 
-import {ReactComponent as Icon} from './svg/clone.svg';
+import {ReactComponent as Icon} from './svg/delta_second.svg';
 
-const CloneIcon = props => (
+const DeltaSecondIcon = props => (
   <SvgIcon
     {...props}
   >
@@ -31,6 +31,6 @@ const CloneIcon = props => (
   </SvgIcon>
 );
 
-export default CloneIcon;
+export default DeltaSecondIcon;
 
 // vim: set ts=2 sw=2 tw=80:

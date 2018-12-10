@@ -50,7 +50,7 @@ const COLUMNS = [
 
 const FormGroupLayout = styled.div`
   display: flex;
-  align-items: enter;
+  align-items: center;
   justify-content: start;
   padding-bottom: 10px;
 `;

@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +36,8 @@ import SeverityBar from 'web/components/bar/severitybar';
 import StatusBar from 'web/components/bar/statusbar';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
-import Icon from 'web/components/icon/icon';
+import DeltaIcon from 'web/components/icon/deltaicon';
+import DeltaSecondIcon from 'web/components/icon/deltasecondicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -68,18 +64,16 @@ const IconActions = ({
     >
       {isDefined(selectedDeltaReport) ?
         entity.id === selectedDeltaReport.id ?
-          <Icon
-            img="delta_inactive.svg"
+          <DeltaIcon
+            active={false}
             title={_('Report is selected for delta comparision')}
           /> :
-          <Icon
-            img="delta_second.svg"
+          <DeltaSecondIcon
             title={_('Select Report for delta comparision')}
             value={entity}
             onClick={onReportDeltaSelect}
           /> :
-          <Icon
-            img="delta.svg"
+          <DeltaIcon
             title={_('Select Report for delta comparision')}
             value={entity}
             onClick={onReportDeltaSelect}
