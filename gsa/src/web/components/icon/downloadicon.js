@@ -23,7 +23,7 @@ import SvgIcon from './svgicon';
 
 import {ReactComponent as Icon} from './svg/download.svg';
 
-const EditIcon = props => (
+const DownloadIcon = props => (
   <SvgIcon
     {...props}
   >
@@ -31,6 +31,6 @@ const EditIcon = props => (
   </SvgIcon>
 );
 
-export default EditIcon;
+export default DownloadIcon;
 
 // vim: set ts=2 sw=2 tw=80:
