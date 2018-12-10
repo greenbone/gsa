@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +19,40 @@
 
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {first} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity.js';
+import {ALL_FILTER} from 'gmp/models/filter';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withGmp from '../../utils/withGmp.js';
+import {isDefined} from 'gmp/utils/identity';
 
-import Select from '../../components/form/select.js';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import Icon from '../../components/icon/icon.js';
+import Icon from 'web/components/icon/icon';
 
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import AlertComponent from '../alerts/component.js';
+import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
+
+import AlertComponent from 'web/pages/alerts/component';
+
+import {
+  loadEntities as loadAlerts,
+  selector as alertsSelector,
+} from 'web/store/entities/alerts';
+
+import {
+  loadReportComposerDefaults,
+  renewSessionTimeout,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -50,28 +62,22 @@ class AlertActions extends React.Component {
     super(...args);
 
     this.state = {
-      alerts: [],
+      showTriggerAlertDialog: false,
     };
 
     this.handleAlertChange = this.handleAlertChange.bind(this);
-    this.handleTestAlert = this.handleTestAlert.bind(this);
+    this.handleTriggerAlert = this.handleTriggerAlert.bind(this);
     this.onAlertCreated = this.onAlertCreated.bind(this);
+    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
+    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(this); /* eslint-disable-line max-len */
   }
 
   componentDidMount() {
-    const {gmp} = this.props;
-    gmp.alerts.getAll().then(response => {
-      const {data: alerts} = response;
-      const alert_id = first(alerts).id;
-      this.setState({
-        alerts,
-        alert_id,
-      });
-    });
+    this.props.loadReportComposerDefaults();
   }
 
-  handleAlertChange(alert_id) {
-    this.setState({alert_id});
+  handleAlertChange(alertId) {
+    this.setState({alertId});
   }
 
   handleInteraction() {
@@ -81,49 +87,87 @@ class AlertActions extends React.Component {
     }
   }
 
-  handleTestAlert() {
-    const {alert_id} = this.state;
+  handleTriggerAlert(state) {
     const {
+      alertId,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
+      storeAsDefault,
+    } = state;
+    const {
+      filter,
       gmp,
       report,
-      filter,
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
 
+    const newFilter = filter.copy();
+    newFilter.set('notes', includeNotes);
+    newFilter.set('overrides', includeOverrides);
+    newFilter.set('apply_overrides', applyOverrides);
+
     this.handleInteraction();
+
+    if (storeAsDefault) {
+      this.props.saveReportComposerDefaults({
+        applyOverrides,
+        includeNotes,
+        includeOverrides,
+      });
+    }
 
     gmp.report.alert({
       report_id: report.id,
-      alert_id,
-      filter: filter.simple(),
+      alert_id: alertId,
+      filter: newFilter.simple(),
     }).then(response => {
-      showSuccessMessage(_('Running the alert was successfull'));
+      showSuccessMessage(_('Running the alert was successful'));
+      this.setState({showTriggerAlertDialog: false});
     }, error => {
         log.error('Failed running alert', error);
         showErrorMessage(_('Failed to run alert.'));
+        this.setState({showTriggerAlertDialog: false});
       }
     );
   }
 
-  onAlertCreated(response) {
-    const {alerts} = this.state;
-    const alert = response.data;
-
+  handleOpenTriggerAlertDialog() {
+    this.props.loadAlerts();
     this.setState({
-      alerts: [alert, ...alerts],
-      alert_id: alert.id,
+      ...this.props.reportComposerDefaults,
+      showTriggerAlertDialog: true,
     });
   }
 
+  handleCloseTriggerAlertDialog() {
+    this.setState({
+      showTriggerAlertDialog: false,
+    });
+  }
+
+  onAlertCreated(response) {
+    this.props.loadAlerts();
+    this.setState({
+      alertId: response.data.id,
+    });
+  };
+
   render() {
     const {
+      alerts,
+      filter,
       showError,
       onInteraction,
     } = this.props;
     const {
-      alert_id,
-      alerts,
+      alertId,
+      applyOverrides,
+      includeNotes,
+      includeOverrides,
+      showTriggerAlertDialog,
+      storeAsDefault,
     } = this.state;
     return (
       <AlertComponent
@@ -132,24 +176,30 @@ class AlertActions extends React.Component {
         onInteraction={onInteraction}
       >
         {({create}) => (
-          <IconDivider>
-            <Select
-              name="alert_id"
-              value={alert_id}
-              items={renderSelectItems(alerts)}
-              onChange={this.handleAlertChange}
-            />
-            <Icon
-              img="start.svg"
-              title={_('Run Alert')}
-              onClick={this.handleTestAlert}
-            />
-            <Icon
-              img="new.svg"
-              title={_('Create new Alert')}
-              onClick={create}
-            />
-          </IconDivider>
+          <React.Fragment>
+            <IconDivider>
+              <Icon
+                img="start.svg"
+                title={_('Trigger Alert')}
+                onClick={this.handleOpenTriggerAlertDialog}
+              />
+            </IconDivider>
+            {showTriggerAlertDialog &&
+              <TriggerAlertDialog
+                alertId={alertId}
+                alerts={alerts}
+                applyOverrides={applyOverrides}
+                filter={filter}
+                includeNotes={includeNotes}
+                includeOverrides={includeOverrides}
+                storeAsDefault={storeAsDefault}
+                onAlertChange={this.handleAlertChange}
+                onClose={this.handleCloseTriggerAlertDialog}
+                onNewAlertClick={create}
+                onSave={this.handleTriggerAlert}
+              />
+            }
+          </React.Fragment>
         )}
       </AlertComponent>
     );
@@ -157,15 +207,41 @@ class AlertActions extends React.Component {
 }
 
 AlertActions.propTypes = {
+  alerts: PropTypes.array,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
+  loadAlerts: PropTypes.func.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
   report: PropTypes.model.isRequired,
+  reportComposerDefaults: PropTypes.object,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default withGmp(AlertActions);
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  return {
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
+  };
+};
+
+const mapStateToProps = rootState => {
+  return {
+    alerts: alertsSelector(rootState).getEntities(ALL_FILTER),
+    reportComposerDefaults: getReportComposerDefaults(rootState),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AlertActions);
 
 // vim: set ts=2 sw=2 tw=80:

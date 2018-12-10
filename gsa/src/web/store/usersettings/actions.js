@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +16,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+export const USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS =
+  'USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS';
 export const USER_SETTINGS_SET_TIMEZONE = 'USER_SETTINGS_SET_TIMEZONE';
 export const USER_SETTINGS_SET_LOCALE = 'USER_SETTINGS_SET_LOCALE';
 export const USER_SETTINGS_SET_USERNAME = 'USER_SETTINGS_SET_USERNAME';
 export const USER_SETTINGS_SET_SESSION_TIMEOUT =
   'USER_SETTINGS_SET_SESSION_TIMEOUT';
+
+export const getReportComposerDefaultsAction = data => ({
+  type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
+  data,
+});
+
+export const loadReportComposerDefaults = gmp => () => dispatch =>
+  gmp.user.getReportComposerDefaults().then(response =>
+    dispatch(getReportComposerDefaultsAction(response.data)),
+  );
+
+export const saveReportComposerDefaults = gmp => defaults => dispatch =>
+  gmp.user.saveReportComposerDefaults(defaults).then(response =>
+    dispatch(getReportComposerDefaultsAction(defaults)),
+  );
 
 export const setTimezone = timezone => ({
   type: USER_SETTINGS_SET_TIMEZONE,

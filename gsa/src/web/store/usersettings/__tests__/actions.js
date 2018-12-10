@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,15 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import moment from 'gmp/models/date';
 
+import {isFunction} from 'gmp/utils/identity';
+
 import {
+  getReportComposerDefaultsAction,
+  loadReportComposerDefaults,
+  saveReportComposerDefaults,
   setLocale,
   setSessionTimeout,
   setTimezone,
   setUsername,
   renewSessionTimeout,
   updateTimezone,
+  USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
   USER_SETTINGS_SET_LOCALE,
   USER_SETTINGS_SET_SESSION_TIMEOUT,
   USER_SETTINGS_SET_TIMEZONE,
@@ -65,6 +68,14 @@ describe('settings actions tests', () => {
     });
   });
 
+  test('should create report composer defaults loading success action', () => {
+    const action = getReportComposerDefaultsAction({foo: 'bar'});
+    expect(action).toEqual({
+      type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
+      data: {foo: 'bar'},
+    });
+  });
+
   test('should update timezone', () => {
     const dispatch = jest.fn();
     const gmp = {
@@ -98,6 +109,62 @@ describe('settings actions tests', () => {
         timeout: sessionTimeout,
       });
       expect(renewSession).toBeCalled();
+    });
+  });
+
+  describe('loadReportComposerDefaults tests', () => {
+
+    test('should dispatch success actions', () => {
+      const dispatch = jest.fn();
+
+      const data = {foo: 'bar'};
+      const getReportComposerDefaults = jest.fn().mockReturnValue(
+        Promise.resolve({data}));
+
+      const gmp = {
+        user: {
+          getReportComposerDefaults,
+        },
+      };
+
+      expect(isFunction(loadReportComposerDefaults)).toBe(true);
+
+      return loadReportComposerDefaults(gmp)()(dispatch).then(() => {
+        expect(getReportComposerDefaults).toBeCalled();
+        expect(dispatch).toHaveBeenCalledWith({
+          type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
+          data,
+        });
+      });
+    });
+  });
+
+  describe('saveReportComposerDefaults tests', () => {
+
+    test('should dispatch success actions', () => {
+      const dispatch = jest.fn();
+
+      const data = {foo: 'bar'};
+      const saveReportComposerDefaultsMock = jest.fn().mockReturnValue(
+        Promise.resolve({data}));
+
+      const gmp = {
+        user: {
+          saveReportComposerDefaults: saveReportComposerDefaultsMock,
+        },
+      };
+
+      const defaults = {fake: 'someDefaults'};
+
+      expect(isFunction(saveReportComposerDefaults)).toBe(true);
+
+      return saveReportComposerDefaults(gmp)(defaults)(dispatch).then(() => {
+        expect(saveReportComposerDefaultsMock).toHaveBeenCalledWith(defaults);
+        expect(dispatch).toHaveBeenCalledWith({
+          type: USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS,
+          data: defaults,
+        });
+      });
     });
   });
 
