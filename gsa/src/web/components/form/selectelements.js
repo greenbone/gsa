@@ -243,6 +243,16 @@ export const SelectedValue = styled.div`
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
 `;
 
+/**
+ * Creates a filter function for select items element
+ *
+ * The created functions checks all items if their label contains the passed
+ * search term. The comparision takes place case intensively.
+ *
+ * @param {String} search case-insesitive keyword to search for
+ *
+ * @returns {Function} filter function
+ */
 export const caseInsensitiveFilter = search => {
   if (!isDefined(search) || search.length === 0) {
     return () => true;
