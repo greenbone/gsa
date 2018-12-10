@@ -52,29 +52,41 @@ const SecinfoEventPart = ({
       >
       </Radio>
       <Select
+        items={[{
+          value: 'new',
+          label: _('New'),
+        }, {
+          value: 'updated',
+          label: _('Updated'),
+        }]}
         value={feedEvent}
         name={prefix + 'feed_event'}
         onChange={onChange}
-      >
-        <option value="new">{_('New')}</option>
-        <option value="updated">{_('Updated')}</option>
-      </Select>
+      />
       <Select
+        items={[{
+          value: 'nvt',
+          label: _('NVTs'),
+        }, {
+          value: 'cve',
+          label: _('CVEs'),
+        }, {
+          value: 'cpe',
+          label: _('CPEs'),
+        }, {
+          value: 'cert_bund_adv',
+          label: _('CERT-Bund Advisories'),
+        }, {
+          value: 'dfn_cert_adv',
+          label: _('DFN-CERT Advisories'),
+        }, {
+          value: 'ovaldef',
+          label: _('OVAL Definition'),
+        }]}
         value={secinfoType}
         name={prefix + 'secinfo_type'}
         onChange={onChange}
-      >
-        <option value="nvt">{_('NVTs')}</option>
-        <option value="cve">{_('CVEs')}</option>
-        <option value="cpe">{_('CPEs')}</option>
-        <option value="cert_bund_adv">
-          {_('CERT-Bund Advisories')}
-        </option>
-        <option value="dfn_cert_adv">
-          {_('DFN-CERT Advisories')}
-        </option>
-        <option value="ovaldef">{_('OVAL Definition')}</option>
-      </Select>
+      />
     </Divider>
   );
 };
