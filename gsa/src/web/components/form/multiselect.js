@@ -46,7 +46,6 @@ import {
   Item,
   ItemContainer,
   Menu,
-  option_items,
   SelectContainer,
   SelectedValue,
 } from './selectelements';
@@ -178,9 +177,10 @@ class MultiSelect extends React.Component {
 
   render() {
     let {
-      children,
-      className,
       disabled = false,
+    } = this.props;
+    const {
+      className,
       items,
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
@@ -190,10 +190,6 @@ class MultiSelect extends React.Component {
       search,
       selectedItems,
     } = this.state;
-
-    if (!isDefined(items)) {
-      items = option_items(children);
-    }
 
     disabled = disabled || !isDefined(items) || items.length === 0;
 

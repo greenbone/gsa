@@ -42,7 +42,6 @@ import {
   Item,
   ItemContainer,
   Menu,
-  option_items,
   SelectContainer,
   SelectedValue,
 } from './selectelements.js';
@@ -114,9 +113,10 @@ class Select extends React.Component {
 
   render() {
     let {
-      children,
-      className,
       disabled = false,
+    } = this.props;
+    const {
+      className,
       items,
       itemToString,
       menuPosition,
@@ -127,10 +127,6 @@ class Select extends React.Component {
     const {
       search,
     } = this.state;
-
-    if (!isDefined(items)) {
-      items = option_items(children);
-    }
 
     disabled = disabled || !isDefined(items) || items.length === 0;
 

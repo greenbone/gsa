@@ -49,28 +49,6 @@ describe('Select component tests', () => {
     expect(element).toMatchSnapshot();
   });
 
-  test('should render with options', () => {
-    const {baseElement, element} = render(
-      <Select>
-        <option value="foo">Foo</option>
-        <option value="bar">Bar</option>
-      </Select>
-    );
-
-    let items = getItemElements(baseElement);
-
-    // ensure selection is not shown yet
-    expect(items.length).toEqual(0);
-
-    openSelectElement(element);
-
-    items = getItemElements(baseElement);
-
-    expect(items.length).toEqual(2);
-    expect(items[0]).toHaveTextContent('Foo');
-    expect(items[1]).toHaveTextContent('Bar');
-  });
-
   test('should render with items', () => {
     const items = [{
       value: 'bar',

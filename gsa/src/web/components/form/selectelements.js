@@ -251,20 +251,4 @@ export const case_insensitive_filter = search => {
   return ({label}) => ('' + label).toLowerCase().includes(search);
 };
 
-export const option_items = children => {
-  if (!isDefined(children)) {
-    return undefined;
-  }
-
-  children = React.Children.toArray(children);
-  children = children.filter(child => child.type === 'option');
-  return children.map(child => {
-    const {props} = child;
-    return {
-      label: props.children,
-      value: isDefined(props.value) ? props.value : props.children,
-    };
-  });
-};
-
 // vim: set ts=2 sw=2 tw=80:
