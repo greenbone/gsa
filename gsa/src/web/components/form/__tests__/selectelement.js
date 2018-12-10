@@ -22,6 +22,8 @@
  */
 import React from 'react';
 
+import {isFunction} from 'gmp/utils/identity';
+
 import {render} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
@@ -30,11 +32,11 @@ import {
   Item,
   Input,
   ItemContainer,
+  Menu,
   SelectContainer,
   SelectedValue,
   caseInsensitiveFilter,
 } from '../selectelements';
-import {isFunction} from 'gmp/utils/identity';
 
 describe('Box tests', () => {
 
@@ -233,6 +235,81 @@ describe('caseInsensitiveFilter tests', () => {
       value: 1,
       label: 'Foo',
     }]);
+  });
+
+});
+
+class MenuTestComponent extends React.Component {
+
+  render() {
+    const hasTarget = this.target !== undefined && this.target !== null;
+    return (
+      <div>
+        <div
+          ref={ref => this.target = ref}
+          style={{width: '200px', height: '100px'}}
+        />
+        {hasTarget &&
+          <Menu
+            {...this.props}
+            target={this.target}
+          />
+        }
+      </div>
+    );
+  }
+}
+
+
+describe('Menu tests', () => {
+
+  const renderTest = props => {
+
+    const {rerender, ...other} = render(
+      <MenuTestComponent
+        {...props}
+      />
+    );
+    rerender(
+      <MenuTestComponent
+        {...props}
+      />
+    );
+    return other;
+  };
+
+  test('should render', () => {
+    const {getByTestId} = renderTest();
+
+    const menu = getByTestId('select-menu');
+
+    expect(menu).toMatchSnapshot();
+  });
+
+  test('should render with position adjust', () => {
+    const {getByTestId} = renderTest({position: 'adjust'});
+
+    const menu = getByTestId('select-menu');
+
+    expect(menu).toMatchSnapshot();
+  });
+
+  test('should render with position right', () => {
+    const {getByTestId} = renderTest({position: 'right'});
+
+    const menu = getByTestId('select-menu');
+
+    expect(menu).toMatchSnapshot();
+  });
+
+  test('should not render without target', () => {
+    const {queryByTestId} = render(
+      <Menu target={null}/>
+    );
+
+    const menu = queryByTestId('select-menu');
+
+    expect(menu).toBeNull();
   });
 
 });

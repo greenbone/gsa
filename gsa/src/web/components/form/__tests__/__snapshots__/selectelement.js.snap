@@ -181,6 +181,108 @@ exports[`ItemContainer tests should render 1`] = `
 />
 `;
 
+exports[`Menu tests should render 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity .1s ease;
+  transition: opacity .1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 100;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
+exports[`Menu tests should render with position adjust 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity .1s ease;
+  transition: opacity .1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 100;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  width: 0px;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
+exports[`Menu tests should render with position right 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity .1s ease;
+  transition: opacity .1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 100;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  right: 0px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
 exports[`SelectContainer tests should render 1`] = `
 .c0 {
   display: -webkit-box;
