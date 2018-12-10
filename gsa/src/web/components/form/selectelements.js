@@ -211,6 +211,7 @@ export class Menu extends React.Component {
     return (
       <Portal>
         <MenuContainer
+          data-testid="select-menu"
           {...props}
           right={document.body.clientWidth - right}
           width={width}
