@@ -216,74 +216,110 @@ class CvssCalculator extends React.Component {
           <h3>{_('From Metrics')}:</h3>
           <FormGroup title={_('Access Vector')}>
             <Select
+              items={[{
+                value: 'LOCAL',
+                label: _('Local'),
+              }, {
+                value: 'ADJACENT_NETWORK',
+                label: _('Adjacent'),
+              }, {
+                value: 'NETWORK',
+                label: _('Network'),
+              }]}
               name="accessVector"
               value={accessVector}
               menuPosition="adjust"
               onChange={this.handleMetricsChange}
-            >
-              <option value="LOCAL">{_('Local')}</option>
-              <option value="ADJACENT_NETWORK">{_('Adjacent')}</option>
-              <option value="NETWORK">{_('Network')}</option>
-            </Select>
+            />
           </FormGroup>
           <FormGroup title={_('Access Complexity')}>
             <Select
+              items={[{
+                value: 'LOW',
+                label: _('Low'),
+              }, {
+                value: 'MEDIUM',
+                label: _('Medium'),
+              }, {
+                value: 'HIGH',
+                label: _('High'),
+              }]}
               name="accessComplexity"
               value={accessComplexity}
               menuPosition="adjust"
               onChange={this.handleMetricsChange}
-            >
-              <option value="LOW">{_('Low')}</option>
-              <option value="MEDIUM">{_('Medium')}</option>
-              <option value="HIGH">{_('High')}</option>
-            </Select>
+            />
           </FormGroup>
           <FormGroup title={_('Authentication')}>
             <Select
+              items={[{
+                value: 'NONE',
+                label: _('None'),
+              }, {
+                value: 'SINGLE_INSTANCES',
+                label: _('Single'),
+              }, {
+                value: 'MULTIPLE_INSTANCES',
+                label: _('Multiple'),
+              }]}
               name="authentication"
               value={authentication}
               menuPosition="adjust"
               onChange={this.handleMetricsChange}
-            >
-              <option value="NONE">{_('None')}</option>
-              <option value="SINGLE_INSTANCES">{_('Single')}</option>
-              <option value="MULTIPLE_INSTANCES">{_('Multiple')}</option>
-            </Select>
+            />
           </FormGroup>
           <FormGroup title={_('Confidentiality')}>
             <Select
+              items={[{
+                value: 'NONE',
+                label: _('None'),
+              }, {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              }, {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              }]}
               name="confidentialityImpact"
               value={confidentialityImpact}
               onChange={this.handleMetricsChange}
-            >
-              <option value="NONE">{_('None')}</option>
-              <option value="PARTIAL">{_('Partial')}</option>
-              <option value="COMPLETE">{_('Complete')}</option>
-            </Select>
+            />
           </FormGroup>
           <FormGroup title={_('Integrity')}>
             <Select
+              items={[{
+                value: 'NONE',
+                label: _('None'),
+              }, {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              }, {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              }]}
               name="integrityImpact"
               value={integrityImpact}
               menuPosition="adjust"
               onChange={this.handleMetricsChange}
-            >
-              <option value="NONE">{_('None')}</option>
-              <option value="PARTIAL">{_('Partial')}</option>
-              <option value="COMPLETE">{_('Complete')}</option>
-            </Select>
+            />
           </FormGroup>
           <FormGroup title={_('Availability')}>
             <Select
+              items={[{
+                value: 'NONE',
+                label: _('None'),
+              }, {
+                value: 'PARTIAL',
+                label: _('Partial'),
+              }, {
+                value: 'COMPLETE',
+                label: _('Complete'),
+              }]}
               name="availabilityImpact"
               value={availabilityImpact}
               menuPosition="adjust"
               onChange={this.handleMetricsChange}
-            >
-              <option value="NONE">{_('None')}</option>
-              <option value="PARTIAL">{_('Partial')}</option>
-              <option value="COMPLETE">{_('Complete')}</option>
-            </Select>
+            />
           </FormGroup>
 
           <h3>{_('From Vector')}:</h3>
