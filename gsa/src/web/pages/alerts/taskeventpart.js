@@ -52,17 +52,29 @@ const TaskEventPart = ({
       >
       </Radio>
       <Select
-        onChange={onChange}
+        items={[{
+          value: 'Done',
+          label: _('Done'),
+        }, {
+          value: 'New',
+          label: _('New'),
+        }, {
+          value: 'Requested',
+          label: _('Requested'),
+        }, {
+          value: 'Running',
+          label: _('Running'),
+        }, {
+          value: 'Stop Requested',
+          label: _('Stop Requested'),
+        }, {
+          value: 'Stopped',
+          label: _('Stopped'),
+        }]}
         name={prefix + 'status'}
         value={status}
-      >
-        <option value="Done">{('Done')}</option>
-        <option value="New">{_('New')}</option>
-        <option value="Requested">{_('Requested')}</option>
-        <option value="Running">{_('Running')}</option>
-        <option value="Stop Requested">{_('Stop Requested')}</option>
-        <option value="Stopped">{_('Stopped')}</option>
-      </Select>
+        onChange={onChange}
+      />
     </Divider>
   );
 };
