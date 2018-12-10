@@ -59,6 +59,16 @@ export const EntitiesFooter = ({
     ...props
   }) => {
   const deleteEntities = props.delete;
+  const selectItems = [{
+    value: SelectionType.SELECTION_PAGE_CONTENTS,
+    label: _('Apply to page contents'),
+  }, {
+    value: SelectionType.SELECTION_USER,
+    label: _('Apply to selection'),
+  }, {
+     value: SelectionType.SELECTION_FILTER,
+     label: _('Apply to all filtered'),
+  }];
   return (
     <TableFooter>
       <TableRow>
@@ -68,18 +78,10 @@ export const EntitiesFooter = ({
               <Divider>
                 {selection &&
                   <Select
+                    items={selectItems}
                     value={selectionType}
                     onChange={onSelectionTypeChange}
                   >
-                    <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
-                      {_('Apply to page contents')}
-                    </option>
-                    <option value={SelectionType.SELECTION_USER}>
-                      {_('Apply to selection')}
-                    </option>
-                    <option value={SelectionType.SELECTION_FILTER}>
-                      {_('Apply to all filtered')}
-                    </option>
                   </Select>
                 }
                 <IconDivider>
