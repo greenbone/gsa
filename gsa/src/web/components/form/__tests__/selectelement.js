@@ -25,7 +25,16 @@ import React from 'react';
 import {render} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
-import {Box, Item, Input, ItemContainer, SelectContainer, SelectedValue} from '../selectelements';
+import {
+  Box,
+  Item,
+  Input,
+  ItemContainer,
+  SelectContainer,
+  SelectedValue,
+  caseInsensitiveFilter,
+} from '../selectelements';
+import {isFunction} from 'gmp/utils/identity';
 
 describe('Box tests', () => {
 
@@ -158,6 +167,72 @@ describe('SelectValue tests', () => {
 
     expect(element).toHaveStyleRule('cursor', 'default');
     expect(element).toMatchSnapshot();
+  });
+
+});
+
+describe('caseInsensitiveFilter tests', () => {
+
+  test('should not filter if search term is undefined', () => {
+    const filter = caseInsensitiveFilter();
+    const items = [{
+      value: 'foo',
+      label: 'Foo',
+    }, {
+      value: 'bar',
+      label: 'Bar',
+    }];
+
+    expect(isFunction(filter)).toEqual(true);
+    expect(items.filter(filter)).toEqual(items);
+  });
+
+  test('should not filter if search term is empty', () => {
+    const filter = caseInsensitiveFilter();
+    const items = [{
+      value: 1,
+      label: 'Foo',
+    }, {
+      value: 2,
+      label: 'Bar',
+    }];
+
+    expect(isFunction(filter)).toEqual(true);
+    expect(items.filter(filter)).toEqual(items);
+  });
+
+  test('should filter by search term', () => {
+    const filter = caseInsensitiveFilter('Foo');
+    const items = [{
+      value: 1,
+      label: 'Foo',
+    }, {
+      value: 2,
+      label: 'Bar',
+    }];
+
+    expect(isFunction(filter)).toEqual(true);
+    expect(items.filter(filter)).toEqual([{
+      value: 1,
+      label: 'Foo',
+    }]);
+  });
+
+  test('should filter by search term case insensitive', () => {
+    const filter = caseInsensitiveFilter('OO');
+    const items = [{
+      value: 1,
+      label: 'Foo',
+    }, {
+      value: 2,
+      label: 'Bar',
+    }];
+
+    expect(isFunction(filter)).toEqual(true);
+    expect(items.filter(filter)).toEqual([{
+      value: 1,
+      label: 'Foo',
+    }]);
   });
 
 });
