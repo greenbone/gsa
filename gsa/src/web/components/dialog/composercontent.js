@@ -37,7 +37,7 @@ import Layout from 'web/components/layout/layout';
 import Theme from 'web/utils/theme';
 
 export const COMPOSER_CONTENT_DEFAULTS = {
-  applyOverrides: NO_VALUE,
+  applyOverrides: YES_VALUE,
   includeNotes: YES_VALUE,
   includeOverrides: YES_VALUE,
 };
@@ -74,16 +74,16 @@ const ComposerContent = ({
       <Divider>
         <Radio
           name="applyOverrides"
-          value={NO_VALUE}
-          checked={!parseYesNo(applyOverrides)}
-          title={_('Original severity')}
+          value={YES_VALUE}
+          checked={parseYesNo(applyOverrides)}
+          title={_('With overrides applied')}
           onChange={onValueChange}
         />
         <Radio
           name="applyOverrides"
-          value={YES_VALUE}
-          checked={parseYesNo(applyOverrides)}
-          title={_('With overrides applied')}
+          value={NO_VALUE}
+          checked={!parseYesNo(applyOverrides)}
+          title={_('Original severity')}
           onChange={onValueChange}
         />
       </Divider>
