@@ -32,7 +32,10 @@ import {
 export const reportComposerDefaults = (state = {}, action) => {
   switch (action.type) {
     case USER_SETTINGS_LOAD_REPORT_COMPOSER_DEFAULTS_SUCCESS:
-      return action.data;
+      return {
+        ...state,
+        ...action.data,
+      };
     default:
       return state;
   }

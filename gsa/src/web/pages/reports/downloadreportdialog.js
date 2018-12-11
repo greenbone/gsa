@@ -25,6 +25,7 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
+import {selectSaveId} from 'gmp/utils/id';
 import {isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -46,6 +47,7 @@ const StyledDiv = styled.div`
 
 const DownloadReportDialog = ({
   applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
+  defaultReportFormatId,
   filter = {},
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
@@ -57,6 +59,8 @@ const DownloadReportDialog = ({
 }) => {
   const filterString = isString(filter) ?
     filter : filter.toFilterCriteriaString();
+
+  reportFormatId = selectSaveId(reportFormats, defaultReportFormatId);
 
   const unControlledValues = {
     applyOverrides,
@@ -114,6 +118,7 @@ const DownloadReportDialog = ({
 
 DownloadReportDialog.propTypes = {
   applyOverrides: PropTypes.numberOrNumberString,
+  defaultReportFormatId: PropTypes.id,
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
