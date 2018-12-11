@@ -99,6 +99,7 @@ class AlertActions extends React.Component {
       filter,
       gmp,
       report,
+      reportComposerDefaults,
       showErrorMessage,
       showSuccessMessage,
     } = this.props;
@@ -112,7 +113,9 @@ class AlertActions extends React.Component {
 
     if (storeAsDefault) {
       this.props.saveReportComposerDefaults({
+        ...reportComposerDefaults,
         applyOverrides,
+        defaultAlertId: alertId,
         includeNotes,
         includeOverrides,
       });
@@ -124,7 +127,10 @@ class AlertActions extends React.Component {
       filter: newFilter.simple(),
     }).then(response => {
       showSuccessMessage(_('Running the alert was successful'));
-      this.setState({showTriggerAlertDialog: false});
+      this.setState({
+        alertId: undefined,
+        showTriggerAlertDialog: false,
+      });
     }, error => {
         log.error('Failed running alert', error);
         showErrorMessage(_('Failed to run alert.'));
@@ -136,7 +142,6 @@ class AlertActions extends React.Component {
   handleOpenTriggerAlertDialog() {
     this.props.loadAlerts();
     this.setState({
-      ...this.props.reportComposerDefaults,
       showTriggerAlertDialog: true,
     });
   }
@@ -157,15 +162,13 @@ class AlertActions extends React.Component {
   render() {
     const {
       alerts,
+      reportComposerDefaults,
       filter,
       showError,
       onInteraction,
     } = this.props;
     const {
       alertId,
-      applyOverrides,
-      includeNotes,
-      includeOverrides,
       showTriggerAlertDialog,
       storeAsDefault,
     } = this.state;
@@ -188,10 +191,11 @@ class AlertActions extends React.Component {
               <TriggerAlertDialog
                 alertId={alertId}
                 alerts={alerts}
-                applyOverrides={applyOverrides}
+                applyOverrides={reportComposerDefaults.applyOverrides}
+                defaultAlertId={reportComposerDefaults.defaultAlertId}
                 filter={filter}
-                includeNotes={includeNotes}
-                includeOverrides={includeOverrides}
+                includeNotes={reportComposerDefaults.includeNotes}
+                includeOverrides={reportComposerDefaults.includeOverrides}
                 storeAsDefault={storeAsDefault}
                 onAlertChange={this.handleAlertChange}
                 onClose={this.handleCloseTriggerAlertDialog}
