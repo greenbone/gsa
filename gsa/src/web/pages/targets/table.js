@@ -109,14 +109,22 @@ const Header = ({
             </Sort>
             {sort !== false &&
               <Select
+                items={[{
+                  value: 'ssh_credential',
+                  label: _('SSH'),
+                }, {
+                  value: 'smb_credential',
+                  label: _('SMB'),
+                }, {
+                  value: 'esxi_credential',
+                  label: _('ESXi'),
+                }, {
+                  value: 'snmp_credential',
+                  label: _('SNMP'),
+                }]}
                 value={selectSort}
                 onChange={onSortChange}
-              >
-                <option value="ssh_credential">{_('SSH')}</option>
-                <option value="smb_credential">{_('SMB')}</option>
-                <option value="esxi_credential">{_('ESXi')}</option>
-                <option value="snmp_credential">{_('SNMP')}</option>
-              </Select>
+              />
             }
           </Divider>
         </TableHead>

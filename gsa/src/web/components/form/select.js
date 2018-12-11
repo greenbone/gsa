@@ -37,12 +37,11 @@ import Layout from '../../components/layout/layout';
 
 import {
   Box,
-  case_insensitive_filter,
+  caseInsensitiveFilter,
   Input,
   Item,
   ItemContainer,
   Menu,
-  option_items,
   SelectContainer,
   SelectedValue,
 } from './selectelements.js';
@@ -114,9 +113,10 @@ class Select extends React.Component {
 
   render() {
     let {
-      children,
-      className,
       disabled = false,
+    } = this.props;
+    const {
+      className,
       items,
       itemToString,
       menuPosition,
@@ -128,14 +128,10 @@ class Select extends React.Component {
       search,
     } = this.state;
 
-    if (!isDefined(items)) {
-      items = option_items(children);
-    }
-
     disabled = disabled || !isDefined(items) || items.length === 0;
 
     const displayedItems = isDefined(items) ?
-      items.filter(case_insensitive_filter(search)) : [];
+      items.filter(caseInsensitiveFilter(search)) : [];
 
     return (
       <Downshift
@@ -174,8 +170,10 @@ class Select extends React.Component {
                 })}
                 isOpen={isOpen}
                 innerRef={ref => this.box = ref}
+                data-testid="select-open-button"
               >
                 <SelectedValue
+                  data-testid="select-selected-value"
                   disabled={disabled}
                   title={label}
                 >
@@ -211,6 +209,7 @@ class Select extends React.Component {
                       }, i) => (
                         <Item
                           {...getItemProps({item: itemValue})}
+                          data-testid="select-item"
                           isSelected={itemValue === selectedItem}
                           isActive={i === highlightedIndex}
                           key={key}

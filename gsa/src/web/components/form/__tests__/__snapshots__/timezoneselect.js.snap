@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Select component tests should render 1`] = `
+exports[`TimezoneSelect tests should render 1`] = `
 .c5 {
   background-color: transparent;
   border: none;
@@ -23,7 +23,7 @@ exports[`Select component tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .c4 {
@@ -77,7 +77,6 @@ exports[`Select component tests should render 1`] = `
   background-color: #fff;
   color: #000;
   font-weight: normal;
-  background-color: #eeeeee;
 }
 
 .c0 {
@@ -89,7 +88,7 @@ exports[`Select component tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   position: relative;
-  width: 180px;
+  width: 230px;
 }
 
 .c2 {
@@ -108,12 +107,12 @@ exports[`Select component tests should render 1`] = `
   word-break: keep-all;
   white-space: nowrap;
   overflow: hidden;
-  cursor: default;
+  cursor: pointer;
 }
 
 <div
   class="c0"
-  width="180px"
+  width="230px"
 >
   <div
     aria-expanded="false"
@@ -122,21 +121,21 @@ exports[`Select component tests should render 1`] = `
     class="c1"
     data-testid="select-open-button"
     data-toggle="true"
-    disabled=""
     role="button"
     type="button"
   >
     <div
       class="c2"
       data-testid="select-selected-value"
-      disabled=""
-    />
+      title="Coordinated Universal Time/UTC"
+    >
+      Coordinated Universal Time/UTC
+    </div>
     <div
       class="c3"
     >
       <span
         class="c4 c5"
-        disabled=""
       >
         ▼
       </span>

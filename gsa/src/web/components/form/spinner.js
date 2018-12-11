@@ -133,11 +133,9 @@ class SpinnerComponent extends React.Component {
     };
 
     this.handleDbClick = this.handleDbClick.bind(this);
-    this.handleDownMouse = this.handleDownMouse.bind(this);
     this.handleDownButton = this.handleDownButton.bind(this);
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
     this.handleUpButton = this.handleUpButton.bind(this);
-    this.handleUpMouse = this.handleUpMouse.bind(this);
     this.notifyChange = this.notifyChange.bind(this);
     this.handleDownKey = this.handleDownKey.bind(this);
     this.handleUpKey = this.handleUpKey.bind(this);
@@ -163,7 +161,7 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) + step);
   }
@@ -178,7 +176,7 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) - step);
   }
@@ -194,24 +192,12 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) + (step * direction));
   }
 
   handleDbClick(event) {
-    event.preventDefault();
-  }
-
-  handleDownMouse(event) {
-    this.setState({downActive: !this.state.down_active});
-
-    event.preventDefault();
-  }
-
-  handleUpMouse(event) {
-    this.setState({upActive: !this.state.up_active});
-
     event.preventDefault();
   }
 
@@ -248,12 +234,7 @@ class SpinnerComponent extends React.Component {
   }
 
   setValue(value) {
-    const {disabled} = this.props;
     let {min, max} = this.props;
-
-    if (disabled) {
-      return;
-    }
 
     min = parseFloat(min);
     max = parseFloat(max);
@@ -285,8 +266,7 @@ class SpinnerComponent extends React.Component {
   }
 
   render() {
-    const {value} = this.props;
-    const {downActive, upActive} = this.state;
+    const {value = 0} = this.props;
     const {
       size,
       type,
@@ -303,6 +283,7 @@ class SpinnerComponent extends React.Component {
         onWheel={this.handleMouseWheel}
       >
         <StyledInput
+          data-testid="spinner-input"
           type={type}
           min={min}
           max={max}
@@ -317,21 +298,17 @@ class SpinnerComponent extends React.Component {
           onDownKeyPressed={this.handleDownKey}
         />
         <SpinnerButtonUp
-          active={upActive}
+          data-testid="spinner-up"
           disabled={disabled}
           onClick={disabled ? undefined : this.handleUpButton}
-          onMouseDown={this.handleUpMouse}
-          onMouseUp={this.handleUpMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▲
         </SpinnerButtonUp>
         <SpinnerButtonDown
-          active={downActive}
+          data-testid="spinner-down"
           disabled={disabled}
           onClick={disabled ? undefined : this.handleDownButton}
-          onMouseDown={this.handleDownMouse}
-          onMouseUp={this.handleDownMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▼
@@ -359,7 +336,7 @@ SpinnerComponent.propTypes = {
   size: PropTypes.numberOrNumberString,
   step: PropTypes.numberOrNumberString,
   type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.number,
+  value: PropTypes.number.isRequired,
   onChange: PropTypes.func,
 };
 

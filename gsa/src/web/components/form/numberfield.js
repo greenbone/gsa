@@ -32,12 +32,13 @@ import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
+
 class NumberField extends React.Component {
 
   constructor(...args) {
     super(...args);
 
-    const {value, type, precision} = this.props;
+    const {value = 0, type, precision} = this.props;
 
     this.allowed = [
       KeyCode.SUBTRACT,
@@ -66,13 +67,18 @@ class NumberField extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const {value, precision} = props;
+    const {value = 0, precision} = props;
     if (value !== state.prevValue) {
-      const displayedValue = fixedValue(value, precision);
+      if (value !== state.lastValidValue) {
+        const displayedValue = fixedValue(value, precision);
+        return {
+          prevValue: value,
+          displayedValue,
+          lastValidValue: value,
+        };
+      }
       return {
-        prevValue: value,
-        displayedValue,
-        lastValidValue: value,
+          prevValue: value,
       };
     }
     return null;
@@ -106,7 +112,6 @@ class NumberField extends React.Component {
       this.setState({
         displayedValue: value,
         lastValidValue: parsedValue,
-        prevValue: parsedValue,
       });
 
       this.notifyChange(parsedValue);
@@ -122,7 +127,7 @@ class NumberField extends React.Component {
     const {lastValidValue, displayedValue} = this.state;
 
     min = parseFloat(min);
-    max = parseFloat(max);
+    max = isDefined(max) ? parseFloat(max) : Number.POSITIVE_INFINITY;
 
     let parsedValue = parseFloat(displayedValue);
 
@@ -195,6 +200,12 @@ class NumberField extends React.Component {
       default:
         break;
     }
+
+    const {onKeyDown} = this.props;
+    if (isDefined(onKeyDown)) {
+      // should only be used for testing
+      onKeyDown(event);
+    }
   }
 
   render() {
@@ -226,7 +237,7 @@ NumberField.propTypes = {
   name: PropTypes.string,
   precision: PropTypes.number,
   type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.number,
+  value: PropTypes.number.isRequired,
   onChange: PropTypes.func,
   onDownKeyPressed: PropTypes.func,
   onUpKeyPressed: PropTypes.func,

@@ -30,28 +30,10 @@ import {_} from 'gmp/locale/lang';
 
 import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
-import {map} from 'gmp/utils/array';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
-
-export const renderOptions = (list, default_opt_value,
-  default_opt = UNSET_LABEL) => {
-  const options = map(list, entry => {
-    return (
-      <option key={entry.id} value={entry.id}>{entry.name}</option>
-    );
-  });
-  if (isDefined(default_opt_value)) {
-    options.unshift(
-      <option key={default_opt_value} value={default_opt_value}>
-        {default_opt}
-      </option>
-    );
-  }
-  return options;
-};
 
 /**
  * Render a entities list as items array

@@ -51,14 +51,20 @@ const SeverityChangedConditionPart = ({
       >
       </Radio>
       <Select
+        items={[{
+          value: 'changed',
+          label: _('changed'),
+        }, {
+          value: 'increased',
+          label: _('increased'),
+        }, {
+          value: 'decreased',
+          label: _('decreased'),
+        }]}
         value={direction}
         name={prefix + 'direction'}
         onChange={onChange}
-      >
-        <option value="changed">{_('changed')}</option>
-        <option value="increased">{_('increased')}</option>
-        <option value="decreased">{_('decreased')}</option>
-      </Select>
+      />
     </Divider>
   );
 };

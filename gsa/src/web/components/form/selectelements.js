@@ -68,11 +68,11 @@ export const Item = styled.span`
     color: ${Theme.white};
   };
   background-color: ${props => props.isSelected ? Theme.lightGray : null};
-  {$props => props.isActive ?
+  ${props => props.isActive ?
     {
       backgroundColor: Theme.mediumBlue,
       color: Theme.white,
-    } : null;
+    } : null
   };
 `;
 
@@ -201,7 +201,7 @@ export class Menu extends React.Component {
       ...props
     } = this.props;
 
-    if (!isDefined(target)) {
+    if (!hasValue(target)) {
       return null;
     }
 
@@ -211,6 +211,7 @@ export class Menu extends React.Component {
     return (
       <Portal>
         <MenuContainer
+          data-testid="select-menu"
           {...props}
           right={document.body.clientWidth - right}
           width={width}
@@ -223,7 +224,7 @@ export class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  target: PropTypes.object.isRequired,
+  target: PropTypes.object,
 };
 
 export const SelectContainer = styled.div`
@@ -243,28 +244,22 @@ export const SelectedValue = styled.div`
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
 `;
 
-export const case_insensitive_filter = search => {
+/**
+ * Creates a filter function for select items element
+ *
+ * The created functions checks all items if their label contains the passed
+ * search term. The comparision takes place case intensively.
+ *
+ * @param {String} search case-insesitive keyword to search for
+ *
+ * @returns {Function} filter function
+ */
+export const caseInsensitiveFilter = search => {
   if (!isDefined(search) || search.length === 0) {
     return () => true;
   }
   search = search.toLowerCase();
   return ({label}) => ('' + label).toLowerCase().includes(search);
-};
-
-export const option_items = children => {
-  if (!isDefined(children)) {
-    return undefined;
-  }
-
-  children = React.Children.toArray(children);
-  children = children.filter(child => child.type === 'option');
-  return children.map(child => {
-    const {props} = child;
-    return {
-      label: props.children,
-      value: isDefined(props.value) ? props.value : props.children,
-    };
-  });
 };
 
 // vim: set ts=2 sw=2 tw=80:

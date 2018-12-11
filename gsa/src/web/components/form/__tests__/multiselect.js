@@ -44,25 +44,6 @@ describe('MultiSelect component tests', () => {
     expect(element).toMatchSnapshot();
   });
 
-  test('should render with options', () => {
-    const {element, baseElement} = render(
-      <MultiSelect>
-        <option value="foo">Foo</option>
-        <option value="bar">Bar</option>
-      </MultiSelect>
-    );
-
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
-
-    openInputElement(element);
-
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(2);
-    expect(domItems[0]).toHaveTextContent('Foo');
-    expect(domItems[1]).toHaveTextContent('Bar');
-  });
-
   test('should render with items', () => {
     const items = [{
       value: 'bar',

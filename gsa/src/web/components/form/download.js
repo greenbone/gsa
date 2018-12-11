@@ -29,10 +29,6 @@ import PropTypes from '../../utils/proptypes.js';
 
 class Download extends React.Component {
 
-  setFileName(name) {
-    this.anchor.download = name;
-  }
-
   componentWillUnmount() {
     this.release();
   }

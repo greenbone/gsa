@@ -22,7 +22,7 @@
  */
 import React from 'react';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
 
 import Select from '../select.js';
 
@@ -33,7 +33,7 @@ const openSelectElement = element => {
 
 const getItemElements = baseElement => {
     const portal = baseElement.querySelector('#portals');
-    return portal.querySelectorAll('span');
+    return queryAllByTestId(portal, 'select-item');
 };
 
 const getInputBox = baseElement => {
@@ -47,28 +47,6 @@ describe('Select component tests', () => {
     const {element} = render(<Select/>);
 
     expect(element).toMatchSnapshot();
-  });
-
-  test('should render with options', () => {
-    const {baseElement, element} = render(
-      <Select>
-        <option value="foo">Foo</option>
-        <option value="bar">Bar</option>
-      </Select>
-    );
-
-    let items = getItemElements(baseElement);
-
-    // ensure selection is not shown yet
-    expect(items.length).toEqual(0);
-
-    openSelectElement(element);
-
-    items = getItemElements(baseElement);
-
-    expect(items.length).toEqual(2);
-    expect(items[0]).toHaveTextContent('Foo');
-    expect(items[1]).toHaveTextContent('Bar');
   });
 
   test('should render with items', () => {

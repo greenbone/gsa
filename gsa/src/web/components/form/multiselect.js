@@ -41,12 +41,11 @@ import Theme from 'web/utils/theme';
 
 import {
   Box,
-  case_insensitive_filter,
+  caseInsensitiveFilter,
   Input,
   Item,
   ItemContainer,
   Menu,
-  option_items,
   SelectContainer,
   SelectedValue,
 } from './selectelements';
@@ -178,9 +177,10 @@ class MultiSelect extends React.Component {
 
   render() {
     let {
-      children,
-      className,
       disabled = false,
+    } = this.props;
+    const {
+      className,
       items,
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
@@ -191,14 +191,10 @@ class MultiSelect extends React.Component {
       selectedItems,
     } = this.state;
 
-    if (!isDefined(items)) {
-      items = option_items(children);
-    }
-
     disabled = disabled || !isDefined(items) || items.length === 0;
 
     const displayedItems = isDefined(items) ?
-      items.filter(case_insensitive_filter(search)) : [];
+      items.filter(caseInsensitiveFilter(search)) : [];
 
     return (
       <Downshift

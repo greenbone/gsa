@@ -32,11 +32,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import Checkbox from 'web/components/form/checkbox';
 import FileField from 'web/components/form/filefield';
-import {noop_convert} from 'web/components/form/form';
 import PasswordField from 'web/components/form/passwordfield';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
+import {noop_convert} from 'web/components/form/withChangeHandler';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';

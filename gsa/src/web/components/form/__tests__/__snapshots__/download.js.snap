@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Download tests should render 1`] = `
+<a
+  aria-hidden="true"
+  style="display: none;"
+>
+  Download
+</a>
+`;
+
+exports[`Download tests should render with filename 1`] = `
+<a
+  aria-hidden="true"
+  download="foo.bar"
+  style="display: none;"
+>
+  Download
+</a>
+`;

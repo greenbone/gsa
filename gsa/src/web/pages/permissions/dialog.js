@@ -307,14 +307,23 @@ const PermissionDialog = ({
             {state.name === 'Super' &&
               <FormGroup title={_('Resource Type')}>
                 <Select
+                  items={[{
+                    value: '',
+                    label: '--',
+                  }, {
+                    value: 'user',
+                    label: _('User'),
+                  }, {
+                    value: 'role',
+                    label: _('Role'),
+                  }, {
+                    value: 'group',
+                    label: _('Group'),
+                  }]}
                   name="resourceType"
                   value={state.resourceType}
                   onChange={onValueChange}
                 >
-                  <option value="">--</option>
-                  <option value="user">{_('User')}</option>
-                  <option value="role">{_('Role')}</option>
-                  <option value="group">{_('Group')}</option>
                 </Select>
               </FormGroup>
             }

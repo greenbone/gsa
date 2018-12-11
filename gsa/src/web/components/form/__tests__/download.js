@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,23 +16,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import withChangeHandlerNew, {
-  noop_convert,
-  target_value,
-} from './withChangeHandler.js';
+import React from 'react';
 
-import withClickHandlerNew from './withClickHandler.js';
+import {render} from 'web/utils/testing';
 
-export {noop_convert, target_value};
+import Download from '../download';
 
-export const withChangeHandler = (
-  Component,
-  options = {},
-) => withChangeHandlerNew(options)(Component);
+describe('Download tests', () => {
 
-export const withClickHandler = (
-  Component,
-  options = {},
-) => withClickHandlerNew(options)(Component);
+  test('should render', () => {
+    const {element} = render(
+      <Download/>
+    );
+    expect(element).toMatchSnapshot();
+  });
 
-// vim: set ts=2 sw=2 tw=80:
+  test('should render with filename', () => {
+    const {element} = render(
+      <Download
+        filename="foo.bar"
+      />
+    );
+    expect(element).toMatchSnapshot();
+  });
+
+});

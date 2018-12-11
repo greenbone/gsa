@@ -39,12 +39,12 @@ import {renderSelectItems} from 'web/utils/render';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Checkbox from 'web/components/form/checkbox';
-import {noop_convert} from 'web/components/form/form';
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
+import {noop_convert} from 'web/components/form/withChangeHandler';
 
 import EditIcon from 'web/components/icon/editicon';
 

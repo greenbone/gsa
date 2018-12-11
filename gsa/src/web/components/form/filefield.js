@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import withLayout from 'web/components/layout/withLayout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -36,11 +38,11 @@ class FileFieldComponent extends React.Component {
   }
 
   handleChange(event) {
-    const {onChange, name} = this.props;
+    const {onChange, disabled, name} = this.props;
 
     event.preventDefault();
 
-    if (onChange) {
+    if (!disabled && isDefined(onChange)) {
       onChange(event.target.files[0], name);
     }
   }
@@ -61,6 +63,7 @@ class FileFieldComponent extends React.Component {
 }
 
 FileFieldComponent.propTypes = {
+  disabled: PropTypes.bool,
   name: PropTypes.string,
   onChange: PropTypes.func,
 };
