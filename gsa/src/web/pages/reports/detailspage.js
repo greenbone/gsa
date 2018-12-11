@@ -361,7 +361,6 @@ class ReportDetails extends React.Component {
 
   handleOpenDownloadReportDialog() {
     this.setState({
-      ...this.props.reportComposerDefaults,
       showDownloadReportDialog: true,
     });
   }
@@ -376,6 +375,7 @@ class ReportDetails extends React.Component {
       entity,
       filter,
       gmp,
+      reportComposerDefaults,
       reportFormats = [],
       onDownload,
     } = this.props;
@@ -394,7 +394,9 @@ class ReportDetails extends React.Component {
 
     if (storeAsDefault) {
       const defaults = {
+        ...reportComposerDefaults,
         applyOverrides,
+        defaultReportFormatId: reportFormatId,
         includeNotes,
         includeOverrides,
       };
@@ -520,6 +522,7 @@ class ReportDetails extends React.Component {
       isLoading,
       reportFormats,
       onInteraction,
+      reportComposerDefaults,
       showError,
       showErrorMessage,
       showSuccessMessage,
@@ -527,9 +530,6 @@ class ReportDetails extends React.Component {
     const {
       activeTab,
       applyOverrides,
-      includeNotes,
-      includeOverrides,
-      reportFormatId,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
@@ -550,8 +550,6 @@ class ReportDetails extends React.Component {
               filter={filter}
               filters={filters}
               isLoading={isLoading}
-              reportFormatId={reportFormatId}
-              reportFormats={reportFormats}
               sorting={sorting}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
@@ -589,10 +587,10 @@ class ReportDetails extends React.Component {
         {showDownloadReportDialog &&
           <DownloadReportDialog
             applyOverrides={applyOverrides}
+            defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
             filter={filter}
-            includeNotes={includeNotes}
-            includeOverrides={includeOverrides}
-            reportFormatId={reportFormatId}
+            includeNotes={reportComposerDefaults.includeNotes}
+            includeOverrides={reportComposerDefaults.includeOverrides}
             reportFormats={reportFormats}
             storeAsDefault={storeAsDefault}
             onClose={this.handleCloseDownloadReportDialog}
