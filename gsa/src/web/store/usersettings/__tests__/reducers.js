@@ -113,10 +113,17 @@ describe('settings reducers tests', () => {
       expect(reportComposerDefaults(undefined, action)).toEqual({foo: 'bar'});
     });
 
-    test('should override existing defaults', () => {
+    test('should merge existing defaults', () => {
       const action = getReportComposerDefaultsAction({foo: 'bar'});
-      const state = {toBe: 'deleted'};
-      expect(reportComposerDefaults(state, action)).toEqual({foo: 'bar'});
+      const state = {
+        foo: 'ipsum',
+        toBe: 'preserved',
+      };
+      const res = {
+        foo: 'bar',
+        toBe: 'preserved',
+      };
+      expect(reportComposerDefaults(state, action)).toEqual(res);
     });
   });
 });
