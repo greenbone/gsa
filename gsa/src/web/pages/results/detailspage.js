@@ -35,6 +35,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -191,8 +192,7 @@ const Details = ({
                     <InnerLink
                       to="overrides"
                     >
-                      <Icon
-                        img="override.svg"
+                      <OverrideIcon
                         title={_('Overrides are applied')}
                       />
                     </InnerLink>
