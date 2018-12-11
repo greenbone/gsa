@@ -234,12 +234,7 @@ class SpinnerComponent extends React.Component {
   }
 
   setValue(value) {
-    const {disabled} = this.props;
     let {min, max} = this.props;
-
-    if (disabled) {
-      return;
-    }
 
     min = parseFloat(min);
     max = parseFloat(max);
