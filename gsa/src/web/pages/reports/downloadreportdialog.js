@@ -96,6 +96,7 @@ const DownloadReportDialog = ({
                 name="reportFormatId"
                 value={values.reportFormatId}
                 items={renderSelectItems(reportFormats)}
+                width="auto"
                 onChange={onValueChange}
               />
             </Divider>
