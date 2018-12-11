@@ -25,7 +25,7 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import {first} from 'gmp/utils/array';
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -50,6 +50,7 @@ const TriggerAlertDialog = ({
   alertId,
   alerts = [],
   applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
+  defaultAlertId,
   filter = {},
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
@@ -59,10 +60,13 @@ const TriggerAlertDialog = ({
   onNewAlertClick,
   onSave,
 }) => {
-  alertId = isDefined(alertId) ? alertId : first(alerts).id;
 
   const filterString = isString(filter) ?
     filter : filter.toFilterCriteriaString();
+
+  if (!isDefined(alertId)) {
+    alertId = selectSaveId(alerts, defaultAlertId);
+  };
 
   const unControlledValues = {
     applyOverrides,
@@ -129,6 +133,7 @@ TriggerAlertDialog.propTypes = {
   alertId: PropTypes.id,
   alerts: PropTypes.array,
   applyOverrides: PropTypes.numberOrNumberString,
+  defaultAlertId: PropTypes.id,
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
