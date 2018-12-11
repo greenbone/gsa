@@ -38,7 +38,7 @@ class NumberField extends React.Component {
   constructor(...args) {
     super(...args);
 
-    const {value, type, precision} = this.props;
+    const {value = 0, type, precision} = this.props;
 
     this.allowed = [
       KeyCode.SUBTRACT,
@@ -67,7 +67,7 @@ class NumberField extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const {value, precision} = props;
+    const {value = 0, precision} = props;
     if (value !== state.prevValue) {
       if (value !== state.lastValidValue) {
         const displayedValue = fixedValue(value, precision);
@@ -237,7 +237,7 @@ NumberField.propTypes = {
   name: PropTypes.string,
   precision: PropTypes.number,
   type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.number,
+  value: PropTypes.number.isRequired,
   onChange: PropTypes.func,
   onDownKeyPressed: PropTypes.func,
   onUpKeyPressed: PropTypes.func,
