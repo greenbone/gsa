@@ -163,7 +163,7 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) + step);
   }
@@ -178,7 +178,7 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) - step);
   }
@@ -194,7 +194,7 @@ class SpinnerComponent extends React.Component {
 
     event.preventDefault();
 
-    const {value} = this.props;
+    const {value = 0} = this.props;
 
     this.setAdjustedValue(parseFloat(value) + (step * direction));
   }
@@ -285,7 +285,7 @@ class SpinnerComponent extends React.Component {
   }
 
   render() {
-    const {value} = this.props;
+    const {value = 0} = this.props;
     const {downActive, upActive} = this.state;
     const {
       size,
@@ -359,7 +359,7 @@ SpinnerComponent.propTypes = {
   size: PropTypes.numberOrNumberString,
   step: PropTypes.numberOrNumberString,
   type: PropTypes.oneOf(['int', 'float']),
-  value: PropTypes.number,
+  value: PropTypes.number.isRequired,
   onChange: PropTypes.func,
 };
 
