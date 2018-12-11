@@ -133,11 +133,9 @@ class SpinnerComponent extends React.Component {
     };
 
     this.handleDbClick = this.handleDbClick.bind(this);
-    this.handleDownMouse = this.handleDownMouse.bind(this);
     this.handleDownButton = this.handleDownButton.bind(this);
     this.handleMouseWheel = this.handleMouseWheel.bind(this);
     this.handleUpButton = this.handleUpButton.bind(this);
-    this.handleUpMouse = this.handleUpMouse.bind(this);
     this.notifyChange = this.notifyChange.bind(this);
     this.handleDownKey = this.handleDownKey.bind(this);
     this.handleUpKey = this.handleUpKey.bind(this);
@@ -200,18 +198,6 @@ class SpinnerComponent extends React.Component {
   }
 
   handleDbClick(event) {
-    event.preventDefault();
-  }
-
-  handleDownMouse(event) {
-    this.setState({downActive: !this.state.down_active});
-
-    event.preventDefault();
-  }
-
-  handleUpMouse(event) {
-    this.setState({upActive: !this.state.up_active});
-
     event.preventDefault();
   }
 
@@ -286,7 +272,6 @@ class SpinnerComponent extends React.Component {
 
   render() {
     const {value = 0} = this.props;
-    const {downActive, upActive} = this.state;
     const {
       size,
       type,
@@ -317,21 +302,15 @@ class SpinnerComponent extends React.Component {
           onDownKeyPressed={this.handleDownKey}
         />
         <SpinnerButtonUp
-          active={upActive}
           disabled={disabled}
           onClick={disabled ? undefined : this.handleUpButton}
-          onMouseDown={this.handleUpMouse}
-          onMouseUp={this.handleUpMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▲
         </SpinnerButtonUp>
         <SpinnerButtonDown
-          active={downActive}
           disabled={disabled}
           onClick={disabled ? undefined : this.handleDownButton}
-          onMouseDown={this.handleDownMouse}
-          onMouseUp={this.handleDownMouse}
           onDoubleClick={this.handleDbClick}
         >
           ▼
