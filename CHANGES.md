@@ -6,6 +6,10 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
+## gsa 8.0 unreleased
+
+ * Add feature: Scan Report Content Composer #1073 #1084
+
 ## gsa 8.0+beta2 (2018-12-04)
 
 Many thanks to everyone who has contributed to this release:
