@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {isDefined, isString, isArray} from '../utils/identity';
-import {forEach} from '../utils/array';
+import {isDefined, isString} from '../utils/identity';
+import {forEach, map} from '../utils/array';
 
 import Model from '../model';
 import {parseSeverity, parseQod} from '../parser';
@@ -131,11 +127,10 @@ class Result extends Model {
     }
 
     copy.qod = parseQod(qod);
-
-    copy.notes = isDefined(notes) && isArray(notes.note) ?
-      notes.note.map(note => new Note(note)) : [];
-    copy.overrides = isDefined(overrides) && isArray(overrides.override) ?
-     overrides.override.map(override => new Override(override)) : [];
+    copy.notes = isDefined(notes) ?
+      map(notes.note, note => new Note(note)) : [];
+    copy.overrides = isDefined(overrides) ?
+      map(overrides.override, override => new Override(override)) : [];
 
     return copy;
   }

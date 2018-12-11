@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +30,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -56,7 +52,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
+import EntityPage, {Col} from 'web/entity/page';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntitiesTab from 'web/entity/tab';
@@ -170,67 +166,72 @@ const Details = ({
       <DetailsBlock
         title={_('Vulnerability')}
       >
-        <InfoTable>
-          <TableBody>
-            <TableRow>
-              <TableData>
-                {_('Name')}
-              </TableData>
-              <TableData>
-                {entity.name}
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {_('Severity')}
-              </TableData>
-              <TableData align={['start', 'center']}>
-                <Divider>
-                  <SeverityBar severity={entity.severity}/>
-                  {active_overrides.length > 0 &&
-                    <InnerLink
-                      to="overrides"
-                    >
-                      <Icon
-                        img="override.svg"
-                        title={_('Overrides are applied')}
-                      />
-                    </InnerLink>
-                  }
-                </Divider>
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {_('QoD')}
-              </TableData>
-              <TableData>
-                {qod.value} %
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {_('Host')}
-              </TableData>
-              <TableData>
-                <DetailsLink
-                  type="host"
-                  id={host.id}
-                >
-                  {host.name}
-                </DetailsLink>
-              </TableData>
-            </TableRow>
-            <TableRow>
-              <TableData>
-                {_('Location')}
-              </TableData>
-              <TableData>
-                {entity.port}
-              </TableData>
-            </TableRow>
-          </TableBody>
-        </InfoTable>
+        <Layout flex="column">
+          <InfoTable>
+            <colgroup>
+              <Col width="10%"/>
+              <Col width="90%"/>
+            </colgroup>
+            <TableBody>
+              <TableRow>
+                <TableData>
+                  {_('Name')}
+                </TableData>
+                <TableData>
+                  {entity.name}
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('Severity')}
+                </TableData>
+                <TableData align={['center', 'start']}>
+                  <Divider>
+                    <SeverityBar severity={entity.severity}/>
+                    {active_overrides.length > 0 &&
+                      <InnerLink
+                        to="overrides"
+                      >
+                        <OverrideIcon
+                          title={_('Overrides are applied')}
+                        />
+                      </InnerLink>
+                    }
+                  </Divider>
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('QoD')}
+                </TableData>
+                <TableData>
+                  {qod.value} %
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('Host')}
+                </TableData>
+                <TableData>
+                  <DetailsLink
+                    type="host"
+                    id={host.id}
+                  >
+                    {host.name}
+                  </DetailsLink>
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('Location')}
+                </TableData>
+                <TableData>
+                  {entity.port}
+                </TableData>
+              </TableRow>
+            </TableBody>
+          </InfoTable>
+        </Layout>
       </DetailsBlock>
 
       {userTags.length > 0 &&
