@@ -283,6 +283,7 @@ class SpinnerComponent extends React.Component {
         onWheel={this.handleMouseWheel}
       >
         <StyledInput
+          data-testid="spinner-input"
           type={type}
           min={min}
           max={max}
@@ -297,6 +298,7 @@ class SpinnerComponent extends React.Component {
           onDownKeyPressed={this.handleDownKey}
         />
         <SpinnerButtonUp
+          data-testid="spinner-up"
           disabled={disabled}
           onClick={disabled ? undefined : this.handleUpButton}
           onDoubleClick={this.handleDbClick}
@@ -304,6 +306,7 @@ class SpinnerComponent extends React.Component {
           ▲
         </SpinnerButtonUp>
         <SpinnerButtonDown
+          data-testid="spinner-down"
           disabled={disabled}
           onClick={disabled ? undefined : this.handleDownButton}
           onDoubleClick={this.handleDbClick}
