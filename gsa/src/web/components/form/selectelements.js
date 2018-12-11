@@ -248,9 +248,9 @@ export const SelectedValue = styled.div`
  * Creates a filter function for select items element
  *
  * The created functions checks all items if their label contains the passed
- * search term. The comparision takes place case intensively.
+ * search term. The comparison takes place case-insensitive.
  *
- * @param {String} search case-insesitive keyword to search for
+ * @param {String} search case-insensitive keyword to search for
  *
  * @returns {Function} filter function
  */
