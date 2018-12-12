@@ -23,13 +23,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {NO_VALUE, YES_VALUE, parseYesNo} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -37,7 +36,6 @@ import Layout from 'web/components/layout/layout';
 import Theme from 'web/utils/theme';
 
 export const COMPOSER_CONTENT_DEFAULTS = {
-  applyOverrides: YES_VALUE,
   includeNotes: YES_VALUE,
   includeOverrides: YES_VALUE,
 };
@@ -55,38 +53,19 @@ const FilterField = styled.div`
 `;
 
 const ComposerContent = ({
-  applyOverrides,
   filterString,
   includeNotes,
   includeOverrides,
   onValueChange,
 }) => (
   <Layout flex="column">
-    <FormGroup title={_('Applied Filter')} titleSize="3">
+    <FormGroup title={_('Filter')} titleSize="3">
       <FilterField
         title={_('To change the filter, please filter your results on the ' +
           'report page.')}
       >
         {filterString}
       </FilterField>
-    </FormGroup>
-    <FormGroup title={_('Severity')} titleSize="3">
-      <Divider>
-        <Radio
-          name="applyOverrides"
-          value={YES_VALUE}
-          checked={parseYesNo(applyOverrides)}
-          title={_('With overrides applied')}
-          onChange={onValueChange}
-        />
-        <Radio
-          name="applyOverrides"
-          value={NO_VALUE}
-          checked={!parseYesNo(applyOverrides)}
-          title={_('Original severity')}
-          onChange={onValueChange}
-        />
-      </Divider>
     </FormGroup>
     <FormGroup title={_('Include')} titleSize="3">
       <Divider>
@@ -114,7 +93,6 @@ const ComposerContent = ({
 
 
 ComposerContent.propTypes = {
-  applyOverrides: PropTypes.numberOrNumberString.isRequired,
   filterString: PropTypes.string.isRequired,
   includeNotes: PropTypes.number.isRequired,
   includeOverrides: PropTypes.number.isRequired,

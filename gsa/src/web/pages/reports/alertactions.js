@@ -90,7 +90,6 @@ class AlertActions extends React.Component {
   handleTriggerAlert(state) {
     const {
       alertId,
-      applyOverrides,
       includeNotes,
       includeOverrides,
       storeAsDefault,
@@ -107,14 +106,12 @@ class AlertActions extends React.Component {
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
-    newFilter.set('apply_overrides', applyOverrides);
 
     this.handleInteraction();
 
     if (storeAsDefault) {
       this.props.saveReportComposerDefaults({
         ...reportComposerDefaults,
-        applyOverrides,
         defaultAlertId: alertId,
         includeNotes,
         includeOverrides,
@@ -191,7 +188,6 @@ class AlertActions extends React.Component {
               <TriggerAlertDialog
                 alertId={alertId}
                 alerts={alerts}
-                applyOverrides={reportComposerDefaults.applyOverrides}
                 defaultAlertId={reportComposerDefaults.defaultAlertId}
                 filter={filter}
                 includeNotes={reportComposerDefaults.includeNotes}

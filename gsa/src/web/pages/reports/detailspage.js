@@ -380,7 +380,6 @@ class ReportDetails extends React.Component {
       onDownload,
     } = this.props;
     const {
-      applyOverrides,
       includeNotes,
       includeOverrides,
       reportFormatId,
@@ -390,12 +389,10 @@ class ReportDetails extends React.Component {
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
-    newFilter.set('apply_overrides', applyOverrides);
 
     if (storeAsDefault) {
       const defaults = {
         ...reportComposerDefaults,
-        applyOverrides,
         defaultReportFormatId: reportFormatId,
         includeNotes,
         includeOverrides,
@@ -529,7 +526,6 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
-      applyOverrides,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
@@ -586,7 +582,6 @@ class ReportDetails extends React.Component {
         }
         {showDownloadReportDialog &&
           <DownloadReportDialog
-            applyOverrides={applyOverrides}
             defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
             filter={filter}
             includeNotes={reportComposerDefaults.includeNotes}

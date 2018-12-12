@@ -90,7 +90,7 @@ const DownloadReportDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onValueChange}
           />
-          <FormGroup title={_('Select Report Format')} titleSize="3">
+          <FormGroup title={_('Report Format')} titleSize="3">
             <Divider flex="column">
               <Select
                 name="reportFormatId"
