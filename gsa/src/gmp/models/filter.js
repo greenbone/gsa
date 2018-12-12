@@ -732,7 +732,7 @@ export const TAGS_FILTER_FILTER = Filter.fromString('type=tag');
 export const USERS_FILTER_FILTER = Filter.fromString('type=user');
 export const VULNS_FILTER_FILTER = Filter.fromString('type=vuln');
 
-export const RESET_FILTER = Filter.fromString('first=1');
+export const RESET_FILTER = Filter.fromString('first=1 min_qod=0');
 
 export default Filter;
 
