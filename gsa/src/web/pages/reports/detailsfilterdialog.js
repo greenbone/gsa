@@ -34,6 +34,7 @@ import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
+import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
@@ -93,6 +94,11 @@ const FilterDialog = ({
       />
 
       <SeverityLevelsGroup
+        filter={filter}
+        onChange={onFilterValueChange}
+      />
+
+      <SolutionTypeGroup
         filter={filter}
         onChange={onFilterValueChange}
       />
