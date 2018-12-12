@@ -62,7 +62,7 @@ const ComposerContent = ({
   onValueChange,
 }) => (
   <Layout flex="column">
-    <FormGroup title={_('Applied Filter')} titleSize="3">
+    <FormGroup title={_('Filter')} titleSize="3">
       <FilterField
         title={_('To change the filter, please filter your results on the ' +
           'report page.')}

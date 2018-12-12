@@ -100,7 +100,7 @@ const TriggerAlertDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onValueChange}
           />
-          <FormGroup title={_('Select Alert')} titleSize="3">
+          <FormGroup title={_('Alert')} titleSize="3">
             <Divider>
               <Select
                 name="alertId"
