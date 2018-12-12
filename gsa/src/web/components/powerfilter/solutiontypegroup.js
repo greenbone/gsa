@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +27,6 @@ import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
-
-import IconDivider from 'web/components/layout/icondivider';
 
 class SolutionTypesFilterGroup extends React.Component {
 
@@ -65,68 +58,56 @@ class SolutionTypesFilterGroup extends React.Component {
 
     return (
       <FormGroup title={_('Solution Type')}>
-        <IconDivider>
-          <Checkbox
-            checked={solutionType === 'Workaround'}
-            name="Workaround"
-            onChange={this.handleSolutionTypeChange}
-          >
-            <IconDivider>
-              <SolutionTypeIcon type="Workaround"/>
-              <span>
-                {_('Workaround')}
-              </span>
-            </IconDivider>
-          </Checkbox>
-          <Checkbox
-            checked={solutionType === 'Mitigation'}
-            name="Mitigation"
-            onChange={this.handleSolutionTypeChange}
-          >
-            <IconDivider>
-              <SolutionTypeIcon type="Mitigation"/>
-              <span>
-                {_('Mitigation')}
-              </span>
-            </IconDivider>
-          </Checkbox>
-          <Checkbox
-            checked={solutionType === 'VendorFix'}
-            name="VendorFix"
-            onChange={this.handleSolutionTypeChange}
-          >
-            <IconDivider>
-              <SolutionTypeIcon type="VendorFix"/>
-              <span>
-                {_('Vendor fix')}
-              </span>
-            </IconDivider>
-          </Checkbox>
-          <Checkbox
-            checked={solutionType === 'NoneAvailable'}
-            name="NoneAvailable"
-            onChange={this.handleSolutionTypeChange}
-          >
-            <IconDivider>
-              <SolutionTypeIcon type="NoneAvailable"/>
-              <span>
-                {_('None available')}
-              </span>
-            </IconDivider>
-          </Checkbox>
-          <Checkbox
-            checked={solutionType === 'WillNotFix'}
-            name="WillNotFix"
-            onChange={this.handleSolutionTypeChange}
-          >
-            <IconDivider>
-              <SolutionTypeIcon type="WillNotFix"/>
-              <span>
-                {_('Will not fix')}
-              </span>
-            </IconDivider>
-          </Checkbox>
-        </IconDivider>
+        <Checkbox
+          checked={solutionType === 'Workaround'}
+          name="Workaround"
+          onChange={this.handleSolutionTypeChange}
+        >
+          <SolutionTypeIcon type="Workaround"/>
+          <span>
+            {_('Workaround')}
+          </span>
+        </Checkbox>
+        <Checkbox
+          checked={solutionType === 'Mitigation'}
+          name="Mitigation"
+          onChange={this.handleSolutionTypeChange}
+        >
+          <SolutionTypeIcon type="Mitigation"/>
+          <span>
+            {_('Mitigation')}
+          </span>
+        </Checkbox>
+        <Checkbox
+          checked={solutionType === 'VendorFix'}
+          name="VendorFix"
+          onChange={this.handleSolutionTypeChange}
+        >
+          <SolutionTypeIcon type="VendorFix"/>
+          <span>
+            {_('Vendor fix')}
+          </span>
+        </Checkbox>
+        <Checkbox
+          checked={solutionType === 'NoneAvailable'}
+          name="NoneAvailable"
+          onChange={this.handleSolutionTypeChange}
+        >
+          <SolutionTypeIcon type="NoneAvailable"/>
+          <span>
+            {_('None available')}
+          </span>
+        </Checkbox>
+        <Checkbox
+          checked={solutionType === 'WillNotFix'}
+          name="WillNotFix"
+          onChange={this.handleSolutionTypeChange}
+        >
+          <SolutionTypeIcon type="WillNotFix"/>
+          <span>
+            {_('Will not fix')}
+          </span>
+        </Checkbox>
       </FormGroup>
     );
   }
