@@ -111,6 +111,16 @@ describe('CheckBox component tests', () => {
     expect(titleElement).toHaveTextContent('bar');
   });
 
+  test('should render with children', () => {
+    const {element} = render(
+      <CheckBox>
+        <span>child1</span>
+        <span>child2</span>
+      </CheckBox>
+    );
+    expect(element).toMatchSnapshot();
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
