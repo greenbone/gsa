@@ -1646,6 +1646,8 @@ init_validator ()
   openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
+  openvas_validator_alias (validator, "report_format_ids:name",  "number");
+  openvas_validator_alias (validator, "report_format_ids:value", "report_format_id");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");
   openvas_validator_alias (validator, "replace_task_id",   "boolean");
@@ -1917,6 +1919,7 @@ params_append_mhd (params_t *params,
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
       || (strcmp(name, "group_ids:") == 0)
+      || (strcmp(name, "report_format_ids:") == 0)
       || (strcmp(name, "id_list:") == 0))
     {
       param_t *param;
@@ -2889,6 +2892,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
       || (strcmp(name, "group_ids:") == 0)
+      || (strcmp(name, "report_format_ids:") == 0)
       || (strcmp(name, "id_list:") == 0))
     {
       param_t *param;

@@ -9852,6 +9852,24 @@ Please contact your local system administrator if you think you
 should not have received it.
 </xsl:variable>
 
+<xsl:variable name="vfire-message-default">
+GVM Task '$n': $e
+
+After the event $e,
+the following condition was met: $c
+
+This ticket includes reports in the following format(s):
+$r.
+Full details and other report formats are available on the scan engine.
+
+$t
+
+Note:
+This ticket was created automatically as a security scan escalation.
+Please contact your local system administrator if you think it
+was created or assigned erroneously.
+</xsl:variable>
+
 <xsl:template name="condition-field">
   <xsl:param name="hide"/>
   <xsl:param name="show">
@@ -10262,6 +10280,9 @@ should not have received it.
               <option data-select="verinice" value="verinice Connector"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('verinice.PRO Connector')"/>
+              </option>
+              <option data-select="vfire" value="Alemba vFire">
+                <xsl:value-of select="gsa:i18n ('Alemba vFire')"/>
               </option>
             </select>
           </div>
@@ -10843,6 +10864,149 @@ should not have received it.
             </select>
           </div>
         </div>
+
+        <!-- Method: vFire. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Formats')"/></label>
+          <div class="col-10">
+            <select multiple="1" name="report_format_ids:">
+              <xsl:for-each select="$report-formats/report_format">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('vFire Base URL')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_base_url"
+                class="form-control"
+                size="60" maxlength="256" value="https://"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:vfire_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:vfire_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Session Type')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <input type="radio" name="method_data:vfire_session_type" value="Analyst" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Analyst')"/>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="method_data:vfire_session_type" value="User"/>
+                <xsl:value-of select="gsa:i18n ('User')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Alemba Client ID')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_client_id"
+                class="form-control"
+                size="60" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Partition')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_partition_name"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Description')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <textarea id="message_vfire"
+                name="method_data:vfire_call_description"
+                class="form-control"
+                rows="8" cols="50">
+                <xsl:value-of select="$vfire-message-default"/>
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Template')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_template_name"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Type')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_type_name"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Impact')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_impact_name"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Urgency')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_urgency_name"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -11370,6 +11534,19 @@ should not have received it.
                   <option data-select="verinice" value="verinice Connector"
                     class="form-selection-input-event form-selection-input-event--task">
                     <xsl:value-of select="gsa:i18n ('verinice.PRO Connector')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Alemba vFire'">
+                  <option data-select="vfire" value="Alemba vFire" selected="1">
+                    <xsl:value-of select="gsa:i18n ('Alemba vFire')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="vfire" value="Alemba vFire">
+                    <xsl:value-of select="gsa:i18n ('Alemba vFire')"/>
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
@@ -12139,6 +12316,181 @@ should not have received it.
                 <option value="''">--</option>
               </xsl:if>
             </select>
+          </div>
+        </div>
+
+
+        <!-- Method: vFire. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Formats')"/></label>
+          <div class="col-10">
+            <xsl:variable name="used-report-formats" select="str:tokenize ($method/data[name='report_formats']/text(), ', ')"/>
+            <select multiple="1" name="report_format_ids:">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:variable name="option-id" select="@id"/>
+                <xsl:choose>
+                  <xsl:when test="count ($used-report-formats[text() = $option-id])">
+                    <option selected="1" value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('vFire Base URL')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_base_url"
+                class="form-control"
+                size="60" maxlength="256" value="{$method/data[name='vfire_base_url']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:vfire_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="@id"/>
+                  <xsl:with-param name="content" select="name"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='vfire_credential']/text()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:vfire_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Session Type')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="not ($method/data[name='vfire_session_type']/text() != 'Analyst')">
+                    <input type="radio" name="method_data:vfire_session_type" value="Analyst" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:vfire_session_type" value="Analyst"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Analyst')"/>
+              </label>
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="$method/data[name='vfire_session_type']/text() = 'User'">
+                    <input type="radio" name="method_data:vfire_session_type" value="User" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:vfire_session_type" value="User"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('User')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Alemba Client ID')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_client_id"
+                class="form-control"
+                size="60" maxlength="256" value="{$method/data[name='vfire_client_id']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Partition')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_partition_name"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='vfire_call_partition_name']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Description')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <textarea id="message_vfire"
+                name="method_data:vfire_call_description"
+                class="form-control"
+                rows="8" cols="50"
+                value="{$method/data[name='vfire_call_description']/text()}">
+                <xsl:value-of select="$vfire-message-default"/>
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Template')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_template_name"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='vfire_call_template_name']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Call Type')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_type_name"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='vfire_call_type_name']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Impact')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_impact_name"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='vfire_call_impact_name']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--vfire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Urgency')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:vfire_call_urgency_name"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='vfire_call_urgency_name']/text()}"/>
+            </div>
           </div>
         </div>
 
