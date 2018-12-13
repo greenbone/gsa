@@ -20762,7 +20762,18 @@ should not have received it.
         <td><xsl:if test="position()=1"><xsl:value-of select="gsa:i18n ('Other', 'SecInfo|References')"/>:</xsl:if></td>
         <xsl:choose>
           <xsl:when test="contains(., 'URL:')">
-            <td><a class="external" href="{substring-after(., 'URL:')}"><xsl:value-of select="substring-after(., 'URL:')"/></a></td>
+            <xsl:variable name="url" select="substring-after(., 'URL:')"/>
+            <xsl:variable name="link-url">
+              <xsl:choose>
+                <xsl:when test="starts-with ($url, 'http://') or starts-with ($url, 'https://') or starts-with ($url, 'ftp://') or starts-with ($url, 'ftps://')">
+                  <xsl:value-of select="$url"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat ('http://', $url)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <td><a class="external" href="{$link-url}"><xsl:value-of select="$url"/></a></td>
           </xsl:when>
           <xsl:otherwise>
             <td><xsl:value-of select="."/></td>
