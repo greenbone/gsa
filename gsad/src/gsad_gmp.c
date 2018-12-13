@@ -7186,12 +7186,14 @@ append_alert_condition_data (GString *xml, params_t *data,
 /**
  * @brief Send method data for an alert.
  *
- * @param[in]   xml      XML.
- * @param[out]  data     Data.
- * @param[out]  method   Method.
+ * @param[in]  xml             Command XML to append to.
+ * @param[in]  data            Alert method data params.
+ * @param[in]  method          Name of the Alert method.
+ * @param[in]  report_formats  Report formats to use if multiple are supported.
  */
 static void
-append_alert_method_data (GString *xml, params_t *data, const char *method)
+append_alert_method_data (GString *xml, params_t *data, const char *method,
+                          params_t *report_formats)
 {
   params_iterator_t iter;
   char *name;
@@ -7201,6 +7203,35 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
   if (data == NULL)
     return;
 
+  /* Add report formats for methods that support multiple */
+  if (strcmp (method, "Alemba vFire") == 0)
+    {
+      g_string_append (xml, "<data><name>report_formats</name>");
+
+      if (report_formats && g_hash_table_size (report_formats))
+        {
+          int report_formats_count = g_hash_table_size (report_formats);
+          int index;
+          params_iterator_init (&iter, report_formats);
+
+          for (index = 1; index <= report_formats_count; index ++)
+            {
+              gchar *index_str = g_strdup_printf ("%d", index);
+              const char *value;
+              value = params_value (report_formats, index_str);
+
+              if (index > 1)
+                xml_string_append (xml, ", %s", value);
+              else
+                xml_string_append (xml, "%s", value);
+
+              g_free (index_str);
+            }
+        }
+      g_string_append (xml, "</data>");
+    }
+
+  /* Add single-value method data items */
   params_iterator_init (&iter, data);
   /* Used to check email notice type before sending report formats values */
   notice = 1;
@@ -7246,6 +7277,17 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                 && (strcmp (name, "verinice_server_credential") == 0
                     || strcmp (name, "verinice_server_url") == 0
                     || strcmp (name, "verinice_server_report_format") == 0))
+            || (strcmp (method, "Alemba vFire") == 0
+                && (strcmp (name, "vfire_base_url") == 0
+                    || strcmp (name, "vfire_call_description") == 0
+                    || strcmp (name, "vfire_call_impact_name") == 0
+                    || strcmp (name, "vfire_call_partition_name") == 0
+                    || strcmp (name, "vfire_call_template_name") == 0
+                    || strcmp (name, "vfire_call_type_name") == 0
+                    || strcmp (name, "vfire_call_urgency_name") == 0
+                    || strcmp (name, "vfire_client_id") == 0
+                    || strcmp (name, "vfire_credential") == 0
+                    || strcmp (name, "vfire_session_type") == 0))
             || (strcmp (method, "Email") == 0
                 && (strcmp (name, "to_address") == 0
                     || strcmp (name, "from_address") == 0
@@ -7330,7 +7372,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   int ret;
   gchar *html, *response;
   const char *name, *comment, *active, *condition, *event, *method, *filter_id;
-  params_t *method_data, *event_data, *condition_data;
+  params_t *method_data, *event_data, *condition_data, *report_formats;
   entity_t entity;
   GString *xml;
 
@@ -7355,6 +7397,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   method_data = params_values (params, "method_data:");
   event_data = params_values (params, "event_data:");
   condition_data = params_values (params, "condition_data:");
+  report_formats = params_values (params, "report_format_ids:");
 
   xml = g_string_new ("");
 
@@ -7395,7 +7438,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
                      "<method>%s",
                      method);
 
-  append_alert_method_data (xml, method_data, method);
+  append_alert_method_data (xml, method_data, method, report_formats);
 
   xml_string_append (xml,
                      "</method>"
@@ -8085,7 +8128,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   const char  *name, *comment, *alert_id;
   const char *event, *condition, *method;
   const char *filter_id, *active;
-  params_t *event_data, *condition_data, *method_data;
+  params_t *event_data, *condition_data, *method_data, *report_formats;
   entity_t entity;
 
   name = params_value (params, "name");
@@ -8113,6 +8156,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   event_data = params_values (params, "event_data:");
   condition_data = params_values (params, "condition_data:");
   method_data = params_values (params, "method_data:");
+  report_formats = params_values (params, "report_format_ids:");
 
   if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
     {
@@ -8152,7 +8196,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
                      "<method>%s",
                      method);
 
-  append_alert_method_data (xml, method_data, method);
+  append_alert_method_data (xml, method_data, method, report_formats);
 
   xml_string_append (xml,
                      "</method>"
