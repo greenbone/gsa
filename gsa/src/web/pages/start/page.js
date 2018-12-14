@@ -499,7 +499,7 @@ class StartPage extends React.Component {
         }
         {showNewDashboardDialog &&
           <NewDashboardDialog
-            additionalItems={dashboards.map(id => ({
+            additionalDisplayChoices={dashboards.map(id => ({
               label: this.getDashboardTitle(id),
               key: id,
               value: this.getDashboardDisplayIds(id),

@@ -98,11 +98,11 @@ const SECINFO_DEFAULT_DISPLAYS = [
 const EMPTY_DISPLAYS = [];
 
 const NewDashboardDialog = ({
-  additionalItems,
+  additionalDisplayChoices,
   onClose,
   onSave,
 }) => {
-  const items = [{
+  const defaultDisplayChoices = [{
     label: _('Default'),
     key: 'default',
     value: DEFAULT_DISPLAYS,
@@ -123,7 +123,7 @@ const NewDashboardDialog = ({
     key: 'empty',
     value: EMPTY_DISPLAYS,
   },
-  ...additionalItems,
+  ...additionalDisplayChoices,
   ];
   return (
     <SaveDialog
@@ -162,7 +162,7 @@ const NewDashboardDialog = ({
           >
             <Select
               name="defaultDisplays"
-              items={items}
+              items={defaultDisplayChoices}
               value={values.defaultDisplays}
               onChange={onValueChange}
             />
@@ -174,7 +174,7 @@ const NewDashboardDialog = ({
 };
 
 NewDashboardDialog.propTypes = {
-  additionalItems: PropTypes.arrayOf(PropTypes.shape({
+  additionalDisplayChoices: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.toString,
     value: PropTypes.array,
   })),
