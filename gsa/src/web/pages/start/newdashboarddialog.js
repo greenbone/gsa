@@ -98,6 +98,7 @@ const SECINFO_DEFAULT_DISPLAYS = [
 const EMPTY_DISPLAYS = [];
 
 const NewDashboardDialog = ({
+  additionalItems,
   onClose,
   onSave,
 }) => {
@@ -121,7 +122,9 @@ const NewDashboardDialog = ({
     label: _('Empty'),
     key: 'empty',
     value: EMPTY_DISPLAYS,
-  }];
+  },
+  ...additionalItems,
+  ];
   return (
     <SaveDialog
       buttonTitle={_('Add')}
@@ -171,6 +174,10 @@ const NewDashboardDialog = ({
 };
 
 NewDashboardDialog.propTypes = {
+  additionalItems: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.toString,
+    value: PropTypes.array,
+  })),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
