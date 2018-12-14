@@ -98,71 +98,86 @@ const SECINFO_DEFAULT_DISPLAYS = [
 const EMPTY_DISPLAYS = [];
 
 const NewDashboardDialog = ({
+  additionalDisplayChoices,
   onClose,
   onSave,
-}) => (
-  <SaveDialog
-    buttonTitle={_('Add')}
-    title={_('Add new Dashboard')}
-    width="550px"
-    minHeight={165}
-    minWidth={340}
-    defaultValues={{
-      title: _('Unnamed'),
-      defaultDisplays: DEFAULT_DISPLAYS,
-    }}
-    onClose={onClose}
-    onSave={onSave}
-  >
-    {({
-      values,
-      onValueChange,
-    }) => (
-      <React.Fragment>
-        <FormGroup
-          title={_('Dashboard Title')}
-          titleSize={4}
-        >
-          <TextField
-            grow
-            name="title"
-            maxLength={MAX_TITLE_LENGTH}
-            value={values.title}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-        <FormGroup
-          title={_('Initial Displays')}
-          titleSize={4}
-        >
-          <Select
-            name="defaultDisplays"
-            items={[{
-              label: _('Default'),
-              value: DEFAULT_DISPLAYS,
-            }, {
-              label: _('Scan Displays'),
-              value: SCAN_DEFAULT_DISPLAYS,
-            }, {
-              label: _('Asset Displays'),
-              value: ASSET_DEFAULT_DISPLAYS,
-            }, {
-              label: _('SecInfo Displays'),
-              value: SECINFO_DEFAULT_DISPLAYS,
-            }, {
-              label: _('Empty'),
-              value: EMPTY_DISPLAYS,
-            }]}
-            value={values.defaultDisplays}
-            onChange={onValueChange}
-          />
-        </FormGroup>
-      </React.Fragment>
-    )}
-  </SaveDialog>
-);
+}) => {
+  const defaultDisplayChoices = [{
+    label: _('Default'),
+    key: 'default',
+    value: DEFAULT_DISPLAYS,
+  }, {
+    label: _('Scan Displays'),
+    key: 'scan-displays',
+    value: SCAN_DEFAULT_DISPLAYS,
+  }, {
+    label: _('Asset Displays'),
+    key: 'asset-displays',
+    value: ASSET_DEFAULT_DISPLAYS,
+  }, {
+    label: _('SecInfo Displays'),
+    key: 'secinfo-displays',
+    value: SECINFO_DEFAULT_DISPLAYS,
+  }, {
+    label: _('Empty'),
+    key: 'empty',
+    value: EMPTY_DISPLAYS,
+  },
+  ...additionalDisplayChoices,
+  ];
+  return (
+    <SaveDialog
+      buttonTitle={_('Add')}
+      title={_('Add new Dashboard')}
+      width="550px"
+      minHeight={165}
+      minWidth={340}
+      defaultValues={{
+        title: _('Unnamed'),
+        defaultDisplays: DEFAULT_DISPLAYS,
+      }}
+      onClose={onClose}
+      onSave={onSave}
+    >
+      {({
+        values,
+        onValueChange,
+      }) => (
+        <React.Fragment>
+          <FormGroup
+            title={_('Dashboard Title')}
+            titleSize={4}
+          >
+            <TextField
+              grow
+              name="title"
+              maxLength={MAX_TITLE_LENGTH}
+              value={values.title}
+              onChange={onValueChange}
+            />
+          </FormGroup>
+          <FormGroup
+            title={_('Initial Displays')}
+            titleSize={4}
+          >
+            <Select
+              name="defaultDisplays"
+              items={defaultDisplayChoices}
+              value={values.defaultDisplays}
+              onChange={onValueChange}
+            />
+          </FormGroup>
+        </React.Fragment>
+      )}
+    </SaveDialog>
+  );
+};
 
 NewDashboardDialog.propTypes = {
+  additionalDisplayChoices: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.toString,
+    value: PropTypes.array,
+  })),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

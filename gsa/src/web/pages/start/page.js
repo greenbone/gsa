@@ -367,6 +367,15 @@ class StartPage extends React.Component {
     return dashboardSettings.title;
   }
 
+  getDashboardDisplayIds(dashboardId) {
+    const dashboardSettings = this.getDashboardSettings(dashboardId);
+    const {rows = []} = dashboardSettings;
+    return rows.map(row => {
+      const {items = []} = row;
+      return items.map(item => item.displayId);
+    });
+  }
+
   render() {
     const {
       isLoading,
@@ -490,6 +499,11 @@ class StartPage extends React.Component {
         }
         {showNewDashboardDialog &&
           <NewDashboardDialog
+            additionalDisplayChoices={dashboards.map(id => ({
+              label: this.getDashboardTitle(id),
+              key: id,
+              value: this.getDashboardDisplayIds(id),
+            }))}
             onClose={this.handleCloseNewDashboardDialog}
             onSave={this.handleAddNewDashboard}
           />
