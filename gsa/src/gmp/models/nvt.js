@@ -108,15 +108,13 @@ class Nvt extends Info {
     }
 
     if (isDefined(ret.cert_refs)) {
-      ret.certs.concat(
-        map(ret.cert_refs.cert_ref, ref => {
-          return {
-            id: ref._id,
-            type: ref._type,
-          };
-        })
-      );
-
+      const crefs = map(ret.cert_refs.cert_ref, ref => {
+        return {
+          id: ref._id,
+          type: ref._type,
+        };
+      });
+      ret.certs = [...ret.certs, ...crefs];
       delete ret.cert_refs;
     }
 
