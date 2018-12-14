@@ -128,6 +128,12 @@ class Nvt extends Info {
       if (xref.startsWith('URL:')) {
         type = 'URL';
         ref = xref.slice(4);
+        if (
+          !ref.startsWith('http://') && !ref.startsWith('https://') &&
+          !ref.startsWith('ftp://') && !ref.startsWith('ftps://')
+        ) {
+          ref = 'http://' + ref;
+        }
       }
       return {type, ref};
     });
