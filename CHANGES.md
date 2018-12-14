@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Sort alerts at task details alphanumerically #1094
  * Add solution type to report details powerfilter #1091
  * Add feature: Scan Report Content Composer #1073 #1084 #1086 #1090
 
