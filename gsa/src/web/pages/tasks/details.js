@@ -57,6 +57,18 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
+const compareAlerts = (alertA, alertB) => {
+  const nameA = alertA.name.toLowerCase();
+  const nameB = alertB.name.toLowerCase();
+  if (nameA > nameB) {
+    return 1;
+  };
+  if (nameA < nameB) {
+    return -1;
+  }
+  return 0;
+};
+
 class TaskDetails extends React.Component {
 
   componentDidMount() {
@@ -137,7 +149,7 @@ class TaskDetails extends React.Component {
           >
             <Divider>
               {
-                alerts.map(alert => (
+                alerts.sort(compareAlerts).map(alert => (
                   <DetailsLink
                     key={alert.id}
                     textOnly={!links}
