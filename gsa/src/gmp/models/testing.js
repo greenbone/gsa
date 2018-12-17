@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,14 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+ */
 
 /* eslint-disable max-len */
 
 import {isDate} from 'gmp/models/date';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-export const testModel = (modelClass, type) => {
+const testId = modelClass => {
+  test('should set ID only for proper ID', () => {
+    const model1 = new modelClass({_id: '1337'});
+    const model2 = new modelClass({});
+    const model3 = new modelClass({_id: ''});
+
+    expect(model1.id).toEqual('1337');
+    expect(model2.id).toBeUndefined();
+    expect(model3.id).toBeUndefined();
+  });
+};
+
+const testNvtId = modelClass => {
+  test('NVT ID test', () => {
+    const nvt1 = new modelClass({_oid: '42.1337'});
+    const nvt2 = new modelClass({});
+
+    expect(nvt1.id).toEqual('42.1337');
+    expect(nvt2.id).toBeUndefined();
+  });
+};
+
+const testModelProperties = (modelClass, type) => {
   describe(`${type} Model tests`, () => {
 
     test('end_time is parsed correctly', () => {
@@ -126,16 +144,6 @@ export const testModel = (modelClass, type) => {
 
   describe(`${type} Model parse_properties function test`, () => {
 
-    test('should set ID only for proper ID', () => {
-      const model1 = new modelClass({_id: '1337'});
-      const model2 = new modelClass({});
-      const model3 = new modelClass({_id: ''});
-
-      expect(model1.id).toEqual('1337');
-      expect(model2.id).toBeUndefined();
-      expect(model3.id).toBeUndefined();
-    });
-
     test('should parse creation_time as date', () => {
       const model = new modelClass({creation_time: '2018-10-10T08:48:46Z'});
 
@@ -220,4 +228,15 @@ export const testModel = (modelClass, type) => {
       });
   });
 };
+
+export const testModel = (modelClass, type) => {
+  testModelProperties(modelClass, type);
+  testId(modelClass);
+};
+
+export const testNvtModel = modelClass => {
+  testModelProperties(modelClass, 'nvt');
+  testNvtId(modelClass);
+};
+
 // vim: set ts=2 sw=2 tw=80:
