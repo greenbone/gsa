@@ -22,6 +22,8 @@
  */
 import uuid from 'uuid/v4';
 
+import {isDefined} from '../utils/identity';
+
 import logger from '../log';
 
 import GmpCommand from './gmp';
@@ -75,6 +77,11 @@ class DashboardCommand extends GmpCommand {
     }).then(response => {
       const {data} = response;
       const {setting} = data.get_settings.get_settings_response;
+
+      if (!isDefined(setting)) {
+        return response.setData({});
+      }
+
       const {value, name} = setting;
       let config;
       try {
