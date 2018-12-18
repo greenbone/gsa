@@ -424,6 +424,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/agents/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/agents/row.js
      ${GSA_SRC_DIR}/src/web/pages/agents/table.js
+     ${GSA_SRC_DIR}/src/web/pages/alerts/alembavfiremethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/component.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/condition.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/details.js
