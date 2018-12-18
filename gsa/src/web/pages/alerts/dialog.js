@@ -35,6 +35,7 @@ import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {
   CONDITION_TYPE_ALWAYS,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  METHOD_TYPE_ALEMBA_VFIRE,
   METHOD_TYPE_SCP,
   METHOD_TYPE_SEND,
   METHOD_TYPE_SMB,
@@ -66,6 +67,7 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import AlembaVfireMethodPart from './alembavfiremethodpart';
 import HttpMethodPart from './httpmethodpart';
 import ScpMethodPart from './scpmethodpart';
 import EmailMethodPart from './emailmethodpart';
@@ -169,6 +171,22 @@ Please contact your local system administrator if you think you
 should not have received it.
 `;
 
+export const VFIRE_CALL_DESCRIPTION =
+`After the event $e,
+the following condition was met: $c
+
+This ticket includes reports in the following format(s):
+$r.
+
+Full details and other report formats are available on the scan engine.
+$t
+
+Note:
+This ticket was created automatically as a security scan escalation.
+Please contact your local system administrator if you think it
+was created or assigned erroneously.
+`;
+
 const DEFAULTS = {
   active: YES_VALUE,
   comment: '',
@@ -213,8 +231,20 @@ const DEFAULTS = {
   method_data_URL: '',
   method_data_delta_type: DELTA_TYPE_NONE,
   method_data_delta_report_id: '',
+  method_data_vfire_report_formats: [],
+  method_data_vfire_base_url: '',
+  method_data_vfire_credential: '',
+  method_data_vfire_session_type: 'Analyst',
+  method_data_vfire_client_id: '',
+  method_data_vfire_call_partition_name: '',
+  method_data_vfire_call_description: VFIRE_CALL_DESCRIPTION,
+  method_data_vfire_call_template_name: '',
+  method_data_vfire_call_type_name: '',
+  method_data_vfire_call_impact_name: '',
+  method_data_vfire_urgency_name: '',
   name: _('Unnamed'),
   report_formats: [],
+  report_format_ids: [],
   result_filters: [],
   secinfo_filters: [],
 };
@@ -292,23 +322,36 @@ class AlertDialog extends React.Component {
       credentials,
       title = _('New Alert'),
       report_formats,
+      report_format_ids,
       method_data_recipient_credential,
       method_data_scp_credential,
       method_data_smb_credential,
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
+      method_data_vfire_base_url,
+      method_data_vfire_credential,
+      method_data_vfire_session_type,
+      method_data_vfire_client_id,
+      method_data_vfire_call_partition_name,
+      method_data_vfire_call_description,
+      method_data_vfire_call_template_name,
+      method_data_vfire_call_type_name,
+      method_data_vfire_call_impact_name,
+      method_data_vfire_urgency_name,
       onClose,
       onEmailCredentialChange,
       onNewEmailCredentialClick,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
+      onNewVfireCredentialClick,
       onNewTippingPointCredentialClick,
       onSave,
       onScpCredentialChange,
       onSmbCredentialChange,
       onTippingPointCredentialChange,
       onVerinceCredentialChange,
+      onVfireCredentialChange,
       ...props
     } = this.props;
 
@@ -362,11 +405,16 @@ class AlertDialog extends React.Component {
     }, {
       value: METHOD_TYPE_TIPPING_POINT,
       label: _('TippingPoint SMS'),
-    });
+    }, {
+      value: METHOD_TYPE_ALEMBA_VFIRE,
+      label: _('Alemba vFire'),
+    }
+  );
 
     const data = {
       ...DEFAULTS,
       ...alert,
+      report_format_ids,
     };
 
     for (const [key, value] of Object.entries(props)) {
@@ -381,6 +429,7 @@ class AlertDialog extends React.Component {
       method_data_smb_credential,
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
+      method_data_vfire_credential,
     };
 
     return (
@@ -695,6 +744,33 @@ class AlertDialog extends React.Component {
                 />
               }
 
+              {values.method === METHOD_TYPE_ALEMBA_VFIRE &&
+                <AlembaVfireMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  reportFormats={report_formats}
+                  reportFormatIds={values.report_format_ids}
+                  vFireBaseUrl={values.method_data_vfire_base_url}
+                  vFireCallDescription=
+                    {values.method_data_vfire_call_description}
+                  vFireCallImpactName=
+                    {values.method_data_vfire_call_impact_name}
+                  vFireCallPartitionName=
+                    {values.method_data_vfire_call_partition_name}
+                  vFireCallTemplateName=
+                    {values.method_data_vfire_call_template_name}
+                  vFireCallTypeName={values.method_data_vfire_call_type_name}
+                  vFireCallUrgencyName=
+                    {values.method_data_vfire_call_urgency_name}
+                  vFireClientId={values.method_data_vfire_client_id}
+                  vFireCredential={values.method_data_vfire_credential}
+                  vFireSessionType={values.method_data_vfire_session_type}
+                  onChange={onValueChange}
+                  onCredentialChange={onVfireCredentialChange}
+                  onNewVfireCredentialClick={onNewVfireCredentialClick}
+                />
+              }
+
               <FormGroup title={_('Active')}>
                 <YesNoRadio
                   name="active"
@@ -767,7 +843,18 @@ AlertDialog.propTypes = {
   method_data_verinice_server_credential: PropTypes.id,
   method_data_verinice_server_report_format: PropTypes.id,
   method_data_verinice_server_url: PropTypes.string,
+  method_data_vfire_base_url: PropTypes.string,
+  method_data_vfire_call_description: PropTypes.string,
+  method_data_vfire_call_impact_name: PropTypes.string,
+  method_data_vfire_call_partition_name: PropTypes.string,
+  method_data_vfire_call_template_name: PropTypes.string,
+  method_data_vfire_call_type_name: PropTypes.string,
+  method_data_vfire_client_id: PropTypes.string,
+  method_data_vfire_credential: PropTypes.id,
+  method_data_vfire_session_type: PropTypes.string,
+  method_data_vfire_urgency_name: PropTypes.string,
   name: PropTypes.string,
+  report_format_ids: PropTypes.array,
   report_formats: PropTypes.array,
   result_filters: PropTypes.array,
   secinfo_filters: PropTypes.array,
@@ -780,11 +867,13 @@ AlertDialog.propTypes = {
   onNewSmbCredentialClick: PropTypes.func.isRequired,
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
+  onNewVfireCredentialClick: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,
   onSmbCredentialChange: PropTypes.func.isRequired,
   onTippingPointCredentialChange: PropTypes.func.isRequired,
   onVerinceCredentialChange: PropTypes.func.isRequired,
+  onVfireCredentialChange: PropTypes.func.isRequired,
 };
 
 export default withCapabilities(AlertDialog);
