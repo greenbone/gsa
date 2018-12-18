@@ -123,6 +123,21 @@ describe('Alert Model tests', () => {
     expect(alert.tasks).toEqual([]);
   });
 
+  test('should parse report format ids', () => {
+    const elem = {
+      report_format_ids: '123,456,789',
+    };
+    const alert = new Alert(elem);
+
+    expect(alert.reportFormatIds).toEqual(['123', '456', '789']);
+  });
+
+  test('should return empty array of no report format ids are given', () => {
+    const alert = new Alert({});
+
+    expect(alert.reportFormatIds).toEqual([]);
+  });
+
   test('isActive() should return correct true/false', () => {
     const alert1 = new Alert({active: '0'});
     const alert2 = new Alert({active: '1'});
