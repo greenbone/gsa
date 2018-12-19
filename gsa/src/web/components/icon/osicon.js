@@ -35,7 +35,7 @@ import PropTypes from 'web/utils/proptypes';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import Icon from './icon';
+import Img from 'web/components/img/img';
 
 const OsIcon = ({
   displayOsCpe = true,
@@ -85,9 +85,10 @@ const OsIcon = ({
   return (
     <Layout>
       <Divider title={title}>
-        <Icon
+        <Img
           {...props}
-          img={os_icon}
+          width="16px"
+          src={os_icon}
         />
         {displayOsName && isDefined(os) &&
           <span>{os.title}</span>
