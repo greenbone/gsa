@@ -38,6 +38,8 @@ import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
+import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/dialog';
+
 const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 const AlembaVfireMethodPart = ({
@@ -46,7 +48,7 @@ const AlembaVfireMethodPart = ({
   reportFormats = [],
   reportFormatIds = [],
   vFireBaseUrl,
-  vFireCallDescription,
+  vFireCallDescription = VFIRE_CALL_DESCRIPTION,
   vFireCallImpactName,
   vFireCallPartitionName,
   vFireCallTemplateName,
@@ -54,7 +56,7 @@ const AlembaVfireMethodPart = ({
   vFireCallUrgencyName,
   vFireClientId,
   vFireCredential,
-  vFireSessionType,
+  vFireSessionType = 'Analyst',
   onChange,
   onCredentialChange,
   onNewVfireCredentialClick,
