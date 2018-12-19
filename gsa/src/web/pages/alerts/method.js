@@ -103,14 +103,14 @@ const Method = ({
                 </TableRow>
               }
 
-              {isDefined(data.vfire_call_impact) &&
-                isDefined(data.vfire_call_impact.value) &&
+              {isDefined(data.vfire_call_impact_name) &&
+                isDefined(data.vfire_call_impact_name.value) &&
                 <TableRow>
                   <TableData>
                     {_('Impact')}
                   </TableData>
                   <TableData>
-                    {data.vfire_call_impact.value}
+                    {data.vfire_call_impact_name.value}
                   </TableData>
                 </TableRow>
               }

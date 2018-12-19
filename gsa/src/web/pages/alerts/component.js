@@ -433,7 +433,8 @@ class AlertComponent extends React.Component {
           method_data_vfire_base_url: value(method.data.vfire_base_url),
           method_data_vfire_call_description:
             value(method.data.vfire_call_description),
-          method_data_vfire_call_impact: value(method.data.vfire_call_impact),
+          method_data_vfire_call_impact_name:
+            value(method.data.vfire_call_impact_name),
           method_data_vfire_call_partition_name:
             value(method.data.vfire_call_partition_name),
           method_data_vfire_call_template_name:
@@ -678,7 +679,7 @@ class AlertComponent extends React.Component {
       method_data_vfire_credential,
       method_data_vfire_base_url,
       method_data_vfire_call_description,
-      method_data_vfire_call_impact,
+      method_data_vfire_call_impact_name,
       method_data_vfire_call_partition_name,
       method_data_vfire_call_template_name,
       method_data_vfire_call_type_name,
@@ -793,7 +794,8 @@ class AlertComponent extends React.Component {
                 method_data_vfire_base_url={method_data_vfire_base_url}
                 method_data_vfire_call_description=
                   {method_data_vfire_call_description}
-                method_data_vfire_call_impact={method_data_vfire_call_impact}
+                method_data_vfire_call_impact_name=
+                  {method_data_vfire_call_impact_name}
                 method_data_vfire_call_partition_name=
                   {method_data_vfire_call_partition_name}
                 method_data_vfire_call_template_name=
