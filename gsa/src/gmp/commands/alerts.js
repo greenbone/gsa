@@ -84,7 +84,7 @@ const method_data_fields = [
   'vfire_call_template_name',
   'vfire_call_type_name',
   'vfire_call_impact_name',
-  'vfire_urgency_name',
+  'vfire_call_urgency_name',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
