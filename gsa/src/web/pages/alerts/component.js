@@ -120,6 +120,8 @@ class AlertComponent extends React.Component {
       .bind(this);
     this.handleTippingPointCredentialChange =
       this.handleTippingPointCredentialChange.bind(this);
+    this.handleVfireCredentialChange =
+      this.handleVfireCredentialChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
@@ -327,7 +329,7 @@ class AlertComponent extends React.Component {
           value(method.data.recipient_credential) : undefined;
 
         const vfire_credential_id = isDefined(method.data.vfire_credential) ?
-          value(method.data.vfire_credential.credential.id) : undefined;
+          value(method.data.vfire_credential) : undefined;
 
         this.setState({
           alertDialogVisible: true,
