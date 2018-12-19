@@ -107,14 +107,14 @@ const AlembaVfireMethodPart = ({
       <FormGroup title={_('Session Type')}>
         <Radio
           title={_('Analyst')}
-          name="vfire_session_type"
+          name={prefix + 'vfire_session_type'}
           checked={vFireSessionType === 'Analyst'}
           value="Analyst"
           onChange={onChange}
         />
         <Radio
           title={_('User')}
-          name="vfire_session_type"
+          name={prefix + 'vfire_session_type'}
           checked={vFireSessionType === 'User'}
           value="User"
           onChange={onChange}
