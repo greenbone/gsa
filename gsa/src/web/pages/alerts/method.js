@@ -57,6 +57,7 @@ import {Col} from 'web/entity/page';
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
+  width: 100%;
   & td {
     padding: 0;
   };
@@ -204,6 +205,10 @@ const Method = ({
         <div>
           <div>{_('SCP')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               {isDefined(data.scp_host) && isDefined(data.scp_host.value) &&
                 <TableRow>
@@ -307,6 +312,10 @@ const Method = ({
         <div>
           <div>{_('SNMP')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -356,6 +365,10 @@ const Method = ({
         <div>
           <div>{_('Email')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -466,6 +479,10 @@ const Method = ({
         <div>
           <div>{_('Sourcefire Connector')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               {isDefined(data.defense_center_ip) &&
                 isDefined(data.defense_center_ip.value) &&
@@ -509,6 +526,10 @@ const Method = ({
         <div>
           <div>{_('verinice Connector')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
 
               {isDefined(data.verinice_server_url) &&
