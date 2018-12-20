@@ -335,6 +335,7 @@ class AlertDialog extends React.Component {
       onNewVeriniceCredentialClick,
       onNewVfireCredentialClick,
       onNewTippingPointCredentialClick,
+      onReportFormatsChange,
       onSave,
       onScpCredentialChange,
       onSmbCredentialChange,
@@ -403,7 +404,15 @@ class AlertDialog extends React.Component {
     const data = {
       ...DEFAULTS,
       ...alert,
-      report_format_ids,
+      method_data_vfire_base_url,
+      method_data_vfire_client_id,
+      method_data_vfire_call_partition_name,
+      method_data_vfire_call_description,
+      method_data_vfire_call_template_name,
+      method_data_vfire_call_type_name,
+      method_data_vfire_call_impact_name,
+      method_data_vfire_call_urgency_name,
+      method_data_vfire_session_type,
     };
 
     for (const [key, value] of Object.entries(props)) {
@@ -419,6 +428,7 @@ class AlertDialog extends React.Component {
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
       method_data_vfire_credential,
+      report_format_ids,
     };
 
     return (
@@ -756,6 +766,7 @@ class AlertDialog extends React.Component {
                   vFireSessionType={values.method_data_vfire_session_type}
                   onChange={onValueChange}
                   onCredentialChange={onVfireCredentialChange}
+                  onReportFormatsChange={onReportFormatsChange}
                   onNewVfireCredentialClick={onNewVfireCredentialClick}
                 />
               }
@@ -857,6 +868,7 @@ AlertDialog.propTypes = {
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onNewVfireCredentialClick: PropTypes.func.isRequired,
+  onReportFormatsChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,
   onSmbCredentialChange: PropTypes.func.isRequired,

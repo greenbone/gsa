@@ -122,6 +122,7 @@ class AlertComponent extends React.Component {
       this.handleTippingPointCredentialChange.bind(this);
     this.handleVfireCredentialChange =
       this.handleVfireCredentialChange.bind(this);
+    this.handleReportFormatsChange = this.handleReportFormatsChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
@@ -344,7 +345,7 @@ class AlertComponent extends React.Component {
           result_filters,
           secinfo_filters,
           report_formats,
-          report_format_ids: alert.reportFormatIds,
+          report_format_ids: method.data.report_formats,
 
           condition: condition.type,
           condition_data_count: parseInt(value(condition.data.count, 1)),
@@ -599,6 +600,10 @@ class AlertComponent extends React.Component {
     this.setState({method_data_vfire_credential: credential});
   }
 
+  handleReportFormatsChange(report_format_ids) {
+    this.setState({report_format_ids});
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
@@ -833,6 +838,7 @@ class AlertComponent extends React.Component {
                   this.handleInteraction();
                   return save(d).then(() => this.closeAlertDialog());
                 }}
+                onReportFormatsChange={this.handleReportFormatsChange}
                 onEmailCredentialChange={this.handleEmailCredentialChange}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}

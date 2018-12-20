@@ -60,6 +60,7 @@ const AlembaVfireMethodPart = ({
   onChange,
   onCredentialChange,
   onNewVfireCredentialClick,
+  onReportFormatsChange,
 }) => {
   credentials = credentials.filter(
     cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
@@ -73,7 +74,7 @@ const AlembaVfireMethodPart = ({
           name={'report_format_ids'}
           items={renderSelectItems(reportFormats)}
           value={reportFormatIds}
-          onChange={onChange}
+          onChange={onReportFormatsChange}
         />
       </FormGroup>
 
@@ -215,6 +216,7 @@ AlembaVfireMethodPart.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewVfireCredentialClick: PropTypes.func.isRequired,
+  onReportFormatsChange: PropTypes.func.isRequired,
 };
 
 export default withPrefix(AlembaVfireMethodPart);
