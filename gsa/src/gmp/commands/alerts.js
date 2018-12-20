@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +74,17 @@ const method_data_fields = [
   'tp_sms_tls_workaround',
   'delta_type',
   'delta_report_id',
+  'report_formats',
+  'vfire_base_url',
+  'vfire_credential',
+  'vfire_session_type',
+  'vfire_client_id',
+  'vfire_call_partition_name',
+  'vfire_call_description',
+  'vfire_call_template_name',
+  'vfire_call_type_name',
+  'vfire_call_impact_name',
+  'vfire_call_urgency_name',
 ];
 const condition_data_fields = [
   'severity', 'direction', 'at_least_filter_id',
@@ -111,6 +118,7 @@ class AlertCommand extends EntityCommand {
       condition,
       filter_id,
       method,
+      report_format_ids,
       ...other
     } = args;
     const data = {
@@ -125,6 +133,7 @@ class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
+      'report_format_ids:': report_format_ids,
     };
     log.debug('Creating new alert', args, data);
     return this.action(data);
@@ -140,6 +149,7 @@ class AlertCommand extends EntityCommand {
       condition,
       filter_id,
       method,
+      report_format_ids = [],
       ...other
     } = args;
     const data = {
@@ -155,6 +165,8 @@ class AlertCommand extends EntityCommand {
       condition,
       method,
       filter_id,
+      'report_format_ids:': report_format_ids.length > 0 ?
+        report_format_ids : undefined,
     };
     log.debug('Saving alert', args, data);
     return this.action(data);

@@ -31,6 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {
   EMAIL_NOTICE_ATTACH,
   EMAIL_NOTICE_INCLUDE,
+  METHOD_TYPE_ALEMBA_VFIRE,
   METHOD_TYPE_SCP,
   METHOD_TYPE_SEND,
   METHOD_TYPE_SNMP,
@@ -51,9 +52,12 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import {Col} from 'web/entity/page';
+
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
+  width: 100%;
   & td {
     padding: 0;
   };
@@ -64,6 +68,133 @@ const Method = ({
   details = false,
 }) => {
   let url = '';
+  if (method.type === METHOD_TYPE_ALEMBA_VFIRE) {
+    const {data = {}} = method;
+    if (details) {
+      return (
+        <div>
+          <div>{_('Alemba vFire')}</div>
+          <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
+            <TableBody>
+              {isDefined(data.vfire_base_url) &&
+                isDefined(data.vfire_base_url.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Base URL')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_base_url.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_description) &&
+                isDefined(data.vfire_call_description.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Call Description')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_description.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_impact_name) &&
+                isDefined(data.vfire_call_impact_name.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Impact')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_impact_name.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_partition_name) &&
+                isDefined(data.vfire_call_partition_name.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Partition')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_partition_name.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_template_name) &&
+                isDefined(data.vfire_call_template_name.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Call Template')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_template_name.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_type_name) &&
+                isDefined(data.vfire_call_type_name.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Call Type')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_type_name.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_call_urgency_name) &&
+                isDefined(data.vfire_call_urgency_name.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Urgency')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_call_urgency_name.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_client_id) &&
+                isDefined(data.vfire_client_id.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Alemba Client ID')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_client_id.value}
+                  </TableData>
+                </TableRow>
+              }
+
+              {isDefined(data.vfire_session_type) &&
+                isDefined(data.vfire_session_type.value) &&
+                <TableRow>
+                  <TableData>
+                    {_('Session Type')}
+                  </TableData>
+                  <TableData>
+                    {data.vfire_session_type.value}
+                  </TableData>
+                </TableRow>
+              }
+            </TableBody>
+          </Table>
+        </div>
+      );
+    }
+    return _('text');
+  }
+
   if (method.type === METHOD_TYPE_SCP) {
     const {data = {}} = method;
     const {scp_credential = {}} = data;
@@ -74,6 +205,10 @@ const Method = ({
         <div>
           <div>{_('SCP')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               {isDefined(data.scp_host) && isDefined(data.scp_host.value) &&
                 <TableRow>
@@ -177,6 +312,10 @@ const Method = ({
         <div>
           <div>{_('SNMP')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -226,6 +365,10 @@ const Method = ({
         <div>
           <div>{_('Email')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               <TableRow>
                 <TableData>
@@ -336,6 +479,10 @@ const Method = ({
         <div>
           <div>{_('Sourcefire Connector')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
               {isDefined(data.defense_center_ip) &&
                 isDefined(data.defense_center_ip.value) &&
@@ -379,6 +526,10 @@ const Method = ({
         <div>
           <div>{_('verinice Connector')}</div>
           <Table>
+            <colgroup>
+              <Col width="12%"/>
+              <Col width="88%"/>
+            </colgroup>
             <TableBody>
 
               {isDefined(data.verinice_server_url) &&

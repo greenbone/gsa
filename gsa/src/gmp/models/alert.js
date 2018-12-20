@@ -43,6 +43,7 @@ export const CONDITION_DIRECTION_DECREASED = 'decreased';
 export const CONDITION_DIRECTION_INCREASED = 'increased';
 export const CONDITION_DIRECTION_CHANGED = 'changed';
 
+export const METHOD_TYPE_ALEMBA_VFIRE = 'Alemba vFire';
 export const METHOD_TYPE_SCP = 'SCP';
 export const METHOD_TYPE_SEND = 'Send';
 export const METHOD_TYPE_SMB = 'SMB';
@@ -120,6 +121,16 @@ class Alert extends Model {
     }
     else {
       ret.tasks = [];
+    }
+
+    const methDatRepForm = ret.method.data.report_formats;
+
+    if (isDefined(methDatRepForm) && isDefined(methDatRepForm.value)) {
+      const methDatRepFormSplit = methDatRepForm.value.split(',');
+      ret.method.data.report_formats = methDatRepFormSplit.map(rf => rf.trim());
+    }
+    else {
+      ret.method.data.report_formats = [];
     }
 
     ret.active = parseYesNo(elem.active);

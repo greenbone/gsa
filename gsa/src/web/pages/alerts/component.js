@@ -37,7 +37,10 @@ import {
   NO_VALUE,
 } from 'gmp/parser';
 
-import {email_credential_filter} from 'gmp/models/credential';
+import {
+  email_credential_filter,
+  vFire_credential_filter,
+} from 'gmp/models/credential';
 
 import EntityComponent from 'web/entity/component';
 
@@ -117,6 +120,9 @@ class AlertComponent extends React.Component {
       .bind(this);
     this.handleTippingPointCredentialChange =
       this.handleTippingPointCredentialChange.bind(this);
+    this.handleVfireCredentialChange =
+      this.handleVfireCredentialChange.bind(this);
+    this.handleReportFormatsChange = this.handleReportFormatsChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
@@ -124,6 +130,7 @@ class AlertComponent extends React.Component {
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
       this);
+    this.openVfireCredentialDialog = this.openVfireCredentialDialog.bind(this);
     this.openTippingPointCredentialDialog =
       this.openTippingPointCredentialDialog.bind(this);
     this.openEmailCredentialDialog = this.openEmailCredentialDialog.bind(this);
@@ -161,6 +168,12 @@ class AlertComponent extends React.Component {
         else if (this.credentialType === 'verinice') {
           this.setState({
             method_data_verinice_server_credential: credential_id,
+            credentials,
+          });
+        }
+        else if (this.credentialType === 'vfire') {
+          this.setState({
+            method_data_vfire_credential: credential_id,
             credentials,
           });
         }
@@ -212,6 +225,10 @@ class AlertComponent extends React.Component {
     this.openCredentialDialog({type: 'verinice', types});
   }
 
+  openVfireCredentialDialog(types) {
+    this.openCredentialDialog({type: 'vfire', types});
+  }
+
   openTippingPointCredentialDialog(types) {
     this.openCredentialDialog({type: 'tippingpoint', types});
   }
@@ -241,6 +258,7 @@ class AlertComponent extends React.Component {
         const {method, condition, event} = lalert;
 
         const emailCredentials = credentials.filter(email_credential_filter);
+        const vFireCredentials = credentials.filter(vFire_credential_filter);
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -311,6 +329,9 @@ class AlertComponent extends React.Component {
           method.data.recipient_credential) ?
           value(method.data.recipient_credential) : undefined;
 
+        const vfire_credential_id = isDefined(method.data.vfire_credential) ?
+          value(method.data.vfire_credential) : undefined;
+
         this.setState({
           alertDialogVisible: true,
           id: alert.id,
@@ -324,6 +345,7 @@ class AlertComponent extends React.Component {
           result_filters,
           secinfo_filters,
           report_formats,
+          report_format_ids: method.data.report_formats,
 
           condition: condition.type,
           condition_data_count: parseInt(value(condition.data.count, 1)),
@@ -407,6 +429,24 @@ class AlertComponent extends React.Component {
           method_data_verinice_server_credential: selectSaveId(credentials,
             verinice_credential_id),
 
+          method_data_vfire_credential: selectSaveId(vFireCredentials,
+            vfire_credential_id),
+          method_data_vfire_base_url: value(method.data.vfire_base_url),
+          method_data_vfire_call_description:
+            value(method.data.vfire_call_description),
+          method_data_vfire_call_impact_name:
+            value(method.data.vfire_call_impact_name),
+          method_data_vfire_call_partition_name:
+            value(method.data.vfire_call_partition_name),
+          method_data_vfire_call_template_name:
+            value(method.data.vfire_call_template_name),
+          method_data_vfire_call_type_name:
+            value(method.data.vfire_call_type_name),
+          method_data_vfire_call_urgency_name:
+            value(method.data.vfire_call_urgency_name),
+          method_data_vfire_client_id: value(method.data.vfire_client_id),
+          method_data_vfire_session_type: value(method.data.vfire_session_type),
+
           method_data_URL: value(method.data.URL, ''),
           method_data_delta_type: value(alert.method.data.delta_type, ''),
           method_data_delta_report_id: value(alert.method.data.delta_report_id,
@@ -465,9 +505,20 @@ class AlertComponent extends React.Component {
           method_data_start_task_task: selectSaveId(tasks),
           method_data_verinice_server_report_format: select_verinice_report_id(
             report_formats),
+          method_data_vfire_credential: undefined,
+          method_data_vfire_base_url: undefined,
+          method_data_vfire_call_description: undefined,
+          method_data_vfire_call_impact_name: undefined,
+          method_data_vfire_call_partition_name: undefined,
+          method_data_vfire_call_template_name: undefined,
+          method_data_vfire_call_type_name: undefined,
+          method_data_vfire_call_urgency_name: undefined,
+          method_data_vfire_client_id: undefined,
+          method_data_vfire_session_type: undefined,
           result_filters,
           secinfo_filters,
           report_formats,
+          report_format_ids: [],
           tasks,
         });
       });
@@ -543,6 +594,14 @@ class AlertComponent extends React.Component {
 
   handleEmailCredentialChange(credential) {
     this.setState({method_data_recipient_credential: credential});
+  }
+
+  handleVfireCredentialChange(credential) {
+    this.setState({method_data_vfire_credential: credential});
+  }
+
+  handleReportFormatsChange(report_format_ids) {
+    this.setState({report_format_ids});
   }
 
   handleInteraction() {
@@ -632,10 +691,21 @@ class AlertComponent extends React.Component {
       method_data_verinice_server_report_format,
       method_data_verinice_server_url,
       method_data_verinice_server_credential,
+      method_data_vfire_credential,
+      method_data_vfire_base_url,
+      method_data_vfire_call_description,
+      method_data_vfire_call_impact_name,
+      method_data_vfire_call_partition_name,
+      method_data_vfire_call_template_name,
+      method_data_vfire_call_type_name,
+      method_data_vfire_call_urgency_name,
+      method_data_vfire_client_id,
+      method_data_vfire_session_type,
       method_data_URL,
       method_data_delta_type,
       method_data_delta_report_id,
       report_formats,
+      report_format_ids,
       tasks,
     } = this.state;
     return (
@@ -735,25 +805,45 @@ class AlertComponent extends React.Component {
                   method_data_verinice_server_url}
                 method_data_verinice_server_credential=
                   {method_data_verinice_server_credential}
+                method_data_vfire_credential={method_data_vfire_credential}
+                method_data_vfire_base_url={method_data_vfire_base_url}
+                method_data_vfire_call_description=
+                  {method_data_vfire_call_description}
+                method_data_vfire_call_impact_name=
+                  {method_data_vfire_call_impact_name}
+                method_data_vfire_call_partition_name=
+                  {method_data_vfire_call_partition_name}
+                method_data_vfire_call_template_name=
+                  {method_data_vfire_call_template_name}
+                method_data_vfire_call_type_name=
+                  {method_data_vfire_call_type_name}
+                method_data_vfire_call_urgency_name=
+                  {method_data_vfire_call_urgency_name}
+                method_data_vfire_client_id={method_data_vfire_client_id}
+                method_data_vfire_session_type={method_data_vfire_session_type}
                 method_data_URL={method_data_URL}
                 method_data_delta_type={method_data_delta_type}
                 method_data_delta_report_id={method_data_delta_report_id}
+                report_format_ids={report_format_ids}
                 tasks={tasks}
                 onClose={this.handleCloseAlertDialog}
                 onNewEmailCredentialClick={this.openEmailCredentialDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
+                onNewVfireCredentialClick={this.openVfireCredentialDialog}
                 onNewTippingPointCredentialClick={
                   this.openTippingPointCredentialDialog}
                 onSave={d => {
                   this.handleInteraction();
                   return save(d).then(() => this.closeAlertDialog());
                 }}
+                onReportFormatsChange={this.handleReportFormatsChange}
                 onEmailCredentialChange={this.handleEmailCredentialChange}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
+                onVfireCredentialChange={this.handleVfireCredentialChange}
                 onTippingPointCredentialChange={
                   this.handleTippingPointCredentialChange}
               />
