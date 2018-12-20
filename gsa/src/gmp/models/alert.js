@@ -123,11 +123,14 @@ class Alert extends Model {
       ret.tasks = [];
     }
 
-    if (isDefined(elem.report_format_ids)) {
-      ret.reportFormatIds = elem.report_format_ids.split(',');
+    const methDatRepForm = ret.method.data.report_formats;
+
+    if (isDefined(methDatRepForm) && isDefined(methDatRepForm.value)) {
+      const methDatRepFormSplit = methDatRepForm.value.split(',');
+      ret.method.data.report_formats = methDatRepFormSplit.map(rf => rf.trim());
     }
     else {
-      ret.reportFormatIds = [];
+      ret.method.data.report_formats = [];
     }
 
     ret.active = parseYesNo(elem.active);
