@@ -66,6 +66,7 @@ const method_data_fields = [
   'scp_report_format',
   'smb_credential',
   'smb_file_path',
+  'smb_file_path_type',
   'smb_report_format',
   'smb_share_path',
   'tp_sms_hostname',
