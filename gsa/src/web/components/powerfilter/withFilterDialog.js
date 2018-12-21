@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import logger from 'gmp/log';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
@@ -31,6 +33,8 @@ import DialogContent from '../dialog/content';
 import DialogTitle from '../dialog/title';
 import DialogFooter from '../dialog/twobuttonfooter';
 import ScrollableContent from '../dialog/scrollablecontent';
+
+const log = logger.getLogger('web.powerfilter');
 
 const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
@@ -63,15 +67,65 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
       };
     }
 
+    createFilter(filter) {
+      const {filterName = ''} = this.state;
+      const {
+        createFilterType,
+        gmp,
+        onError,
+        onFilterCreated,
+      } = this.props;
+
+      gmp.filter.create({
+        term: filter.toFilterString(),
+        type: createFilterType,
+        name: filterName,
+      }).then(response => {
+        const {data: result} = response;
+        // load new filter
+        return gmp.filter.get(result);
+      }).then(response => {
+        const {data: f} = response;
+        this.setState({filterName: ''});
+
+        if (onFilterCreated) {
+          onFilterCreated(f);
+        }
+      }).catch(err => {
+        if (isDefined(onError)) {
+          onError(err);
+        }
+        else {
+          log.error(err);
+        }
+      });
+    }
+
     handleSave() {
-      let {filter, filterstring} = this.state;
+      let {
+        filter,
+        filterName = '',
+        filterstring,
+        saveNamedFilter,
+      } = this.state;
       const {onFilterChanged, onCloseClick} = this.props;
 
       filter = Filter.fromString(filterstring, filter);
 
+      if (saveNamedFilter) {
+        if (filterName.trim().length > 0) {
+          this.createFilter(filter);
+        }
+        else {
+          this.setState({filterNameValid: false});
+          return;
+        }
+      }
+
       if (onFilterChanged && !filter.equals(this.orig_filter)) {
         onFilterChanged(filter);
       }
+
 
       if (isDefined(onCloseClick)) {
         onCloseClick();
@@ -116,7 +170,13 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
     render() {
       const {onCloseClick} = this.props;
-      const {filter, filterstring} = this.state;
+      const {
+        filter,
+        filterName,
+        filterNameValid,
+        filterstring,
+        saveNamedFilter,
+      } = this.state;
 
       if (!isDefined(filter)) {
         return null;
@@ -143,6 +203,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
                 <FilterDialogComponent
                   {...options}
                   {...this.props}
+                  saveNamedFilter={saveNamedFilter}
                   onFilterChange={this.handleFilterChange}
                   onFilterValueChange={this.onFilterValueChange}
                   onFilterStringChange={this.onFilterStringChange}
@@ -150,6 +211,8 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
                   onSortByChange={this.onSortByChange}
                   onValueChange={this.onValueChange}
                   filterstring={filterstring}
+                  filterName={filterName}
+                  filterNameValid={filterNameValid}
                   filter={filter}
                 />
               </ScrollableContent>
@@ -168,6 +231,7 @@ const withFilterDialog = (options = {}) => FilterDialogComponent => {
 
   FilterDialogWrapper.propTypes = {
     filter: PropTypes.filter,
+    gmp: PropTypes.gmp.isRequired,
     onCloseClick: PropTypes.func,
     onFilterChanged: PropTypes.func,
   };
