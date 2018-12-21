@@ -27,7 +27,7 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import compose from 'web/utils/compose';
-import PropTypes from '../utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import Toolbar from 'web/components/bar/toolbar';
@@ -79,6 +79,7 @@ class EntitiesPage extends React.Component {
       showFilterDialog: false,
     };
 
+    this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
     this.handleFilterDialogCloseClick =
       this.handleFilterDialogCloseClick.bind(this);
@@ -191,14 +192,12 @@ class EntitiesPage extends React.Component {
 
   renderPowerFilter() {
     const {
-      createFilterType,
       filter,
       filterEditDialog,
       filters,
       powerfilter = PowerFilter,
       onError,
       onFilterChanged,
-      onFilterCreated,
       onFilterRemoved,
       onFilterReset,
     } = this.props;
@@ -219,12 +218,10 @@ class EntitiesPage extends React.Component {
         grow="1"
       >
         <PowerFilterComponent
-          createFilterType={createFilterType}
           filter={filter}
           filters={filters}
           onEditClick={handler}
           onError={onError}
-          onFilterCreated={onFilterCreated}
           onRemoveClick={onFilterRemoved}
           onResetClick={onFilterReset}
           onUpdate={onFilterChanged}
@@ -256,8 +253,14 @@ class EntitiesPage extends React.Component {
     );
   }
 
+  handleFilterCreated(filter) {
+    this.props.loadFilters();
+    this.props.onFilterCreated(filter);
+  }
+
   renderDialogs() {
     const {
+      createFilterType,
       filter,
       filterEditDialog: FilterDialogComponent,
       onFilterChanged,
@@ -270,8 +273,10 @@ class EntitiesPage extends React.Component {
 
     return (
       <FilterDialogComponent
+        createFilterType={createFilterType}
         filter={filter}
         onFilterChanged={onFilterChanged}
+        onFilterCreated={this.handleFilterCreated}
         onCloseClick={this.handleFilterDialogCloseClick}
       />
     );
