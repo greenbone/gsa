@@ -218,7 +218,7 @@ const DEFAULTS = {
   method_data_send_host: '',
   method_data_send_port: '',
   method_data_smb_file_path: 'report.xml',
-  method_data_smb_file_path_type: 'directory',
+  method_data_smb_file_path_type: 'full',
   method_data_smb_share_path: '\\\\localhost\\gvm-reports',
   method_data_snmp_agent: 'localhost',
   method_data_snmp_community: 'public',
