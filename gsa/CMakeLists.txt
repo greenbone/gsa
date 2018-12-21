@@ -342,6 +342,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/panel/infopanel.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/autofpgroup.js
+     ${GSA_SRC_DIR}/src/web/components/powerfilter/createnamedfiltergroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/dialog.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/dialogproptypes.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/filterstringgroup.js
