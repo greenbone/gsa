@@ -404,6 +404,8 @@ class AlertComponent extends React.Component {
 
           method_data_smb_credential: value(method.data.smb_credential, ''),
           method_data_smb_file_path: value(method.data.smb_file_path, ''),
+          method_data_smb_file_path_type:
+            value(method.data.smb_file_path_type, ''),
           method_data_smb_report_format:
             value(method.data.smb_report_format, ''),
           method_data_smb_share_path: value(method.data.smb_share_path, ''),
@@ -679,6 +681,7 @@ class AlertComponent extends React.Component {
       method_data_send_report_format,
       method_data_smb_credential,
       method_data_smb_file_path,
+      method_data_smb_file_path_type,
       method_data_smb_report_format,
       method_data_smb_share_path,
       method_data_snmp_agent,
@@ -789,6 +792,7 @@ class AlertComponent extends React.Component {
                 method_data_send_report_format={method_data_send_report_format}
                 method_data_smb_credential={method_data_smb_credential}
                 method_data_smb_file_path={method_data_smb_file_path}
+                method_data_smb_file_path_type={method_data_smb_file_path_type}
                 method_data_smb_report_format={method_data_smb_report_format}
                 method_data_smb_share_path={method_data_smb_share_path}
                 method_data_snmp_agent={method_data_snmp_agent}
