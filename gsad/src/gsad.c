@@ -701,8 +701,8 @@ init_validator ()
   gvm_validator_add (validator, "subject_type",  "^(group|role|user)$");
   gvm_validator_add (validator, "summary",    "^.{0,400}$");
   gvm_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
-  gvm_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
+  gvm_validator_add (validator, "tag_name",  "^[\\:\\-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "tag_value", "^[\\-_@[:alnum:], \\.\\\\]{0,200}$");
   gvm_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "term",       "^.{0,1000}");
