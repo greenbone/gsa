@@ -218,6 +218,7 @@ const DEFAULTS = {
   method_data_send_host: '',
   method_data_send_port: '',
   method_data_smb_file_path: 'report.xml',
+  method_data_smb_file_path_type: 'directory',
   method_data_smb_share_path: '\\\\localhost\\gvm-reports',
   method_data_snmp_agent: 'localhost',
   method_data_snmp_community: 'public',
@@ -686,6 +687,7 @@ class AlertDialog extends React.Component {
                   reportFormats={report_formats}
                   smbCredential={values.method_data_smb_credential}
                   smbFilePath={values.method_data_smb_file_path}
+                  smbFilePathType={values.method_data_smb_file_path_type}
                   smbSharePath={values.method_data_smb_share_path}
                   smbReportFormat={values.method_data_smb_report_format}
                   onNewCredentialClick={onNewSmbCredentialClick}
@@ -829,6 +831,7 @@ AlertDialog.propTypes = {
   method_data_send_report_format: PropTypes.id,
   method_data_smb_credential: PropTypes.id,
   method_data_smb_file_path: PropTypes.string,
+  method_data_smb_file_path_type: PropTypes.string,
   method_data_smb_report_format: PropTypes.id,
   method_data_smb_share_path: PropTypes.string,
   method_data_snmp_agent: PropTypes.string,
