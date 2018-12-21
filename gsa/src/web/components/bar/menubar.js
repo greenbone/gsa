@@ -104,7 +104,7 @@ const MenuBar = ({
     'roles',
     'groups',
   ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false) ||
-    (capabilities.mayOp('descibe_auth') && capabilities.mayOp('modify_auth'));
+    (capabilities.mayOp('describe_auth') && capabilities.mayOp('modify_auth'));
   return (
     <React.Fragment>
       <MenuBarPlaceholder/>

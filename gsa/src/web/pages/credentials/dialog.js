@@ -45,6 +45,7 @@ import {
   SNMP_PRIVACY_ALGORITHM_DES,
   PGP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
+  VFIRE_CREDENTIAL_TYPES,
   ALL_CREDENTIAL_TYPES,
   getCredentialTypeName,
 } from 'gmp/models/credential';
@@ -311,7 +312,8 @@ class CredentialsDialog extends React.Component {
               }
 
               {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
-                state.credential_type === SNMP_CREDENTIAL_TYPE) &&
+                state.credential_type === SNMP_CREDENTIAL_TYPE ||
+                state.credential_type === VFIRE_CREDENTIAL_TYPES) &&
                 <FormGroup
                   title={_('Password')}
                 >

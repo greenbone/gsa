@@ -64,6 +64,7 @@ describe('Alert Model tests', () => {
     expect(alert.method).toEqual({
       data: {
         bar: {value: '42'},
+        report_formats: [],
       },
       type: 'foo',
     });
@@ -94,6 +95,7 @@ describe('Alert Model tests', () => {
           },
           value: '42',
         },
+        report_formats: [],
       },
       type: 'foo',
     });
@@ -121,6 +123,26 @@ describe('Alert Model tests', () => {
     const alert = new Alert({});
 
     expect(alert.tasks).toEqual([]);
+  });
+
+  test('should parse report format ids', () => {
+    const elem = {
+      method: {
+        data: {
+          __text: '123, 456, 789',
+          name: 'report_formats',
+        },
+      },
+    };
+    const alert = new Alert(elem);
+
+    expect(alert.method.data.report_formats).toEqual(['123', '456', '789']);
+  });
+
+  test('should return empty array if no report format ids are given', () => {
+    const alert = new Alert({});
+
+    expect(alert.method.data.report_formats).toEqual([]);
   });
 
   test('isActive() should return correct true/false', () => {
