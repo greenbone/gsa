@@ -10841,6 +10841,16 @@ was created or assigned erroneously.
         <div class="form-group form-selection-item-method form-selection-item-method--smb">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('File path')"/></label>
           <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <input type="radio" name="method_data:smb_file_path_type" value="directory"/>
+                <xsl:value-of select="gsa:i18n ('Directory')"/>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="method_data:smb_file_path_type" value="full" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Full path')"/>
+              </label>
+            </div>
             <div class="form-item">
               <input type="text" name="method_data:smb_file_path"
                 class="form-control"
@@ -12292,6 +12302,30 @@ was created or assigned erroneously.
         <div class="form-group form-selection-item-method form-selection-item-method--smb">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('File Path')"/></label>
           <div class="col-10">
+            <div class="form-item radio">
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="$method/data[name='smb_file_path_type']/text() = 'directory'">
+                    <input type="radio" name="method_data:smb_file_path_type" value="directory" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:smb_file_path_type" value="directory"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Directory')"/>
+              </label>
+              <label class="radio-inline">
+                <xsl:choose>
+                  <xsl:when test="not ($method/data[name='smb_file_path_type']/text() != 'full')">
+                    <input type="radio" name="method_data:smb_file_path_type" value="full" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="method_data:smb_file_path_type" value="full"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Full path')"/>
+              </label>
+            </div>
             <div class="form-item">
               <input name="method_data:smb_file_path"
                 class="form-control"
