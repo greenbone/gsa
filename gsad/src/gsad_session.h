@@ -1,12 +1,6 @@
-/* Greenbone Security Assistant
-
- * Description: GSAD user session handling
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+/**
+ * @file gsad_session.h
+ * @brief GSAD user session handling
  */
 
 #ifndef _GSAD_SESSION_H

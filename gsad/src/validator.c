@@ -1,13 +1,6 @@
-/* Greenbone Security Assistant (set for gvm-libs/base)
- * $Id$
- * Description: String validator.
+/* Copyright (C) 2009-2018 Greenbone Networks GmbH
  *
- * Authors:
- * Matthew Mundell <matthew.mundell@greenbone.net>
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,16 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <assert.h>
-
-#include "validator.h"
-
-#undef G_LOG_DOMAIN
-/**
- * @brief GLib log domain.
- */
-#define G_LOG_DOMAIN "gsad vali"
-
 /**
  * @file validator.c
  * @brief Validation mechanism.
@@ -45,6 +28,16 @@
  * expression to a validator as a rule.  \ref gvm_validate checks that a
  * given string matches a given rule.
  */
+
+#include <assert.h>
+
+#include "validator.h"
+
+#undef G_LOG_DOMAIN
+/**
+ * @brief GLib log domain.
+ */
+#define G_LOG_DOMAIN "gsad vali"
 
 /**
  * @brief Create a new validator rule.
