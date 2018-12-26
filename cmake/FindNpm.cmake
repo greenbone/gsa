@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# CMake find module for yarn package manager
+# CMake find module for node package manager
 
 find_package (Node REQUIRED)
 
