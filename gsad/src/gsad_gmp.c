@@ -1,14 +1,6 @@
-/* Greenbone Security Assistant
- * $Id$
- * Description: GMP communication module.
+/* Copyright (C) 2009-2018 Greenbone Networks GmbH
  *
- * Authors:
- * Matthew Mundell <matthew.mundell@greenbone.net>
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
- * Michael Wiegand <michael.wiegand@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2009, 2014 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7262,6 +7254,7 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
             || (strcmp (method, "SMB") == 0
                 && (strcmp (name, "smb_credential") == 0
                     || strcmp (name, "smb_file_path") == 0
+                    || strcmp (name, "smb_file_path_type") == 0
                     || strcmp (name, "smb_report_format") == 0
                     || strcmp (name, "smb_share_path") == 0))
             || (strcmp (method, "SNMP") == 0

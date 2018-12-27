@@ -1,15 +1,6 @@
-/* Greenbone Security Assistant
- * $Id$
- * Description: Main module of Greenbone Security Assistant daemon.
+/* Copyright (C) 2009-2018 Greenbone Networks GmbH
  *
- * Authors:
- * Chandrashekhar B <bchandra@secpod.com>
- * Matthew Mundell <matthew.mundell@greenbone.net>
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
- * Michael Wiegand <michael.wiegand@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2009-2016 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,8 +692,8 @@ init_validator ()
   gvm_validator_add (validator, "subject_type",  "^(group|role|user)$");
   gvm_validator_add (validator, "summary",    "^.{0,400}$");
   gvm_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
-  gvm_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
+  gvm_validator_add (validator, "tag_name",  "^[\\:\\-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "tag_value", "^[\\-_@[:alnum:], \\.\\\\]{0,200}$");
   gvm_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "term",       "^.{0,1000}");

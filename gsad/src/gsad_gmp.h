@@ -1,14 +1,6 @@
-/* Greenbone Security Assistant
- * $Id$
- * Description: Headers for GSA's GMP communication module.
+/* Copyright (C) 2009-2018 Greenbone Networks GmbH
  *
- * Authors:
- * Matthew Mundell <matthew.mundell@greenbone.net>
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
- * Michael Wiegand <michael.wiegand@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +26,7 @@
 #define _GSAD_GMP_H
 
 #include <glib.h>                 /* for gboolean */
+
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
 
 #include "gsad_content_type.h"    /* for content_type */
