@@ -1,12 +1,6 @@
-/* Greenbone Security Assistant
- * $Id$
- * Description: Uility functions in GSAD
+/* Copyright (C) 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,15 +22,14 @@
  * @brief Utility functions in GSAD
  */
 
+#include <string.h>  // For strcmp
+#include "utils.h"
+
 /**
  * @brief Check if two strings are equal
  *
  * @return TRUE if string are equal
  */
-
-#include <string.h>  // For strcmp
-#include "utils.h"
-
 gboolean
 str_equal (const gchar *str1, const gchar *str2)
 {
