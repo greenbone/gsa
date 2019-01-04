@@ -1786,13 +1786,10 @@ edit_resource (gvm_connection_t *connection, const char *type,
     }
 
   if (gvm_connection_sendf (connection,
-                            /* TODO: Remove redundant COMMANDS. */
-                            "<commands>"
                             "<get_%ss"
                             " %s"
                             " %s_id=\"%s\""
-                            " details=\"1\"/>"
-                            "</commands>",
+                            " details=\"1\"/>",
                             type,
                             extra_get_attribs ? extra_get_attribs : "",
                             type,
