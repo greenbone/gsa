@@ -69,7 +69,7 @@ class FeedStatus extends HttpCommand {
     return this.httpGet().then(response => {
       const {data: envelope} = response;
       const {get_feeds_response: feedsresponse} =
-        envelope.get_feeds.commands_response;
+        envelope.get_feeds;
 
       const feeds = map(feedsresponse.feed, feed => new Feed(feed));
 

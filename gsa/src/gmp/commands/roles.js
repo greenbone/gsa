@@ -85,9 +85,9 @@ class RoleCommand extends EntityCommand {
       const {capabilities, edit_role} = response.data;
 
       edit_role.role = new Role(
-      edit_role.commands_response.get_roles_response.role);
+      edit_role.get_roles_response.role);
 
-      delete edit_role.commands_response;
+      delete edit_role.get_roles_response;
 
       const perm_names = new Set();
 

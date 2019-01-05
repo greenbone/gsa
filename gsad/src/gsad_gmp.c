@@ -1786,13 +1786,10 @@ edit_resource (gvm_connection_t *connection, const char *type,
     }
 
   if (gvm_connection_sendf (connection,
-                            /* TODO: Remove redundant COMMANDS. */
-                            "<commands>"
                             "<get_%ss"
                             " %s"
                             " %s_id=\"%s\""
-                            " details=\"1\"/>"
-                            "</commands>",
+                            " details=\"1\"/>",
                             type,
                             extra_get_attribs ? extra_get_attribs : "",
                             type,
@@ -20327,10 +20324,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t * credentials,
   struct tm *tm;
   gchar current_timestamp[30];
 
-  if (gvm_connection_sendf (connection,
-                            "<commands>"
-                            "<get_feeds/>"
-                            "</commands>")
+  if (gvm_connection_sendf (connection, "<get_feeds/>")
       == -1)
     {
       cmd_response_data_set_status_code (response_data,
