@@ -7295,7 +7295,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
                 && strcmp (name, "start_task_task") == 0)
             || strcmp (name, "details_url") == 0
             || strcmp (name, "delta_type") == 0
-            || strcmp (name, "delta_report_id") == 0)
+            || strcmp (name, "delta_report_id") == 0
+            || strcmp (name, "composer_include_notes") == 0
+            || strcmp (name, "composer_include_overrides") == 0)
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
