@@ -1206,7 +1206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           title="{gsa:i18n ('Help')}: {gsa:i18n ('Powerfilter')}">
           <img src="/img/help.svg" />
         </a>
-        <a href="#" class="icon icon-sm edit-filter-action-icon" data-id="filterbox">
+        <a href="#" class="icon icon-sm edit-filter-action-icon" data-id="filterbox" title="{gsa:i18n ('Edit filter')}">
           <img src="/img/edit.svg"/>
         </a>
         <xsl:variable name="extras">
