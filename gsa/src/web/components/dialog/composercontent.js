@@ -53,6 +53,8 @@ const FilterField = styled.div`
 `;
 
 const ComposerContent = ({
+  filterFieldTitle = _('To change the filter, please filter your results on ' +
+    'the report page.'),
   filterString,
   includeNotes,
   includeOverrides,
@@ -61,8 +63,7 @@ const ComposerContent = ({
   <Layout flex="column">
     <FormGroup title={_('Filter')} titleSize="3">
       <FilterField
-        title={_('To change the filter, please filter your results on the ' +
-          'report page.')}
+        title={filterFieldTitle}
       >
         {filterString}
       </FilterField>
@@ -93,6 +94,7 @@ const ComposerContent = ({
 
 
 ComposerContent.propTypes = {
+  filterFieldTitle: PropTypes.string,
   filterString: PropTypes.string.isRequired,
   includeNotes: PropTypes.number.isRequired,
   includeOverrides: PropTypes.number.isRequired,
