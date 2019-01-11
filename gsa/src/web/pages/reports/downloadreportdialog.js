@@ -46,7 +46,6 @@ const StyledDiv = styled.div`
 `;
 
 const DownloadReportDialog = ({
-  applyOverrides = COMPOSER_CONTENT_DEFAULTS.applyOverrides,
   defaultReportFormatId,
   filter = {},
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
@@ -63,7 +62,6 @@ const DownloadReportDialog = ({
   reportFormatId = selectSaveId(reportFormats, defaultReportFormatId);
 
   const unControlledValues = {
-    applyOverrides,
     includeNotes,
     includeOverrides,
     reportFormatId,
@@ -84,7 +82,6 @@ const DownloadReportDialog = ({
       }) => (
         <Layout flex="column">
           <ComposerContent
-            applyOverrides={values.applyOverrides}
             filterString={filterString}
             includeNotes={values.includeNotes}
             includeOverrides={values.includeOverrides}
@@ -118,7 +115,6 @@ const DownloadReportDialog = ({
 };
 
 DownloadReportDialog.propTypes = {
-  applyOverrides: PropTypes.numberOrNumberString,
   defaultReportFormatId: PropTypes.id,
   filter: PropTypes.filter.isRequired,
   includeNotes: PropTypes.number,
