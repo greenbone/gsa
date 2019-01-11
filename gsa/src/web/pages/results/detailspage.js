@@ -30,6 +30,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ReportIcon from 'web/components/icon/reporticon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 
 import Divider from 'web/components/layout/divider';
@@ -132,8 +133,7 @@ let ToolBarIcons = ({
           type="report"
           id={entity.report.id}
         >
-          <Icon
-            img="report.svg"
+          <ReportIcon
             title={_('Corresponding Report')}
           />
         </DetailsLink>
