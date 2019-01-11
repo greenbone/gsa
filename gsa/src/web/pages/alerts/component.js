@@ -92,7 +92,7 @@ const select_verinice_report_id = (report_formats, report_id) => {
   return first(report_formats).id;
 };
 
-const value = (data = {}, def = undefined) => {
+const getValue = (data = {}, def = undefined) => {
   const {value: val = def} = data;
   return val;
 };
@@ -264,11 +264,11 @@ class AlertComponent extends React.Component {
         const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         let condition_data_filters;
-        const condition_data_filter_id = value(condition.data.filter_id);
+        const condition_data_filter_id = getValue(condition.data.filter_id);
 
         let method_data_message;
         let method_data_message_attach;
-        const method_data_notice = value(method.data.notice,
+        const method_data_notice = getValue(method.data.notice,
           DEFAULT_NOTICE);
 
         let method_data_subject;
@@ -277,31 +277,31 @@ class AlertComponent extends React.Component {
 
         if (event_type === 'Task run status changed') {
           condition_data_filters = result_filters;
-          method_data_subject = value(method.data.subject, TASK_SUBJECT);
+          method_data_subject = getValue(method.data.subject, TASK_SUBJECT);
 
           if (method_data_notice === NOTICE_ATTACH) {
-            method_data_message_attach = value(method.data.message,
+            method_data_message_attach = getValue(method.data.message,
               ATTACH_MESSAGE_DEFAULT);
             method_data_message = INCLUDE_MESSAGE_DEFAULT;
           }
           else {
-            method_data_message = value(method.data.message,
+            method_data_message = getValue(method.data.message,
               INCLUDE_MESSAGE_DEFAULT);
             method_data_message_attach = ATTACH_MESSAGE_DEFAULT;
           }
         }
         else {
           condition_data_filters = secinfo_filters;
-          method_data_subject = value(method.data.subject,
+          method_data_subject = getValue(method.data.subject,
             SECINFO_SUBJECT);
 
           if (method_data_notice === NOTICE_ATTACH) {
-            method_data_message_attach = value(method.data.message,
+            method_data_message_attach = getValue(method.data.message,
               ATTACH_MESSAGE_SECINFO);
             method_data_message = INCLUDE_MESSAGE_SECINFO;
           }
           else {
-            method_data_message = value(method.data.message,
+            method_data_message = getValue(method.data.message,
               INCLUDE_MESSAGE_SECINFO);
             method_data_message_attach = ATTACH_MESSAGE_SECINFO;
           }
@@ -323,14 +323,14 @@ class AlertComponent extends React.Component {
             method.data.verinice_server_credential.credential.id : undefined;
 
         const tp_sms_credential_id = isDefined(method.data.tp_sms_credential) ?
-          value(method.data.tp_sms_credential.credential) : undefined;
+          getValue(method.data.tp_sms_credential.credential) : undefined;
 
         const recipient_credential_id = isDefined(
           method.data.recipient_credential) ?
-          value(method.data.recipient_credential) : undefined;
+          getValue(method.data.recipient_credential) : undefined;
 
         const vfire_credential_id = isDefined(method.data.vfire_credential) ?
-          value(method.data.vfire_credential) : undefined;
+          getValue(method.data.vfire_credential) : undefined;
 
         this.setState({
           alertDialogVisible: true,
@@ -348,110 +348,110 @@ class AlertComponent extends React.Component {
           report_format_ids: method.data.report_formats,
 
           condition: condition.type,
-          condition_data_count: parseInt(value(condition.data.count, 1)),
-          condition_data_direction: value(condition.data.direction,
+          condition_data_count: parseInt(getValue(condition.data.count, 1)),
+          condition_data_direction: getValue(condition.data.direction,
             DEFAULT_DIRECTION),
           condition_data_filters,
           condition_data_filter_id,
           condition_data_at_least_filter_id: condition_data_filter_id,
           condition_data_at_least_count: parseInt(
-            value(condition.data.count, 1)),
-          condition_data_severity: parseSeverity(value(condition.data.severity,
+            getValue(condition.data.count, 1)),
+          condition_data_severity: parseSeverity(getValue(condition.data.severity,
             DEFAULT_SEVERITY)),
 
           event: event_type,
-          event_data_status: value(event.data.status, DEFAULT_EVENT_STATUS),
+          event_data_status: getValue(event.data.status, DEFAULT_EVENT_STATUS),
           event_data_feed_event: feed_event,
-          event_data_secinfo_type: value(event.data.secinfo_type,
+          event_data_secinfo_type: getValue(event.data.secinfo_type,
             DEFAULT_SECINFO_TYPE),
 
           method: alert.method.type,
 
-          method_data_defense_center_ip: value(method.data.defense_center_ip,
+          method_data_defense_center_ip: getValue(method.data.defense_center_ip,
             ''),
-          method_data_defense_center_port: parseInt(value(
+          method_data_defense_center_port: parseInt(getValue(
             method.data.defense_center_port, DEFAULT_DEFENSE_CENTER_PORT)),
 
-          method_data_details_url: value(method.data.details_url,
+          method_data_details_url: getValue(method.data.details_url,
             DEFAULT_DETAILS_URL),
           method_data_recipient_credential: selectSaveId(emailCredentials,
             recipient_credential_id, UNSET_VALUE),
-          method_data_to_address: value(alert.method.data.to_address, ''),
-          method_data_from_address: value(alert.method.data.from_address, ''),
+          method_data_to_address: getValue(alert.method.data.to_address, ''),
+          method_data_from_address: getValue(alert.method.data.from_address, ''),
           method_data_subject,
           method_data_message,
           method_data_message_attach,
           method_data_notice,
           method_data_notice_report_format: selectSaveId(report_formats,
-            value(method.data.notice_report_format,
+            getValue(method.data.notice_report_format,
               DEFAULT_NOTICE_REPORT_FORMAT)),
           method_data_notice_attach_format: selectSaveId(report_formats,
-            value(method.data.attach_report_format,
+            getValue(method.data.attach_report_format,
               DEFAULT_NOTICE_ATTACH_FORMAT)),
 
           method_data_scp_credential: selectSaveId(credentials,
             scp_credential_id),
           method_data_scp_report_format: selectSaveId(report_formats,
-            value(method.data.scp_report_format)),
-          method_data_scp_path: value(method.data.scp_path, DEFAULT_SCP_PATH),
-          method_data_scp_host: value(method.data.scp_host, ''),
-          method_data_scp_known_hosts: value(method.data.scp_known_hosts, ''),
+            getValue(method.data.scp_report_format)),
+          method_data_scp_path: getValue(method.data.scp_path, DEFAULT_SCP_PATH),
+          method_data_scp_host: getValue(method.data.scp_host, ''),
+          method_data_scp_known_hosts: getValue(method.data.scp_known_hosts, ''),
 
-          method_data_send_port: value(method.data.send_port, ''),
-          method_data_send_host: value(method.data.send_host, ''),
+          method_data_send_port: getValue(method.data.send_port, ''),
+          method_data_send_host: getValue(method.data.send_host, ''),
           method_data_send_report_format: selectSaveId(report_formats,
-            value(method.data.send_report_format)),
+            getValue(method.data.send_report_format)),
 
-          method_data_smb_credential: value(method.data.smb_credential, ''),
-          method_data_smb_file_path: value(method.data.smb_file_path, ''),
+          method_data_smb_credential: getValue(method.data.smb_credential, ''),
+          method_data_smb_file_path: getValue(method.data.smb_file_path, ''),
           method_data_smb_file_path_type:
-            value(method.data.smb_file_path_type, ''),
+            getValue(method.data.smb_file_path_type, ''),
           method_data_smb_report_format:
-            value(method.data.smb_report_format, ''),
-          method_data_smb_share_path: value(method.data.smb_share_path, ''),
+            getValue(method.data.smb_report_format, ''),
+          method_data_smb_share_path: getValue(method.data.smb_share_path, ''),
 
-          method_data_snmp_agent: value(method.data.snmp_agent, ''),
-          method_data_snmp_community: value(method.data.snmp_community,
+          method_data_snmp_agent: getValue(method.data.snmp_agent, ''),
+          method_data_snmp_community: getValue(method.data.snmp_community,
             ''),
-          method_data_snmp_message: value(method.data.snmp_message, ''),
+          method_data_snmp_message: getValue(method.data.snmp_message, ''),
 
-          method_data_start_task_task: selectSaveId(tasks, value(
+          method_data_start_task_task: selectSaveId(tasks, getValue(
             method.data.start_task_task)),
 
           method_data_tp_sms_credential: selectSaveId(credentials,
             tp_sms_credential_id),
-          method_data_tp_sms_hostname: value(method.data.tp_sms_hostname, ''),
+          method_data_tp_sms_hostname: getValue(method.data.tp_sms_hostname, ''),
           method_data_tp_sms_tls_workaround: parseYesNo(
-            value(method.data.tp_sms_hostname, NO_VALUE)),
+            getValue(method.data.tp_sms_hostname, NO_VALUE)),
 
           method_data_verinice_server_report_format: select_verinice_report_id(
-            report_formats, value(method.data.verinice_server_report_format)),
-          method_data_verinice_server_url: value(
+            report_formats, getValue(method.data.verinice_server_report_format)),
+          method_data_verinice_server_url: getValue(
             method.data.verinice_server_url),
           method_data_verinice_server_credential: selectSaveId(credentials,
             verinice_credential_id),
 
           method_data_vfire_credential: selectSaveId(vFireCredentials,
             vfire_credential_id),
-          method_data_vfire_base_url: value(method.data.vfire_base_url),
+          method_data_vfire_base_url: getValue(method.data.vfire_base_url),
           method_data_vfire_call_description:
-            value(method.data.vfire_call_description),
+            getValue(method.data.vfire_call_description),
           method_data_vfire_call_impact_name:
-            value(method.data.vfire_call_impact_name),
+            getValue(method.data.vfire_call_impact_name),
           method_data_vfire_call_partition_name:
-            value(method.data.vfire_call_partition_name),
+            getValue(method.data.vfire_call_partition_name),
           method_data_vfire_call_template_name:
-            value(method.data.vfire_call_template_name),
+            getValue(method.data.vfire_call_template_name),
           method_data_vfire_call_type_name:
-            value(method.data.vfire_call_type_name),
+            getValue(method.data.vfire_call_type_name),
           method_data_vfire_call_urgency_name:
-            value(method.data.vfire_call_urgency_name),
-          method_data_vfire_client_id: value(method.data.vfire_client_id),
-          method_data_vfire_session_type: value(method.data.vfire_session_type),
+            getValue(method.data.vfire_call_urgency_name),
+          method_data_vfire_client_id: getValue(method.data.vfire_client_id),
+          method_data_vfire_session_type: getValue(method.data.vfire_session_type),
 
-          method_data_URL: value(method.data.URL, ''),
-          method_data_delta_type: value(alert.method.data.delta_type, ''),
-          method_data_delta_report_id: value(alert.method.data.delta_report_id,
+          method_data_URL: getValue(method.data.URL, ''),
+          method_data_delta_type: getValue(alert.method.data.delta_type, ''),
+          method_data_delta_report_id: getValue(alert.method.data.delta_report_id,
             ''),
           tasks,
           title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
