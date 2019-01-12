@@ -96,8 +96,8 @@ const getValue = (data = {}, def = undefined) => {
   return val;
 };
 
-const filter_results_filter = filter => filter.filter_type = 'Results';
-const filter_secinfo_filter = filter => filter.filter_type = 'SecInfo';
+const filter_results_filter = filter => filter.filter_type === 'result';
+const filter_secinfo_filter = filter => filter.filter_type === 'info';
 
 class AlertComponent extends React.Component {
 

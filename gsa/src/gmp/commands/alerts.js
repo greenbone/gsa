@@ -26,6 +26,7 @@ import Model from '../model';
 
 import Alert from '../models/alert';
 import Credential from '../models/credential';
+import Filter from '../models/filter';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -189,7 +190,7 @@ class AlertCommand extends EntityCommand {
       new_alert.tasks = map(
         new_alert.get_tasks_response.task, task => new Model(task)); // don't use Task here to avoid cyclic dependencies
       new_alert.filters = map(
-        new_alert.get_filters_response.filter, filter => new Model(filter));
+        new_alert.get_filters_response.filter, filter => new Filter(filter));
       return response.setData(new_alert);
     });
   }
@@ -219,7 +220,7 @@ class AlertCommand extends EntityCommand {
       delete edit_alert.get_tasks_response;
 
       edit_alert.filters = map(
-        edit_alert.get_filters_response.filter, filter => new Model(filter));
+        edit_alert.get_filters_response.filter, filter => new Filter(filter));
       delete edit_alert.get_filters_response;
 
       delete edit_alert.next;
