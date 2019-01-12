@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +39,8 @@ import {
 
 import EntityComponent from 'web/entity/component';
 
+import {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent';
+
 import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
@@ -73,6 +70,8 @@ import AlertDialog, {
   SECINFO_SUBJECT,
   TASK_SUBJECT,
 } from './dialog';
+
+import ContentComposerDialog from './contentcomposerdialog';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -113,9 +112,12 @@ class AlertComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleEmailCredentialChange = this.handleEmailCredentialChange
       .bind(this);
+    this.handleFilterIdChange = this.handleFilterIdChange.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
+    this.handleSaveComposerContent = this.handleSaveComposerContent.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
     this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange
       .bind(this);
     this.handleTippingPointCredentialChange =
@@ -126,6 +128,11 @@ class AlertComponent extends React.Component {
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
+    this.handleOpenContentComposerDialog =
+      this.handleOpenContentComposerDialog.bind(this);
+    this.openContentComposerDialog = this.openContentComposerDialog.bind(this);
+    this.closeContentComposerDialog =
+      this.closeContentComposerDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
@@ -211,6 +218,57 @@ class AlertComponent extends React.Component {
   handleCloseCredentialDialog() {
     this.closeCredentialDialog();
     this.handleInteraction();
+  }
+
+  openContentComposerDialog() {
+    this.setState({contentComposerDialogVisible: true});
+  }
+
+  handleOpenContentComposerDialog() {
+    const {gmp} = this.props;
+    const {filterId = NO_VALUE} = this.state;
+    gmp.filter.get({id: filterId}).then(response => {
+      this.setState({
+        filterString: isDefined(response.data) ?
+          response.data.toFilterCriteriaString() :
+          undefined,
+      });
+      this.openContentComposerDialog();
+      this.handleInteraction();
+    });
+  }
+
+  closeContentComposerDialog() {
+    const {
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
+      filter_id,
+      filter_string,
+    } = this.state;
+    this.setState({
+      includeNotes: method_data_composer_include_notes,
+      includeOverrides: method_data_composer_include_overrides,
+      filterId: filter_id,
+      filterString: filter_string,
+      contentComposerDialogVisible: false,
+    });
+  }
+
+  handleSaveComposerContent() {
+    const {
+      includeNotes,
+      includeOverrides,
+      filterId,
+      filterString,
+    } = this.state;
+    this.setState({
+      filterId,
+      filter_id: filterId,
+      filter_string: filterString,
+      method_data_composer_include_notes: includeNotes,
+      method_data_composer_include_overrides: includeOverrides,
+      contentComposerDialogVisible: false,
+    });
   }
 
   openScpCredentialDialog(types) {
@@ -341,6 +399,9 @@ class AlertComponent extends React.Component {
           comment: alert.comment,
           filters,
           filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+          filterId: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+          includeNotes: getValue(method.data.composer_include_notes),
+          includeOverrides: getValue(method.data.composer_include_overrides),
           credentials,
           result_filters,
           secinfo_filters,
@@ -356,8 +417,8 @@ class AlertComponent extends React.Component {
           condition_data_at_least_filter_id: condition_data_filter_id,
           condition_data_at_least_count: parseInt(
             getValue(condition.data.count, 1)),
-          condition_data_severity: parseSeverity(getValue(condition.data.severity,
-            DEFAULT_SEVERITY)),
+          condition_data_severity:
+            parseSeverity(getValue(condition.data.severity, DEFAULT_SEVERITY)),
 
           event: event_type,
           event_data_status: getValue(event.data.status, DEFAULT_EVENT_STATUS),
@@ -366,6 +427,11 @@ class AlertComponent extends React.Component {
             DEFAULT_SECINFO_TYPE),
 
           method: alert.method.type,
+
+          method_data_composer_include_notes:
+            getValue(method.data.composer_include_notes),
+          method_data_composer_include_overrides:
+            getValue(method.data.composer_include_overrides),
 
           method_data_defense_center_ip: getValue(method.data.defense_center_ip,
             ''),
@@ -377,7 +443,8 @@ class AlertComponent extends React.Component {
           method_data_recipient_credential: selectSaveId(emailCredentials,
             recipient_credential_id, UNSET_VALUE),
           method_data_to_address: getValue(alert.method.data.to_address, ''),
-          method_data_from_address: getValue(alert.method.data.from_address, ''),
+          method_data_from_address:
+            getValue(alert.method.data.from_address, ''),
           method_data_subject,
           method_data_message,
           method_data_message_attach,
@@ -393,9 +460,11 @@ class AlertComponent extends React.Component {
             scp_credential_id),
           method_data_scp_report_format: selectSaveId(report_formats,
             getValue(method.data.scp_report_format)),
-          method_data_scp_path: getValue(method.data.scp_path, DEFAULT_SCP_PATH),
+          method_data_scp_path:
+            getValue(method.data.scp_path, DEFAULT_SCP_PATH),
           method_data_scp_host: getValue(method.data.scp_host, ''),
-          method_data_scp_known_hosts: getValue(method.data.scp_known_hosts, ''),
+          method_data_scp_known_hosts:
+            getValue(method.data.scp_known_hosts, ''),
 
           method_data_send_port: getValue(method.data.send_port, ''),
           method_data_send_host: getValue(method.data.send_host, ''),
@@ -420,12 +489,15 @@ class AlertComponent extends React.Component {
 
           method_data_tp_sms_credential: selectSaveId(credentials,
             tp_sms_credential_id),
-          method_data_tp_sms_hostname: getValue(method.data.tp_sms_hostname, ''),
+          method_data_tp_sms_hostname:
+            getValue(method.data.tp_sms_hostname, ''),
           method_data_tp_sms_tls_workaround: parseYesNo(
             getValue(method.data.tp_sms_hostname, NO_VALUE)),
 
           method_data_verinice_server_report_format: select_verinice_report_id(
-            report_formats, getValue(method.data.verinice_server_report_format)),
+            report_formats,
+            getValue(method.data.verinice_server_report_format)
+          ),
           method_data_verinice_server_url: getValue(
             method.data.verinice_server_url),
           method_data_verinice_server_credential: selectSaveId(credentials,
@@ -447,11 +519,13 @@ class AlertComponent extends React.Component {
           method_data_vfire_call_urgency_name:
             getValue(method.data.vfire_call_urgency_name),
           method_data_vfire_client_id: getValue(method.data.vfire_client_id),
-          method_data_vfire_session_type: getValue(method.data.vfire_session_type),
+          method_data_vfire_session_type:
+            getValue(method.data.vfire_session_type),
 
           method_data_URL: getValue(method.data.URL, ''),
           method_data_delta_type: getValue(alert.method.data.delta_type, ''),
-          method_data_delta_report_id: getValue(alert.method.data.delta_report_id,
+          method_data_delta_report_id:
+            getValue(alert.method.data.delta_report_id,
             ''),
           tasks,
           title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
@@ -497,6 +571,8 @@ class AlertComponent extends React.Component {
           filters,
           id: undefined,
           method: undefined,
+          method_data_composer_include_notes: undefined,
+          method_data_composer_include_overrides: undefined,
           method_data_defense_center_ip: undefined,
           method_data_defense_center_port: undefined,
           method_data_details_url: undefined,
@@ -563,6 +639,12 @@ class AlertComponent extends React.Component {
   }
 
   handleCloseAlertDialog() {
+    this.setState({
+      includeNotes: undefined,
+      includeOverrides: undefined,
+      filterId: undefined,
+      filterString: undefined,
+    });
     this.closeAlertDialog();
     this.handleInteraction();
   }
@@ -644,6 +726,25 @@ class AlertComponent extends React.Component {
     }
   }
 
+  handleValueChange(value, name) {
+    this.handleInteraction();
+    this.setState({[name]: value});
+  }
+
+  handleFilterIdChange(value) {
+    const {gmp} = this.props;
+    gmp.filter.get({id: value}).then(response => {
+      const filterString = isDefined(response.data) ?
+        response.data.toFilterCriteriaString() :
+        undefined;
+      this.setState({
+        filterId: value,
+        filterString,
+      });
+    });
+    this.handleInteraction();
+  }
+
   render() {
     const {
       children,
@@ -663,6 +764,7 @@ class AlertComponent extends React.Component {
 
     const {
       alertDialogVisible,
+      contentComposerDialogVisible,
       credentialDialogVisible,
       credentialDialogTitle,
       credentialTypes,
@@ -674,6 +776,10 @@ class AlertComponent extends React.Component {
       comment,
       filters,
       filter_id,
+      filterId,
+      filterString,
+      includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+      includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
       credentials,
       result_filters,
       secinfo_filters,
@@ -690,6 +796,8 @@ class AlertComponent extends React.Component {
       event_data_feed_event,
       event_data_secinfo_type,
       method,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
       method_data_defense_center_ip,
       method_data_defense_center_port,
       method_data_details_url,
@@ -795,6 +903,10 @@ class AlertComponent extends React.Component {
                 event_data_feed_event={event_data_feed_event}
                 event_data_secinfo_type={event_data_secinfo_type}
                 method={method}
+                method_data_composer_include_notes=
+                  {method_data_composer_include_notes}
+                method_data_composer_include_overrides=
+                  {method_data_composer_include_overrides}
                 method_data_defense_center_ip={method_data_defense_center_ip}
                 method_data_defense_center_port={
                   method_data_defense_center_port}
@@ -862,6 +974,8 @@ class AlertComponent extends React.Component {
                 report_format_ids={report_format_ids}
                 tasks={tasks}
                 onClose={this.handleCloseAlertDialog}
+                onOpenContentComposerDialogClick=
+                  {this.handleOpenContentComposerDialog}
                 onNewEmailCredentialClick={this.openEmailCredentialDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
@@ -889,6 +1003,20 @@ class AlertComponent extends React.Component {
                 types={credentialTypes}
                 onClose={this.handleCloseCredentialDialog}
                 onSave={this.handleCreateCredential}
+              />
+            }
+            {contentComposerDialogVisible &&
+              <ContentComposerDialog
+                includeNotes={parseInt(includeNotes)}
+                includeOverrides={parseInt(includeOverrides)}
+                filterId={filterId}
+                filters={result_filters}
+                filterString={filterString}
+                title={_('Compose Content for Scan Report')}
+                onChange={this.handleValueChange}
+                onClose={this.closeContentComposerDialog}
+                onFilterIdChange={this.handleFilterIdChange}
+                onSave={this.handleSaveComposerContent}
               />
             }
           </Layout>
