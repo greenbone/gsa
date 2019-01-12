@@ -423,6 +423,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/alerts/alembavfiremethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/component.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/condition.js
+     ${GSA_SRC_DIR}/src/web/pages/alerts/contentcomposerdialog.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/details.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/dialog.js
