@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016 - 2018 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +19,8 @@
 import 'core-js/fn/object/entries';
 
 import React from 'react';
+
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
@@ -53,7 +50,6 @@ import {
 } from 'gmp/models/alert';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -63,6 +59,8 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
 import YesNoRadio from 'web/components/form/yesnoradio';
+
+import ReportIcon from 'web/components/icon/reporticon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -239,6 +237,10 @@ const DEFAULTS = {
   secinfo_filters: [],
 };
 
+const StyledDivider = styled(Divider)`
+  cursor: pointer;
+`;
+
 class AlertDialog extends React.Component {
 
   constructor(...args) {
@@ -310,9 +312,12 @@ class AlertDialog extends React.Component {
     const {
       capabilities,
       credentials,
+      filter_id,
       title = _('New Alert'),
       report_formats,
       report_format_ids,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
       method_data_recipient_credential,
       method_data_scp_credential,
       method_data_smb_credential,
@@ -336,6 +341,7 @@ class AlertDialog extends React.Component {
       onNewVeriniceCredentialClick,
       onNewVfireCredentialClick,
       onNewTippingPointCredentialClick,
+      onOpenContentComposerDialogClick,
       onReportFormatsChange,
       onSave,
       onScpCredentialChange,
@@ -423,6 +429,9 @@ class AlertDialog extends React.Component {
     }
 
     const controlledValues = {
+      filter_id,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
       method_data_recipient_credential,
       method_data_scp_credential,
       method_data_smb_credential,
@@ -555,13 +564,17 @@ class AlertDialog extends React.Component {
 
               {capabilities.mayOp('get_filters') &&
                 is_task_event &&
-                <FormGroup title={_('Report Result Filter')}>
-                  <Select
-                    value={values.filter_id}
-                    name="filter_id"
-                    items={renderSelectItems(values.result_filters, 0)}
-                    onChange={onValueChange}
-                  />
+                <FormGroup title={_('Report Content')}>
+                  <StyledDivider
+                    onClick={onOpenContentComposerDialogClick}
+                  >
+                    <ReportIcon
+                      title={_('Compose Report Content')}
+                    />
+                    <span>
+                      {_('Compose')}
+                    </span>
+                  </StyledDivider>
                 </FormGroup>
               }
 
@@ -809,6 +822,8 @@ AlertDialog.propTypes = {
   filter_id: PropTypes.idOrZero,
   method: PropTypes.string,
   method_data_URL: PropTypes.string,
+  method_data_composer_include_notes: PropTypes.number,
+  method_data_composer_include_overrides: PropTypes.number,
   method_data_defense_center_ip: PropTypes.string,
   method_data_defense_center_port: PropTypes.numberOrNumberString,
   method_data_delta_report_id: PropTypes.string,
@@ -871,6 +886,7 @@ AlertDialog.propTypes = {
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onNewVfireCredentialClick: PropTypes.func.isRequired,
+  onOpenContentComposerDialogClick: PropTypes.func.isRequired,
   onReportFormatsChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,
