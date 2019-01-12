@@ -34,6 +34,8 @@ const log = logger.getLogger('gmp.commands.alerts');
 
 const event_data_fields = ['status', 'feed_event', 'secinfo_type'];
 const method_data_fields = [
+  'composer_include_notes',
+  'composer_include_overrides',
   'details_url',
   'to_address',
   'from_address',
