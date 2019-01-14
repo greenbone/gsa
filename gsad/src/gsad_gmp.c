@@ -4252,7 +4252,8 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @return Enveloped XML object.
  */
 static char *
-get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+get_tasks (gvm_connection_t *connection, credentials_t *credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   const char *overrides, *schedules_only, *ignore_pagination;
@@ -4302,7 +4303,7 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 
 
 /**
- * @brief Get all tasks, envelope the result.
+ * @brief Get single task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -21363,6 +21364,123 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
   g_free (response);
   return html;
+}
+
+/**
+ * @brief Get all tickets, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tickets_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+
+  return get_many (connection, "ticket", credentials, params, NULL, NULL,
+                   response_data);
+}
+
+/**
+ * @brief Get single tickets, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
+{
+
+  return get_one (connection, "ticket", credentials, params, NULL, NULL,
+                  response_data);
+}
+
+/**
+ * @brief Create a ticket, get report, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t* response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *result_id, *user_id;
+  char *ret;
+
+  result_id = params_value (params, "result_id");
+  user_id = params_value(params, "user_id");
+
+  CHECK_VARIABLE_INVALID (result_id, "Create Ticket");
+  CHECK_VARIABLE_INVALID (user_id, "Create Ticket");
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<create_ticket>"
+                "<result id=\"%s\"/>"
+                "<assigned_to>"
+                "<user id=\"%s\"/>"
+                "</assigned_to>"
+                "</create_ticket>",
+                result_id,
+                user_id
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Create Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
 }
 
 char *

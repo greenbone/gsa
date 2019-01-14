@@ -285,8 +285,9 @@ init_validator ()
                      "|(create_tags)"
                      "|(create_target)"
                      "|(create_task)"
-                     "|(cvss_calculator)"
+                     "|(create_ticket)"
                      "|(create_user)"
+                     "|(cvss_calculator)"
                      "|(delete_agent)"
                      "|(delete_asset)"
                      "|(delete_config)"
@@ -368,19 +369,19 @@ init_validator ()
                      "|(get_agent)"
                      "|(get_agents)"
                      "|(get_aggregate)"
+                     "|(get_alert)"
+                     "|(get_alerts)"
                      "|(get_asset)"
                      "|(get_assets)"
                      "|(get_config)"
                      "|(get_config_family)"
                      "|(get_config_nvt)"
                      "|(get_configs)"
-                     "|(get_feeds)"
                      "|(get_credential)"
                      "|(get_credentials)"
+                     "|(get_feeds)"
                      "|(get_filter)"
                      "|(get_filters)"
-                     "|(get_alert)"
-                     "|(get_alerts)"
                      "|(get_group)"
                      "|(get_groups)"
                      "|(get_info)"
@@ -414,6 +415,8 @@ init_validator ()
                      "|(get_targets)"
                      "|(get_task)"
                      "|(get_tasks)"
+                     "|(get_ticket)"
+                     "|(get_tickets)"
                      "|(get_trash)"
                      "|(get_user)"
                      "|(get_users)"
@@ -873,6 +876,7 @@ init_validator ()
   gvm_validator_alias (validator, "task_filter",  "filter");
   gvm_validator_alias (validator, "task_filt_id", "filt_id");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
+  gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout",      "boolean");
   gvm_validator_alias (validator, "trend:name",   "family");
   gvm_validator_alias (validator, "user_id",      "id");
@@ -1450,26 +1454,27 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_asset)
+  ELSE (create_config)
   ELSE (create_container_task)
   ELSE (create_credential)
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_host)
+  ELSE (create_note)
+  ELSE (create_override)
   ELSE (create_permission)
   ELSE (create_permissions)
   ELSE (create_port_list)
   ELSE (create_port_range)
   ELSE (create_report)
-  ELSE (create_task)
-  ELSE (create_user)
-  ELSE (create_role)
   ELSE (create_scanner)
   ELSE (create_schedule)
+  ELSE (create_task)
   ELSE (create_tag)
   ELSE (create_target)
-  ELSE (create_config)
-  ELSE (create_note)
-  ELSE (create_override)
+  ELSE (create_ticket)
+  ELSE (create_user)
+  ELSE (create_role)
   ELSE (delete_agent)
   ELSE (delete_asset)
   ELSE (delete_alert)
@@ -2123,6 +2128,8 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_tags)
   ELSE (get_target)
   ELSE (get_targets)
+  ELSE (get_ticket)
+  ELSE (get_tickets)
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
