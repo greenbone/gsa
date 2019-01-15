@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
-import {shorten} from 'gmp/utils/string';
+import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
 
 import {
   parseInt,
@@ -226,10 +226,10 @@ class AlertComponent extends React.Component {
 
   handleOpenContentComposerDialog() {
     const {gmp} = this.props;
-    const {filterId = NO_VALUE} = this.state;
-    gmp.filter.get({id: filterId}).then(response => {
+    const {composerFilterId = NO_VALUE} = this.state;
+    gmp.filter.get({id: composerFilterId}).then(response => {
       this.setState({
-        filterString: isDefined(response.data) ?
+        composerFilterString: isDefined(response.data) ?
           response.data.toFilterCriteriaString() :
           undefined,
       });
@@ -246,23 +246,21 @@ class AlertComponent extends React.Component {
       filter_string,
     } = this.state;
     this.setState({
-      includeNotes: method_data_composer_include_notes,
-      includeOverrides: method_data_composer_include_overrides,
-      filterId: filter_id,
-      filterString: filter_string,
+      composerIncludeNotes: method_data_composer_include_notes,
+      composerIncludeOverrides: method_data_composer_include_overrides,
+      composerFilterId: filter_id,
+      composerFilterString: filter_string,
       contentComposerDialogVisible: false,
     });
   }
 
-  handleSaveComposerContent() {
-    const {
-      includeNotes,
-      includeOverrides,
-      filterId,
-      filterString,
-    } = this.state;
+  handleSaveComposerContent({
+    includeNotes,
+    includeOverrides,
+    filterId,
+    filterString,
+  }) {
     this.setState({
-      filterId,
       filter_id: filterId,
       filter_string: filterString,
       method_data_composer_include_notes: includeNotes,
@@ -399,9 +397,11 @@ class AlertComponent extends React.Component {
           comment: alert.comment,
           filters,
           filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
-          filterId: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
-          includeNotes: getValue(method.data.composer_include_notes),
-          includeOverrides: getValue(method.data.composer_include_overrides),
+          composerFilterId:
+            isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+          composerIncludeNotes: getValue(method.data.composer_include_notes),
+          composerIncludeOverrides:
+            getValue(method.data.composer_include_overrides),
           credentials,
           result_filters,
           secinfo_filters,
@@ -569,6 +569,8 @@ class AlertComponent extends React.Component {
           event_data_secinfo_type: undefined,
           filter_id: undefined,
           filters,
+          composerIncludeNotes: undefined,
+          composerIncludeOverrides: undefined,
           id: undefined,
           method: undefined,
           method_data_composer_include_notes: undefined,
@@ -640,10 +642,10 @@ class AlertComponent extends React.Component {
 
   handleCloseAlertDialog() {
     this.setState({
-      includeNotes: undefined,
-      includeOverrides: undefined,
-      filterId: undefined,
-      filterString: undefined,
+      composerIncludeNotes: undefined,
+      composerIncludeOverrides: undefined,
+      composerFilterId: undefined,
+      composerFilterString: undefined,
     });
     this.closeAlertDialog();
     this.handleInteraction();
@@ -728,18 +730,19 @@ class AlertComponent extends React.Component {
 
   handleValueChange(value, name) {
     this.handleInteraction();
-    this.setState({[name]: value});
+    name = capitalizeFirstLetter(name);
+    this.setState({[`composer${name}`]: value});
   }
 
   handleFilterIdChange(value) {
     const {gmp} = this.props;
     gmp.filter.get({id: value}).then(response => {
-      const filterString = isDefined(response.data) ?
+      const composerFilterString = isDefined(response.data) ?
         response.data.toFilterCriteriaString() :
         undefined;
       this.setState({
-        filterId: value,
-        filterString,
+        composerFilterId: value,
+        composerFilterString,
       });
     });
     this.handleInteraction();
@@ -776,10 +779,10 @@ class AlertComponent extends React.Component {
       comment,
       filters,
       filter_id,
-      filterId,
-      filterString,
-      includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
-      includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
+      composerFilterId,
+      composerFilterString,
+      composerIncludeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+      composerIncludeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
       credentials,
       result_filters,
       secinfo_filters,
@@ -1007,11 +1010,11 @@ class AlertComponent extends React.Component {
             }
             {contentComposerDialogVisible &&
               <ContentComposerDialog
-                includeNotes={parseInt(includeNotes)}
-                includeOverrides={parseInt(includeOverrides)}
-                filterId={filterId}
+                includeNotes={parseInt(composerIncludeNotes)}
+                includeOverrides={parseInt(composerIncludeOverrides)}
+                filterId={composerFilterId}
                 filters={result_filters}
-                filterString={filterString}
+                filterString={composerFilterString}
                 title={_('Compose Content for Scan Report')}
                 onChange={this.handleValueChange}
                 onClose={this.closeContentComposerDialog}
