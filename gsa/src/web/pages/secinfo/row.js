@@ -25,12 +25,9 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
+import {secInfoTypeName, secInfoType} from 'gmp/models/secinfo';
+
 import {shorten} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -40,61 +37,63 @@ import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
-import {secInfoTypeName, secInfoType} from 'gmp/models/secinfo';
+import EntitiesActions from 'web/entities/actions';
+import {RowDetailsToggle} from 'web/entities/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
-  ...other
-}) => {
-  return (
-    <TableBody>
-      <TableRow>
-        <TableData
-          rowSpan="2"
+  ...props
+}) => (
+  <TableBody>
+    <TableRow>
+      <TableData
+        rowSpan="2"
+      >
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}
         >
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}
-          >
-            {entity.name}
-          </RowDetailsToggle>
-          <Comment text={entity.comment}/>
-        </TableData>
-        <TableData>
-          {secInfoTypeName(secInfoType(entity))}
-        </TableData>
-        <TableData>
-          {longDate(entity.creationTime)}
-        </TableData>
-        <TableData>
-          {longDate(entity.modificationTime)}
-        </TableData>
-        <TableData>
-          <SeverityBar severity={entity.severity}/>
-        </TableData>
-        {renderComponent(actions, {...other, entity})}
-      </TableRow>
-      <TableRow>
-        <TableData colSpan="5">
-          <span title={entity.extra}>
-            {shorten(entity.extra, 150)}
-          </span>
-        </TableData>
-      </TableRow>
-    </TableBody>
-  );
-};
+          {entity.name}
+        </RowDetailsToggle>
+        <Comment text={entity.comment}/>
+      </TableData>
+      <TableData>
+        {secInfoTypeName(secInfoType(entity))}
+      </TableData>
+      <TableData>
+        {longDate(entity.creationTime)}
+      </TableData>
+      <TableData>
+        {longDate(entity.modificationTime)}
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.severity}/>
+      </TableData>
+      <EntitiesActions
+        {...props}
+        entity={entity}
+      />
+    </TableRow>
+    <TableRow>
+      <TableData colSpan="5">
+        <span title={entity.extra}>
+          {shorten(entity.extra, 150)}
+        </span>
+      </TableData>
+    </TableRow>
+  </TableBody>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

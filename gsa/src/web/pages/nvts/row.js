@@ -25,11 +25,6 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
@@ -42,72 +37,76 @@ import Link from 'web/components/link/link';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import EntitiesActions from 'web/entities/actions';
+import {RowDetailsToggle} from 'web/entities/row';
+
+import PropTypes from 'web/utils/proptypes';
+
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
-  ...other
-}) => {
-  return (
-    <TableRow>
-      <TableData>
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
-          {entity.name}
-        </RowDetailsToggle>
-      </TableData>
-      <TableData>
-        <Link
-          to="nvts"
-          filter={'family="' + entity.family + '"'}
-          textOnly={!links}
-        >
-          {entity.family}
-        </Link>
-      </TableData>
-      <TableData>
-        {longDate(entity.creationTime)}
-      </TableData>
-      <TableData>
-        {longDate(entity.modificationTime)}
-      </TableData>
-      <TableData>
-        <Divider wrap>
-          {entity.cves.map(id => (
-            <CveLink
-              key={id}
-              id={id}
-              textOnly={!links}
-            />
-          ))}
-        </Divider>
-      </TableData>
-      <TableData align="center">
-        {entity && entity.tags &&
-          <SolutionTypeIcon type={entity.tags.solution_type}/>
-        }
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
-      </TableData>
-      <TableData align="end">
-        {entity.qod && entity.qod.value} %
-      </TableData>
-      {renderComponent(actions, {...other, entity})}
-    </TableRow>
-  );
-};
+  ...props
+}) => (
+  <TableRow>
+    <TableData>
+      <RowDetailsToggle
+        name={entity.id}
+        onClick={onToggleDetailsClick}
+      >
+        {entity.name}
+      </RowDetailsToggle>
+    </TableData>
+    <TableData>
+      <Link
+        to="nvts"
+        filter={'family="' + entity.family + '"'}
+        textOnly={!links}
+      >
+        {entity.family}
+      </Link>
+    </TableData>
+    <TableData>
+      {longDate(entity.creationTime)}
+    </TableData>
+    <TableData>
+      {longDate(entity.modificationTime)}
+    </TableData>
+    <TableData>
+      <Divider wrap>
+        {entity.cves.map(id => (
+          <CveLink
+            key={id}
+            id={id}
+            textOnly={!links}
+          />
+        ))}
+      </Divider>
+    </TableData>
+    <TableData align="center">
+      {entity && entity.tags &&
+        <SolutionTypeIcon type={entity.tags.solution_type}/>
+      }
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.severity}/>
+    </TableData>
+    <TableData align="end">
+      {entity.qod && entity.qod.value} %
+    </TableData>
+    <EntitiesActions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:
