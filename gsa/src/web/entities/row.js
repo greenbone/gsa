@@ -20,30 +20,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import styled from 'styled-components';
 
-import Theme from 'web/utils/theme';
 import withClickHandler from 'web/components/form/withClickHandler';
 
-import EntityActions from './actions';
-
-export const withEntityRow = (actions = EntityActions, options = {}) =>
-  Component => {
-
-  const EntityRowWrapper = props => {
-    return (
-      <Component
-        {...options}
-        actions={actions}
-        {...props}
-      />
-    );
-  };
-  return EntityRowWrapper;
-};
+import Theme from 'web/utils/theme';
 
 export const RowDetailsToggle = withClickHandler()(styled.span`
   {
