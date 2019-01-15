@@ -1006,6 +1006,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/tags.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/tasks.js
+     ${GSA_SRC_DIR}/src/web/store/entities/tickets.js
      ${GSA_SRC_DIR}/src/web/store/entities/users.js
      ${GSA_SRC_DIR}/src/web/store/entities/vulns.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js
