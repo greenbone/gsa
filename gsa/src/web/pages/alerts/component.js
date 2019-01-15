@@ -1010,8 +1010,8 @@ class AlertComponent extends React.Component {
             }
             {contentComposerDialogVisible &&
               <ContentComposerDialog
-                includeNotes={parseInt(composerIncludeNotes)}
-                includeOverrides={parseInt(composerIncludeOverrides)}
+                includeNotes={parseYesNo(composerIncludeNotes)}
+                includeOverrides={parseYesNo(composerIncludeOverrides)}
                 filterId={composerFilterId}
                 filters={result_filters}
                 filterString={composerFilterString}
