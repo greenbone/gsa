@@ -94,6 +94,7 @@ const ENTITY_TYPES = {
   tag: _l('Tag'),
   target: _l('Target'),
   task: _l('Task'),
+  ticket: _l('Ticket'),
   user: _l('User'),
   vulnerability: _l('Vulnerability'),
 };
