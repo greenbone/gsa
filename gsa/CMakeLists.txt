@@ -389,6 +389,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/entities/selection.js
      ${GSA_SRC_DIR}/src/web/entities/table.js
      ${GSA_SRC_DIR}/src/web/entities/tagsdialog.js
+     ${GSA_SRC_DIR}/src/web/entities/withEntitiesActions.js
      ${GSA_SRC_DIR}/src/web/entities/withEntitiesContainer.js
      ${GSA_SRC_DIR}/src/web/entities/withRowDetails.js
      ${GSA_SRC_DIR}/src/web/entity/block.js
