@@ -24,21 +24,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import IconDivider from 'web/components/layout/icondivider';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-import EntityLink from 'web/entity/link';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import Icon from 'web/components/icon/icon';
@@ -46,10 +36,19 @@ import Icon from 'web/components/icon/icon';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import EntityLink from 'web/entity/link';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
 
 
-const Actions = ({
+const Actions = withEntitiesActions(({
   entity,
   onScannerCertificateDownloadClick,
   onScannerCloneClick,
@@ -111,7 +110,7 @@ const Actions = ({
       />
     }
   </IconDivider>
-);
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -155,17 +154,19 @@ const Row = ({
         <EntityLink entity={entity.credential}/>
       }
     </TableData>
-    {renderComponent(actions, {...props, entity})}
+    <Actions
+      {...props}
+      entity={entity}
+    />
   </TableRow>
 );
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

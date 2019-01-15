@@ -29,10 +29,9 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined, isString} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
 import withUserName from 'web/utils/withUserName';
 
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
+import {RowDetailsToggle} from 'web/entities/row';
 
 import ObserverIcon from 'web/entity/icon/observericon';
 
@@ -180,11 +179,11 @@ const Row = ({
           <Trend name={entity.trend} />
         }
       </TableData>
-      {renderComponent(actions, {
-        links,
-        ...props,
-        entity,
-      })}
+      <Actions
+        {...props}
+        links={links}
+        entity={entity}
+      />
     </TableRow>
   );
 };
@@ -197,6 +196,6 @@ Row.propTypes = {
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(Actions)(withUserName(Row));
+export default withUserName(Row);
 
 // vim: set ts=2 sw=2 tw=80:

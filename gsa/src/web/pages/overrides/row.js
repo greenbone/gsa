@@ -29,17 +29,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {severityValue} from 'gmp/utils/number';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-import {
-  extraRiskFactor,
-  translateRiskFactor,
-  LOG_VALUE,
-} from 'web/utils/severity';
-
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -53,6 +42,16 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import {RowDetailsToggle} from 'web/entities/row';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import PropTypes from 'web/utils/proptypes';
+import {
+  extraRiskFactor,
+  translateRiskFactor,
+  LOG_VALUE,
+} from 'web/utils/severity';
+
 
 const render_severity = severity => {
   if (isDefined(severity)) {
@@ -64,41 +63,39 @@ const render_severity = severity => {
   return _('Any');
 };
 
-const Actions = ({
-    entity,
-    onOverrideDeleteClick,
-    onOverrideDownloadClick,
-    onOverrideCloneClick,
-    onOverrideEditClick,
-  }) => {
-  return (
-    <IconDivider
-      align={['center', 'center']}
-      grow
-    >
-      <TrashIcon
-        entity={entity}
-        name="override"
-        onClick={onOverrideDeleteClick}
-      />
-      <EditIcon
-        entity={entity}
-        name="override"
-        onClick={onOverrideEditClick}
-      />
-      <CloneIcon
-        entity={entity}
-        name="override"
-        onClick={onOverrideCloneClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Override')}
-        onClick={onOverrideDownloadClick}
-      />
-    </IconDivider>
-  );
-};
+const Actions = withEntitiesActions(({
+  entity,
+  onOverrideDeleteClick,
+  onOverrideDownloadClick,
+  onOverrideCloneClick,
+  onOverrideEditClick,
+}) => (
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
+    <TrashIcon
+      entity={entity}
+      name="override"
+      onClick={onOverrideDeleteClick}
+    />
+    <EditIcon
+      entity={entity}
+      name="override"
+      onClick={onOverrideEditClick}
+    />
+    <CloneIcon
+      entity={entity}
+      name="override"
+      onClick={onOverrideCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Override')}
+      onClick={onOverrideDownloadClick}
+    />
+  </IconDivider>
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -111,50 +108,49 @@ Actions.propTypes = {
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
   ...props
-}) => {
-  return (
-    <TableRow>
-      <TableData>
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
-          {shorten(entity.text)}
-        </RowDetailsToggle>
-      </TableData>
-      <TableData>
-        {entity.nvt ? entity.nvt.name : ''}
-      </TableData>
-      <TableData title={entity.hosts}>
-        {shorten(entity.hosts.join(', '))}
-      </TableData>
-      <TableData title={entity.port}>
-        {shorten(entity.port)}
-      </TableData>
-      <TableData>
-        {render_severity(entity.severity)}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.new_severity}/>
-      </TableData>
-      <TableData>
-        {entity.isActive() ? _('yes') : _('no')}
-      </TableData>
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+}) => (
+  <TableRow>
+    <TableData>
+      <RowDetailsToggle
+        name={entity.id}
+        onClick={onToggleDetailsClick}
+      >
+        {shorten(entity.text)}
+      </RowDetailsToggle>
+    </TableData>
+    <TableData>
+      {entity.nvt ? entity.nvt.name : ''}
+    </TableData>
+    <TableData title={entity.hosts}>
+      {shorten(entity.hosts.join(', '))}
+    </TableData>
+    <TableData title={entity.port}>
+      {shorten(entity.port)}
+    </TableData>
+    <TableData>
+      {render_severity(entity.severity)}
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.new_severity}/>
+    </TableData>
+    <TableData>
+      {entity.isActive() ? _('yes') : _('no')}
+    </TableData>
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

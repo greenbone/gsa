@@ -26,17 +26,6 @@ import _ from 'gmp/locale';
 
 import {getCredentialTypeName} from 'gmp/models/credential';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import FootNote from 'web/components/footnote/footnote';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -47,53 +36,60 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+
 import CredentialDownloadIcon from './downloadicon';
 
-const Actions = ({
+const Actions = withEntitiesActions(({
   entity,
   onCredentialDeleteClick,
   onCredentialDownloadClick,
   onCredentialCloneClick,
   onCredentialEditClick,
   onCredentialInstallerDownloadClick,
-}) => {
-  return (
-    <IconDivider
-      align={['start', 'center']}
-      grow
-    >
-      <TrashIcon
-        displayName={_('Credential')}
-        name="credential"
-        entity={entity}
-        onClick={onCredentialDeleteClick}
-      />
-      <EditIcon
-        displayName={_('Credential')}
-        name="credential"
-        entity={entity}
-        onClick={onCredentialEditClick}
-      />
-      <CloneIcon
-        displayName={_('Credential')}
-        name="credential"
-        entity={entity}
-        title={_('Clone Credential')}
-        value={entity}
-        onClick={onCredentialCloneClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Credential')}
-        onClick={onCredentialDownloadClick}
-      />
-      <CredentialDownloadIcon
-        credential={entity}
-        onDownload={onCredentialInstallerDownloadClick}
-      />
-    </IconDivider>
-  );
-};
+}) => (
+  <IconDivider
+    align={['start', 'center']}
+    grow
+  >
+    <TrashIcon
+      displayName={_('Credential')}
+      name="credential"
+      entity={entity}
+      onClick={onCredentialDeleteClick}
+    />
+    <EditIcon
+      displayName={_('Credential')}
+      name="credential"
+      entity={entity}
+      onClick={onCredentialEditClick}
+    />
+    <CloneIcon
+      displayName={_('Credential')}
+      name="credential"
+      entity={entity}
+      title={_('Clone Credential')}
+      value={entity}
+      onClick={onCredentialCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Credential')}
+      onClick={onCredentialDownloadClick}
+    />
+    <CredentialDownloadIcon
+      credential={entity}
+      onDownload={onCredentialInstallerDownloadClick}
+    />
+  </IconDivider>
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -105,7 +101,6 @@ Actions.propTypes = {
 };
 
 const Row = ({
-  actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -135,17 +130,19 @@ const Row = ({
     <TableData>
       {entity.login}
     </TableData>
-    {renderComponent(actions, {...props, entity})}
+    <Actions
+      {...props}
+      entity={entity}
+    />
   </TableRow>
 );
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:
