@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,25 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import styled from 'styled-components';
+import React from 'react';
 
-import withClickHandler from 'web/components/form/withClickHandler';
+import EntitiesActions from './actions';
 
-import Theme from 'web/utils/theme';
+const withEntitiesActions = Component => {
+  const EnitiesActionsWrapper = props => (
+    <EntitiesActions
+      {...props}
+    >
+      {actionprops => <Component {...actionprops}/>}
+    </EntitiesActions>
+  );
 
-export const RowDetailsToggle = withClickHandler()(styled.span`
-  {
-    cursor: pointer;
-    text-decoration: none;
-    color: ${Theme.blue};
-    :hover {
-      text-decoration: underline;
-      color: ${Theme.blue};
-    };
-    @media print {
-      color: ${Theme.black};
-    };
-  }
-`);
+  return EnitiesActionsWrapper;
+};
+
+export default withEntitiesActions;
 
 // vim: set ts=2 sw=2 tw=80:

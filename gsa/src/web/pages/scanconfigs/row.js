@@ -26,25 +26,25 @@ import _ from 'gmp/locale';
 
 import IconDivider from 'web/components/layout/icondivider';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent, na} from 'web/utils/render';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+import {na} from 'web/utils/render';
+
+
 import Trend from './trend';
 
-const Actions = ({
+const Actions = withEntitiesActions(({
   entity,
   onScanConfigDeleteClick,
   onScanConfigDownloadClick,
@@ -78,7 +78,7 @@ const Actions = ({
       onClick={onScanConfigDownloadClick}
     />
   </IconDivider>
-);
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -89,58 +89,57 @@ Actions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        entity={entity}
-        link={links}
-        type="scanconfig"
-        displayName={_('Scan Config')}
-        onToggleDetailsClick={onToggleDetailsClick}
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="scanconfig"
+      displayName={_('Scan Config')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {na(entity.families.count)}
+    </TableData>
+    <TableData>
+      <Trend
+        trend={entity.families.trend}
+        titleDynamic={_('The family selection is DYNAMIC. New families ' +
+          'will automatically be added and considered.')}
+        titleStatic={_('The family selection is STATIC. New families ' +
+          'will NOT automatically be added and considered.')}
       />
-      <TableData>
-        {na(entity.families.count)}
-      </TableData>
-      <TableData>
-        <Trend
-          trend={entity.families.trend}
-          titleDynamic={_('The family selection is DYNAMIC. New families ' +
-            'will automatically be added and considered.')}
-          titleStatic={_('The family selection is STATIC. New families ' +
-            'will NOT automatically be added and considered.')}
-        />
-      </TableData>
-      <TableData>
-        {na(entity.nvts.count)}
-      </TableData>
-      <TableData>
-        <Trend
-          trend={entity.nvts.trend}
-          titleDynamic={_('The NVT selection is DYNAMIC. New NVTs of ' +
-            'selected families will automatically be added and considered.')}
-          titleStatic={_('The NVT selection is DYNAMIC. New NVTS of ' +
-            'selected families will NOT automatically be added and ' +
-            'considered.')}
-        />
-      </TableData>
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+    </TableData>
+    <TableData>
+      {na(entity.nvts.count)}
+    </TableData>
+    <TableData>
+      <Trend
+        trend={entity.nvts.trend}
+        titleDynamic={_('The NVT selection is DYNAMIC. New NVTs of ' +
+          'selected families will automatically be added and considered.')}
+        titleStatic={_('The NVT selection is DYNAMIC. New NVTS of ' +
+          'selected families will NOT automatically be added and ' +
+          'considered.')}
+      />
+    </TableData>
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

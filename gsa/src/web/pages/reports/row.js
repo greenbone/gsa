@@ -26,12 +26,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TASK_STATUS, isActive} from 'gmp/models/task';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 import StatusBar from 'web/components/bar/statusbar';
 
@@ -46,7 +40,11 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const IconActions = ({
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import PropTypes from 'web/utils/proptypes';
+
+const Actions = withEntitiesActions(({
   entity,
   selectedDeltaReport,
   onReportDeleteClick,
@@ -87,16 +85,20 @@ const IconActions = ({
       />
     </IconDivider>
   );
-};
+});
 
-IconActions.propTypes = {
+Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   selectedDeltaReport: PropTypes.model,
   onReportDeleteClick: PropTypes.func.isRequired,
   onReportDeltaSelect: PropTypes.func.isRequired,
 };
 
-const Row = ({entity, links = true, actions, ...other}) => {
+const Row = ({
+  entity,
+  links = true,
+  ...props
+}) => {
   const {report} = entity;
   const {scan_run_status, task} = report;
 
@@ -156,18 +158,20 @@ const Row = ({entity, links = true, actions, ...other}) => {
       <TableData align="end">
         {report.result_count.false_positive.filtered}
       </TableData>
-      {renderComponent(actions, {...other, entity})}
+      <Actions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 
-export default withEntityRow(withEntityActions(IconActions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

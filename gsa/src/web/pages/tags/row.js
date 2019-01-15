@@ -29,21 +29,6 @@ import {shortDate} from 'gmp/locale/date';
 
 import {typeName} from 'gmp/utils/entitytype';
 
-import PropTypes from 'web/utils/proptypes';
-import {
-  renderComponent,
-  renderYesNo,
-} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 import Icon from 'web/components/icon/icon';
 
@@ -52,7 +37,22 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const Actions = withCapabilities(({
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+
+const Actions = compose(
+  withCapabilities,
+  withEntitiesActions,
+)(({
   capabilities,
   entity,
   onTagCloneClick,
@@ -132,14 +132,11 @@ Actions.propTypes = {
 };
 
 const Row = ({
-    actions,
-    entity,
-    links = true,
-    onToggleDetailsClick,
-    ...props
-  }, {
-    capabilities,
-  }) => {
+  entity,
+  links = true,
+  onToggleDetailsClick,
+  ...props
+}) => {
   const {resourceCount, resourceType} = entity;
   return (
     <TableRow>
@@ -165,22 +162,20 @@ const Row = ({
       <TableData>
         {shortDate(entity.modificationTime)}
       </TableData>
-      {renderComponent(actions, {...props, entity})}
+      <Actions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-Row.contextTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-};
-
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

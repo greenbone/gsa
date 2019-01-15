@@ -27,16 +27,6 @@ import _ from 'gmp/locale';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -44,42 +34,48 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import {RowDetailsToggle} from 'web/entities/row';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 
-const Actions = ({
-    entity,
-    onNoteDeleteClick,
-    onNoteDownloadClick,
-    onNoteCloneClick,
-    onNoteEditClick,
-  }) => {
-  return (
-    <IconDivider
-      align={['center', 'center']}
-      grow
-    >
-      <TrashIcon
-        entity={entity}
-        name="note"
-        onClick={onNoteDeleteClick}
-      />
-      <EditIcon
-        entity={entity}
-        name="note"
-        onClick={onNoteEditClick}
-      />
-      <CloneIcon
-        entity={entity}
-        name="note"
-        onClick={onNoteCloneClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Note')}
-        onClick={onNoteDownloadClick}
-      />
-    </IconDivider>
-  );
-};
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+
+const Actions = withEntitiesActions(({
+  entity,
+  onNoteDeleteClick,
+  onNoteDownloadClick,
+  onNoteCloneClick,
+  onNoteEditClick,
+}) => (
+  <IconDivider
+    align={['center', 'center']}
+    grow
+  >
+    <TrashIcon
+      entity={entity}
+      name="note"
+      onClick={onNoteDeleteClick}
+    />
+    <EditIcon
+      entity={entity}
+      name="note"
+      onClick={onNoteEditClick}
+    />
+    <CloneIcon
+      entity={entity}
+      name="note"
+      onClick={onNoteCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Note')}
+      onClick={onNoteDownloadClick}
+    />
+  </IconDivider>
+));
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -92,7 +88,6 @@ Actions.propTypes = {
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -126,18 +121,20 @@ const Row = ({
       <TableData>
         {entity.isActive() ? _('yes') : _('no')}
       </TableData>
-      {renderComponent(actions, {...props, entity})}
+      <Actions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -24,67 +24,47 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from '../components/layout/layout.js';
+import TableData from 'web/components/table/data';
 
-import PropTypes from '../utils/proptypes.js';
-import {renderComponent} from '../utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
-import SelectionType from '../utils/selectiontype.js';
+import EntitySelection from './selection';
 
-import EntitySelection from './selection.js';
-
-const EntityActions = ({
-  actionsComponent,
+const EntitiesActions = ({
+  children,
   entity,
   selectionType,
   onEntityDeselected,
   onEntitySelected,
-  ...other
+  ...props
 }) => {
-  if (!isDefined(actionsComponent) &&
+  if (!isDefined(children) &&
     selectionType !== SelectionType.SELECTION_USER) {
     return null;
   }
-
-  return (
-    <td className="table-actions">
-      {selectionType === SelectionType.SELECTION_USER ?
-        <Layout align={['center', 'center']}>
-          <EntitySelection
-            entity={entity}
-            onSelected={onEntitySelected}
-            onDeselected={onEntityDeselected}
-          />
-        </Layout> :
-        <Layout flex="column" grow>
-          {renderComponent(actionsComponent, {...other, entity})}
-        </Layout>
-      }
-    </td>
-  );
+  return selectionType === SelectionType.SELECTION_USER ?
+    <TableData align={['center', 'center']}>
+      <EntitySelection
+        entity={entity}
+        onSelected={onEntitySelected}
+        onDeselected={onEntityDeselected}
+      />
+    </TableData> :
+    <TableData grow>
+      {children({entity, ...props})}
+    </TableData>;
 };
 
-EntityActions.propTypes = {
+EntitiesActions.propTypes = {
   actionsComponent: PropTypes.component,
+  children: PropTypes.func,
   entity: PropTypes.model,
   selectionType: PropTypes.string,
   onEntityDeselected: PropTypes.func,
   onEntitySelected: PropTypes.func,
 };
 
-export const withEntityActions = component => {
-  // filter actions from parent. actions may contain this component
-  const EnityActionsWrapper = ({actions, ...props}) => { // eslint-disable-line no-unused
-    return <EntityActions actionsComponent={component} {...props}/>;
-  };
-
-  EnityActionsWrapper.propTypes = {
-    actions: PropTypes.any, // don't care
-  };
-
-  return EnityActionsWrapper;
-};
-
-export default EntityActions;
+export default EntitiesActions;
 
 // vim: set ts=2 sw=2 tw=80:

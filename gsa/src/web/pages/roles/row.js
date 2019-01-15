@@ -24,24 +24,22 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-import EditIcon from 'web/entity/icon/editicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import TableRow from 'web/components/table/row';
 
-const IconActions = ({
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+import EditIcon from 'web/entity/icon/editicon';
+
+import PropTypes from 'web/utils/proptypes';
+
+const Actions = withEntitiesActions(({
   entity,
   onRoleCloneClick,
   onRoleDeleteClick,
@@ -78,9 +76,9 @@ const IconActions = ({
       onClick={onRoleDownloadClick}
     />
   </IconDivider>
-);
+));
 
-IconActions.propTypes = {
+Actions.propTypes = {
   entity: PropTypes.model,
   onRoleCloneClick: PropTypes.func,
   onRoleDeleteClick: PropTypes.func,
@@ -89,33 +87,32 @@ IconActions.propTypes = {
 };
 
 const Row = ({
-  actions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        entity={entity}
-        link={links}
-        type="role"
-        displayName={_('Role')}
-        onToggleDetailsClick={onToggleDetailsClick}
-      />
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="role"
+      displayName={_('Role')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(IconActions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:
