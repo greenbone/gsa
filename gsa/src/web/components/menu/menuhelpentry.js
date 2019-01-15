@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016-2018 Greenbone Networks GmbH
  *
- * Authors:
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
