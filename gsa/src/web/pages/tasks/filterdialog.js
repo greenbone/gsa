@@ -36,12 +36,30 @@ import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 /* eslint-enable */
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['status', _l('Status')],
-  ['total', _l('Reports: Total')],
-  ['last', _l('Reports: Last')],
-  ['severity', _l('Severity')],
-  ['trend', _l('Trend')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'status',
+    displayName: _l('Status'),
+  },
+  {
+    name: 'total',
+    displayName: _l('Reports: Total'),
+  },
+  {
+    name: 'last',
+    displayName: _l('Reports: Last'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
+  {
+    name: 'trend',
+    displayName: _l('Trend'),
+  },
 ];
 
 const TaskFilterDialogComponent = ({

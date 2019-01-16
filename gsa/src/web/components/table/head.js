@@ -48,7 +48,7 @@ const TableHead = ({
 }) => {
 
   let sortSymbol;
-  if (currentSortBy === sortBy) {
+  if (isDefined(sortBy) && currentSortBy === sortBy) {
     if (currentSortDir === Sort.DESC) {
       sortSymbol = ( // triangle pointing down
         <span

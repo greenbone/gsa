@@ -27,11 +27,31 @@ import ScheduleDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '30%'],
-  ['first_run', _l('First Run'), '20%'],
-  ['next_run', _l('Next Run'), '20%'],
-  ['period', _l('Recurrence'), '11%'],
-  ['duration', _l('Duration'), '11%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '30%',
+  },
+  {
+    name: 'first_run',
+    displayName: _l('First Run'),
+    width: '20%',
+  },
+  {
+    name: 'next_run',
+    displayName: _l('Next Run'),
+    width: '20%',
+  },
+  {
+    name: 'period',
+    displayName: _l('Recurrence'),
+    width: '11%',
+  },
+  {
+    name: 'duration',
+    displayName: _l('Duration'),
+    width: '11%',
+  },
 ];
 
 const SchedulesTable = createEntitiesTable({

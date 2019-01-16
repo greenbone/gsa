@@ -21,15 +21,42 @@ import {_l} from 'gmp/locale/lang';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['vector', _l('Vector')],
-  ['complexity', _l('Complexity')],
-  ['authentication', _l('Authentication')],
-  ['confidentiality_impact', _l('Confidentiality Impact')],
-  ['integrity_impact', _l('Integrity Impact')],
-  ['availability_impact', _l('Availability Impact')],
-  ['published', _l('Published')],
-  ['severity', _l('Severity')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'vector',
+    displayName: _l('Vector'),
+  },
+  {
+    name: 'complexity',
+    displayName: _l('Complexity'),
+  },
+  {
+    name: 'authentication',
+    displayName: _l('Authentication'),
+  },
+  {
+    name: 'confidentiality_impact',
+    displayName: _l('Confidentiality Impact'),
+  },
+  {
+    name: 'integrity_impact',
+    displayName: _l('Integrity Impact'),
+  },
+  {
+    name: 'availability_impact',
+    displayName: _l('Availability Impact'),
+  },
+  {
+    name: 'published',
+    displayName: _l('Published'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
 ];
 
 export default createFilterDialog({

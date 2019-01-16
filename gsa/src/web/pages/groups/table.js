@@ -27,7 +27,10 @@ import Header from './header.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
 ];
 
 const GroupsTable = createEntitiesTable({

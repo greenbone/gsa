@@ -104,7 +104,14 @@ export const withEntitiesHeader = (
  * array
  *
  * @param {Array}   columns   An array in the form of
- *                            [['<column_key>', '<column_display_name>'], ...]
+ *                            [{
+ *                                name: 'foo',
+ *                                displayName: _l('Foo'),
+ *                                width: '20%',
+ *                                align: ['center', 'center'],
+ *                             }, {
+ *                               ...
+ *                             }, ... ]
  * @param {Element} actions_column   React element, undefined or boolean value.
  * @param {Object}  options   Default properties for Component.
  *
@@ -126,10 +133,11 @@ export const createEntitiesHeader = (
     <TableHeader>
       <TableRow>
         {columns.map(column => {
-          const [name, displayName, width] = column;
+          const {name, displayName, width, align} = column;
           return (
             <TableHead
               key={name}
+              align={align}
               width={width}
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}

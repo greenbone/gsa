@@ -37,15 +37,42 @@ import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.
 
 
 const SORT_FIELDS = [
-  ['date', _l('Date')],
-  ['status', _l('Status')],
-  ['task', _l('Task')],
-  ['severity', _l('Severity')],
-  ['high', _l('Scan Results: High')],
-  ['medium', _l('Scan Results: Medium')],
-  ['low', _l('Scan Results: Low')],
-  ['log', _l('Scan Results: Log')],
-  ['false_positive', _l('Scan Results: False Positive')],
+  {
+    name: 'date',
+    displayName: _l('Date'),
+  },
+  {
+    name: 'status',
+    displayName: _l('Status'),
+  },
+  {
+    name: 'task',
+    displayName: _l('Task'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
+  {
+    name: 'high',
+    displayName: _l('Scan Results: High'),
+  },
+  {
+    name: 'medium',
+    displayName: _l('Scan Results: Medium'),
+  },
+  {
+    name: 'low',
+    displayName: _l('Scan Results: Low'),
+  },
+  {
+    name: 'log',
+    displayName: _l('Scan Results: Log'),
+  },
+  {
+    name: 'false_positive',
+    displayName: _l('Scan Results: False Positive'),
+  },
 ];
 
 const ReportFilterDialogComponent = ({

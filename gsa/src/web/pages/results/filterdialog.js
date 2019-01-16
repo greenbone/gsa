@@ -39,14 +39,38 @@ import AutoFpGroup from '../../components/powerfilter/autofpgroup.js';
 /* eslint-enable */
 
 const SORT_FIELDS = [
-  ['vulnerability', _l('Vulnerability')],
-  ['solution_type', _l('Solution type')],
-  ['severity', _l('Severity')],
-  ['qod', _l('QoD')],
-  ['host', _l('Host (IP)')],
-  ['hostname', _l('Host (Name)')],
-  ['location', _l('Location')],
-  ['created', _l('Created')],
+  {
+    name: 'name',
+    displayName: _l('Vulnerability'),
+  },
+  {
+    name: 'solution_type',
+    displayName: _l('Solution type'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
+  {
+    name: 'qod',
+    displayName: _l('QoD'),
+  },
+  {
+    name: 'host',
+    displayName: _l('Host (IP)'),
+  },
+  {
+    name: 'hostname',
+    displayName: _l('Host (Name)'),
+  },
+  {
+    name: 'location',
+    displayName: _l('Location'),
+  },
+  {
+    name: 'created',
+    displayName: _l('Created'),
+  },
 ];
 
 const ResultsFilterDialogComponent = ({

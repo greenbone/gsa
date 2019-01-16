@@ -27,11 +27,31 @@ import ScannerDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '30%'],
-  ['host', _l('Host'), '20%'],
-  ['port', _l('Port'), '20%'],
-  ['type', _l('Type'), '10%'],
-  ['credential', _l('Credential'), '12%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '30%',
+  },
+  {
+    name: 'host',
+    displayName: _l('Host'),
+    width: '20%',
+  },
+  {
+    name: 'port',
+    displayName: _l('Port'),
+    width: '20%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '10%',
+  },
+  {
+    name: 'credential',
+    displayName: _l('Credential'),
+    width: '12%',
+  },
 ];
 
 const ScannersTable = createEntitiesTable({

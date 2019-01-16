@@ -27,11 +27,26 @@ import Row from './row';
 import ScanConfigDetails from './details';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['families_total', _l('Families: Total')],
-  ['families_trend', _l('Families: Trend')],
-  ['nvts_total', _l('NVTS: Total')],
-  ['nvts_trend', _l('NVTs: Trend')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'families_total',
+    displayName: _l('Families: Total'),
+  },
+  {
+    name: 'families_trend',
+    displayName: _l('Families: Trend'),
+  },
+  {
+    name: 'nvts_total',
+    displayName: _l('NVTS: Total'),
+  },
+  {
+    name: 'nvts_trend',
+    displayName: _l('NVTs: Trend'),
+  },
 ];
 
 const ScanConfigsTable = createEntitiesTable({

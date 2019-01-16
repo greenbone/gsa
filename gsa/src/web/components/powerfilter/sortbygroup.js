@@ -33,7 +33,7 @@ class SortByGroup extends React.Component {
 
   renderSortFieldItems() {
     const {fields = []} = this.props;
-    return fields.map(([value, label]) => ({
+    return fields.map(({name: value, displayName: label}) => ({
       value,
       label,
     }));
@@ -75,7 +75,10 @@ class SortByGroup extends React.Component {
 
 SortByGroup.propTypes = {
   by: PropTypes.string,
-  fields: PropTypes.array,
+  fields: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    displayName: PropTypes.toString,
+  })),
   filter: PropTypes.filter,
   order: PropTypes.oneOf(['sort', 'sort-reverse']),
   onSortByChange: PropTypes.func,

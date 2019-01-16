@@ -81,7 +81,7 @@ const Header = ({
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'ldap' : false}
-          onClick={onSortChange}
+          onSortChange={onSortChange}
         >
           {_('Authentication Type')}
         </TableHead>
