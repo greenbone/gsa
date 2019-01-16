@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018 - 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -19,29 +19,37 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
-import {NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import ComposerContent from 'web/components/dialog/composercontent';
+import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len*/
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
+import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import Layout from 'web/components/layout/layout';
 
+const StyledDiv = styled.div`
+  text-align: end;
+`;
+
 const ContentComposerDialog = ({
   filterId,
   filters,
   filterString = '',
-  includeNotes,
-  includeOverrides,
+  includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
+  includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
+  storeAsDefault,
   onClose,
   onFilterIdChange,
   onSave,
@@ -56,6 +64,7 @@ const ContentComposerDialog = ({
     filterString,
     includeNotes,
     includeOverrides,
+    storeAsDefault,
   };
 
   return (
@@ -68,6 +77,7 @@ const ContentComposerDialog = ({
     >
       {({
         values,
+        onValueChange,
       }) => (
         <Layout flex="column">
           <FormGroup title={_('Report Result Filter')} titleSize="3">
@@ -86,6 +96,16 @@ const ContentComposerDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onChange}
           />
+          <StyledDiv>
+            <CheckBox
+              name="storeAsDefault"
+              checked={values.storeAsDefault}
+              checkedValue={YES_VALUE}
+              unCheckedValue={NO_VALUE}
+              title={_('Store as default')}
+              onChange={onChange}
+            />
+          </StyledDiv>
         </Layout>
       )}
     </SaveDialog>
@@ -101,6 +121,7 @@ ContentComposerDialog.propTypes = {
   includeOverrides: PropTypes.number,
   reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
+  storeAsDefault: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onFilterIdChange: PropTypes.func.isRequired,

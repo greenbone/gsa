@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+/* Copyright (C) 2017 - 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,6 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -39,12 +41,17 @@ import {
 
 import EntityComponent from 'web/entity/component';
 
-import {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent';
-
 import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
+import {
+  loadReportComposerDefaults,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
@@ -250,6 +257,7 @@ class AlertComponent extends React.Component {
       composerIncludeOverrides: method_data_composer_include_overrides,
       composerFilterId: filter_id,
       composerFilterString: filter_string,
+      composerStoreAsDefault: NO_VALUE,
       contentComposerDialogVisible: false,
     });
   }
@@ -259,14 +267,26 @@ class AlertComponent extends React.Component {
     includeOverrides,
     filterId,
     filterString,
+    storeAsDefault,
   }) {
+    if (storeAsDefault) {
+      const {reportComposerDefaults} = this.props;
+      const defaults = {
+        ...reportComposerDefaults,
+        includeNotes,
+        includeOverrides,
+      };
+      this.props.saveReportComposerDefaults(defaults);
+    }
     this.setState({
       filter_id: filterId,
       filter_string: filterString,
       method_data_composer_include_notes: includeNotes,
       method_data_composer_include_overrides: includeOverrides,
+      composerStoreAsDefault: NO_VALUE,
       contentComposerDialogVisible: false,
     });
+    this.handleInteraction();
   }
 
   openScpCredentialDialog(types) {
@@ -299,6 +319,8 @@ class AlertComponent extends React.Component {
     this.handleInteraction();
 
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
+
+    this.props.loadReportComposerDefaults();
 
     if (isDefined(alert)) {
       const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);
@@ -402,6 +424,7 @@ class AlertComponent extends React.Component {
           composerIncludeNotes: getValue(method.data.composer_include_notes),
           composerIncludeOverrides:
             getValue(method.data.composer_include_overrides),
+          composerStoreAsDefault: NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
@@ -541,6 +564,7 @@ class AlertComponent extends React.Component {
           report_formats = [],
           tasks = [],
         } = settings;
+        const {reportComposerDefaults} = this.props;
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -569,8 +593,9 @@ class AlertComponent extends React.Component {
           event_data_secinfo_type: undefined,
           filter_id: undefined,
           filters,
-          composerIncludeNotes: undefined,
-          composerIncludeOverrides: undefined,
+          composerIncludeNotes: reportComposerDefaults.includeNotes,
+          composerIncludeOverrides: reportComposerDefaults.includeOverrides,
+          composerStoreAsDefault: NO_VALUE,
           id: undefined,
           method: undefined,
           method_data_composer_include_notes: undefined,
@@ -646,6 +671,7 @@ class AlertComponent extends React.Component {
       composerIncludeOverrides: undefined,
       composerFilterId: undefined,
       composerFilterString: undefined,
+      composerStoreAsDefault: NO_VALUE,
     });
     this.closeAlertDialog();
     this.handleInteraction();
@@ -781,8 +807,8 @@ class AlertComponent extends React.Component {
       filter_id,
       composerFilterId,
       composerFilterString,
-      composerIncludeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
-      composerIncludeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
+      composerIncludeNotes,
+      composerIncludeOverrides,
       credentials,
       result_filters,
       secinfo_filters,
@@ -851,6 +877,7 @@ class AlertComponent extends React.Component {
       method_data_delta_report_id,
       report_formats,
       report_format_ids,
+      composerStoreAsDefault,
       tasks,
     } = this.state;
     return (
@@ -1015,6 +1042,7 @@ class AlertComponent extends React.Component {
                 filterId={composerFilterId}
                 filters={result_filters}
                 filterString={composerFilterString}
+                storeAsDefault={parseYesNo(composerStoreAsDefault)}
                 title={_('Compose Content for Scan Report')}
                 onChange={this.handleValueChange}
                 onClose={this.closeContentComposerDialog}
@@ -1032,6 +1060,9 @@ class AlertComponent extends React.Component {
 AlertComponent.propTypes = {
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
+  reportComposerDefaults: PropTypes.object,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -1048,6 +1079,24 @@ AlertComponent.propTypes = {
   onTestSuccess: PropTypes.func,
 };
 
-export default withGmp(AlertComponent);
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  return {
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
+  };
+};
+
+const mapStateToProps = rootState => {
+  return {
+    reportComposerDefaults: getReportComposerDefaults(rootState),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AlertComponent);
 
 // vim: set ts=2 sw=2 tw=80:
