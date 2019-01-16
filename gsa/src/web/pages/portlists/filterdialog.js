@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +21,22 @@ import {_l} from 'gmp/locale/lang';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['total', _l('Port Counts: Total')],
-  ['tcp', _l('Port Counts: TCP')],
-  ['udp', _l('Port Counts: UDP')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'total',
+    displayName: _l('Port Counts: Total'),
+  },
+  {
+    name: 'tcp',
+    displayName: _l('Port Counts: TCP'),
+  },
+  {
+    name: 'udp',
+    displayName: _l('Port Counts: UDP'),
+  },
 ];
 
 export default createFilterDialog({

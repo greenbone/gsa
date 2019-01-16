@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +33,7 @@ class SortByGroup extends React.Component {
 
   renderSortFieldItems() {
     const {fields = []} = this.props;
-    return fields.map(([value, label]) => ({
+    return fields.map(({name: value, displayName: label}) => ({
       value,
       label,
     }));
@@ -79,7 +75,10 @@ class SortByGroup extends React.Component {
 
 SortByGroup.propTypes = {
   by: PropTypes.string,
-  fields: PropTypes.array,
+  fields: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    displayName: PropTypes.toString,
+  })),
   filter: PropTypes.filter,
   order: PropTypes.oneOf(['sort', 'sort-reverse']),
   onSortByChange: PropTypes.func,

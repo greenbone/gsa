@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,11 +27,31 @@ import ScannerDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '30%'],
-  ['host', _l('Host'), '20%'],
-  ['port', _l('Port'), '20%'],
-  ['type', _l('Type'), '10%'],
-  ['credential', _l('Credential'), '12%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '30%',
+  },
+  {
+    name: 'host',
+    displayName: _l('Host'),
+    width: '20%',
+  },
+  {
+    name: 'port',
+    displayName: _l('Port'),
+    width: '20%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '10%',
+  },
+  {
+    name: 'credential',
+    displayName: _l('Credential'),
+    width: '12%',
+  },
 ];
 
 const ScannersTable = createEntitiesTable({

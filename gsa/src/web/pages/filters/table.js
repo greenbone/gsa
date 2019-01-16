@@ -1,11 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- * Steffen Waterkamp <steffen.waterkamp@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +27,21 @@ import FilterDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '37%'],
-  ['term', _l('Term'), '37%'],
-  ['type', _l('Type'), '18%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '37%',
+  },
+  {
+    name: 'term',
+    displayName: _l('Term'),
+    width: '37%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '18%',
+  },
 ];
 
 const FiltersTable = createEntitiesTable({

@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2016-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2016 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,12 +36,30 @@ import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
 /* eslint-enable */
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['status', _l('Status')],
-  ['total', _l('Reports: Total')],
-  ['last', _l('Reports: Last')],
-  ['severity', _l('Severity')],
-  ['trend', _l('Trend')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'status',
+    displayName: _l('Status'),
+  },
+  {
+    name: 'total',
+    displayName: _l('Reports: Total'),
+  },
+  {
+    name: 'last',
+    displayName: _l('Reports: Last'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
+  {
+    name: 'trend',
+    displayName: _l('Trend'),
+  },
 ];
 
 const TaskFilterDialogComponent = ({

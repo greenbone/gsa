@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +27,26 @@ import Header from './header.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['roles', _l('Roles')],
-  ['groups', _l('Groups')],
-  ['host_access', _l('Host Access')],
-  ['ldpa', _l('Authentication Type')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'roles',
+    displayName: _l('Roles'),
+  },
+  {
+    name: 'groups',
+    displayName: _l('Groups'),
+  },
+  {
+    name: 'host_access',
+    displayName: _l('Host Access'),
+  },
+  {
+    name: 'ldap',
+    displayName: _l('Authentication Type'),
+  },
 ];
 
 const UsersTable = createEntitiesTable({

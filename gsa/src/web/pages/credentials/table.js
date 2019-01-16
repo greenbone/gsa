@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +27,26 @@ import CredentialDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '36%'],
-  ['type', _l('Type'), '31%'],
-  ['allow_insecure', _l('Allow insecure use'), '10%'],
-  ['login', _l('Login'), '15%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '36%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '31%',
+  },
+  {
+    name: 'allow_insecure',
+    displayName: _l('Allow insecure use'),
+    width: '10%',
+  },
+  {
+    name: 'login',
+    displayName: _l('Login'),
+    width: '15%',
+  },
 ];
 
 const CredentialsTable = createEntitiesTable({

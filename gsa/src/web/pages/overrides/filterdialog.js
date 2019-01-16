@@ -1,10 +1,6 @@
-/* Greenbone Security Assistant
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
- * Authors:
- * Björn Ricks <bjoern.ricks@greenbone.net>
- *
- * Copyright:
- * Copyright (C) 2017 - 2018 Greenbone Networks GmbH
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +21,34 @@ import {_l} from 'gmp/locale/lang';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['text', _l('Text')],
-  ['nvt', _l('Nvt')],
-  ['hosts', _l('Hosts')],
-  ['port', _l('Location')],
-  ['severity', _l('From')],
-  ['new_severity', _l('To')],
-  ['active', _l('Active')],
+  {
+    name: 'text',
+    displayName: _l('Text'),
+  },
+  {
+    name: 'nvt',
+    displayName: _l('Nvt'),
+  },
+  {
+    name: 'hosts',
+    displayName: _l('Hosts'),
+  },
+  {
+    name: 'port',
+    displayName: _l('Location'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('From'),
+  },
+  {
+    name: 'new_severity',
+    displayName: _l('To'),
+  },
+  {
+    name: 'active',
+    displayName: _l('Active'),
+  },
 ];
 
 export default createFilterDialog({
