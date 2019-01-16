@@ -108,6 +108,7 @@ export const withEntitiesHeader = (
  *                                name: 'foo',
  *                                displayName: _l('Foo'),
  *                                width: '20%',
+ *                                align: ['center', 'center'],
  *                             }, {
  *                               ...
  *                             }, ... ]
@@ -132,10 +133,11 @@ export const createEntitiesHeader = (
     <TableHeader>
       <TableRow>
         {columns.map(column => {
-          const {name, displayName, width} = column;
+          const {name, displayName, width, align} = column;
           return (
             <TableHead
               key={name}
+              align={align}
               width={width}
               currentSortBy={currentSortBy}
               currentSortDir={currentSortDir}
