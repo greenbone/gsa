@@ -65,8 +65,10 @@ const defaultactions = (
  *
  * @return A new EntitiesHeader component
  */
-export const withEntitiesHeader = (actions_column = defaultactions,
-  options = {}) => Component => {
+export const withEntitiesHeader = (
+  actions_column = defaultactions,
+  options = {},
+) => Component => {
 
   if (actions_column === false) {
     actions_column = null;
@@ -115,8 +117,11 @@ export const withEntitiesHeader = (actions_column = defaultactions,
  *
  * @return A new EntitiesHeader component
  */
-export const createEntitiesHeader = (columns, actions_column, options = {}) => {
-
+export const createEntitiesHeader = (
+  columns,
+  actions_column,
+  options = {},
+) => {
   const Header = ({
     actionsColumn,
     links = true,
