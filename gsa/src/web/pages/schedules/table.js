@@ -35,7 +35,8 @@ export const SORT_FIELDS = [
   {
     name: 'first_run',
     displayName: _l('First Run'),
-    width: '20%'},
+    width: '20%',
+  },
   {
     name: 'next_run',
     displayName: _l('Next Run'),

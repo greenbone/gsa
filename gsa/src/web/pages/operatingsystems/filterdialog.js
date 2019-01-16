@@ -43,7 +43,7 @@ const SORT_FIELDS = [
   },
   {
     name: 'hosts',
-    displayName: _l('Hosts')
+    displayName: _l('Hosts'),
   },
   {
     name: 'modified',
