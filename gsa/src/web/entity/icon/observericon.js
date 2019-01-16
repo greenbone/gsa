@@ -1,5 +1,5 @@
 
-/* Copyright (C) 2017-2018 Greenbone Networks GmbH
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *

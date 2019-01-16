@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2018 Greenbone Networks GmbH
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -83,7 +83,7 @@ const About = () => (
               infrastructures.
             </DivP>
             <DivP>
-              Copyright 2009-2018 by&nbsp;
+              Copyright (C) 2017-2019 by&nbsp;
               <a
                 href="https://www.greenbone.net"
                 target="_blank"
