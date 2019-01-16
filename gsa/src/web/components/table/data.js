@@ -28,24 +28,22 @@ import PropTypes from 'web/utils/proptypes';
 import Layout from '../layout/layout';
 
 const TableData = ({
-    children,
-    className,
-    colSpan,
-    rowSpan,
-    ...other
-  }) => {
-  return (
-    <td
-      className={className}
-      colSpan={colSpan}
-      rowSpan={rowSpan}
-    >
-      <Layout flex="column" {...other}>
-        {children}
-      </Layout>
-    </td>
-  );
-};
+  children,
+  className,
+  colSpan,
+  rowSpan,
+  ...other
+}) => (
+  <td
+    className={className}
+    colSpan={colSpan}
+    rowSpan={rowSpan}
+  >
+    <Layout flex="column" {...other}>
+      {children}
+    </Layout>
+  </td>
+);
 
 TableData.propTypes = {
   className: PropTypes.string,
