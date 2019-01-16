@@ -18,12 +18,14 @@
  */
 import React from 'react';
 
+import {connect} from 'react-redux';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
-import {shorten} from 'gmp/utils/string';
+import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
 
 import {
   parseInt,
@@ -43,6 +45,13 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
+import {
+  loadReportComposerDefaults,
+  saveReportComposerDefaults,
+} from 'web/store/usersettings/actions';
+import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import withGmp from 'web/utils/withGmp';
@@ -69,6 +78,8 @@ import AlertDialog, {
   TASK_SUBJECT,
 } from './dialog';
 
+import ContentComposerDialog from './contentcomposerdialog';
+
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
     for (const format of report_formats) {
@@ -87,13 +98,13 @@ const select_verinice_report_id = (report_formats, report_id) => {
   return first(report_formats).id;
 };
 
-const value = (data = {}, def = undefined) => {
+const getValue = (data = {}, def = undefined) => {
   const {value: val = def} = data;
   return val;
 };
 
-const filter_results_filter = filter => filter.filter_type = 'Results';
-const filter_secinfo_filter = filter => filter.filter_type = 'SecInfo';
+const filter_results_filter = filter => filter.filter_type === 'result';
+const filter_secinfo_filter = filter => filter.filter_type === 'info';
 
 class AlertComponent extends React.Component {
 
@@ -108,9 +119,12 @@ class AlertComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleEmailCredentialChange = this.handleEmailCredentialChange
       .bind(this);
+    this.handleFilterIdChange = this.handleFilterIdChange.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
+    this.handleSaveComposerContent = this.handleSaveComposerContent.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
     this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange
       .bind(this);
     this.handleTippingPointCredentialChange =
@@ -121,6 +135,11 @@ class AlertComponent extends React.Component {
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
+    this.handleOpenContentComposerDialog =
+      this.handleOpenContentComposerDialog.bind(this);
+    this.openContentComposerDialog = this.openContentComposerDialog.bind(this);
+    this.closeContentComposerDialog =
+      this.closeContentComposerDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
@@ -208,6 +227,69 @@ class AlertComponent extends React.Component {
     this.handleInteraction();
   }
 
+  openContentComposerDialog() {
+    this.setState({contentComposerDialogVisible: true});
+  }
+
+  handleOpenContentComposerDialog() {
+    const {gmp} = this.props;
+    const {composerFilterId = NO_VALUE} = this.state;
+    gmp.filter.get({id: composerFilterId}).then(response => {
+      this.setState({
+        composerFilterString: isDefined(response.data) ?
+          response.data.toFilterCriteriaString() :
+          undefined,
+      });
+      this.openContentComposerDialog();
+      this.handleInteraction();
+    });
+  }
+
+  closeContentComposerDialog() {
+    const {
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
+      filter_id,
+      filter_string,
+    } = this.state;
+    this.setState({
+      composerIncludeNotes: method_data_composer_include_notes,
+      composerIncludeOverrides: method_data_composer_include_overrides,
+      composerFilterId: filter_id,
+      composerFilterString: filter_string,
+      composerStoreAsDefault: NO_VALUE,
+      contentComposerDialogVisible: false,
+    });
+  }
+
+  handleSaveComposerContent({
+    includeNotes,
+    includeOverrides,
+    filterId,
+    filterString,
+    storeAsDefault,
+  }) {
+    if (storeAsDefault) {
+      const {reportComposerDefaults} = this.props;
+      const defaults = {
+        ...reportComposerDefaults,
+        reportResultFilterId: filterId,
+        includeNotes,
+        includeOverrides,
+      };
+      this.props.saveReportComposerDefaults(defaults);
+    }
+    this.setState({
+      filter_id: filterId,
+      filter_string: filterString,
+      method_data_composer_include_notes: includeNotes,
+      method_data_composer_include_overrides: includeOverrides,
+      composerStoreAsDefault: NO_VALUE,
+      contentComposerDialogVisible: false,
+    });
+    this.handleInteraction();
+  }
+
   openScpCredentialDialog(types) {
     this.openCredentialDialog({type: 'scp', types});
   }
@@ -239,6 +321,8 @@ class AlertComponent extends React.Component {
 
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
 
+    this.props.loadReportComposerDefaults();
+
     if (isDefined(alert)) {
       const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);
       Promise.all([credentialPromise, alertPromise]).then(
@@ -259,11 +343,11 @@ class AlertComponent extends React.Component {
         const secinfo_filters = filters.filter(filter_secinfo_filter);
 
         let condition_data_filters;
-        const condition_data_filter_id = value(condition.data.filter_id);
+        const condition_data_filter_id = getValue(condition.data.filter_id);
 
         let method_data_message;
         let method_data_message_attach;
-        const method_data_notice = value(method.data.notice,
+        const method_data_notice = getValue(method.data.notice,
           DEFAULT_NOTICE);
 
         let method_data_subject;
@@ -272,31 +356,31 @@ class AlertComponent extends React.Component {
 
         if (event_type === 'Task run status changed') {
           condition_data_filters = result_filters;
-          method_data_subject = value(method.data.subject, TASK_SUBJECT);
+          method_data_subject = getValue(method.data.subject, TASK_SUBJECT);
 
           if (method_data_notice === NOTICE_ATTACH) {
-            method_data_message_attach = value(method.data.message,
+            method_data_message_attach = getValue(method.data.message,
               ATTACH_MESSAGE_DEFAULT);
             method_data_message = INCLUDE_MESSAGE_DEFAULT;
           }
           else {
-            method_data_message = value(method.data.message,
+            method_data_message = getValue(method.data.message,
               INCLUDE_MESSAGE_DEFAULT);
             method_data_message_attach = ATTACH_MESSAGE_DEFAULT;
           }
         }
         else {
           condition_data_filters = secinfo_filters;
-          method_data_subject = value(method.data.subject,
+          method_data_subject = getValue(method.data.subject,
             SECINFO_SUBJECT);
 
           if (method_data_notice === NOTICE_ATTACH) {
-            method_data_message_attach = value(method.data.message,
+            method_data_message_attach = getValue(method.data.message,
               ATTACH_MESSAGE_SECINFO);
             method_data_message = INCLUDE_MESSAGE_SECINFO;
           }
           else {
-            method_data_message = value(method.data.message,
+            method_data_message = getValue(method.data.message,
               INCLUDE_MESSAGE_SECINFO);
             method_data_message_attach = ATTACH_MESSAGE_SECINFO;
           }
@@ -318,14 +402,14 @@ class AlertComponent extends React.Component {
             method.data.verinice_server_credential.credential.id : undefined;
 
         const tp_sms_credential_id = isDefined(method.data.tp_sms_credential) ?
-          value(method.data.tp_sms_credential.credential) : undefined;
+          getValue(method.data.tp_sms_credential.credential) : undefined;
 
         const recipient_credential_id = isDefined(
           method.data.recipient_credential) ?
-          value(method.data.recipient_credential) : undefined;
+          getValue(method.data.recipient_credential) : undefined;
 
         const vfire_credential_id = isDefined(method.data.vfire_credential) ?
-          value(method.data.vfire_credential) : undefined;
+          getValue(method.data.vfire_credential) : undefined;
 
         this.setState({
           alertDialogVisible: true,
@@ -336,6 +420,12 @@ class AlertComponent extends React.Component {
           comment: alert.comment,
           filters,
           filter_id: isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+          composerFilterId:
+            isDefined(alert.filter) ? alert.filter.id : NO_VALUE,
+          composerIncludeNotes: getValue(method.data.composer_include_notes),
+          composerIncludeOverrides:
+            getValue(method.data.composer_include_overrides),
+          composerStoreAsDefault: NO_VALUE,
           credentials,
           result_filters,
           secinfo_filters,
@@ -343,110 +433,123 @@ class AlertComponent extends React.Component {
           report_format_ids: method.data.report_formats,
 
           condition: condition.type,
-          condition_data_count: parseInt(value(condition.data.count, 1)),
-          condition_data_direction: value(condition.data.direction,
+          condition_data_count: parseInt(getValue(condition.data.count, 1)),
+          condition_data_direction: getValue(condition.data.direction,
             DEFAULT_DIRECTION),
           condition_data_filters,
           condition_data_filter_id,
           condition_data_at_least_filter_id: condition_data_filter_id,
           condition_data_at_least_count: parseInt(
-            value(condition.data.count, 1)),
-          condition_data_severity: parseSeverity(value(condition.data.severity,
-            DEFAULT_SEVERITY)),
+            getValue(condition.data.count, 1)),
+          condition_data_severity:
+            parseSeverity(getValue(condition.data.severity, DEFAULT_SEVERITY)),
 
           event: event_type,
-          event_data_status: value(event.data.status, DEFAULT_EVENT_STATUS),
+          event_data_status: getValue(event.data.status, DEFAULT_EVENT_STATUS),
           event_data_feed_event: feed_event,
-          event_data_secinfo_type: value(event.data.secinfo_type,
+          event_data_secinfo_type: getValue(event.data.secinfo_type,
             DEFAULT_SECINFO_TYPE),
 
           method: alert.method.type,
 
-          method_data_defense_center_ip: value(method.data.defense_center_ip,
+          method_data_composer_include_notes:
+            getValue(method.data.composer_include_notes),
+          method_data_composer_include_overrides:
+            getValue(method.data.composer_include_overrides),
+
+          method_data_defense_center_ip: getValue(method.data.defense_center_ip,
             ''),
-          method_data_defense_center_port: parseInt(value(
+          method_data_defense_center_port: parseInt(getValue(
             method.data.defense_center_port, DEFAULT_DEFENSE_CENTER_PORT)),
 
-          method_data_details_url: value(method.data.details_url,
+          method_data_details_url: getValue(method.data.details_url,
             DEFAULT_DETAILS_URL),
           method_data_recipient_credential: selectSaveId(emailCredentials,
             recipient_credential_id, UNSET_VALUE),
-          method_data_to_address: value(alert.method.data.to_address, ''),
-          method_data_from_address: value(alert.method.data.from_address, ''),
+          method_data_to_address: getValue(alert.method.data.to_address, ''),
+          method_data_from_address:
+            getValue(alert.method.data.from_address, ''),
           method_data_subject,
           method_data_message,
           method_data_message_attach,
           method_data_notice,
           method_data_notice_report_format: selectSaveId(report_formats,
-            value(method.data.notice_report_format,
+            getValue(method.data.notice_report_format,
               DEFAULT_NOTICE_REPORT_FORMAT)),
           method_data_notice_attach_format: selectSaveId(report_formats,
-            value(method.data.attach_report_format,
+            getValue(method.data.attach_report_format,
               DEFAULT_NOTICE_ATTACH_FORMAT)),
 
           method_data_scp_credential: selectSaveId(credentials,
             scp_credential_id),
           method_data_scp_report_format: selectSaveId(report_formats,
-            value(method.data.scp_report_format)),
-          method_data_scp_path: value(method.data.scp_path, DEFAULT_SCP_PATH),
-          method_data_scp_host: value(method.data.scp_host, ''),
-          method_data_scp_known_hosts: value(method.data.scp_known_hosts, ''),
+            getValue(method.data.scp_report_format)),
+          method_data_scp_path:
+            getValue(method.data.scp_path, DEFAULT_SCP_PATH),
+          method_data_scp_host: getValue(method.data.scp_host, ''),
+          method_data_scp_known_hosts:
+            getValue(method.data.scp_known_hosts, ''),
 
-          method_data_send_port: value(method.data.send_port, ''),
-          method_data_send_host: value(method.data.send_host, ''),
+          method_data_send_port: getValue(method.data.send_port, ''),
+          method_data_send_host: getValue(method.data.send_host, ''),
           method_data_send_report_format: selectSaveId(report_formats,
-            value(method.data.send_report_format)),
+            getValue(method.data.send_report_format)),
 
-          method_data_smb_credential: value(method.data.smb_credential, ''),
-          method_data_smb_file_path: value(method.data.smb_file_path, ''),
+          method_data_smb_credential: getValue(method.data.smb_credential, ''),
+          method_data_smb_file_path: getValue(method.data.smb_file_path, ''),
           method_data_smb_file_path_type:
-            value(method.data.smb_file_path_type, ''),
+            getValue(method.data.smb_file_path_type, ''),
           method_data_smb_report_format:
-            value(method.data.smb_report_format, ''),
-          method_data_smb_share_path: value(method.data.smb_share_path, ''),
+            getValue(method.data.smb_report_format, ''),
+          method_data_smb_share_path: getValue(method.data.smb_share_path, ''),
 
-          method_data_snmp_agent: value(method.data.snmp_agent, ''),
-          method_data_snmp_community: value(method.data.snmp_community,
+          method_data_snmp_agent: getValue(method.data.snmp_agent, ''),
+          method_data_snmp_community: getValue(method.data.snmp_community,
             ''),
-          method_data_snmp_message: value(method.data.snmp_message, ''),
+          method_data_snmp_message: getValue(method.data.snmp_message, ''),
 
-          method_data_start_task_task: selectSaveId(tasks, value(
+          method_data_start_task_task: selectSaveId(tasks, getValue(
             method.data.start_task_task)),
 
           method_data_tp_sms_credential: selectSaveId(credentials,
             tp_sms_credential_id),
-          method_data_tp_sms_hostname: value(method.data.tp_sms_hostname, ''),
+          method_data_tp_sms_hostname:
+            getValue(method.data.tp_sms_hostname, ''),
           method_data_tp_sms_tls_workaround: parseYesNo(
-            value(method.data.tp_sms_hostname, NO_VALUE)),
+            getValue(method.data.tp_sms_hostname, NO_VALUE)),
 
           method_data_verinice_server_report_format: select_verinice_report_id(
-            report_formats, value(method.data.verinice_server_report_format)),
-          method_data_verinice_server_url: value(
+            report_formats,
+            getValue(method.data.verinice_server_report_format)
+          ),
+          method_data_verinice_server_url: getValue(
             method.data.verinice_server_url),
           method_data_verinice_server_credential: selectSaveId(credentials,
             verinice_credential_id),
 
           method_data_vfire_credential: selectSaveId(vFireCredentials,
             vfire_credential_id),
-          method_data_vfire_base_url: value(method.data.vfire_base_url),
+          method_data_vfire_base_url: getValue(method.data.vfire_base_url),
           method_data_vfire_call_description:
-            value(method.data.vfire_call_description),
+            getValue(method.data.vfire_call_description),
           method_data_vfire_call_impact_name:
-            value(method.data.vfire_call_impact_name),
+            getValue(method.data.vfire_call_impact_name),
           method_data_vfire_call_partition_name:
-            value(method.data.vfire_call_partition_name),
+            getValue(method.data.vfire_call_partition_name),
           method_data_vfire_call_template_name:
-            value(method.data.vfire_call_template_name),
+            getValue(method.data.vfire_call_template_name),
           method_data_vfire_call_type_name:
-            value(method.data.vfire_call_type_name),
+            getValue(method.data.vfire_call_type_name),
           method_data_vfire_call_urgency_name:
-            value(method.data.vfire_call_urgency_name),
-          method_data_vfire_client_id: value(method.data.vfire_client_id),
-          method_data_vfire_session_type: value(method.data.vfire_session_type),
+            getValue(method.data.vfire_call_urgency_name),
+          method_data_vfire_client_id: getValue(method.data.vfire_client_id),
+          method_data_vfire_session_type:
+            getValue(method.data.vfire_session_type),
 
-          method_data_URL: value(method.data.URL, ''),
-          method_data_delta_type: value(alert.method.data.delta_type, ''),
-          method_data_delta_report_id: value(alert.method.data.delta_report_id,
+          method_data_URL: getValue(method.data.URL, ''),
+          method_data_delta_type: getValue(alert.method.data.delta_type, ''),
+          method_data_delta_report_id:
+            getValue(alert.method.data.delta_report_id,
             ''),
           tasks,
           title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
@@ -462,6 +565,7 @@ class AlertComponent extends React.Component {
           report_formats = [],
           tasks = [],
         } = settings;
+        const {reportComposerDefaults} = this.props;
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -490,8 +594,14 @@ class AlertComponent extends React.Component {
           event_data_secinfo_type: undefined,
           filter_id: undefined,
           filters,
+          composerFilterId: reportComposerDefaults.reportResultFilterId,
+          composerIncludeNotes: reportComposerDefaults.includeNotes,
+          composerIncludeOverrides: reportComposerDefaults.includeOverrides,
+          composerStoreAsDefault: NO_VALUE,
           id: undefined,
           method: undefined,
+          method_data_composer_include_notes: undefined,
+          method_data_composer_include_overrides: undefined,
           method_data_defense_center_ip: undefined,
           method_data_defense_center_port: undefined,
           method_data_details_url: undefined,
@@ -558,6 +668,13 @@ class AlertComponent extends React.Component {
   }
 
   handleCloseAlertDialog() {
+    this.setState({
+      composerIncludeNotes: undefined,
+      composerIncludeOverrides: undefined,
+      composerFilterId: undefined,
+      composerFilterString: undefined,
+      composerStoreAsDefault: NO_VALUE,
+    });
     this.closeAlertDialog();
     this.handleInteraction();
   }
@@ -639,6 +756,26 @@ class AlertComponent extends React.Component {
     }
   }
 
+  handleValueChange(value, name) {
+    this.handleInteraction();
+    name = capitalizeFirstLetter(name);
+    this.setState({[`composer${name}`]: value});
+  }
+
+  handleFilterIdChange(value) {
+    const {gmp} = this.props;
+    gmp.filter.get({id: value}).then(response => {
+      const composerFilterString = isDefined(response.data) ?
+        response.data.toFilterCriteriaString() :
+        undefined;
+      this.setState({
+        composerFilterId: value,
+        composerFilterString,
+      });
+    });
+    this.handleInteraction();
+  }
+
   render() {
     const {
       children,
@@ -658,6 +795,7 @@ class AlertComponent extends React.Component {
 
     const {
       alertDialogVisible,
+      contentComposerDialogVisible,
       credentialDialogVisible,
       credentialDialogTitle,
       credentialTypes,
@@ -669,6 +807,10 @@ class AlertComponent extends React.Component {
       comment,
       filters,
       filter_id,
+      composerFilterId,
+      composerFilterString,
+      composerIncludeNotes,
+      composerIncludeOverrides,
       credentials,
       result_filters,
       secinfo_filters,
@@ -685,6 +827,8 @@ class AlertComponent extends React.Component {
       event_data_feed_event,
       event_data_secinfo_type,
       method,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
       method_data_defense_center_ip,
       method_data_defense_center_port,
       method_data_details_url,
@@ -735,6 +879,7 @@ class AlertComponent extends React.Component {
       method_data_delta_report_id,
       report_formats,
       report_format_ids,
+      composerStoreAsDefault,
       tasks,
     } = this.state;
     return (
@@ -790,6 +935,10 @@ class AlertComponent extends React.Component {
                 event_data_feed_event={event_data_feed_event}
                 event_data_secinfo_type={event_data_secinfo_type}
                 method={method}
+                method_data_composer_include_notes=
+                  {method_data_composer_include_notes}
+                method_data_composer_include_overrides=
+                  {method_data_composer_include_overrides}
                 method_data_defense_center_ip={method_data_defense_center_ip}
                 method_data_defense_center_port={
                   method_data_defense_center_port}
@@ -857,6 +1006,8 @@ class AlertComponent extends React.Component {
                 report_format_ids={report_format_ids}
                 tasks={tasks}
                 onClose={this.handleCloseAlertDialog}
+                onOpenContentComposerDialogClick=
+                  {this.handleOpenContentComposerDialog}
                 onNewEmailCredentialClick={this.openEmailCredentialDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
@@ -886,6 +1037,21 @@ class AlertComponent extends React.Component {
                 onSave={this.handleCreateCredential}
               />
             }
+            {contentComposerDialogVisible &&
+              <ContentComposerDialog
+                includeNotes={parseYesNo(composerIncludeNotes)}
+                includeOverrides={parseYesNo(composerIncludeOverrides)}
+                filterId={composerFilterId}
+                filters={result_filters}
+                filterString={composerFilterString}
+                storeAsDefault={parseYesNo(composerStoreAsDefault)}
+                title={_('Compose Content for Scan Report')}
+                onChange={this.handleValueChange}
+                onClose={this.closeContentComposerDialog}
+                onFilterIdChange={this.handleFilterIdChange}
+                onSave={this.handleSaveComposerContent}
+              />
+            }
           </Layout>
         )}
       </EntityComponent>
@@ -896,6 +1062,9 @@ class AlertComponent extends React.Component {
 AlertComponent.propTypes = {
   children: PropTypes.func.isRequired,
   gmp: PropTypes.gmp.isRequired,
+  loadReportComposerDefaults: PropTypes.func.isRequired,
+  reportComposerDefaults: PropTypes.object,
+  saveReportComposerDefaults: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -912,6 +1081,24 @@ AlertComponent.propTypes = {
   onTestSuccess: PropTypes.func,
 };
 
-export default withGmp(AlertComponent);
+const mapDispatchToProps = (dispatch, {gmp}) => {
+  return {
+    loadReportComposerDefaults: () => dispatch(
+      loadReportComposerDefaults(gmp)()),
+    saveReportComposerDefaults: reportComposerDefaults =>
+      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
+  };
+};
+
+const mapStateToProps = rootState => {
+  return {
+    reportComposerDefaults: getReportComposerDefaults(rootState),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AlertComponent);
 
 // vim: set ts=2 sw=2 tw=80:

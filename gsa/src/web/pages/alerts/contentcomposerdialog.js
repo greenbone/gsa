@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018 - 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -25,12 +25,11 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import {selectSaveId} from 'gmp/utils/id';
-import {isString} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
-import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
+import ComposerContent, {COMPOSER_CONTENT_DEFAULTS} from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len*/
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -38,33 +37,33 @@ import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 const StyledDiv = styled.div`
   text-align: end;
 `;
 
-const DownloadReportDialog = ({
-  defaultReportFormatId,
-  filter = {},
+const ContentComposerDialog = ({
+  filterId,
+  filters,
+  filterString = '',
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
-  reportFormatId,
-  reportFormats,
   storeAsDefault,
   onClose,
+  onFilterIdChange,
   onSave,
+  onChange,
 }) => {
-  const filterString = isString(filter) ?
-    filter : filter.toFilterCriteriaString();
 
-  reportFormatId = selectSaveId(reportFormats, defaultReportFormatId);
+  filterId = filterId === NO_VALUE || !isDefined(filterId) ?
+    UNSET_VALUE : filterId;
 
-  const unControlledValues = {
+  const controlledValues = {
+    filterId,
+    filterString,
     includeNotes,
     includeOverrides,
-    reportFormatId,
     storeAsDefault,
   };
 
@@ -72,7 +71,7 @@ const DownloadReportDialog = ({
     <SaveDialog
       buttonTitle={_('OK')}
       title={_('Compose Content for Scan Report')}
-      defaultValues={unControlledValues}
+      values={controlledValues}
       onClose={onClose}
       onSave={onSave}
     >
@@ -81,31 +80,30 @@ const DownloadReportDialog = ({
         onValueChange,
       }) => (
         <Layout flex="column">
+          <FormGroup title={_('Report Result Filter')} titleSize="3">
+            <Select
+              name="filterId"
+              value={values.filterId}
+              items={renderSelectItems(filters, UNSET_VALUE)}
+              onChange={onFilterIdChange}
+            />
+          </FormGroup>
           <ComposerContent
-            filterString={filterString}
+            filterFieldTitle={_('To change the filter, please select a filter' +
+              ' from the dropdown menu.')}
+            filterString={values.filterString}
             includeNotes={values.includeNotes}
             includeOverrides={values.includeOverrides}
-            onValueChange={onValueChange}
+            onValueChange={onChange}
           />
-          <FormGroup title={_('Report Format')} titleSize="3">
-            <Divider flex="column">
-              <Select
-                name="reportFormatId"
-                value={values.reportFormatId}
-                items={renderSelectItems(reportFormats)}
-                width="auto"
-                onChange={onValueChange}
-              />
-            </Divider>
-          </FormGroup>
           <StyledDiv>
             <CheckBox
               name="storeAsDefault"
-              checked={storeAsDefault}
+              checked={values.storeAsDefault}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
               title={_('Store as default')}
-              onChange={onValueChange}
+              onChange={onChange}
             />
           </StyledDiv>
         </Layout>
@@ -114,18 +112,22 @@ const DownloadReportDialog = ({
   );
 };
 
-DownloadReportDialog.propTypes = {
+ContentComposerDialog.propTypes = {
   defaultReportFormatId: PropTypes.id,
-  filter: PropTypes.filter.isRequired,
+  filterId: PropTypes.toString,
+  filterString: PropTypes.string,
+  filters: PropTypes.array,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
   reportFormatId: PropTypes.id,
   reportFormats: PropTypes.array,
-  storeAsDefault: PropTypes.bool,
+  storeAsDefault: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onFilterIdChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default DownloadReportDialog;
+export default ContentComposerDialog;
 
 // vim: set ts=2 sw=2 tw=80:

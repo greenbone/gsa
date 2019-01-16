@@ -135,7 +135,7 @@ const ToolBarIcons = ({
           title={_('Results for this Host')}
         >
           <Icon
-            img="report.svg"
+            img="result.svg"
           />
         </Link>
       </IconDivider>

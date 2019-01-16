@@ -41,6 +41,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ReportIcon from 'web/components/icon/reporticon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -194,9 +195,7 @@ const ToolBarIcons = ({
                 date: shortDate(entity.current_report.scan_start),
               })}
             >
-              <Icon
-                img="report.svg"
-              />
+              <ReportIcon/>
             </DetailsLink>
           }
 
@@ -209,9 +208,7 @@ const ToolBarIcons = ({
                 date: shortDate(entity.last_report.scan_start),
               })}
             >
-              <Icon
-                img="report.svg"
-              />
+              <ReportIcon/>
             </DetailsLink>
           }
 
@@ -223,9 +220,7 @@ const ToolBarIcons = ({
               filter={'task_id=' + entity.id}
               title={_('Total Reports for Task {{name}}', entity)}
             >
-              <Icon
-                img="report.svg"
-              />
+              <ReportIcon/>
             </Link>
           </Badge>
         </IconDivider>
