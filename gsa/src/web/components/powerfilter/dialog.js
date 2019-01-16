@@ -20,9 +20,10 @@
 import React from 'react';
 
 import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
 
 import Layout from 'web/components/layout/layout';
+
+import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 
 import compose from 'web/utils/compose';
 
@@ -32,7 +33,6 @@ import FirstResultGroup from './firstresultgroup';
 import ResultsPerPageGroup from './resultsperpagegroup';
 import SortByGroup from './sortbygroup';
 
-import withFilterDialogNew from './withFilterDialog';
 import DefaultFilterDialogPropTypes from './dialogproptypes';
 
 export const DefaultFilterDialog = ({
@@ -85,16 +85,11 @@ export const DefaultFilterDialog = ({
 
 DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 
-const withFilterDialog = (FilterDialogComponent, options = {}) => {
-  return withFilterDialogNew(options)(FilterDialogComponent);
-};
-
 export const createFilterDialog = options => {
   return compose(
     withCapabilities,
-    withGmp,
-    withFilterDialog
-  )(DefaultFilterDialog, options);
+    withFilterDialog(options)
+  )(DefaultFilterDialog);
 };
 
 export {DefaultFilterDialogPropTypes};

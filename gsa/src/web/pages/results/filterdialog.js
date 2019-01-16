@@ -24,7 +24,6 @@ import Layout from 'web/components/layout/layout';
 
 import compose from 'web/utils/compose';
 import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
 
 /* eslint-disable max-len */
 
@@ -159,7 +158,6 @@ ResultsFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
 export default compose(
   withCapabilities,
-  withGmp,
   withFilterDialog(),
 )(ResultsFilterDialogComponent);
 
