@@ -23,11 +23,6 @@ import {longDate} from 'gmp/locale/date';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-import {na, renderComponent} from 'web/utils/render';
-
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
@@ -36,67 +31,72 @@ import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import EntitiesActions from 'web/entities/actions';
+import {RowDetailsToggle} from 'web/entities/row';
+
+import PropTypes from 'web/utils/proptypes';
+import {na} from 'web/utils/render';
+
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
-  ...other
-}) => {
-  return (
-    <TableBody>
-      <TableRow>
-        <TableData
-          rowSpan="2"
+  ...props
+}) => (
+  <TableBody>
+    <TableRow>
+      <TableData
+        rowSpan="2"
+      >
+        <RowDetailsToggle
+          name={entity.id}
+          onClick={onToggleDetailsClick}
         >
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}
-          >
-            {entity.name}
-          </RowDetailsToggle>
-          <div>{shorten(entity.file, 45)}</div>
-          <Comment text={entity.comment}/>
-        </TableData>
-        <TableData>
-          {na(entity.version)}
-        </TableData>
-        <TableData>
-          {na(entity.status)}
-        </TableData>
-        <TableData>
-          {na(entity.class)}
-        </TableData>
-        <TableData>
-          {longDate(entity.creationTime)}
-        </TableData>
-        <TableData>
-          {longDate(entity.modificationTime)}
-        </TableData>
-        <TableData>
-          {entity.cve_refs}
-        </TableData>
-        <TableData>
-          <SeverityBar severity={entity.severity}/>
-        </TableData>
-        {renderComponent(actions, {...other, entity})}
-      </TableRow>
-      <TableRow>
-        <TableData colSpan="8">
-          {shorten(entity.title, 250)}
-        </TableData>
-      </TableRow>
-    </TableBody>
-  );
-};
+          {entity.name}
+        </RowDetailsToggle>
+        <div>{shorten(entity.file, 45)}</div>
+        <Comment text={entity.comment}/>
+      </TableData>
+      <TableData>
+        {na(entity.version)}
+      </TableData>
+      <TableData>
+        {na(entity.status)}
+      </TableData>
+      <TableData>
+        {na(entity.class)}
+      </TableData>
+      <TableData>
+        {longDate(entity.creationTime)}
+      </TableData>
+      <TableData>
+        {longDate(entity.modificationTime)}
+      </TableData>
+      <TableData>
+        {entity.cve_refs}
+      </TableData>
+      <TableData>
+        <SeverityBar severity={entity.severity}/>
+      </TableData>
+      <EntitiesActions
+        {...props}
+        entity={entity}
+      />
+    </TableRow>
+    <TableRow>
+      <TableData colSpan="8">
+        {shorten(entity.title, 250)}
+      </TableData>
+    </TableRow>
+  </TableBody>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

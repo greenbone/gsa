@@ -24,18 +24,6 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -46,7 +34,16 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const IconActions = ({
+import EntityNameTableData from 'web/entities/entitynametabledata';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+const Actions = withEntitiesActions(({
   entity,
   onTargetEditClick,
   onTargetCloneClick,
@@ -83,9 +80,9 @@ const IconActions = ({
       onClick={onTargetDownloadClick}
     />
   </IconDivider>
-);
+));
 
-IconActions.propTypes = {
+Actions.propTypes = {
   entity: PropTypes.model,
   onTargetCloneClick: PropTypes.func.isRequired,
   onTargetDeleteClick: PropTypes.func.isRequired,
@@ -123,64 +120,63 @@ Cred.propTypes = {
   title: PropTypes.string,
 };
 
-
 const Row = ({
-  actions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        entity={entity}
-        link={links}
-        type="target"
-        displayName={_('Target')}
-        onToggleDetailsClick={onToggleDetailsClick}
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="target"
+      displayName={_('Target')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      {shorten(entity.hosts.join(', '), 500)}
+    </TableData>
+    <TableData>
+      {entity.max_hosts}
+    </TableData>
+    <TableData>
+      <DetailsLink
+        type="portlist"
+        id={entity.port_list.id}
+        textOnly={!links}
+      >
+        {entity.port_list.name}
+      </DetailsLink>
+    </TableData>
+    <TableData flex="column" align="center">
+      <Cred
+        cred={entity.ssh_credential}
+        title={'SSH'}
+        links={links}
       />
-      <TableData>
-        {shorten(entity.hosts.join(', '), 500)}
-      </TableData>
-      <TableData>
-        {entity.max_hosts}
-      </TableData>
-      <TableData>
-        <DetailsLink
-          type="portlist"
-          id={entity.port_list.id}
-          textOnly={!links}
-        >
-          {entity.port_list.name}
-        </DetailsLink>
-      </TableData>
-      <TableData flex="column" align="center">
-        <Cred
-          cred={entity.ssh_credential}
-          title={'SSH'}
-          links={links}
-        />
-        <Cred
-          cred={entity.smb_credential}
-          title={'SMB'}
-          links={links}
-        />
-        <Cred
-          cred={entity.esxi_credential}
-          title={'ESXi'}
-          links={links}
-        />
-        <Cred
-          cred={entity.snmp_credential}
-          title={'SNMP'}
-          links={links}
-        />
-      </TableData>
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+      <Cred
+        cred={entity.smb_credential}
+        title={'SMB'}
+        links={links}
+      />
+      <Cred
+        cred={entity.esxi_credential}
+        title={'ESXi'}
+        links={links}
+      />
+      <Cred
+        cred={entity.snmp_credential}
+        title={'SNMP'}
+        links={links}
+      />
+    </TableData>
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
   actions: PropTypes.componentOrFalse,
@@ -189,6 +185,6 @@ Row.propTypes = {
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(IconActions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

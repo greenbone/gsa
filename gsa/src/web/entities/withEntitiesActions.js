@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,37 +16,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import EntitiesActions from './actions';
 
-import Layout from '../layout/layout';
+const withEntitiesActions = Component => {
+  const EnitiesActionsWrapper = props => (
+    <EntitiesActions
+      {...props}
+    >
+      {actionprops => <Component {...actionprops}/>}
+    </EntitiesActions>
+  );
 
-const TableData = ({
-  children,
-  className,
-  colSpan,
-  rowSpan,
-  ...other
-}) => (
-  <td
-    className={className}
-    colSpan={colSpan}
-    rowSpan={rowSpan}
-  >
-    <Layout flex="column" {...other}>
-      {children}
-    </Layout>
-  </td>
-);
-
-TableData.propTypes = {
-  className: PropTypes.string,
-  colSpan: PropTypes.numberOrNumberString,
-  rowSpan: PropTypes.numberOrNumberString,
+  return EnitiesActionsWrapper;
 };
 
-export default TableData;
+export default withEntitiesActions;
 
 // vim: set ts=2 sw=2 tw=80:

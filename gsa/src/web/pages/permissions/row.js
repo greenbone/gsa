@@ -24,21 +24,6 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
-import PropTypes from 'web/utils/proptypes';
-import {
-  renderComponent,
-  permissionDescription,
-} from 'web/utils/render';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import EntityLink from 'web/entity/link';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -46,7 +31,19 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const Actions = ({
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import EntityLink from 'web/entity/link';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
+
+const Actions = withEntitiesActions(({
   entity,
   onPermissionDeleteClick,
   onPermissionDownloadClick,
@@ -84,7 +81,7 @@ const Actions = ({
       onClick={onPermissionDownloadClick}
     />
   </IconDivider>
-);
+));
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -95,7 +92,6 @@ Actions.propTypes = {
 };
 
 const Row = ({
-  actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -128,17 +124,19 @@ const Row = ({
         <EntityLink entity={entity.subject}/>
       }
     </TableData>
-    {renderComponent(actions, {...props, entity})}
+    <Actions
+      {...props}
+      entity={entity}
+    />
   </TableRow>
 );
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

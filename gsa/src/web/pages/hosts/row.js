@@ -24,16 +24,6 @@ import {longDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EditIcon from 'web/entity/icon/editicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
@@ -47,15 +37,27 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const Actions = ({
-    capabilities,
-    entity,
-    onTargetCreateFromHostClick,
-    onHostEditClick,
-    onHostDeleteClick,
-    onHostDownloadClick,
-  }) => {
+import DeleteIcon from 'web/entity/icon/deleteicon';
+import EditIcon from 'web/entity/icon/editicon';
 
+import {RowDetailsToggle} from 'web/entities/row';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+const Actions = compose(
+  withCapabilities,
+  withEntitiesActions,
+)(({
+  capabilities,
+  entity,
+  onTargetCreateFromHostClick,
+  onHostEditClick,
+  onHostDeleteClick,
+  onHostDownloadClick,
+}) => {
   let new_title;
   const can_create_target = capabilities.mayCreate('target');
   if (can_create_target) {
@@ -94,10 +96,9 @@ const Actions = ({
       />
     </IconDivider>
   );
-};
+});
 
 Actions.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model,
   onHostDeleteClick: PropTypes.func,
   onHostDownloadClick: PropTypes.func,
@@ -108,7 +109,6 @@ Actions.propTypes = {
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
   ...props
 }) => {
@@ -148,21 +148,20 @@ const Row = ({
           longDate(entity.modificationTime)
         }
       </TableData>
-      {renderComponent(actions, {...props, entity})}
+      <Actions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default compose(
-  withEntityRow(withEntityActions(Actions)),
-  withCapabilities,
-)(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

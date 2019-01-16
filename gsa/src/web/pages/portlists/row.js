@@ -21,11 +21,9 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -83,10 +81,11 @@ IconActions.propTypes = {
   onPortListEditClick: PropTypes.func.isRequired,
 };
 
+const Actions = withEntitiesActions(IconActions);
+
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
   ...props
 }) => (
@@ -107,17 +106,19 @@ const Row = ({
     <TableData align="start">
       {entity.port_count.udp}
     </TableData>
-    {renderComponent(actions, {...props, entity})}
+    <Actions
+      {...props}
+      entity={entity}
+    />
   </TableRow>
 );
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(IconActions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

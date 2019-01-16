@@ -22,19 +22,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent, renderYesNo} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import ExportIcon from 'web/components/icon/exporticon';
 import Icon from 'web/components/icon/icon';
 
@@ -45,11 +32,22 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import EntityNameTableData from 'web/entities/entitynametabledata';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+
 import Condition from './condition';
 import Event from './event';
 import Method from './method';
 
-const Actions = ({
+const Actions = withEntitiesActions(({
   entity,
   onAlertDeleteClick,
   onAlertDownloadClick,
@@ -93,7 +91,7 @@ const Actions = ({
       onClick={onAlertTestClick}
     />
   </IconDivider>
-);
+));
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -121,56 +119,52 @@ const render_filter = (filter, caps, links = true) => {
 };
 
 const Row = ({
-  actions,
   capabilities,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
-  return (
-    <TableRow>
-      <EntityNameTableData
-        entity={entity}
-        link={links}
-        type="alert"
-        displayName={_('Alert')}
-        onToggleDetailsClick={onToggleDetailsClick}
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="alert"
+      displayName={_('Alert')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>
+      <Event event={entity.event}/>
+    </TableData>
+    <TableData>
+      <Condition
+        condition={entity.condition}
+        event={entity.event}
       />
-      <TableData>
-        <Event event={entity.event}/>
-      </TableData>
-      <TableData>
-        <Condition
-          condition={entity.condition}
-          event={entity.event}
-        />
-      </TableData>
-      <TableData>
-        <Method method={entity.method}/>
-      </TableData>
-      <TableData>
-        {render_filter(entity.filter, capabilities)}
-      </TableData>
-      <TableData>
-        {renderYesNo(entity.active)}
-      </TableData>
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+    </TableData>
+    <TableData>
+      <Method method={entity.method}/>
+    </TableData>
+    <TableData>
+      {render_filter(entity.filter, capabilities)}
+    </TableData>
+    <TableData>
+      {renderYesNo(entity.active)}
+    </TableData>
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default compose(
-  withEntityRow(withEntityActions(Actions)),
-  withCapabilities,
-)(Row);
+export default withCapabilities(Row);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -21,11 +21,6 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityRow} from 'web/entities/row';
-
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
@@ -34,11 +29,14 @@ import SeverityBar from 'web/components/bar/severitybar';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import EntitiesActions from 'web/entities/actions';
+
+import PropTypes from 'web/utils/proptypes';
+
 const Row = ({
   entity,
   links = true,
-  actions,
-  ...other
+  ...props
 }) => {
   const {results = {}, hosts = {}} = entity;
   return (
@@ -76,17 +74,19 @@ const Row = ({
       <TableData>
         {hosts.count}
       </TableData>
-      {renderComponent(actions, {...other, entity})}
+      <EntitiesActions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

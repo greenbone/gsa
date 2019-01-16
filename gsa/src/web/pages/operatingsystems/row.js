@@ -22,12 +22,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import CpeIcon from 'web/components/icon/cpeicon';
@@ -42,7 +36,11 @@ import Link from 'web/components/link/link';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const IconActions = ({
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import PropTypes from 'web/utils/proptypes';
+
+const Actions = withEntitiesActions(({
   entity,
   onOsDeleteClick,
   onOsDownloadClick,
@@ -68,66 +66,68 @@ const IconActions = ({
       title={_('Export Operating System')}
     />
   </IconDivider>
-);
+));
 
-IconActions.propTypes = {
+Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   onOsDeleteClick: PropTypes.func.isRequired,
   onOsDownloadClick: PropTypes.func.isRequired,
 };
 
-const Actions = withEntityActions(IconActions);
-
-const Row = ({entity, links = true, actions, ...props}) => {
-  return (
-    <TableRow>
-      <TableData>
-        <IconDivider align={['start', 'center']}>
-          <CpeIcon name={entity.name}/>
-          <DetailsLink
-            type={entity.entityType}
-            id={entity.id}
-            textOnly={!links}
-          >
-            {entity.name}
-          </DetailsLink>
-        </IconDivider>
-      </TableData>
-      <TableData>
-        {entity.title}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.latest_severity}/>
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.highest_severity}/>
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.average_severity}/>
-      </TableData>
-      <TableData>
-        <Link
-          to={'hosts'}
-          filter={'os~"' + entity.name + '"'}
+const Row = ({
+  entity,
+  links = true,
+  ...props
+}) => (
+  <TableRow>
+    <TableData>
+      <IconDivider align={['start', 'center']}>
+        <CpeIcon name={entity.name}/>
+        <DetailsLink
+          type={entity.entityType}
+          id={entity.id}
           textOnly={!links}
         >
-          {entity.hosts.length}
-        </Link>
-      </TableData>
-      <TableData>
-        {longDate(entity.modificationTime)}
-      </TableData>
-      {renderComponent(actions, {...props, entity})}
-    </TableRow>
-  );
-};
+          {entity.name}
+        </DetailsLink>
+      </IconDivider>
+    </TableData>
+    <TableData>
+      {entity.title}
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.latest_severity}/>
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.highest_severity}/>
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.average_severity}/>
+    </TableData>
+    <TableData>
+      <Link
+        to={'hosts'}
+        filter={'os~"' + entity.name + '"'}
+        textOnly={!links}
+      >
+        {entity.hosts.length}
+      </Link>
+    </TableData>
+    <TableData>
+      {longDate(entity.modificationTime)}
+    </TableData>
+    <Actions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
 
-export default withEntityRow(Actions)(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

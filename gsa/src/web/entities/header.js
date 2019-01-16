@@ -20,8 +20,6 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
@@ -60,8 +58,10 @@ const defaultactions = (
  *
  * @return A new EntitiesHeader component
  */
-export const withEntitiesHeader = (actions_column = defaultactions,
-  options = {}) => Component => {
+export const withEntitiesHeader = (
+  actions_column = defaultactions,
+  options = {},
+) => Component => {
 
   if (actions_column === false) {
     actions_column = null;
@@ -110,8 +110,11 @@ export const withEntitiesHeader = (actions_column = defaultactions,
  *
  * @return A new EntitiesHeader component
  */
-export const createEntitiesHeader = (columns, actions_column, options = {}) => {
-
+export const createEntitiesHeader = (
+  columns,
+  actions_column,
+  options = {},
+) => {
   const Header = ({
     actionsColumn,
     links = true,
@@ -119,33 +122,28 @@ export const createEntitiesHeader = (columns, actions_column, options = {}) => {
     currentSortDir,
     sort = true,
     onSortChange,
-  }) => {
-
-    return (
-      <TableHeader>
-        <TableRow>
-          {
-            columns.map(column => {
-              const width = isDefined(column[2]) ? column[2] : '';
-              return (
-                <TableHead
-                  key={column[0]}
-                  width={width}
-                  currentSortBy={currentSortBy}
-                  currentSortDir={currentSortDir}
-                  sortBy={sort ? column[0] : false}
-                  onSortChange={onSortChange}
-                >
-                  {`${column[1]}`}
-                </TableHead>
-              );
-            })
-          }
-          {actionsColumn}
-        </TableRow>
-      </TableHeader>
-    );
-  };
+  }) => (
+    <TableHeader>
+      <TableRow>
+        {columns.map(column => {
+          const [name, displayName, width] = column;
+          return (
+            <TableHead
+              key={name}
+              width={width}
+              currentSortBy={currentSortBy}
+              currentSortDir={currentSortDir}
+              sortBy={sort ? name : false}
+              onSortChange={onSortChange}
+            >
+              {`${displayName}`}
+            </TableHead>
+          );
+        })}
+        {actionsColumn}
+      </TableRow>
+    </TableHeader>
+  );
 
   Header.propTypes = {
     actionsColumn: PropTypes.element,

@@ -27,11 +27,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderComponent} from 'web/utils/render';
-
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Icon from 'web/components/icon/icon';
@@ -45,15 +40,19 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import {RowDetailsToggle} from 'web/entities/row';
+import EntitiesActions from 'web/entities/actions';
+
+import PropTypes from 'web/utils/proptypes';
+
 import ResultDelta from './delta';
 
 const Row = ({
-  actions,
   delta = false,
   entity,
   links = true,
   onToggleDetailsClick,
-  ...other
+  ...props
 }) => {
   const {host} = entity;
   const shown_name = isDefined(entity.name) ? entity.name : entity.nvt.oid;
@@ -132,19 +131,21 @@ const Row = ({
       <TableData>
         {longDate(entity.modificationTime)}
       </TableData>
-      {renderComponent(actions, {...other, entity})}
+      <EntitiesActions
+        {...props}
+        entity={entity}
+      />
     </TableRow>
   );
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   delta: PropTypes.bool,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -21,11 +21,6 @@ import React from 'react';
 
 import {longDate} from 'gmp/locale/date';
 
-import PropTypes from 'web/utils/proptypes';
-import {na, renderComponent} from 'web/utils/render';
-
-import {withEntityRow, RowDetailsToggle} from 'web/entities/row';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
@@ -33,48 +28,53 @@ import Comment from 'web/components/comment/comment';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import EntitiesActions from 'web/entities/actions';
+import {RowDetailsToggle} from 'web/entities/row';
+
+import PropTypes from 'web/utils/proptypes';
+import {na} from 'web/utils/render';
+
 const Row = ({
   entity,
   links = true,
-  actions,
   onToggleDetailsClick,
-  ...other
-}) => {
-  return (
-    <TableRow>
-      <TableData>
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
-          {entity.name}
-        </RowDetailsToggle>
-        <Comment text={entity.comment}/>
-      </TableData>
-      <TableData>
-        {na(entity.title)}
-      </TableData>
-      <TableData>
-        {longDate(entity.creationTime)}
-      </TableData>
-      <TableData>
-        {entity.cve_refs}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
-      </TableData>
-      {renderComponent(actions, {...other, entity})}
-    </TableRow>
-  );
-};
+  ...props
+}) => (
+  <TableRow>
+    <TableData>
+      <RowDetailsToggle
+        name={entity.id}
+        onClick={onToggleDetailsClick}
+      >
+        {entity.name}
+      </RowDetailsToggle>
+      <Comment text={entity.comment}/>
+    </TableData>
+    <TableData>
+      {na(entity.title)}
+    </TableData>
+    <TableData>
+      {longDate(entity.creationTime)}
+    </TableData>
+    <TableData>
+      {entity.cve_refs}
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.severity}/>
+    </TableData>
+    <EntitiesActions
+      {...props}
+      entity={entity}
+    />
+  </TableRow>
+);
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
   entity: PropTypes.model,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow()(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:

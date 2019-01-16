@@ -22,13 +22,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderComponent, renderYesNo} from 'web/utils/render';
-
 import EntityNameTableData from 'web/entities/entitynametabledata';
-import {withEntityActions} from 'web/entities/actions';
-import {withEntityRow} from 'web/entities/row';
 
 import Comment from 'web/components/comment/comment';
 
@@ -44,7 +38,16 @@ import IconDivider from 'web/components/layout/icondivider';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-const Actions = withCapabilities(({
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+const Actions = compose(
+  withCapabilities,
+  withEntitiesActions,
+)(({
   capabilities,
   entity,
   onReportFormatCloneClick,
@@ -107,7 +110,6 @@ Actions.propTypes = {
 };
 
 const Row = ({
-  actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -142,7 +144,10 @@ const Row = ({
     <TableData>
       {renderYesNo(entity.isActive())}
     </TableData>
-    {renderComponent(actions, {...props, entity})}
+    <Actions
+      {...props}
+      entity={entity}
+    />
   </TableRow>
 );
 
@@ -153,6 +158,6 @@ Row.propTypes = {
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default withEntityRow(withEntityActions(Actions))(Row);
+export default Row;
 
 // vim: set ts=2 sw=2 tw=80:
