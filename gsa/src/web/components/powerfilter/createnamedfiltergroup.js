@@ -55,7 +55,7 @@ const CreateNamedFilterGroup = ({
           checkedValue={true}
           unCheckedValue={false}
           checked={saveNamedFilter}
-          title={_('Create new filter from current settings with name: ')}
+          title={_('Store filter as: ')}
           onChange={onValueChange}
         />
         <TextField
