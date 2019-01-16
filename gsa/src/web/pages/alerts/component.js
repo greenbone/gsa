@@ -273,6 +273,7 @@ class AlertComponent extends React.Component {
       const {reportComposerDefaults} = this.props;
       const defaults = {
         ...reportComposerDefaults,
+        reportResultFilterId: filterId,
         includeNotes,
         includeOverrides,
       };
@@ -593,6 +594,7 @@ class AlertComponent extends React.Component {
           event_data_secinfo_type: undefined,
           filter_id: undefined,
           filters,
+          composerFilterId: reportComposerDefaults.reportResultFilterId,
           composerIncludeNotes: reportComposerDefaults.includeNotes,
           composerIncludeOverrides: reportComposerDefaults.includeOverrides,
           composerStoreAsDefault: NO_VALUE,
