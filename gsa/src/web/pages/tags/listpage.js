@@ -44,11 +44,31 @@ import TagComponent from './component';
 import TagsTable from './table';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '30%'],
-  ['value', _l('Value'), '30%'],
-  ['active', _l('Active'), '8%'],
-  ['resource_type', _l('Resource Type'), '8%'],
-  ['modified', _l('Modified'), '8%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '30%',
+  },
+  {
+    name: 'value',
+    displayName: _l('Value'),
+    width: '30%',
+  },
+  {
+    name: 'active',
+    displayName: _l('Active'),
+    width: '8%',
+  },
+  {
+    name: 'resource_type',
+    displayName: _l('Resource Type'),
+    width: '8%',
+  },
+  {
+    name: 'modified',
+    displayName: _l('Modified'),
+    width: '8%',
+  },
 ];
 
 const ToolBarIcons = withCapabilities(({

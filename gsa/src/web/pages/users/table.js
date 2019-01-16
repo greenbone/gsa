@@ -27,11 +27,26 @@ import Header from './header.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['roles', _l('Roles')],
-  ['groups', _l('Groups')],
-  ['host_access', _l('Host Access')],
-  ['ldpa', _l('Authentication Type')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'roles',
+    displayName: _l('Roles'),
+  },
+  {
+    name: 'groups',
+    displayName: _l('Groups'),
+  },
+  {
+    name: 'host_access',
+    displayName: _l('Host Access'),
+  },
+  {
+    name: 'ldap',
+    displayName: _l('Authentication Type'),
+  },
 ];
 
 const UsersTable = createEntitiesTable({

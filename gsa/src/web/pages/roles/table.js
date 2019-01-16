@@ -27,7 +27,11 @@ import Row from './row.js';
 import RoleDetails from './details.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '92%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '92%',
+  },
 ];
 
 const RolesTable = createEntitiesTable({

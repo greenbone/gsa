@@ -21,11 +21,26 @@ import {_l} from 'gmp/locale/lang';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['title', _l('Title')],
-  ['modified', _l('Modified')],
-  ['cves', _l('CVEs')],
-  ['severity', _l('Severity')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'title',
+    displayName: _l('Title'),
+  },
+  {
+    name: 'modified',
+    displayName: _l('Modified'),
+  },
+  {
+    name: 'cves',
+    displayName: _l('CVEs'),
+  },
+  {
+    name: 'severity',
+    displayName: _l('Severity'),
+  },
 ];
 
 export default createFilterDialog({

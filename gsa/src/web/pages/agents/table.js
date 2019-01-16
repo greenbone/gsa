@@ -27,8 +27,16 @@ import AgentDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '46%'],
-  ['trust', _l('Trust'), '46%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '46%',
+  },
+  {
+    name: 'trust',
+    displayName: _l('Trust'),
+    width: '46%',
+  },
 ];
 
 const AgentsTable = createEntitiesTable({

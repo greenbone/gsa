@@ -27,9 +27,21 @@ import FilterDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '37%'],
-  ['term', _l('Term'), '37%'],
-  ['type', _l('Type'), '18%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '37%',
+  },
+  {
+    name: 'term',
+    displayName: _l('Term'),
+    width: '37%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '18%',
+  },
 ];
 
 const FiltersTable = createEntitiesTable({

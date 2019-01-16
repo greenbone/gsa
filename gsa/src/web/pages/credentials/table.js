@@ -27,10 +27,26 @@ import CredentialDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '36%'],
-  ['type', _l('Type'), '31%'],
-  ['allow_insecure', _l('Allow insecure use'), '10%'],
-  ['login', _l('Login'), '15%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '36%',
+  },
+  {
+    name: 'type',
+    displayName: _l('Type'),
+    width: '31%',
+  },
+  {
+    name: 'allow_insecure',
+    displayName: _l('Allow insecure use'),
+    width: '10%',
+  },
+  {
+    name: 'login',
+    displayName: _l('Login'),
+    width: '15%',
+  },
 ];
 
 const CredentialsTable = createEntitiesTable({

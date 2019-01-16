@@ -21,10 +21,22 @@ import {_l} from 'gmp/locale/lang';
 import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
-  ['name', _l('Name')],
-  ['total', _l('Port Counts: Total')],
-  ['tcp', _l('Port Counts: TCP')],
-  ['udp', _l('Port Counts: UDP')],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+  },
+  {
+    name: 'total',
+    displayName: _l('Port Counts: Total'),
+  },
+  {
+    name: 'tcp',
+    displayName: _l('Port Counts: TCP'),
+  },
+  {
+    name: 'udp',
+    displayName: _l('Port Counts: UDP'),
+  },
 ];
 
 export default createFilterDialog({

@@ -27,11 +27,31 @@ import ReportFormatDetails from './details.js';
 import Row from './row.js';
 
 export const SORT_FIELDS = [
-  ['name', _l('Name'), '35%'],
-  ['extension', _l('Extension'), '14%'],
-  ['content_type', _l('Content Type'), '18%'],
-  ['trust', _l('Trust (Last Verified)'), '15%'],
-  ['active', _l('Active'), '10%'],
+  {
+    name: 'name',
+    displayName: _l('Name'),
+    width: '35%',
+  },
+  {
+    name: 'extension',
+    displayName: _l('Extension'),
+    width: '14%',
+  },
+  {
+    name: 'content_type',
+    displayName: _l('Content Type'),
+    width: '18%',
+  },
+  {
+    name: 'trust',
+    displayName: _l('Trust (Last Verified)'),
+    width: '15%',
+  },
+  {
+    name: 'active',
+    displayName: _l('Active'),
+    width: '10%',
+  },
 ];
 
 const ReportFormatsTable = createEntitiesTable({
