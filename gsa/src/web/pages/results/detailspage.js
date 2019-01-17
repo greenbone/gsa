@@ -29,6 +29,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
@@ -56,6 +57,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
+import {goto_list} from 'web/entity/component';
 import EntityPage, {Col} from 'web/entity/page';
 import Note from 'web/entity/note';
 import Override from 'web/entity/override';
@@ -75,6 +77,8 @@ import NoteComponent from '../notes/component';
 
 import OverrideComponent from '../overrides/component';
 
+import TicketComponent from '../tickets/component';
+
 import ResultDetails from './details';
 
 let ToolBarIcons = ({
@@ -83,6 +87,7 @@ let ToolBarIcons = ({
   onNoteCreateClick,
   onOverrideCreateClick,
   onResultDownloadClick,
+  onTicketCreateClick,
 }) => (
   <Divider margin="10px">
     <IconDivider>
@@ -114,6 +119,13 @@ let ToolBarIcons = ({
           title={_('Add new Override')}
           value={entity}
           onClick={onOverrideCreateClick}
+        />
+      }
+      {capabilities.mayCreate('ticket') &&
+        <NewIcon
+          title={_('Create new Ticket')}
+          value={entity}
+          onClick={onTicketCreateClick}
         />
       }
     </IconDivider>
@@ -148,6 +160,7 @@ ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
   onResultDownloadClick: PropTypes.func.isRequired,
+  onTicketCreateClick: PropTypes.func.isRequired,
 };
 
 ToolBarIcons = withCapabilities(ToolBarIcons);
@@ -369,64 +382,70 @@ class Page extends React.Component {
             onInteraction={onInteraction}
           >
             {({create: createoverride}) => (
-              <EntityPage
-                {...this.props}
-                entity={entity}
-                sectionIcon={<ResultIcon size="large"/>}
-                title={_('Result')}
-                toolBarIcons={ToolBarIcons}
+              <TicketComponent
+                onCreated={goto_list('tickets', this.props)}
                 onInteraction={onInteraction}
-                onNoteCreateClick={
-                  result => this.openDialog(result, createnote)}
-                onOverrideCreateClick={
-                  result => this.openDialog(result, createoverride)}
-                onResultDownloadClick={this.handleDownload}
               >
-                {({
-                  activeTab = 0,
-                  onActivateTab,
-                }) => {
-                  return (
-                    <Layout grow="1" flex="column">
-                      <TabLayout
-                        grow="1"
-                        align={['start', 'end']}
-                      >
-                        <TabList
-                          active={activeTab}
-                          align={['start', 'stretch']}
-                          onActivateTab={onActivateTab}
+                {({createFromResult: createticket}) => (
+                  <EntityPage
+                    {...this.props}
+                    entity={entity}
+                    sectionIcon={<ResultIcon size="large"/>}
+                    title={_('Result')}
+                    toolBarIcons={ToolBarIcons}
+                    onInteraction={onInteraction}
+                    onNoteCreateClick={
+                      result => this.openDialog(result, createnote)}
+                    onOverrideCreateClick={
+                      result => this.openDialog(result, createoverride)}
+                    onResultDownloadClick={this.handleDownload}
+                    onTicketCreateClick={createticket}
+                  >
+                    {({
+                      activeTab = 0,
+                      onActivateTab,
+                    }) => (
+                      <Layout grow="1" flex="column">
+                        <TabLayout
+                          grow="1"
+                          align={['start', 'end']}
                         >
-                          <Tab>
-                            {_('Information')}
-                          </Tab>
-                          <EntitiesTab entities={entity.userTags}>
-                            {_('User Tags')}
-                          </EntitiesTab>
-                        </TabList>
-                      </TabLayout>
+                          <TabList
+                            active={activeTab}
+                            align={['start', 'stretch']}
+                            onActivateTab={onActivateTab}
+                          >
+                            <Tab>
+                              {_('Information')}
+                            </Tab>
+                            <EntitiesTab entities={entity.userTags}>
+                              {_('User Tags')}
+                            </EntitiesTab>
+                          </TabList>
+                        </TabLayout>
 
-                      <Tabs active={activeTab}>
-                        <TabPanels>
-                          <TabPanel>
-                            <Details
-                              entity={entity}
-                            />
-                          </TabPanel>
-                          <TabPanel>
-                            <EntityTags
-                              entity={entity}
-                              onChanged={onChanged}
-                              onError={onError}
-                              onInteraction={onInteraction}
-                            />
-                          </TabPanel>
-                        </TabPanels>
-                      </Tabs>
-                    </Layout>
-                  );
-                }}
-              </EntityPage>
+                        <Tabs active={activeTab}>
+                          <TabPanels>
+                            <TabPanel>
+                              <Details
+                                entity={entity}
+                              />
+                            </TabPanel>
+                            <TabPanel>
+                              <EntityTags
+                                entity={entity}
+                                onChanged={onChanged}
+                                onError={onError}
+                                onInteraction={onInteraction}
+                              />
+                            </TabPanel>
+                          </TabPanels>
+                        </Tabs>
+                      </Layout>
+                    )}
+                  </EntityPage>
+                )}
+              </TicketComponent>
             )}
           </OverrideComponent>
         )}
