@@ -275,6 +275,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
@@ -292,6 +294,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg

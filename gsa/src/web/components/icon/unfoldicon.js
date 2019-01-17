@@ -20,16 +20,16 @@ import React from 'react';
 
 import SvgIcon from './svgicon';
 
-import {ReactComponent as FoldSvg} from './svg/fold.svg';
+import {ReactComponent as UnfoldSvg} from './svg/unfold.svg';
 
-const FoldIcon = props => (
+const UnfoldIcon = props => (
   <SvgIcon
     {...props}
   >
-    <FoldSvg/>
+    <UnfoldSvg/>
   </SvgIcon>
 );
 
-export default FoldIcon;
+export default UnfoldIcon;
 
 // vim: set ts=2 sw=2 tw=80:

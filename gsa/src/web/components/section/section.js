@@ -26,7 +26,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import {withFolding, withFoldToggle} from 'web/components/folding/folding';
 
-import FoldIcon from 'web/components/icon/foldicon';
+import FoldIcon from 'web/components/icon/foldstateicon';
 
 import Layout from 'web/components/layout/layout';
 
