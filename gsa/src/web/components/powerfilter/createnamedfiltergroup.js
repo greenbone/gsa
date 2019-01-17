@@ -35,7 +35,6 @@ const StyledLayout = styled(Layout)`
 `;
 
 const CreateNamedFilterGroup = ({
-  filter,
   filterName,
   saveNamedFilter = false,
   onValueChange,
@@ -64,7 +63,6 @@ const CreateNamedFilterGroup = ({
 );
 
 CreateNamedFilterGroup.propTypes = {
-  filter: PropTypes.filter.isRequired,
   filterName: PropTypes.string,
   saveNamedFilter: PropTypes.bool,
   onValueChange: PropTypes.func.isRequired,
