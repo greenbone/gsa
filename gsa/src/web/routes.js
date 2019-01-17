@@ -97,6 +97,7 @@ import TargetsPage from './pages/targets/listpage';
 import TargetDetailsPage from './pages/targets/detailspage';
 import TasksPage from './pages/tasks/listpage';
 import TaskDetailsPage from './pages/tasks/detailspage';
+import TicketsPage from './pages/tickets/listpage';
 import TrashcanPage from './pages/extras/trashcanpage';
 import UserDetailsPage from './pages/users/detailspage';
 import UserSettingsPage from './pages/usersettings/usersettingspage';
@@ -190,6 +191,10 @@ class Routes extends React.Component {
                   <Route
                     path="/tasks"
                     component={TasksPage}
+                  />
+                  <Route
+                    path="/tickets"
+                    component={TicketsPage}
                   />
                   <Route
                     path="/results"
