@@ -40,6 +40,28 @@ export class TicketCommand extends EntityCommand {
     });
   }
 
+  solve({
+    id,
+    comment,
+  }) {
+    return this.action({
+      cmd: 'solve_ticket',
+      ticket_id: id,
+      comment,
+    });
+  }
+
+  close({
+    id,
+    comment,
+  }) {
+    return this.action({
+      cmd: 'close_ticket',
+      ticket_id: id,
+      comment,
+    });
+  }
+
   getElementFromRoot(root) {
     return root.get_ticket.get_tickets_response.ticket;
   }
