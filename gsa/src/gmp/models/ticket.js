@@ -110,6 +110,14 @@ class Ticket extends Model {
 
     return ret;
   }
+
+  isClosed() {
+    return this.status === 'Closed';
+  }
+
+  isSolved() {
+    return this.status === 'Solved';
+  }
 }
 
 export default Ticket;
