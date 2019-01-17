@@ -261,6 +261,7 @@ init_validator ()
                      "cmd",
                      "^((bulk_delete)"
                      "|(bulk_export)"
+                     "|(close_ticket)"
                      "|(clone)"
                      "|(create_agent)"
                      "|(create_asset)"
@@ -461,6 +462,7 @@ init_validator ()
                      "|(save_target)"
                      "|(save_task)"
                      "|(save_user)"
+                     "|(solve_ticket)"
                      "|(start_task)"
                      "|(stop_task)"
                      "|(sync_feed)"
@@ -1450,6 +1452,7 @@ exec_gmp_post (http_connection_t *con,
   if (0) {}
   ELSE (bulk_delete)
   ELSE (bulk_export)
+  ELSE (close_ticket)
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)
@@ -1545,6 +1548,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_task)
   ELSE (save_container_task)
   ELSE (save_user)
+  ELSE (solve_ticket)
   ELSE (start_task)
   ELSE (stop_task)
   ELSE (sync_feed)

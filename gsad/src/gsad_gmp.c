@@ -21485,6 +21485,165 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
   return ret;
 }
 
+#define TICKET_STATUS_CLOSED "Closed"
+#define TICKET_STATUS_SOLVED "Solved"
+
+/**
+ * @brief Close a Ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+close_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
+{
+  const char *comment, *ticket_id;
+  entity_t entity = NULL;
+  char *ret;
+  gchar *response = NULL;
+
+  ticket_id = params_value (params, "ticket_id");
+  comment = params_value (params, "comment");
+
+  CHECK_VARIABLE_INVALID (ticket_id, "Close Ticket");
+  CHECK_VARIABLE_INVALID (comment, "Close Ticket");
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<modify_ticket ticket_id=\"%s\">"
+                "<status>"
+                TICKET_STATUS_CLOSED
+                "</status>"
+                "<closed_comment>%s</closed_comment>"
+                "</modify_ticket>",
+                ticket_id,
+                comment
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while closing a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while closing a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while closing a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Close Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
+ * @brief Solve a Ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+solve_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
+{
+  const char *comment, *ticket_id;
+  entity_t entity = NULL;
+  char *ret;
+  gchar *response = NULL;
+
+  ticket_id = params_value (params, "ticket_id");
+  comment = params_value (params, "comment");
+
+  CHECK_VARIABLE_INVALID (ticket_id, "Close Ticket");
+  CHECK_VARIABLE_INVALID (comment, "Close Ticket");
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<modify_ticket ticket_id=\"%s\">"
+                "<status>"
+                TICKET_STATUS_SOLVED
+                "</status>"
+                "<solved_comment>%s</solved_comment>"
+                "</modify_ticket>",
+                ticket_id,
+                comment
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while solving a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while solving a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while solving a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Solve Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
 char *
 renew_session_gmp (gvm_connection_t *connection, credentials_t * credentials,
                    params_t *params, cmd_response_data_t* response_data)
