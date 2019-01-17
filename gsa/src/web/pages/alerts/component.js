@@ -36,6 +36,7 @@ import {
 
 import {
   email_credential_filter,
+  smb_credential_filter,
   vFire_credential_filter,
 } from 'gmp/models/credential';
 
@@ -569,6 +570,7 @@ class AlertComponent extends React.Component {
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
+        const smbCredentials = credentials.filter(smb_credential_filter);
 
         const result_filter_id = selectSaveId(result_filters);
         const report_format_id = selectSaveId(report_formats);
@@ -636,7 +638,7 @@ class AlertComponent extends React.Component {
           method_data_recipient_credential: UNSET_VALUE,
           method_data_send_report_format: report_format_id,
           method_data_start_task_task: selectSaveId(tasks),
-          method_data_smb_credential: selectSaveId(credentials),
+          method_data_smb_credential: selectSaveId(smbCredentials),
           method_data_smb_share_path: undefined,
           method_data_smb_file_path: undefined,
           method_data_smb_file_path_type: undefined,

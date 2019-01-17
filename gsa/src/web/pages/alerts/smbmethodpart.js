@@ -53,7 +53,7 @@ const SmbMethodPart = ({
   onNewCredentialClick,
   onCredentialChange,
 }) => {
-  credentials.filter(smb_credential_filter);
+  credentials = credentials.filter(smb_credential_filter);
   return (
     <Layout
       flex="column"
