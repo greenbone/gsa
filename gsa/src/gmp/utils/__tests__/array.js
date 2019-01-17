@@ -207,6 +207,12 @@ describe('filter function tests', () => {
 });
 
 describe('first function tests', () => {
+
+  test('should return non for undefined array', () => {
+    expect(first()).toEqual({});
+    expect(first(undefined, 'foo')).toEqual('foo');
+  });
+
   test('should return first value from array', () => {
     expect(first(['foo', 'bar'])).toEqual('foo');
     expect(first([undefined])).toBeUndefined();

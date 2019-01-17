@@ -84,6 +84,10 @@ export function first(array, non = {}) {
     return array[0];
   }
 
+  if (!isDefined(array)) {
+    return non;
+  }
+
   // support array like objects which have an iterator
   if (!isDefined(array[Symbol.iterator])) { // not an array like object
     return non;
