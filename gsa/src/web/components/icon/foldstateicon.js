@@ -1,4 +1,4 @@
-/* Copyright (C) 2019 Greenbone Networks GmbH
+/* Copyright (C) 2017-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -18,18 +18,45 @@
  */
 import React from 'react';
 
-import SvgIcon from './svgicon';
+import _ from 'gmp/locale';
 
-import {ReactComponent as FoldSvg} from './svg/fold.svg';
+import PropTypes from 'web/utils/proptypes';
 
-const FoldIcon = props => (
-  <SvgIcon
-    {...props}
-  >
-    <FoldSvg/>
-  </SvgIcon>
-);
+import {FoldState} from 'web/components/folding/folding';
 
-export default FoldIcon;
+import UnfoldIcon from './unfoldicon';
+import FoldIcon from './foldicon';
+
+const FoldStateIcon = ({
+  foldState,
+  ...props
+}) => {
+  const folded = foldState === FoldState.FOLDED ||
+      foldState === FoldState.FOLDING ||
+      foldState === FoldState.FOLDING_START;
+
+  if (folded) {
+    return (
+      <FoldIcon
+        title={_('Fold')}
+        {...props}
+      />
+    );
+  }
+
+  return (
+    <UnfoldIcon
+      title={_('Unfold')}
+      {...props}
+    />
+  );
+};
+
+FoldStateIcon.propTypes = {
+  foldState: PropTypes.string,
+  title: PropTypes.string,
+};
+
+export default FoldStateIcon;
 
 // vim: set ts=2 sw=2 tw=80:
