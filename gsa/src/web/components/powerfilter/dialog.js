@@ -40,7 +40,6 @@ export const DefaultFilterDialog = ({
   createFilterType,
   filter,
   filterName,
-  filterNameValid,
   filterstring,
   saveNamedFilter,
   sortFields,
@@ -75,7 +74,6 @@ export const DefaultFilterDialog = ({
       <CreateNamedFilterGroup
         filter={filter}
         filterName={filterName}
-        filterNameValid={filterNameValid}
         saveNamedFilter={saveNamedFilter}
         onValueChange={onValueChange}
       />

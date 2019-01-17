@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -30,57 +30,42 @@ import TextField from 'web/components/form/textfield';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import Theme from 'web/utils/theme';
-
 const StyledLayout = styled(Layout)`
   margin-top: 15px;
-`;
-
-const Div = styled.div`
-  color: ${Theme.warningRed};
 `;
 
 const CreateNamedFilterGroup = ({
   filter,
   filterName,
-  filterNameValid = true,
-  saveNamedFilter,
+  saveNamedFilter = false,
   onValueChange,
-}) => {
-  return (
-    <StyledLayout>
-      <Divider>
-        <Checkbox
-          name="saveNamedFilter"
-          checkedValue={true}
-          unCheckedValue={false}
-          checked={saveNamedFilter}
-          title={_('Store filter as: ')}
-          onChange={onValueChange}
-        />
-        <TextField
-          disabled={!saveNamedFilter}
-          name="filterName"
-          size="20"
-          maxLength="80"
-          title={_('Filter Name')}
-          value={filterName}
-          onChange={onValueChange}
-        />
-        {!filterNameValid &&
-          <Div>
-            {_('Please insert a name for the new filter')}
-          </Div>
-        }
-      </Divider>
-    </StyledLayout>
-  );
-};
+}) => (
+  <StyledLayout>
+    <Divider>
+      <Checkbox
+        name="saveNamedFilter"
+        checkedValue={true}
+        unCheckedValue={false}
+        checked={saveNamedFilter}
+        title={_('Store filter as: ')}
+        onChange={onValueChange}
+      />
+      <TextField
+        disabled={!saveNamedFilter}
+        name="filterName"
+        size="20"
+        maxLength="80"
+        title={_('Filter Name')}
+        value={filterName}
+        onChange={onValueChange}
+      />
+    </Divider>
+  </StyledLayout>
+);
 
 CreateNamedFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,
   filterName: PropTypes.string,
-  filterNameValid: PropTypes.bool,
   saveNamedFilter: PropTypes.bool,
   onValueChange: PropTypes.func.isRequired,
 };

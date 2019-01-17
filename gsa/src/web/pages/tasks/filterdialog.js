@@ -70,7 +70,6 @@ const TaskFilterDialogComponent = ({
     capabilities,
     filter,
     filterName,
-    filterNameValid,
     filterstring,
     saveNamedFilter,
     onFilterStringChange,
@@ -124,7 +123,6 @@ const TaskFilterDialogComponent = ({
         <CreateNamedFilterGroup
           filter={filter}
           filterName={filterName}
-          filterNameValid={filterNameValid}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
         />

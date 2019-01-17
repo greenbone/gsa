@@ -135,7 +135,6 @@ const ReportFilterDialogComponent = ({
         <CreateNamedFilterGroup
           filter={filter}
           filterName={filterName}
-          filterNameValid={filterNameValid}
           saveNamedFilter={saveNamedFilter}
           onValueChange={onValueChange}
         />

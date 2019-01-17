@@ -20,8 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
@@ -29,13 +27,7 @@ import Filter from 'gmp/models/filter';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Dialog from '../dialog/dialog';
-import DialogContent from '../dialog/content';
-import DialogTitle from '../dialog/title';
-import DialogFooter from '../dialog/twobuttonfooter';
-import ScrollableContent from '../dialog/scrollablecontent';
-
-const log = logger.getLogger('web.powerfilter.filterDialog');
+import SaveDialog from '../dialog/savedialog';
 
 class FilterDialog extends React.Component {
 
@@ -71,31 +63,22 @@ class FilterDialog extends React.Component {
     const {
       createFilterType,
       gmp,
-      onError,
       onFilterCreated,
     } = this.props;
 
-    gmp.filter.create({
+    return gmp.filter.create({
       term: filter.toFilterString(),
       type: createFilterType,
       name: filterName,
     }).then(response => {
-      const {data: result} = response;
+      const {data} = response;
       // load new filter
-      return gmp.filter.get(result);
+      return gmp.filter.get(data);
     }).then(response => {
       const {data: f} = response;
-      this.setState({filterName: ''});
 
       if (onFilterCreated) {
         onFilterCreated(f);
-      }
-    }).catch(err => {
-      if (isDefined(onError)) {
-        onError(err);
-      }
-      else {
-        log.error(err);
       }
     });
   }
@@ -113,22 +96,20 @@ class FilterDialog extends React.Component {
 
     if (saveNamedFilter) {
       if (filterName.trim().length > 0) {
-        this.createFilter(filter);
+        return this.createFilter(filter).then(onCloseClick);
       }
-      else {
-        this.setState({filterNameValid: false});
-        return;
-      }
+      return Promise.reject(
+        new Error(_('Please insert a name for the new filter')));
     }
 
     if (onFilterChanged && !filter.equals(this.orig_filter)) {
       onFilterChanged(filter);
     }
 
-
     if (isDefined(onCloseClick)) {
       onCloseClick();
     }
+    return Promise.resolve();
   }
 
   handleFilterChange(filter) {
@@ -172,7 +153,6 @@ class FilterDialog extends React.Component {
     const {
       filter,
       filterName,
-      filterNameValid,
       filterstring,
       saveNamedFilter,
     } = this.state;
@@ -182,57 +162,39 @@ class FilterDialog extends React.Component {
     }
 
     return (
-      <Dialog
+      <SaveDialog
+        buttonTitle={_('Update')}
+        title={_('Update Filter')}
         width="800px"
         onClose={onCloseClick}
+        onSave={this.handleSave}
       >
-        {({
-          close,
-          moveProps,
-          heightProps,
-        }) => (
-          <DialogContent>
-            <DialogTitle
-              title={_('Update Filter')}
-              onCloseClick={close}
-              {...moveProps}
-            />
-
-            <ScrollableContent {...heightProps}>
-              {children({
-                ...this.props,
-                filterstring: filterstring,
-                filterName: filterName,
-                filterNameValid: filterNameValid,
-                filter: filter,
-                saveNamedFilter,
-                onFilterChange: this.handleFilterChange,
-                onFilterValueChange: this.onFilterValueChange,
-                onFilterStringChange: this.onFilterStringChange,
-                onSortOrderChange: this.onSortOrderChange,
-                onSortByChange: this.onSortByChange,
-                onValueChange: this.onValueChange,
-              })}
-            </ScrollableContent>
-
-            <DialogFooter
-              rightButtonTitle={_('Update')}
-              onLeftButtonClick={close}
-              onRightButtonClick={this.handleSave}
-            />
-          </DialogContent>
-        )}
-      </Dialog>
+        {() => children({
+          ...this.props,
+          filterstring: filterstring,
+          filterName: filterName,
+          filter: filter,
+          saveNamedFilter,
+          onFilterChange: this.handleFilterChange,
+          onFilterValueChange: this.onFilterValueChange,
+          onFilterStringChange: this.onFilterStringChange,
+          onSortOrderChange: this.onSortOrderChange,
+          onSortByChange: this.onSortByChange,
+          onValueChange: this.onValueChange,
+        })}
+      </SaveDialog>
     );
   }
 };
 
 FilterDialog.propTypes = {
   children: PropTypes.func.isRequired,
+  createFilterType: PropTypes.string.isRequired,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
-  onCloseClick: PropTypes.func,
-  onFilterChanged: PropTypes.func,
+  onCloseClick: PropTypes.func.isRequired,
+  onFilterChanged: PropTypes.func.isRequired,
+  onFilterCreated: PropTypes.func.isRequired,
 };
 
 export default withGmp(FilterDialog);
