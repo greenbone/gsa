@@ -68,6 +68,21 @@ describe('selectSaveId function tests', () => {
     expect(selectSaveId(list, 4, 42)).toBe(42);
     expect(selectSaveId(list, '2', 42)).toBe(42);
   });
+
+  test('should select first entry id if id is undefined', () => {
+    const list = [{id: 1}, {id: 2}, {id: 3}];
+
+    expect(selectSaveId(list)).toEqual(1);
+  });
+
+  test('should return undefined for undefined list', () => {
+    expect(selectSaveId()).toBeUndefined();
+  });
+
+  test('should return empty_default for undefined list', () => {
+    expect(selectSaveId(undefined, undefined, 'foo')).toEqual('foo');
+  });
+
 });
 
 describe('hasId tests', () => {
