@@ -24,6 +24,7 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
+import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -49,6 +50,7 @@ const CreateTicketDialog = ({
   >
     {({
       values,
+      onValueChange,
     }) => (
       <Layout flex="column">
         <FormGroup title={_('Assign To User')}>
@@ -58,6 +60,15 @@ const CreateTicketDialog = ({
             value={values.userId}
             items={renderSelectItems(users)}
             onChange={onUserIdChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Comment')}>
+          <TextArea
+            name="comment"
+            grow="1"
+            rows="5"
+            value={values.comment}
+            onChange={onValueChange}
           />
         </FormGroup>
       </Layout>
