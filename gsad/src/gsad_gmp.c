@@ -21420,11 +21420,12 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const gchar *result_id, *user_id;
+  const gchar *result_id, *user_id, *comment;
   char *ret;
 
   result_id = params_value (params, "result_id");
-  user_id = params_value(params, "user_id");
+  user_id = params_value (params, "user_id");
+  comment = params_value (params, "comment");
 
   CHECK_VARIABLE_INVALID (result_id, "Create Ticket");
   CHECK_VARIABLE_INVALID (user_id, "Create Ticket");
@@ -21438,9 +21439,11 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<assigned_to>"
                 "<user id=\"%s\"/>"
                 "</assigned_to>"
+                "<comment>%s</comment>"
                 "</create_ticket>",
                 result_id,
-                user_id
+                user_id,
+                comment ? comment : ""
                ))
     {
       case 0:
