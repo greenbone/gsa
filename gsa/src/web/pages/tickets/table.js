@@ -22,6 +22,7 @@ import {_l, _} from 'gmp/locale/lang';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/components/icon/editicon';
 import SolutionType from 'web/components/icon/solutiontypeicon';
 import TrashIcon from 'web/entity/icon/trashicon';
@@ -69,6 +70,7 @@ export const FIELDS = [
 
 const Actions = withEntitiesActions(({
   entity,
+  onTicketClone,
   onTicketClose,
   onTicketSolve,
   onTicketDelete,
@@ -97,6 +99,14 @@ const Actions = withEntitiesActions(({
       name="ticket"
       entity={entity}
       onClick={onTicketDelete}
+    />
+    <CloneIcon
+      displayName={_('Ticket')}
+      name="ticket"
+      entity={entity}
+      title={_('Clone Ticket')}
+      value={entity}
+      onClick={onTicketClone}
     />
   </IconDivider>
 ));

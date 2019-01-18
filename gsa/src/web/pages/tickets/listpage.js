@@ -64,6 +64,7 @@ const Page = ({
     onSolveError={onError}
   >
     {({
+      clone,
       close,
       delete: deleteticket,
       solve,
@@ -80,6 +81,7 @@ const Page = ({
         onError={onError}
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
+        onTicketClone={clone}
         onTicketClose={close}
         onTicketDelete={deleteticket}
         onTicketSolve={solve}
