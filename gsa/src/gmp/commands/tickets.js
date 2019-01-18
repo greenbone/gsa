@@ -32,11 +32,13 @@ export class TicketCommand extends EntityCommand {
   create({
     resultId,
     userId,
+    comment,
   }) {
     return this.action({
       cmd: 'create_ticket',
       result_id: resultId,
       user_id: userId,
+      comment,
     });
   }
 

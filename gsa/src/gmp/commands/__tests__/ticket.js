@@ -51,6 +51,33 @@ describe('TicketCommand tests', () => {
     });
   });
 
+  test('should create new ticket with comment', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.create({
+      resultId: 'r1',
+      userId: 'u1',
+      comment: 'bar',
+      foo: 'bar',
+    }).then(resp => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'create_ticket',
+          result_id: 'r1',
+          user_id: 'u1',
+          comment: 'bar',
+        },
+      });
+
+      const {data} = resp;
+      expect(data.id).toEqual('foo');
+    });
+  });
+
   test('should return single ticket', () => {
     const response = createEntityResponse('ticket', {_id: 'foo'});
     const fakeHttp = createHttp(response);
