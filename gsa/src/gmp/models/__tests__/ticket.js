@@ -23,7 +23,7 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(Ticket, 'ticket');
 
-describe('Ticket Model tests', () => {
+describe('Additional Ticket Model tests', () => {
 
   test('should parse assignedTo', () => {
     let ticket = new Ticket({assigned_to: {}});
