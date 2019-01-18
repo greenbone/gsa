@@ -151,6 +151,22 @@ describe('Additional Ticket Model tests', () => {
     expect(ticket.closedComment).toEqual('foo');
   });
 
+  test('should provide isSolved', () => {
+    let ticket = new Ticket({status: 'Solved'});
+    expect(ticket.isSolved()).toBe(true);
+
+    ticket = new Ticket({status: 'Closed'});
+    expect(ticket.isSolved()).toBe(false);
+  });
+
+  test('should provide isClosed', () => {
+    let ticket = new Ticket({status: 'Closed'});
+    expect(ticket.isClosed()).toBe(true);
+
+    ticket = new Ticket({status: 'Solved'});
+    expect(ticket.isClosed()).toBe(false);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
