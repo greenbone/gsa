@@ -21644,6 +21644,25 @@ solve_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials, par
   return ret;
 }
 
+/**
+ * @brief Delete a ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+delete_ticket_gmp (gvm_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  return move_resource_to_trash (connection, "ticket", credentials, params,
+                                 response_data);
+}
+
 char *
 renew_session_gmp (gvm_connection_t *connection, credentials_t * credentials,
                    params_t *params, cmd_response_data_t* response_data)

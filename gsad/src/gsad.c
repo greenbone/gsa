@@ -310,6 +310,24 @@ init_validator ()
                      "|(delete_tag)"
                      "|(delete_target)"
                      "|(delete_task)"
+                     "|(delete_ticket)"
+                     "|(delete_trash_agent)"
+                     "|(delete_trash_config)"
+                     "|(delete_trash_alert)"
+                     "|(delete_trash_credential)"
+                     "|(delete_trash_filter)"
+                     "|(delete_trash_group)"
+                     "|(delete_trash_note)"
+                     "|(delete_trash_override)"
+                     "|(delete_trash_permission)"
+                     "|(delete_trash_port_list)"
+                     "|(delete_trash_report_format)"
+                     "|(delete_trash_role)"
+                     "|(delete_trash_scanner)"
+                     "|(delete_trash_schedule)"
+                     "|(delete_trash_tag)"
+                     "|(delete_trash_target)"
+                     "|(delete_trash_task)"
                      "|(delete_user)"
                      "|(download_agent)"
                      "|(download_credential)"
@@ -1499,6 +1517,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (delete_tag)
   ELSE (delete_target)
   ELSE (delete_task)
+  ELSE (delete_ticket)
   ELSE (delete_user)
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
