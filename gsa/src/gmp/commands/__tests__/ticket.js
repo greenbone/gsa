@@ -113,4 +113,23 @@ describe('TicketCommand tests', () => {
     });
   });
 
+  test('should delete a ticket', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.delete({
+      id: 'foo',
+    }).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'delete_ticket',
+          ticket_id: 'foo',
+        },
+      });
+    });
+  });
+
 });
