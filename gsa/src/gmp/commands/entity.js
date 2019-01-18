@@ -91,7 +91,6 @@ class EntityCommand extends GmpCommand {
     const params = {
       cmd: 'delete_' + this.name,
       id,
-      no_redirect: '1',
     };
     return this.httpPost(params);
   }
