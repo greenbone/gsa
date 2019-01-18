@@ -1990,7 +1990,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
 {
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   entity_t entity;
-  gchar *cap_type, *default_next, *prev_action;
+  gchar *cap_type, *prev_action;
 
   id_name = g_strdup_printf ("%s_id", type);
   if (params_value (params, id_name))
@@ -2072,7 +2072,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
     set_http_status_from_entity (entity, response_data);
 
   cap_type = capitalize (type);
-  default_next = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("Delete %s", cap_type);
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -2081,7 +2080,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
   g_free (response);
   free_entity (entity);
   g_free (cap_type);
-  g_free (default_next);
   g_free (prev_action);
 
   return html;
