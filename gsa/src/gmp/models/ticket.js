@@ -23,6 +23,13 @@ import {isEmpty} from 'gmp/utils/string';
 
 import Model from '../model';
 
+export const TICKET_STATUS = {
+  open: 'Open',
+  solved: 'Solved',
+  closed: 'Closed',
+  confimed: 'Confirmed',
+  orphaned: 'Orphaned',
+};
 
 class Ticket extends Model {
 
@@ -112,11 +119,11 @@ class Ticket extends Model {
   }
 
   isClosed() {
-    return this.status === 'Closed';
+    return this.status === TICKET_STATUS.closed;
   }
 
   isSolved() {
-    return this.status === 'Solved';
+    return this.status === TICKET_STATUS.solved;
   }
 }
 
