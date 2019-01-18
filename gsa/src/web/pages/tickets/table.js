@@ -20,6 +20,14 @@ import React from 'react';
 
 import {_l, _} from 'gmp/locale/lang';
 
+import SeverityBar from 'web/components/bar/severitybar';
+
+import EditIcon from 'web/components/icon/editicon';
+import SolutionType from 'web/components/icon/solutiontypeicon';
+import TrashIcon from 'web/entity/icon/trashicon';
+
+import IconDivider from 'web/components/layout/icondivider';
+
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
@@ -29,12 +37,7 @@ import {createEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
-import SeverityBar from 'web/components/bar/severitybar';
-import SolutionType from 'web/components/icon/solutiontypeicon';
-
 import PropTypes from 'web/utils/proptypes';
-import IconDivider from 'web/components/layout/icondivider';
-import EditIcon from 'web/components/icon/editicon';
 
 export const FIELDS = [
   {
@@ -68,6 +71,7 @@ const Actions = withEntitiesActions(({
   entity,
   onTicketClose,
   onTicketSolve,
+  onTicketDelete,
 }) => (
   <IconDivider>
     <EditIcon
@@ -87,6 +91,12 @@ const Actions = withEntitiesActions(({
       active={!entity.isClosed()}
       value={entity}
       onClick={onTicketClose}
+    />
+    <TrashIcon
+      displayName={_('Ticket')}
+      name="ticket"
+      entity={entity}
+      onClick={onTicketDelete}
     />
   </IconDivider>
 ));

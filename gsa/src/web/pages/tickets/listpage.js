@@ -65,6 +65,7 @@ const Page = ({
   >
     {({
       close,
+      delete: deleteticket,
       solve,
     }) => (
       <EntitiesPage
@@ -80,6 +81,7 @@ const Page = ({
         onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
         onTicketClose={close}
+        onTicketDelete={deleteticket}
         onTicketSolve={solve}
       />
     )}
