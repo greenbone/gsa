@@ -71,4 +71,46 @@ describe('TicketCommand tests', () => {
     });
   });
 
+  test('should solve a ticket', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.solve({
+      id: 'foo',
+      comment: 'bar',
+    }).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'solve_ticket',
+          ticket_id: 'foo',
+          comment: 'bar',
+        },
+      });
+    });
+  });
+
+  test('should close a ticket', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.close({
+      id: 'foo',
+      comment: 'bar',
+    }).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'close_ticket',
+          ticket_id: 'foo',
+          comment: 'bar',
+        },
+      });
+    });
+  });
+
 });
