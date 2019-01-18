@@ -132,4 +132,24 @@ describe('TicketCommand tests', () => {
     });
   });
 
+  test('should clone a ticket', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.clone({
+      id: 'foo',
+    }).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'clone',
+          id: 'foo',
+          resource_type: 'ticket',
+        },
+      });
+    });
+  });
+
 });
