@@ -42,6 +42,7 @@ const CreateNamedFilterGroup = ({
   <StyledLayout>
     <Divider>
       <Checkbox
+        data-testid="createnamedfiltergroup-checkbox"
         name="saveNamedFilter"
         checkedValue={true}
         unCheckedValue={false}
@@ -50,6 +51,7 @@ const CreateNamedFilterGroup = ({
         onChange={onValueChange}
       />
       <TextField
+        data-testid="createnamedfiltergroup-textfield"
         disabled={!saveNamedFilter}
         name="filterName"
         size="20"
