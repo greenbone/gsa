@@ -613,7 +613,7 @@ class EntitiesContainer extends React.Component {
       <React.Fragment>
         {children({
           ...other,
-          createFilterType: this.name,
+          createFilterType: entitiesType,
           entities,
           entitiesCounts,
           entitiesSelected: selected,

@@ -20,18 +20,22 @@ import React from 'react';
 
 import {_l} from 'gmp/locale/lang';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
+
+import compose from 'web/utils/compose';
+import withCapabilities from 'web/utils/withCapabilities';
 
 /* eslint-disable max-len */
 
-import ApplyOverridesGroup from '../../components/powerfilter/applyoverridesgroup.js';
-import FilterStringGroup from '../../components/powerfilter/filterstringgroup.js';
-import FirstResultGroup from '../../components/powerfilter/firstresultgroup.js';
-import MinQodGroup from '../../components/powerfilter/minqodgroup.js';
-import ResultsPerPageGroup from '../../components/powerfilter/resultsperpagegroup.js';
-import SortByGroup from '../../components/powerfilter/sortbygroup.js';
-import FilterDialogPropTypes from '../../components/powerfilter/dialogproptypes.js';
-import withFilterDialog from '../../components/powerfilter/withFilterDialog.js';
+import ApplyOverridesGroup from 'web/components/powerfilter/applyoverridesgroup';
+import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
+import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
+import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
+import MinQodGroup from 'web/components/powerfilter/minqodgroup';
+import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
+import SortByGroup from 'web/components/powerfilter/sortbygroup';
+import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
+import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 
 /* eslint-enable */
 
@@ -63,12 +67,16 @@ const SORT_FIELDS = [
 ];
 
 const TaskFilterDialogComponent = ({
+    capabilities,
     filter,
+    filterName,
     filterstring,
+    saveNamedFilter,
     onFilterStringChange,
     onFilterValueChange,
     onSortOrderChange,
     onSortByChange,
+    onValueChange,
   }) => {
 
   if (!filter) {
@@ -110,12 +118,24 @@ const TaskFilterDialogComponent = ({
         onSortOrderChange={onSortOrderChange}
         onSortByChange={onSortByChange}
       />
+
+      {capabilities.mayCreate('filter') &&
+        <CreateNamedFilterGroup
+          filter={filter}
+          filterName={filterName}
+          saveNamedFilter={saveNamedFilter}
+          onValueChange={onValueChange}
+        />
+      }
     </Layout>
   );
 };
 
 TaskFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export default withFilterDialog()(TaskFilterDialogComponent);
+export default compose(
+  withCapabilities,
+  withFilterDialog(),
+)(TaskFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:

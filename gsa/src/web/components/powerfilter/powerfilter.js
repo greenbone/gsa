@@ -23,8 +23,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import Filter, {RESET_FILTER} from 'gmp/models/filter';
 
 import {KeyCode} from 'gmp/utils/event';
@@ -43,13 +41,10 @@ import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
 import Icon from 'web/components/icon/icon';
 import ManualIcon from 'web/components/icon/manualicon';
-import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
-
-const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 
@@ -155,41 +150,6 @@ class PowerFilter extends React.Component {
     this.createFilter(filter);
   }
 
-  createFilter(filter) {
-    const {filtername = ''} = this.state;
-    const {
-      createFilterType,
-      gmp,
-      onError,
-      onFilterCreated,
-    } = this.props;
-
-    gmp.filter.create({
-      term: filter.toFilterString(),
-      type: createFilterType,
-      name: filtername,
-    }).then(response => {
-      const {data: result} = response;
-      // load new filter
-      return gmp.filter.get(result);
-    }).then(response => {
-      const {data: f} = response;
-      this.updateFilter(f);
-      this.setState({filtername: ''});
-
-      if (onFilterCreated) {
-        onFilterCreated(f);
-      }
-    }).catch(err => {
-      if (isDefined(onError)) {
-        onError(err);
-      }
-      else {
-        log.error(err);
-      }
-    });
-  }
-
   componentWillReceiveProps(props) {
     const {filter, filters} = props;
     const {filter: state_filter} = this.state;
@@ -220,7 +180,6 @@ class PowerFilter extends React.Component {
     const {
       userfilter = '',
       filter,
-      filtername = '',
     } = this.state;
     const {
       capabilities,
@@ -233,9 +192,6 @@ class PowerFilter extends React.Component {
       filter.id : DEFAULT_FILTER_ID;
 
     const filter_items = renderSelectItems(filters, DEFAULT_FILTER_ID);
-
-    const can_create = capabilities.mayCreate('filter') &&
-      filtername.trim().length > 0;
 
     return (
       <Layout
@@ -297,25 +253,6 @@ class PowerFilter extends React.Component {
             </IconDivider>
           </LeftDivider>
           <Divider align={['end', 'center']}>
-            {capabilities.mayCreate('filter') &&
-              <TextField
-                name="filtername"
-                size="10"
-                maxLength="80"
-                value={filtername}
-                onChange={this.handleValueChange}
-              />
-            }
-            {can_create ?
-              <NewIcon
-                title={_('Create new filter from current term')}
-                onClick={this.handleCreateFilter}
-              /> :
-              <NewIcon
-                active={false}
-                title={_('Please insert a filter name')}
-              />
-            }
             {capabilities.mayAccess('filters') &&
               <Select
                 width="150px"

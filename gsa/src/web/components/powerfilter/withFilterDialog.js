@@ -18,162 +18,18 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import FilterDialog from './filterdialog';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import Filter from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Dialog from '../dialog/dialog';
-import DialogContent from '../dialog/content';
-import DialogTitle from '../dialog/title';
-import DialogFooter from '../dialog/twobuttonfooter';
-import ScrollableContent from '../dialog/scrollablecontent';
-
-const withFilterDialog = (options = {}) => FilterDialogComponent => {
-
-  class FilterDialogWrapper extends React.Component {
-
-    constructor(...args) {
-      super(...args);
-
-      this.state = this.setFilter(this.props.filter);
-
-      this.handleSave = this.handleSave.bind(this);
-      this.handleFilterChange = this.handleFilterChange.bind(this);
-      this.onFilterValueChange = this.onFilterValueChange.bind(this);
-      this.onFilterStringChange = this.onFilterStringChange.bind(this);
-      this.onSortByChange = this.onSortByChange.bind(this);
-      this.onSortOrderChange = this.onSortOrderChange.bind(this);
-      this.onValueChange = this.onValueChange.bind(this);
-    }
-
-    setFilter(filter) {
-      if (!isDefined(filter)) {
-        return {};
-      }
-
-      this.orig_filter = filter;
-
-      return {
-        filter: filter.copy(),
-        filterstring: filter.toFilterCriteriaString(),
-      };
-    }
-
-    handleSave() {
-      let {filter, filterstring} = this.state;
-      const {onFilterChanged, onCloseClick} = this.props;
-
-      filter = Filter.fromString(filterstring, filter);
-
-      if (onFilterChanged && !filter.equals(this.orig_filter)) {
-        onFilterChanged(filter);
-      }
-
-      if (isDefined(onCloseClick)) {
-        onCloseClick();
-      }
-    }
-
-    handleFilterChange(filter) {
-      this.setState({filter});
-    }
-
-    onFilterValueChange(value, name, relation = '=') {
-      const {filter} = this.state;
-
-      filter.set(name, value, relation);
-
-      this.setState({filter});
-    }
-
-    onFilterStringChange(value) {
-      this.setState({filterstring: value});
-    }
-
-    onValueChange(value, name) {
-      this.setState({[name]: value});
-    }
-
-    onSortByChange(value) {
-      const {filter} = this.state;
-
-      filter.setSortBy(value);
-
-      this.setState({filter});
-    }
-
-    onSortOrderChange(value) {
-      const {filter} = this.state;
-
-      filter.setSortOrder(value);
-
-      this.setState({filter});
-    }
-
-    render() {
-      const {onCloseClick} = this.props;
-      const {filter, filterstring} = this.state;
-
-      if (!isDefined(filter)) {
-        return null;
-      }
-
-      return (
-        <Dialog
-          width="800px"
-          onClose={onCloseClick}
-        >
-          {({
-            close,
-            moveProps,
-            heightProps,
-          }) => (
-            <DialogContent>
-              <DialogTitle
-                title={_('Update Filter')}
-                onCloseClick={close}
-                {...moveProps}
-              />
-
-              <ScrollableContent {...heightProps}>
-                <FilterDialogComponent
-                  {...options}
-                  {...this.props}
-                  onFilterChange={this.handleFilterChange}
-                  onFilterValueChange={this.onFilterValueChange}
-                  onFilterStringChange={this.onFilterStringChange}
-                  onSortOrderChange={this.onSortOrderChange}
-                  onSortByChange={this.onSortByChange}
-                  onValueChange={this.onValueChange}
-                  filterstring={filterstring}
-                  filter={filter}
-                />
-              </ScrollableContent>
-
-              <DialogFooter
-                rightButtonTitle={_('Update')}
-                onLeftButtonClick={close}
-                onRightButtonClick={this.handleSave}
-              />
-            </DialogContent>
-          )}
-        </Dialog>
-      );
-    }
-  };
-
-  FilterDialogWrapper.propTypes = {
-    filter: PropTypes.filter,
-    onCloseClick: PropTypes.func,
-    onFilterChanged: PropTypes.func,
-  };
-
-  return FilterDialogWrapper;
-};
+const withFilterDialog = (options = {}) => FilterDialogComponent => props => (
+  <FilterDialog {...props}>
+    {dialogProps => (
+      <FilterDialogComponent
+        {...options}
+        {...dialogProps}
+      />
+    )}
+  </FilterDialog>
+);
 
 export default withFilterDialog;
 
