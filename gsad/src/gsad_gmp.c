@@ -11921,8 +11921,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   const char *format_id, *first_result, *max_results, *host, *pos;
   const char *filt_id, *filter, *apply_filter, *report_section;
   const char *build_filter, *filter_extra;
-  const char *host_search_phrase, *host_levels;
-  const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
   gchar *built_filter;
@@ -12142,9 +12140,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   report_id = params_value (params, "report_id");
 
   if (report_id == NULL
-      && (type == NULL
-          || (strcmp (type, "prognostic")
-              && strcmp (type, "assets"))))
+      && (type == NULL || strcmp (type, "assets")))
     return get_reports (connection, credentials, params, extra_xml,
                         response_data);
 
@@ -12253,12 +12249,9 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
   if (gvm_connection_sendf (connection,
                             "<get_reports"
-                            "%s%s"
+                            "%s"
                             " details=\"%i\""
                             "%s%s%s",
-                            (type && (strcmp (type, "prognostic") == 0))
-                             ? " type=\"prognostic\""
-                             : "",
                             (type && (strcmp (type, "assets") == 0))
                              ? " type=\"assets\""
                              : "",
@@ -12372,75 +12365,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   else
     built_filter = NULL;
 
-  if (type && (strcmp (type, "prognostic") == 0))
-    {
-      host_search_phrase = params_value (params, "host_search_phrase");
-      if (host_search_phrase == NULL)
-        params_given (params, "host_search_phrase")
-          || (host_search_phrase = "");
-
-      host_levels = params_value (params, "host_levels");
-      if (host_levels == NULL)
-        params_given (params, "host_levels")
-          || (host_levels = "");
-
-      host_first_result = params_value (params, "host_first_result");
-      if (host_first_result == NULL
-          || sscanf (host_first_result, "%u", &first) != 1)
-        host_first_result = "1";
-
-      host_max_results = params_value (params, "host_max_results");
-      if (host_max_results == NULL
-          || sscanf (host_max_results, "%u", &max) != 1)
-        host_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
-
-      if (host_search_phrase == NULL)
-        {
-          g_string_free (delta_states, TRUE);
-          g_string_free (commands_xml, TRUE);
-          g_string_free (levels, TRUE);
-          xml = g_string_new ("");
-          g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
-                                  "Given host search_phrase was invalid",
-                                  "Get Report");
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_BAD_REQUEST);
-          return g_string_free (xml, FALSE);
-        }
-
-      if (gvm_connection_sendf_xml (connection,
-                                    " host_search_phrase=\"%s\""
-                                    " host_levels=\"%s\""
-                                    " host_first_result=\"%s\""
-                                    " host_max_results=\"%s\"",
-                                    host_search_phrase,
-                                    host_levels,
-                                    host_first_result,
-                                    host_max_results))
-        {
-          g_string_free (delta_states, TRUE);
-          g_string_free (commands_xml, TRUE);
-          g_string_free (levels, TRUE);
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               response_data);
-        }
-    }
-  else
-    {
-      host_search_phrase = NULL;
-      host_levels = NULL;
-      host_first_result = NULL;
-      host_max_results = NULL;
-    }
-
   /* Don't apply default filter when applying result filter checkboxes/textboxes
    */
   if (sort_field == NULL && sort_order == NULL)
@@ -12458,9 +12382,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                     " report_id=\"%s\""
                                     " delta_report_id=\"%s\""
                                     " format_id=\"%s\"/>",
-                                    (type && ((strcmp (type, "assets") == 0)
-                                              || (strcmp (type, "prognostic")
-                                                  == 0)))
+                                    (type && (strcmp (type, "assets") == 0))
                                       ? ""
                                       : report_id,
                                     delta_report_id ? delta_report_id : "0",
@@ -12480,9 +12402,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                     filt_id ? filt_id : "0",
                                     built_filter ? built_filter : "",
                                     pos ? pos : "1",
-                                    (type && ((strcmp (type, "assets") == 0)
-                                              || (strcmp (type, "prognostic")
-                                                  == 0)))
+                                    (type && (strcmp (type, "assets") == 0))
                                      ? ""
                                      : report_id,
                                     delta_report_id ? delta_report_id : "0",
@@ -12609,9 +12529,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                             credentials,
                                             "report",
                                             (type
-                                             && ((strcmp (type, "assets") == 0)
-                                                 || (strcmp (type, "prognostic")
-                                                     == 0)))
+                                             && (strcmp (type, "assets") == 0))
                                             ? type
                                             : report_id,
                                             report);
@@ -12619,9 +12537,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                 file_name = g_strdup_printf ("%s-%s",
                                             "report",
                                             (type
-                                             && ((strcmp (type, "assets") == 0)
-                                                 || (strcmp (type, "prognostic")
-                                                     == 0)))
+                                             && (strcmp (type, "assets") == 0))
                                               ? type
                                               : report_id);
 
@@ -12684,8 +12600,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                   const char *id;
                   if (report_id)
                     id = report_id;
-                  else if (type && (strcmp (type, "prognostic") == 0))
-                    id = "prognostic";
                   else
                     id = "ERROR";
 
@@ -12783,25 +12697,9 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
-      else if (host || (type && (strcmp (type, "prognostic") == 0)))
+      else if (host)
         {
-          if (type && (strcmp (type, "prognostic") == 0))
-            {
-              xml = g_string_new ("<get_prognostic_report>");
-
-              xml_string_append (xml,
-                                 "<host_search_phrase>"
-                                 "%s"
-                                 "</host_search_phrase>"
-                                 "<host_levels>%s</host_levels>"
-                                 "<results start=\"%s\" max=\"%s\"/>",
-                                 host_search_phrase,
-                                 host_levels,
-                                 host_first_result,
-                                 host_max_results);
-            }
-          else
-            xml = g_string_new ("<get_asset>");
+          xml = g_string_new ("<get_asset>");
           xml_string_append (xml,
                              "<search_phrase>%s</search_phrase>"
                              "<levels>%s</levels>"
@@ -12871,88 +12769,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               param->valid = 1;
               param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
             }
-        }
-
-      if ((type && (strcmp (type, "prognostic") == 0))
-          && (command_enabled (credentials, "GET_REPORT_FORMATS")))
-        {
-          if (gvm_connection_sendf
-               (connection,
-                "<get_report_formats"
-                " filter=\"rows=-1 sort=name\"/>")
-              == -1)
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   response_data);
-            }
-        }
-
-      if (type && (strcmp (type, "prognostic") == 0))
-        {
-          if (command_enabled (credentials, "GET_FILTERS"))
-            {
-              /* Get the filters. */
-
-              g_string_append (xml, "<filters>");
-
-              if (gvm_connection_sendf_xml (connection,
-                                            "<get_filters"
-                                            " filter=\"type=result\"/>")
-                  == -1)
-                {
-                  g_string_free (xml, TRUE);
-                  if (error) *error = 1;
-                  cmd_response_data_set_status_code (response_data,
-                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
-                  return gsad_message (credentials,
-                                       "Internal error", __FUNCTION__, __LINE__,
-                                       "An internal error occurred while getting the filter list. "
-                                       "The current list of filters is not available. "
-                                       "Diagnostics: Failure to send command to manager daemon.",
-                                       response_data);
-                }
-
-              if (read_string_c (connection, &xml))
-                {
-                  g_string_free (xml, TRUE);
-                  if (error) *error = 1;
-                  cmd_response_data_set_status_code (response_data,
-                                                     MHD_HTTP_INTERNAL_SERVER_ERROR);
-                  return gsad_message (credentials,
-                                       "Internal error", __FUNCTION__, __LINE__,
-                                       "An internal error occurred while getting the filter list. "
-                                       "The current list of filters is not available. "
-                                       "Diagnostics: Failure to receive response from manager daemon.",
-                                       response_data);
-                }
-
-              g_string_append (xml, "</filters>");
-            }
-
-          g_string_append (xml, "</get_prognostic_report>");
-          return g_string_free (xml, FALSE);
         }
 
       if (type && (strcmp (type, "assets") == 0))
@@ -13415,7 +13231,7 @@ get_report_section (gvm_connection_t *connection,
   if (report_section == NULL)
     report_section = "results";
 
-  if (report_id == NULL && (type == NULL || strcmp (type, "prognostic")))
+  if (report_id == NULL && (type == NULL))
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);

@@ -703,7 +703,7 @@ init_validator ()
   gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
   gvm_validator_add (validator, "trend",       "^(0|1)$");
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
-  gvm_validator_add (validator, "type",       "^(assets|prognostic)$");
+  gvm_validator_add (validator, "type",       "^(assets)$");
   gvm_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   gvm_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   gvm_validator_add (validator, "sort_order", "^(ascending|descending)$");
@@ -807,11 +807,6 @@ init_validator ()
   gvm_validator_alias (validator, "group_ids:name",     "number");
   gvm_validator_alias (validator, "group_ids:value",    "id_optional");
   gvm_validator_alias (validator, "groups",             "optional_number");
-  gvm_validator_alias (validator, "host_search_phrase", "search_phrase");
-  gvm_validator_alias (validator, "host_first_result",  "first_result");
-  gvm_validator_alias (validator, "host_max_results",   "max_results");
-  gvm_validator_alias (validator, "host_levels",        "levels");
-  gvm_validator_alias (validator, "host_count",         "number");
   gvm_validator_alias (validator, "hosts_manual",       "hosts");
   gvm_validator_alias (validator, "hosts_filter",       "filter");
   gvm_validator_alias (validator, "exclude_hosts",      "hosts_opt");
