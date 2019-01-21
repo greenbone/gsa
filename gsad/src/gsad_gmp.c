@@ -2397,6 +2397,33 @@ move_resource_to_trash (gvm_connection_t *connection,
 }
 
 /**
+ * @brief Delete a resource from the trashcan
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+delete_from_trash_gmp (gvm_connection_t *connection,
+                       credentials_t * credentials,
+                       params_t *params,
+                       cmd_response_data_t* response_data)
+{
+  const gchar *resource_type;
+
+  resource_type = params_value (params, "resource_type");
+
+  CHECK_VARIABLE_INVALID (resource_type, "Delete from Trashcan");
+
+  return delete_resource (connection, resource_type, credentials, params, TRUE,
+                          response_data);
+}
+
+/**
  * @brief Perform action on resource, get next page, envelope result.
  *
  * @param[in]  connection     Connection to manager.
@@ -8704,150 +8731,6 @@ delete_target_gmp (gvm_connection_t *connection, credentials_t *
 }
 
 /**
- * @brief Delete a trash agent, get all agents, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "agent", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash config, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "config", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash alert, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "alert", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash credential, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                             cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "credential", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash report format, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_report_format_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                                cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "report_format", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash schedule, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                           cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "schedule", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash target, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_target_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "target", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
- * @brief Delete a trash task, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_task_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                       cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "task", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
  * @brief Restore a resource, get all trash, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -9112,24 +8995,6 @@ delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 {
   return move_resource_to_trash (connection, "tag", credentials, params,
                                  response_data);
-}
-
-/**
- * @brief Delete a note, get all notes, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                      cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "tag", credentials, params, TRUE,
-                          response_data);
 }
 
 /**
@@ -14013,24 +13878,6 @@ delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, para
 }
 
 /**
- * @brief Delete a note, get all notes, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                       cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "note", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
  * @brief Edit note, get next page, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -14447,24 +14294,6 @@ delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, 
 {
   return move_resource_to_trash (connection, "override", credentials, params,
                                  response_data);
-}
-
-/**
- * @brief Delete a override, get all overrides, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                           cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "override", credentials, params, TRUE,
-                          response_data);
 }
 
 /**
@@ -14965,24 +14794,6 @@ delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, p
 {
   return move_resource_to_trash (connection, "scanner", credentials, params,
                                  response_data);
-}
-
-/**
- * @brief Delete a trash scanner, get all scanners, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                          cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "scanner", credentials, params, TRUE,
-                          response_data);
 }
 
 /**
@@ -17542,24 +17353,6 @@ get_groups_gmp (gvm_connection_t *connection, credentials_t * credentials, param
 }
 
 /**
- * @brief Delete a group from trash, get all groups, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "group", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
  * @brief Delete a group, get all groups, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -17914,24 +17707,6 @@ get_permissions_gmp (gvm_connection_t *connection, credentials_t * credentials, 
                      cmd_response_data_t* response_data)
 {
   return get_permissions (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Delete a permission, get all permissions, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                             cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "permission", credentials, params, TRUE,
-                          response_data);
 }
 
 /**
@@ -19546,24 +19321,6 @@ delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Delete a trash port list, get all trash, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                            cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "port_list", credentials, params, TRUE,
-                          response_data);
-}
-
-/**
  * @brief Delete a port range, get the port list, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
@@ -19654,24 +19411,6 @@ import_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
 
 /* Roles. */
-
-/**
- * @brief Delete a role from trash, get all roles, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                       cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "role", credentials, params, TRUE,
-                          response_data);
-}
 
 /**
  * @brief Delete a role, get all roles, envelope the result.
@@ -20476,24 +20215,6 @@ create_filter_gmp (gvm_connection_t *connection, credentials_t *credentials, par
   free_entity (entity);
   g_free (response);
   return html;
-}
-
-/**
- * @brief Delete a filter, get all filters, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-delete_trash_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
-{
-  return delete_resource (connection, "filter", credentials, params, TRUE,
-                          response_data);
 }
 
 /**
