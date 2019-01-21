@@ -11914,7 +11914,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   entity_t report_entity;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *alert_id, *search_phrase, *min_qod, *type, *zone;
+  const char *alert_id, *search_phrase, *min_qod, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *apply_overrides;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
@@ -11977,7 +11977,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
   min_qod = params_value (params, "min_qod");
 
-  type = params_value (params, "type");
   host = params_value (params, "host");
   pos = params_value (params, "pos");
 
@@ -12127,20 +12126,14 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
         g_string_append (levels, "f");
     }
 
-  if (type && (strcmp (type, "assets") == 0))
-    {
-      if (strlen (levels->str) == 0)
-        g_string_append (levels, "");
-    }
-  else if (strlen (levels->str) == 0)
+  if (strlen (levels->str) == 0)
     g_string_append (levels, "hml");
 
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
 
-  if (report_id == NULL
-      && (type == NULL || strcmp (type, "assets")))
+  if (report_id == NULL)
     return get_reports (connection, credentials, params, extra_xml,
                         response_data);
 
@@ -12249,16 +12242,9 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
   if (gvm_connection_sendf (connection,
                             "<get_reports"
-                            "%s"
                             " details=\"%i\""
                             "%s%s%s",
-                            (type && (strcmp (type, "assets") == 0))
-                             ? " type=\"assets\""
-                             : "",
-                            (type
-                             && (strcmp (type, "assets") == 0)
-                             && host)
-                            || delta_report_id
+                            delta_report_id
                             || strcmp (report_section, "summary"),
                             host ? " host=\"" : "",
                             host ? host : "",
@@ -12382,9 +12368,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                     " report_id=\"%s\""
                                     " delta_report_id=\"%s\""
                                     " format_id=\"%s\"/>",
-                                    (type && (strcmp (type, "assets") == 0))
-                                      ? ""
-                                      : report_id,
+                                    report_id,
                                     delta_report_id ? delta_report_id : "0",
                                     format_id ? format_id : "");
   else
@@ -12402,9 +12386,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                     filt_id ? filt_id : "0",
                                     built_filter ? built_filter : "",
                                     pos ? pos : "1",
-                                    (type && (strcmp (type, "assets") == 0))
-                                     ? ""
-                                     : report_id,
+                                    report_id,
                                     delta_report_id ? delta_report_id : "0",
                                     format_id ? format_id : "",
                                     first_result,
@@ -12528,18 +12510,12 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               file_name = format_file_name (fname_format,
                                             credentials,
                                             "report",
-                                            (type
-                                             && (strcmp (type, "assets") == 0))
-                                            ? type
-                                            : report_id,
+                                            report_id,
                                             report);
               if (file_name == NULL)
                 file_name = g_strdup_printf ("%s-%s",
                                             "report",
-                                            (type
-                                             && (strcmp (type, "assets") == 0))
-                                              ? type
-                                              : report_id);
+                                            report_id);
 
               cmd_response_data_set_content_type_string
                 (response_data, g_strdup (requested_content_type));
@@ -12769,15 +12745,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
               param->valid = 1;
               param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
             }
-        }
-
-      if (type && (strcmp (type, "assets") == 0))
-        {
-          if (host)
-            g_string_append (xml, "</get_asset>");
-          else
-            g_string_append (xml, "</get_report>");
-          return g_string_free (xml, FALSE);
         }
 
       report_entity = entity_child (entity, "report");
