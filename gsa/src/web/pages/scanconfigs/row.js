@@ -40,7 +40,7 @@ import {na} from 'web/utils/render';
 
 import Trend from './trend';
 
-const Actions = withEntitiesActions(({
+const ScanConfigActions = withEntitiesActions(({
   entity,
   onScanConfigDeleteClick,
   onScanConfigDownloadClick,
@@ -76,7 +76,7 @@ const Actions = withEntitiesActions(({
   </IconDivider>
 ));
 
-Actions.propTypes = {
+ScanConfigActions.propTypes = {
   entity: PropTypes.model.isRequired,
   onScanConfigCloneClick: PropTypes.func.isRequired,
   onScanConfigDeleteClick: PropTypes.func.isRequired,
@@ -84,7 +84,8 @@ Actions.propTypes = {
   onScanConfigEditClick: PropTypes.func.isRequired,
 };
 
-const Row = ({
+const ScanConfigRow = ({
+  actionsComponent: ActionsComponent = ScanConfigActions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -123,19 +124,20 @@ const Row = ({
           'considered.')}
       />
     </TableData>
-    <Actions
+    <ActionsComponent
       {...props}
       entity={entity}
     />
   </TableRow>
 );
 
-Row.propTypes = {
+ScanConfigRow.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
-export default Row;
+export default ScanConfigRow;
 
 // vim: set ts=2 sw=2 tw=80:

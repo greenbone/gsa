@@ -75,6 +75,7 @@ Actions.propTypes = {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   ...props
@@ -116,7 +117,7 @@ const Row = ({
     <TableData>
       {longDate(entity.modificationTime)}
     </TableData>
-    <Actions
+    <ActionsComponent
       {...props}
       entity={entity}
     />
@@ -124,6 +125,7 @@ const Row = ({
 );
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };

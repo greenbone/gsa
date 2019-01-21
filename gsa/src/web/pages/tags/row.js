@@ -127,6 +127,7 @@ Actions.propTypes = {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -157,7 +158,7 @@ const Row = ({
       <TableData>
         {shortDate(entity.modificationTime)}
       </TableData>
-      <Actions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -166,6 +167,7 @@ const Row = ({
 };
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,

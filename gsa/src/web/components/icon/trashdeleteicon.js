@@ -17,17 +17,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
 import styled from 'styled-components';
-
-import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Icon from './icon';
+import DeleteIcon from './deleteicon';
 
-const StyledIcon = styled(Icon)`
+const TrashDeleteIcon = styled(DeleteIcon)`
   & svg:hover {
     background-color: ${Theme.lightRed};
   }
@@ -35,23 +31,6 @@ const StyledIcon = styled(Icon)`
     fill: ${Theme.darkRed};
   }
 `;
-
-const TrashDeleteIcon = ({
-  active,
-  ...props
-}) => {
-  return (
-    <StyledIcon
-      {...props}
-      active={active}
-      img="delete.svg"
-    />
-  );
-};
-
-TrashDeleteIcon.propTypes = {
-  active: PropTypes.bool,
-};
 
 export default TrashDeleteIcon;
 

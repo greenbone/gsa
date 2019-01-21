@@ -34,6 +34,7 @@ import EntitiesActions from 'web/entities/actions';
 import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
+  actionsComponent: ActionsComponent = EntitiesActions,
   entity,
   links = true,
   ...props
@@ -74,7 +75,7 @@ const Row = ({
       <TableData>
         {hosts.count}
       </TableData>
-      <EntitiesActions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -83,6 +84,7 @@ const Row = ({
 };
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
 };

@@ -82,6 +82,7 @@ Actions.propTypes = {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -117,7 +118,7 @@ const Row = ({
       <TableData>
         {entity.isActive() ? _('yes') : _('no')}
       </TableData>
-      <Actions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -126,6 +127,7 @@ const Row = ({
 };
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,

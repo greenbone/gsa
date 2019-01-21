@@ -54,11 +54,12 @@ class Trashcan extends HttpCommand {
 
   delete({id, entityType}) {
     entityType = apiType(entityType);
-    const cmd = 'delete_trash_' + entityType;
+    const cmd = 'delete_from_trash';
     const typeId = entityType + '_id';
     return this.httpPost({
       cmd,
       [typeId]: id,
+      resource_type: entityType,
     });
   }
 

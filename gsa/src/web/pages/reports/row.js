@@ -95,6 +95,7 @@ Actions.propTypes = {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   ...props
@@ -158,7 +159,7 @@ const Row = ({
       <TableData align="end">
         {report.result_count.false_positive.filtered}
       </TableData>
-      <Actions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -168,6 +169,7 @@ const Row = ({
 
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };

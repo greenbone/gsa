@@ -293,6 +293,7 @@ init_validator ()
                      "|(delete_credential)"
                      "|(delete_alert)"
                      "|(delete_filter)"
+                     "|(delete_from_trash)"
                      "|(delete_group)"
                      "|(delete_note)"
                      "|(delete_override)"
@@ -307,23 +308,6 @@ init_validator ()
                      "|(delete_tag)"
                      "|(delete_target)"
                      "|(delete_task)"
-                     "|(delete_trash_agent)"
-                     "|(delete_trash_config)"
-                     "|(delete_trash_alert)"
-                     "|(delete_trash_credential)"
-                     "|(delete_trash_filter)"
-                     "|(delete_trash_group)"
-                     "|(delete_trash_note)"
-                     "|(delete_trash_override)"
-                     "|(delete_trash_permission)"
-                     "|(delete_trash_port_list)"
-                     "|(delete_trash_report_format)"
-                     "|(delete_trash_role)"
-                     "|(delete_trash_scanner)"
-                     "|(delete_trash_schedule)"
-                     "|(delete_trash_tag)"
-                     "|(delete_trash_target)"
-                     "|(delete_trash_task)"
                      "|(delete_user)"
                      "|(delete_user_confirm)"
                      "|(download_agent)"
@@ -1505,10 +1489,11 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_override)
   ELSE (delete_agent)
   ELSE (delete_asset)
-  ELSE (delete_task)
   ELSE (delete_alert)
+  ELSE (delete_config)
   ELSE (delete_credential)
   ELSE (delete_filter)
+  ELSE (delete_from_trash)
   ELSE (delete_group)
   ELSE (delete_note)
   ELSE (delete_override)
@@ -1520,27 +1505,10 @@ exec_gmp_post (http_connection_t *con,
   ELSE (delete_role)
   ELSE (delete_scanner)
   ELSE (delete_schedule)
-  ELSE (delete_user)
   ELSE (delete_tag)
   ELSE (delete_target)
-  ELSE (delete_trash_agent)
-  ELSE (delete_trash_config)
-  ELSE (delete_trash_alert)
-  ELSE (delete_trash_credential)
-  ELSE (delete_trash_filter)
-  ELSE (delete_trash_group)
-  ELSE (delete_trash_note)
-  ELSE (delete_trash_override)
-  ELSE (delete_trash_permission)
-  ELSE (delete_trash_port_list)
-  ELSE (delete_trash_report_format)
-  ELSE (delete_trash_role)
-  ELSE (delete_trash_scanner)
-  ELSE (delete_trash_schedule)
-  ELSE (delete_trash_tag)
-  ELSE (delete_trash_target)
-  ELSE (delete_trash_task)
-  ELSE (delete_config)
+  ELSE (delete_task)
+  ELSE (delete_user)
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
     {

@@ -53,7 +53,6 @@ const EntitiesActions = ({
 };
 
 EntitiesActions.propTypes = {
-  actionsComponent: PropTypes.component,
   children: PropTypes.func,
   entity: PropTypes.model,
   selectionType: PropTypes.string,
