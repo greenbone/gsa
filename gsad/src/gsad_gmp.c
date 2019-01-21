@@ -2375,6 +2375,28 @@ delete_resource (gvm_connection_t *connection, const char *type,
 }
 
 /**
+ * @brief Move a resource to the trashcan
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+move_resource_to_trash (gvm_connection_t *connection,
+                        const char *type,
+                        credentials_t * credentials,
+                        params_t *params,
+                        cmd_response_data_t* response_data)
+{
+  return delete_resource (connection, type, credentials, params, FALSE,
+                          response_data);
+}
+
+/**
  * @brief Perform action on resource, get next page, envelope result.
  *
  * @param[in]  connection     Connection to manager.
@@ -3621,8 +3643,8 @@ char *
 delete_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "task", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "task", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -5701,8 +5723,8 @@ char *
 delete_credential_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "credential", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "credential", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -6173,8 +6195,8 @@ char *
 delete_agent_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "agent", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "agent", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -7505,8 +7527,8 @@ char *
 delete_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "alert", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "alert", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -8677,8 +8699,8 @@ delete_target_gmp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "target", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "target", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -9088,8 +9110,8 @@ char *
 delete_tag_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "tag", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "tag", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -11574,8 +11596,8 @@ char *
 delete_config_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "config", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "config", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -13986,8 +14008,8 @@ char *
 delete_note_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "note", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "note", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -14423,8 +14445,8 @@ char *
 delete_override_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "override", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "override", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -14941,8 +14963,8 @@ char *
 delete_scanner_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "scanner", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "scanner", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -15398,8 +15420,8 @@ char *
 delete_schedule_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "schedule", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "schedule", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -15874,8 +15896,8 @@ delete_report_format_gmp (gvm_connection_t *connection,
                           credentials_t *credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "report_format", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "report_format", credentials,
+                                 params, response_data);
 }
 
 /**
@@ -17551,8 +17573,8 @@ char *
 delete_group_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "group", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "group", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -17926,8 +17948,8 @@ char *
 delete_permission_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "permission", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "permission", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -19519,8 +19541,8 @@ char *
 delete_port_list_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "port_list", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "port_list", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -19665,8 +19687,8 @@ char *
 delete_role_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "role", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "role", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -20497,8 +20519,8 @@ delete_filter_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
     // TODO: Add params_remove.
     filt_id->value = NULL;
 
-  return delete_resource (connection, "filter", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "filter", credentials, params,
+                                 response_data);
 }
 
 /**
@@ -20846,8 +20868,8 @@ char *
 delete_user_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
-  return delete_resource (connection, "user", credentials, params, 0,
-                          response_data);
+  return move_resource_to_trash (connection, "user", credentials, params,
+                                 response_data);
 }
 
 /**
