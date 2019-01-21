@@ -8,6 +8,48 @@ $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git checkout gsa-7.0 && git log
 
 
+gsa 7.0.4 (work in progress)
+
+This is the fourth maintenance release of the Greenbone Security
+Assistant (GSA) 7.0 module for the Open Vulnerability Assessment System
+release 9 (OpenVAS-9). It is the web client that makes the full feature
+set of OpenVAS Manager available in a web browser.
+
+Many thanks to everyone who has contributed to this release.
+
+Main changes compared to 7.0.3:
+* French translation has been fixed and updated.
+* An issue with sorting by multiple columns in detached charts has been fixed.
+* Host lists of targets are abbreviated if they are longer than 500 characters.
+* A new OMP element is used to decide which credential downloads are available.
+* Help pages have been updated.
+* Performance of the "New Note" and "New Override" dialogs has been improved.
+* The host access fields of users now accept colons to support IPv6.
+* An issue with dialog inputs sending superfluous parameters has been fixed.
+* In get_aggregate data a memory leak has been fixed and the response handling
+  has been improved.
+* An option to change the per-IP connection limit has been added.
+* New options for generating delta reports in alerts have been added.
+* Binary files are now accepted for the agent installer and alert PKCS12 file.
+* Issues with checkbox bulk selections not displayed correctly in some browsers
+  and not working correctly for hosts have been addressed.
+* Japanese translations have been added.
+* The output of the CPE icon and timezone dictionary generator scripts
+  is now more reproducible.
+* An issue with the wrong filt_id in a filter reset link has been addressed.
+* Details and type parameters are now handled in redirects has been addressed.
+* Tags can now be created for Scanners.
+* An issue with showing long durations in charts has been addressed.
+* An issue when using a hosts filter to create a target has been addressed.
+* The length of the hosts field for notes and overrides is no longer limited.
+* Segmentation faults when certain configs are saved have been addressed.
+* Privacy password and algorithm of SNMP credentials can be edited separately.
+* A new Alemba vFire alert method has been added.
+* An issue with handling XRef URLs without scheme prefix has been addressed.
+* Various small usability improvements for the auth config page, empty list
+  pages and the "Edit filter" icons.
+
+
 gsa 7.0.3 (2018-03-28)
 
 This is the third maintenance release of the Greenbone Security
@@ -36,7 +78,7 @@ Main changes compared to 7.0.2:
 * An option to resume uncompleted scheduled tasks has been added.
 * SMB alerts have been added.
 * Cancelling the loading of a page, dialog, dashboard etc. in GSA can
-  now also cancel the corresponding request to manger, improving
+  now also cancel the corresponding request to manager, improving
   performance.
 * An issue which caused an internal error getting performance info of an
   unconnected slave has been addressed.
@@ -639,7 +681,7 @@ Main changes since 4.0.x:
 * Added support for setting the priorities for cipher suites when using HTTPS.
 * Add --drop option to drop privileges once the chroot is established.
   Attention: This action was previously part of the --chroot parameter, if
-  required, this now needs to be explicitely set.
+  required, this now needs to be explicitly set.
 * Add --face to support switching between different layouts.
 * Code cleanup.
 
@@ -849,7 +891,7 @@ Matthew Mundell, Timo Pollmeier and Hani Benhabiles.
 Main changes since 5.0+beta3:
 * Add --drop option to drop privileges once the chroot is established.
   Attention: This action was previously part of the --chroot parameter, if
-  required, this now needs to be explicitely set.
+  required, this now needs to be explicitly set.
 * The interface has been simplified, improved and made more consistent in a
   number of places.
 * Code cleanup.
@@ -1070,7 +1112,7 @@ Main changes since 2.0.x:
 * New: References info box in results view.
 * New: Product detection info box in results view.
 * New: Allow target list upload from file.
-* New: Support for note/overrrides lifetimes.
+* New: Support for note/overrides lifetimes.
 * New: Support for empty passwords has been added.
 * New: Support for changing user passwords.
 * New: Asset Management.
@@ -1137,7 +1179,7 @@ Main changes since 3.0+beta8:
 
 gsa 3.0+beta8 (2011-12-02)
 
-This is the eigth beta version of the upcoming 3.0 release of the Greenbone
+This is the eighth beta version of the upcoming 3.0 release of the Greenbone
 Security Assistant (GSA). It is the web client that makes the full feature set
 of OpenVAS Manager available in a web browser.
 
