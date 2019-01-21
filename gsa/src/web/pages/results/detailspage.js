@@ -29,7 +29,6 @@ import SeverityBar from 'web/components/bar/severitybar';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
-import NewIcon from 'web/components/icon/newicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
@@ -80,6 +79,7 @@ import OverrideComponent from '../overrides/component';
 import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
+import NewTicketIcon from 'web/components/icon/newticketicon';
 
 let ToolBarIcons = ({
   capabilities,
@@ -122,7 +122,7 @@ let ToolBarIcons = ({
         />
       }
       {capabilities.mayCreate('ticket') &&
-        <NewIcon
+        <NewTicketIcon
           title={_('Create new Ticket')}
           value={entity}
           onClick={onTicketCreateClick}
