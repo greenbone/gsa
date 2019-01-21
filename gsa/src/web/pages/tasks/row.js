@@ -88,6 +88,7 @@ const render_report_total = (entity, links) => {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   actions,
@@ -175,7 +176,7 @@ const Row = ({
           <Trend name={entity.trend} />
         }
       </TableData>
-      <Actions
+      <ActionsComponent
         {...props}
         links={links}
         entity={entity}
@@ -185,7 +186,7 @@ const Row = ({
 };
 
 Row.propTypes = {
-  actions: PropTypes.componentOrFalse,
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   username: PropTypes.string.isRequired,

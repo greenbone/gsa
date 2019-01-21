@@ -39,6 +39,7 @@ import {RowDetailsToggle} from 'web/entities/row';
 import PropTypes from 'web/utils/proptypes';
 
 const Row = ({
+  actionsComponent: ActionsComponent = EntitiesActions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -90,7 +91,7 @@ const Row = ({
     <TableData align="end">
       {entity.qod && entity.qod.value} %
     </TableData>
-    <EntitiesActions
+    <ActionsComponent
       {...props}
       entity={entity}
     />
@@ -98,6 +99,7 @@ const Row = ({
 );
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,

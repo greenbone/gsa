@@ -84,6 +84,7 @@ IconActions.propTypes = {
 const Actions = withEntitiesActions(IconActions);
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -106,7 +107,7 @@ const Row = ({
     <TableData align="start">
       {entity.port_count.udp}
     </TableData>
-    <Actions
+    <ActionsComponent
       {...props}
       entity={entity}
     />
@@ -114,6 +115,7 @@ const Row = ({
 );
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,

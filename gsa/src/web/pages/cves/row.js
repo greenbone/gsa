@@ -38,6 +38,7 @@ import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
 const Row = ({
+  actionsComponent: ActionsComponent = EntitiesActions,
   entity,
   links = true,
   onToggleDetailsClick,
@@ -80,7 +81,7 @@ const Row = ({
       <TableData>
         <SeverityBar severity={entity.severity}/>
       </TableData>
-      <EntitiesActions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -94,6 +95,7 @@ const Row = ({
 );
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   entity: PropTypes.model,
   links: PropTypes.bool,
   onToggleDetailsClick: PropTypes.func.isRequired,

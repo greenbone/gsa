@@ -48,6 +48,7 @@ import PropTypes from 'web/utils/proptypes';
 import ResultDelta from './delta';
 
 const Row = ({
+  actionsComponent: ActionsComponent = EntitiesActions,
   delta = false,
   entity,
   links = true,
@@ -131,7 +132,7 @@ const Row = ({
       <TableData>
         {longDate(entity.modificationTime)}
       </TableData>
-      <EntitiesActions
+      <ActionsComponent
         {...props}
         entity={entity}
       />
@@ -140,6 +141,7 @@ const Row = ({
 };
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   delta: PropTypes.bool,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,

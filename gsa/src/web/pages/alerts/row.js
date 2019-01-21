@@ -119,6 +119,7 @@ const render_filter = (filter, caps, links = true) => {
 };
 
 const Row = ({
+  actionsComponent: ActionsComponent = Actions,
   capabilities,
   entity,
   links = true,
@@ -151,7 +152,7 @@ const Row = ({
     <TableData>
       {renderYesNo(entity.active)}
     </TableData>
-    <Actions
+    <ActionsComponent
       {...props}
       entity={entity}
     />
@@ -159,6 +160,7 @@ const Row = ({
 );
 
 Row.propTypes = {
+  actionsComponent: PropTypes.component,
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
