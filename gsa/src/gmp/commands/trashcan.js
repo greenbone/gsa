@@ -18,7 +18,7 @@
  */
 import registerCommand from '../command';
 
-import {apiType} from '../utils/entitytype.js';
+import {apiType} from '../utils/entitytype';
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
