@@ -244,7 +244,7 @@ class Trashcan extends React.Component {
       links: false,
       onEntityRestore: this.handleRestore,
       onEntityDelete: this.handleDelete,
-      actions: TrashActions,
+      actionsComponent: TrashActions,
       footnote: false,
       footer: false,
     };
