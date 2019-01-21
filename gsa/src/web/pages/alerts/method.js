@@ -188,7 +188,7 @@ const Method = ({
         </div>
       );
     }
-    return _('text');
+    return _('Alemba vFire');
   }
 
   if (method.type === METHOD_TYPE_SCP) {

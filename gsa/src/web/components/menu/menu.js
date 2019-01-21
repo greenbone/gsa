@@ -115,6 +115,7 @@ const Menu = ({
   ...props
 }) => {
   let link;
+  children = React.Children.toArray(children).filter(hasValue);
   if (isDefined(to)) {
     link = <Link to={to}>{title}</Link>;
   }
@@ -123,12 +124,11 @@ const Menu = ({
     link = React.cloneElement(child, {title});
   }
 
-  const menuentries = React.Children.map(children, child => hasValue(child) ? (
+  const menuentries = children.map(child => (
     <StyledMenuEntry key={child.key}>
       {child}
     </StyledMenuEntry>
-  ) : child);
-
+  ));
   return (
     <StyledMenu>
       <DefaultEntry>
