@@ -22,6 +22,8 @@ import _ from 'gmp/locale';
 
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 
+import TicketIcon from 'web/components/icon/ticketicon';
+
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import EntitiesPage from 'web/entities/page';
@@ -74,7 +76,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={TICKETS_FILTER_FILTER}
-        sectionIcon="task.svg"
+        sectionIcon={<TicketIcon size="large"/>}
         table={Table}
         title={_('Tickets')}
         onChanged={onChanged}
