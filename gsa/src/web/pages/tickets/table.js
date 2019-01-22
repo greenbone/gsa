@@ -23,7 +23,6 @@ import {_l, _} from 'gmp/locale/lang';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/components/icon/editicon';
 import SolutionType from 'web/components/icon/solutiontypeicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
@@ -39,6 +38,10 @@ import {createEntitiesTable} from 'web/entities/table';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 import PropTypes from 'web/utils/proptypes';
+
+import SolveIcon from './icon/solveicon';
+import CloseIcon from './icon/closeicon';
+import Layout from 'web/components/layout/layout';
 
 export const FIELDS = [
   {
@@ -75,40 +78,32 @@ const Actions = withEntitiesActions(({
   onTicketSolve,
   onTicketDelete,
 }) => (
-  <IconDivider>
-    <EditIcon
-      title={entity.isSolved() ?
-        _('Ticket is already solved') :
-        _('Mark Ticket as solved')
-      }
-      active={!entity.isSolved()}
-      value={entity}
-      onClick={onTicketSolve}
-    />
-    <EditIcon
-      title={entity.isClosed() ?
-         _('Ticket is already closed') :
-         _('Mark Ticket as closed')
-      }
-      active={!entity.isClosed()}
-      value={entity}
-      onClick={onTicketClose}
-    />
-    <TrashIcon
-      displayName={_('Ticket')}
-      name="ticket"
-      entity={entity}
-      onClick={onTicketDelete}
-    />
-    <CloneIcon
-      displayName={_('Ticket')}
-      name="ticket"
-      entity={entity}
-      title={_('Clone Ticket')}
-      value={entity}
-      onClick={onTicketClone}
-    />
-  </IconDivider>
+  <Layout align={['center', 'center']}>
+    <IconDivider>
+      <SolveIcon
+        ticket={entity}
+        onClick={onTicketSolve}
+      />
+      <CloseIcon
+        ticket={entity}
+        onClick={onTicketClose}
+      />
+      <TrashIcon
+        displayName={_('Ticket')}
+        name="ticket"
+        entity={entity}
+        onClick={onTicketDelete}
+      />
+      <CloneIcon
+        displayName={_('Ticket')}
+        name="ticket"
+        entity={entity}
+        title={_('Clone Ticket')}
+        value={entity}
+        onClick={onTicketClone}
+      />
+    </IconDivider>
+  </Layout>
 ));
 
 const Row = ({
