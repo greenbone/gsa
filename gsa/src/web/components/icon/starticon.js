@@ -20,18 +20,17 @@
 import React from 'react';
 
 import SvgIcon from './svgicon';
-import {ReactComponent as Icon} from './svg/new.svg';
 
-export const NewIcon = props => {
-  return (
-    <SvgIcon
-      {...props}
-    >
-      <Icon/>
-    </SvgIcon>
-  );
-};
+import {ReactComponent as Icon} from './svg/start.svg';
 
-export default NewIcon;
+const StartIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
+
+export default StartIcon;
 
 // vim: set ts=2 sw=2 tw=80:

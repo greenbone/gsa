@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,21 +17,33 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* eslint-disable max-len */
 import React from 'react';
 
-import SvgIcon from './svgicon';
-import {ReactComponent as Icon} from './svg/new.svg';
+import {render, fireEvent} from 'web/utils/testing';
 
-export const NewIcon = props => {
-  return (
-    <SvgIcon
-      {...props}
-    >
-      <Icon/>
-    </SvgIcon>
-  );
+import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
+
+export const testIcon = (Icon, type) => {
+  describe(`${type}Icon tests`, () => {
+    test('should render', () => {
+      const {element} = render(<Icon/>);
+
+      expect(element).toMatchSnapshot();
+
+      expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
+      expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
+    });
+
+    test('should handle click', () => {
+      const handler = jest.fn();
+      const {element} = render(<Icon onClick={handler} value="1"/>);
+
+      fireEvent.click(element);
+
+      expect(handler).toHaveBeenCalledWith('1');
+    });
+  });
 };
-
-export default NewIcon;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,21 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import {testIcon} from 'web/components/icon/testing';
 
-import SvgIcon from './svgicon';
-import {ReactComponent as Icon} from './svg/new.svg';
+import StartIcon from '../starticon';
 
-export const NewIcon = props => {
-  return (
-    <SvgIcon
-      {...props}
-    >
-      <Icon/>
-    </SvgIcon>
-  );
-};
-
-export default NewIcon;
+describe('StartIcon component tests', () => {
+  testIcon(StartIcon, 'start');
+});
 
 // vim: set ts=2 sw=2 tw=80:
