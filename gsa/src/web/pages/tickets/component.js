@@ -206,7 +206,7 @@ class TicketComponent extends React.Component {
             {createDialogVisible &&
               <CreateTicketDialog
                 resultId={result.id}
-                title={_('Create new Ticket for Result {{name}}', result)}
+                title={_('Create new Ticket for Result {{- name}}', result)}
                 userId={isDefined(userId) ? userId : selectSaveId(users)}
                 users={users}
                 onUserIdChange={this.handleUserIdChange}
@@ -219,7 +219,7 @@ class TicketComponent extends React.Component {
             }
             {solvedDialogVisible &&
               <StatusChangeTicketDialog
-                title={_('Mark Ticket {{name}} as solved', ticket)}
+                title={_('Mark Ticket {{- name}} as solved', ticket)}
                 ticketId={ticket.id}
                 onClose={this.handleCloseSolvedDialog}
                 onSave={this.handleSolve}
@@ -227,7 +227,7 @@ class TicketComponent extends React.Component {
             }
             {closedDialogVisible &&
               <StatusChangeTicketDialog
-                title={_('Mark Ticket {{name}} as closed', ticket)}
+                title={_('Mark Ticket {{- name}} as closed', ticket)}
                 ticketId={ticket.id}
                 onClose={this.handleCloseClosedDialog}
                 onSave={this.handleClose}
