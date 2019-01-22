@@ -25,20 +25,17 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from 'web/components/icon/icon';
+import ResumeIcon from 'web/components/icon/resumeicon';
 
-const ResumeIcon = ({
+const TaskResumeIcon = ({
   capabilities,
-  size,
   task,
   onClick,
 }) => {
   if (task.isContainer()) {
     return (
-      <Icon
+      <ResumeIcon
         active={false}
-        size={size}
-        img="resume.svg"
         alt={_('Resume')}
         title={_('Task is a container')}
       />
@@ -47,10 +44,8 @@ const ResumeIcon = ({
 
   if (isDefined(task.schedule)) {
     return (
-      <Icon
+      <ResumeIcon
         active={false}
-        size={size}
-        img="resume.svg"
         alt={_('Resume')}
         title={_('Task is scheduled')}
       />
@@ -60,20 +55,16 @@ const ResumeIcon = ({
   if (task.isStopped() || task.isInterrupted()) {
     if (capabilities.mayOp('resume_task')) {
       return (
-        <Icon
-          size={size}
+        <ResumeIcon
           title={_('Resume')}
-          img="resume.svg"
           value={task}
           onClick={onClick}
         />
       );
     }
     return (
-      <Icon
+      <ResumeIcon
         active={false}
-        size={size}
-        img="resume.svg"
         alt={_('Resume')}
         title={_('Permission to resume task denied')}
       />
@@ -81,23 +72,20 @@ const ResumeIcon = ({
   }
 
   return (
-    <Icon
+    <ResumeIcon
       active={false}
-      size={size}
-      img="resume.svg"
       alt={_('Resume')}
       title={_('Task is not stopped')}
     />
   );
 };
 
-ResumeIcon.propTypes = {
+TaskResumeIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(ResumeIcon);
+export default withCapabilities(TaskResumeIcon);
 
 // vim: set ts=2 sw=2 tw=80:
