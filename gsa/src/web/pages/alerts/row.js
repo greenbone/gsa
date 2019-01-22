@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import Icon from 'web/components/icon/icon';
+import StartIcon from 'web/components/icon/starticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -84,8 +84,7 @@ const Actions = withEntitiesActions(({
       title={_('Export Alert')}
       onClick={onAlertDownloadClick}
     />
-    <Icon
-      img="start.svg"
+    <StartIcon
       value={entity}
       title={_('Test Alert')}
       onClick={onAlertTestClick}

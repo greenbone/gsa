@@ -23,12 +23,11 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from 'web/components/icon/icon';
+import StartIcon from 'web/components/icon/starticon';
 
-const StartIcon = ({
+const TaskStartIcon = ({
   capabilities,
   task,
-  size,
   onClick,
 }) => {
 
@@ -38,10 +37,8 @@ const StartIcon = ({
 
   if (!capabilities.mayOp('start_task')) {
     return (
-      <Icon
+      <StartIcon
         active={false}
-        size={size}
-        img="start.svg"
         title={_('Permission to start Task denied')}
       />
     );
@@ -49,9 +46,7 @@ const StartIcon = ({
 
   if (!task.isActive()) {
     return (
-      <Icon
-        size={size}
-        img="start.svg"
+      <StartIcon
         title={_('Start')}
         value={task}
         onClick={onClick}
@@ -59,22 +54,19 @@ const StartIcon = ({
     );
   }
   return (
-    <Icon
+    <StartIcon
       active={false}
-      size={size}
-      img="start.svg"
       title={_('Task is already active')}
     />
   );
 };
 
-StartIcon.propTypes = {
+TaskStartIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
-  size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(StartIcon);
+export default withCapabilities(TaskStartIcon);
 
 // vim: set ts=2 sw=2 tw=80:

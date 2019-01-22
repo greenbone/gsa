@@ -33,7 +33,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import Icon from 'web/components/icon/icon';
+import StartIcon from 'web/components/icon/starticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -178,8 +178,7 @@ class AlertActions extends React.Component {
         {({create}) => (
           <React.Fragment>
             <IconDivider>
-              <Icon
-                img="start.svg"
+              <StartIcon
                 title={_('Trigger Alert')}
                 onClick={this.handleOpenTriggerAlertDialog}
               />
