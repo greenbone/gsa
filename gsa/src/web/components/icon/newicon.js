@@ -19,8 +19,6 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SvgIcon from './svgicon';
 import {ReactComponent as Icon} from './svg/new.svg';
 
@@ -32,10 +30,6 @@ export const NewIcon = props => {
       <Icon/>
     </SvgIcon>
   );
-};
-
-NewIcon.propTypes = {
-  active: PropTypes.bool,
 };
 
 export default NewIcon;
