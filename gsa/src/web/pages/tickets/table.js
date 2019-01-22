@@ -36,8 +36,11 @@ import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+import withRowDetails from 'web/entities/withRowDetails';
 
 import PropTypes from 'web/utils/proptypes';
+
+import TicketDetails from './details';
 
 import SolveIcon from './icon/solveicon';
 import CloseIcon from './icon/closeicon';
@@ -162,6 +165,7 @@ const Footer = createEntitiesFooter({
 export default createEntitiesTable({
   emptyTitle: _l('No tickets available'),
   row: Row,
+  rowDetails: withRowDetails('ticket', 7)(TicketDetails),
   header: createEntitiesHeader(FIELDS),
   footer: Footer,
 });
