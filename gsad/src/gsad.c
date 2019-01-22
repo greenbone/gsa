@@ -525,7 +525,7 @@ init_validator ()
   gvm_validator_add (validator, "chart_init:value", "(?s)^.*$");
   gvm_validator_add (validator, "setting_value", "^.*$");
   gvm_validator_add (validator, "setting_name", "^(.*){0,1000}$");
-  gvm_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  gvm_validator_add (validator, "comment",    "(?s)^(.*){0,1000}$");
   gvm_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
