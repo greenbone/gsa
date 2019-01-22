@@ -950,6 +950,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/trend.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/component.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/createdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/icon/closeicon.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/icon/solveicon.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/listpage.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/statuschangedialog.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
