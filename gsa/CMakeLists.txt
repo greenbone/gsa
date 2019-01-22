@@ -288,6 +288,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
@@ -307,6 +308,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
