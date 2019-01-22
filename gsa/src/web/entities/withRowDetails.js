@@ -79,11 +79,13 @@ const withRowDetails = (type, colSpan = '10') => Component => {
           </Layout>
         }
         <Indent/>
-        <Component
-          {...props}
-          links={links}
-          entity={entity}
-        />
+        <Layout flex="column" grow="1">
+          <Component
+            {...props}
+            links={links}
+            entity={entity}
+          />
+        </Layout>
       </TableData>
     </StyledTableRow>
   );
