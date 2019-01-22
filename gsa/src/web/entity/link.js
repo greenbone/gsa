@@ -73,6 +73,7 @@ const EntityLink = ({
       {...props}
       id={id}
       type={type}
+      textOnly={textOnly}
     >
       {name}
     </DetailsLink>
