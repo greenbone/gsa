@@ -29,7 +29,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Icon from 'web/components/icon/icon';
+import DetailsIcon from 'web/components/icon/detailsicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -71,8 +71,7 @@ const withRowDetails = (type, colSpan = '10') => Component => {
               type={isFunction(type) ? type(entity) : type}
               id={entity.id}
             >
-              <Icon
-                img="details.svg"
+              <DetailsIcon
                 size="small"
                 title={_('Open all details')}
               />
