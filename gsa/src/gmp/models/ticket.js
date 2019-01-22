@@ -125,6 +125,14 @@ class Ticket extends Model {
   isSolved() {
     return this.status === TICKET_STATUS.solved;
   }
+
+  isConfirmed() {
+    return this.status === TICKET_STATUS.confimed;
+  }
+
+  isOrphaned() {
+    return this.status === TICKET_STATUS.orphaned;
+  }
 }
 
 export default Ticket;
