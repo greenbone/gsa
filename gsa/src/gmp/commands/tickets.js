@@ -42,6 +42,17 @@ export class TicketCommand extends EntityCommand {
     });
   }
 
+  save({
+    id,
+    comment,
+  }) {
+    return this.action({
+      cmd: 'save_ticket',
+      id,
+      comment,
+    });
+  }
+
   solve({
     id,
     comment,
