@@ -575,6 +575,10 @@ class AlertComponent extends React.Component {
         const result_filter_id = selectSaveId(result_filters);
         const report_format_id = selectSaveId(report_formats);
 
+        const filterId =
+          isDefined(reportComposerDefaults.reportResultFilterId) ?
+          reportComposerDefaults.reportResultFilterId : UNSET_VALUE;
+
         this.setState({
           active: undefined,
           alert: undefined,
@@ -594,7 +598,7 @@ class AlertComponent extends React.Component {
           event_data_status: DEFAULT_EVENT_STATUS,
           event_data_feed_event: undefined,
           event_data_secinfo_type: undefined,
-          filter_id: undefined,
+          filter_id: filterId,
           filters,
           composerFilterId: reportComposerDefaults.reportResultFilterId,
           composerIncludeNotes: reportComposerDefaults.includeNotes,
