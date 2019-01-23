@@ -22,14 +22,15 @@ import {_l, _} from 'gmp/locale/lang';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
-import CloneIcon from 'web/entity/icon/cloneicon';
 import SolutionType from 'web/components/icon/solutiontypeicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import EntityCloneIcon from 'web/entity/icon/cloneicon';
+import EntityTrashIcon from 'web/entity/icon/trashicon';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import {createEntitiesFooter} from 'web/entities/footer';
@@ -91,18 +92,17 @@ const Actions = withEntitiesActions(({
         ticket={entity}
         onClick={onTicketClose}
       />
-      <TrashIcon
+      <EntityTrashIcon
         displayName={_('Ticket')}
-        name="ticket"
         entity={entity}
+        name="ticket"
         onClick={onTicketDelete}
       />
-      <CloneIcon
+      <EntityEditIcon
         displayName={_('Ticket')}
-        name="ticket"
         entity={entity}
+        name="ticket"
         title={_('Clone Ticket')}
-        value={entity}
         onClick={onTicketClone}
       />
     </IconDivider>
