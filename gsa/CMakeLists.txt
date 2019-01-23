@@ -952,6 +952,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tickets/createdialog.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/loaders.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/statusdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/usersassigneddisplay.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/details.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/detailspage.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/editdialog.js
