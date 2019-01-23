@@ -21405,7 +21405,7 @@ get_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Create a ticket, get report, envelope the result.
+ * @brief Create a ticket
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -21480,6 +21480,81 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   ret = response_from_entity (connection, credentials, params, entity,
                               "Create Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
+ * @brief Modify a ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t* response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *ticket_id, *comment;
+  char *ret;
+
+  ticket_id = params_value (params, "ticket_id");
+  comment = params_value (params, "comment");
+
+  CHECK_VARIABLE_INVALID (ticket_id, "Save Ticket");
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<modify_ticket ticket_id=\"%s\">"
+                "<comment>%s</comment>"
+                "</modify_ticket>",
+                ticket_id,
+                comment ? comment : ""
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "It is unclear whether the ticket has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "It is unclear whether the ticket has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Save Ticket", response_data);
 
   free_entity (entity);
   g_free (response);

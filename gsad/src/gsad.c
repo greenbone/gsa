@@ -479,6 +479,7 @@ init_validator ()
                      "|(save_tag)"
                      "|(save_target)"
                      "|(save_task)"
+                     "|(save_ticket)"
                      "|(save_user)"
                      "|(solve_ticket)"
                      "|(start_task)"
@@ -1565,6 +1566,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_tag)
   ELSE (save_target)
   ELSE (save_task)
+  ELSE (save_ticket)
   ELSE (save_container_task)
   ELSE (save_user)
   ELSE (solve_ticket)
