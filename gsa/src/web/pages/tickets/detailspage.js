@@ -52,6 +52,7 @@ import EntityPage, {Col} from 'web/entity/page';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
 import EntityCloneIcon from 'web/entity/icon/cloneicon';
+import EntityEditIcon from 'web/entity/icon/editicon';
 import EntityTrashIcon from 'web/entity/icon/trashicon';
 
 import {
@@ -73,6 +74,7 @@ const ToolBarIcons = ({
   onTicketCloseClick,
   onTicketDeleteClick,
   onTicketDownloadClick,
+  onTicketEditClick,
   onTicketSolveClick,
 }) => (
   <Divider margin="10px">
@@ -85,6 +87,11 @@ const ToolBarIcons = ({
         entity={entity}
         name="ticket"
         onClick={onTicketCloneClick}
+      />
+      <EntityEditIcon
+        entity={entity}
+        name="ticket"
+        onClick={onTicketEditClick}
       />
       <EntityTrashIcon
         entity={entity}
@@ -116,6 +123,7 @@ ToolBarIcons.propTypes = {
   onTicketCloseClick: PropTypes.func.isRequired,
   onTicketDeleteClick: PropTypes.func.isRequired,
   onTicketDownloadClick: PropTypes.func.isRequired,
+  onTicketEditClick: PropTypes.func.isRequired,
   onTicketSolveClick: PropTypes.func.isRequired,
 };
 

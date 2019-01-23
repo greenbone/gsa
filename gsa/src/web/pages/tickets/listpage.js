@@ -69,6 +69,7 @@ const Page = ({
       clone,
       close,
       delete: deleteticket,
+      edit,
       solve,
     }) => (
       <EntitiesPage
@@ -86,6 +87,7 @@ const Page = ({
         onTicketClone={clone}
         onTicketClose={close}
         onTicketDelete={deleteticket}
+        onTicketEdit={edit}
         onTicketSolve={solve}
       />
     )}
