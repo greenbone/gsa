@@ -60,6 +60,8 @@ class TicketComponent extends React.Component {
 
     this.handleSolve = this.handleSolve.bind(this);
     this.handleClose = this.handleClose.bind(this);
+
+    this.handleUserIdChange = this.handleUserIdChange.bind(this);
   }
 
   handleOpenCreateDialog(result) {
