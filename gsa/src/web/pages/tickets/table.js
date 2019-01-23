@@ -31,6 +31,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityCloneIcon from 'web/entity/icon/cloneicon';
+import EntityEditIcon from 'web/entity/icon/editicon';
 import EntityTrashIcon from 'web/entity/icon/trashicon';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
@@ -81,6 +82,7 @@ const Actions = withEntitiesActions(({
   onTicketClose,
   onTicketSolve,
   onTicketDelete,
+  onTicketEdit,
 }) => (
   <Layout align={['center', 'center']}>
     <IconDivider>
@@ -99,6 +101,12 @@ const Actions = withEntitiesActions(({
         onClick={onTicketDelete}
       />
       <EntityEditIcon
+        displayName={_('Ticket')}
+        entity={entity}
+        name="ticket"
+        onClick={onTicketEdit}
+      />
+      <EntityCloneIcon
         displayName={_('Ticket')}
         entity={entity}
         name="ticket"
