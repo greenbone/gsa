@@ -478,7 +478,7 @@ class AlertComponent extends React.Component {
             getValue(method.data.notice_report_format,
               DEFAULT_NOTICE_REPORT_FORMAT)),
           method_data_notice_attach_format: selectSaveId(report_formats,
-            getValue(method.data.attach_report_format,
+            getValue(method.data.notice_attach_format,
               DEFAULT_NOTICE_ATTACH_FORMAT)),
 
           method_data_scp_credential: selectSaveId(credentials,
