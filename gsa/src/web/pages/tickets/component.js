@@ -40,6 +40,7 @@ import withGmp from 'web/utils/withGmp';
 
 import CreateTicketDialog from './createdialog';
 import StatusChangeTicketDialog from './statuschangedialog';
+import EditTicketDialog from './editdialog';
 
 class TicketComponent extends React.Component {
 
@@ -53,6 +54,8 @@ class TicketComponent extends React.Component {
 
     this.handleCloseCreateDialog = this.handleCloseCreateDialog.bind(this);
     this.handleOpenCreateDialog = this.handleOpenCreateDialog.bind(this);
+    this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
+    this.handleOpenEditDialog = this.handleOpenEditDialog.bind(this);
     this.handleCloseSolvedDialog = this.handleCloseSolvedDialog.bind(this);
     this.handleOpenSolvedDialog = this.handleOpenSolvedDialog.bind(this);
     this.handleCloseClosedDialog = this.handleCloseClosedDialog.bind(this);
@@ -79,6 +82,26 @@ class TicketComponent extends React.Component {
     this.setState({
       userId: undefined,
       createDialogVisible: false,
+    });
+
+    this.handleInteraction();
+  }
+
+  handleOpenEditDialog(ticket) {
+    this.props.loadUsers();
+
+    this.setState({
+      ticket,
+      editDialogVisible: true,
+    });
+
+    this.handleInteraction();
+  }
+
+  handleCloseEditDialog() {
+    this.setState({
+      ticket: undefined,
+      editDialogVisible: false,
     });
 
     this.handleInteraction();
@@ -184,6 +207,7 @@ class TicketComponent extends React.Component {
     const {
       closedDialogVisible,
       createDialogVisible,
+      editDialogVisible,
       result,
       solvedDialogVisible,
       ticket,
@@ -215,6 +239,7 @@ class TicketComponent extends React.Component {
               createFromResult: this.handleOpenCreateDialog,
               solve: this.handleOpenSolvedDialog,
               close: this.handleOpenClosedDialog,
+              edit: this.handleOpenEditDialog,
             })}
             {createDialogVisible &&
               <CreateTicketDialog
@@ -227,6 +252,24 @@ class TicketComponent extends React.Component {
                 onSave={d => {
                   this.handleInteraction();
                   return create(d).then(this.handleCloseCreateDialog);
+                }}
+              />
+            }
+            {editDialogVisible &&
+              <EditTicketDialog
+                comment={ticket.comment}
+                ticketId={ticket.id}
+                title={_('Edit Ticket {{- name}}', ticket)}
+                onClose={this.handleCloseEditDialog}
+                onSave={({
+                  comment,
+                  ticketId,
+                }) => {
+                  this.handleInteraction();
+                  return save({
+                    id: ticketId,
+                    comment,
+                  }).then(this.handleCloseEditDialog);
                 }}
               />
             }
