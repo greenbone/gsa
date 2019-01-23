@@ -103,9 +103,9 @@ export const NOTICE_INCLUDE = '0';
 export const NOTICE_ATTACH = '2';
 
 export const DEFAULT_NOTICE_REPORT_FORMAT =
-  '19f6f1b3-7128-4433-888c-ccc764fe6ed5';
+  'a3810a62-1f62-11e1-9219-406186ea4fc5';
 export const DEFAULT_NOTICE_ATTACH_FORMAT =
-  '1a60a67e-97d0-4cbf-bc77-f71b08e7043d';
+  'a0b5bfb2-1f62-11e1-85db-406186ea4fc5';
 
 export const TASK_SUBJECT = '[GVM] Task \'$n\': $e';
 export const SECINFO_SUBJECT = '[GVM] $T $q $S since $d';
