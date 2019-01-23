@@ -215,7 +215,7 @@ class TicketComponent extends React.Component {
                 onClose={this.handleCloseCreateDialog}
                 onSave={d => {
                   this.handleInteraction();
-                  return save(d).then(this.handleCloseCreateDialog);
+                  return create(d).then(this.handleCloseCreateDialog);
                 }}
               />
             }
