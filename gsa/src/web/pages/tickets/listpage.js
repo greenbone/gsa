@@ -24,6 +24,8 @@ import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 
 import TicketIcon from 'web/components/icon/ticketicon';
 
+import DashboardControls from 'web/components/dashboard/controls';
+
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import EntitiesPage from 'web/entities/page';
@@ -35,6 +37,7 @@ import {
 } from 'web/store/entities/tickets';
 
 import TicketComponent from './component';
+import TicketsDashboard, {TICKETS_DASHBOARD_ID} from './dashboard';
 import Table, {FIELDS} from './table';
 
 const FilterDialog = createFilterDialog({
@@ -74,6 +77,19 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
+        dashboard={() => (
+          <TicketsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={TICKETS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={TICKETS_FILTER_FILTER}
