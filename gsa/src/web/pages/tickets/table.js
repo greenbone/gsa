@@ -76,7 +76,7 @@ export const FIELDS = [
   },
 ];
 
-const Actions = withEntitiesActions(({
+const TicketActions = withEntitiesActions(({
   entity,
   onTicketClone,
   onTicketClose,
@@ -118,7 +118,7 @@ const Actions = withEntitiesActions(({
 ));
 
 const Row = ({
-  actionsComponent: ActionsComponent = Actions,
+  actionsComponent: ActionsComponent = TicketActions,
   entity,
   links = true,
   onToggleDetailsClick,
