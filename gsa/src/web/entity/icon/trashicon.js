@@ -45,8 +45,10 @@ const EntityTrashIcon = ({
     displayName = typeName(name);
   }
 
-  const active = capabilities.mayDelete(name) && entity.isWritable() &&
-      !entity.isInUse();
+  const mayDelete = capabilities.mayDelete(name) &&
+    entity.userCapabilities.mayDelete(name);
+
+  const active = mayDelete && entity.isWritable() && !entity.isInUse();
   if (!isDefined(title)) {
     if (active) {
       title = _('Move {{entity}} to trashcan', {entity: displayName});
@@ -57,7 +59,7 @@ const EntityTrashIcon = ({
     else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
     }
-    else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
+    else if (!mayDelete) { // eslint-disable-line no-negated-condition
       title = _('Permission to move {{entity}} to trashcan denied',
         {entity: displayName});
     }

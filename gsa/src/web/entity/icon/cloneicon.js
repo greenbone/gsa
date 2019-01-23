@@ -47,7 +47,8 @@ const EntityCloneIcon = ({
     displayName = typeName(name);
   }
 
-  const active = mayClone && capabilities.mayClone(name);
+  const active = mayClone && capabilities.mayClone(name) &&
+    entity.userCapabilities.mayClone(name);
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});

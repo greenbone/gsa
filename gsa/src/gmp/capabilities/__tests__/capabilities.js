@@ -34,6 +34,27 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('tasks')).toEqual(false);
   });
 
+  test('should allow everything', () => {
+    const caps = new Capabilities(['everything']);
+
+    expect(caps.areDefined()).toEqual(true);
+    expect(caps.length).toEqual(1);
+    expect(caps.has('get_tasks')).toEqual(false);
+    expect(caps.has('everything')).toEqual(true);
+    expect(caps.mayOp('get_tasks')).toEqual(true);
+    expect(caps.mayAccess('tasks')).toEqual(true);
+    expect(caps.mayClone('tasks')).toEqual(true);
+    expect(caps.mayCreate('tasks')).toEqual(true);
+    expect(caps.mayDelete('tasks')).toEqual(true);
+    expect(caps.mayEdit('tasks')).toEqual(true);
+    expect(caps.mayOp('get_foo')).toEqual(true);
+    expect(caps.mayAccess('foo')).toEqual(true);
+    expect(caps.mayClone('foo')).toEqual(true);
+    expect(caps.mayCreate('foo')).toEqual(true);
+    expect(caps.mayDelete('foo')).toEqual(true);
+    expect(caps.mayEdit('foo')).toEqual(true);
+  });
+
   test('should ignore case for capabilities', () => {
     const caps = new Capabilities(['GET_TASKS']);
 
