@@ -25,6 +25,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import SolutionType from 'web/components/icon/solutiontypeicon';
 
 import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
@@ -45,7 +46,6 @@ import TicketDetails from './details';
 
 import SolveIcon from './icon/solveicon';
 import CloseIcon from './icon/closeicon';
-import Layout from 'web/components/layout/layout';
 
 export const FIELDS = [
   {
