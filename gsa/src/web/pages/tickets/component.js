@@ -76,7 +76,10 @@ class TicketComponent extends React.Component {
   }
 
   handleCloseCreateDialog() {
-    this.setState({createDialogVisible: false});
+    this.setState({
+      userId: undefined,
+      createDialogVisible: false,
+    });
 
     this.handleInteraction();
   }
@@ -91,7 +94,10 @@ class TicketComponent extends React.Component {
   }
 
   handleCloseSolvedDialog() {
-    this.setState({solvedDialogVisible: false});
+    this.setState({
+      ticket: undefined,
+      solvedDialogVisible: false,
+    });
 
     this.handleInteraction();
   }
@@ -106,7 +112,10 @@ class TicketComponent extends React.Component {
   }
 
   handleCloseClosedDialog() {
-    this.setState({closedDialogVisible: false});
+    this.setState({
+      ticket: undefined,
+      closedDialogVisible: false,
+    });
 
     this.handleInteraction();
   }
@@ -148,7 +157,9 @@ class TicketComponent extends React.Component {
       onCloseError,
     } = this.props;
 
-    this.setState({closedDialogVisible: false});
+    this.setState({
+      closedDialogVisible: false,
+    });
 
     return gmp.ticket.close({id: ticketId, comment})
       .then(onClosed, onCloseError);
