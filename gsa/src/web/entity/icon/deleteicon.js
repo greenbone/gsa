@@ -46,7 +46,10 @@ const EntityDeleteIcon = ({
     displayName = typeName(name);
   }
 
-  const active = capabilities.mayDelete(name) && entity.isWritable() &&
+  const mayDelete = capabilities.mayDelete(name) &&
+    entity.userCapabilities.mayDelete(name);
+
+  const active = mayDelete && entity.isWritable() &&
       !entity.isInUse();
   if (!isDefined(title)) {
     if (active) {
@@ -58,7 +61,7 @@ const EntityDeleteIcon = ({
     else if (entity.isInUse()) {
       title = _('{{entity}} is still in use', {entity: displayName});
     }
-    else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
+    else if (!mayDelete) { // eslint-disable-line no-negated-condition
       title = _('Permission to delete {{entity}} denied',
         {entity: displayName});
     }
