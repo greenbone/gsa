@@ -45,9 +45,6 @@ import PropTypes from 'web/utils/proptypes';
 
 import TicketDetails from './details';
 
-import SolveIcon from './icon/solveicon';
-import CloseIcon from './icon/closeicon';
-
 export const FIELDS = [
   {
     name: 'name',
@@ -79,21 +76,11 @@ export const FIELDS = [
 const TicketActions = withEntitiesActions(({
   entity,
   onTicketClone,
-  onTicketClose,
-  onTicketSolve,
   onTicketDelete,
   onTicketEdit,
 }) => (
   <Layout align={['center', 'center']}>
     <IconDivider>
-      <SolveIcon
-        ticket={entity}
-        onClick={onTicketSolve}
-      />
-      <CloseIcon
-        ticket={entity}
-        onClick={onTicketClose}
-      />
       <EntityTrashIcon
         displayName={_('Ticket')}
         entity={entity}
@@ -122,10 +109,8 @@ TicketActions.displayName = 'TicketActions';
 TicketActions.propTypes = {
   entity: PropTypes.model.isRequired,
   onTicketClone: PropTypes.func.isRequired,
-  onTicketClose: PropTypes.func.isRequired,
   onTicketDelete: PropTypes.func.isRequired,
   onTicketEdit: PropTypes.func.isRequired,
-  onTicketSolve: PropTypes.func.isRequired,
 };
 
 const Row = ({
