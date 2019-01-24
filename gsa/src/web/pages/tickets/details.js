@@ -110,15 +110,7 @@ const TicketDetails = ({
           <Col width="90%"/>
         </colgroup>
         <TableBody>
-          <TableRow>
-            <TableData>
-              {_('Opened')}
-            </TableData>
-            <TableData>
-              {longDate(entity.openTime)}
-            </TableData>
-          </TableRow>
-          {entity.isOrphaned() &&
+          {entity.isOrphan() &&
             <TableRow>
               <TableData>
                 {_('Orphaned')}
@@ -128,11 +120,33 @@ const TicketDetails = ({
               </TableData>
             </TableRow>
           }
+          {isDefined(entity.openTime) &&
+            <React.Fragment>
+              <TableRow>
+                <TableData>
+                  {_('Opened')}
+                </TableData>
+                <TableData>
+                  {longDate(entity.openTime)}
+                </TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>
+                  {_('With Comment')}
+                </TableData>
+                <TableData>
+                  <Comment>
+                    {entity.openComment}
+                  </Comment>
+                </TableData>
+              </TableRow>
+            </React.Fragment>
+          }
           {isDefined(entity.solvedTime) &&
             <React.Fragment>
               <TableRow>
                 <TableData>
-                  {_('Solved')}
+                  {_('Fixed')}
                 </TableData>
                 <TableData>
                   {longDate(entity.solvedTime)}
@@ -150,11 +164,11 @@ const TicketDetails = ({
               </TableRow>
             </React.Fragment>
           }
-          {entity.isConfirmed() &&
+          {isDefined(entity.confirmedTime) &&
             <React.Fragment>
               <TableRow>
                 <TableData>
-                  {_('Confirmed')}
+                  {_('Fix Verified')}
                 </TableData>
                 <TableData>
                   {longDate(entity.confirmedTime)}
@@ -176,7 +190,7 @@ const TicketDetails = ({
               </TableRow>
             </React.Fragment>
           }
-          {entity.isClosed() &&
+          {isDefined(entity.closedTime) &&
             <React.Fragment>
               <TableRow>
                 <TableData>
