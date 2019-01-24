@@ -961,7 +961,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tickets/icon/closeicon.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/icon/solveicon.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/tickets/statuschangedialog.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
      ${GSA_SRC_DIR}/src/web/pages/users/component.js
      ${GSA_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js

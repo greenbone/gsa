@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import {_} from 'gmp/locale/lang';
 
 import {ALL_FILTER} from 'gmp/models/filter';
+import {TICKET_STATUS} from 'gmp/models/ticket';
 
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
@@ -39,7 +40,6 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import CreateTicketDialog from './createdialog';
-import StatusChangeTicketDialog from './statuschangedialog';
 import EditTicketDialog from './editdialog';
 
 class TicketComponent extends React.Component {
@@ -52,17 +52,12 @@ class TicketComponent extends React.Component {
       solvedDialogVisible: false,
     };
 
+    this.closeEditDialog = this.closeEditDialog.bind(this);
+
     this.handleCloseCreateDialog = this.handleCloseCreateDialog.bind(this);
     this.handleOpenCreateDialog = this.handleOpenCreateDialog.bind(this);
     this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
     this.handleOpenEditDialog = this.handleOpenEditDialog.bind(this);
-    this.handleCloseSolvedDialog = this.handleCloseSolvedDialog.bind(this);
-    this.handleOpenSolvedDialog = this.handleOpenSolvedDialog.bind(this);
-    this.handleCloseClosedDialog = this.handleCloseClosedDialog.bind(this);
-    this.handleOpenClosedDialog = this.handleOpenClosedDialog.bind(this);
-
-    this.handleSolve = this.handleSolve.bind(this);
-    this.handleClose = this.handleClose.bind(this);
 
     this.handleUserIdChange = this.handleUserIdChange.bind(this);
   }
@@ -98,47 +93,15 @@ class TicketComponent extends React.Component {
     this.handleInteraction();
   }
 
-  handleCloseEditDialog() {
+  closeEditDialog() {
     this.setState({
-      ticket: undefined,
       editDialogVisible: false,
-    });
-
-    this.handleInteraction();
-  }
-
-  handleOpenSolvedDialog(ticket) {
-    this.setState({
-      ticket,
-      solvedDialogVisible: true,
-    });
-
-    this.handleInteraction();
-  }
-
-  handleCloseSolvedDialog() {
-    this.setState({
       ticket: undefined,
-      solvedDialogVisible: false,
     });
-
-    this.handleInteraction();
   }
 
-  handleOpenClosedDialog(ticket) {
-    this.setState({
-      ticket,
-      closedDialogVisible: true,
-    });
-
-    this.handleInteraction();
-  }
-
-  handleCloseClosedDialog() {
-    this.setState({
-      ticket: undefined,
-      closedDialogVisible: false,
-    });
+  handleCloseEditDialog() {
+    this.closeEditDialog();
 
     this.handleInteraction();
   }
@@ -152,40 +115,6 @@ class TicketComponent extends React.Component {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
-
-  handleSolve({
-    ticketId,
-    comment,
-  }) {
-    const {
-      gmp,
-      onSolved,
-      onSolveError,
-    } = this.props;
-
-    this.setState({solvedDialogVisible: false});
-
-    return gmp.ticket.solve({id: ticketId, comment})
-      .then(onSolved, onSolveError);
-  }
-
-  handleClose({
-    ticketId,
-    comment,
-  }) {
-    const {
-      gmp,
-      onClosed,
-      onCloseError,
-    } = this.props;
-
-    this.setState({
-      closedDialogVisible: false,
-    });
-
-    return gmp.ticket.close({id: ticketId, comment})
-      .then(onClosed, onCloseError);
   }
 
   render() {
@@ -205,11 +134,9 @@ class TicketComponent extends React.Component {
       onSaveError,
     } = this.props;
     const {
-      closedDialogVisible,
       createDialogVisible,
       editDialogVisible,
       result,
-      solvedDialogVisible,
       ticket,
       userId,
     } = this.state;
@@ -257,36 +184,30 @@ class TicketComponent extends React.Component {
             }
             {editDialogVisible &&
               <EditTicketDialog
-                comment={ticket.comment}
+                status={
+                  ticket.status === TICKET_STATUS.verified ?
+                    TICKET_STATUS.closed :
+                    ticket.status
+                }
                 ticketId={ticket.id}
                 title={_('Edit Ticket {{- name}}', ticket)}
+                userId={ticket.assignedTo.user.id}
+                users={users}
                 onClose={this.handleCloseEditDialog}
                 onSave={({
                   comment,
+                  status,
                   ticketId,
+                  userId, // eslint-disable-line no-shadow
                 }) => {
                   this.handleInteraction();
                   return save({
                     id: ticketId,
                     comment,
-                  }).then(this.handleCloseEditDialog);
+                    status,
+                    userId,
+                  }).then(this.closeEditDialog);
                 }}
-              />
-            }
-            {solvedDialogVisible &&
-              <StatusChangeTicketDialog
-                title={_('Mark Ticket {{- name}} as solved', ticket)}
-                ticketId={ticket.id}
-                onClose={this.handleCloseSolvedDialog}
-                onSave={this.handleSolve}
-              />
-            }
-            {closedDialogVisible &&
-              <StatusChangeTicketDialog
-                title={_('Mark Ticket {{- name}} as closed', ticket)}
-                ticketId={ticket.id}
-                onClose={this.handleCloseClosedDialog}
-                onSave={this.handleClose}
               />
             }
           </React.Fragment>
@@ -303,8 +224,6 @@ TicketComponent.propTypes = {
   users: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
-  onCloseError: PropTypes.func,
-  onClosed: PropTypes.func,
   onCreateError: PropTypes.func,
   onCreated: PropTypes.func,
   onDeleteError: PropTypes.func,
@@ -314,8 +233,6 @@ TicketComponent.propTypes = {
   onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
-  onSolveError: PropTypes.func,
-  onSolved: PropTypes.func,
 };
 
 const mapStateToProps = rootState => {

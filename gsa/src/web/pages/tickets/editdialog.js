@@ -20,18 +20,36 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {TICKET_STATUS, TICKET_STATUS_TRANSLATIONS} from 'gmp/models/ticket';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import FormGroup from 'web/components/form/formgroup';
-import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
 
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextArea from 'web/components/form/textarea';
+
 import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+
+const STATUS = [
+  TICKET_STATUS.open,
+  TICKET_STATUS.fixed,
+  TICKET_STATUS.closed,
+];
+
+const STATUS_ITEMS = STATUS.map(status => ({
+  value: status,
+  label: TICKET_STATUS_TRANSLATIONS[status],
+}));
 
 const EditTicketDialog = ({
-  comment = '',
   ticketId,
   title = _('Edit Ticket'),
+  status,
+  userId,
+  users,
   onClose,
   onSave,
 }) => (
@@ -43,7 +61,8 @@ const EditTicketDialog = ({
       ticketId,
     }}
     defaultValues={{
-      comment,
+      status,
+      userId,
     }}
   >
     {({
@@ -51,6 +70,22 @@ const EditTicketDialog = ({
       onValueChange,
     }) => (
       <Layout flex="column">
+        <FormGroup title={_('Status')}>
+          <Select
+            name="status"
+            items={STATUS_ITEMS}
+            value={values.status}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Assigned User')}>
+          <Select
+            name="userId"
+            items={renderSelectItems(users)}
+            value={values.userId}
+            onChange={onValueChange}
+          />
+        </FormGroup>
         <FormGroup title={_('Comment')}>
           <TextArea
             name="comment"
@@ -66,9 +101,11 @@ const EditTicketDialog = ({
 );
 
 EditTicketDialog.propTypes = {
-  comment: PropTypes.string,
+  status: PropTypes.oneOf(STATUS),
   ticketId: PropTypes.id.isRequired,
   title: PropTypes.toString,
+  userId: PropTypes.id.isRequired,
+  users: PropTypes.arrayOf(PropTypes.model),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
