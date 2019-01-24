@@ -51,6 +51,8 @@ Main changes compared to 7.0.3:
 * Tags can now contain backslashes and percent signs in the value and
   hyphens in the name to allow using the special "smb-alert:file_path"
   task tag.
+* The OID of the VT sending the SNMP Host Detail for Authentication failure /
+  success was updated.
 
 
 gsa 7.0.3 (2018-03-28)
