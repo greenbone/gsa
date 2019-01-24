@@ -10912,10 +10912,10 @@ ws@^6.0.0:
   dependencies:
     async-limiter "~1.0.0"
 
-x2js@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.2.1.tgz#d7d9eb3ab14a31a98068b9eba1bb1b9397c96714"
-  integrity sha512-+6gQGmMKbAHmapedjI/r+cPQNdFqQ0OE1VJvv3A6GPVlEJAsFq9JyNVgfwgnceMiUtpt38VOUEtEF7S3SxZkMQ==
+x2js@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/x2js/-/x2js-3.2.6.tgz#5be54bd5e65972c2886f0dcc178cbc75e9b42219"
+  integrity sha512-AtIflg7LRYhayFwujlyujD0qi9C9XwMkV6fHFOhc6FPqTvuVSDbUeFimbd91zO9QophYJsnaW4mz6p/U/MQ9rA==
   dependencies:
     xmldom "^0.1.19"
 
