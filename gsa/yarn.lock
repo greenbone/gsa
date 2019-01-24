@@ -3662,10 +3662,10 @@ dotenv@6.0.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.0.0.tgz#24e37c041741c5f4b25324958ebbc34bca965935"
   integrity sha512-FlWbnhgjtwD+uNLUGHbMykMOYQaTivdHEmYwAKFjn6GKe/CqY0fNae93ZHTd20snh9ZLr8mTzIL9m0APQ1pjQg==
 
-downshift@^1.31.6:
-  version "1.31.6"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-1.31.6.tgz#467ef5bb81e68d2377c7ed2c602a43f81e68478f"
-  integrity sha512-svf6DYOIJRI8TIDR3H2gMKWIZRSziLj+BdmWbh08+GmXfCDCCtRC1HOWlne4U4dJqglY4Pjvpk1Bgu9WAW5rIQ==
+downshift@^1.31.16:
+  version "1.31.16"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-1.31.16.tgz#acd81631539502d4112d01bd573654419fd9f640"
+  integrity sha512-RskXmiGSoz0EHAyBrmTBGSLHg6+NYDGuLu2W3GpmuOe6hmZEWhCiQrq5g6DWzhnUaJD41xHbbfC6j1Fe86YqgA==
 
 duplexer@^0.1.1:
   version "0.1.1"
