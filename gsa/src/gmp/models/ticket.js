@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {_l} from 'gmp/locale/lang';
+
 import {parseSeverity, parseDate} from 'gmp/parser';
 
 import {isDefined, isModelElement} from 'gmp/utils/identity';
@@ -25,11 +27,20 @@ import Model from '../model';
 
 export const TICKET_STATUS = {
   open: 'Open',
-  solved: 'Solved',
+  fixed: 'Solved',
+  verified: 'Confirmed',
   closed: 'Closed',
-  confimed: 'Confirmed',
-  orphaned: 'Orphaned',
 };
+
+export const TICKET_STATUS_TRANSLATIONS = {
+  [TICKET_STATUS.open]: _l('Open'),
+  [TICKET_STATUS.fixed]: _l('Fixed'),
+  [TICKET_STATUS.verified]: _l('Fix Verified'),
+  [TICKET_STATUS.closed]: _l('Closed'),
+};
+
+export const getTranslatableTicketStatus = status =>
+  `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 class Ticket extends Model {
 
@@ -118,21 +129,6 @@ class Ticket extends Model {
     return ret;
   }
 
-  isClosed() {
-    return this.status === TICKET_STATUS.closed;
-  }
-
-  isSolved() {
-    return this.status === TICKET_STATUS.solved;
-  }
-
-  isConfirmed() {
-    return this.status === TICKET_STATUS.confimed;
-  }
-
-  isOrphaned() {
-    return this.status === TICKET_STATUS.orphaned;
-  }
 }
 
 export default Ticket;
