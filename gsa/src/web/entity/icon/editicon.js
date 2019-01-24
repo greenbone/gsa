@@ -37,8 +37,6 @@ const EntityEditIcon = ({
   onClick,
   ...props
 }) => {
-  const {permissions} = entity;
-
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -47,9 +45,10 @@ const EntityEditIcon = ({
     displayName = typeName(name);
   }
 
-  const may_edit = capabilities.mayEdit(name) && (!isDefined(permissions) ||
-    permissions.mayEdit(name));
-  const active = may_edit && entity.isWritable();
+  const mayEdit = capabilities.mayEdit(name) &&
+    entity.userCapabilities.mayEdit(name);
+
+  const active = mayEdit && entity.isWritable();
 
   if (!isDefined(title)) {
     if (active) {
@@ -58,7 +57,7 @@ const EntityEditIcon = ({
     else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
     }
-    else if (!may_edit) {  // eslint-disable-line no-negated-condition
+    else if (!mayEdit) {  // eslint-disable-line no-negated-condition
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     }
     else {

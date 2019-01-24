@@ -35,7 +35,6 @@ import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
@@ -46,7 +45,6 @@ const SmbMethodPart = ({
   reportFormats,
   smbCredential,
   smbFilePath,
-  smbFilePathType,
   smbReportFormat,
   smbSharePath,
   onChange,
@@ -98,29 +96,13 @@ const SmbMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('File path')}>
-        <Divider grow="1">
-          <Radio
-            title="Directory"
-            checked={smbFilePathType === 'directory'}
-            name={prefix + 'smb_file_path_type'}
-            value={'directory'}
-            onChange={onChange}
-          />
-          <Radio
-            title="Full path"
-            checked={smbFilePathType === 'full'}
-            name={prefix + 'smb_file_path_type'}
-            value={'full'}
-            onChange={onChange}
-          />
-          <TextField
-            grow="1"
-            name={prefix + 'smb_file_path'}
-            maxLength="256"
-            value={smbFilePath}
-            onChange={onChange}
-          />
-        </Divider>
+        <TextField
+          grow="1"
+          name={prefix + 'smb_file_path'}
+          maxLength="256"
+          value={smbFilePath}
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Report Format')}>
@@ -141,7 +123,6 @@ SmbMethodPart.propTypes = {
   reportFormats: PropTypes.array,
   smbCredential: PropTypes.id,
   smbFilePath: PropTypes.string.isRequired,
-  smbFilePathType: PropTypes.string.isRequired,
   smbReportFormat: PropTypes.id,
   smbSharePath: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

@@ -8,7 +8,6 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
- * Add SMB file path type to alerts #1108
  * Add Alemba vFire alert to GUI #1100
  * Sort alerts at task details alphanumerically #1094
  * Add solution type to report details powerfilter #1091
