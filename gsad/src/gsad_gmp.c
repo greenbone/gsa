@@ -21502,29 +21502,43 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const gchar *ticket_id, *comment;
-  char *ret;
+  const gchar *ticket_id, *status, *comment, *user_id;
+  gchar *status_comment, *ret;
 
   ticket_id = params_value (params, "ticket_id");
+  status = params_value (params, "ticket_status");
   comment = params_value (params, "comment");
+  user_id = params_value (params, "user_id");
 
   CHECK_VARIABLE_INVALID (ticket_id, "Save Ticket");
+  CHECK_VARIABLE_INVALID (status, "Save Ticket");
+  CHECK_VARIABLE_INVALID (comment, "Save Ticket");
+  CHECK_VARIABLE_INVALID (user_id, "Save Ticket");
+
+  status_comment = g_ascii_strdown (status, -1);
 
   switch (gmpf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
                 "<modify_ticket ticket_id=\"%s\">"
-                "<comment>%s</comment>"
+                "<assigned_to><user id=\"%s\"/></assigned_to>"
+                "<status>%s</status>"
+                "<%s_comment>%s</%s_comment>"
                 "</modify_ticket>",
                 ticket_id,
-                comment ? comment : ""
+                user_id,
+                status,
+                status_comment,
+                comment,
+                status_comment
                ))
     {
       case 0:
       case -1:
         break;
       case 1:
+        g_free (status_comment);
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
@@ -21533,6 +21547,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to send command to manager daemon.",
                              response_data);
       case 2:
+        g_free (status_comment);
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
@@ -21542,6 +21557,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "Diagnostics: Failure to receive response from manager daemon.",
                              response_data);
       default:
+        g_free (status_comment);
         cmd_response_data_set_status_code (response_data,
                                            MHD_HTTP_INTERNAL_SERVER_ERROR);
         return gsad_message (credentials,
@@ -21557,6 +21573,7 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                               "Save Ticket", response_data);
 
   free_entity (entity);
+  g_free (status_comment);
   g_free (response);
   return ret;
 }

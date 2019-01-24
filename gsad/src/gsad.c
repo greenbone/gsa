@@ -690,6 +690,7 @@ init_validator ()
   gvm_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
   gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
+  gvm_validator_add (validator, "ticket_status", "^(Open|Solved|Closed)$");
   gvm_validator_add (validator, "trend",       "^(0|1)$");
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
   gvm_validator_add (validator, "type",       "^(assets)$");
