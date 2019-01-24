@@ -4954,10 +4954,10 @@ i18next-xhr-backend@1.5.1:
   resolved "https://registry.yarnpkg.com/i18next-xhr-backend/-/i18next-xhr-backend-1.5.1.tgz#50282610780c6a696d880dfa7f4ac1d01e8c3ad5"
   integrity sha512-9OLdC/9YxDvTFcgsH5t2BHCODHEotHCa6h7Ly0EUlUC7Y2GS09UeoHOGj3gWKQ3HCqXz8NlH4gOrK3NNc9vPuw==
 
-i18next@^11.3.3:
-  version "11.3.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.3.3.tgz#a6ca3c2a93237c94e242bda7df3411588ac37ea1"
-  integrity sha512-YR1p0IJCKbUxi9DKKb7SK5kQMVcUIUA1xxPlxr7mn3pvkFdEE1eZi/TiYC5eyOE6wvWYOb5xZc+1HVSD5dJXMg==
+i18next@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-14.0.1.tgz#c5f0292ea6389394b6056f597b75f1f9aa03124f"
+  integrity sha512-wsKfQuYsy4RdCaqqN71eDjWMhizhTfQSIBGttEA7vcboQrUfpQlCezrSzrtmoW9F9tmVyNs38iBgLYLMhRSeIQ==
 
 ical.js@^1.3.0:
   version "1.3.0"
