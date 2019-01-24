@@ -20,6 +20,8 @@ import React from 'react';
 
 import {_l, _} from 'gmp/locale/lang';
 
+import {getTranslatableTicketStatus} from 'gmp/models/ticket';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import SolutionType from 'web/components/icon/solutiontypeicon';
@@ -144,7 +146,7 @@ const Row = ({
       {entity.assignedTo.user.name}
     </TableData>
     <TableData>
-      {entity.status}
+      {getTranslatableTicketStatus(entity.status)}
     </TableData>
     <ActionsComponent
       {...props}

@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {getTranslatableTicketStatus} from 'gmp/models/ticket';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
@@ -153,7 +155,7 @@ const Details = ({
             {_('Status')}
           </TableData>
           <TableData>
-            {entity.status}
+            {getTranslatableTicketStatus(entity.status)}
           </TableData>
         </TableRow>
         <TableRow>
