@@ -23,9 +23,9 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@vx/axis": "^0.0.160",
-    "@vx/gradient": "^0.0.153",
-    "@vx/shape": "^0.0.160",
+    "@vx/axis": "^0.0.183",
+    "@vx/gradient": "^0.0.183",
+    "@vx/shape": "^0.0.183",
     "core-js": "^2.5.7",
     "d3-cloud": "^1.2.5",
     "d3-color": "^1.2.0",
