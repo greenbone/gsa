@@ -65,17 +65,12 @@ import PropTypes from 'web/utils/proptypes';
 import TicketComponent from './component';
 import TicketDetails from './details';
 
-import SolveIcon from './icon/solveicon';
-import CloseIcon from './icon/closeicon';
-
 const ToolBarIcons = ({
   entity,
   onTicketCloneClick,
-  onTicketCloseClick,
   onTicketDeleteClick,
   onTicketDownloadClick,
   onTicketEditClick,
-  onTicketSolveClick,
 }) => (
   <Divider margin="10px">
     <ListIcon
@@ -104,27 +99,15 @@ const ToolBarIcons = ({
         onClick={onTicketDownloadClick}
       />
     </IconDivider>
-    <IconDivider>
-      <SolveIcon
-        ticket={entity}
-        onClick={onTicketSolveClick}
-      />
-      <CloseIcon
-        ticket={entity}
-        onClick={onTicketCloseClick}
-      />
-    </IconDivider>
   </Divider>
 );
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onTicketCloneClick: PropTypes.func.isRequired,
-  onTicketCloseClick: PropTypes.func.isRequired,
   onTicketDeleteClick: PropTypes.func.isRequired,
   onTicketDownloadClick: PropTypes.func.isRequired,
   onTicketEditClick: PropTypes.func.isRequired,
-  onTicketSolveClick: PropTypes.func.isRequired,
 };
 
 const Details = ({
