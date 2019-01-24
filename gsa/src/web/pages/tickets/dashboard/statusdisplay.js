@@ -24,7 +24,7 @@ import {_, _l} from 'gmp/locale/lang';
 
 import Filter, {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
-import {TICKET_STATUS} from 'gmp/models/ticket';
+import {TICKET_STATUS, getTranslatableTicketStatus} from 'gmp/models/ticket';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -47,43 +47,28 @@ import Theme from 'web/utils/theme';
 import {TicketsListLoader} from './loaders';
 
 const taskStatusColorScale = scaleOrdinal()
-  .domain([
-    TICKET_STATUS.open,
-    TICKET_STATUS.solved,
-    TICKET_STATUS.closed,
-    TICKET_STATUS.confimed,
-    TICKET_STATUS.orphaned,
-  ])
+  .domain(Object.keys(TICKET_STATUS).sort())
   .range([
-    Theme.warningRed, // open
-    '#f0a519', // solved
     Theme.lightGray, // closed
-    '#2ca02c', // confirmed
-    Theme.darkGray, // orphaned
+    '#f0a519', // fixed
+    Theme.warningRed, // open
+    '#2ca02c', // verified
   ]);
 
 const transformStatusData = (tickets = []) => {
-  const groups = {
-    [TICKET_STATUS.open]: 0,
-    [TICKET_STATUS.solved]: 0,
-    [TICKET_STATUS.closed]: 0,
-    [TICKET_STATUS.solved]: 0,
-    [TICKET_STATUS.confimed]: 0,
-    [TICKET_STATUS.orphaned]: 0,
-  };
-
-  tickets.reduce((prev, ticket) => {
-    const count = prev[ticket.status];
+  const groups = tickets.reduce((prev, ticket) => {
+    const count = prev[ticket.status] || 0;
     prev[ticket.status] = count + 1;
     return prev;
-  }, groups);
+  }, {});
 
   const tdata = Object.entries(groups).map(([value, count]) => {
     const perc = percent(count, tickets.length);
+    const label = getTranslatableTicketStatus(value);
     return {
       value: count,
-      label: value,
-      toolTip: `${value}: ${perc}% (${count})`,
+      label,
+      toolTip: `${label}: ${perc}% (${count})`,
       color: taskStatusColorScale(value),
       filterValue: value,
     };
