@@ -39,7 +39,7 @@
     "fast-deep-equal": "^1.1.0",
     "glamor": "^2.20.40",
     "history": "^4.7.2",
-    "hoist-non-react-statics": "^2.5.5",
+    "hoist-non-react-statics": "^3.3.0",
     "i18next": "^11.3.3",
     "i18next-xhr-backend": "1.5.1",
     "ical.js": "^1.2.2",
