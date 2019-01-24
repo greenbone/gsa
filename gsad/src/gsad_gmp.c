@@ -7299,7 +7299,6 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
             || (strcmp (method, "SMB") == 0
                 && (strcmp (name, "smb_credential") == 0
                     || strcmp (name, "smb_file_path") == 0
-                    || strcmp (name, "smb_file_path_type") == 0
                     || strcmp (name, "smb_report_format") == 0
                     || strcmp (name, "smb_share_path") == 0))
             || (strcmp (method, "SNMP") == 0
