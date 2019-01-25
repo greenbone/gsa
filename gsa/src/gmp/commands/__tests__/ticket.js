@@ -98,43 +98,26 @@ describe('TicketCommand tests', () => {
     });
   });
 
-  test('should solve a ticket', () => {
+  test('should save a ticket', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.solve({
+    return cmd.save({
       id: 'foo',
+      status: 'fixed',
+      userId: 'u1',
       comment: 'bar',
     }).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
-          cmd: 'solve_ticket',
+          cmd: 'save_ticket',
           ticket_id: 'foo',
+          ticket_status: 'fixed',
           comment: 'bar',
-        },
-      });
-    });
-  });
-
-  test('should close a ticket', () => {
-    const response = createActionResultResponse();
-    const fakeHttp = createHttp(response);
-
-    expect.hasAssertions();
-
-    const cmd = new TicketCommand(fakeHttp);
-    return cmd.close({
-      id: 'foo',
-      comment: 'bar',
-    }).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'close_ticket',
-          ticket_id: 'foo',
-          comment: 'bar',
+          user_id: 'u1',
         },
       });
     });
