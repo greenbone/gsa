@@ -44,13 +44,15 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
-
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
+
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPage, {Col} from 'web/entity/page';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
 import EntityCloneIcon from 'web/entity/icon/cloneicon';
@@ -269,6 +271,9 @@ const Page = ({
                 <Tab>
                   {_('Information')}
                 </Tab>
+                <EntitiesTab entities={entity.userTags}>
+                  {_('User Tags')}
+                </EntitiesTab>
               </TabList>
             </TabLayout>
 
@@ -277,6 +282,14 @@ const Page = ({
                 <TabPanel>
                   <Details
                     entity={entity}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <EntityTags
+                    entity={entity}
+                    onChanged={onChanged}
+                    onError={onError}
+                    onInteraction={onInteraction}
                   />
                 </TabPanel>
               </TabPanels>
