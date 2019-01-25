@@ -224,6 +224,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstabledisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstransform.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/display/status/statusdisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/utils.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js

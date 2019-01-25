@@ -16,38 +16,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import 'core-js/fn/object/values';
 
 import {scaleOrdinal} from 'd3-scale';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import Filter, {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
-import FilterTerm from 'gmp/models/filter/filterterm';
+import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 import {TICKET_STATUS, getTranslatableTicketStatus} from 'gmp/models/ticket';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import DonutChart from 'web/components/chart/donut';
 
 import {registerDisplay} from 'web/components/dashboard/registry';
 
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {
-  renderDonutChartIcons,
-} from 'web/components/dashboard/display/datadisplayicons';
+import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {
   percent,
 } from 'web/components/dashboard/display/utils';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection';  // eslint-disable-line max-len
 
-import PropTypes from 'web/utils/proptypes';
+import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
+
 import Theme from 'web/utils/theme';
 
 import {TicketsListLoader} from './loaders';
 
 const taskStatusColorScale = scaleOrdinal()
-  .domain(Object.keys(TICKET_STATUS).sort())
+  .domain(Object.values(TICKET_STATUS).sort())
   .range([
     Theme.lightGray, // closed
     '#f0a519', // fixed
@@ -79,87 +71,15 @@ const transformStatusData = (tickets = []) => {
   return tdata;
 };
 
-export class TicketsStatusDisplay extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
-
-  handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
-    const {filterValue} = data;
-
-    if (isDefined(filterValue) && isDefined(onFilterChanged)) {
-      const statusTerm = FilterTerm.fromString(`status="${filterValue}"`);
-
-      if (isDefined(filter) && filter.hasTerm(statusTerm)) {
-        return;
-      }
-
-      const statusFilter = Filter.fromTerm(statusTerm);
-      const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
-        statusFilter;
-
-      onFilterChanged(newFilter);
-    }
-  }
-
-  render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
-    return (
-      <TicketsListLoader
-        filter={filter}
-      >
-        {loaderProps => (
-          <DataDisplay
-            {...props}
-            {...loaderProps}
-            initialState={{
-              show3d: true,
-            }}
-            filter={filter}
-            dataTransform={transformStatusData}
-            title={({data: tdata}) =>
-              _('Tickets by Status (Total: {{count}})', {count: tdata.total})}
-            icons={renderDonutChartIcons}
-          >
-            {({width, height, data: tdata, svgRef, state}) => (
-              <DonutChart
-                svgRef={svgRef}
-                width={width}
-                height={height}
-                data={tdata}
-                show3d={state.show3d}
-                showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
-                onLegendItemClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
-              />
-            )}
-          </DataDisplay>
-        )}
-      </TicketsListLoader>
-    );
-  }
-}
-
-TicketsStatusDisplay.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
-
-TicketsStatusDisplay.displayId = 'tickets-by-status';
-
-TicketsStatusDisplay = withFilterSelection({
+export const TicketsStatusDisplay = createDisplay({
+  dataTransform: transformStatusData,
+  displayComponent: StatusDisplay,
+  displayId: 'tickets-by-status',
+  title: ({data: tdata}) =>
+    _('Tickets by Status (Total: {{count}})', {count: tdata.total}),
   filtersFilter: TICKETS_FILTER_FILTER,
-})(TicketsStatusDisplay);
+  loaderComponent: TicketsListLoader,
+});
 
 registerDisplay(TicketsStatusDisplay.displayId, TicketsStatusDisplay, {
   title: _l('Chart: Tickets by Status'),
