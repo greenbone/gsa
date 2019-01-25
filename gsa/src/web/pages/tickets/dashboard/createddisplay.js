@@ -18,6 +18,7 @@
  */
 import {_, _l} from 'gmp/locale/lang';
 
+import date from 'gmp/models/date';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 
 import createDisplay from 'web/components/dashboard/display/createDisplay';
@@ -29,9 +30,34 @@ import Theme from 'web/utils/theme';
 
 import {TicketsListLoader} from './loaders';
 
+const transfromCreated = (tickets = []) => {
+  const dates = tickets.reduce((prev, ticket) => {
+      const timestamp = +ticket.creationTime.startOf('day');
+      const count = prev[timestamp] || 0;
+      prev[timestamp] = count + 1;
+      return prev;
+    }, {});
+
+  let sum = 0;
+  return Object.entries(dates)
+    .sort((a, b) => a[0] - b[0]) // sort asc by timestamp
+    .map(([timestamp, count]) => {
+      sum += count;
+      return {
+        x: date(+timestamp), // Object.entries returns keys as string => convert to number
+        y: count,
+        y2: sum,
+      };
+    });
+};
+
 export const TicketsCreatedDisplay = createDisplay({
-  loaderComponent: TicketsListLoader,
+  dataTransform: transfromCreated,
+  displayId: 'tickets-by-created',
+  displayName: 'TicketsCreatedDisplay',
   displayComponent: CreatedDisplay,
+  filtersFilter: TICKETS_FILTER_FILTER,
+  loaderComponent: TicketsListLoader,
   title: () => _('Tickets by Creation Time'),
   yAxisLabel: _l('# of created Tickets'),
   y2AxisLabel: _l('Total Tickets'),
@@ -45,9 +71,6 @@ export const TicketsCreatedDisplay = createDisplay({
     dashArray: '3, 2',
     label: _l('Total Tickets'),
   },
-  displayId: 'tickets-by-created',
-  displayName: 'TicketsCreatedDisplay',
-  filtersFilter: TICKETS_FILTER_FILTER,
 });
 
 registerDisplay(TicketsCreatedDisplay.displayId,
