@@ -51,6 +51,8 @@ Main changes compared to 7.0.3:
 * Tags can now contain backslashes and percent signs in the value and
   hyphens in the name to allow using the special "smb-alert:file_path"
   task tag.
+* A new "Password only" credential type has been added.
+* A credential can be selected for the PKCS12 file of Sourcefire Alerts.
 
 
 gsa 7.0.3 (2018-03-28)
