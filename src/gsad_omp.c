@@ -6219,6 +6219,28 @@ create_credential_omp (openvas_connection_t *connection,
                         auth_algorithm ? auth_algorithm : "",
                         allow_insecure);
         }
+      else if (type && (strcmp (type, "pw") == 0))
+        {
+          CHECK_PARAM_INVALID (password,
+                                "Create Credential", "new_credential");
+
+          ret = ompf (connection, credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<create_credential>"
+                      "<name>%s</name>"
+                      "<comment>%s</comment>"
+                      "<type>%s</type>"
+                      "<password>%s</password>"
+                      "<allow_insecure>%s</allow_insecure>"
+                      "</create_credential>",
+                      name,
+                      comment ? comment : "",
+                      type,
+                      password ? password : "",
+                      allow_insecure);
+        }
       else
         {
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7941,7 +7963,8 @@ new_alert (openvas_connection_t *connection, credentials_t *credentials,
 
   ret = omp (connection, credentials, &response, &entity, response_data,
              "<get_credentials"
-             " filter=\"type=up owner=any permission=any rows=-1\"/>");
+             " filter=\"type=up or type=pw"
+             "          owner=any permission=any rows=-1\"/>");
 
   switch (ret)
     {
@@ -8242,7 +8265,8 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
     if (strcmp (name, "pkcs12"))
       {
         if (strcmp (name, "defense_center_ip") == 0
-            || strcmp (name, "defense_center_port") == 0)
+            || strcmp (name, "defense_center_port") == 0
+            || strcmp (name, "pkcs12_credential") == 0)
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
@@ -8948,7 +8972,8 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
     {
       if (openvas_connection_sendf (connection,
                                     "<get_credentials"
-                                    " filter=\"type=up owner=any permission=any"
+                                    " filter=\"type=up or type=pw"
+                                    "          owner=any permission=any"
                                     "          rows=-1\"/>")
           == -1)
         {
