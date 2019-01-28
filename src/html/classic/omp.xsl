@@ -33118,13 +33118,13 @@ was created or assigned erroneously.
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10265&#34;&amp;token={/envelope/token}"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SNMP-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10265&#34;&amp;token={/envelope/token}"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SNMP-Failure']/value}"/>
                 </a>
