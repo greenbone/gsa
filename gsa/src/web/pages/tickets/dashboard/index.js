@@ -20,16 +20,25 @@ import React from 'react';
 
 import Dashboard from 'web/components/dashboard/dashboard';
 
-import {TicketsStatusDisplay} from './statusdisplay';
-import {TicketsAssignedUsersDisplay} from './usersassigneddisplay';
-import {TicketsCreatedDisplay} from './createddisplay';
+import {TicketsStatusDisplay, TicketsStatusTableDisplay} from './statusdisplay';
+import {
+  TicketsAssignedUsersDisplay,
+  TicketsAssignedUsersTableDisplay,
+} from './usersassigneddisplay';
+import {
+  TicketsCreatedDisplay,
+  TicketsCreatedTableDisplay,
+} from './createddisplay';
 
 export const TICKETS_DASHBOARD_ID = '70b0626f-a835-478e-8194-e09f97887a15';
 
 const TICKETS_DISPLAYS = [
-  TicketsStatusDisplay.displayId,
   TicketsAssignedUsersDisplay.displayId,
   TicketsCreatedDisplay.displayId,
+  TicketsStatusDisplay.displayId,
+  TicketsAssignedUsersTableDisplay.displayId,
+  TicketsCreatedTableDisplay.displayId,
+  TicketsStatusTableDisplay.displayId,
 ];
 
 const TicketsDashboard = props => (
