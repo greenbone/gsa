@@ -8378,6 +8378,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="/envelope/params/base"/>
                 </xsl:call-template>
               </xsl:if>
+              <xsl:if test="(count($allowed_types) = 0) or (count($allowed_types[text()='pw']))">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'pw'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Password only')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </xsl:if>
             </select>
           </div>
         </div>
@@ -8430,7 +8437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item-credentials form-selection-item-credentials--up form-selection-item-credentials--snmp"
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--up form-selection-item-credentials--snmp form-selection-item-credentials--pw"
             id="password_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password')"/></label>
           <div class="col-10">
@@ -8626,6 +8633,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="content" select="gsa:i18n ('SNMP')"/>
                 <xsl:with-param name="select-value" select="$credential_type"/>
               </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'pw'"/>
+                <xsl:with-param name="content" select="gsa:i18n ('Password only')"/>
+                <xsl:with-param name="select-value" select="$credential_type"/>
+              </xsl:call-template>
             </select>
           </div>
         </div>
@@ -8674,7 +8686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </xsl:if>
-        <xsl:if test="$credential_type != 'cc'">
+        <xsl:if test="$credential_type != 'cc' and $credential_type != 'pw'">
           <div class="form-group">
             <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></label>
             <div class="col-10">
@@ -8686,7 +8698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </xsl:if>
-        <xsl:if test="$credential_type = 'up' or $credential_type = 'snmp'">
+        <xsl:if test="$credential_type = 'up' or $credential_type = 'snmp' or $credential_type = 'pw'">
           <div class="form-group">
             <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password')"/></label>
             <div class="col-10">
@@ -10545,6 +10557,30 @@ was created or assigned erroneously.
           </div>
         </div>
 
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('PKCS12 password credential')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <select name="method_data:pkcs12_credential">
+                <option value="">
+                  <xsl:text>--</xsl:text>
+                </option>
+                <xsl:for-each select="$credentials/credential[type='pw']">
+                  <option value="{@id}">
+                    <xsl:value-of select="name"/>
+                  </option>
+                </xsl:for-each>
+              </select>
+            </div>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:pkcs12_credential']" data-extra="restrict_credential_type=pw">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <!-- Method: Tipping Point SMS -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
@@ -10564,7 +10600,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:tp_sms_credential">
-              <xsl:for-each select="$credentials/credential">
+              <xsl:for-each select="$credentials/credential[type='up']">
                 <option value="{@id}">
                   <xsl:value-of select="name"/>
                 </option>
@@ -10626,7 +10662,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:verinice_server_credential">
-              <xsl:for-each select="$credentials/credential">
+              <xsl:for-each select="$credentials/credential[type='up']">
                 <option value="{@id}">
                   <xsl:value-of select="name"/>
                 </option>
@@ -10732,7 +10768,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:scp_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <option value="{@id}">
                   <xsl:value-of select="name"/>
                 </option>
@@ -10812,7 +10848,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:smb_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <option value="{@id}">
                   <xsl:value-of select="name"/>
                 </option>
@@ -10897,7 +10933,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:vfire_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <option value="{@id}">
                   <xsl:value-of select="name"/>
                 </option>
@@ -11879,6 +11915,35 @@ was created or assigned erroneously.
           </div>
         </div>
 
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('PKCS12 password credential')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <select name="method_data:pkcs12_credential">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="''"/>
+                  <xsl:with-param name="content" select="'--'"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='pkcs12_credential']/text()"/>
+                </xsl:call-template>
+                <xsl:for-each select="$credentials/credential[type='pw']">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="@id"/>
+                    <xsl:with-param name="content" select="name"/>
+                    <xsl:with-param name="select-value" select="$method/data[name='pkcs12_credential']/text()"/>
+                  </xsl:call-template>
+                </xsl:for-each>
+              </select>
+            </div>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:pkcs12_credential']" data-extra="restrict_credential_type=pw">
+                <img src="/img/new.svg"/>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
         <!-- Method: Tipping Point SMS -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--tippingpoint">
@@ -11898,7 +11963,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:tp_sms_credential">
-              <xsl:for-each select="$credentials/credential">
+              <xsl:for-each select="$credentials/credential[type='up']">
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="@id"/>
                   <xsl:with-param name="content" select="name"/>
@@ -11976,7 +12041,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:verinice_server_credential">
-              <xsl:for-each select="$credentials/credential">
+              <xsl:for-each select="$credentials/credential[type='up']">
                 <xsl:choose>
                   <xsl:when test="@id=$method/data[name='verinice_server_credential']/text()">
                     <option value="{@id}" selected="1">
@@ -12111,7 +12176,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:scp_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <xsl:choose>
                   <xsl:when test="@id=$method/data[name='scp_credential']/text()">
                     <option value="{@id}" selected="1">
@@ -12253,7 +12318,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:smb_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <xsl:choose>
                   <xsl:when test="@id=$method/data[name='smb_credential']/text()">
                     <option value="{@id}" selected="1">
@@ -12366,7 +12431,7 @@ was created or assigned erroneously.
           </label>
           <div class="col-10">
             <select name="method_data:vfire_credential">
-              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+              <xsl:for-each select="$credentials/credential[type='up' and (not (contains (login, '@') or contains (login, ':')))]">
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="@id"/>
                   <xsl:with-param name="content" select="name"/>
