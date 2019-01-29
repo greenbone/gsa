@@ -6658,6 +6658,12 @@ new_alert_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 char *
 get_alerts (gvm_connection_t *connection, credentials_t *, params_t *, const char *, cmd_response_data_t*);
 
+#define EVENT_TYPE_NEW_SECINFO "New SecInfo arrived"
+#define EVENT_TYPE_UPDATED_SECINFO "Updated SecInfo arrived"
+#define EVENT_TYPE_TASK_RUN_STATUS_CHANGED "Task run status changed"
+#define EVENT_TYPE_TICKET_RECEIVED "Ticket received"
+#define EVENT_TYPE_ASSIGNED_TICKET_CHANGED "Assigned ticket changed"
+#define EVENT_TYPE_OWNED_TICKET_CHANGED "Owned ticket changed"
 /**
  * @brief Send event data for an alert.
  *
@@ -6678,11 +6684,11 @@ append_alert_event_data (GString *xml, params_t *data, const char *event)
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (event, "Task run status changed") == 0
-             && strcmp (name, "status") == 0)
-            || ((strcmp (event, "New SecInfo arrived") == 0
-                 || strcmp (event, "Updated SecInfo arrived") == 0)
-                && strcmp (name, "secinfo_type") == 0))
+        if ((str_equal (event, EVENT_TYPE_TASK_RUN_STATUS_CHANGED)
+             && str_equal (name, "status"))
+            || ((str_equal (event, EVENT_TYPE_NEW_SECINFO)
+                 || str_equal (event, EVENT_TYPE_UPDATED_SECINFO))
+                && str_equal (name, "secinfo_type")))
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
@@ -6933,7 +6939,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
  * @return Enveloped XML object.
  */
 char *
-create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_alert_gmp (gvm_connection_t *connection,
+                  credentials_t * credentials,
+                  params_t *params,
                   cmd_response_data_t* response_data)
 {
   int ret;
@@ -6968,7 +6976,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 
   xml = g_string_new ("");
 
-  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
+  if (str_equal (event, EVENT_TYPE_NEW_SECINFO) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -6976,11 +6984,11 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 
       params_iterator_init (&iter, event_data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (name, "feed_event") == 0)
+        if (str_equal (name, "feed_event")
             && param->value
-            && (strcmp (param->value, "updated") == 0))
+            && str_equal (param->value, "updated"))
           {
-            event = "Updated SecInfo arrived";
+            event = EVENT_TYPE_UPDATED_SECINFO;
             break;
           }
     }
@@ -7726,7 +7734,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   method_data = params_values (params, "method_data:");
   report_formats = params_values (params, "report_format_ids:");
 
-  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
+  if (str_equal (event, EVENT_TYPE_NEW_SECINFO) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -7734,11 +7742,11 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
       params_iterator_init (&iter, event_data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (name, "feed_event") == 0)
+        if (str_equal (name, "feed_event")
             && param->value
-            && (strcmp (param->value, "updated") == 0))
+            && str_equal (param->value, "updated"))
           {
-            event = "Updated SecInfo arrived";
+            event = EVENT_TYPE_UPDATED_SECINFO;
             break;
           }
     }
