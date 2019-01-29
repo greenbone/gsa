@@ -48,9 +48,9 @@ Main changes compared to 7.0.3:
 * An issue with handling XRef URLs without scheme prefix has been addressed.
 * Various small usability improvements for the auth config page, empty list
   pages and the "Edit filter" icons.
-* Tags can now contain backslashes and percent signs in the value and
-  hyphens in the name to allow using the special "smb-alert:file_path"
-  task tag.
+* Tags can now contain backslashes, forward slashes and percent signs in the
+  value as well as hyphens in the name to allow using the special task tag
+  "smb-alert:file_path".
 * The OID of the VT sending the SNMP Host Detail for Authentication failure /
   success was updated.
 
