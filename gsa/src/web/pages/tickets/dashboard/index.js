@@ -32,7 +32,7 @@ import {
 
 export const TICKETS_DASHBOARD_ID = '70b0626f-a835-478e-8194-e09f97887a15';
 
-const TICKETS_DISPLAYS = [
+export const TICKETS_DISPLAYS = [
   TicketsAssignedUsersDisplay.displayId,
   TicketsCreatedDisplay.displayId,
   TicketsStatusDisplay.displayId,
