@@ -28,6 +28,7 @@ import {TICKET_STATUS, getTranslatableTicketStatus} from 'gmp/models/ticket';
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import {
   percent,
 } from 'web/components/dashboard/display/utils';
@@ -81,6 +82,27 @@ export const TicketsStatusDisplay = createDisplay({
   loaderComponent: TicketsListLoader,
 });
 
+export const TicketsStatusTableDisplay = createDisplay({
+  dataRow: row => [row.label, row.value],
+  dataTitles: [
+    _l('Status'),
+    _l('# of Tickets'),
+  ],
+  dataTransform: transformStatusData,
+  displayComponent: DataTableDisplay,
+  displayId: 'tickets-by-status-table',
+  displayName: 'TicketsStatusTableDisplay',
+  filtersFilter: TICKETS_FILTER_FILTER,
+  loaderComponent: TicketsListLoader,
+  title: ({data: tdata = {}}) =>
+    _('Tickets by Status (Total: {{count}})', {count: tdata.total}),
+});
+
 registerDisplay(TicketsStatusDisplay.displayId, TicketsStatusDisplay, {
   title: _l('Chart: Tickets by Status'),
 });
+
+registerDisplay(TicketsStatusTableDisplay.displayId,
+  TicketsStatusTableDisplay, {
+    title: _l('Table: Tickets by Status'),
+  });

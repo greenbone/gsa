@@ -17,11 +17,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 import {_, _l} from 'gmp/locale/lang';
+import {shortDate} from 'gmp/locale/date';
 
 import date from 'gmp/models/date';
 import {TICKETS_FILTER_FILTER} from 'gmp/models/filter';
 
 import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard/registry';
 
 import CreatedDisplay from 'web/components/dashboard/display/created/createddisplay'; // eslint-disable-line max-len
@@ -73,8 +75,31 @@ export const TicketsCreatedDisplay = createDisplay({
   },
 });
 
+export const TicketsCreatedTableDisplay = createDisplay({
+  dataRow: row => [row.y, row.y2, shortDate(row.x)],
+  dataTitles: [
+    _l('Created Tickets'),
+    _l('Total Tickets'),
+    _l('Time'),
+  ],
+  dataTransform: transfromCreated,
+  displayComponent: DataTableDisplay,
+  displayId: 'tickets-by-created-table',
+  displayName: 'TicketsCreatedTableDisplay',
+  filtersFilter: TICKETS_FILTER_FILTER,
+  loaderComponent: TicketsListLoader,
+  title: ({data: tdata = {}}) =>
+   _('Tickets by Creation Time (Total: {{count}})', {count: tdata.total}),
+});
+
 registerDisplay(TicketsCreatedDisplay.displayId,
   TicketsCreatedDisplay, {
     title: _l('Chart: Tickets by Creation Time'),
+  },
+);
+
+registerDisplay(TicketsCreatedTableDisplay.displayId,
+  TicketsCreatedTableDisplay, {
+    title: _l('Table: Tickets by Creation Time'),
   },
 );
