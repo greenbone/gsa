@@ -29,6 +29,9 @@ import Model from '../model.js';
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
 export const EVENT_TYPE_TASK_RUN_STATUS_CHANGED = 'Task run status changed';
+export const EVENT_TYPE_TICKET_RECEIVED = 'Ticket received';
+export const EVENT_TYPE_ASSIGNED_TICKET_CHANGED = 'Assigned ticket changed';
+export const EVENT_TYPE_OWNED_TICKET_CHANGED = 'Owned ticket changed';
 
 export const CONDITION_TYPE_FILTER_COUNT_AT_LEAST = 'Filter count at least';
 export const CONDITION_TYPE_FILTER_COUNT_CHANGED = 'Filter count changed';
