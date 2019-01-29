@@ -612,6 +612,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/table.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${GSA_SRC_DIR}/src/web/pages/alerts/ticketeventpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/component.js
