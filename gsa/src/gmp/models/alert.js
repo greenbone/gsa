@@ -62,6 +62,16 @@ export const DELTA_TYPE_NONE = 'None';
 export const DELTA_TYPE_PREVIOUS = 'Previous';
 export const DELTA_TYPE_REPORT = 'Report';
 
+export const isTaskEvent = event =>
+  event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
+export const isTicketEvent = event =>
+  event === EVENT_TYPE_ASSIGNED_TICKET_CHANGED ||
+  event === EVENT_TYPE_OWNED_TICKET_CHANGED ||
+  event === EVENT_TYPE_TICKET_RECEIVED;
+export const isSecinfoEvent = event =>
+  event === EVENT_TYPE_NEW_SECINFO ||
+  event === EVENT_TYPE_UPDATED_SECINFO;
+
 const create_values = data => {
   const value = isEmpty(data.__text) ? undefined : data.__text;
   const values = {value};
