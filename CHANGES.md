@@ -12,6 +12,10 @@ $ cd gsa && git log
  * Sort alerts at task details alphanumerically #1094
  * Add solution type to report details powerfilter #1091
  * Add feature: Scan Report Content Composer #1073 #1084 #1086 #1090
+ * Tags can now contain backslashes, forward slashes and percent signs in the
+   value as well as hyphens in the name to allow using the special task tag
+   "smb-alert:file_path". #1107 #1142 #1145
+
 
 ## gsa 8.0+beta2 (2018-12-04)
 
