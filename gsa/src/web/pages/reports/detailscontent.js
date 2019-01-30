@@ -85,6 +85,7 @@ import {
   tlsCertificatesSortFunctions,
 } from './sort';
 import {TASK_STATUS} from 'gmp/models/task';
+import TaskIcon from 'web/components/icon/taskicon';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
@@ -172,9 +173,7 @@ const ToolBarIcons = ({
               id={task_id}
               title={_('Corresponding Task')}
             >
-              <Icon
-                img="task.svg"
-              />
+              <TaskIcon />
             </DetailsLink>
             <Link
               to="results"

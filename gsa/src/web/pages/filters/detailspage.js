@@ -63,6 +63,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import FilterDetails from './details';
 import FilterComponent from './component';
+import FilterIcon from 'web/components/icon/filtericon';
 
 const ToolBarIcons = ({
   entity,
@@ -151,7 +152,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="filter.svg"
+          sectionIcon={<FilterIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Filter')}
           onFilterCloneClick={clone}

@@ -23,6 +23,7 @@ import {_} from 'gmp/locale/lang';
 import Icon from 'web/components/icon/icon';
 
 import PropTypes from 'web/utils/proptypes';
+import FilterIcon from 'web/components/icon/filtericon';
 
 export const renderDonutChartIcons = ({
   setState, // eslint-disable-line react/prop-types
@@ -53,8 +54,7 @@ const DataDisplayIcons = ({
 }) => (
   <React.Fragment>
     {showFilterSelection &&
-      <Icon
-        img="filter.svg"
+      <FilterIcon
         title={_('Select Filter')}
         onClick={onSelectFilterClick}
       />

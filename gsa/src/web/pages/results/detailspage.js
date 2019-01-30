@@ -32,6 +32,7 @@ import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import OverrideIcon from 'web/components/icon/overrideicon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -122,8 +123,7 @@ let ToolBarIcons = ({
           type="task"
           id={entity.task.id}
         >
-          <Icon
-            img="task.svg"
+          <TaskIcon
             title={_('Corresponding Task ({{name}})', entity.task)}
           />
         </DetailsLink>

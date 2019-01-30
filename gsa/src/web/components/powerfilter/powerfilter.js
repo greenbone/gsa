@@ -39,8 +39,9 @@ import TextField from 'web/components/form/textfield';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
-import Icon from 'web/components/icon/icon';
 import ManualIcon from 'web/components/icon/manualicon';
+import RefreshIcon from '../icon/refreshicon';
+import ResetIcon from '../icon/reseticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -215,8 +216,7 @@ class PowerFilter extends React.Component {
               />
             </Layout>
             <IconDivider align={['start', 'center']}>
-              <Icon
-                img="refresh.svg"
+              <RefreshIcon
                 title={_('Update Filter')}
                 onClick={this.handleUpdateFilter}
               />
@@ -229,8 +229,7 @@ class PowerFilter extends React.Component {
                 />
               }
               {onResetClick &&
-                <Icon
-                  img="reset.svg"
+                <ResetIcon
                   title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onResetClick : undefined}

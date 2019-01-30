@@ -100,6 +100,7 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
+import TaskIcon from 'web/components/icon/taskicon';
 
 const ToolBarIcons = ({
   entity,
@@ -399,7 +400,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="task.svg"
+        sectionIcon={<TaskIcon size="large"/>}
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}

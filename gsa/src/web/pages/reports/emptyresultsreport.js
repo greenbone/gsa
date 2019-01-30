@@ -32,6 +32,9 @@ import Layout from 'web/components/layout/layout';
 import InfoPanel from 'web/components/panel/infopanel';
 
 import ReportPanel from './reportpanel';
+import FilterIcon from 'web/components/icon/filtericon';
+import EditIcon from 'web/components/icon/editicon';
+import DeleteIcon from 'web/components/icon/deleteicon';
 
 const EmptyResultsReport = ({
   all,
@@ -62,7 +65,7 @@ const EmptyResultsReport = ({
       <Divider align={['start', 'stretch']} wrap>
         {!levels.includes('g') &&
           <ReportPanel
-            icon="filter.svg"
+            icon={props => <FilterIcon {...props}/>}
             title={_('Log messages are currently excluded.')}
             onClick={onFilterAddLogLevelClick}
           >
@@ -72,7 +75,7 @@ const EmptyResultsReport = ({
 
         {has_severity_filter &&
           <ReportPanel
-            icon="filter.svg"
+            icon={props => <FilterIcon {...props}/>}
             title={
               _('You are using keywords setting a minimum limit on severity.')
             }
@@ -84,7 +87,7 @@ const EmptyResultsReport = ({
 
         {isDefined(min_qod) && min_qod > 30 &&
           <ReportPanel
-            icon="filter.svg"
+            icon={props => <FilterIcon {...props}/>}
             title={
               _('There may be results below the current minimum Quality of ' +
                 'Detection level.')
@@ -97,7 +100,7 @@ const EmptyResultsReport = ({
         }
 
         <ReportPanel
-          icon="edit.svg"
+          icon={props => <EditIcon {...props}/>}
           title={_('Your filter settings may be too refined.')}
           onClick={onFilterEditClick}
         >
@@ -105,7 +108,7 @@ const EmptyResultsReport = ({
         </ReportPanel>
 
         <ReportPanel
-          icon="delete.svg"
+          icon={props => <DeleteIcon {...props}/>}
           title={_('Your last filter change may be too restrictive.')}
           onClick={onFilterRemoveClick}
         >

@@ -41,7 +41,7 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import NewIcon from 'web/components/icon/newicon';
-import Icon from 'web/components/icon/icon';
+import ResetIcon from 'web/components/icon/reseticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -140,8 +140,7 @@ export class DashboardControls extends React.Component {
             }
             onClick={canAdd ? this.handleNewClick : undefined}
           />
-          <Icon
-            img="reset.svg"
+          <ResetIcon
             title={_('Reset to Defaults')}
             onClick={this.handleResetClick}
           />
