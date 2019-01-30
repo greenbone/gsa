@@ -549,7 +549,7 @@ class AlertComponent extends React.Component {
             verinice_credential_id),
 
           method_data_pkcs12_credential: selectSaveId(passwordOnlyCredentials,
-            pkcs12_credential_id),
+            pkcs12_credential_id, '0'),
           method_data_vfire_credential: selectSaveId(vFireCredentials,
             vfire_credential_id),
           method_data_vfire_base_url: getValue(method.data.vfire_base_url),
