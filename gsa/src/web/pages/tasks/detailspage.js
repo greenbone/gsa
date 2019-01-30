@@ -38,10 +38,13 @@ import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NoteIcon from 'web/components/icon/noteicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -100,7 +103,6 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import TaskIcon from 'web/components/icon/taskicon';
 
 const ToolBarIcons = ({
   entity,
@@ -249,9 +251,7 @@ const ToolBarIcons = ({
               filter={'task_id=' + entity.id}
               title={_('Notes for Task {{name}}', entity)}
             >
-              <Icon
-                img="note.svg"
-              />
+              <NoteIcon />
             </Link>
           </Badge>
 
@@ -263,9 +263,7 @@ const ToolBarIcons = ({
               filter={'task_id=' + entity.id}
               title={_('Overrides for Task {{name}}', entity)}
             >
-              <Icon
-                img="override.svg"
-              />
+              <OverrideIcon />
             </Link>
           </Badge>
         </IconDivider>

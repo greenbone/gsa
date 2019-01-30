@@ -26,6 +26,7 @@ import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 
@@ -105,7 +106,7 @@ class FeedStatus extends React.Component {
         <Layout flex="column">
           <ToolBarIcons/>
           <Section
-            img="feed.svg"
+            img={<FeedIcon size="large"/>}
             title={_('Feed Status')}
           />
           <Table>

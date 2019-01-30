@@ -25,8 +25,9 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NoteIcon from 'web/components/icon/noteicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -224,7 +225,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="note.svg"
+        sectionIcon={<NoteIcon size="large"/>}
         title={_('Note')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
