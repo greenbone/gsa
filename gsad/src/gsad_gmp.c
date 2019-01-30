@@ -5371,6 +5371,27 @@ create_credential_gmp (gvm_connection_t *connection,
                       certificate,
                       allow_insecure);
         }
+      else if (type && (strcmp (type, "pw") == 0))
+         {
+           CHECK_VARIABLE_INVALID (password, "Create Credential");
+
+           ret = gmpf (connection, credentials,
+                       &response,
+                       &entity,
+                       response_data,
+                       "<create_credential>"
+                       "<name>%s</name>"
+                       "<comment>%s</comment>"
+                       "<type>%s</type>"
+                       "<password>%s</password>"
+                       "<allow_insecure>%s</allow_insecure>"
+                       "</create_credential>",
+                       name,
+                       comment ? comment : "",
+                       type,
+                       password ? password : "",
+                       allow_insecure);
+         }
       else
         {
           cmd_response_data_set_status_code (response_data,
@@ -5861,7 +5882,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
       if (params_given (params, "change_community"))
         CHECK_VARIABLE_INVALID (community, "Save Credential");
     }
-  else if (str_equal (type, "up"))
+  else if (str_equal (type, "up") | str_equal (type, "pw"))
     {
       if (params_given (params, "change_password"))
         CHECK_VARIABLE_INVALID (password, "Save Credential");
@@ -5974,7 +5995,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t * credentials,
                              "</key>");
         }
     }
-  else if (str_equal (type, "up"))
+  else if (str_equal (type, "up") | str_equal (type, "pw"))
     {
       if (change_password)
         xml_string_append(command,
@@ -7066,7 +7087,8 @@ new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *p
 
   ret = gmp (connection, credentials, &response, &entity, response_data,
              "<get_credentials"
-             " filter=\"type=up owner=any permission=any rows=-1\"/>");
+             " filter=\"type=up or type=pw"
+             "          owner=any permission=any rows=-1\"/>");
 
   switch (ret)
     {
@@ -7370,7 +7392,8 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
     if (strcmp (name, "pkcs12"))
       {
         if (strcmp (name, "defense_center_ip") == 0
-            || strcmp (name, "defense_center_port") == 0)
+            || strcmp (name, "defense_center_port") == 0
+            || strcmp (name, "pkcs12_credential") == 0)
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
@@ -8091,7 +8114,8 @@ edit_alert (gvm_connection_t *connection, credentials_t * credentials,
     {
       if (gvm_connection_sendf (connection,
                                 "<get_credentials"
-                                " filter=\"type=up owner=any permission=any"
+                                " filter=\"type=up or type=pw"
+                                "          owner=any permission=any"
                                 "          rows=-1\"/>")
           == -1)
         {

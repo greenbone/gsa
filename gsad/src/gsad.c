@@ -525,7 +525,7 @@ init_validator ()
   gvm_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   gvm_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
-  gvm_validator_add (validator, "credential_type", "^(cc|up|usk|smime|pgp|snmp)$");
+  gvm_validator_add (validator, "credential_type", "^(cc|up|usk|smime|pgp|snmp|pw)$");
   gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
   gvm_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
