@@ -20,22 +20,37 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Layout from '../../components/layout/layout.js';
+import {
+  PASSWORD_ONLY_CREDENTIAL_TYPE,
+  password_only_credential_filter,
+} from 'gmp/models/credential';
 
-import PropTypes from '../../utils/proptypes.js';
-import withPrefix from '../../utils/withPrefix.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import Spinner from '../../components/form/spinner.js';
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
-import FileField from '../../components/form/filefield.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+import FileField from 'web/components/form/filefield';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withPrefix from 'web/utils/withPrefix';
 
 const SourcefireMethodPart = ({
+  credentials,
+  pkcs12Credential,
   prefix,
   defenseCenterIp,
   defenseCenterPort,
   onChange,
+  onCredentialChange,
+  onNewCredentialClick,
 }) => {
+  const credentialOptions = credentials.filter(password_only_credential_filter);
   return (
     <Layout
       flex="column"
@@ -62,7 +77,24 @@ const SourcefireMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('PKCS12 file')}>
+      <FormGroup title={_('PKCS12 Credential')}>
+        <Divider>
+          <Select
+            name={prefix + 'pkcs12_credential'}
+            items={renderSelectItems(credentialOptions)}
+            value={pkcs12Credential}
+            onChange={onCredentialChange}
+          />
+          <NewIcon
+            size="small"
+            value={[PASSWORD_ONLY_CREDENTIAL_TYPE]}
+            title={_('Create a credential')}
+            onClick={onNewCredentialClick}
+          />
+        </Divider>
+      </FormGroup>
+
+      <FormGroup title={_('PKCS12 File')}>
         <FileField
           name={prefix + 'pkcs12'}
           onChange={onChange}
@@ -73,10 +105,14 @@ const SourcefireMethodPart = ({
 };
 
 SourcefireMethodPart.propTypes = {
+  credentials: PropTypes.array.isRequired,
   defenseCenterIp: PropTypes.string.isRequired,
   defenseCenterPort: PropTypes.numberOrNumberString.isRequired,
+  pkcs12Credential: PropTypes.id,
   prefix: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onCredentialChange: PropTypes.func.isRequired,
+  onNewCredentialClick: PropTypes.func.isRequired,
 };
 
 export default withPrefix(SourcefireMethodPart);

@@ -36,6 +36,7 @@ import {
 
 import {
   email_credential_filter,
+  password_only_credential_filter,
   smb_credential_filter,
   vFire_credential_filter,
 } from 'gmp/models/credential';
@@ -122,6 +123,8 @@ class AlertComponent extends React.Component {
       .bind(this);
     this.handleFilterIdChange = this.handleFilterIdChange.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
+    this.handlePasswordOnlyCredentialChange =
+      this.handlePasswordOnlyCredentialChange.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
     this.handleSaveComposerContent = this.handleSaveComposerContent.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
@@ -141,6 +144,8 @@ class AlertComponent extends React.Component {
     this.openContentComposerDialog = this.openContentComposerDialog.bind(this);
     this.closeContentComposerDialog =
       this.closeContentComposerDialog.bind(this);
+    this.openPasswordOnlyCredentialDialog =
+      this.openPasswordOnlyCredentialDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
     this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
@@ -201,6 +206,12 @@ class AlertComponent extends React.Component {
         else if (this.credentialType === 'email') {
           this.setState({
             method_data_recipient_credential: credential_id,
+            credentials,
+          });
+        }
+        else if (this.credentialType === 'pw') {
+          this.setState({
+            method_data_pkcs12_credential: credential_id,
             credentials,
           });
         }
@@ -303,6 +314,10 @@ class AlertComponent extends React.Component {
     this.openCredentialDialog({type: 'verinice', types});
   }
 
+  openPasswordOnlyCredentialDialog(types) {
+    this.openCredentialDialog({type: 'pw', types});
+  }
+
   openVfireCredentialDialog(types) {
     this.openCredentialDialog({type: 'vfire', types});
   }
@@ -339,6 +354,8 @@ class AlertComponent extends React.Component {
 
         const emailCredentials = credentials.filter(email_credential_filter);
         const vFireCredentials = credentials.filter(vFire_credential_filter);
+        const passwordOnlyCredentials =
+          credentials.filter(password_only_credential_filter);
 
         const result_filters = filters.filter(filter_results_filter);
         const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -408,6 +425,9 @@ class AlertComponent extends React.Component {
         const recipient_credential_id = isDefined(
           method.data.recipient_credential) ?
           getValue(method.data.recipient_credential) : undefined;
+
+        const pkcs12_credential_id = isDefined(method.data.pkcs12_credential) ?
+          getValue(method.data.pkcs12_credential) : undefined;
 
         const vfire_credential_id = isDefined(method.data.vfire_credential) ?
           getValue(method.data.vfire_credential) : undefined;
@@ -528,6 +548,8 @@ class AlertComponent extends React.Component {
           method_data_verinice_server_credential: selectSaveId(credentials,
             verinice_credential_id),
 
+          method_data_pkcs12_credential: selectSaveId(passwordOnlyCredentials,
+            pkcs12_credential_id),
           method_data_vfire_credential: selectSaveId(vFireCredentials,
             vfire_credential_id),
           method_data_vfire_base_url: getValue(method.data.vfire_base_url),
@@ -648,6 +670,7 @@ class AlertComponent extends React.Component {
           method_data_smb_file_path_type: undefined,
           method_data_verinice_server_report_format: select_verinice_report_id(
             report_formats),
+          method_data_pkcs12_credential: undefined,
           method_data_vfire_credential: undefined,
           method_data_vfire_base_url: undefined,
           method_data_vfire_call_description: undefined,
@@ -725,6 +748,10 @@ class AlertComponent extends React.Component {
           alert));
       }
     });
+  }
+
+  handlePasswordOnlyCredentialChange(credential) {
+    this.setState({method_data_pkcs12_credential: credential});
   }
 
   handleScpCredentialChange(credential) {
@@ -870,6 +897,7 @@ class AlertComponent extends React.Component {
       method_data_verinice_server_report_format,
       method_data_verinice_server_url,
       method_data_verinice_server_credential,
+      method_data_pkcs12_credential,
       method_data_vfire_credential,
       method_data_vfire_base_url,
       method_data_vfire_call_description,
@@ -990,6 +1018,7 @@ class AlertComponent extends React.Component {
                   method_data_verinice_server_url}
                 method_data_verinice_server_credential=
                   {method_data_verinice_server_credential}
+                method_data_pkcs12_credential={method_data_pkcs12_credential}
                 method_data_vfire_credential={method_data_vfire_credential}
                 method_data_vfire_base_url={method_data_vfire_base_url}
                 method_data_vfire_call_description=
@@ -1015,6 +1044,8 @@ class AlertComponent extends React.Component {
                 onOpenContentComposerDialogClick=
                   {this.handleOpenContentComposerDialog}
                 onNewEmailCredentialClick={this.openEmailCredentialDialog}
+                onNewPasswordOnlyCredentialClick=
+                  {this.openPasswordOnlyCredentialDialog}
                 onNewScpCredentialClick={this.openScpCredentialDialog}
                 onNewSmbCredentialClick={this.openSmbCredentialDialog}
                 onNewVeriniceCredentialClick={this.openVeriniceCredentialDialog}
@@ -1027,6 +1058,8 @@ class AlertComponent extends React.Component {
                 }}
                 onReportFormatsChange={this.handleReportFormatsChange}
                 onEmailCredentialChange={this.handleEmailCredentialChange}
+                onPasswordOnlyCredentialChange=
+                  {this.handlePasswordOnlyCredentialChange}
                 onScpCredentialChange={this.handleScpCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
                 onVerinceCredentialChange={this.handleVeriniceCredentialChange}
