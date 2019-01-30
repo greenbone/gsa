@@ -322,6 +322,7 @@ class AlertDialog extends React.Component {
       method_data_smb_credential,
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
+      method_data_pkcs12_credential,
       method_data_vfire_base_url,
       method_data_vfire_credential,
       method_data_vfire_session_type,
@@ -335,6 +336,7 @@ class AlertDialog extends React.Component {
       onClose,
       onEmailCredentialChange,
       onNewEmailCredentialClick,
+      onNewPasswordOnlyCredentialClick,
       onNewScpCredentialClick,
       onNewSmbCredentialClick,
       onNewVeriniceCredentialClick,
@@ -343,6 +345,7 @@ class AlertDialog extends React.Component {
       onOpenContentComposerDialogClick,
       onReportFormatsChange,
       onSave,
+      onPasswordOnlyCredentialChange,
       onScpCredentialChange,
       onSmbCredentialChange,
       onTippingPointCredentialChange,
@@ -429,6 +432,7 @@ class AlertDialog extends React.Component {
 
     const controlledValues = {
       filter_id,
+      method_data_pkcs12_credential,
       method_data_composer_include_notes,
       method_data_composer_include_overrides,
       method_data_recipient_credential,
@@ -719,11 +723,15 @@ class AlertDialog extends React.Component {
 
               {values.method === METHOD_TYPE_SOURCEFIRE &&
                 <SourcefireMethodPart
+                  credentials={credentials}
+                  pkcs12Credential={values.method_data_pkcs12_credential}
                   prefix="method_data"
                   defenseCenterIp={values.method_data_defense_center_ip}
                   defenseCenterPort={
                     parseInt(values.method_data_defense_center_port)}
                   onChange={onValueChange}
+                  onCredentialChange={onPasswordOnlyCredentialChange}
+                  onNewCredentialClick={onNewPasswordOnlyCredentialClick}
                 />
               }
 
@@ -833,6 +841,7 @@ AlertDialog.propTypes = {
   method_data_notice: PropTypes.string,
   method_data_notice_attach_format: PropTypes.id,
   method_data_notice_report_format: PropTypes.id,
+  method_data_pkcs12_credential: PropTypes.id,
   method_data_recipient_credential: PropTypes.id,
   method_data_scp_credential: PropTypes.id,
   method_data_scp_host: PropTypes.string,
@@ -878,12 +887,14 @@ AlertDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onEmailCredentialChange: PropTypes.func.isRequired,
   onNewEmailCredentialClick: PropTypes.func.isRequired,
+  onNewPasswordOnlyCredentialClick: PropTypes.func.isRequired,
   onNewScpCredentialClick: PropTypes.func.isRequired,
   onNewSmbCredentialClick: PropTypes.func.isRequired,
   onNewTippingPointCredentialClick: PropTypes.func.isRequired,
   onNewVeriniceCredentialClick: PropTypes.func.isRequired,
   onNewVfireCredentialClick: PropTypes.func.isRequired,
   onOpenContentComposerDialogClick: PropTypes.func.isRequired,
+  onPasswordOnlyCredentialChange: PropTypes.func.isRequired,
   onReportFormatsChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,

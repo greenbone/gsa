@@ -38,6 +38,7 @@ import {
   SNMP_PRIVACY_ALOGRITHM_NONE,
   SNMP_PRIVACY_ALGORITHM_AES,
   SNMP_PRIVACY_ALGORITHM_DES,
+  PASSWORD_ONLY_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
   VFIRE_CREDENTIAL_TYPES,
@@ -308,7 +309,8 @@ class CredentialsDialog extends React.Component {
 
               {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
                 state.credential_type === SNMP_CREDENTIAL_TYPE ||
-                state.credential_type === VFIRE_CREDENTIAL_TYPES) &&
+                state.credential_type === VFIRE_CREDENTIAL_TYPES ||
+                state.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE) &&
                 <FormGroup
                   title={_('Password')}
                 >

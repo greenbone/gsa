@@ -31,6 +31,7 @@ export const CLIENT_CERTIFICATE_CREDENTIAL_TYPE = 'cc';
 export const SNMP_CREDENTIAL_TYPE = 'snmp';
 export const SMIME_CREDENTIAL_TYPE = 'smime';
 export const PGP_CREDENTIAL_TYPE = 'pgp';
+export const PASSWORD_ONLY_CREDENTIAL_TYPE = 'pw';
 
 export const SSH_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -65,6 +66,7 @@ export const ALL_CREDENTIAL_TYPES = [
   SNMP_CREDENTIAL_TYPE,
   SMIME_CREDENTIAL_TYPE,
   PGP_CREDENTIAL_TYPE,
+  PASSWORD_ONLY_CREDENTIAL_TYPE,
 ];
 
 export const ssh_credential_filter = credential =>
@@ -83,6 +85,9 @@ export const snmp_credential_filter = credential =>
 export const email_credential_filter = credential =>
   credential.credential_type === SMIME_CREDENTIAL_TYPE ||
   credential.credential_type === PGP_CREDENTIAL_TYPE;
+
+export const password_only_credential_filter = credential =>
+  credential.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE;
 
 export const vFire_credential_filter = credential =>
 credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
@@ -103,6 +108,7 @@ const TYPE_NAMES = {
   cc: _l('Client Certificate'),
   snmp: _l('SNMP'),
   pgp: _l('PGP Key'),
+  pw: _l('Password only'),
   smime: _l('S/MIME Certificate'),
 };
 
