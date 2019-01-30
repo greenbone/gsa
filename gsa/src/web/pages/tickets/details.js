@@ -102,7 +102,7 @@ const TicketDetails = ({
     </DetailsBlock>
 
     <DetailsBlock
-      title={_('Status History')}
+      title={_('Status Details')}
     >
       <InfoTable>
         <colgroup>
