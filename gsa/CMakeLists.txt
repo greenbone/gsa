@@ -277,19 +277,23 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/feedicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/filtericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/firsticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/lasticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reseticon.js
@@ -316,13 +320,17 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/refresh.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/reset.svg
