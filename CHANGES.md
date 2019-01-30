@@ -8,6 +8,7 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Add Sourcefire PKCS12 password support #1150
  * Add Alemba vFire alert to GUI #1100
  * Sort alerts at task details alphanumerically #1094
  * Add solution type to report details powerfilter #1091
