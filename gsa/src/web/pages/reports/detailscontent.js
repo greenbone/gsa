@@ -24,19 +24,19 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
+import {TASK_STATUS} from 'gmp/models/task';
+
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntityInfo from 'web/entity/info';
 
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
 import DownloadIcon from 'web/components/icon/downloadicon';
-import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ResultIcon from 'web/components/icon/resulticon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Divider from 'web/components/layout/divider';
@@ -59,7 +59,10 @@ import Tabs from 'web/components/tab/tabs';
 import Section from 'web/components/section/section';
 import SectionHeader from 'web/components/section/header';
 
+import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
+
+import PropTypes from 'web/utils/proptypes';
 
 import AlertActions from './alertactions';
 import ApplicationsTable from './applicationstable';
@@ -84,8 +87,6 @@ import {
   portsSortFunctions,
   tlsCertificatesSortFunctions,
 } from './sort';
-import {TASK_STATUS} from 'gmp/models/task';
-import TaskIcon from 'web/components/icon/taskicon';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
@@ -180,9 +181,7 @@ const ToolBarIcons = ({
               filter={'report_id=' + report.id}
               title={_('Corresponding Results')}
             >
-              <Icon
-                img="result.svg"
-              />
+              <ResultIcon />
             </Link>
             <Link
               to="vulnerabilities"

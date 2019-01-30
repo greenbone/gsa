@@ -28,6 +28,7 @@ import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
+import ResultIcon from 'web/components/icon/resulticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -122,8 +123,7 @@ let ToolBarIcons = ({
             to="results"
             filter={'nvt=' + entity.id}
           >
-            <Icon
-              img="result.svg"
+            <ResultIcon
               title={_('Corresponding Results')}
             />
           </Link>

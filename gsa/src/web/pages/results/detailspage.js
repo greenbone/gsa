@@ -33,6 +33,7 @@ import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
+import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
 import Divider from 'web/components/layout/divider';
@@ -371,7 +372,7 @@ class Page extends React.Component {
               <EntityPage
                 {...this.props}
                 entity={entity}
-                sectionIcon="result.svg"
+                sectionIcon={<ResultIcon size="large"/>}
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
                 onInteraction={onInteraction}

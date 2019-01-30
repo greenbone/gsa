@@ -44,6 +44,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
+import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
 import Tab from 'web/components/tab/tab';
@@ -236,9 +237,7 @@ const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Results for Task {{name}}', entity)}
           >
-            <Icon
-              img="result.svg"
-            />
+            <ResultIcon />
           </Link>
         </Badge>
 
