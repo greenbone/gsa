@@ -55,6 +55,7 @@ const method_data_fields = [
   'defense_center_ip',
   'defense_center_port',
   'pkcs12',
+  'pkcs12_credential',
   'verinice_server_url',
   'verinice_server_credential',
   'verinice_server_report_format',
