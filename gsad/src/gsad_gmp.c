@@ -7393,7 +7393,8 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
       {
         if (strcmp (name, "defense_center_ip") == 0
             || strcmp (name, "defense_center_port") == 0
-            || strcmp (name, "pkcs12_credential") == 0)
+            || (strcmp (name, "pkcs12_credential") == 0
+                && !str_equal (param->value, "0")))
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,

@@ -37,7 +37,7 @@ import TextField from 'web/components/form/textfield';
 import FileField from 'web/components/form/filefield';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
 const SourcefireMethodPart = ({
@@ -81,7 +81,7 @@ const SourcefireMethodPart = ({
         <Divider>
           <Select
             name={prefix + 'pkcs12_credential'}
-            items={renderSelectItems(credentialOptions)}
+            items={renderSelectItems(credentialOptions, UNSET_VALUE)}
             value={pkcs12Credential}
             onChange={onCredentialChange}
           />

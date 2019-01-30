@@ -670,7 +670,7 @@ class AlertComponent extends React.Component {
           method_data_smb_file_path_type: undefined,
           method_data_verinice_server_report_format: select_verinice_report_id(
             report_formats),
-          method_data_pkcs12_credential: undefined,
+          method_data_pkcs12_credential: UNSET_VALUE,
           method_data_vfire_credential: undefined,
           method_data_vfire_base_url: undefined,
           method_data_vfire_call_description: undefined,
