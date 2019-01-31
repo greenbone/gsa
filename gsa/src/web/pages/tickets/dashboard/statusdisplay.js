@@ -39,7 +39,7 @@ import Theme from 'web/utils/theme';
 
 import {TicketsListLoader} from './loaders';
 
-const taskStatusColorScale = scaleOrdinal()
+const ticketStatusColorScale = scaleOrdinal()
   .domain(Object.values(TICKET_STATUS).sort())
   .range([
     Theme.lightGray, // closed
@@ -62,7 +62,7 @@ const transformStatusData = (tickets = []) => {
       value: count,
       label,
       toolTip: `${label}: ${perc}% (${count})`,
-      color: taskStatusColorScale(value),
+      color: ticketStatusColorScale(value),
       filterValue: value,
     };
   });
