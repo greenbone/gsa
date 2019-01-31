@@ -71,7 +71,7 @@ const Page = ({
     {({
       clone,
       close,
-      delete: deleteticket,
+      delete: deleteTicket,
       edit,
       solve,
     }) => (
@@ -102,7 +102,7 @@ const Page = ({
         onInteraction={onInteraction}
         onTicketClone={clone}
         onTicketClose={close}
-        onTicketDelete={deleteticket}
+        onTicketDelete={deleteTicket}
         onTicketEdit={edit}
         onTicketSolve={solve}
       />
