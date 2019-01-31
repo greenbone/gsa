@@ -110,16 +110,6 @@ const TicketDetails = ({
           <Col width="90%"/>
         </colgroup>
         <TableBody>
-          {entity.isOrphan() &&
-            <TableRow>
-              <TableData>
-                {_('Orphaned')}
-              </TableData>
-              <TableData>
-                {longDate(entity.orphanedTime)}
-              </TableData>
-            </TableRow>
-          }
           {isDefined(entity.openTime) &&
             <React.Fragment>
               <TableRow>
