@@ -38,6 +38,7 @@ import {
   parseProperties,
   parseCvssBaseVector,
   parseCvssBaseFromVector,
+  parseText,
 } from '../parser';
 
 describe('parseInt tests', () => {
@@ -750,6 +751,22 @@ describe('parseCvssBaseFromVector tests', () => {
       integrityImpact: 'COMPLETE',
     });
   });
+});
+
+describe('parseText tests', () => {
+
+  test('should return undefined for undefined', () => {
+    expect(parseText()).toBeUndefined();
+  });
+
+  test('should return string for string', () => {
+    expect(parseText('foo')).toEqual('foo');
+  });
+
+  test('should return __text if set', () => {
+    expect(parseText({__text: 'foo'})).toEqual('foo');
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:
