@@ -22,6 +22,21 @@ import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 import registerCommand from '../command';
+import {isDefined} from 'gmp/utils/identity';
+
+const convertNote = note => {
+  if (!isDefined(note)) {
+    return note;
+  }
+
+  note = note.trim();
+
+  if (note.length === 0) {
+    return undefined;
+  }
+  return note;
+};
+
 
 export class TicketCommand extends EntityCommand {
 
@@ -32,26 +47,26 @@ export class TicketCommand extends EntityCommand {
   create({
     resultId,
     userId,
-    comment,
+    note,
   }) {
     return this.action({
       cmd: 'create_ticket',
       result_id: resultId,
       user_id: userId,
-      comment,
+      note: convertNote(note),
     });
   }
 
   save({
     id,
-    comment,
+    note,
     status,
     userId,
   }) {
     return this.action({
       cmd: 'save_ticket',
       id,
-      comment,
+      note: convertNote(note),
       ticket_status: status,
       user_id: userId,
     });

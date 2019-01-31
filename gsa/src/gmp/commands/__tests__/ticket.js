@@ -26,7 +26,7 @@ import {
 
 describe('TicketCommand tests', () => {
 
-  test('should create new ticket', () => {
+  test('should trim note when creating ticket', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
@@ -37,6 +37,7 @@ describe('TicketCommand tests', () => {
       resultId: 'r1',
       userId: 'u1',
       foo: 'bar',
+      note: ' ',
     }).then(resp => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
@@ -51,7 +52,7 @@ describe('TicketCommand tests', () => {
     });
   });
 
-  test('should create new ticket with comment', () => {
+  test('should create new ticket with note', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
@@ -61,7 +62,7 @@ describe('TicketCommand tests', () => {
     return cmd.create({
       resultId: 'r1',
       userId: 'u1',
-      comment: 'bar',
+      note: 'foo',
       foo: 'bar',
     }).then(resp => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
@@ -69,7 +70,7 @@ describe('TicketCommand tests', () => {
           cmd: 'create_ticket',
           result_id: 'r1',
           user_id: 'u1',
-          comment: 'bar',
+          note: 'foo',
         },
       });
 
@@ -109,14 +110,39 @@ describe('TicketCommand tests', () => {
       id: 'foo',
       status: 'fixed',
       userId: 'u1',
-      comment: 'bar',
+      note: 'bar',
     }).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
           cmd: 'save_ticket',
           ticket_id: 'foo',
           ticket_status: 'fixed',
-          comment: 'bar',
+          note: 'bar',
+          user_id: 'u1',
+        },
+      });
+    });
+  });
+
+  test('should trim note when saveing a ticket', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new TicketCommand(fakeHttp);
+    return cmd.save({
+      id: 'foo',
+      status: 'fixed',
+      userId: 'u1',
+      note: '   bar   ',
+    }).then(() => {
+      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+        data: {
+          cmd: 'save_ticket',
+          ticket_id: 'foo',
+          ticket_status: 'fixed',
+          note: 'bar',
           user_id: 'u1',
         },
       });
