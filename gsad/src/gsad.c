@@ -615,6 +615,7 @@ init_validator ()
   gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
   gvm_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
   gvm_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
+  gvm_validator_add (validator, "note",        "(?s)^(.){1,1000}$");
   gvm_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
@@ -690,7 +691,7 @@ init_validator ()
   gvm_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
   gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
-  gvm_validator_add (validator, "ticket_status", "^(Open|Solved|Closed)$");
+  gvm_validator_add (validator, "ticket_status", "^(Open|Fixed|Closed)$");
   gvm_validator_add (validator, "trend",       "^(0|1)$");
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
   gvm_validator_add (validator, "type",       "^(assets)$");

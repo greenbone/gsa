@@ -21428,15 +21428,16 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const gchar *result_id, *user_id, *comment;
+  const gchar *result_id, *user_id, *note;
   char *ret;
 
   result_id = params_value (params, "result_id");
   user_id = params_value (params, "user_id");
-  comment = params_value (params, "comment");
+  note = params_value (params, "note");
 
   CHECK_VARIABLE_INVALID (result_id, "Create Ticket");
   CHECK_VARIABLE_INVALID (user_id, "Create Ticket");
+  CHECK_VARIABLE_INVALID (note, "Create Ticket")
 
   switch (gmpf (connection, credentials,
                 &response,
@@ -21447,11 +21448,11 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<assigned_to>"
                 "<user id=\"%s\"/>"
                 "</assigned_to>"
-                "<comment>%s</comment>"
+                "<open_note>%s</open_note>"
                 "</create_ticket>",
                 result_id,
                 user_id,
-                comment ? comment : ""
+                note ? note : ""
                ))
     {
       case 0:
@@ -21506,21 +21507,21 @@ create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
  */
 char *
 save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                   params_t *params, cmd_response_data_t* response_data)
+                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response = NULL;
   entity_t entity = NULL;
-  const gchar *ticket_id, *status, *comment, *user_id;
+  const gchar *ticket_id, *status, *note, *user_id;
   gchar *status_comment, *ret;
 
   ticket_id = params_value (params, "ticket_id");
   status = params_value (params, "ticket_status");
-  comment = params_value (params, "comment");
+  note = params_value (params, "note");
   user_id = params_value (params, "user_id");
 
   CHECK_VARIABLE_INVALID (ticket_id, "Save Ticket");
   CHECK_VARIABLE_INVALID (status, "Save Ticket");
-  CHECK_VARIABLE_INVALID (comment, "Save Ticket");
+  CHECK_VARIABLE_INVALID (note, "Save Ticket");
   CHECK_VARIABLE_INVALID (user_id, "Save Ticket");
 
   status_comment = g_ascii_strdown (status, -1);
@@ -21532,13 +21533,13 @@ save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
                 "<modify_ticket ticket_id=\"%s\">"
                 "<assigned_to><user id=\"%s\"/></assigned_to>"
                 "<status>%s</status>"
-                "<%s_comment>%s</%s_comment>"
+                "<%s_note>%s</%s_note>"
                 "</modify_ticket>",
                 ticket_id,
                 user_id,
                 status,
                 status_comment,
-                comment,
+                note,
                 status_comment
                ))
     {
