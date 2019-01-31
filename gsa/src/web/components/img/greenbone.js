@@ -21,25 +21,16 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import Img from './img';
 
-import Icon from './icon';
+const GreenboneLogo = props => (
+  <Img
+    alt={_('Greenbone Security Assistant')}
+    {...props}
+    src="greenbone.svg"
+  />
+);
 
-const GreenboneIcon = ({size = 'default', ...props}) => {
-  return (
-    <Icon
-      {...props}
-      size={size}
-      alt={_('Greenbone Security Assistant')}
-      img="greenbone.svg"
-    />
-  );
-};
-
-GreenboneIcon.propTypes = {
-  size: PropTypes.iconSize,
-};
-
-export default GreenboneIcon;
+export default GreenboneLogo;
 
 // vim: set ts=2 sw=2 tw=80:

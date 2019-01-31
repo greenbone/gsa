@@ -18,10 +18,16 @@
  */
 import React from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 
-import GBIcon from 'web/components/icon/greenboneicon';
+import Logo from 'web/components/img/greenbone';
 import Divider from 'web/components/layout/divider';
+
+const StyledLogo = styled(Logo)`
+  width: 300px;
+`;
 
 const PageNotFound = () => (
   <Divider
@@ -30,7 +36,7 @@ const PageNotFound = () => (
     grow
   >
     <h1>{_('Page Not Found.')}</h1>
-    <GBIcon size="large"/>
+    <StyledLogo/>
     <p>{_('We are sorry. The page you have requested could not be found.')}</p>
   </Divider>
 );

@@ -36,7 +36,7 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
-import GBIcon from 'web/components/icon/greenboneicon';
+import Logo from 'web/components/img/greenbone';
 
 import Layout from 'web/components/layout/layout';
 
@@ -53,7 +53,7 @@ import LoginForm from './loginform';
 
 const log = logger.getLogger('web.login');
 
-const GreenboneIcon = styled(GBIcon)`
+const GreenboneLogo = styled(Logo)`
   width: 30vh;
   margin: 30px auto;
   position: sticky;
@@ -158,7 +158,7 @@ class LoginPage extends React.Component {
         <LoginHeader/>
         <MenuSpacer/>
         <LoginLayout flex="column" className="login">
-          <GreenboneIcon/>
+          <GreenboneLogo/>
           <Wrapper>
             <LoginForm
               error={message}

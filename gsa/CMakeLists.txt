@@ -280,7 +280,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/firsticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/lasticon.js
@@ -342,6 +341,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
+     ${GSA_SRC_DIR}/src/web/components/img/greenbone.js
      ${GSA_SRC_DIR}/src/web/components/img/img.js
      ${GSA_SRC_DIR}/src/web/components/label/severityclass.js
      ${GSA_SRC_DIR}/src/web/components/layout/divider.js

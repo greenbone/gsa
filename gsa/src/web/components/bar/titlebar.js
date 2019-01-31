@@ -25,7 +25,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import GBIcon from 'web/components/icon/greenboneicon';
+import Logo from 'web/components/img/greenbone';
 import Img from 'web/components/img/img';
 
 import Divider from 'web/components/layout/divider';
@@ -49,7 +49,7 @@ const LogoutLink = styled.a`
   };
 `;
 
-const GreenboneIcon = styled(GBIcon)`
+const GreenboneIcon = styled(Logo)`
   width: 40px;
   height: 40px;
   margin-right: 4px;
@@ -57,15 +57,7 @@ const GreenboneIcon = styled(GBIcon)`
   margin-bottom: 1px;
 `;
 
-const GsaIconComponent = props => (
-  <Img
-    {...props}
-    src="gsa.svg"
-    alt={_('Greenbone Security Assistant')}
-  />
-);
-
-const GsaIcon = styled(GsaIconComponent)`
+const GsaIcon = styled(Img)`
   height: 40px;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -74,7 +66,10 @@ const GsaIcon = styled(GsaIconComponent)`
 const Greenbone = () => (
   <Layout>
     <GreenboneIcon/>
-    <GsaIcon/>
+    <GsaIcon
+      src="gsa.svg"
+      alt={_('Greenbone Security Assistant')}
+    />
   </Layout>
 );
 
