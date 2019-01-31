@@ -20,20 +20,25 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import NewIcon from 'web/components/icon/newicon';
 
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
 
-const NewIcon = ({
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+const NewIconMenu = ({
   capabilities,
   onNewClick,
   onNewContainerClick,
 }) => {
   if (capabilities.mayCreate('task')) {
     return (
-      <IconMenu img="new.svg" onClick={onNewClick}>
+      <IconMenu
+        icon={<NewIcon/>}
+        onClick={onNewClick}
+      >
         <MenuEntry
           title={_('New Task')}
           onClick={onNewClick}
@@ -48,12 +53,12 @@ const NewIcon = ({
   return null;
 };
 
-NewIcon.propTypes = {
+NewIconMenu.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   onNewClick: PropTypes.func,
   onNewContainerClick: PropTypes.func,
 };
 
-export default withCapabilities(NewIcon);
+export default withCapabilities(NewIconMenu);
 
 // vim: set ts=2 sw=2 tw=80:
