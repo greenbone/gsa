@@ -28,7 +28,7 @@ import Model from '../model';
 export const TICKET_STATUS = {
   open: 'Open',
   fixed: 'Fixed',
-  verified: 'Fixed Verified',
+  verified: 'Fix Verified',
   closed: 'Closed',
 };
 
