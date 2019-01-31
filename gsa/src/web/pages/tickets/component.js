@@ -49,7 +49,7 @@ class TicketComponent extends React.Component {
 
     this.state = {
       createDialogVisible: false,
-      solvedDialogVisible: false,
+      editDialogVisible: false,
     };
 
     this.closeEditDialog = this.closeEditDialog.bind(this);
