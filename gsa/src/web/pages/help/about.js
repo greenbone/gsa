@@ -24,9 +24,12 @@ import _ from 'gmp/locale';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import HelpIcon from 'web/components/icon/helpicon';
+
+import Img from 'web/components/img/img';
+
 import ExternalLink from 'web/components/link/externallink';
 import ProtocolDocLink from 'web/components/link/protocoldoclink';
-import Img from 'web/components/img/img';
 
 import Layout from 'web/components/layout/layout';
 import Section from 'web/components/section/section';
@@ -58,7 +61,7 @@ const About = () => (
   <ErrorBoundary errElement={_('page')}>
     <Layout flex="column">
       <Section
-        img="help.svg"
+        img={<HelpIcon size="large"/>}
         title={_('About GSA')}
       >
         <StyledLayout

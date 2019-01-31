@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -19,38 +19,18 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import SvgIcon from './svgicon';
 
-import ManualLink from 'web/components/link/manuallink';
+import {ReactComponent as Icon} from './svg/help.svg';
 
-import HelpIcon from './helpicon';
+const HelpIcon = props => (
+  <SvgIcon
+    {...props}
+  >
+    <Icon/>
+  </SvgIcon>
+);
 
-const ManualIcon = ({
-  anchor,
-  page,
-  searchTerm,
-  ...props
-}) => {
-  return (
-    <ManualLink
-      anchor={anchor}
-      page={page}
-      searchTerm={searchTerm}
-    >
-      <HelpIcon
-        {...props}
-      />
-    </ManualLink>
-  );
-};
-
-ManualIcon.propTypes = {
-  anchor: PropTypes.string,
-  page: PropTypes.string.isRequired,
-  searchTerm: PropTypes.string,
-  title: PropTypes.string.isRequired,
-};
-
-export default ManualIcon;
+export default HelpIcon;
 
 // vim: set ts=2 sw=2 tw=80:
