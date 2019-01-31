@@ -26,9 +26,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/trashcan.svg';
+
+const TrashCanIcon = withSvgIcon()(Icon);
 
 const TrashIcon = ({
   selectionType,
@@ -47,12 +49,10 @@ const TrashIcon = ({
     }
   }
   return (
-    <SvgIcon
+    <TrashCanIcon
       {...other}
       title={title}
-    >
-      <Icon/>
-    </SvgIcon>
+    />
   );
 };
 

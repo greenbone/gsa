@@ -25,9 +25,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/export.svg';
+
+const ExportSvgIcon = withSvgIcon()(Icon);
 
 const ExportIcon = ({
   selectionType,
@@ -45,12 +47,10 @@ const ExportIcon = ({
     download_title = _('Export all filtered');
   }
   return (
-    <SvgIcon
+    <ExportSvgIcon
       {...other}
       title={download_title}
-    >
-      <Icon/>
-    </SvgIcon>
+    />
   );
 };
 

@@ -16,23 +16,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import {_} from 'gmp/locale/lang';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/dl_csv.svg';
 
-const DownloadCsvIcon = props => (
-  <SvgIcon
-    title={_('Download CSV')}
-    {...props}
-  >
-    <Icon/>
-  </SvgIcon>
-);
+const DownloadCsvIcon = withSvgIcon({
+  title: _('Download CSV'),
+})(Icon);
 
 export default DownloadCsvIcon;
 

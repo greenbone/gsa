@@ -16,23 +16,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-import React from 'react';
-
 import {_} from 'gmp/locale/lang';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/dl_exe.svg';
 
-const DownloadExeIcon = props => (
-  <SvgIcon
-    title={_('Download Windows Executable (.exe)')}
-    {...props}
-  >
-    <Icon/>
-  </SvgIcon>
-);
+const DownloadExeIcon = withSvgIcon({
+  title: _('Download Windows Executable (.exe)'),
+})(Icon);
 
 export default DownloadExeIcon;
 
