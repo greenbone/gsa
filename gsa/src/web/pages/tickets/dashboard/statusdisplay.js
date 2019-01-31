@@ -44,8 +44,8 @@ const ticketStatusColorScale = scaleOrdinal()
   .range([
     Theme.lightGray, // closed
     '#f0a519', // fixed
+    '#2ca02c', // fix verified
     Theme.warningRed, // open
-    '#2ca02c', // verified
   ]);
 
 const transformStatusData = (tickets = []) => {
