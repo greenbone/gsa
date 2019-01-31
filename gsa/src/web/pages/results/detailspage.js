@@ -24,6 +24,8 @@ import {MANUAL, TASK_SELECTED, RESULT_UUID} from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Badge from 'web/components/badge/badge';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -31,10 +33,12 @@ import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
 import NewOverrideIcon from 'web/components/icon/newoverrideicon';
+import NewTicketIcon from 'web/components/icon/newticketicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
+import TicketIcon from 'web/components/icon/ticketicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -42,6 +46,7 @@ import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 import InnerLink from 'web/components/link/innerlink';
+import Link from 'web/components/link/link';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -79,7 +84,6 @@ import OverrideComponent from '../overrides/component';
 import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
-import NewTicketIcon from 'web/components/icon/newticketicon';
 
 let ToolBarIcons = ({
   capabilities,
@@ -149,6 +153,19 @@ let ToolBarIcons = ({
             title={_('Corresponding Report')}
           />
         </DetailsLink>
+      }
+      {capabilities.mayAccess('tickets') && entity.tickets.length > 0 &&
+        <Link
+          to="tickets"
+          filter={'result_id=' + entity.id}
+          title={_('Corresponding Tickets')}
+        >
+          <Badge
+            content={entity.tickets.length}
+          >
+            <TicketIcon/>
+          </Badge>
+        </Link>
       }
     </IconDivider>
   </Divider>
