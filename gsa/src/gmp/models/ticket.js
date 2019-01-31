@@ -18,7 +18,7 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseSeverity, parseDate, parseText} from 'gmp/parser';
 
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -27,8 +27,8 @@ import Model from '../model';
 
 export const TICKET_STATUS = {
   open: 'Open',
-  fixed: 'Solved',
-  verified: 'Confirmed',
+  fixed: 'Fixed',
+  verified: 'Fixed Verified',
   closed: 'Closed',
 };
 
@@ -75,10 +75,10 @@ class Ticket extends Model {
       delete ret.task;
     }
 
-    if (isModelElement(elem.confirmed_report)) {
-      ret.confirmedReport = new Model(elem.confirmed_report, 'report');
+    if (isModelElement(elem.fix_verified_report)) {
+      ret.fixVerifiedReport = new Model(elem.fix_verified_report, 'report');
     }
-    delete ret.confirmed_report;
+    delete ret.fix_verified_report;
 
     if (isDefined(elem.severity)) {
       ret.severity = parseSeverity(elem.severity);
@@ -93,38 +93,41 @@ class Ticket extends Model {
     }
     delete ret.open_time;
 
-    if (!isEmpty(elem.confirmed_time)) {
-      ret.confirmedTime = parseDate(elem.confirmed_time);
+    if (!isEmpty(elem.fix_verified_time)) {
+      ret.fixVerifiedTime = parseDate(elem.fix_verified_time);
     }
-    delete ret.confirmed_time;
+    delete ret.fix_verified_time;
 
-    if (!isEmpty(elem.solved_time)) {
-      ret.solvedTime = parseDate(elem.solved_time);
+    if (!isEmpty(elem.fixed_time)) {
+      ret.fixedTime = parseDate(elem.fixed_time);
     }
-    delete ret.solved_time;
+    delete ret.fixed_time;
 
     if (!isEmpty(elem.closed_time)) {
       ret.closedTime = parseDate(elem.closed_time);
     }
     delete ret.closed_time;
 
-    if (!isEmpty(elem.orphaned_time)) {
-      ret.orphanedTime = parseDate(elem.orphaned_time);
-    }
-    delete ret.orphaned_time;
-
     ret.solutionType = elem.solution_type;
     delete ret.solution_type;
 
-    if (!isEmpty(elem.closed_comment)) {
-      ret.closedComment = elem.closed_comment;
+    const openNote = parseText(elem.open_note);
+    if (!isEmpty(openNote)) {
+      ret.openNote = openNote;
     }
-    delete ret.closed_comment;
+    delete ret.open_note;
 
-    if (!isEmpty(elem.solved_comment)) {
-      ret.solvedComment = elem.solved_comment;
+    const closedNote = parseText(elem.closed_note);
+    if (!isEmpty(closedNote)) {
+      ret.closedNote = closedNote;
     }
-    delete ret.solved_comment;
+    delete ret.closed_note;
+
+    const fixedNote = parseText(ret.fixed_note);
+    if (!isEmpty(fixedNote)) {
+      ret.fixedNote = fixedNote;
+    }
+    delete ret.fixed_note;
 
     return ret;
   }

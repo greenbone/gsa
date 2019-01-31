@@ -68,13 +68,13 @@ describe('Additional Ticket Model tests', () => {
 
   test('should parse confirmedReport', () => {
     let ticket = new Ticket({});
-    expect(ticket.confirmedReport).toBeUndefined();
-    expect(ticket.confirmed_report).toBeUndefined();
+    expect(ticket.fixVerifiedReport).toBeUndefined();
+    expect(ticket.fix_verified_report).toBeUndefined();
 
-    ticket = new Ticket({confirmed_report: {_id: 'foo'}});
-    expect(ticket.confirmedReport).toBeDefined();
-    expect(ticket.confirmed_report).toBeUndefined();
-    expect(ticket.confirmedReport.id).toEqual('foo');
+    ticket = new Ticket({fix_verified_report: {_id: 'foo'}});
+    expect(ticket.fixVerifiedReport).toBeDefined();
+    expect(ticket.fix_verified_report).toBeUndefined();
+    expect(ticket.fixVerifiedReport.id).toEqual('foo');
   });
 
   test('should parse severity', () => {
@@ -100,20 +100,20 @@ describe('Additional Ticket Model tests', () => {
     expect(isDate(ticket.openTime)).toBe(true);
   });
 
-  test('should parse confirmedTime', () => {
-    const ticket = new Ticket({confirmed_time: '2019-01-01T12:00:00Z'});
+  test('should parse fixVerifiedTime', () => {
+    const ticket = new Ticket({fix_verified_time: '2019-01-01T12:00:00Z'});
 
-    expect(ticket.confirmed_time).toBeUndefined();
-    expect(ticket.confirmedTime).toBeDefined();
-    expect(isDate(ticket.confirmedTime)).toBe(true);
+    expect(ticket.fix_verified_time).toBeUndefined();
+    expect(ticket.fixVerifiedTime).toBeDefined();
+    expect(isDate(ticket.fixVerifiedTime)).toBe(true);
   });
 
-  test('should parse solvedTime', () => {
-    const ticket = new Ticket({solved_time: '2019-01-01T12:00:00Z'});
+  test('should parse fixedTime', () => {
+    const ticket = new Ticket({fixed_time: '2019-01-01T12:00:00Z'});
 
-    expect(ticket.solved_time).toBeUndefined();
-    expect(ticket.solvedTime).toBeDefined();
-    expect(isDate(ticket.solvedTime)).toBe(true);
+    expect(ticket.fixed_time).toBeUndefined();
+    expect(ticket.fixedTime).toBeDefined();
+    expect(isDate(ticket.fixedTime)).toBe(true);
   });
 
   test('should parse closedTime', () => {
@@ -124,14 +124,6 @@ describe('Additional Ticket Model tests', () => {
     expect(isDate(ticket.closedTime)).toBe(true);
   });
 
-  test('should parse orphanedTime', () => {
-    const ticket = new Ticket({orphaned_time: '2019-01-01T12:00:00Z'});
-
-    expect(ticket.orphaned_time).toBeUndefined();
-    expect(ticket.orphanedTime).toBeDefined();
-    expect(isDate(ticket.orphanedTime)).toBe(true);
-  });
-
   test('should parse solutionType', () => {
     const ticket = new Ticket({solution_type: 'foo'});
 
@@ -140,15 +132,37 @@ describe('Additional Ticket Model tests', () => {
     expect(ticket.solutionType).toEqual('foo');
   });
 
-  test('should parse closedComment', () => {
-    let ticket = new Ticket({closed_comment: ''});
-    expect(ticket.closed_comment).toBeUndefined();
-    expect(ticket.closedComment).toBeUndefined();
+  test('should parse openNote', () => {
+    let ticket = new Ticket({open_note: ''});
+    expect(ticket.open_note).toBeUndefined();
+    expect(ticket.openNote).toBeUndefined();
 
-    ticket = new Ticket({closed_comment: 'foo'});
-    expect(ticket.closed_comment).toBeUndefined();
-    expect(ticket.closedComment).toBeDefined();
-    expect(ticket.closedComment).toEqual('foo');
+    ticket = new Ticket({open_note: 'foo'});
+    expect(ticket.open_note).toBeUndefined();
+    expect(ticket.openNote).toBeDefined();
+    expect(ticket.openNote).toEqual('foo');
+  });
+
+  test('should parse fixedNote', () => {
+    let ticket = new Ticket({fixed_note: ''});
+    expect(ticket.fixed_note).toBeUndefined();
+    expect(ticket.fixedNote).toBeUndefined();
+
+    ticket = new Ticket({fixed_note: 'foo'});
+    expect(ticket.fixed_note).toBeUndefined();
+    expect(ticket.fixedNote).toBeDefined();
+    expect(ticket.fixedNote).toEqual('foo');
+  });
+
+  test('should parse closedNote', () => {
+    let ticket = new Ticket({closed_note: ''});
+    expect(ticket.closed_note).toBeUndefined();
+    expect(ticket.closedNote).toBeUndefined();
+
+    ticket = new Ticket({closed_note: 'foo'});
+    expect(ticket.closed_note).toBeUndefined();
+    expect(ticket.closedNote).toBeDefined();
+    expect(ticket.closedNote).toEqual('foo');
   });
 
 });
