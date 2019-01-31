@@ -29,7 +29,11 @@ import SvgIcon from './svgicon';
 
 import {ReactComponent as Icon} from './svg/export.svg';
 
-export const ExportIcon = ({selectionType, title, ...other}) => {
+const ExportIcon = ({
+  selectionType,
+  title,
+  ...other
+}) => {
   let download_title = title;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     download_title = _('Export page contents');
