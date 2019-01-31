@@ -273,6 +273,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadcsvicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloaddebicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadexeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadkeyicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/feedicon.js
@@ -316,6 +322,12 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_csv.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_deb.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_exe.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_key.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_rpm.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
