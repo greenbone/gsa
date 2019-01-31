@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,14 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import withSvgIcon from './withSvgIcon';
+import {testIcon} from 'web/components/icon/testing';
 
-import {ReactComponent as Icon} from './svg/restore.svg';
+import RestoreIcon from '../restoreicon';
 
-const RestoreIcon = withSvgIcon({
-  active: true,
-})(Icon);
-
-export default RestoreIcon;
+describe('RestoreIcon component tests', () => {
+  testIcon(RestoreIcon);
+});
 
 // vim: set ts=2 sw=2 tw=80:

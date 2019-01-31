@@ -302,6 +302,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reseticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/resulticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
@@ -349,6 +350,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/reset.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/result.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/restore.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
