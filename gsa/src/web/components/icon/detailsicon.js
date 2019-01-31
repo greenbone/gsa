@@ -22,11 +22,11 @@ import SvgIcon from './svgicon';
 
 import {ReactComponent as Icon} from './svg/details.svg';
 
-const DetialsIcon = props => (
+const DetailsIcon = props => (
   <SvgIcon {...props}>
     <Icon/>
   </SvgIcon>
 
 );
 
-export default DetialsIcon;
+export default DetailsIcon;
