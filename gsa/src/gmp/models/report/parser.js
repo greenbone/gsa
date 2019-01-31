@@ -21,33 +21,33 @@ import 'core-js/fn/object/values';
 import 'core-js/fn/string/includes';
 import 'core-js/fn/string/starts-with';
 
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 import {
   filter as filter_func,
   forEach,
   map,
-} from '../../utils/array';
+} from 'gmp/utils/array';
 
-import {parseSeverity, parseDate} from '../../parser.js';
+import {parseSeverity, parseDate} from 'gmp/parser';
 
 import {
   parseCollectionList,
   parseFilter,
   parseReportResultEntities,
-} from '../../collection/parser.js';
+} from 'gmp/collection/parser';
 
-import CollectionCounts from '../../collection/collectioncounts.js';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import App from './app.js';
-import Cve from './cve.js';
-import Host from './host.js';
-import OperatingSystem from './os.js';
-import Port from './port.js';
-import TLSCertificate from './tlscertificate.js';
-import Vulerability from './vulnerability.js';
+import App from './app';
+import Cve from './cve';
+import Host from './host';
+import OperatingSystem from './os';
+import Port from './port';
+import TLSCertificate from './tlscertificate';
+import Vulerability from './vulnerability';
 
-import Result from '../result.js';
+import Result from '../result';
 
 const empty_collection_list = filter => {
   return {
@@ -511,7 +511,11 @@ export const parse_results = (report, filter) => {
   const {results} = report;
 
   if (!isDefined(results)) {
-    return empty_collection_list(filter);
+    return undefined;
+    // instead of returning empty_collection_list(filter) we return an undefined
+    // in order to query if results have been loaded and make a difference to
+    // "loaded, but 0 total". This is used for showing the Loading indicator at
+    // the report details
   }
 
   return parseCollectionList(report, 'result', Result, {
@@ -705,4 +709,3 @@ export const parse_cves = (report, filter) => {
 };
 
 // vim: set ts=2 sw=2 tw=80:
-
