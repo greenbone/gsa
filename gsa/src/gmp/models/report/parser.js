@@ -511,7 +511,11 @@ export const parse_results = (report, filter) => {
   const {results} = report;
 
   if (!isDefined(results)) {
-    return empty_collection_list(filter);
+    return undefined;
+    // instead of returning empty_collection_list(filter) we return an undefined
+    // in order to query if results have been loaded and make a diffence to
+    // "loaded, but 0 total". This is used for showing the Loading indicator at
+    // the report details
   }
 
   return parseCollectionList(report, 'result', Result, {
@@ -705,4 +709,3 @@ export const parse_cves = (report, filter) => {
 };
 
 // vim: set ts=2 sw=2 tw=80:
-
