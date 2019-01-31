@@ -62,9 +62,9 @@ const CreateTicketDialog = ({
             onChange={onUserIdChange}
           />
         </FormGroup>
-        <FormGroup title={_('Comment')}>
+        <FormGroup title={_('Note')}>
           <TextArea
-            name="comment"
+            name="note"
             grow="1"
             rows="5"
             value={values.comment}

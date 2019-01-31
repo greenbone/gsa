@@ -122,46 +122,46 @@ const TicketDetails = ({
               </TableRow>
               <TableRow>
                 <TableData>
-                  {_('With Comment')}
+                  {_('With Note')}
                 </TableData>
                 <TableData>
                   <Comment>
-                    {entity.openComment}
+                    {entity.openNote}
                   </Comment>
                 </TableData>
               </TableRow>
             </React.Fragment>
           }
-          {isDefined(entity.solvedTime) &&
+          {isDefined(entity.fixedTime) &&
             <React.Fragment>
               <TableRow>
                 <TableData>
                   {_('Fixed')}
                 </TableData>
                 <TableData>
-                  {longDate(entity.solvedTime)}
+                  {longDate(entity.fixedTime)}
                 </TableData>
               </TableRow>
               <TableRow>
                 <TableData>
-                  {_('With Comment')}
+                  {_('With Note')}
                 </TableData>
                 <TableData>
                   <Comment>
-                    {entity.solvedComment}
+                    {entity.fixedNote}
                   </Comment>
                 </TableData>
               </TableRow>
             </React.Fragment>
           }
-          {isDefined(entity.confirmedTime) &&
+          {isDefined(entity.fixedVerifiedTime) &&
             <React.Fragment>
               <TableRow>
                 <TableData>
                   {_('Fix Verified')}
                 </TableData>
                 <TableData>
-                  {longDate(entity.confirmedTime)}
+                  {longDate(entity.fixedVerifiedTime)}
                 </TableData>
               </TableRow>
               <TableRow>
@@ -171,10 +171,10 @@ const TicketDetails = ({
                 <TableData>
                   <DetailsLink
                     type="report"
-                    id={entity.confirmedReport.id}
+                    id={entity.fixedVerifiedReport.id}
                     textOnly={!links}
                   >
-                    {longDate(entity.confirmedReport.timestamp)}
+                    {longDate(entity.fixedVerifiedReport.timestamp)}
                   </DetailsLink>
                 </TableData>
               </TableRow>
@@ -192,11 +192,11 @@ const TicketDetails = ({
               </TableRow>
               <TableRow>
                 <TableData>
-                  {_('With Comment')}
+                  {_('With Note')}
                 </TableData>
                 <TableData>
                   <Comment>
-                    {entity.closedComment}
+                    {entity.closedNote}
                   </Comment>
                 </TableData>
               </TableRow>

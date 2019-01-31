@@ -195,7 +195,7 @@ class TicketComponent extends React.Component {
                 users={users}
                 onClose={this.handleCloseEditDialog}
                 onSave={({
-                  comment,
+                  note,
                   status,
                   ticketId,
                   userId, // eslint-disable-line no-shadow
@@ -203,7 +203,7 @@ class TicketComponent extends React.Component {
                   this.handleInteraction();
                   return save({
                     id: ticketId,
-                    comment,
+                    note,
                     status,
                     userId,
                   }).then(this.closeEditDialog);

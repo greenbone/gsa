@@ -61,6 +61,7 @@ const EditTicketDialog = ({
       ticketId,
     }}
     defaultValues={{
+      note: '',
       status,
       userId,
     }}
@@ -86,12 +87,12 @@ const EditTicketDialog = ({
             onChange={onValueChange}
           />
         </FormGroup>
-        <FormGroup title={_('Comment')}>
+        <FormGroup title={_('Note for Status Change')}>
           <TextArea
-            name="comment"
+            name="note"
             grow="1"
             rows="5"
-            value={values.comment}
+            value={values.note}
             onChange={onValueChange}
           />
         </FormGroup>
