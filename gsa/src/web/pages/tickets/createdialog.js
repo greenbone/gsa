@@ -80,7 +80,7 @@ CreateTicketDialog.propTypes = {
   resultId: PropTypes.id,
   title: PropTypes.toString,
   userId: PropTypes.id,
-  users: PropTypes.arrayOf(PropTypes.mdoel),
+  users: PropTypes.arrayOf(PropTypes.model),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onUserIdChange: PropTypes.func.isRequired,
