@@ -343,6 +343,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
      ${GSA_SRC_DIR}/src/web/components/img/greenbone.js
      ${GSA_SRC_DIR}/src/web/components/img/img.js
+     ${GSA_SRC_DIR}/src/web/components/img/product.js
      ${GSA_SRC_DIR}/src/web/components/label/severityclass.js
      ${GSA_SRC_DIR}/src/web/components/layout/divider.js
      ${GSA_SRC_DIR}/src/web/components/layout/icondivider.js
