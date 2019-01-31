@@ -29,12 +29,13 @@ import {
 import Radio from 'web/components/form/radio';
 
 import PropTypes from 'web/utils/proptypes';
+import Divider from 'web/components/layout/divider';
 
 const TicketEventPart = ({
   event,
   onEventChange,
 }) => (
-  <React.Fragment>
+  <Divider>
     <Radio
       title={_('Ticket Received')}
       name="event"
@@ -56,7 +57,7 @@ const TicketEventPart = ({
       checked={event === EVENT_TYPE_OWNED_TICKET_CHANGED}
       onChange={onEventChange}
     />
-  </React.Fragment>
+  </Divider>
 );
 
 TicketEventPart.propTypes = {
