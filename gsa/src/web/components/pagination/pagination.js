@@ -26,7 +26,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import FirstIcon from 'web/components/icon/firsticon';
+import LastIcon from 'web/components/icon/lasticon';
+import NextIcon from 'web/components/icon/nexticon';
+import PreviousIcon from 'web/components/icon/previousicon';
 
 import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
@@ -37,12 +40,12 @@ const PaginationText = styled.span`
 
 const PaginationLayout = styled(Layout)`
   margin: 2px 3px;
-`;
 
-const NavigationIcon = styled(Icon)`
   @media print {
-    display: none;
-  };
+    svg {
+      display: none;
+    }
+  }
 `;
 
 const Pagination = ({
@@ -63,15 +66,13 @@ const Pagination = ({
       align={['end', 'center']}
     >
       <IconDivider>
-        <NavigationIcon
+        <FirstIcon
           active={counts.hasPrevious()}
-          img="first.svg"
           title={_('First')}
           onClick={onFirstClick}
         />
-        <NavigationIcon
+        <PreviousIcon
           active={counts.hasPrevious()}
-          img="previous.svg"
           title={_('Previous')}
           onClick={onPreviousClick}
         />
@@ -80,15 +81,13 @@ const Pagination = ({
         {_('{{first}} - {{last}} of {{filtered}}', counts)}
       </PaginationText>
       <IconDivider>
-        <NavigationIcon
+        <NextIcon
           active={counts.hasNext()}
-          img="next.svg"
           title={_('Next')}
           onClick={onNextClick}
         />
-        <NavigationIcon
+        <LastIcon
           active={counts.hasNext()}
-          img="last.svg"
           title={_('Last')}
           onClick={onLastClick}
         />

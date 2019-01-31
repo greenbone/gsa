@@ -273,48 +273,94 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadcsvicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloaddebicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadexeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadkeyicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/feedicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/filtericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/firsticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/greenboneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/helpicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/lasticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/reseticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/resulticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/resumeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
+     ${GSA_SRC_DIR}/src/web/components/icon/withSvgIcon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_csv.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_deb.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_exe.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_key.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_rpm.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/refresh.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/reset.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/result.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/restore.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
+     ${GSA_SRC_DIR}/src/web/components/img/greenbone.js
      ${GSA_SRC_DIR}/src/web/components/img/img.js
+     ${GSA_SRC_DIR}/src/web/components/img/product.js
      ${GSA_SRC_DIR}/src/web/components/label/severityclass.js
      ${GSA_SRC_DIR}/src/web/components/layout/divider.js
      ${GSA_SRC_DIR}/src/web/components/layout/icondivider.js

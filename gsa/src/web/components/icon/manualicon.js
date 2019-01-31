@@ -23,13 +23,12 @@ import PropTypes from 'web/utils/proptypes';
 
 import ManualLink from 'web/components/link/manuallink';
 
-import Icon from './icon';
+import HelpIcon from './helpicon';
 
 const ManualIcon = ({
   anchor,
   page,
   searchTerm,
-  title,
   ...props
 }) => {
   return (
@@ -38,10 +37,8 @@ const ManualIcon = ({
       page={page}
       searchTerm={searchTerm}
     >
-      <Icon
+      <HelpIcon
         {...props}
-        img="help.svg"
-        title={title}
       />
     </ManualLink>
   );

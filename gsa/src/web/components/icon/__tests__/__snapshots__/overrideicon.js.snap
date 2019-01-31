@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OverrideIcon component tests overrideIcon tests should render 1`] = `
+exports[`OverrideIcon component tests should render 1`] = `
 .c0 {
   height: 16px;
   width: 16px;

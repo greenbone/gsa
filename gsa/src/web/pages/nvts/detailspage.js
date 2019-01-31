@@ -23,9 +23,12 @@ import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewNoteIcon from 'web/components/icon/newnoteicon';
+import NewOverrideIcon from 'web/components/icon/newoverrideicon';
+import ResultIcon from 'web/components/icon/resulticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -99,16 +102,14 @@ let ToolBarIcons = ({
 
       <IconDivider>
         {capabilities.mayCreate('note') &&
-          <Icon
-            img="new_note.svg"
+          <NewNoteIcon
             title={_('Add new Note')}
             value={entity}
             onClick={onNoteCreateClick}
           />
         }
         {capabilities.mayCreate('override') &&
-          <Icon
-            img="new_override.svg"
+          <NewOverrideIcon
             title={_('Add new Override')}
             value={entity}
             onClick={onOverrideCreateClick}
@@ -122,8 +123,7 @@ let ToolBarIcons = ({
             to="results"
             filter={'nvt=' + entity.id}
           >
-            <Icon
-              img="result.svg"
+            <ResultIcon
               title={_('Corresponding Results')}
             />
           </Link>

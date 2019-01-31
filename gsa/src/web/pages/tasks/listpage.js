@@ -50,6 +50,7 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
+import TaskIcon from 'web/components/icon/taskicon';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -172,7 +173,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
-        sectionIcon="task.svg"
+        sectionIcon={<TaskIcon size="large"/>}
         table={Table}
         title={_('Tasks')}
         toolBarIcons={ToolBarIcons}

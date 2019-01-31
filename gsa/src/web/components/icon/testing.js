@@ -24,25 +24,23 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import {ICON_SIZE_SMALL_PIXELS} from './withIconSize';
 
-export const testIcon = (Icon, type) => {
-  describe(`${type}Icon tests`, () => {
-    test('should render', () => {
-      const {element} = render(<Icon/>);
+export const testIcon = Icon => {
+  test('should render', () => {
+    const {element} = render(<Icon/>);
 
-      expect(element).toMatchSnapshot();
+    expect(element).toMatchSnapshot();
 
-      expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
-      expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
-    });
+    expect(element).toHaveStyleRule('width', ICON_SIZE_SMALL_PIXELS);
+    expect(element).toHaveStyleRule('height', ICON_SIZE_SMALL_PIXELS);
+  });
 
-    test('should handle click', () => {
-      const handler = jest.fn();
-      const {element} = render(<Icon onClick={handler} value="1"/>);
+  test('should handle click', () => {
+    const handler = jest.fn();
+    const {element} = render(<Icon onClick={handler} value="1"/>);
 
-      fireEvent.click(element);
+    fireEvent.click(element);
 
-      expect(handler).toHaveBeenCalledWith('1');
-    });
+    expect(handler).toHaveBeenCalledWith('1');
   });
 };
 

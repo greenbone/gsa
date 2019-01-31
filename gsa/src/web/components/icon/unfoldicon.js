@@ -16,19 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import withSvgIcon from './withSvgIcon';
 
-import SvgIcon from './svgicon';
+import {ReactComponent as Icon} from './svg/unfold.svg';
 
-import {ReactComponent as UnfoldSvg} from './svg/unfold.svg';
-
-const UnfoldIcon = props => (
-  <SvgIcon
-    {...props}
-  >
-    <UnfoldSvg/>
-  </SvgIcon>
-);
+const UnfoldIcon = withSvgIcon()(Icon);
 
 export default UnfoldIcon;
 

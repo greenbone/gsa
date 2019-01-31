@@ -27,10 +27,10 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import OsIcon from 'web/components/icon/osicon';
+import ResultIcon from 'web/components/icon/resulticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -134,9 +134,7 @@ const ToolBarIcons = ({
           filter={'host=' + entity.name}
           title={_('Results for this Host')}
         >
-          <Icon
-            img="result.svg"
-          />
+          <ResultIcon />
         </Link>
       </IconDivider>
     </Divider>

@@ -30,7 +30,10 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import DownloadExeIcon from 'web/components/icon/downloadexeicon';
+import DownloadDebIcon from 'web/components/icon/downloaddebicon';
+import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
+import DownloadRpmIcon from 'web/components/icon/downloadrpmicon';
 
 const CredentialDownloadIcon = ({
   credential,
@@ -40,40 +43,32 @@ const CredentialDownloadIcon = ({
   return (
     <IconDivider align={['center', 'center']}>
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
-        <Icon
-          title={_('Download RPM (.rpm) Package')}
-          img="dl_rpm.svg"
+        <DownloadRpmIcon
           value={credential}
           onClick={cred => onDownload(cred, 'rpm')}
         />
       }
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
-        <Icon
-          img="dl_deb.svg"
-          title={_('Download Debian (.deb) Package')}
+        <DownloadDebIcon
           value={credential}
           onClick={cred => onDownload(cred, 'deb')}
         />
       }
       {type === USERNAME_SSH_KEY_CREDENTIAL_TYPE &&
-        <Icon
+        <DownloadKeyIcon
           title={_('Download Public Key')}
-          img="dl_key.svg"
           value={credential}
           onClick={cred => onDownload(cred, 'key')}
         />
       }
       {type === USERNAME_PASSWORD_CREDENTIAL_TYPE &&
-        <Icon
-          title={_('Download Windows Executable (.exe)')}
-          img="dl_exe.svg"
+        <DownloadExeIcon
           value={credential}
           onClick={cred => onDownload(cred, 'exe')}
         />
       }
       {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE &&
-        <Icon
-          img="dl_key.svg"
+        <DownloadKeyIcon
           title={_('Download Certificate (.pem)')}
           value={credential}
           onClick={cred => onDownload(cred, 'pem')}

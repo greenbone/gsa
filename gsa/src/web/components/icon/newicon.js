@@ -16,21 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withSvgIcon from './withSvgIcon';
 
-import React from 'react';
-
-import SvgIcon from './svgicon';
 import {ReactComponent as Icon} from './svg/new.svg';
 
-export const NewIcon = props => {
-  return (
-    <SvgIcon
-      {...props}
-    >
-      <Icon/>
-    </SvgIcon>
-  );
-};
+const NewIcon = withSvgIcon()(Icon);
 
 export default NewIcon;
 

@@ -24,8 +24,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
-
 import Divider from 'web/components/layout/divider';
 
 import InfoPanel from 'web/components/panel/infopanel';
@@ -59,11 +57,7 @@ const ReportPanel = ({
         margin="1em"
         align={['start', 'center']}
       >
-        <Icon
-          size="large"
-          img={icon}
-          onClick={onClick}
-        />
+        {icon({size: 'large', onClick})}
         <Content onClick={onClick}>
           {children}
         </Content>
@@ -73,7 +67,7 @@ const ReportPanel = ({
 };
 
 ReportPanel.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };
