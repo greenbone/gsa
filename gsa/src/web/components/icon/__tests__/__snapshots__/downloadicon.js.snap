@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DownloadIcon component tests downloadIcon tests should render 1`] = `
+exports[`DownloadIcon component tests should render 1`] = `
 .c0 {
   height: 16px;
   width: 16px;

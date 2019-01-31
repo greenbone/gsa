@@ -22,7 +22,7 @@ import {testIcon} from 'web/components/icon/testing';
 import OverrideIcon from '../overrideicon';
 
 describe('OverrideIcon component tests', () => {
-  testIcon(OverrideIcon, 'override');
+  testIcon(OverrideIcon);
 });
 
 // vim: set ts=2 sw=2 tw=80:

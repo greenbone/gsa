@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DeltaSecondIcon component tests delta_secondIcon tests should render 1`] = `
+exports[`DeltaSecondIcon component tests should render 1`] = `
 .c0 {
   height: 16px;
   width: 16px;

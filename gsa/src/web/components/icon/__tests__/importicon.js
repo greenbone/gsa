@@ -22,7 +22,7 @@ import {testIcon} from 'web/components/icon/testing';
 import ImportIcon from '../importicon';
 
 describe('ImportIcon component tests', () => {
-  testIcon(ImportIcon, 'import');
+  testIcon(ImportIcon);
 });
 
 // vim: set ts=2 sw=2 tw=80:

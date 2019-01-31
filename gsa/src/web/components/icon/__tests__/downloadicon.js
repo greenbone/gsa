@@ -22,7 +22,7 @@ import {testIcon} from 'web/components/icon/testing';
 import DownloadIcon from '../deltaicon';
 
 describe('DownloadIcon component tests', () => {
-  testIcon(DownloadIcon, 'download');
+  testIcon(DownloadIcon);
 });
 
 // vim: set ts=2 sw=2 tw=80:
