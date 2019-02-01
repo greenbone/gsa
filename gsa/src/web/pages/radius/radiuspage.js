@@ -35,6 +35,7 @@ import PasswordField from 'web/components/form/passwordfield';
 import TextField from 'web/components/form/textfield';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import RadiusIcon from 'web/components/icon/radiusicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -142,7 +143,7 @@ class RadiusAuthentication extends React.Component {
             title={_('Help: RADIUS Authentication')}
           />
           <Section
-            img="radius.svg"
+            img={<RadiusIcon size="large"/>}
             title={_('RADIUS Authentication')}
           />
           <Layout flex="column">
