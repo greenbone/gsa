@@ -20,6 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import AgentIcon from 'web/components/icon/agenticon';
 import Icon from 'web/components/icon/icon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -119,8 +120,7 @@ const ToolBarIcons = withCapabilities(({
           onClick={onAgentVerifyClick}
         />
       }
-      <Icon
-        img="agent.svg"
+      <AgentIcon
         value={entity}
         title={_('Download Agent Installer Package')}
         onClick={onAgentInstallerDownloadClick}
@@ -176,7 +176,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="agent.svg"
+        sectionIcon={<AgentIcon size="large"/>}
         toolBarIcons={ToolBarIcons}
         title={_('Agent')}
         onAgentCloneClick={clone}

@@ -37,6 +37,8 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import AgentIcon from 'web/components/icon/agenticon';
+
 import PropTypes from 'web/utils/proptypes';
 
 
@@ -78,8 +80,7 @@ const Actions = withEntitiesActions(({
       title={_('Export Agent')}
       onClick={onAgentDownloadClick}
     />
-    <Icon
-      img="agent.svg"
+    <AgentIcon
       value={entity}
       title={_('Download Agent Installer Package')}
       onClick={onAgentInstallerDownloadClick}
