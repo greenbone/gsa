@@ -285,6 +285,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/dfncertadvicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/disableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadcsvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloaddebicon.js
@@ -352,6 +353,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dfn_cert_adv.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/disable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_csv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_deb.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_exe.svg

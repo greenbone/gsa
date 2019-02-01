@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 
+import DisableIcon from 'web/components/icon/disableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -83,8 +84,7 @@ const ToolBarIcons = withCapabilties(({
   if (capabilities.mayEdit('tag')) {
     if (entity.isActive()) {
       endisableable = (
-        <Icon
-          img="disable.svg"
+        <DisableIcon
           value={entity}
           title={_('Disable Tag')}
           onClick={onTagDisableClick}

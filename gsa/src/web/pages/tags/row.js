@@ -24,6 +24,7 @@ import {shortDate} from 'gmp/locale/date';
 
 import {typeName} from 'gmp/utils/entitytype';
 
+import DisableIcon from 'web/components/icon/disableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import Icon from 'web/components/icon/icon';
 
@@ -62,8 +63,7 @@ const Actions = compose(
   if (capabilities.mayEdit('tag')) {
     if (entity.isActive()) {
       endisableable = (
-        <Icon
-          img="disable.svg"
+        <DisableIcon
           value={entity}
           title={_('Disable Tag')}
           onClick={onTagDisableClick}
