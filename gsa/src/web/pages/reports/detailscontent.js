@@ -100,7 +100,7 @@ const TabTitle = ({title, counts}) => (
   <Layout flex="column" align={['center', 'center']}>
     <span>{title}</span>
     <TabTitleCounts>
-      (<i>{_('{{filtered}} of {{full}}', counts)}</i>)
+      (<i>{_('{{filtered}} of {{all}}', counts)}</i>)
     </TabTitleCounts>
   </Layout>
 );
@@ -322,7 +322,7 @@ const PageContent = ({
   );
 
   const {full, filtered} = result_count;
-  const resultCounts = {filtered, full};
+  const resultCounts = {filtered, all: full};
 
   return (
     <Layout
