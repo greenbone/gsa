@@ -34,6 +34,7 @@ import {goto_details} from 'web/entity/component';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import HostIcon from 'web/components/icon/hosticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
@@ -117,7 +118,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={HostsFilterDialog}
         filtersFilter={HOSTS_FILTER_FILTER}
-        sectionIcon="host.svg"
+        sectionIcon={<HostIcon size="large"/>}
         table={HostsTable}
         title={_('Hosts')}
         toolBarIcons={ToolBarIcons}

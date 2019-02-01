@@ -302,6 +302,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/groupicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/hosticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/helpicon.js
@@ -371,6 +372,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/group.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/host.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
