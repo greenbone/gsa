@@ -34,7 +34,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
+import UploadIcon from 'web/components/icon/uploadicon';
 import ReportIcon from 'web/components/icon/reporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -64,9 +64,8 @@ const ToolBarIcons = ({onUploadReportClick}) => (
       anchor="reading-of-the-reports"
       title={_('Help: Reports')}
     />
-    <Icon
+    <UploadIcon
       title={_('Upload report')}
-      img="upload.svg"
       onClick={onUploadReportClick}
     />
   </IconDivider>

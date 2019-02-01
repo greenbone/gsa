@@ -31,7 +31,7 @@ import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
+import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 import PortListIcon from 'web/components/icon/portlisticon';
 
@@ -61,8 +61,7 @@ const ToolBarIcons = withCapabilities(({
         onClick={onPortListCreateClick}
       />
     }
-    <Icon
-      img="upload.svg"
+    <UploadIcon
       title={_('Import Port List')}
       onClick={onPortListImportClick}
     />
