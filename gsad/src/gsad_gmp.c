@@ -23299,18 +23299,6 @@ authenticate_gmp (const gchar * username, const gchar * password,
       return 2;
     }
 
-#ifdef DEBUG_AUTH
-  /* Enable this if you need the CGI to sleep after launch. This can be useful
-   * if you need to attach to manager process the CGI is talking to for
-   * debugging purposes.
-   *
-   * It's probably easier to run gsad in the foreground under gdb and
-   * set a break point here.
-   */
-  g_debug ("Sleeping!");
-  sleep (20);
-#endif
-
   auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = username;
   auth_opts.password = password;
