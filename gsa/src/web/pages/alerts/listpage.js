@@ -33,6 +33,8 @@ import NewIcon from 'web/components/icon/newicon.js';
 
 import IconDivider from 'web/components/layout/icondivider';
 
+import AlertIcon from 'web/components/icon/alerticon';
+
 import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
 
 import {
@@ -104,7 +106,7 @@ const AlertsPage = ({
       {...props}
       filterEditDialog={AlertFilterDialog}
       filtersFilter={ALERTS_FILTER_FILTER}
-      sectionIcon="alert.svg"
+      sectionIcon={<AlertIcon size="large"/>}
       table={AlertTable}
       title={_('Alerts')}
       toolBarIcons={ToolBarIcons}
