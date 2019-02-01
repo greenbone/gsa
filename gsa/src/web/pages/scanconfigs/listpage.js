@@ -31,6 +31,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import NewIcon from 'web/components/icon/newicon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -111,7 +112,7 @@ const ScanConfigsPage = ({
         {...props}
         filterEditDialog={ScanConfigFilterDialog}
         filtersFilter={SCANCONFIGS_FILTER_FILTER}
-        sectionIcon="config.svg"
+        sectionIcon={<ScanConfigIcon size="large"/>}
         table={Table}
         title={_('Scan Configs')}
         toolBarIcons={ToolBarIcons}

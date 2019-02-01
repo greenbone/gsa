@@ -32,6 +32,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 import Link from 'web/components/link/link';
 
@@ -386,7 +387,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="config.svg"
+          sectionIcon={<ScanConfigIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
           onInteraction={onInteraction}
