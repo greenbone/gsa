@@ -27,6 +27,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import AllInfoIcon from 'web/components/icon/allinfoicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import {
@@ -77,7 +78,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={SecInfoFilterDialog}
     filtersFilter={SECINFO_FILTER_FILTER}
-    sectionIcon="allinfo.svg"
+    sectionIcon={<AllInfoIcon size="large"/>}
     table={SecInfosTable}
     title={_('All SecInfo Information')}
     toolBarIcons={ToolBarIcons}
