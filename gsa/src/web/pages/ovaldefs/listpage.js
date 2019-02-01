@@ -28,6 +28,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import OvalDefIcon from 'web/components/icon/ovaldeficon';
 
 import {
   loadEntities,
@@ -74,7 +75,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={OvaldefFilterDialog}
     filtersFilter={OVALDEFS_FILTER_FILTER}
-    sectionIcon="ovaldef.svg"
+    sectionIcon={<OvalDefIcon size="large"/>}
     table={OvaldefsTable}
     title={_('OVAL Definitions')}
     toolBarIcons={ToolBarIcons}

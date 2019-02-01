@@ -32,6 +32,7 @@ import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
+import OvalDefIcon from 'web/components/icon/ovaldeficon';
 import Icon from 'web/components/icon/icon';
 
 import Divider from 'web/components/layout/divider';
@@ -172,8 +173,7 @@ class FeedStatus extends React.Component {
                         </Link>
                         <Link to="ovaldefs">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="ovaldef.svg"
+                            <OvalDefIcon
                               size="medium"
                             />
                             <span>OVAL Definitions</span>

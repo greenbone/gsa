@@ -320,6 +320,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nvticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/ovaldeficon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
@@ -390,6 +391,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/ovaldef.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/refresh.svg
