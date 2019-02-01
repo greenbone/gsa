@@ -497,8 +497,6 @@ char * auth_settings_gmp (gvm_connection_t *, credentials_t *, params_t *,
 
 char * get_info_gmp (gvm_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
-char * get_nvts_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                     cmd_response_data_t*);
 char * get_info (gvm_connection_t *, credentials_t *, params_t *,
                  const char *, cmd_response_data_t*);
 

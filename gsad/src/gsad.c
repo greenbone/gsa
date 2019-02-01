@@ -387,7 +387,6 @@ init_validator ()
                      "|(get_info)"
                      "|(get_note)"
                      "|(get_notes)"
-                     "|(get_nvts)"
                      "|(get_override)"
                      "|(get_overrides)"
                      "|(get_permission)"
@@ -2135,7 +2134,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_configs)
   ELSE (get_config_family)
   ELSE (get_config_nvt)
-  ELSE (get_nvts)
   ELSE (ping)
   ELSE (sync_config)
   ELSE (wizard)

@@ -217,10 +217,6 @@ static char *get_notes (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_note (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_nvts (gvm_connection_t *, credentials_t *credentials,
-                       params_t *, const char *, const char *,
-                       cmd_response_data_t*);
-
 static char *get_overrides (gvm_connection_t *, credentials_t *, params_t *,
                             const char *, cmd_response_data_t*);
 
@@ -4045,125 +4041,6 @@ move_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Requests NVT details, accepting extra commands.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials    Credentials for the manager connection.
- * @param[in]  params         Request parameters.
- * @param[in]  commands       Extra commands to run before the others.
- * @param[in]  extra_xml      Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return XML enveloped NVT details response or error message.
- */
-static char*
-get_nvts (gvm_connection_t *connection, credentials_t *credentials,
-          params_t *params, const char *commands,
-          const char *extra_xml, cmd_response_data_t* response_data)
-{
-  GString *xml = NULL;
-  const char *oid;
-
-  oid = params_value (params, "oid");
-  if (oid == NULL)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an NVT. "
-                           "Diagnostics: Required parameter was NULL.",
-                           response_data);
-    }
-
-  if (gvm_connection_sendf (connection,
-                            "<commands>"
-                            "%s"
-                            "<get_nvts"
-                            " nvt_oid=\"%s\""
-                            " details=\"1\""
-                            " preferences=\"1\"/>"
-                            "<get_notes"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"notes.text\"/>"
-                            "<get_overrides"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"overrides.text\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            oid,
-                            oid,
-                            oid)
-        == -1)
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while getting nvt details. "
-                            "Diagnostics: Failure to send command to manager daemon.",
-                            response_data);
-    }
-
-  xml = g_string_new ("<get_nvts>");
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting nvt details. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  /* Append extra_xml */
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_tags"
-                            " filter=\"resource_type=nvt"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  g_string_append (xml, "</get_nvts>");
-
-  return envelope_gmp (connection, credentials, params,
-                       g_string_free (xml, FALSE), response_data);
-}
-
-/**
  * @brief Requests SecInfo.
  *
  * @param[in]  connection     Connection to manager.
@@ -4309,23 +4186,6 @@ get_info_gmp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_info (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Requests NVT details, accepting extra commands.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return XML enveloped NVT details response or error message.
- */
-char*
-get_nvts_gmp (gvm_connection_t *connection, credentials_t *credentials,
-              params_t *params, cmd_response_data_t* response_data)
-{
-  return get_nvts (connection, credentials, params, NULL, NULL, response_data);
 }
 
 /**
