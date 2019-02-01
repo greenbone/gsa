@@ -32,6 +32,7 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import Icon from 'web/components/icon/icon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -86,8 +87,7 @@ const Actions = compose(
       onClick={onReportFormatDownloadClick}
     />
     {capabilities.mayOp('verify_report_format') ?
-      <Icon
-        img="verify.svg"
+      <VerifyIcon
         value={entity}
         title={_('Verify Report Format')}
         onClick={onReportFormatVerifyClick}

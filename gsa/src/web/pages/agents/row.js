@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import Icon from 'web/components/icon/icon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -85,8 +85,7 @@ const Actions = withEntitiesActions(({
       title={_('Download Agent Installer Package')}
       onClick={onAgentInstallerDownloadClick}
     />
-    <Icon
-      img="verify.svg"
+    <VerifyIcon
       value={entity}
       title={_('Verify Agent')}
       onClick={onAgentVerifyClick}

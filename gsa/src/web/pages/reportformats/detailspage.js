@@ -24,6 +24,7 @@ import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -123,8 +124,7 @@ const ToolBarIcons = withCapabilities(({
         onClick={onReportFormatDownloadClick}
       />
       {capabilities.mayOp('verify_report_format') ?
-        <Icon
-          img="verify.svg"
+        <VerifyIcon
           value={entity}
           title={_('Verify Report Format')}
           onClick={onReportFormatVerifyClick}

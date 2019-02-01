@@ -37,10 +37,10 @@ import Tabs from 'web/components/tab/tabs';
 
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
 import ScannerIcon from 'web/components/icon/scannericon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -118,8 +118,7 @@ const ToolBarIcons = ({
           title={_('Export Scanner as XML')}
           onClick={onScannerDownloadClick}
         />
-        <Icon
-          img="verify.svg"
+        <VerifyIcon
           value={entity}
           title={_('Verify Scanner')}
           onClick={onScannerVerifyClick}

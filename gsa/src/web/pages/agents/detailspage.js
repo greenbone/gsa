@@ -21,10 +21,10 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import AgentIcon from 'web/components/icon/agenticon';
-import Icon from 'web/components/icon/icon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -113,8 +113,7 @@ const ToolBarIcons = withCapabilities(({
         onClick={onAgentDownloadClick}
       />
       {capabilities.mayOp('verify_report_format') &&
-        <Icon
-          img="verify.svg"
+        <VerifyIcon
           value={entity}
           title={_('Verify Agent')}
           onClick={onAgentVerifyClick}
