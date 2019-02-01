@@ -28,6 +28,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
+import GroupIcon from 'web/components/icon/groupicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
@@ -98,7 +99,7 @@ const GroupsPage = ({
         {...props}
         filterEditDialog={GroupsFilterDialog}
         filtersFilter={GROUPS_FILTER_FILTER}
-        sectionIcon="group.svg"
+        sectionIcon={<GroupIcon size="large"/>}
         table={Table}
         title={_('Groups')}
         toolBarIcons={ToolBarIcons}

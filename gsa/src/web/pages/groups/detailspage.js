@@ -43,10 +43,11 @@ import withEntityContainer, {
   permissionsSubjectFilter,
 } from 'web/entity/withEntityContainer';
 
-import ExportIcon from 'web/components/icon/exporticon';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import GroupIcon from 'web/components/icon/groupicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import {
@@ -150,7 +151,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="group.svg"
+        sectionIcon={<GroupIcon size="large"/>}
         title={_('Group')}
         toolBarIcons={ToolBarIcons}
         onGroupCloneClick={clone}
