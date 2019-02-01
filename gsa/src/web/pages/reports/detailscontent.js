@@ -36,6 +36,7 @@ import DownloadIcon from 'web/components/icon/downloadicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
@@ -162,8 +163,7 @@ const ToolBarIcons = ({
               title={_('Add to Assets with QoD=>70% and Overrides enabled')}
               onClick={onAddToAssetsClick}
             />
-            <Icon
-              img="remove_from_assets.svg"
+            <RemoveFromAssetsIcon
               title={_('Remove from Assets')}
               onClick={onRemoveFromAssetsClick}
             />
