@@ -151,8 +151,6 @@ char * create_credential_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
 char * delete_credential_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
-char * edit_credential_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                            cmd_response_data_t*);
 char * save_credential_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 
@@ -162,8 +160,6 @@ char * get_agents_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 int download_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         char **, char **, cmd_response_data_t*);
-char * edit_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                       cmd_response_data_t*);
 char * save_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * create_agent_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -190,8 +186,6 @@ char * save_scanner_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * delete_scanner_gmp (gvm_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
-char * edit_scanner_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                         cmd_response_data_t*);
 char * export_scanner_gmp (gvm_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
 char * export_scanners_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -203,8 +197,6 @@ char * create_schedule_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 char * delete_schedule_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
-char * edit_schedule_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                          cmd_response_data_t*);
 char * get_schedule_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * get_schedules_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -222,8 +214,6 @@ char * create_tags_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * delete_tag_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
-char * edit_tag_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                     cmd_response_data_t*);
 char * export_tags_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_tag_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -237,8 +227,6 @@ char * save_tag_gmp (gvm_connection_t *, credentials_t *, params_t *,
 char * toggle_tag_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 
-char * edit_target_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                        cmd_response_data_t*);
 char * get_target_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * get_targets_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -298,8 +286,6 @@ char * create_group_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * delete_group_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
-char * edit_group_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                       cmd_response_data_t*);
 char * export_group_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * export_groups_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -319,8 +305,6 @@ char * create_note_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * delete_note_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
-char * edit_note_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                      cmd_response_data_t*);
 char * save_note_gmp (gvm_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * export_note_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -334,8 +318,6 @@ char * create_permissions_gmp (gvm_connection_t *, credentials_t *,
                                params_t *, cmd_response_data_t*);
 char * delete_permission_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
-char * edit_permission_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                            cmd_response_data_t*);
 char * export_permission_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
 char * export_permissions_gmp (gvm_connection_t *, credentials_t *,
@@ -352,8 +334,6 @@ char * create_port_range_gmp (gvm_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
 char * get_port_list_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
-char * edit_port_list_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                           cmd_response_data_t*);
 char * save_port_list_gmp (gvm_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
 char * get_port_lists_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -394,8 +374,6 @@ char * create_override_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 char * delete_override_gmp (gvm_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
-char * edit_override_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                          cmd_response_data_t*);
 char * save_override_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * export_override_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -413,8 +391,6 @@ char * save_slave_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * delete_slave_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
-char * edit_slave_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                       cmd_response_data_t*);
 char * export_slave_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * export_slaves_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -432,8 +408,6 @@ char * get_report_formats_gmp (gvm_connection_t *, credentials_t *,
                                params_t *, cmd_response_data_t*);
 char * delete_report_format_gmp (gvm_connection_t *, credentials_t *,
                                  params_t *, cmd_response_data_t*);
-char * edit_report_format_gmp (gvm_connection_t *, credentials_t *,
-                               params_t *, cmd_response_data_t*);
 char * import_report_format_gmp (gvm_connection_t *, credentials_t *,
                                  params_t *, cmd_response_data_t*);
 char * save_report_format_gmp (gvm_connection_t *, credentials_t *,
@@ -454,8 +428,6 @@ char * create_filter_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * delete_filter_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
-char * edit_filter_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                        cmd_response_data_t*);
 char * export_filter_gmp (gvm_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * export_filters_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -473,8 +445,6 @@ char * delete_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * delete_user_confirm_gmp (gvm_connection_t *, credentials_t *,
                                 params_t *, cmd_response_data_t*);
-char * edit_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                      cmd_response_data_t*);
 char * export_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_users_gmp (gvm_connection_t *, credentials_t *, params_t *,
@@ -538,8 +508,6 @@ char * create_host_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * delete_asset_gmp (gvm_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
-char * edit_asset_gmp (gvm_connection_t *, credentials_t *, params_t *,
-                       cmd_response_data_t*);
 char * save_asset_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * get_assets_gmp (gvm_connection_t *, credentials_t *, params_t *,
