@@ -216,55 +216,55 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
-          <Badge
-            content={entity.report_count.total}
+          <Link
+            to="reports"
+            filter={'task_id=' + entity.id}
+            title={_('Total Reports for Task {{name}}', entity)}
           >
-            <Link
-              to="reports"
-              filter={'task_id=' + entity.id}
-              title={_('Total Reports for Task {{name}}', entity)}
+            <Badge
+              content={entity.report_count.total}
             >
               <ReportIcon/>
-            </Link>
-          </Badge>
+            </Badge>
+          </Link>
         </IconDivider>
 
-        <Badge
-          content={entity.result_count}
+        <Link
+          to="results"
+          filter={'task_id=' + entity.id}
+          title={_('Results for Task {{name}}', entity)}
         >
-          <Link
-            to="results"
-            filter={'task_id=' + entity.id}
-            title={_('Results for Task {{name}}', entity)}
+          <Badge
+            content={entity.result_count}
           >
             <ResultIcon />
-          </Link>
-        </Badge>
+          </Badge>
+        </Link>
 
         <IconDivider>
-          <Badge
-            content={notes.length}
+          <Link
+            to="notes"
+            filter={'task_id=' + entity.id}
+            title={_('Notes for Task {{name}}', entity)}
           >
-            <Link
-              to="notes"
-              filter={'task_id=' + entity.id}
-              title={_('Notes for Task {{name}}', entity)}
+            <Badge
+              content={notes.length}
             >
               <NoteIcon />
-            </Link>
-          </Badge>
+            </Badge>
+          </Link>
 
-          <Badge
-            content={overrides.length}
+          <Link
+            to="overrides"
+            filter={'task_id=' + entity.id}
+            title={_('Overrides for Task {{name}}', entity)}
           >
-            <Link
-              to="overrides"
-              filter={'task_id=' + entity.id}
-              title={_('Overrides for Task {{name}}', entity)}
+            <Badge
+              content={overrides.length}
             >
               <OverrideIcon />
-            </Link>
-          </Badge>
+            </Badge>
+          </Link>
         </IconDivider>
       </Divider>
 
