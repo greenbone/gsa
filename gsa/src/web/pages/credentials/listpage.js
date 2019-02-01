@@ -28,6 +28,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
+import CredentialIcon from 'web/components/icon/credentialicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
@@ -102,7 +103,7 @@ const CredentialsPage = ({
       {...props}
       filterEditDialog={CredentialsFilterDialog}
       filtersFilter={CREDENTIALS_FILTER_FILTER}
-      sectionIcon="credential.svg"
+      sectionIcon={<CredentialIcon size="large"/>}
       table={CredentialsTable}
       title={_('Credentials')}
       toolBarIcons={ToolBarIcons}

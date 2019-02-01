@@ -29,6 +29,7 @@ import {
   CERTIFICATE_STATUS_EXPIRED,
 } from 'gmp/models/credential';
 
+import CredentialIcon from 'web/components/icon/credentialicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -258,7 +259,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="credential.svg"
+          sectionIcon={<CredentialIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Credential')}
           onCredentialCloneClick={clone}
