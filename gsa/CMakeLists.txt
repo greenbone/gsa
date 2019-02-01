@@ -306,6 +306,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/helpicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/keyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/lasticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
@@ -374,6 +375,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/host.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/key.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
