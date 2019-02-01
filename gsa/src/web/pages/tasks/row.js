@@ -35,6 +35,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
 
+import AlterableIcon from 'web/components/icon/alterableicon';
 import Icon from 'web/components/icon/icon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -124,9 +125,8 @@ const Row = ({
           </RowDetailsToggle>
           <IconDivider>
             {entity.alterable === 1 &&
-              <Icon
+              <AlterableIcon
                 size="small"
-                img="alterable.svg"
                 title={_('Task is alterable')}
               />
             }
