@@ -351,6 +351,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
