@@ -28,6 +28,8 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import PermissionIcon from 'web/components/icon/permissionicon';
+
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -97,7 +99,7 @@ const Page = ({
     }) => (
       <EntitiesPage
         {...props}
-        sectionIcon="permission.svg"
+        sectionIcon={<PermissionIcon size="large"/>}
         table={Table}
         filterEditDialog={FilterDialog}
         title={_('Permissions')}

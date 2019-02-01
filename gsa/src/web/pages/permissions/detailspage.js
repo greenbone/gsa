@@ -34,6 +34,7 @@ import Tabs from 'web/components/tab/tabs';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import PermissionIcon from 'web/components/icon/permissionicon';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -142,7 +143,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="permission.svg"
+          sectionIcon={<PermissionIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Permission')}
           onInteraction={onInteraction}
