@@ -1096,9 +1096,8 @@ get_one (gvm_connection_t *connection, const char *type,
          cmd_response_data_t* response_data)
 {
   GString *xml;
-  int ret;
-  gchar *end, *id_name;
-  const char *id, *sort_field, *sort_order, *filter, *first, *max;
+  gchar *id_name;
+  const char *id, *sort_field, *sort_order;
 
   id_name = g_strdup_printf ("%s_id", type);
   id = params_value (params, id_name);
@@ -1110,70 +1109,6 @@ get_one (gvm_connection_t *connection, const char *type,
 
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_%s>", type);
-
-  if (str_equal (type, "role")
-      && command_enabled (credentials, "GET_PERMISSIONS")
-      && params_value (params, "role_id"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (gmpf (connection, credentials, &response, &entity, response_data,
-                    "<get_permissions"
-                    " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
-                    params_value (params, "role_id")))
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissions. "
-                                 "Diagnostics: Failure to send command to manager daemon.",
-                                 response_data);
-          case 2:
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissions. "
-                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                 response_data);
-          default:
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting permissins. "
-                                 "Diagnostics: Internal Error.", response_data);
-        }
-
-      g_string_append (xml, response);
-
-      if (!gmp_success (entity))
-        set_http_status_from_entity (entity, response_data);
-
-      free_entity (entity);
-      g_free (response);
-    }
-
-  /* Pass through params for get_resources. */
-  filter = params_value (params, "filter");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
-  end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
-                                 "<%ss start=\"%s\" max=\"%s\"/>",
-                                 filter ? filter : "",
-                                 type,
-                                 first ? first : "",
-                                 max ? max : "");
-  g_string_append (xml, end);
-  g_free (end);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
@@ -1218,91 +1153,6 @@ get_one (gvm_connection_t *connection, const char *type,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            response_data);
     }
-
-  /* Get tag names */
-
-  if (gvm_connection_sendf (connection,
-                            "<get_tags"
-                            " filter=\"resource_type=%s"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>",
-                            type)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting tag names list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  /* Get permissions */
-
-  g_string_append (xml, "<permissions>");
-
-  if (str_equal (type, "user")
-      || str_equal (type, "group")
-      || str_equal (type, "role"))
-    ret = gvm_connection_sendf (connection,
-                                "<get_permissions"
-                                " filter=\"subject_uuid=%s"
-                                "          and not resource_uuid=&quot;&quot;"
-                                "          or resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                id,
-                                id);
-  else
-    ret = gvm_connection_sendf (connection,
-                                "<get_permissions"
-                                " filter=\"resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                id);
-  if (ret == -1)
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting permissions list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           response_data);
-    }
-
-  if (read_string_c (connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting permissions list. "
-                           "The current list of resources is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           response_data);
-    }
-
-  g_string_append (xml, "</permissions>");
 
   /* Cleanup, and return transformed XML. */
 
