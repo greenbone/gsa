@@ -27,6 +27,7 @@ import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
+import CveIcon from 'web/components/icon/cveicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -153,8 +154,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="cves">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="cve.svg"
+                            <CveIcon
                               size="medium"
                             />
                             <span>CVEs</span>
