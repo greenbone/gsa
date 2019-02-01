@@ -443,8 +443,6 @@ char * create_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * delete_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
-char * delete_user_confirm_gmp (gvm_connection_t *, credentials_t *,
-                                params_t *, cmd_response_data_t*);
 char * export_user_gmp (gvm_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_users_gmp (gvm_connection_t *, credentials_t *, params_t *,

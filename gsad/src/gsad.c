@@ -309,7 +309,6 @@ init_validator ()
                      "|(delete_target)"
                      "|(delete_task)"
                      "|(delete_user)"
-                     "|(delete_user_confirm)"
                      "|(download_agent)"
                      "|(download_credential)"
                      "|(download_ssl_cert)"
@@ -1935,7 +1934,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_alert)
   ELSE (get_task)
   ELSE (get_tasks)
-  ELSE (delete_user_confirm)
   ELSE (edit_alert)
   ELSE (edit_config)
   ELSE (edit_config_family)
