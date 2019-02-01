@@ -26,6 +26,7 @@ import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -183,8 +184,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="certbunds">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="cert_bund_adv.svg"
+                            <CertBundAdvIcon
                               size="medium"
                             />
                             <span>CERT-Bund Advisories</span>

@@ -55,6 +55,7 @@ import {
   loadEntity,
 } from 'web/store/entities/certbund';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -237,7 +238,7 @@ const CertBundAdvPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="cert_bund_adv.svg"
+        sectionIcon={<CertBundAdvIcon size="large"/>}
         title={_('CERT-Bund Advisory')}
         toolBarIcons={ToolBarIcons}
         onCertBundAdvDownloadClick={download}

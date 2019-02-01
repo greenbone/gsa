@@ -27,6 +27,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import {
@@ -74,7 +75,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CertBundFilterDialog}
     filtersFilter={CERTBUND_FILTER_FILTER}
-    sectionIcon="cert_bund_adv.svg"
+    sectionIcon={<CertBundAdvIcon size="large"/>}
     table={CertBundTable}
     title={_('CERT-Bund Advisories')}
     toolBarIcons={ToolBarIcons}
