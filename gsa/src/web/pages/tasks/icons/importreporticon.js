@@ -23,9 +23,9 @@ import _ from 'gmp/locale';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
-import Icon from 'web/components/icon/icon';
+import ImportIcon from 'web/components/icon/importicon';
 
-const ImportIcon = ({
+const ImportReportIcon = ({
   capabilities,
   size,
   task,
@@ -37,10 +37,9 @@ const ImportIcon = ({
   }
 
   return (
-    <Icon
+    <ImportIcon
       value={task}
       size={size}
-      img="import.svg"
       onClick={onClick}
       alt={_('Import Report')}
       title={_('Import Report')}
@@ -48,13 +47,13 @@ const ImportIcon = ({
   );
 };
 
-ImportIcon.propTypes = {
+ImportReportIcon.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(ImportIcon);
+export default withCapabilities(ImportReportIcon);
 
 // vim: set ts=2 sw=2 tw=80:
