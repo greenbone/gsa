@@ -23,7 +23,7 @@ import {_} from 'gmp/locale/lang';
 import DownloadCsvIcon from 'web/components/icon/downloadcsvicon';
 import DownloadSvgIcon from 'web/components/icon/downloadsvgicon';
 import FilterIcon from 'web/components/icon/filtericon';
-import Icon from 'web/components/icon/icon';
+import LegendIcon from 'web/components/icon/legendicon';
 import Toggle3dIcon from 'web/components/icon/toggle3dicon';
 
 import PropTypes from 'web/utils/proptypes';
@@ -72,8 +72,7 @@ const DataDisplayIcons = ({
       />
     }
     {showToggleLegend &&
-      <Icon
-        img="legend.svg"
+      <LegendIcon
         title={_('Toggle Legend')}
         onClick={() => setState(({showLegend}) => ({showLegend: !showLegend}))}
       />
