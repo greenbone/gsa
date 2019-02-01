@@ -347,7 +347,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/agent.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfoicon.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfo.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
