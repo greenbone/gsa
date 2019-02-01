@@ -44,6 +44,7 @@ describe('TicketCommand tests', () => {
           cmd: 'create_ticket',
           result_id: 'r1',
           user_id: 'u1',
+          note: '',
         },
       });
 
@@ -110,14 +111,18 @@ describe('TicketCommand tests', () => {
       id: 'foo',
       status: 'fixed',
       userId: 'u1',
-      note: 'bar',
+      openNote: 'bar',
+      fixedNote: 'bar',
+      closedNote: 'bar',
     }).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
           cmd: 'save_ticket',
           ticket_id: 'foo',
           ticket_status: 'fixed',
-          note: 'bar',
+          open_note: 'bar',
+          fixed_note: 'bar',
+          closed_note: 'bar',
           user_id: 'u1',
         },
       });
@@ -135,14 +140,18 @@ describe('TicketCommand tests', () => {
       id: 'foo',
       status: 'fixed',
       userId: 'u1',
-      note: '   bar   ',
+      openNote: '   bar   ',
+      fixedNote: '   bar   ',
+      closedNote: '   bar   ',
     }).then(() => {
       expect(fakeHttp.request).toHaveBeenCalledWith('post', {
         data: {
           cmd: 'save_ticket',
           ticket_id: 'foo',
           ticket_status: 'fixed',
-          note: 'bar',
+          open_note: 'bar',
+          fixed_note: 'bar',
+          closed_note: 'bar',
           user_id: 'u1',
         },
       });

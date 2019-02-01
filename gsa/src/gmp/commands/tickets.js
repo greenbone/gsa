@@ -31,9 +31,6 @@ const convertNote = note => {
 
   note = note.trim();
 
-  if (note.length === 0) {
-    return undefined;
-  }
   return note;
 };
 
@@ -59,14 +56,18 @@ export class TicketCommand extends EntityCommand {
 
   save({
     id,
-    note,
+    openNote,
+    fixedNote,
+    closedNote,
     status,
     userId,
   }) {
     return this.action({
       cmd: 'save_ticket',
       id,
-      note: convertNote(note),
+      open_note: convertNote(openNote),
+      fixed_note: convertNote(fixedNote),
+      closed_note: convertNote(closedNote),
       ticket_status: status,
       user_id: userId,
     });
