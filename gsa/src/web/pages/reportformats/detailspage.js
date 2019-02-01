@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ReportFormatIcon from 'web/components/icon/reportformaticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -246,7 +247,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="report_format.svg"
+        sectionIcon={<ReportFormatIcon size="large"/>}
         title={_('Report Format')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}

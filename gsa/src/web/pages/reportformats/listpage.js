@@ -30,6 +30,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ImportIcon from 'web/components/icon/importicon';
+import ReportFormatIcon from 'web/components/icon/reportformaticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -102,7 +103,7 @@ const ReportFormatsPage = ({
       {...props}
       filterEditDialog={ReportFormatsFilterDialog}
       filtersFilter={REPORT_FORMATS_FILTER_FILTER}
-      sectionIcon="report_format.svg"
+      sectionIcon={<ReportFormatIcon size="large"/>}
       table={ReportFormatsTable}
       title={_('Report Formats')}
       toolBarIcons={ToolBarIcons}
