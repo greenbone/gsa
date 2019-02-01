@@ -28,6 +28,7 @@ import DeleteIcon from 'web/entity/icon/deleteicon';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -150,7 +151,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="schedule.svg"
+        sectionIcon={<ScheduleIcon size="large"/>}
         title={_('Schedule')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}
