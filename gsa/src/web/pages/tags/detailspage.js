@@ -24,9 +24,9 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 
 import DisableIcon from 'web/components/icon/disableicon';
+import EnableIcon from 'web/components/icon/enableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 
 import Layout from 'web/components/layout/layout';
@@ -93,8 +93,7 @@ const ToolBarIcons = withCapabilties(({
     }
     else {
       endisableable = (
-        <Icon
-          img="enable.svg"
+        <EnableIcon
           value={entity}
           title={_('Enable Tag')}
           onClick={onTagEnableClick}

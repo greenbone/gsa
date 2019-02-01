@@ -294,6 +294,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/enableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/feedicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/filtericon.js
@@ -362,6 +363,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/enable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
