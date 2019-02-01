@@ -40,6 +40,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import UserIcon from 'web/components/icon/usericon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -216,7 +217,7 @@ class UsersPage extends React.Component {
             {...props}
             filterEditDialog={UsersFilterDialog}
             filtersFilter={USERS_FILTER_FILTER}
-            sectionIcon="user.svg"
+            sectionIcon={<UserIcon size="large"/>}
             table={UsersTable}
             title={_('Users')}
             toolBarIcons={ToolBarIcons}
