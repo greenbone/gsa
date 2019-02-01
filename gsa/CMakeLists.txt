@@ -279,6 +279,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cveicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/cvssicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
@@ -343,6 +344,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/credential.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cve.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cvss_calculator.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
