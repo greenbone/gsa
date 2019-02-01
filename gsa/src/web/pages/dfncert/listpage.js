@@ -27,6 +27,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import {
@@ -76,7 +77,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={FilterDialog}
     filtersFilter={DFNCERT_FILTER_FILTER}
-    sectionIcon="dfn_cert_adv.svg"
+    sectionIcon={<DfnCertAdvIcon size="large"/>}
     table={DfnCertTable}
     title={_('DFN-CERT Advisories')}
     toolBarIcons={ToolBarIcons}

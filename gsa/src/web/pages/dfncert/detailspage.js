@@ -22,6 +22,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -173,7 +174,7 @@ const DfnCertAdvPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="dfn_cert_adv.svg"
+        sectionIcon={<DfnCertAdvIcon size="large"/>}
         title={_('DFN-CERT Advisory')}
         toolBarIcons={ToolBarIcons}
         onDfnCertAdvDownloadClick={download}

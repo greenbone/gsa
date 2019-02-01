@@ -28,6 +28,7 @@ import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import CveIcon from 'web/components/icon/cveicon';
+import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -192,8 +193,7 @@ class FeedStatus extends React.Component {
                         </Link>
                         <Link to="dfncerts">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="dfn_cert_adv.svg"
+                            <DfnCertAdvIcon
                               size="medium"
                             />
                             <span>DFN-CERT Advisories</span>
