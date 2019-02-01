@@ -16,38 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import withSvgIcon from './withSvgIcon';
 
-import _ from 'gmp/locale';
+import {ReactComponent as Icon} from './svg/stop.svg';
 
-import PropTypes from 'web/utils/proptypes';
+const StopIcon = withSvgIcon()(Icon);
 
-import StopIcon from 'web/components/icon/stopicon';
-
-const TaskStopIcon = ({
-  size,
-  task,
-  onClick,
-}) => {
-  if (task.isRunning() && !task.isContainer()) {
-    return (
-      <StopIcon
-        size={size}
-        title={_('Stop')}
-        value={task}
-        onClick={onClick}
-      />
-    );
-  }
-  return null;
-};
-
-TaskStopIcon.propTypes = {
-  size: PropTypes.iconSize,
-  task: PropTypes.model.isRequired,
-  onClick: PropTypes.func,
-};
-
-export default TaskStopIcon;
+export default StopIcon;
 
 // vim: set ts=2 sw=2 tw=80:
