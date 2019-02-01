@@ -339,6 +339,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/resumeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/scanconfigicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/scannericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
@@ -416,6 +417,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/restore.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/role.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/scanner.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg

@@ -40,6 +40,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ScannerIcon from 'web/components/icon/scannericon';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -196,7 +197,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="scanner.svg"
+        sectionIcon={<ScannerIcon size="large"/>}
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
         onInteraction={onInteraction}
