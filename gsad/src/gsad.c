@@ -598,7 +598,8 @@ init_validator ()
   gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
   gvm_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
   gvm_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
-  gvm_validator_add (validator, "note",        "(?s)^(.){1,1000}$");
+  gvm_validator_add (validator, "note_optional", "(?s)^(.){0,1000}$");
+  gvm_validator_add (validator, "note_required", "(?s)^(.){1,1000}$");
   gvm_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
@@ -749,6 +750,7 @@ init_validator ()
   gvm_validator_alias (validator, "chart_type", "name");
   gvm_validator_alias (validator, "chart_template", "name");
   gvm_validator_alias (validator, "community", "lsc_password");
+  gvm_validator_alias (validator, "closed_note",    "note_optional");
   gvm_validator_alias (validator, "custom_severity", "boolean");
   gvm_validator_alias (validator, "current_user", "boolean");
   gvm_validator_alias (validator, "dashboard_name", "name");
@@ -773,6 +775,7 @@ init_validator ()
   gvm_validator_alias (validator, "filter_extra",       "filter");
   gvm_validator_alias (validator, "filter_id",          "id");
   gvm_validator_alias (validator, "filterbox",          "boolean");
+  gvm_validator_alias (validator, "fixed_note",         "note_optional");
   gvm_validator_alias (validator, "from_file",          "boolean");
   gvm_validator_alias (validator, "force_wizard",       "boolean");
   gvm_validator_alias (validator, "get_name",           "name");
@@ -814,6 +817,7 @@ init_validator ()
   gvm_validator_alias (validator, "next_type",    "resource_type");
   gvm_validator_alias (validator, "next_subtype", "info_type");
   gvm_validator_alias (validator, "next_xml",      "boolean");
+  gvm_validator_alias (validator, "note",         "note_required");
   gvm_validator_alias (validator, "notes",        "boolean");
   gvm_validator_alias (validator, "no_chart_links",        "boolean");
   gvm_validator_alias (validator, "no_filter_history", "boolean");
@@ -821,6 +825,7 @@ init_validator ()
   gvm_validator_alias (validator, "nvt:value",         "uuid");
   gvm_validator_alias (validator, "old_login", "login");
   gvm_validator_alias (validator, "old_password", "password");
+  gvm_validator_alias (validator, "open_note",    "note_optional");
   gvm_validator_alias (validator, "original_overrides",  "boolean");
   gvm_validator_alias (validator, "overrides",        "boolean");
   gvm_validator_alias (validator, "owner", "name");
