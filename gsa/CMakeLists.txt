@@ -331,6 +331,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/radiusicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/removefromassetsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reportformaticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/roleicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reseticon.js
@@ -414,6 +415,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/result.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/restore.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/role.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
