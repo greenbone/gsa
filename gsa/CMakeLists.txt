@@ -341,6 +341,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/scanconfigicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/scannericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/scheduleicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/sensoricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
@@ -423,6 +424,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/stop.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/schedule.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/sensor.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg

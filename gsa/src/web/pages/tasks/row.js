@@ -37,7 +37,7 @@ import Comment from 'web/components/comment/comment';
 
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ProvideViewIcon from 'web/components/icon/provideviewicon';
-import Icon from 'web/components/icon/icon';
+import SensorIcon from 'web/components/icon/sensoricon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -132,9 +132,8 @@ const Row = ({
               />
             }
             {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
-              <Icon
+              <SensorIcon
                 size="small"
-                img="sensor.svg"
                 title={_('Task is configured to run on slave scanner {{name}}',
                   {name: scanner.name})}
               />
