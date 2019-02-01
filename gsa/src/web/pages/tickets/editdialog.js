@@ -45,6 +45,9 @@ const STATUS_ITEMS = STATUS.map(status => ({
 }));
 
 const EditTicketDialog = ({
+  closedNote = '',
+  fixedNote = '',
+  openNote = '',
   ticketId,
   title = _('Edit Ticket'),
   status,
@@ -61,7 +64,9 @@ const EditTicketDialog = ({
       ticketId,
     }}
     defaultValues={{
-      note: '',
+      closedNote,
+      fixedNote,
+      openNote,
       status,
       userId,
     }}
@@ -87,12 +92,30 @@ const EditTicketDialog = ({
             onChange={onValueChange}
           />
         </FormGroup>
-        <FormGroup title={_('Note for Status Change')}>
+        <FormGroup title={_('Note for Open')}>
           <TextArea
-            name="note"
+            name="openNote"
             grow="1"
             rows="5"
-            value={values.note}
+            value={values.openNote}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Note for Fixed')}>
+          <TextArea
+            name="fixedNote"
+            grow="1"
+            rows="5"
+            value={values.fixedNote}
+            onChange={onValueChange}
+          />
+        </FormGroup>
+        <FormGroup title={_('Note for Closed')}>
+          <TextArea
+            name="closedNote"
+            grow="1"
+            rows="5"
+            value={values.closedNote}
             onChange={onValueChange}
           />
         </FormGroup>
@@ -102,6 +125,9 @@ const EditTicketDialog = ({
 );
 
 EditTicketDialog.propTypes = {
+  closedNote: PropTypes.string,
+  fixedNote: PropTypes.string,
+  openNote: PropTypes.string,
   status: PropTypes.oneOf(STATUS),
   ticketId: PropTypes.id.isRequired,
   title: PropTypes.toString,

@@ -189,13 +189,18 @@ class TicketComponent extends React.Component {
                     TICKET_STATUS.closed :
                     ticket.status
                 }
+                openNote={ticket.openNote}
+                fixedNote={ticket.fixedNote}
+                closedNote={ticket.closedNote}
                 ticketId={ticket.id}
                 title={_('Edit Ticket {{- name}}', ticket)}
                 userId={ticket.assignedTo.user.id}
                 users={users}
                 onClose={this.handleCloseEditDialog}
                 onSave={({
-                  note,
+                  openNote,
+                  fixedNote,
+                  closedNote,
                   status,
                   ticketId,
                   userId, // eslint-disable-line no-shadow
@@ -203,7 +208,9 @@ class TicketComponent extends React.Component {
                   this.handleInteraction();
                   return save({
                     id: ticketId,
-                    note,
+                    openNote,
+                    fixedNote,
+                    closedNote,
                     status,
                     userId,
                   }).then(this.closeEditDialog);
