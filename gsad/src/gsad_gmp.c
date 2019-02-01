@@ -1097,13 +1097,11 @@ get_one (gvm_connection_t *connection, const char *type,
 {
   GString *xml;
   gchar *id_name;
-  const char *id, *sort_field, *sort_order;
+  const char *id;
 
   id_name = g_strdup_printf ("%s_id", type);
   id = params_value (params, id_name);
   g_free (id_name);
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
 
   CHECK_VARIABLE_INVALID (id, "Get")
 
@@ -1118,15 +1116,11 @@ get_one (gvm_connection_t *connection, const char *type,
   if (gvm_connection_sendf (connection,
                             "<get_%ss"
                             " %s_id=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
                             " details=\"1\""
                             " %s/>",
                             type,
                             type,
                             id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending",
                             extra_attribs ? extra_attribs : "")
       == -1)
     {
