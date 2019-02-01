@@ -23,6 +23,7 @@ import _ from 'gmp/locale';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import PortListIcon from 'web/components/icon/portlisticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -197,7 +198,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="port_list.svg"
+        sectionIcon={<PortListIcon size="large"/>}
         title={_('Port List')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}

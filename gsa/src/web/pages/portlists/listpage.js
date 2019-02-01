@@ -33,6 +33,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import NewIcon from 'web/components/icon/newicon';
+import PortListIcon from 'web/components/icon/portlisticon';
 
 import {
   loadEntities,
@@ -105,7 +106,7 @@ const PortListsPage = ({
       {...props}
       filterEditDialog={PortListsFilterDialog}
       filtersFilter={PORTLISTS_FILTER_FILTER}
-      sectionIcon="port_list.svg"
+      sectionIcon={<PortListIcon size="large"/>}
       table={PortListsTable}
       title={_('Portlists')}
       toolBarIcons={ToolBarIcons}

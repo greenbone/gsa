@@ -324,6 +324,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/portlisticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
@@ -397,6 +398,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/refresh.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
