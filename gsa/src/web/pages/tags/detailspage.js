@@ -28,6 +28,7 @@ import EnableIcon from 'web/components/icon/enableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import TagIcon from 'web/components/icon/tagicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -192,7 +193,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="tag.svg"
+          sectionIcon={<TagIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Tag')}
           onInteraction={onInteraction}
