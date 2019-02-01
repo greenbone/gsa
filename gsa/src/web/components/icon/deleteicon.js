@@ -26,9 +26,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/delete.svg';
+
+const DeleteSvgIcon = withSvgIcon()(Icon);
 
 const DeleteIcon = ({
   selectionType,
@@ -47,12 +49,10 @@ const DeleteIcon = ({
     }
   }
   return (
-    <SvgIcon
+    <DeleteSvgIcon
       {...props}
       title={title}
-    >
-      <Icon/>
-    </SvgIcon>
+    />
   );
 };
 

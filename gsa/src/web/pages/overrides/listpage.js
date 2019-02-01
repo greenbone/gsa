@@ -32,6 +32,7 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -116,7 +117,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={OVERRIDES_FILTER_FILTER}
-        sectionIcon="override.svg"
+        sectionIcon={<OverrideIcon size="large"/>}
         table={OverridesTable}
         title={_('Overrides')}
         toolBarIcons={ToolBarIcons}

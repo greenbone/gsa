@@ -30,7 +30,7 @@ import PasswordField from 'web/components/form/passwordfield';
 import Button from 'web/components/form/button';
 import TextField from 'web/components/form/textfield';
 
-import Img from 'web/components/img/img';
+import ProductImage from 'web/components/img/product';
 
 import Layout from 'web/components/layout/layout';
 
@@ -55,11 +55,6 @@ const Error = styled.p`
   font-weight: bold;
   text-align: center;
   margin: 10px;
-`;
-
-const StyledImg = styled(Img)`
-  display: flex;
-  height: 95px;
 `;
 
 class LoginForm extends React.Component {
@@ -115,7 +110,7 @@ class LoginForm extends React.Component {
         }
 
         <LoginPanel>
-          <StyledImg src="login-label.png"/>
+          <ProductImage/>
           <Layout flex="column">
             <FormGroup title={_('Username')} titleSize="4">
               <TextField

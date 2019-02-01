@@ -27,6 +27,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import TargetIcon from 'web/components/icon/targeticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -94,7 +95,7 @@ const TargetsPage = ({
       {...props}
       filterEditDialog={TargetsFilterDialog}
       filtersFilter={TARGETS_FILTER_FILTER}
-      sectionIcon="target.svg"
+      sectionIcon={<TargetIcon size="large"/>}
       table={TargetsTable}
       title={_('Targets')}
       toolBarIcons={ToolBarIcons}

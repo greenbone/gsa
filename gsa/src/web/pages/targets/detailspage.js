@@ -56,6 +56,7 @@ import withEntityContainer, {
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
+import TargetIcon from 'web/components/icon/targeticon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import {
@@ -201,7 +202,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="target.svg"
+          sectionIcon={<TargetIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
           onInteraction={onInteraction}

@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
+import ErrorContainer from 'web/components/errorboundary/errorcontainer';
 
 import Button from 'web/components/form/button';
 
@@ -125,6 +126,8 @@ class Trashcan extends React.Component {
     const data = gmp.trashcan.get().then(response => {
       const trash = response.data;
       this.setState({trash});
+    }, error => {
+      this.setState({error});
     });
     return data;
   }
@@ -233,7 +236,18 @@ class Trashcan extends React.Component {
   };
 
   render() {
-    const {trash} = this.state;
+    const {
+      error,
+      trash,
+    } = this.state;
+
+    if (isDefined(error)) {
+      return (
+        <ErrorContainer>
+          {error.message}
+        </ErrorContainer>
+      );
+    }
     if (!isDefined(trash)) {
       return <Loading/>;
     }

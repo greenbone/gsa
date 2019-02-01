@@ -22,7 +22,7 @@ import {testIcon} from 'web/components/icon/testing';
 import DeltaSecondIcon from '../deltasecondicon';
 
 describe('DeltaSecondIcon component tests', () => {
-  testIcon(DeltaSecondIcon, 'delta_second');
+  testIcon(DeltaSecondIcon);
 });
 
 // vim: set ts=2 sw=2 tw=80:

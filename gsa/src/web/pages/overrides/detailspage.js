@@ -25,8 +25,9 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -228,7 +229,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="override.svg"
+        sectionIcon={<OverrideIcon size="large"/>}
         title={_('Override')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}

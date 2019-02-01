@@ -19,25 +19,14 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import Icon from 'web/components/icon/icon';
 import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Theme from 'web/utils/theme';
-
-const ErrorContainer = styled(Layout)`
-  padding: 15px;
-  margin: 15px 15px 15px 15px;
-  border: 1px solid ${Theme.mediumLightRed};
-  color: ${Theme.darkRed};
-  background-color: ${Theme.lightRed};
-`;
+import ErrorContainer from './errorcontainer';
 
 class ErrorBoundary extends React.Component {
 

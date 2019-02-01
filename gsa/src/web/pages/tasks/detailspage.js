@@ -38,10 +38,14 @@ import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NoteIcon from 'web/components/icon/noteicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 import ReportIcon from 'web/components/icon/reporticon';
+import ResultIcon from 'web/components/icon/resulticon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -212,61 +216,55 @@ const ToolBarIcons = ({
             </DetailsLink>
           }
 
-          <Badge
-            content={entity.report_count.total}
+          <Link
+            to="reports"
+            filter={'task_id=' + entity.id}
+            title={_('Total Reports for Task {{name}}', entity)}
           >
-            <Link
-              to="reports"
-              filter={'task_id=' + entity.id}
-              title={_('Total Reports for Task {{name}}', entity)}
+            <Badge
+              content={entity.report_count.total}
             >
               <ReportIcon/>
-            </Link>
-          </Badge>
+            </Badge>
+          </Link>
         </IconDivider>
 
-        <Badge
-          content={entity.result_count}
+        <Link
+          to="results"
+          filter={'task_id=' + entity.id}
+          title={_('Results for Task {{name}}', entity)}
         >
-          <Link
-            to="results"
-            filter={'task_id=' + entity.id}
-            title={_('Results for Task {{name}}', entity)}
+          <Badge
+            content={entity.result_count}
           >
-            <Icon
-              img="result.svg"
-            />
-          </Link>
-        </Badge>
+            <ResultIcon />
+          </Badge>
+        </Link>
 
         <IconDivider>
-          <Badge
-            content={notes.length}
+          <Link
+            to="notes"
+            filter={'task_id=' + entity.id}
+            title={_('Notes for Task {{name}}', entity)}
           >
-            <Link
-              to="notes"
-              filter={'task_id=' + entity.id}
-              title={_('Notes for Task {{name}}', entity)}
+            <Badge
+              content={notes.length}
             >
-              <Icon
-                img="note.svg"
-              />
-            </Link>
-          </Badge>
+              <NoteIcon />
+            </Badge>
+          </Link>
 
-          <Badge
-            content={overrides.length}
+          <Link
+            to="overrides"
+            filter={'task_id=' + entity.id}
+            title={_('Overrides for Task {{name}}', entity)}
           >
-            <Link
-              to="overrides"
-              filter={'task_id=' + entity.id}
-              title={_('Overrides for Task {{name}}', entity)}
+            <Badge
+              content={overrides.length}
             >
-              <Icon
-                img="override.svg"
-              />
-            </Link>
-          </Badge>
+              <OverrideIcon />
+            </Badge>
+          </Link>
         </IconDivider>
       </Divider>
 
@@ -399,7 +397,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="task.svg"
+        sectionIcon={<TaskIcon size="large"/>}
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}

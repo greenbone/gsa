@@ -25,11 +25,17 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/export.svg';
 
-export const ExportIcon = ({selectionType, title, ...other}) => {
+const ExportSvgIcon = withSvgIcon()(Icon);
+
+const ExportIcon = ({
+  selectionType,
+  title,
+  ...other
+}) => {
   let download_title = title;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     download_title = _('Export page contents');
@@ -41,12 +47,10 @@ export const ExportIcon = ({selectionType, title, ...other}) => {
     download_title = _('Export all filtered');
   }
   return (
-    <SvgIcon
+    <ExportSvgIcon
       {...other}
       title={download_title}
-    >
-      <Icon/>
-    </SvgIcon>
+    />
   );
 };
 

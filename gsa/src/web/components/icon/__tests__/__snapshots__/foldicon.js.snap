@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FoldIcon component tests foldIcon tests should render 1`] = `
+exports[`FoldIcon component tests should render 1`] = `
 .c0 {
   height: 16px;
   width: 16px;

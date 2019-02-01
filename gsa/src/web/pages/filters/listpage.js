@@ -28,6 +28,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
+import FilterIcon from 'web/components/icon/filtericon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
@@ -99,7 +100,7 @@ const FiltersPage = ({
       {...props}
       filterEditDialog={FiltersFilterDialog}
       filtersFilter={FILTERS_FILTER_FILTER}
-      sectionIcon="filter.svg"
+      sectionIcon={<FilterIcon size="large"/>}
       table={FiltersTable}
       title={_('Filters')}
       toolBarIcons={ToolBarIcons}

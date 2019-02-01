@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TrashDeleteIcon component tests should render 1`] = `
+.c1 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c1 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c0 svg:hover {
+  background-color: #f2dede;
+}
+
+.c0 svg:hover path {
+  fill: #a94442;
+}
+
+<span
+  class="c0 c1 "
+>
+  <svg>
+    delete.svg
+  </svg>
+</span>
+`;

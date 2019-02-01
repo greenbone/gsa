@@ -14,12 +14,12 @@
     stroke:none;
     text-decoration-line:none;
     text-rendering:auto;
-    stroke-width:15.99999905;
+    stroke-width:18;
     font-style:normal;
     fill:#000000;
     solid-opacity:1;
     line-height:normal;
-    fill-rule:evenodd;
+    fill-rule:nonzero;
     font-variant-position:normal;
     mix-blend-mode:normal;
     fill-opacity:1;
@@ -51,6 +51,7 @@
     writing-mode:lr-tb;
     stroke-opacity:1;
     isolation:auto;
+    paint-order:normal;
     stroke-dashoffset:0;
     text-anchor:start;
     text-decoration:none;
@@ -62,6 +63,8 @@
     color-interpolation:sRGB;
 }</style>
  <g transform="translate(0 -229.27)">
-  <path class="gui_icon_class" transform="matrix(.26458 0 0 .26458 0 229.27)" d="m183.7-0.048828-16.785 52.102-54.736-0.10156 44.363 32.062-17.01 52.025 44.201-32.285 44.223 32.256-17.045-52.016 44.342-32.09-54.736 0.13672-16.816-52.09zm-183.7 16.049v240h192l-0.00391-112h-16.004l0.00196 96.004h-160v-208.01l112 0.003906v-15.996l-128-0.003906z"/>
+  <g transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)">
+   <path class="gui_icon_class" transform="matrix(.12673 0 0 .11845 -19.96 253.7)" d="m-0.0058594 0.0078125v18.615c132.19 0 238.61 106.52 238.61 237.37h17.398c1e-5 -141.64-115.04-255.99-256-255.99zm0 95.996v18.615c79.182 0 142.61 63.555 142.61 141.38h17.4c3e-5 -88.629-72.068-159.99-160.01-159.99zm32.006 95.996a32 32 0 0 0-32 32 32 32 0 0 0 32 32 32 32 0 0 0 32-32 32 32 0 0 0-32-32z"/>
+  </g>
  </g>
 </svg>

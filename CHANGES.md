@@ -8,13 +8,14 @@ $ cd gsa && git log
 
 ## gsa 8.0 unreleased
 
+ * Add Sourcefire PKCS12 password support #1150
  * Add Alemba vFire alert to GUI #1100
  * Sort alerts at task details alphanumerically #1094
  * Add solution type to report details powerfilter #1091
  * Add feature: Scan Report Content Composer #1073 #1084 #1086 #1090
- * Tags can now contain backslashes and percent signs in the value and
-   hyphens in the name to allow using the special "smb-alert:file_path"
-   task tag #1107 #1142 #1145
+ * Tags can now contain backslashes, forward slashes and percent signs in the
+   value as well as hyphens in the name to allow using the special task tag
+   "smb-alert:file_path". #1107 #1142 #1145
  * Fix issues with updating user authentication and logging out active
    sessions after changing the password of a user #1159
 

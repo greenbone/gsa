@@ -22,7 +22,7 @@ import {testIcon} from 'web/components/icon/testing';
 import TrendMoreIcon from '../trendmoreicon';
 
 describe('TrendMoreIcon component tests', () => {
-  testIcon(TrendMoreIcon, 'trend_more');
+  testIcon(TrendMoreIcon);
 });
 
 // vim: set ts=2 sw=2 tw=80:

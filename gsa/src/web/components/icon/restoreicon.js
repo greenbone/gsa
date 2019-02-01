@@ -16,29 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withSvgIcon from './withSvgIcon';
 
-import React from 'react';
+import {ReactComponent as Icon} from './svg/restore.svg';
 
-import PropTypes from 'web/utils/proptypes';
-
-import Icon from './icon';
-
-const RestoreIcon = ({
-  active = true,
-  ...props
-}) => {
-  return (
-    <Icon
-      {...props}
-      active={active}
-      img="restore.svg"
-    />
-  );
-};
-
-RestoreIcon.propTypes = {
-  active: PropTypes.bool,
-};
+const RestoreIcon = withSvgIcon({
+  active: true,
+})(Icon);
 
 export default RestoreIcon;
 

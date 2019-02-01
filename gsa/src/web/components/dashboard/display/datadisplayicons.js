@@ -20,6 +20,9 @@ import React from 'react';
 
 import {_} from 'gmp/locale/lang';
 
+import DownloadCsvIcon from 'web/components/icon/downloadcsvicon';
+import DownloadSvgIcon from 'web/components/icon/downloadsvgicon';
+import FilterIcon from 'web/components/icon/filtericon';
 import Icon from 'web/components/icon/icon';
 
 import PropTypes from 'web/utils/proptypes';
@@ -53,23 +56,18 @@ const DataDisplayIcons = ({
 }) => (
   <React.Fragment>
     {showFilterSelection &&
-      <Icon
-        img="filter.svg"
+      <FilterIcon
         title={_('Select Filter')}
         onClick={onSelectFilterClick}
       />
     }
     {showSvgDownload &&
-      <Icon
-        img="dl_svg.svg"
-        title={_('Download SVG')}
+      <DownloadSvgIcon
         onClick={onDownloadSvgClick}
       />
     }
     {showCsvDownload &&
-      <Icon
-        img="dl_csv.svg"
-        title={_('Download CSV')}
+      <DownloadCsvIcon
         onClick={onDownloadCsvClick}
       />
     }

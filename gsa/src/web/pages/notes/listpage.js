@@ -45,6 +45,7 @@ import NotesTable from './table';
 import NoteComponent from './component';
 
 import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
+import NoteIcon from 'web/components/icon/noteicon';
 
 const ToolBarIcons = withCapabilities(({
   capabilities,
@@ -114,7 +115,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={FilterDialog}
         filtersFilter={NOTES_FILTER_FILTER}
-        sectionIcon="note.svg"
+        sectionIcon={<NoteIcon size="large"/>}
         table={NotesTable}
         title={_('Notes')}
         toolBarIcons={ToolBarIcons}

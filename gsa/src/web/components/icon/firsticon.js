@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,30 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withSvgIcon from './withSvgIcon';
 
-import React from 'react';
+import {ReactComponent as Icon} from './svg/first.svg';
 
-import _ from 'gmp/locale';
+const FirstIcon = withSvgIcon()(Icon);
 
-import PropTypes from 'web/utils/proptypes';
-
-import Icon from './icon';
-
-const GreenboneIcon = ({size = 'default', ...props}) => {
-  return (
-    <Icon
-      {...props}
-      size={size}
-      alt={_('Greenbone Security Assistant')}
-      img="greenbone.svg"
-    />
-  );
-};
-
-GreenboneIcon.propTypes = {
-  size: PropTypes.iconSize,
-};
-
-export default GreenboneIcon;
+export default FirstIcon;
 
 // vim: set ts=2 sw=2 tw=80:

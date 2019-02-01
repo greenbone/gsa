@@ -24,19 +24,19 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
+import {TASK_STATUS} from 'gmp/models/task';
+
 import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-
-import EntityInfo from 'web/entity/info';
 
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
 import DownloadIcon from 'web/components/icon/downloadicon';
-import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ResultIcon from 'web/components/icon/resulticon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Divider from 'web/components/layout/divider';
@@ -59,7 +59,10 @@ import Tabs from 'web/components/tab/tabs';
 import Section from 'web/components/section/section';
 import SectionHeader from 'web/components/section/header';
 
+import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
+
+import PropTypes from 'web/utils/proptypes';
 
 import AlertActions from './alertactions';
 import ApplicationsTable from './applicationstable';
@@ -84,7 +87,6 @@ import {
   portsSortFunctions,
   tlsCertificatesSortFunctions,
 } from './sort';
-import {TASK_STATUS} from 'gmp/models/task';
 
 const TabTitleCounts = styled.span`
   font-size: 0.7em;
@@ -104,7 +106,7 @@ const TabTitle = ({title, counts}) => (
 );
 
 TabTitle.propTypes = {
-  counts: PropTypes.counts.isRequired,
+  counts: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
 };
 
@@ -172,18 +174,14 @@ const ToolBarIcons = ({
               id={task_id}
               title={_('Corresponding Task')}
             >
-              <Icon
-                img="task.svg"
-              />
+              <TaskIcon />
             </DetailsLink>
             <Link
               to="results"
               filter={'report_id=' + report.id}
               title={_('Corresponding Results')}
             >
-              <Icon
-                img="result.svg"
-              />
+              <ResultIcon />
             </Link>
             <Link
               to="vulnerabilities"
@@ -271,6 +269,7 @@ const PageContent = ({
     operatingsystems,
     ports,
     results,
+    result_count = {},
     task = {},
     tls_certificates,
     timestamp,
@@ -321,6 +320,10 @@ const PageContent = ({
       }
     </SectionHeader>
   );
+
+  const {full, filtered} = result_count;
+  const resultCounts = {filtered, all: full};
+
   return (
     <Layout
       grow
@@ -377,7 +380,7 @@ const PageContent = ({
                 <Tab>
                   <TabTitle
                     title={_('Results')}
-                    counts={results.counts}
+                    counts={resultCounts}
                   />
                 </Tab>
                 {!delta &&
@@ -452,345 +455,348 @@ const PageContent = ({
                 </Tab>
               </TabList>
             </TabLayout>
-            <Tabs active={activeTab}>
-              <TabPanels>
-                <TabPanel>
-                  <Summary
-                    report={report}
-                    onError={onError}
-                    onTagChanged={onTagSuccess}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <ResultsTab
-                    counts={results.counts}
-                    delta={delta}
-                    filter={filter}
-                    hasTarget={!isContainer}
-                    progress={task.progress}
-                    results={results.entities}
-                    sortField={sorting.results.sortField}
-                    sortReverse={sorting.results.sortReverse}
-                    status={status}
-                    onFilterAddLogLevelClick={onFilterAddLogLevelClick}
-                    onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-                    onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
-                    onFilterEditClick={onFilterEditClick}
-                    onFilterRemoveClick={onFilterRemoveClick}
-                    onInteraction={onInteraction}
-                    onSortChange={sortField =>
-                      onSortChange('results', sortField)}
-                    onTargetEditClick={onTargetEditClick}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={hosts.counts}
-                    entities={hosts.entities}
-                    filter={filter}
-                    sortField={sorting.hosts.sortField}
-                    sortReverse={sorting.hosts.sortReverse}
-                    sortFunctions={hostsSortFunctions}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <HostsTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('hosts', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={ports.counts}
-                    entities={ports.entities}
-                    filter={filter}
-                    sortField={sorting.ports.sortField}
-                    sortFunctions={portsSortFunctions}
-                    sortReverse={sorting.ports.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <PortsTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('ports', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={applications.counts}
-                    entities={applications.entities}
-                    filter={filter}
-                    sortField={sorting.apps.sortField}
-                    sortFunctions={appsSortFunctions}
-                    sortReverse={sorting.apps.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <ApplicationsTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('apps', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={operatingsystems.counts}
-                    entities={operatingsystems.entities}
-                    filter={filter}
-                    sortFunctions={operatingssystemsSortFunctions}
-                    sortField={sorting.os.sortField}
-                    sortReverse={sorting.os.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <OperatingSystemsTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('os', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={cves.counts}
-                    entities={cves.entities}
-                    filter={filter}
-                    sortFunctions={cvesSortFunctions}
-                    sortField={sorting.cves.sortField}
-                    sortReverse={sorting.cves.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <CvesTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('cves', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={closed_cves.counts}
-                    entities={closed_cves.entities}
-                    filter={filter}
-                    sortFunctions={closedCvesSortFunctions}
-                    sortField={sorting.closedcves.sortField}
-                    sortReverse={sorting.closedcves.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <ClosedCvesTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('closedcves', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={tls_certificates.counts}
-                    entities={tls_certificates.entities}
-                    filter={filter}
-                    sortFunctions={tlsCertificatesSortFunctions}
-                    sortField={sorting.tlscerts.sortField}
-                    sortReverse={sorting.tlscerts.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <TLSCertificatesTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('tlscerts', sortField)}
-                        onTlsCertificateDownloadClick={
-                          onTlsCertificateDownloadClick}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <ReportEntitiesContainer
-                    counts={errors.counts}
-                    entities={errors.entities}
-                    filter={filter}
-                    sortFunctions={errorsSortFunctions}
-                    sortField={sorting.errors.sortField}
-                    sortReverse={sorting.errors.sortReverse}
-                    onInteraction={onInteraction}
-                  >
-                    {({
-                      entities,
-                      entitiesCounts,
-                      sortBy,
-                      sortDir,
-                      onFirstClick,
-                      onLastClick,
-                      onNextClick,
-                      onPreviousClick,
-                    }) => (
-                      <ErrorsTable
-                        entities={entities}
-                        entitiesCounts={entitiesCounts}
-                        filter={filter}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                        toggleDetailsIcon={false}
-                        onFirstClick={onFirstClick}
-                        onLastClick={onLastClick}
-                        onNextClick={onNextClick}
-                        onPreviousClick={onPreviousClick}
-                        onSortChange={
-                          sortField => onSortChange('errors', sortField)}
-                      />
-                    )}
-                  </ReportEntitiesContainer>
-                </TabPanel>
-                <TabPanel>
-                  <EntityTags
-                    entity={report}
-                    onChanged={onTagSuccess}
-                    onError={onError}
-                    onInteraction={onInteraction}
-                  />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+            {isDefined(results) ?
+              <Tabs active={activeTab}>
+                <TabPanels>
+                  <TabPanel>
+                    <Summary
+                      report={report}
+                      onError={onError}
+                      onTagChanged={onTagSuccess}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <ResultsTab
+                      counts={results.counts}
+                      delta={delta}
+                      filter={filter}
+                      hasTarget={!isContainer}
+                      progress={task.progress}
+                      results={isDefined(results) ? results.entities : {}}
+                      sortField={sorting.results.sortField}
+                      sortReverse={sorting.results.sortReverse}
+                      status={status}
+                      onFilterAddLogLevelClick={onFilterAddLogLevelClick}
+                      onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
+                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
+                      onFilterEditClick={onFilterEditClick}
+                      onFilterRemoveClick={onFilterRemoveClick}
+                      onInteraction={onInteraction}
+                      onSortChange={sortField =>
+                        onSortChange('results', sortField)}
+                      onTargetEditClick={onTargetEditClick}
+                    />
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={hosts.counts}
+                      entities={hosts.entities}
+                      filter={filter}
+                      sortField={sorting.hosts.sortField}
+                      sortReverse={sorting.hosts.sortReverse}
+                      sortFunctions={hostsSortFunctions}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <HostsTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('hosts', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={ports.counts}
+                      entities={ports.entities}
+                      filter={filter}
+                      sortField={sorting.ports.sortField}
+                      sortFunctions={portsSortFunctions}
+                      sortReverse={sorting.ports.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <PortsTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('ports', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={applications.counts}
+                      entities={applications.entities}
+                      filter={filter}
+                      sortField={sorting.apps.sortField}
+                      sortFunctions={appsSortFunctions}
+                      sortReverse={sorting.apps.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <ApplicationsTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('apps', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={operatingsystems.counts}
+                      entities={operatingsystems.entities}
+                      filter={filter}
+                      sortFunctions={operatingssystemsSortFunctions}
+                      sortField={sorting.os.sortField}
+                      sortReverse={sorting.os.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <OperatingSystemsTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('os', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={cves.counts}
+                      entities={cves.entities}
+                      filter={filter}
+                      sortFunctions={cvesSortFunctions}
+                      sortField={sorting.cves.sortField}
+                      sortReverse={sorting.cves.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <CvesTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('cves', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={closed_cves.counts}
+                      entities={closed_cves.entities}
+                      filter={filter}
+                      sortFunctions={closedCvesSortFunctions}
+                      sortField={sorting.closedcves.sortField}
+                      sortReverse={sorting.closedcves.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <ClosedCvesTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('closedcves', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={tls_certificates.counts}
+                      entities={tls_certificates.entities}
+                      filter={filter}
+                      sortFunctions={tlsCertificatesSortFunctions}
+                      sortField={sorting.tlscerts.sortField}
+                      sortReverse={sorting.tlscerts.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <TLSCertificatesTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('tlscerts', sortField)}
+                          onTlsCertificateDownloadClick={
+                            onTlsCertificateDownloadClick}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <ReportEntitiesContainer
+                      counts={errors.counts}
+                      entities={errors.entities}
+                      filter={filter}
+                      sortFunctions={errorsSortFunctions}
+                      sortField={sorting.errors.sortField}
+                      sortReverse={sorting.errors.sortReverse}
+                      onInteraction={onInteraction}
+                    >
+                      {({
+                        entities,
+                        entitiesCounts,
+                        sortBy,
+                        sortDir,
+                        onFirstClick,
+                        onLastClick,
+                        onNextClick,
+                        onPreviousClick,
+                      }) => (
+                        <ErrorsTable
+                          entities={entities}
+                          entitiesCounts={entitiesCounts}
+                          filter={filter}
+                          sortBy={sortBy}
+                          sortDir={sortDir}
+                          toggleDetailsIcon={false}
+                          onFirstClick={onFirstClick}
+                          onLastClick={onLastClick}
+                          onNextClick={onNextClick}
+                          onPreviousClick={onPreviousClick}
+                          onSortChange={
+                            sortField => onSortChange('errors', sortField)}
+                        />
+                      )}
+                    </ReportEntitiesContainer>
+                  </TabPanel>
+                  <TabPanel>
+                    <EntityTags
+                      entity={report}
+                      onChanged={onTagSuccess}
+                      onError={onError}
+                      onInteraction={onInteraction}
+                    />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs> :
+              <Loading/>
+            }
           </React.Fragment>
         }
       </Section>

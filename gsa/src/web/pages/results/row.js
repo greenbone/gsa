@@ -29,7 +29,8 @@ import {shorten} from 'gmp/utils/string';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
-import Icon from 'web/components/icon/icon';
+import NoteIcon from 'web/components/icon/noteicon';
+import OverrideIcon from 'web/components/icon/overrideicon';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -84,14 +85,12 @@ const Row = ({
             </span>
             <IconDivider>
               {hasActiveNotes &&
-                <Icon
-                  img="new_note.svg"
+                <NoteIcon
                   title={_('There are notes for this result')}
                 />
               }
               {hasActiveOverrides &&
-                <Icon
-                  img="new_override.svg"
+                <OverrideIcon
                   title={_('There are overrides for this result')}
                 />
               }

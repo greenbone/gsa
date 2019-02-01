@@ -27,11 +27,14 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
-import ReportIcon from 'web/components/icon/reporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewNoteIcon from 'web/components/icon/newnoteicon';
+import NewOverrideIcon from 'web/components/icon/newoverrideicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
+import ReportIcon from 'web/components/icon/reporticon';
+import ResultIcon from 'web/components/icon/resulticon';
+import TaskIcon from 'web/components/icon/taskicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -100,16 +103,14 @@ let ToolBarIcons = ({
     </IconDivider>
     <IconDivider>
       {capabilities.mayCreate('note') &&
-        <Icon
-          img="new_note.svg"
+        <NewNoteIcon
           title={_('Add new Note')}
           value={entity}
           onClick={onNoteCreateClick}
         />
       }
       {capabilities.mayCreate('override') &&
-        <Icon
-          img="new_override.svg"
+        <NewOverrideIcon
           title={_('Add new Override')}
           value={entity}
           onClick={onOverrideCreateClick}
@@ -122,8 +123,7 @@ let ToolBarIcons = ({
           type="task"
           id={entity.task.id}
         >
-          <Icon
-            img="task.svg"
+          <TaskIcon
             title={_('Corresponding Task ({{name}})', entity.task)}
           />
         </DetailsLink>
@@ -372,7 +372,7 @@ class Page extends React.Component {
               <EntityPage
                 {...this.props}
                 entity={entity}
-                sectionIcon="result.svg"
+                sectionIcon={<ResultIcon size="large"/>}
                 title={_('Result')}
                 toolBarIcons={ToolBarIcons}
                 onInteraction={onInteraction}

@@ -28,6 +28,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import ResultIcon from 'web/components/icon/resulticon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -76,7 +77,7 @@ const Page = ({
     filter={filter}
     filtersFilter={RESULTS_FILTER_FILTER}
     filterEditDialog={ResultsFilterDialog}
-    sectionIcon="result.svg"
+    sectionIcon={<ResultIcon size="large"/>}
     title={_('Results')}
     toolBarIcons={ToolBarIcons}
     table={ResultsTable}

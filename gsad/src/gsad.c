@@ -309,33 +309,17 @@ init_validator ()
                      "|(delete_target)"
                      "|(delete_task)"
                      "|(delete_user)"
-                     "|(delete_user_confirm)"
                      "|(download_agent)"
                      "|(download_credential)"
                      "|(download_ssl_cert)"
                      "|(download_ca_pub)"
                      "|(download_key_pub)"
-                     "|(edit_agent)"
                      "|(edit_alert)"
-                     "|(edit_asset)"
                      "|(edit_config)"
                      "|(edit_config_family)"
                      "|(edit_config_nvt)"
-                     "|(edit_credential)"
-                     "|(edit_filter)"
-                     "|(edit_group)"
-                     "|(edit_note)"
-                     "|(edit_override)"
-                     "|(edit_permission)"
-                     "|(edit_port_list)"
-                     "|(edit_report_format)"
                      "|(edit_role)"
-                     "|(edit_scanner)"
-                     "|(edit_schedule)"
-                     "|(edit_tag)"
-                     "|(edit_target)"
                      "|(edit_task)"
-                     "|(edit_user)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
                      "|(alert_report)"
@@ -402,7 +386,6 @@ init_validator ()
                      "|(get_info)"
                      "|(get_note)"
                      "|(get_notes)"
-                     "|(get_nvts)"
                      "|(get_override)"
                      "|(get_overrides)"
                      "|(get_permission)"
@@ -525,7 +508,7 @@ init_validator ()
   gvm_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   gvm_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
-  gvm_validator_add (validator, "credential_type", "^(cc|up|usk|smime|pgp|snmp)$");
+  gvm_validator_add (validator, "credential_type", "^(cc|up|usk|smime|pgp|snmp|pw)$");
   gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
   gvm_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
@@ -677,7 +660,7 @@ init_validator ()
   gvm_validator_add (validator, "summary",    "^.{0,400}$");
   gvm_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "tag_name",  "^[\\:\\-_[:alnum:], \\./]{1,80}$");
-  gvm_validator_add (validator, "tag_value", "^[\\-_@%[:alnum:], \\.\\\\]{0,200}$");
+  gvm_validator_add (validator, "tag_value", "^[\\-_@%[:alnum:], \\.\\/\\\\]{0,200}$");
   gvm_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "term",       "^.{0,1000}");
@@ -1951,28 +1934,12 @@ exec_gmp_get (http_connection_t *con,
   ELSE (new_alert)
   ELSE (get_task)
   ELSE (get_tasks)
-  ELSE (delete_user_confirm)
-  ELSE (edit_agent)
   ELSE (edit_alert)
-  ELSE (edit_asset)
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
-  ELSE (edit_credential)
-  ELSE (edit_filter)
-  ELSE (edit_group)
-  ELSE (edit_note)
-  ELSE (edit_override)
-  ELSE (edit_permission)
-  ELSE (edit_port_list)
-  ELSE (edit_report_format)
   ELSE (edit_role)
-  ELSE (edit_scanner)
-  ELSE (edit_schedule)
-  ELSE (edit_tag)
-  ELSE (edit_target)
   ELSE (edit_task)
-  ELSE (edit_user)
   ELSE (auth_settings)
   ELSE (export_agent)
   ELSE (export_agents)
@@ -2165,7 +2132,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_configs)
   ELSE (get_config_family)
   ELSE (get_config_nvt)
-  ELSE (get_nvts)
   ELSE (ping)
   ELSE (sync_config)
   ELSE (wizard)
