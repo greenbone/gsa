@@ -35,6 +35,7 @@ import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
+import ReportIcon from 'web/components/icon/reporticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -237,7 +238,7 @@ class Page extends React.Component {
           table={ReportsTable}
           toolBarIcons={ToolBarIcons}
           title={_('Reports')}
-          sectionIcon="report.svg"
+          sectionIcon={<ReportIcon size="large"/>}
           onInteraction={onInteraction}
           onUploadReportClick={this.openImportDialog}
           onReportDeltaSelect={this.handleReportDeltaSelect}

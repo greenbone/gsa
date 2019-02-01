@@ -37,6 +37,7 @@ import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
+import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
@@ -310,7 +311,7 @@ const PageContent = ({
 
   const header = (
     <SectionHeader
-      img="report.svg"
+      img={<ReportIcon size="large"/>}
       title={header_title}
     >
       {hasReport &&
