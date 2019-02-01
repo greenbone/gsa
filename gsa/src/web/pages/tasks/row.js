@@ -36,6 +36,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import Comment from 'web/components/comment/comment';
 
 import AlterableIcon from 'web/components/icon/alterableicon';
+import ProvideViewIcon from 'web/components/icon/provideviewicon';
 import Icon from 'web/components/icon/icon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -144,9 +145,8 @@ const Row = ({
               userName={username}
             />
             {isDefined(observers) && observers.length > 0 &&
-              <Icon
+              <ProvideViewIcon
                 size="small"
-                img="provide_view.svg"
                 title={_('Task made visible for: {{observers}}',
                   {observers: obs.join(', ')})}
               /> // TODO observer roles and groups
