@@ -42,6 +42,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import MySettingsIcon from 'web/components/icon/mysettingsicon';
 import EditIcon from 'web/components/icon/editicon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -371,7 +372,7 @@ class UserSettings extends React.Component {
             onEditSettingsClick={this.openDialog}
           />
           <Section
-            img="my_setting.svg"
+            img={<MySettingsIcon size="large"/>}
             title={_('My Settings')}
           />
           {isLoading ?
