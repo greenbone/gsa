@@ -30,6 +30,7 @@ import DashboardControls from 'web/components/dashboard/controls';
 import Layout from 'web/components/layout/layout';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 
 import {
   loadEntities,
@@ -79,7 +80,7 @@ const Page = ({
     filtersFilter={VULNS_FILTER_FILTER}
     table={VulnsTable}
     title={_('Vulnerabilities')}
-    sectionIcon="vulnerability.svg"
+    sectionIcon={<VulnerabilityIcon size="large"/>}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
     onInteraction={onInteraction}

@@ -361,6 +361,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/usericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/verifyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/viewothericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/vulnerabilityicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${GSA_SRC_DIR}/src/web/components/icon/withSvgIcon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
@@ -442,6 +443,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/user.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/verify.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/view_other.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/vulnerability.svg
      ${GSA_SRC_DIR}/src/web/components/img/greenbone.js
      ${GSA_SRC_DIR}/src/web/components/img/img.js
      ${GSA_SRC_DIR}/src/web/components/img/product.js

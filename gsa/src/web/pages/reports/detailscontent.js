@@ -33,7 +33,7 @@ import ToolBar from 'web/components/bar/toolbar';
 
 import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
-import Icon from 'web/components/icon/icon';
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
@@ -189,9 +189,7 @@ const ToolBarIcons = ({
               filter={'report_id=' + report.id}
               title={_('Corresponding Vulnerabilities')}
             >
-              <Icon
-                img="vulnerability.svg"
-              />
+              <VulnerabilityIcon/>
             </Link>
           </IconDivider>
           {!delta &&

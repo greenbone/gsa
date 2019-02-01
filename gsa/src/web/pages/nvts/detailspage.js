@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import Filter from 'gmp/models/filter';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import Icon from 'web/components/icon/icon';
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewNoteIcon from 'web/components/icon/newnoteicon';
@@ -134,8 +134,7 @@ let ToolBarIcons = ({
             to="vulnerabilities"
             filter={'uuid=' + entity.id}
           >
-            <Icon
-              img="vulnerability.svg"
+            <VulnerabilityIcon
               title={_('Corresponding Vulnerabilities')}
             />
           </Link>
