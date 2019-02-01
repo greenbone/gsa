@@ -28,7 +28,7 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import TextField from 'web/components/form/textfield';
 
-import Icon from 'web/components/icon/icon';
+import {default as WizIcon} from 'web/components/icon/wizardicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
@@ -44,7 +44,7 @@ const IconContainer = styled.div`
 
 export const WizardIcon = () => (
   <IconContainer>
-    <Icon img="wizard.svg" size="large"/>
+    <WizIcon size="large"/>
   </IconContainer>
 );
 
