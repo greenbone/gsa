@@ -31,6 +31,7 @@ import CveIcon from 'web/components/icon/cveicon';
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import NvtIcon from 'web/components/icon/nvticon';
 import Icon from 'web/components/icon/icon';
 
 import Divider from 'web/components/layout/divider';
@@ -142,8 +143,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="nvts">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="nvt.svg"
+                            <NvtIcon
                               size="medium"
                             />
                             <span>NVTs</span>
