@@ -21493,20 +21493,26 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
           {
             user_t * user = session_get_user_by_username (old_login);
 
-            if (!str_equal(modify_password, "0") ||
-              (user && !str_equal(old_login, login)))
+            if (user &&
+                (!str_equal(modify_password, "0") ||
+                 !str_equal(old_login, login)))
               {
                 /* logout all other user sessions if new password was set,
                    authentication type has changed or username has changed */
-                session_remove_other_sessions(user_get_token(user), user);
+                session_remove_other_sessions (user_get_token(current_user),
+                                               user);
               }
 
-            if (str_equal (modify_password, "1") &&
-             str_equal (old_login, user_get_username (current_user)))
+            if (str_equal (old_login, user_get_username (current_user)))
               {
-                /* update password and username of current user */
-                user_set_password (current_user, password);
+                /* update username of current user */
                 user_set_username (current_user, login);
+
+                if (str_equal (modify_password, "1"))
+                  {
+                    /* update password of current user */
+                    user_set_password (current_user, password);
+                  }
               }
           }
         break;
