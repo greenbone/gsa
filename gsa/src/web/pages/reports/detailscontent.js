@@ -31,6 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
+import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
 import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
@@ -157,8 +158,7 @@ const ToolBarIcons = ({
             onClick={onReportDownloadClick}
           />
           <IconDivider>
-            <Icon
-              img="add_to_assets.svg"
+            <AddToAssetsIcon
               title={_('Add to Assets with QoD=>70% and Overrides enabled')}
               onClick={onAddToAssetsClick}
             />

@@ -267,6 +267,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${GSA_SRC_DIR}/src/web/components/form/withDownload.js
      ${GSA_SRC_DIR}/src/web/components/form/yesnoradio.js
+     ${GSA_SRC_DIR}/src/web/components/icon/addtoassetsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
@@ -322,6 +323,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${GSA_SRC_DIR}/src/web/components/icon/withSvgIcon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
