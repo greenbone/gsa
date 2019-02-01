@@ -35,6 +35,7 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
+import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import Icon from 'web/components/icon/icon';
@@ -125,16 +126,14 @@ const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         {isDefined(entity.credential) &&
-          <Icon
+          <DownloadKeyIcon
             title={_('Download Certificate')}
-            img="key.svg"
             value={entity}
             onClick={onScannerCredentialDownloadClick}
           />
         }
         {isDefined(entity.ca_pub) &&
-          <Icon
-            img="key.svg"
+          <DownloadKeyIcon
             title={_('Download CA Certificate')}
             value={entity}
             onClick={onScannerCertificateDownloadClick}
