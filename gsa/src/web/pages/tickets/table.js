@@ -18,6 +18,7 @@
  */
 import React from 'react';
 
+import {longDate} from 'gmp/locale/date';
 import {_l, _} from 'gmp/locale/lang';
 
 import {getTranslatableTicketStatus} from 'gmp/models/ticket';
@@ -68,6 +69,10 @@ export const FIELDS = [
   {
     name: 'username',
     displayName: _l('Assigned User'),
+  },
+  {
+    name: 'modified',
+    displayName: _l('Modification Time'),
   },
   {
     name: 'status',
@@ -144,6 +149,9 @@ const Row = ({
     </TableData>
     <TableData>
       {entity.assignedTo.user.name}
+    </TableData>
+    <TableData>
+      {longDate(entity.modificationTime)}
     </TableData>
     <TableData>
       {getTranslatableTicketStatus(entity.status)}
