@@ -26,7 +26,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
 
-import Icon from './icon';
+import TagsSvgIcon from './tagssvgicon';
 
 const TagsIcon = ({
   active = true,
@@ -46,10 +46,9 @@ const TagsIcon = ({
     }
   }
   return (
-    <Icon
+    <TagsSvgIcon
       {...other}
       active={active}
-      img={'tags.svg'}
       title={title}
     />
   );

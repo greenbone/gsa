@@ -32,6 +32,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import OsSvgIcon from 'web/components/icon/ossvgicon';
 
 import {
   loadEntities,
@@ -100,7 +101,7 @@ const Page = ({
         filter={filter}
         filtersFilter={OS_FILTER_FILTER}
         filterEditDialog={OsFilterDialog}
-        sectionIcon="os.svg"
+        sectionIcon={<OsSvgIcon size="large"/>}
         table={OsTable}
         title={_('Operating Systems')}
         toolBarIcons={ToolBarIcons}

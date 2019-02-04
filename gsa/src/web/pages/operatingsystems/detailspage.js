@@ -30,6 +30,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import HostIcon from 'web/components/icon/hosticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import OsSvgIcon from 'web/components/icon/ossvgicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -227,7 +228,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="os.svg"
+        sectionIcon={<OsSvgIcon size="large"/>}
         title={_('Operating System')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}

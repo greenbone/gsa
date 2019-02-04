@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TrendDownIcon component tests should render 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  class="c0 "
+>
+  <svg>
+    trend_down.svg
+  </svg>
+</span>
+`;

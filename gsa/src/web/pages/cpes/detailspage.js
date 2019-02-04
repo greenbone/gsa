@@ -23,6 +23,7 @@ import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
+import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -191,7 +192,7 @@ const CpePage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="cpe.svg"
+        sectionIcon={<CpeLogoIcon size="large"/>}
         title={_('CPE')}
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}

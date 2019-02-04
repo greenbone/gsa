@@ -277,6 +277,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/cpelogoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cveicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cvssicon.js
@@ -311,6 +312,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/ldapicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/legendicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
@@ -320,6 +322,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nvticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/ossvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/ovaldeficon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
@@ -343,19 +346,24 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/scheduleicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/sensoricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/solutiontypesvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/tagssvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trenddownicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendlessicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendupicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/uploadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/usericon.js
@@ -374,6 +382,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cpe.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/credential.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cve.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cvss_calculator.svg
@@ -404,6 +413,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
@@ -411,6 +421,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/os.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ovaldef.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
@@ -433,13 +444,18 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/stop.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/schedule.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/sensor.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/solution_type.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/tag.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/tags.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_down.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_less.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_up.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/upload.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/user.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/verify.svg

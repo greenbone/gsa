@@ -29,7 +29,7 @@ import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
 
-import Icon from 'web/components/icon/icon';
+import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
 
 import Sort from 'web/components/sortby/sortby';
 
@@ -100,9 +100,9 @@ const Header = ({
           <Layout align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
-                <Icon title={_('Solution type')} img="solution_type.svg"/>
+                <SolutionTypeSvgIcon title={_('Solution type')}/>
               </Sort> :
-              <Icon title={_('Solution type')} img="solution_type.svg"/>
+              <SolutionTypeSvgIcon title={_('Solution type')}/>
             }
           </Layout>
         </TableHead>

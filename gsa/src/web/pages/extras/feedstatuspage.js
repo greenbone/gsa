@@ -33,7 +33,7 @@ import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
 import OvalDefIcon from 'web/components/icon/ovaldeficon';
-import Icon from 'web/components/icon/icon';
+import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -164,8 +164,7 @@ class FeedStatus extends React.Component {
                         </Link>
                         <Link to="cpes">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="cpe.svg"
+                            <CpeLogoIcon
                               size="medium"
                             />
                             <span>CPEs</span>
