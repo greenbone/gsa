@@ -312,6 +312,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/ldapicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/legendicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
@@ -406,6 +407,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
