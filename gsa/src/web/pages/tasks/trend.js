@@ -21,39 +21,42 @@ import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import TrendUpIcon from 'web/components/icon/trendupicon';
+import TrendDownIcon from 'web/components/icon/trenddownicon';
+import TrendMoreIcon from 'web/components/icon/trendmoreicon';
+import TrendLessIcon from 'web/components/icon/trendlessicon';
+import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
 
 const Trend = ({name}) => {
   let title;
-  let img;
+  let IconComponent;
 
   if (name === 'up') {
     title = 'Severity increased';
-    img = 'trend_' + name + '.svg';
+    IconComponent = TrendUpIcon;
   }
   else if (name === 'down') {
     title = 'Severity decreased';
-    img = 'trend_' + name + '.svg';
+    IconComponent = TrendDownIcon;
   }
   else if (name === 'more') {
     title = 'Vulnerability count increased';
-    img = 'trend_' + name + '.svg';
+    IconComponent = TrendMoreIcon;
   }
   else if (name === 'less') {
     title = 'Vulnerability count decreased';
-    img = 'trend_' + name + '.svg';
+    IconComponent = TrendLessIcon;
   }
   else if (name === 'same') {
     title = 'Vulnerabilities did not change';
-    img = 'trend_nochange.svg';
+    IconComponent = TrendNoChangeIcon;
   }
   else {
     return <span/>;
   }
 
   return (
-    <Icon
-      img={img}
+    <IconComponent
       size="small"
       alt={title}
       title={title}

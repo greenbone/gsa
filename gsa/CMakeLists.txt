@@ -359,8 +359,11 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trenddownicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendlessicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trendupicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/uploadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/usericon.js
@@ -448,8 +451,11 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_down.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_less.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_up.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/upload.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/user.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/verify.svg
