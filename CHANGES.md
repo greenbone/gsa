@@ -16,6 +16,8 @@ $ cd gsa && git log
  * Tags can now contain backslashes, forward slashes and percent signs in the
    value as well as hyphens in the name to allow using the special task tag
    "smb-alert:file_path". #1107 #1142 #1145
+ * Fix issues with updating user authentication and logging out active
+   sessions after changing the password of a user #1159
 
 
 ## gsa 8.0+beta2 (2018-12-04)
