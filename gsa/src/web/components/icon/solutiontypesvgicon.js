@@ -16,33 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import withSvgIcon from './withSvgIcon';
 
-import React from 'react';
+import {ReactComponent as Icon} from './svg/solution_type.svg';
 
-import PropTypes from 'web/utils/proptypes';
+const SolutionTypeSvgIcon = withSvgIcon()(Icon);
 
-import Link from 'web/components/link/link';
-
-import ListSvgIcon from './listsvgicon';
-
-const ListIcon = ({page, filter, ...props}) => {
-  return (
-    <Link
-      to={page}
-      filter={filter}
-    >
-      <ListSvgIcon
-        {...props}
-      />
-    </Link>
-  );
-};
-
-ListIcon.propTypes = {
-  filter: PropTypes.filter,
-  page: PropTypes.string.isRequired,
-};
-
-export default ListIcon;
+export default SolutionTypeSvgIcon;
 
 // vim: set ts=2 sw=2 tw=80:

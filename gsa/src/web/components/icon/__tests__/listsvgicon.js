@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2019 Greenbone Networks GmbH
+/* Copyright (C) 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,32 +17,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import {testIcon} from 'web/components/icon/testing';
 
-import PropTypes from 'web/utils/proptypes';
+import ListSvgIcon from '../listsvgicon';
 
-import Link from 'web/components/link/link';
-
-import ListSvgIcon from './listsvgicon';
-
-const ListIcon = ({page, filter, ...props}) => {
-  return (
-    <Link
-      to={page}
-      filter={filter}
-    >
-      <ListSvgIcon
-        {...props}
-      />
-    </Link>
-  );
-};
-
-ListIcon.propTypes = {
-  filter: PropTypes.filter,
-  page: PropTypes.string.isRequired,
-};
-
-export default ListIcon;
+describe('ListSvgIcon component tests', () => {
+  testIcon(ListSvgIcon);
+});
 
 // vim: set ts=2 sw=2 tw=80:
