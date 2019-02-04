@@ -45,12 +45,14 @@ const DialogTwoButtonFooter = ({
     shrink="0"
   >
     <Button
+      data-testid="dialog-close-button"
       onClick={onLeftButtonClick}
       title={leftButtonTitle}
     >
       {leftButtonTitle}
     </Button>
     <Button
+      data-testid="dialog-save-button"
       onClick={onRightButtonClick}
       title={rightButtonTitle}
       loading={loading}

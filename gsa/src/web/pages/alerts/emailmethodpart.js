@@ -22,19 +22,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isTaskEvent, isSecinfoEvent} from 'gmp/models/alert';
 import {
   EMAIL_CREDENTIAL_TYPES,
   email_credential_filter,
 } from 'gmp/models/credential';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-import withPrefix from 'web/utils/withPrefix';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
@@ -42,15 +34,23 @@ import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
 
-import IconDivider from 'web/components/layout/icondivider';
-
 import NewIcon from 'web/components/icon/newicon';
+
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+import withPrefix from 'web/utils/withPrefix';
 
 const EmailMethodPart = ({
   capabilities,
   credentials = [],
   fromAddress,
-  isTaskEvent,
+  event,
   message,
   messageAttach,
   notice,
@@ -65,9 +65,11 @@ const EmailMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const taskEvent = isTaskEvent(event);
+  const secinfoEvent = isSecinfoEvent(event);
   const reportFormatItems = renderSelectItems(
     reportFormats.filter(format =>
-      (isTaskEvent && format.content_type.startsWith('text/')) || !isTaskEvent)
+      (taskEvent && format.content_type.startsWith('text/')) || !taskEvent)
   );
   credentials = credentials.filter(email_credential_filter);
   return (
@@ -91,16 +93,18 @@ const EmailMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('Subject')}>
-        <TextField
-          grow="1"
-          name={prefix + 'subject'}
-          size="30"
-          maxLength="80"
-          value={subject}
-          onChange={onChange}
-        />
-      </FormGroup>
+      {(taskEvent || secinfoEvent) &&
+        <FormGroup title={_('Subject')}>
+          <TextField
+            grow="1"
+            name={prefix + 'subject'}
+            size="30"
+            maxLength="80"
+            value={subject}
+            onChange={onChange}
+          />
+        </FormGroup>
+      }
 
       <FormGroup title={_('Email Encryption')}>
         <IconDivider>
@@ -119,81 +123,83 @@ const EmailMethodPart = ({
         </IconDivider>
       </FormGroup>
 
-      <FormGroup title={_('Content')} flex="column">
-        <Divider flex="column" grow="1">
-          <Radio
-            title={_('Simple Notice')}
-            name={prefix + 'notice'}
-            checked={notice === '1'}
-            value="1"
-            onChange={onChange}
-          />
+      {(taskEvent || secinfoEvent) &&
+        <FormGroup title={_('Content')} flex="column">
+          <Divider flex="column" grow="1">
+            <Radio
+              title={_('Simple Notice')}
+              name={prefix + 'notice'}
+              checked={notice === '1'}
+              value="1"
+              onChange={onChange}
+            />
 
-          {capabilities.mayOp('get_report_formats') &&
-            <Layout flex="column" box>
-              <Divider>
-                <Radio
-                  name={prefix + 'notice'}
-                  title={isTaskEvent ? _('Include report') :
-                    _('Include list of resources with message:')}
-                  checked={notice === '0'}
-                  value="0"
-                  onChange={onChange}
-                >
-                </Radio>
-                {isTaskEvent &&
-                  <Select
-                    name={prefix + 'notice_report_format'}
-                    value={noticeReportFormat}
-                    items={reportFormatItems}
-                    onChange={onChange}
-                  />
-                }
-              </Divider>
-              <TextArea
-                name={prefix + 'message'}
-                rows="8"
-                cols="50"
-                value={message}
-                onChange={onChange}
-              />
-            </Layout>
-          }
-
-          {capabilities.mayOp('get_report_formats') &&
-            <Layout flex="column">
-              <Layout>
+            {capabilities.mayOp('get_report_formats') &&
+              <Layout flex="column" box>
                 <Divider>
                   <Radio
                     name={prefix + 'notice'}
-                    title={isTaskEvent ? _('Attach report') :
-                      _('Attach list of resources with message:')}
-                    checked={notice === '2'}
-                    value="2"
+                    title={taskEvent ? _('Include report') :
+                      _('Include list of resources with message:')}
+                    checked={notice === '0'}
+                    value="0"
                     onChange={onChange}
                   >
                   </Radio>
-                  {isTaskEvent &&
+                  {taskEvent &&
                     <Select
-                      name={prefix + 'notice_attach_format'}
-                      value={noticeAttachFormat}
-                      items={renderSelectItems(reportFormats)}
+                      name={prefix + 'notice_report_format'}
+                      value={noticeReportFormat}
+                      items={reportFormatItems}
                       onChange={onChange}
                     />
                   }
                 </Divider>
+                <TextArea
+                  name={prefix + 'message'}
+                  rows="8"
+                  cols="50"
+                  value={message}
+                  onChange={onChange}
+                />
               </Layout>
-              <TextArea
-                name={prefix + 'message_attach'}
-                rows="8"
-                cols="50"
-                value={messageAttach}
-                onChange={onChange}
-              />
-            </Layout>
-          }
-        </Divider>
-      </FormGroup>
+            }
+
+            {capabilities.mayOp('get_report_formats') &&
+              <Layout flex="column">
+                <Layout>
+                  <Divider>
+                    <Radio
+                      name={prefix + 'notice'}
+                      title={taskEvent ? _('Attach report') :
+                        _('Attach list of resources with message:')}
+                      checked={notice === '2'}
+                      value="2"
+                      onChange={onChange}
+                    >
+                    </Radio>
+                    {taskEvent &&
+                      <Select
+                        name={prefix + 'notice_attach_format'}
+                        value={noticeAttachFormat}
+                        items={renderSelectItems(reportFormats)}
+                        onChange={onChange}
+                      />
+                    }
+                  </Divider>
+                </Layout>
+                <TextArea
+                  name={prefix + 'message_attach'}
+                  rows="8"
+                  cols="50"
+                  value={messageAttach}
+                  onChange={onChange}
+                />
+              </Layout>
+            }
+          </Divider>
+        </FormGroup>
+      }
 
     </Layout>
   );
@@ -202,8 +208,8 @@ const EmailMethodPart = ({
 EmailMethodPart.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
+  event: PropTypes.string.isRequired,
   fromAddress: PropTypes.string.isRequired,
-  isTaskEvent: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
   messageAttach: PropTypes.string.isRequired,
   notice: PropTypes.string.isRequired,

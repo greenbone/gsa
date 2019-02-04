@@ -25,6 +25,9 @@ import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  EVENT_TYPE_TICKET_RECEIVED,
+  EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
+  EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
 
 const Event = ({
@@ -44,6 +47,15 @@ const Event = ({
     isDefined(event.data.status)) {
     return _('Task run status changed to {{status}}',
       {status: event.data.status.value});
+  }
+  if (event.type === EVENT_TYPE_TICKET_RECEIVED) {
+    return _('Ticket received');
+  }
+  if (event.type === EVENT_TYPE_ASSIGNED_TICKET_CHANGED) {
+    return _('Assigned Ticket changed');
+  }
+  if (event.type === EVENT_TYPE_OWNED_TICKET_CHANGED) {
+    return _('Owned Ticket changed');
   }
   return event.type;
 };

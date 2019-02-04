@@ -18,7 +18,7 @@
  */
 import registerCommand from '../command';
 
-import {apiType} from '../utils/entitytype.js';
+import {apiType} from '../utils/entitytype';
 import {isDefined} from '../utils/identity';
 import {map} from '../utils/array';
 
@@ -39,6 +39,7 @@ import Schedule from '../models/schedule';
 import Tag from '../models/tag';
 import Target from '../models/target';
 import Task from '../models/task';
+import Ticket from '../models/ticket';
 
 import HttpCommand from './http';
 
@@ -144,6 +145,10 @@ class Trashcan extends HttpCommand {
       if (isDefined(trash_data.get_tasks_response)) {
         data.task_list = map(trash_data.get_tasks_response.task,
           model => new Task(model));
+      }
+      if (isDefined(trash_data.get_tickets_response)) {
+        data.ticket_list = map(trash_data.get_tickets_response.ticket,
+          model => new Ticket(model));
       }
       return response.setData(data);
     });

@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import DetailsIcon from 'web/components/icon/detailsicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -41,7 +41,7 @@ const NoteBox = ({
         type="note"
         title={_('Note Details')}
       >
-        <Icon img="details.svg"/>
+        <DetailsIcon/>
       </DetailsLink>
     </IconDivider>
   ) : undefined;

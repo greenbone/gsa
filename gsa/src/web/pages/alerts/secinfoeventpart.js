@@ -20,72 +20,72 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
+import {EVENT_TYPE_NEW_SECINFO, isSecinfoEvent} from 'gmp/models/alert';
 
-import PropTypes from '../../utils/proptypes.js';
-import withPrefix from '../../utils/withPrefix.js';
+import Divider from 'web/components/layout/divider';
 
-import Select from '../../components/form/select.js';
-import Radio from '../../components/form/radio.js';
+import Select from 'web/components/form/select';
+import Radio from 'web/components/form/radio';
 
-const VALUE = 'New SecInfo arrived';
+import PropTypes from 'web/utils/proptypes';
+import withPrefix from 'web/utils/withPrefix';
 
 const SecinfoEventPart = ({
-    event,
-    feedEvent,
-    prefix,
-    secinfoType,
-    onChange,
-    onEventChange,
-  }) => {
-  return (
-    <Divider>
-      <Radio
-        name="event"
-        value={VALUE}
-        checked={event === VALUE}
-        onChange={onEventChange}
-      >
-      </Radio>
-      <Select
-        items={[{
-          value: 'new',
-          label: _('New'),
-        }, {
-          value: 'updated',
-          label: _('Updated'),
-        }]}
-        value={feedEvent}
-        name={prefix + 'feed_event'}
-        onChange={onChange}
-      />
-      <Select
-        items={[{
-          value: 'nvt',
-          label: _('NVTs'),
-        }, {
-          value: 'cve',
-          label: _('CVEs'),
-        }, {
-          value: 'cpe',
-          label: _('CPEs'),
-        }, {
-          value: 'cert_bund_adv',
-          label: _('CERT-Bund Advisories'),
-        }, {
-          value: 'dfn_cert_adv',
-          label: _('DFN-CERT Advisories'),
-        }, {
-          value: 'ovaldef',
-          label: _('OVAL Definition'),
-        }]}
-        value={secinfoType}
-        name={prefix + 'secinfo_type'}
-        onChange={onChange}
-      />
-    </Divider>
-  );
-};
+  event,
+  feedEvent,
+  prefix,
+  secinfoType,
+  onChange,
+  onEventChange,
+}) => (
+  <Divider>
+    <Radio
+      name="event"
+      value={EVENT_TYPE_NEW_SECINFO}
+      checked={event === EVENT_TYPE_NEW_SECINFO}
+      onChange={onEventChange}
+    >
+    </Radio>
+    <Select
+      disabled={!isSecinfoEvent(event)}
+      items={[{
+        value: 'new',
+        label: _('New'),
+      }, {
+        value: 'updated',
+        label: _('Updated'),
+      }]}
+      value={feedEvent}
+      name={prefix + 'feed_event'}
+      onChange={onChange}
+    />
+    <Select
+      disabled={!isSecinfoEvent(event)}
+      items={[{
+        value: 'nvt',
+        label: _('NVTs'),
+      }, {
+        value: 'cve',
+        label: _('CVEs'),
+      }, {
+        value: 'cpe',
+        label: _('CPEs'),
+      }, {
+        value: 'cert_bund_adv',
+        label: _('CERT-Bund Advisories'),
+      }, {
+        value: 'dfn_cert_adv',
+        label: _('DFN-CERT Advisories'),
+      }, {
+        value: 'ovaldef',
+        label: _('OVAL Definition'),
+      }]}
+      value={secinfoType}
+      name={prefix + 'secinfo_type'}
+      onChange={onChange}
+    />
+  </Divider>
+);
 
 SecinfoEventPart.propTypes = {
   event: PropTypes.string.isRequired,

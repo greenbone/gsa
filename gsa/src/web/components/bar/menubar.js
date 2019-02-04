@@ -77,6 +77,7 @@ const MenuBar = ({
     'results',
     'overrides',
     'notes',
+    'tickets',
   ].reduce((sum, cur) => sum || capabilities.mayAccess(cur), false);
 
   const may_op_configuration = [
@@ -136,6 +137,15 @@ const MenuBar = ({
                   to="vulnerabilities"
                 />
               }
+              <MenuSection>
+                {capabilities.mayAccess('tickets') &&
+                  <MenuEntry
+                    section
+                    title={_('Remediation Tickets')}
+                    to="tickets"
+                  />
+                }
+              </MenuSection>
               <MenuSection>
                 {capabilities.mayAccess('notes') &&
                   <MenuEntry

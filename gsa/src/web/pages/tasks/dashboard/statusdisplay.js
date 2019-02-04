@@ -16,38 +16,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
-
 import {scaleOrdinal} from 'd3-scale';
 
 import {interpolateHcl} from 'd3-interpolate';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import Filter, {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 import {TASK_STATUS} from 'gmp/models/task';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import FilterTerm from 'gmp/models/filter/filterterm';
-
-import PropTypes from 'web/utils/proptypes';
-
-import DonutChart from 'web/components/chart/donut';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {
-  renderDonutChartIcons,
-} from 'web/components/dashboard/display/datadisplayicons';
-import DataTable from 'web/components/dashboard/display/datatable';
-import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
-import createDisplay from 'web/components/dashboard/display/createDisplay';
-import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {
   totalCount,
   percent,
 } from 'web/components/dashboard/display/utils';
+
+import createDisplay from 'web/components/dashboard/display/createDisplay';
+import DataTable from 'web/components/dashboard/display/datatable';
+import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
+
+import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
 
 import {TaskStatusLoader} from './loaders';
 
@@ -104,87 +92,15 @@ const transformStatusData = (data = {}) => {
   return tdata;
 };
 
-export class TasksStatusDisplay extends React.Component {
-
-  constructor(...args) {
-    super(...args);
-
-    this.handleDataClick = this.handleDataClick.bind(this);
-  }
-
-  handleDataClick(data) {
-    const {onFilterChanged, filter} = this.props;
-    const {filterValue} = data;
-
-    if (isDefined(filterValue) && isDefined(onFilterChanged)) {
-      const statusTerm = FilterTerm.fromString(`status="${filterValue}"`);
-
-      if (isDefined(filter) && filter.hasTerm(statusTerm)) {
-        return;
-      }
-
-      const statusFilter = Filter.fromTerm(statusTerm);
-      const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
-        statusFilter;
-
-      onFilterChanged(newFilter);
-    }
-  }
-
-  render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
-    return (
-      <TaskStatusLoader
-        filter={filter}
-      >
-        {loaderProps => (
-          <DataDisplay
-            {...props}
-            {...loaderProps}
-            initialState={{
-              show3d: true,
-            }}
-            filter={filter}
-            dataTransform={transformStatusData}
-            title={({data: tdata}) =>
-              _('Tasks by Status (Total: {{count}})', {count: tdata.total})}
-            icons={renderDonutChartIcons}
-          >
-            {({width, height, data: tdata, svgRef, state}) => (
-              <DonutChart
-                svgRef={svgRef}
-                width={width}
-                height={height}
-                data={tdata}
-                show3d={state.show3d}
-                showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
-                onLegendItemClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
-              />
-            )}
-          </DataDisplay>
-        )}
-      </TaskStatusLoader>
-    );
-  }
-}
-
-TasksStatusDisplay.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func,
-};
-
-TasksStatusDisplay.displayId = 'task-by-status';
-
-TasksStatusDisplay = withFilterSelection({
+export const TasksStatusDisplay = createDisplay({
+  dataTransform: transformStatusData,
+  displayComponent: StatusDisplay,
+  displayId: 'task-by-status',
+  title: ({data: tdata}) =>
+    _('Tasks by Status (Total: {{count}})', {count: tdata.total}),
   filtersFilter: TASKS_FILTER_FILTER,
-})(TasksStatusDisplay);
+  loaderComponent: TaskStatusLoader,
+});
 
 export const TasksStatusTableDisplay = createDisplay({
   chartComponent: DataTable,

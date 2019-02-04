@@ -18,7 +18,17 @@
  */
 
 import Model from 'gmp/model';
-import Alert from 'gmp/models/alert';
+import Alert, {
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
+  EVENT_TYPE_OWNED_TICKET_CHANGED,
+  EVENT_TYPE_TICKET_RECEIVED,
+  EVENT_TYPE_NEW_SECINFO,
+  EVENT_TYPE_UPDATED_SECINFO,
+  isSecinfoEvent,
+  isTaskEvent,
+  isTicketEvent,
+} from 'gmp/models/alert';
 import {testModel} from 'gmp/models/testing';
 
 testModel(Alert, 'alert');
@@ -148,6 +158,48 @@ describe('Alert Model tests', () => {
     expect(alert1.isActive()).toBe(false);
     expect(alert2.isActive()).toBe(true);
   });
+});
+
+describe('isTaskEvent tests', () => {
+
+  test('should consider only task events', () => {
+    expect(isTaskEvent()).toEqual(false);
+    expect(isTaskEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(true);
+    expect(isTaskEvent(EVENT_TYPE_ASSIGNED_TICKET_CHANGED)).toEqual(false);
+    expect(isTaskEvent(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(false);
+    expect(isTaskEvent(EVENT_TYPE_TICKET_RECEIVED)).toEqual(false);
+    expect(isTaskEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(false);
+    expect(isTaskEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
+  });
+
+});
+
+describe('isSecinfoEvent tests', () => {
+
+  test('should consider only secinfo events', () => {
+    expect(isSecinfoEvent()).toEqual(false);
+    expect(isSecinfoEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(false);
+    expect(isSecinfoEvent(EVENT_TYPE_ASSIGNED_TICKET_CHANGED)).toEqual(false);
+    expect(isSecinfoEvent(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(false);
+    expect(isSecinfoEvent(EVENT_TYPE_TICKET_RECEIVED)).toEqual(false);
+    expect(isSecinfoEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(true);
+    expect(isSecinfoEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(true);
+  });
+
+});
+
+describe('isTicketEvent tests', () => {
+
+  test('should consider only ticket events', () => {
+    expect(isTicketEvent()).toEqual(false);
+    expect(isTicketEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(false);
+    expect(isTicketEvent(EVENT_TYPE_ASSIGNED_TICKET_CHANGED)).toEqual(true);
+    expect(isTicketEvent(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(true);
+    expect(isTicketEvent(EVENT_TYPE_TICKET_RECEIVED)).toEqual(true);
+    expect(isTicketEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(false);
+    expect(isTicketEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
+  });
+
 });
 
 // vim: set ts=2 sw=2 tw=80:

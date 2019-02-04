@@ -285,8 +285,9 @@ init_validator ()
                      "|(create_tags)"
                      "|(create_target)"
                      "|(create_task)"
-                     "|(cvss_calculator)"
+                     "|(create_ticket)"
                      "|(create_user)"
+                     "|(cvss_calculator)"
                      "|(delete_agent)"
                      "|(delete_asset)"
                      "|(delete_config)"
@@ -308,6 +309,7 @@ init_validator ()
                      "|(delete_tag)"
                      "|(delete_target)"
                      "|(delete_task)"
+                     "|(delete_ticket)"
                      "|(delete_user)"
                      "|(download_agent)"
                      "|(download_credential)"
@@ -368,19 +370,19 @@ init_validator ()
                      "|(get_agent)"
                      "|(get_agents)"
                      "|(get_aggregate)"
+                     "|(get_alert)"
+                     "|(get_alerts)"
                      "|(get_asset)"
                      "|(get_assets)"
                      "|(get_config)"
                      "|(get_config_family)"
                      "|(get_config_nvt)"
                      "|(get_configs)"
-                     "|(get_feeds)"
                      "|(get_credential)"
                      "|(get_credentials)"
+                     "|(get_feeds)"
                      "|(get_filter)"
                      "|(get_filters)"
-                     "|(get_alert)"
-                     "|(get_alerts)"
                      "|(get_group)"
                      "|(get_groups)"
                      "|(get_info)"
@@ -414,6 +416,8 @@ init_validator ()
                      "|(get_targets)"
                      "|(get_task)"
                      "|(get_tasks)"
+                     "|(get_ticket)"
+                     "|(get_tickets)"
                      "|(get_trash)"
                      "|(get_user)"
                      "|(get_users)"
@@ -457,6 +461,7 @@ init_validator ()
                      "|(save_tag)"
                      "|(save_target)"
                      "|(save_task)"
+                     "|(save_ticket)"
                      "|(save_user)"
                      "|(start_task)"
                      "|(stop_task)"
@@ -593,6 +598,8 @@ init_validator ()
   gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
   gvm_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
   gvm_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
+  gvm_validator_add (validator, "note_optional", "(?s)^(.){0,1000}$");
+  gvm_validator_add (validator, "note_required", "(?s)^(.){1,1000}$");
   gvm_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
@@ -643,7 +650,7 @@ init_validator ()
   gvm_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "resource_type",
-                         "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|"
+                         "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|ticket|"
                          "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
   gvm_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
@@ -668,6 +675,7 @@ init_validator ()
   gvm_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
   gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
+  gvm_validator_add (validator, "ticket_status", "^(Open|Fixed|Closed)$");
   gvm_validator_add (validator, "trend",       "^(0|1)$");
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
   gvm_validator_add (validator, "type",       "^(assets)$");
@@ -742,6 +750,7 @@ init_validator ()
   gvm_validator_alias (validator, "chart_type", "name");
   gvm_validator_alias (validator, "chart_template", "name");
   gvm_validator_alias (validator, "community", "lsc_password");
+  gvm_validator_alias (validator, "closed_note",    "note_optional");
   gvm_validator_alias (validator, "custom_severity", "boolean");
   gvm_validator_alias (validator, "current_user", "boolean");
   gvm_validator_alias (validator, "dashboard_name", "name");
@@ -766,6 +775,7 @@ init_validator ()
   gvm_validator_alias (validator, "filter_extra",       "filter");
   gvm_validator_alias (validator, "filter_id",          "id");
   gvm_validator_alias (validator, "filterbox",          "boolean");
+  gvm_validator_alias (validator, "fixed_note",         "note_optional");
   gvm_validator_alias (validator, "from_file",          "boolean");
   gvm_validator_alias (validator, "force_wizard",       "boolean");
   gvm_validator_alias (validator, "get_name",           "name");
@@ -807,6 +817,7 @@ init_validator ()
   gvm_validator_alias (validator, "next_type",    "resource_type");
   gvm_validator_alias (validator, "next_subtype", "info_type");
   gvm_validator_alias (validator, "next_xml",      "boolean");
+  gvm_validator_alias (validator, "note",         "note_required");
   gvm_validator_alias (validator, "notes",        "boolean");
   gvm_validator_alias (validator, "no_chart_links",        "boolean");
   gvm_validator_alias (validator, "no_filter_history", "boolean");
@@ -814,6 +825,7 @@ init_validator ()
   gvm_validator_alias (validator, "nvt:value",         "uuid");
   gvm_validator_alias (validator, "old_login", "login");
   gvm_validator_alias (validator, "old_password", "password");
+  gvm_validator_alias (validator, "open_note",    "note_optional");
   gvm_validator_alias (validator, "original_overrides",  "boolean");
   gvm_validator_alias (validator, "overrides",        "boolean");
   gvm_validator_alias (validator, "owner", "name");
@@ -873,6 +885,7 @@ init_validator ()
   gvm_validator_alias (validator, "task_filter",  "filter");
   gvm_validator_alias (validator, "task_filt_id", "filt_id");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
+  gvm_validator_alias (validator, "ticket_id", "id");
   gvm_validator_alias (validator, "timeout",      "boolean");
   gvm_validator_alias (validator, "trend:name",   "family");
   gvm_validator_alias (validator, "user_id",      "id");
@@ -1450,26 +1463,27 @@ exec_gmp_post (http_connection_t *con,
   ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_asset)
+  ELSE (create_config)
   ELSE (create_container_task)
   ELSE (create_credential)
   ELSE (create_filter)
   ELSE (create_group)
   ELSE (create_host)
+  ELSE (create_note)
+  ELSE (create_override)
   ELSE (create_permission)
   ELSE (create_permissions)
   ELSE (create_port_list)
   ELSE (create_port_range)
   ELSE (create_report)
-  ELSE (create_task)
-  ELSE (create_user)
-  ELSE (create_role)
   ELSE (create_scanner)
   ELSE (create_schedule)
+  ELSE (create_task)
   ELSE (create_tag)
   ELSE (create_target)
-  ELSE (create_config)
-  ELSE (create_note)
-  ELSE (create_override)
+  ELSE (create_ticket)
+  ELSE (create_user)
+  ELSE (create_role)
   ELSE (delete_agent)
   ELSE (delete_asset)
   ELSE (delete_alert)
@@ -1491,6 +1505,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (delete_tag)
   ELSE (delete_target)
   ELSE (delete_task)
+  ELSE (delete_ticket)
   ELSE (delete_user)
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
@@ -1538,6 +1553,7 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_tag)
   ELSE (save_target)
   ELSE (save_task)
+  ELSE (save_ticket)
   ELSE (save_container_task)
   ELSE (save_user)
   ELSE (start_task)
@@ -2123,6 +2139,8 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_tags)
   ELSE (get_target)
   ELSE (get_targets)
+  ELSE (get_ticket)
+  ELSE (get_tickets)
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
