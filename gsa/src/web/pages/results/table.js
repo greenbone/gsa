@@ -20,25 +20,25 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
 
-import SolutionTypeSvgIcon from '../../components/icon/solutiontypesvgicon.js';
+import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
 
-import Layout from '../../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import Sort from '../../components/sortby/sortby.js';
+import Sort from 'web/components/sortby/sortby';
 
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import ResultsRow from './row.js';
-import ResultDetails from './details.js';
+import ResultsRow from './row';
+import ResultDetails from './details';
 
 const Header = ({
   actionsColumn,
