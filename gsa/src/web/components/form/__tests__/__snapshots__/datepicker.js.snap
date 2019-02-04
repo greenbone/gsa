@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DatePicker component tests should render 2`] = `
+exports[`DatePicker component tests should render 1`] = `
 .c2 {
   height: 16px;
   width: 16px;
@@ -29,52 +29,48 @@ exports[`DatePicker component tests should render 2`] = `
   width: auto;
 }
 
-<div>
+<div
+  class="react-datepicker-wrapper"
+>
   <div
-    class="react-datepicker-wrapper"
+    class="react-datepicker__input-container"
   >
     <div
-      class="react-datepicker__input-container"
+      class="c0"
+      width="auto"
     >
-      <div
-        class="c0"
-        width="auto"
+      2018/11/11
+      <span
+        class="c1 c2 "
       >
-        2018/11/11
-        <span
-          class="c1 c2 "
-        >
-          <svg>
-            calendar.svg
-          </svg>
-        </span>
-      </div>
+        <svg>
+          calendar.svg
+        </svg>
+      </span>
     </div>
   </div>
 </div>
 `;
 
-exports[`DatePicker component tests should render 1`] = `
-<div>
+exports[`DatePicker component tests should render 2`] = `
+<div
+  class="react-datepicker-wrapper"
+>
   <div
-    class="react-datepicker-wrapper"
+    class="react-datepicker__input-container"
   >
     <div
-      class="react-datepicker__input-container"
+      class="sc-ifAKCX hnwbJj"
+      width="auto"
     >
-      <div
-        class="sc-ifAKCX hnwbJj"
-        width="auto"
+      2018/11/11
+      <span
+        class="sc-bxivhb jVFbWC sc-htpNat kDWxZe sc-bwzfXH eOSpbt"
       >
-        2018/11/11
-        <span
-          class="sc-bxivhb jVFbWC sc-htpNat kDWxZe sc-bwzfXH eOSpbt"
-        >
-          <svg>
-            calendar.svg
-          </svg>
-        </span>
-      </div>
+        <svg>
+          calendar.svg
+        </svg>
+      </span>
     </div>
   </div>
 </div>
