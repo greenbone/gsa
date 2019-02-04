@@ -27,6 +27,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import {
@@ -74,7 +75,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CpeFilterDialog}
     filtersFilter={CPES_FILTER_FILTER}
-    sectionIcon="cpe.svg"
+    sectionIcon={<CpeLogoIcon size="large"/>}
     table={CpesTable}
     title={_('CPEs')}
     toolBarIcons={ToolBarIcons}

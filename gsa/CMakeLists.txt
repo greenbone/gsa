@@ -277,6 +277,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/cpelogoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cveicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cvssicon.js
@@ -374,6 +375,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cpe.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/credential.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cve.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cvss_calculator.svg
