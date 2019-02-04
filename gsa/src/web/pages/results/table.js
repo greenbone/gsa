@@ -27,7 +27,7 @@ import {withEntitiesHeader} from '../../entities/header.js';
 import {createEntitiesTable} from '../../entities/table.js';
 import withRowDetails from '../../entities/withRowDetails.js';
 
-import Icon from '../../components/icon/icon.js';
+import SolutionTypeSvgIcon from '../../components/icon/solutiontypesvgicon.js';
 
 import Layout from '../../components/layout/layout.js';
 
@@ -78,9 +78,9 @@ const Header = ({
           <Layout align="center">
             {sort ?
               <Sort by="solution_type" onClick={onSortChange}>
-                <Icon title={_('Solution type')} img="solution_type.svg"/>
+                <SolutionTypeSvgIcon title={_('Solution type')}/>
               </Sort> :
-              <Icon title={_('Solution type')} img="solution_type.svg"/>
+              <SolutionTypeSvgIcon title={_('Solution type')}/>
             }
           </Layout>
         </TableHead>

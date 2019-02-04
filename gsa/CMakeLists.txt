@@ -345,6 +345,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/scheduleicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/sensoricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/solutiontypesvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
@@ -438,6 +439,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/stop.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/schedule.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/sensor.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/solution_type.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/tag.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/tags.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
