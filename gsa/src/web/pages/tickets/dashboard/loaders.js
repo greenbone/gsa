@@ -18,6 +18,8 @@
  */
 import React from 'react';
 
+import Filter from 'gmp/models/filter';
+
 import Loader, {
   loadFunc,
   loaderPropTypes,
@@ -25,8 +27,10 @@ import Loader, {
 
 const TICKETS_LIST = 'tickets-list';
 
+const DEFAULT_FILTER = Filter.fromString('sort-reverse=modified');
+
 const ticketsListLoader = loadFunc(
-  ({gmp, filter}) => gmp.tickets.getAll({
+  ({gmp, filter = DEFAULT_FILTER}) => gmp.tickets.getAll({
     filter,
   }).then(r => r.data),
   TICKETS_LIST);
