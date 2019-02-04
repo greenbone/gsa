@@ -30,6 +30,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import ScannerIcon from 'web/components/icon/scannericon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -108,7 +109,7 @@ const ScannersPage = ({
       {...props}
       filterEditDialog={ScannersFilterDialog}
       filtersFilter={SCANNERS_FILTER_FILTER}
-      sectionIcon="scanner.svg"
+      sectionIcon={<ScannerIcon size="large"/>}
       table={ScannersTable}
       title={_('Scanners')}
       toolBarIcons={ToolBarIcons}

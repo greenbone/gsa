@@ -52,6 +52,7 @@ import {
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import DashboardIcon from 'web/components/icon/dashboardicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -396,7 +397,7 @@ class StartPage extends React.Component {
       <ErrorBoundary errElement={_('page')}>
         <Section
           title={_('Dashboards')}
-          img="dashboard.svg"
+          img={<DashboardIcon size="large"/>}
         >
           {isLoading ?
             <Loading/> :

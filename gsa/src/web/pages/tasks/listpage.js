@@ -36,6 +36,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import WizardIcon from 'web/components/icon/wizardicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -68,7 +69,7 @@ const ToolBarIcons = withCapabilities(({
     />
     {capabilities.mayOp('run_wizard') &&
       <IconMenu
-        img="wizard.svg"
+        icon={<WizardIcon/>}
         onClick={onTaskWizardClick}
       >
         {capabilities.mayCreate('task') &&

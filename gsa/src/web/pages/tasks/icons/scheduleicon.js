@@ -24,11 +24,11 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-const ScheduleIcon = ({
+const TaskScheduleIcon = ({
   size,
   links = true,
   schedule,
@@ -36,10 +36,9 @@ const ScheduleIcon = ({
   if (schedule.userCapabilities.areDefined() &&
     schedule.userCapabilities.length === 0) {
     return (
-      <Icon
+      <ScheduleIcon
         active={false}
         size={size}
-        img="schedule.svg"
         title={_('Schedule Unavailable. Name: {{name}}, ID: {{id}}',
           {name: schedule.name, id: schedule.id})}
       />
@@ -78,22 +77,21 @@ const ScheduleIcon = ({
       title={title}
       textOnly={!links}
     >
-      <Icon
+      <ScheduleIcon
         size={size}
-        img="schedule.svg"
         alt={_('Schedule Details')}
       />
     </DetailsLink>
   );
 };
 
-ScheduleIcon.propTypes = {
+TaskScheduleIcon.propTypes = {
   links: PropTypes.bool,
   schedule: PropTypes.model.isRequired,
   schedulePeriods: PropTypes.number,
   size: PropTypes.iconSize,
 };
 
-export default ScheduleIcon;
+export default TaskScheduleIcon;
 
 // vim: set ts=2 sw=2 tw=80:

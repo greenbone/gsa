@@ -32,6 +32,7 @@ import ErrorContainer from 'web/components/errorboundary/errorcontainer';
 import Button from 'web/components/form/button';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import TrashcanIcon from 'web/components/icon/trashcanicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -268,7 +269,7 @@ class Trashcan extends React.Component {
         <Layout flex="column">
           <ToolBarIcons/>
           <Section
-            img="trashcan.svg"
+            img={<TrashcanIcon size="large"/>}
             title={_('Trashcan')}
           />
           <EmptyTrashButton

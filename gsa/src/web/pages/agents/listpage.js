@@ -33,6 +33,8 @@ import NewIcon from 'web/components/icon/newicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
+import AgentIcon from 'web/components/icon/agenticon';
+
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import {
@@ -105,7 +107,7 @@ const AgentsPage = ({
       {...props}
       filterEditDialog={AgentsFilterDialog}
       filtersFilter={AGENTS_FILTER_FILTER}
-      sectionIcon="agent.svg"
+      sectionIcon={<AgentIcon size="large"/>}
       table={AgentsTable}
       title={_('Agents')}
       toolBarIcons={ToolBarIcons}

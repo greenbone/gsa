@@ -26,8 +26,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import IconDivider from 'web/components/layout/icondivider';
 
+import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import Icon from 'web/components/icon/icon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
@@ -83,23 +84,20 @@ const Actions = withEntitiesActions(({
       title={_('Export Scanner')}
       onClick={onScannerDownloadClick}
     />
-    <Icon
-      img="verify.svg"
+    <VerifyIcon
       value={entity}
       title={_('Verify Scanner')}
       onClick={onScannerVerifyClick}
     />
     {isDefined(entity.credential) &&
-      <Icon
+      <DownloadKeyIcon
         title={_('Download Certificate')}
-        img="key.svg"
         value={entity}
         onClick={onScannerCredentialDownloadClick}
       />
     }
     {isDefined(entity.ca_pub) &&
-      <Icon
-        img="key.svg"
+      <DownloadKeyIcon
         title={_('Download CA Certificate')}
         value={entity}
         onClick={onScannerCertificateDownloadClick}

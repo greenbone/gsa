@@ -30,6 +30,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import TagIcon from 'web/components/icon/tagicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -133,7 +134,7 @@ const TagsPage = ({
       {...props}
       filterEditDialog={TagsFilterDialog}
       filterFilter={TAGS_FILTER_FILTER}
-      sectionIcon="tag.svg"
+      sectionIcon={<TagIcon size="large"/>}
       table={TagsTable}
       tags={false}
       title={_('Tags')}

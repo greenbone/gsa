@@ -30,6 +30,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -99,7 +100,7 @@ const SchedulesPage = ({
       {...props}
       filterEditDialog={ScheduleFilterDialog}
       filtersFilter={SCHEDULES_FILTER_FILTER}
-      sectionIcon="schedule.svg"
+      sectionIcon={<ScheduleIcon size="large"/>}
       table={SchedulesTable}
       title={_('Schedules')}
       toolBarIcons={ToolBarIcons}

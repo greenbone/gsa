@@ -26,7 +26,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import ViewOtherIcon from 'web/components/icon/viewothericon';
 
 const ObserverIcon = ({
   entity,
@@ -47,10 +47,9 @@ const ObserverIcon = ({
     title = _('Global {{type}}', {type: displayName});
   }
   return (
-    <Icon
+    <ViewOtherIcon
       alt={title}
       title={title}
-      img="view_other.svg"
     />
   );
 };

@@ -27,6 +27,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
+import CveIcon from 'web/components/icon/cveicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import {
@@ -74,7 +75,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CveFilterDialog}
     filtersFilter={CVES_FILTER_FILTER}
-    sectionIcon="cve.svg"
+    sectionIcon={<CveIcon size="large"/>}
     table={CvesTable}
     title={_('CVEs')}
     toolBarIcons={ToolBarIcons}

@@ -22,18 +22,17 @@ import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import StopIcon from 'web/components/icon/stopicon';
 
-const StopIcon = ({
+const TaskStopIcon = ({
   size,
   task,
   onClick,
 }) => {
   if (task.isRunning() && !task.isContainer()) {
     return (
-      <Icon
+      <StopIcon
         size={size}
-        img="stop.svg"
         title={_('Stop')}
         value={task}
         onClick={onClick}
@@ -43,12 +42,12 @@ const StopIcon = ({
   return null;
 };
 
-StopIcon.propTypes = {
+TaskStopIcon.propTypes = {
   size: PropTypes.iconSize,
   task: PropTypes.model.isRequired,
   onClick: PropTypes.func,
 };
 
-export default StopIcon;
+export default TaskStopIcon;
 
 // vim: set ts=2 sw=2 tw=80:

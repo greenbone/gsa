@@ -27,6 +27,7 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
+import HostIcon from 'web/components/icon/hosticon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import OsIcon from 'web/components/icon/osicon';
@@ -320,7 +321,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="host.svg"
+          sectionIcon={<HostIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Host')}
           onChanged={onChanged}

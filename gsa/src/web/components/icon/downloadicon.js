@@ -1,4 +1,4 @@
-/* Copyright (C) 2018 Greenbone Networks GmbH
+/* Copyright (C) 2018 - 2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -17,19 +17,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
-
-import SvgIcon from './svgicon';
+import withSvgIcon from './withSvgIcon';
 
 import {ReactComponent as Icon} from './svg/download.svg';
 
-const DownloadIcon = props => (
-  <SvgIcon
-    {...props}
-  >
-    <Icon/>
-  </SvgIcon>
-);
+const DownloadIcon = withSvgIcon()(Icon);
 
 export default DownloadIcon;
 

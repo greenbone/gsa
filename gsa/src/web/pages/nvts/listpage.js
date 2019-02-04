@@ -28,6 +28,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import NvtIcon from 'web/components/icon/nvticon';
 
 import {
   loadEntities,
@@ -74,7 +75,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={NvtsFilterDialog}
     filtersFilter={NVTS_FILTER_FILTER}
-    sectionIcon="nvt.svg"
+    sectionIcon={<NvtIcon size="large"/>}
     table={NvtsTable}
     title={_('NVTs')}
     toolBarIcons={ToolBarIcons}

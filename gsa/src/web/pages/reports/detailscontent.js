@@ -31,10 +31,13 @@ import {isDefined} from 'gmp/utils/identity';
 import StatusBar from 'web/components/bar/statusbar';
 import ToolBar from 'web/components/bar/toolbar';
 
+import AddToAssetsIcon from 'web/components/icon/addtoassetsicon';
 import DownloadIcon from 'web/components/icon/downloadicon';
-import Icon from 'web/components/icon/icon';
+import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
+import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
@@ -157,13 +160,11 @@ const ToolBarIcons = ({
             onClick={onReportDownloadClick}
           />
           <IconDivider>
-            <Icon
-              img="add_to_assets.svg"
+            <AddToAssetsIcon
               title={_('Add to Assets with QoD=>70% and Overrides enabled')}
               onClick={onAddToAssetsClick}
             />
-            <Icon
-              img="remove_from_assets.svg"
+            <RemoveFromAssetsIcon
               title={_('Remove from Assets')}
               onClick={onRemoveFromAssetsClick}
             />
@@ -188,9 +189,7 @@ const ToolBarIcons = ({
               filter={'report_id=' + report.id}
               title={_('Corresponding Vulnerabilities')}
             >
-              <Icon
-                img="vulnerability.svg"
-              />
+              <VulnerabilityIcon/>
             </Link>
           </IconDivider>
           {!delta &&
@@ -310,7 +309,7 @@ const PageContent = ({
 
   const header = (
     <SectionHeader
-      img="report.svg"
+      img={<ReportIcon size="large"/>}
       title={header_title}
     >
       {hasReport &&

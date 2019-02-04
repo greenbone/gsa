@@ -40,6 +40,7 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
+import CvssIcon from 'web/components/icon/cvssicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import Layout from 'web/components/layout/layout';
@@ -205,7 +206,7 @@ class CvssCalculator extends React.Component {
         <Layout flex="column">
           <ToolBarIcons/>
           <Section
-            img="cvss_calculator.svg"
+            img={<CvssIcon size="large"/>}
             title={_('CVSS Base Score Calculator')}
           />
 

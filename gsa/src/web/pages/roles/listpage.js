@@ -30,6 +30,7 @@ import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import RoleIcon from 'web/components/icon/roleicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -99,7 +100,7 @@ const RolesPage = ({
       {...props}
       filterEditDialog={RolesFilterDialog}
       filtersFilter={ROLES_FILTER_FILTER}
-      sectionIcon="role.svg"
+      sectionIcon={<RoleIcon size="large"/>}
       table={Table}
       title={_('Roles')}
       toolBarIcons={ToolBarIcons}

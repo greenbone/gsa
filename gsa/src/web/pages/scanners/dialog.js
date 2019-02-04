@@ -41,7 +41,7 @@ import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
-import Icon from 'web/components/icon/icon';
+import KeyIcon from 'web/components/icon/keyicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
@@ -101,7 +101,7 @@ const CertStatus = ({
   return (
     <FootNote>
       <Layout>
-        <Icon img="key.svg"/>
+        <KeyIcon/>
       </Layout>
       <span>
         {render_certificate_info(info)}

@@ -27,8 +27,8 @@ import SeverityBar from 'web/components/bar/severitybar';
 import CpeIcon from 'web/components/icon/cpeicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 import ExportIcon from 'web/components/icon/exporticon';
+import HostIcon from 'web/components/icon/hosticon';
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
 
 import Divider from 'web/components/layout/divider';
@@ -123,9 +123,7 @@ let ToolBarIcons = ({
             textOnly={!links}
             title={_('Hosts with Operating System {{- name}}', entity)}
           >
-            <Icon
-              img="host.svg"
-            />
+            <HostIcon/>
           </Link>
         </Badge>
       </IconDivider>

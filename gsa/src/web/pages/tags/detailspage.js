@@ -23,10 +23,12 @@ import _ from 'gmp/locale';
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 
+import DisableIcon from 'web/components/icon/disableicon';
+import EnableIcon from 'web/components/icon/enableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import TagIcon from 'web/components/icon/tagicon';
 
 import Layout from 'web/components/layout/layout';
 
@@ -83,8 +85,7 @@ const ToolBarIcons = withCapabilties(({
   if (capabilities.mayEdit('tag')) {
     if (entity.isActive()) {
       endisableable = (
-        <Icon
-          img="disable.svg"
+        <DisableIcon
           value={entity}
           title={_('Disable Tag')}
           onClick={onTagDisableClick}
@@ -93,8 +94,7 @@ const ToolBarIcons = withCapabilties(({
     }
     else {
       endisableable = (
-        <Icon
-          img="enable.svg"
+        <EnableIcon
           value={entity}
           title={_('Enable Tag')}
           onClick={onTagEnableClick}
@@ -193,7 +193,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="tag.svg"
+          sectionIcon={<TagIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Tag')}
           onInteraction={onInteraction}

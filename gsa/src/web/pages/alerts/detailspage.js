@@ -43,6 +43,7 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
+import AlertIcon from 'web/components/icon/alerticon';
 import ExportIcon from 'web/components/icon/exporticon';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -150,7 +151,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="alert.svg"
+        sectionIcon={<AlertIcon size="large"/>}
         title={_('Alert')}
         toolBarIcons={ToolBarIcons}
         onAlertCloneClick={clone}

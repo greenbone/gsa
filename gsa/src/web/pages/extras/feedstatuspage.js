@@ -26,8 +26,13 @@ import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
 
 import ErrorBoundary from 'web/components/errorboundary/errorboundary';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
+import CveIcon from 'web/components/icon/cveicon';
+import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import NvtIcon from 'web/components/icon/nvticon';
+import OvalDefIcon from 'web/components/icon/ovaldeficon';
 import Icon from 'web/components/icon/icon';
 
 import Divider from 'web/components/layout/divider';
@@ -139,8 +144,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="nvts">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="nvt.svg"
+                            <NvtIcon
                               size="medium"
                             />
                             <span>NVTs</span>
@@ -152,8 +156,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="cves">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="cve.svg"
+                            <CveIcon
                               size="medium"
                             />
                             <span>CVEs</span>
@@ -170,8 +173,7 @@ class FeedStatus extends React.Component {
                         </Link>
                         <Link to="ovaldefs">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="ovaldef.svg"
+                            <OvalDefIcon
                               size="medium"
                             />
                             <span>OVAL Definitions</span>
@@ -183,8 +185,7 @@ class FeedStatus extends React.Component {
                       <IconDivider>
                         <Link to="certbunds">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="cert_bund_adv.svg"
+                            <CertBundAdvIcon
                               size="medium"
                             />
                             <span>CERT-Bund Advisories</span>
@@ -192,8 +193,7 @@ class FeedStatus extends React.Component {
                         </Link>
                         <Link to="dfncerts">
                           <IconDivider align={['start', 'center']}>
-                            <Icon
-                              img="dfn_cert_adv.svg"
+                            <DfnCertAdvIcon
                               size="medium"
                             />
                             <span>DFN-CERT Advisories</span>

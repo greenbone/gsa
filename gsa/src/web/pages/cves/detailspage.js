@@ -21,6 +21,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
+import CveIcon from 'web/components/icon/cveicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -225,7 +226,7 @@ const CvePage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="cve.svg"
+        sectionIcon={<CveIcon size="large"/>}
         title={_('CVE')}
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}

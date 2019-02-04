@@ -27,6 +27,7 @@ import EntityNameTableData from 'web/entities/entitynametabledata';
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import RoleIcon from 'web/components/icon/roleicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -232,7 +233,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="role.svg"
+        sectionIcon={<RoleIcon size="large"/>}
         title={_('Role')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}

@@ -34,6 +34,8 @@ import Select from 'web/components/form/select';
 import withClickHandler from 'web/components/form/withClickHandler';
 
 import ManualIcon from 'web/components/icon/manualicon';
+import PerformanceIcon from 'web/components/icon/performanceicon';
+import WizardIcon from 'web/components/icon/wizardicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -81,7 +83,7 @@ const ToolBar = ({
         title={_('Help: Performance')}
       />
       <IconMenu
-        img="wizard.svg"
+        icon={<WizardIcon/>}
         size="small"
       >
         <MenuEntry
@@ -284,7 +286,7 @@ class PerformancePage extends React.Component {
       >
         <ToolBar onDurationChangeClick={this.handleDurationChange} />
         <Section
-          img="performance.svg"
+          img={<PerformanceIcon size="large"/>}
           title={_('Performance')}
         >
           <StartEndTimeSelection

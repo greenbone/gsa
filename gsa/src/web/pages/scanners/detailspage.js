@@ -35,10 +35,12 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
+import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ScannerIcon from 'web/components/icon/scannericon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -116,8 +118,7 @@ const ToolBarIcons = ({
           title={_('Export Scanner as XML')}
           onClick={onScannerDownloadClick}
         />
-        <Icon
-          img="verify.svg"
+        <VerifyIcon
           value={entity}
           title={_('Verify Scanner')}
           onClick={onScannerVerifyClick}
@@ -125,16 +126,14 @@ const ToolBarIcons = ({
       </IconDivider>
       <IconDivider>
         {isDefined(entity.credential) &&
-          <Icon
+          <DownloadKeyIcon
             title={_('Download Certificate')}
-            img="key.svg"
             value={entity}
             onClick={onScannerCredentialDownloadClick}
           />
         }
         {isDefined(entity.ca_pub) &&
-          <Icon
-            img="key.svg"
+          <DownloadKeyIcon
             title={_('Download CA Certificate')}
             value={entity}
             onClick={onScannerCertificateDownloadClick}
@@ -197,7 +196,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="scanner.svg"
+        sectionIcon={<ScannerIcon size="large"/>}
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
         onInteraction={onInteraction}

@@ -267,12 +267,25 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/form/withClickHandler.js
      ${GSA_SRC_DIR}/src/web/components/form/withDownload.js
      ${GSA_SRC_DIR}/src/web/components/form/yesnoradio.js
+     ${GSA_SRC_DIR}/src/web/components/icon/addtoassetsicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/agenticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/alerticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/allinfoicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/calendaricon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/cveicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/cvssicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/dashboardicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/dfncertadvicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/disableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadcsvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloaddebicon.js
@@ -281,50 +294,95 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/enableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/feedicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/filtericon.js
      ${GSA_SRC_DIR}/src/web/components/icon/firsticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/foldstateicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/groupicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/hosticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/icon.js
      ${GSA_SRC_DIR}/src/web/components/icon/importicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/helpicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/keyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/lasticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/ldapicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/legendicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/listicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/nvticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/ovaldeficon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/portlisticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/provideviewicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/refreshicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/radiusicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/removefromassetsicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/reportformaticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/roleicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reporticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/reseticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/resulticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/restoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/resumeicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/scanconfigicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/scannericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/scheduleicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/sensoricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/solutiontypeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/starticon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/stopicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/svgicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/tagicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/tagsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendmoreicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trendnochangeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/unfoldicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/uploadicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/usericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/verifyicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/viewothericon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/vulnerabilityicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/withIconSize.js
      ${GSA_SRC_DIR}/src/web/components/icon/withSvgIcon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/wizardicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/add_to_assets.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/agent.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/allinfo.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/credential.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cve.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/cvss_calculator.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dashboard.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/dfn_cert_adv.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/disable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_csv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_deb.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_exe.svg
@@ -333,32 +391,61 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/enable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/filter.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/first.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/feed.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/group.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/help.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/host.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/import.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/key.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/last.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/ldap.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/legend.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/ovaldef.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/provide_view.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/radius.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/refresh.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/remove_from_assets.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/report_format.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/report.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/reset.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/result.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/restore.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/resume.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/role.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/scanner.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/start.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/stop.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/schedule.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/sensor.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/tag.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_more.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_nochange.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/upload.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/user.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/verify.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/view_other.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/vulnerability.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/wizard.svg
      ${GSA_SRC_DIR}/src/web/components/img/greenbone.js
      ${GSA_SRC_DIR}/src/web/components/img/img.js
      ${GSA_SRC_DIR}/src/web/components/img/product.js

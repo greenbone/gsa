@@ -30,9 +30,9 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
+import DisableIcon from 'web/components/icon/disableicon';
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
 import NewIcon from 'web/components/icon/newicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
 
@@ -176,8 +176,7 @@ class EntityTagsTable extends React.Component {
                       </TableData>
                       <TableData>
                         <IconDivider align="center" grow>
-                          <Icon
-                            img="disable.svg"
+                          <DisableIcon
                             value={tag}
                             title={_('Disable Tag')}
                             onClick={onTagDisableClick}

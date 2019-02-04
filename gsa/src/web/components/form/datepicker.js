@@ -34,11 +34,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
-import Icon from 'web/components/icon/icon';
+import CalendarIcon from 'web/components/icon/calendaricon';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const StyledIcon = styled(Icon)`
+const StyledCalendarIcon = styled(CalendarIcon)`
   margin-left: 5px;
   :hover {
     cursor: ${props => props.disabled ? 'not-allowed ' : 'pointer'};
@@ -72,9 +72,8 @@ class InputField extends React.Component { // eslint-disable-line react/prefer-s
         onClick={onClick}
       >
         {value}
-        <StyledIcon
+        <StyledCalendarIcon
           disabled={disabled}
-          img="calendar.svg"
         />
       </StyledDiv>
     );

@@ -31,8 +31,9 @@ import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
+import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
+import PortListIcon from 'web/components/icon/portlisticon';
 
 import {
   loadEntities,
@@ -60,8 +61,7 @@ const ToolBarIcons = withCapabilities(({
         onClick={onPortListCreateClick}
       />
     }
-    <Icon
-      img="upload.svg"
+    <UploadIcon
       title={_('Import Port List')}
       onClick={onPortListImportClick}
     />
@@ -105,7 +105,7 @@ const PortListsPage = ({
       {...props}
       filterEditDialog={PortListsFilterDialog}
       filtersFilter={PORTLISTS_FILTER_FILTER}
-      sectionIcon="port_list.svg"
+      sectionIcon={<PortListIcon size="large"/>}
       table={PortListsTable}
       title={_('Portlists')}
       toolBarIcons={ToolBarIcons}

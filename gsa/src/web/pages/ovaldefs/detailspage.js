@@ -27,8 +27,9 @@ import {longDate} from 'gmp/locale/date';
 import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import OvalDefIcon from 'web/components/icon/ovaldeficon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -359,7 +360,7 @@ const OvaldefPage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="ovaldef.svg"
+        sectionIcon={<OvalDefIcon size="large"/>}
         title={_('OVAL Definition')}
         toolBarIcons={ToolBarIcons}
         onInteraction={onInteraction}

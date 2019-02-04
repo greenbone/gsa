@@ -30,8 +30,9 @@ import Layout from 'web/components/layout/layout';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
-import Icon from 'web/components/icon/icon';
+import UploadIcon from 'web/components/icon/uploadicon';
 import ListIcon from 'web/components/icon/listicon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 import Link from 'web/components/link/link';
 
@@ -125,8 +126,7 @@ const ToolBarIcons = withCapabilities(({
         onClick={onScanConfigDownloadClick}
       />
       {capabilities.mayCreate('config') &&
-        <Icon
-          img="upload.svg"
+        <UploadIcon
           title={_('Import Scan Config')}
           onClick={onScanConfigImportClick}
         />
@@ -386,7 +386,7 @@ const Page = ({
         <EntityPage
           {...props}
           entity={entity}
-          sectionIcon="config.svg"
+          sectionIcon={<ScanConfigIcon size="large"/>}
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
           onInteraction={onInteraction}

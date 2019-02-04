@@ -20,10 +20,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Icon from 'web/components/icon/icon';
+import AgentIcon from 'web/components/icon/agenticon';
 import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+import ManualIcon from 'web/components/icon/manualicon';
+import VerifyIcon from 'web/components/icon/verifyicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -112,15 +113,13 @@ const ToolBarIcons = withCapabilities(({
         onClick={onAgentDownloadClick}
       />
       {capabilities.mayOp('verify_report_format') &&
-        <Icon
-          img="verify.svg"
+        <VerifyIcon
           value={entity}
           title={_('Verify Agent')}
           onClick={onAgentVerifyClick}
         />
       }
-      <Icon
-        img="agent.svg"
+      <AgentIcon
         value={entity}
         title={_('Download Agent Installer Package')}
         onClick={onAgentInstallerDownloadClick}
@@ -176,7 +175,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon="agent.svg"
+        sectionIcon={<AgentIcon size="large"/>}
         toolBarIcons={ToolBarIcons}
         title={_('Agent')}
         onAgentCloneClick={clone}

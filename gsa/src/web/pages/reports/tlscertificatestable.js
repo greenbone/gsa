@@ -26,7 +26,7 @@ import {shortDate} from 'gmp/locale/date';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Icon from 'web/components/icon/icon';
+import DownloadIcon from 'web/components/icon/downloadicon';
 
 import Link from 'web/components/link/link';
 
@@ -167,9 +167,8 @@ const Row = ({
         {port}
       </TableData>
       {actions &&
-        <TableData align="center">
-          <Icon
-            img="download.svg"
+        <TableData align={['center', 'center']}>
+          <DownloadIcon
             title={_('Download TLS Certificate')}
             value={entity}
             onClick={onTlsCertificateDownloadClick}

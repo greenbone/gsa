@@ -35,7 +35,9 @@ import SeverityBar from 'web/components/bar/severitybar';
 
 import Comment from 'web/components/comment/comment';
 
-import Icon from 'web/components/icon/icon';
+import AlterableIcon from 'web/components/icon/alterableicon';
+import ProvideViewIcon from 'web/components/icon/provideviewicon';
+import SensorIcon from 'web/components/icon/sensoricon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -124,16 +126,14 @@ const Row = ({
           </RowDetailsToggle>
           <IconDivider>
             {entity.alterable === 1 &&
-              <Icon
+              <AlterableIcon
                 size="small"
-                img="alterable.svg"
                 title={_('Task is alterable')}
               />
             }
             {isDefined(scanner) && scanner.type === SLAVE_SCANNER_TYPE &&
-              <Icon
+              <SensorIcon
                 size="small"
-                img="sensor.svg"
                 title={_('Task is configured to run on slave scanner {{name}}',
                   {name: scanner.name})}
               />
@@ -144,9 +144,8 @@ const Row = ({
               userName={username}
             />
             {isDefined(observers) && observers.length > 0 &&
-              <Icon
+              <ProvideViewIcon
                 size="small"
-                img="provide_view.svg"
                 title={_('Task made visible for: {{observers}}',
                   {observers: obs.join(', ')})}
               /> // TODO observer roles and groups
