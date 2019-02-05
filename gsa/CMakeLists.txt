@@ -92,6 +92,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/tags.js
      ${GSA_SRC_DIR}/src/gmp/commands/targets.js
      ${GSA_SRC_DIR}/src/gmp/commands/tasks.js
+     ${GSA_SRC_DIR}/src/gmp/commands/tickets.js
      ${GSA_SRC_DIR}/src/gmp/commands/trashcan.js
      ${GSA_SRC_DIR}/src/gmp/commands/users.js
      ${GSA_SRC_DIR}/src/gmp/commands/vulns.js
@@ -161,6 +162,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/tag.js
      ${GSA_SRC_DIR}/src/gmp/models/target.js
      ${GSA_SRC_DIR}/src/gmp/models/task.js
+     ${GSA_SRC_DIR}/src/gmp/models/ticket.js
      ${GSA_SRC_DIR}/src/gmp/models/user.js
      ${GSA_SRC_DIR}/src/gmp/models/vulnerability.js
      ${GSA_SRC_DIR}/src/gmp/parser.js
@@ -222,6 +224,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstabledisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/severity/severityclasstransform.js
+     ${GSA_SRC_DIR}/src/web/components/dashboard/display/status/statusdisplay.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/utils.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/display/withFilterSelection.js
      ${GSA_SRC_DIR}/src/web/components/dashboard/registry.js
@@ -285,6 +288,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/deleteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltaicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/deltasecondicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/detailsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/dfncertadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/disableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadicon.js
@@ -318,6 +322,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/newticketicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nvticon.js
@@ -355,6 +360,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/tagssvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/targeticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/taskicon.js
+     ${GSA_SRC_DIR}/src/web/components/icon/ticketicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/toggle3dicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashcanicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/trashdeleteicon.js
@@ -390,6 +396,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delete.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/delta_second.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/details.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dfn_cert_adv.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/disable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_csv.svg
@@ -419,6 +426,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/new_ticket.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/next.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/os.svg
@@ -449,6 +457,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/tags.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/target.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/task.svg
+     ${GSA_SRC_DIR}/src/web/components/icon/svg/ticket.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/toggle3d.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trashcan.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/trend_down.svg
@@ -603,6 +612,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/alerts/starttaskmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/table.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/taskeventpart.js
+     ${GSA_SRC_DIR}/src/web/pages/alerts/ticketeventpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/tippingpointmethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/alerts/verinicemethodpart.js
      ${GSA_SRC_DIR}/src/web/pages/credentials/component.js
@@ -940,6 +950,18 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/table.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/task.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/trend.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/component.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/createdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/createddisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/index.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/loaders.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/statusdisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/dashboard/usersassigneddisplay.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/details.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/detailspage.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/editdialog.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/listpage.js
+     ${GSA_SRC_DIR}/src/web/pages/tickets/table.js
      ${GSA_SRC_DIR}/src/web/pages/users/component.js
      ${GSA_SRC_DIR}/src/web/pages/users/confirmdeletedialog.js
      ${GSA_SRC_DIR}/src/web/pages/users/details.js
@@ -1004,6 +1026,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/tags.js
      ${GSA_SRC_DIR}/src/web/store/entities/targets.js
      ${GSA_SRC_DIR}/src/web/store/entities/tasks.js
+     ${GSA_SRC_DIR}/src/web/store/entities/tickets.js
      ${GSA_SRC_DIR}/src/web/store/entities/users.js
      ${GSA_SRC_DIR}/src/web/store/entities/vulns.js
      ${GSA_SRC_DIR}/src/web/store/entities/utils/actions.js

@@ -66,6 +66,7 @@ class Result extends Model {
       task,
       delta,
       qod = {},
+      tickets,
     } = elem;
 
     if (isString(host)) {
@@ -131,6 +132,10 @@ class Result extends Model {
       map(notes.note, note => new Note(note)) : [];
     copy.overrides = isDefined(overrides) ?
       map(overrides.override, override => new Override(override)) : [];
+
+    // parse tickets as models only. we don't have other data then the id here
+    copy.tickets = isDefined(tickets) ?
+      map(tickets.ticket, ticket => new Model(ticket, 'ticket')) : [];
 
     return copy;
   }

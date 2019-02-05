@@ -115,6 +115,9 @@ const getRestorableDeletableForEntityType = {
     const restorable = schedule && target && config && scanner && alerts;
     return {restorable, deletable: true};
   },
+  ticket: entity => {
+    return {restorable: true, deletable: true};
+  },
 };
 
 const isAbleToRestoreAndDelete = entity => {

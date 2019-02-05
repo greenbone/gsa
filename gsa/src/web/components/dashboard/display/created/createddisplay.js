@@ -80,6 +80,7 @@ class CreatedDisplay extends React.Component {
 
   render() {
     const {
+      dataTransform = transformCreated,
       filter,
       xAxisLabel,
       yAxisLabel,
@@ -92,7 +93,7 @@ class CreatedDisplay extends React.Component {
     return (
       <DataDisplay
         {...props}
-        dataTransform={transformCreated}
+        dataTransform={dataTransform}
         filter={filter}
       >
         {({width, height, data: tdata, svgRef, state}) => (

@@ -47,11 +47,12 @@ import {
   DELTA_TYPE_NONE,
   DELTA_TYPE_PREVIOUS,
   DELTA_TYPE_REPORT,
+  isTaskEvent,
+  isTicketEvent,
+  isSecinfoEvent,
 } from 'gmp/models/alert';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
@@ -64,6 +65,9 @@ import ReportIcon from 'web/components/icon/reporticon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import {UNSET_VALUE} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import AlembaVfireMethodPart from './alembavfiremethodpart';
 import HttpMethodPart from './httpmethodpart';
@@ -78,6 +82,7 @@ import TippingPontMethodPart from './tippingpointmethodpart';
 import VeriniceMethodPart from './verinicemethodpart';
 
 import TaskEventPart from './taskeventpart';
+import TicketEventPart from './ticketeventpart';
 import SecInfoEventPart from './secinfoeventpart';
 
 import SeverityLeastConditionPart from './severityleastconditionpart';
@@ -245,59 +250,54 @@ class AlertDialog extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {stateEvent: EVENT_TYPE_TASK_RUN_STATUS_CHANGED};
+    const {event} = this.props;
+
+    this.state = {
+      stateEvent: isDefined(event) ? event : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+    };
 
     this.handleEventChange = this.handleEventChange.bind(this);
   }
 
   handleEventChange(value, onValueChange) {
     const {
-      method_data_subject,
-      method_data_message,
-      method_data_message_attach,
       result_filters,
       secinfo_filters,
     } = this.props;
 
-    const is_task_event = value === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
+    const is_task_event = isTaskEvent(value);
     let filter_id;
 
     if (onValueChange) {
 
-      onValueChange(value, 'event');
+      onValueChange(CONDITION_TYPE_ALWAYS, 'condition'); // reset condition
 
       if (is_task_event) {
-        if (method_data_subject === SECINFO_SUBJECT) {
-          onValueChange(TASK_SUBJECT, 'method_data_subject');
-        }
-        if (method_data_message === INCLUDE_MESSAGE_SECINFO) {
-          onValueChange(INCLUDE_MESSAGE_DEFAULT, 'method_data_message');
-        }
-        if (method_data_message_attach === ATTACH_MESSAGE_SECINFO) {
-          onValueChange(ATTACH_MESSAGE_DEFAULT, 'method_data_message_attach');
-        }
+        onValueChange(TASK_SUBJECT, 'method_data_subject');
+        onValueChange(INCLUDE_MESSAGE_DEFAULT, 'method_data_message');
+        onValueChange(ATTACH_MESSAGE_DEFAULT, 'method_data_message_attach');
         onValueChange(result_filters, 'condition_data_filters');
+        onValueChange(DELTA_TYPE_NONE, 'method_data_delta_type');
 
         filter_id = selectSaveId(result_filters);
-
+      }
+      else if (isTicketEvent(value)) {
+        onValueChange(DEFAULT_METHOD, 'method'); // reset method to avoid having an invalid method for tickets
+        onValueChange(UNSET_VALUE, 'filter_id'); // reset filter_id
+        onValueChange(undefined, 'method_data_subject');
+        onValueChange(undefined, 'method_data_message');
+        onValueChange(undefined, 'method_data_message_attach');
+        onValueChange(undefined, 'method_data_delta_type');
       }
       else {
         onValueChange(DEFAULT_METHOD, 'method'); // reset method to avoid having an invalid method for secinfo
-
-        if (method_data_subject === TASK_SUBJECT) {
-          onValueChange(SECINFO_SUBJECT, 'method_data_subject');
-        }
-        if (method_data_message === INCLUDE_MESSAGE_DEFAULT) {
-          onValueChange(INCLUDE_MESSAGE_SECINFO, 'method_data_message');
-        }
-        if (method_data_message_attach === ATTACH_MESSAGE_DEFAULT) {
-          onValueChange(ATTACH_MESSAGE_SECINFO, 'method_data_message_attach');
-        }
+        onValueChange(SECINFO_SUBJECT, 'method_data_subject');
+        onValueChange(INCLUDE_MESSAGE_SECINFO, 'method_data_message');
+        onValueChange(ATTACH_MESSAGE_SECINFO, 'method_data_message_attach');
         onValueChange(secinfo_filters, 'condition_data_filters');
 
         filter_id = selectSaveId(secinfo_filters);
-
-        onValueChange('0', 'filter_id'); // reset filter_id
+        onValueChange(UNSET_VALUE, 'filter_id'); // reset filter_id
       }
 
       onValueChange(filter_id, 'condition_data_at_least_filter_id');
@@ -356,59 +356,93 @@ class AlertDialog extends React.Component {
 
     const {stateEvent: event} = this.state;
 
-    const is_task_event = event === EVENT_TYPE_TASK_RUN_STATUS_CHANGED;
+    const methodTypes = [];
 
-    const method_types = [{
-      value: METHOD_TYPE_EMAIL,
-      label: _('Email'),
-    }];
+    const taskEvent = isTaskEvent(event);
+    const secinfoEvent = isSecinfoEvent(event);
+    const ticketEvent = isTicketEvent(event);
 
-    if (is_task_event) {
-      method_types.push({
+    if (taskEvent) {
+      methodTypes.push({
+        value: METHOD_TYPE_EMAIL,
+        label: _('Email'),
+      }, {
         value: METHOD_TYPE_HTTP_GET,
         label: _('HTTP Get'),
-      });
-    }
-
-    method_types.push({
-      value: METHOD_TYPE_SCP,
-      label: _('SCP'),
-    }, {
-      value: METHOD_TYPE_SEND,
-      label: _('Send to host'),
-    }, {
-
-      value: METHOD_TYPE_SMB,
-      label: _('SMB'),
-    }, {
-      value: METHOD_TYPE_SNMP,
-      label: _('SNMP'),
-    });
-
-    if (is_task_event) {
-      method_types.push({
+      }, {
+        value: METHOD_TYPE_SCP,
+        label: _('SCP'),
+      }, {
+        value: METHOD_TYPE_SEND,
+        label: _('Send to host'),
+      }, {
+        value: METHOD_TYPE_SMB,
+        label: _('SMB'),
+      }, {
+        value: METHOD_TYPE_SNMP,
+        label: _('SNMP'),
+      }, {
         value: METHOD_TYPE_SOURCEFIRE,
         label: _('Sourcefire Connector'),
       }, {
-          value: METHOD_TYPE_START_TASK,
-          label: _('Start Task'),
+        value: METHOD_TYPE_START_TASK,
+        label: _('Start Task'),
+      }, {
+        value: METHOD_TYPE_SYSLOG,
+        label: _('System Logger'),
+      }, {
+        value: METHOD_TYPE_VERINICE,
+        label: _('verinice.PRO Connector'),
+      }, {
+        value: METHOD_TYPE_TIPPING_POINT,
+        label: _('TippingPoint SMS'),
+      }, {
+        value: METHOD_TYPE_ALEMBA_VFIRE,
+        label: _('Alemba vFire'),
       });
     }
-
-    method_types.push({
-      value: METHOD_TYPE_SYSLOG,
-      label: _('System Logger'),
-    }, {
-      value: METHOD_TYPE_VERINICE,
-      label: _('verinice.PRO Connector'),
-    }, {
-      value: METHOD_TYPE_TIPPING_POINT,
-      label: _('TippingPoint SMS'),
-    }, {
-      value: METHOD_TYPE_ALEMBA_VFIRE,
-      label: _('Alemba vFire'),
+    else if (ticketEvent) {
+      methodTypes.push({
+        value: METHOD_TYPE_EMAIL,
+        label: _('Email'),
+      }, {
+        value: METHOD_TYPE_SYSLOG,
+        label: _('System Logger'),
+      }, {
+        value: METHOD_TYPE_START_TASK,
+        label: _('Start Task'),
+      });
     }
-  );
+    else {
+      methodTypes.push({
+        value: METHOD_TYPE_EMAIL,
+        label: _('Email'),
+      }, {
+        value: METHOD_TYPE_SCP,
+        label: _('SCP'),
+      }, {
+        value: METHOD_TYPE_SEND,
+        label: _('Send to host'),
+      }, {
+        value: METHOD_TYPE_SMB,
+        label: _('SMB'),
+      }, {
+        value: METHOD_TYPE_SNMP,
+        label: _('SNMP'),
+      }, {
+        value: METHOD_TYPE_SYSLOG,
+        label: _('System Logger'),
+      }, {
+        value: METHOD_TYPE_VERINICE,
+        label: _('verinice.PRO Connector'),
+      }, {
+        value: METHOD_TYPE_TIPPING_POINT,
+        label: _('TippingPoint SMS'),
+      }, {
+        value: METHOD_TYPE_ALEMBA_VFIRE,
+        label: _('Alemba vFire'),
+      });
+    }
 
     const data = {
       ...DEFAULTS,
@@ -431,6 +465,7 @@ class AlertDialog extends React.Component {
     }
 
     const controlledValues = {
+      event,
       filter_id,
       method_data_pkcs12_credential,
       method_data_composer_include_notes,
@@ -501,6 +536,11 @@ class AlertDialog extends React.Component {
                       value => this.handleEventChange(value, onValueChange)}
                     onChange={onValueChange}
                   />
+                  <TicketEventPart
+                    event={values.event}
+                    onEventChange={
+                      value => this.handleEventChange(value, onValueChange)}
+                  />
                 </Divider>
               </FormGroup>
 
@@ -514,7 +554,7 @@ class AlertDialog extends React.Component {
                     onChange={onValueChange}
                   />
 
-                  {is_task_event &&
+                  {taskEvent &&
                     <SeverityLeastConditionPart
                       prefix="condition_data"
                       condition={values.condition}
@@ -523,7 +563,7 @@ class AlertDialog extends React.Component {
                     />
                   }
 
-                  {is_task_event &&
+                  {taskEvent &&
                     <SeverityChangedConditionPart
                       prefix="condition_data"
                       condition={values.condition}
@@ -532,16 +572,18 @@ class AlertDialog extends React.Component {
                     />
                   }
 
-                  <FilterCountLeastConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    atLeastFilterId={values.condition_data_at_least_filter_id}
-                    atLeastCount={values.condition_data_at_least_count}
-                    filters={values.condition_data_filters}
-                    onChange={onValueChange}
-                  />
+                  {secinfoEvent &&
+                    <FilterCountLeastConditionPart
+                      prefix="condition_data"
+                      condition={values.condition}
+                      atLeastFilterId={values.condition_data_at_least_filter_id}
+                      atLeastCount={values.condition_data_at_least_count}
+                      filters={values.condition_data_filters}
+                      onChange={onValueChange}
+                    />
+                  }
 
-                  {is_task_event &&
+                  {taskEvent &&
                     <FilterCountChangedConditionPart
                       prefix="condition_data"
                       condition={values.condition}
@@ -554,7 +596,7 @@ class AlertDialog extends React.Component {
                 </Divider>
               </FormGroup>
 
-              {!is_task_event &&
+              {secinfoEvent &&
                 <FormGroup title={_('Details URL')}>
                   <TextField
                     grow="1"
@@ -566,7 +608,7 @@ class AlertDialog extends React.Component {
               }
 
               {capabilities.mayOp('get_filters') &&
-                is_task_event &&
+                taskEvent &&
                 <FormGroup title={_('Report Content')}>
                   <StyledDivider
                     onClick={onOpenContentComposerDialogClick}
@@ -581,7 +623,7 @@ class AlertDialog extends React.Component {
                 </FormGroup>
               }
 
-              {is_task_event &&
+              {taskEvent &&
                 <FormGroup title={_('Delta Report')} flex="column">
                   <Divider flex="column">
                     <Radio
@@ -626,7 +668,7 @@ class AlertDialog extends React.Component {
                 <Select
                   name="method"
                   value={values.method}
-                  items={method_types}
+                  items={methodTypes}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -635,6 +677,7 @@ class AlertDialog extends React.Component {
                 <EmailMethodPart
                   prefix="method_data"
                   credentials={credentials}
+                  event={event}
                   fromAddress={values.method_data_from_address}
                   message={values.method_data_message}
                   messageAttach={values.method_data_message_attach}
@@ -645,7 +688,6 @@ class AlertDialog extends React.Component {
                   toAddress={values.method_data_to_address}
                   recipientCredential={values.method_data_recipient_credential}
                   reportFormats={report_formats}
-                  isTaskEvent={is_task_event}
                   onChange={onValueChange}
                   onCredentialChange={onEmailCredentialChange}
                   onNewCredentialClick={onNewEmailCredentialClick}

@@ -20,60 +20,62 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
+import {
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  isTaskEvent,
+} from 'gmp/models/alert';
 
-import PropTypes from '../../utils/proptypes.js';
-import withPrefix from '../../utils/withPrefix.js';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
 
-import Select from '../../components/form/select.js';
-import Radio from '../../components/form/radio.js';
+import Divider from 'web/components/layout/divider';
 
-const VALUE = 'Task run status changed';
+import PropTypes from 'web/utils/proptypes.js';
+import withPrefix from 'web/utils/withPrefix';
 
 const TaskEventPart = ({
-    prefix,
-    event,
-    status,
-    onChange,
-    onEventChange,
-  }) => {
-  return (
-    <Divider>
-      <Radio
-        title={_('Task run status changed to')}
-        name="event"
-        value={VALUE}
-        checked={event === VALUE}
-        onChange={onEventChange}
-      >
-      </Radio>
-      <Select
-        items={[{
-          value: 'Done',
-          label: _('Done'),
-        }, {
-          value: 'New',
-          label: _('New'),
-        }, {
-          value: 'Requested',
-          label: _('Requested'),
-        }, {
-          value: 'Running',
-          label: _('Running'),
-        }, {
-          value: 'Stop Requested',
-          label: _('Stop Requested'),
-        }, {
-          value: 'Stopped',
-          label: _('Stopped'),
-        }]}
-        name={prefix + 'status'}
-        value={status}
-        onChange={onChange}
-      />
-    </Divider>
-  );
-};
+  prefix,
+  event,
+  status,
+  onChange,
+  onEventChange,
+}) => (
+  <Divider>
+    <Radio
+      title={_('Task run status changed to')}
+      name="event"
+      value={EVENT_TYPE_TASK_RUN_STATUS_CHANGED}
+      checked={isTaskEvent(event)}
+      onChange={onEventChange}
+    >
+    </Radio>
+    <Select
+      disabled={!isTaskEvent(event)}
+      items={[{
+        value: 'Done',
+        label: _('Done'),
+      }, {
+        value: 'New',
+        label: _('New'),
+      }, {
+        value: 'Requested',
+        label: _('Requested'),
+      }, {
+        value: 'Running',
+        label: _('Running'),
+      }, {
+        value: 'Stop Requested',
+        label: _('Stop Requested'),
+      }, {
+        value: 'Stopped',
+        label: _('Stopped'),
+      }]}
+      name={prefix + 'status'}
+      value={status}
+      onChange={onChange}
+    />
+  </Divider>
+);
 
 TaskEventPart.propTypes = {
   event: PropTypes.string.isRequired,

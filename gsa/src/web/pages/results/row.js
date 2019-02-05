@@ -32,6 +32,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
+import TicketIcon from 'web/components/icon/ticketicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -63,6 +64,7 @@ const Row = ({
     entity.notes.filter(note => note.isActive()).length > 0;
   const hasActiveOverrides =
     entity.overrides.filter(override => override.isActive()).length > 0;
+  const hasTickets = entity.tickets.length > 0;
   return (
     <TableRow>
       {delta &&
@@ -92,6 +94,11 @@ const Row = ({
               {hasActiveOverrides &&
                 <OverrideIcon
                   title={_('There are overrides for this result')}
+                />
+              }
+              {hasTickets &&
+                <TicketIcon
+                  title={_('There are tickets for this result')}
                 />
               }
             </IconDivider>

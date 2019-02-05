@@ -1990,7 +1990,7 @@ delete_resource (gvm_connection_t *connection, const char *type,
 {
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   entity_t entity;
-  gchar *cap_type, *default_next, *prev_action;
+  gchar *cap_type, *prev_action;
 
   id_name = g_strdup_printf ("%s_id", type);
   if (params_value (params, id_name))
@@ -2072,7 +2072,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
     set_http_status_from_entity (entity, response_data);
 
   cap_type = capitalize (type);
-  default_next = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("Delete %s", cap_type);
 
   html = response_from_entity (connection, credentials, params, entity,
@@ -2081,7 +2080,6 @@ delete_resource (gvm_connection_t *connection, const char *type,
   g_free (response);
   free_entity (entity);
   g_free (cap_type);
-  g_free (default_next);
   g_free (prev_action);
 
   return html;
@@ -4252,7 +4250,8 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @return Enveloped XML object.
  */
 static char *
-get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+get_tasks (gvm_connection_t *connection, credentials_t *credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   const char *overrides, *schedules_only, *ignore_pagination;
@@ -4302,7 +4301,7 @@ get_tasks_gmp (gvm_connection_t *connection, credentials_t * credentials, params
 
 
 /**
- * @brief Get all tasks, envelope the result.
+ * @brief Get single task, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
@@ -6659,6 +6658,12 @@ new_alert_gmp (gvm_connection_t *connection, credentials_t *credentials, params_
 char *
 get_alerts (gvm_connection_t *connection, credentials_t *, params_t *, const char *, cmd_response_data_t*);
 
+#define EVENT_TYPE_NEW_SECINFO "New SecInfo arrived"
+#define EVENT_TYPE_UPDATED_SECINFO "Updated SecInfo arrived"
+#define EVENT_TYPE_TASK_RUN_STATUS_CHANGED "Task run status changed"
+#define EVENT_TYPE_TICKET_RECEIVED "Ticket received"
+#define EVENT_TYPE_ASSIGNED_TICKET_CHANGED "Assigned ticket changed"
+#define EVENT_TYPE_OWNED_TICKET_CHANGED "Owned ticket changed"
 /**
  * @brief Send event data for an alert.
  *
@@ -6679,11 +6684,11 @@ append_alert_event_data (GString *xml, params_t *data, const char *event)
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (event, "Task run status changed") == 0
-             && strcmp (name, "status") == 0)
-            || ((strcmp (event, "New SecInfo arrived") == 0
-                 || strcmp (event, "Updated SecInfo arrived") == 0)
-                && strcmp (name, "secinfo_type") == 0))
+        if ((str_equal (event, EVENT_TYPE_TASK_RUN_STATUS_CHANGED)
+             && str_equal (name, "status"))
+            || ((str_equal (event, EVENT_TYPE_NEW_SECINFO)
+                 || str_equal (event, EVENT_TYPE_UPDATED_SECINFO))
+                && str_equal (name, "secinfo_type")))
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
@@ -6934,7 +6939,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method,
  * @return Enveloped XML object.
  */
 char *
-create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
+create_alert_gmp (gvm_connection_t *connection,
+                  credentials_t * credentials,
+                  params_t *params,
                   cmd_response_data_t* response_data)
 {
   int ret;
@@ -6969,7 +6976,7 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 
   xml = g_string_new ("");
 
-  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
+  if (str_equal (event, EVENT_TYPE_NEW_SECINFO) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -6977,11 +6984,11 @@ create_alert_gmp (gvm_connection_t *connection, credentials_t * credentials, par
 
       params_iterator_init (&iter, event_data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (name, "feed_event") == 0)
+        if (str_equal (name, "feed_event")
             && param->value
-            && (strcmp (param->value, "updated") == 0))
+            && str_equal (param->value, "updated"))
           {
-            event = "Updated SecInfo arrived";
+            event = EVENT_TYPE_UPDATED_SECINFO;
             break;
           }
     }
@@ -7727,7 +7734,7 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
   method_data = params_values (params, "method_data:");
   report_formats = params_values (params, "report_format_ids:");
 
-  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
+  if (str_equal (event, EVENT_TYPE_NEW_SECINFO) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -7735,11 +7742,11 @@ save_alert_gmp (gvm_connection_t *connection, credentials_t * credentials,
 
       params_iterator_init (&iter, event_data);
       while (params_iterator_next (&iter, &name, &param))
-        if ((strcmp (name, "feed_event") == 0)
+        if (str_equal (name, "feed_event")
             && param->value
-            && (strcmp (param->value, "updated") == 0))
+            && str_equal (param->value, "updated"))
           {
-            event = "Updated SecInfo arrived";
+            event = EVENT_TYPE_UPDATED_SECINFO;
             break;
           }
     }
@@ -15364,6 +15371,8 @@ get_trash (gvm_connection_t *connection, credentials_t * credentials,
 
   GET_TRASH_RESOURCE ("GET_TASKS", "get_tasks", "tasks");
 
+  GET_TRASH_RESOURCE ("GET_TICKETS", "get_tickets", "tickets");
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
@@ -21363,6 +21372,239 @@ save_asset_gmp (gvm_connection_t *connection, credentials_t * credentials,
   free_entity (entity);
   g_free (response);
   return html;
+}
+
+/**
+ * @brief Get all tickets, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_tickets_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+
+  return get_many (connection, "ticket", credentials, params, NULL, NULL,
+                   response_data);
+}
+
+/**
+ * @brief Get single tickets, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_ticket_gmp (gvm_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
+{
+
+  return get_one (connection, "ticket", credentials, params, NULL, NULL,
+                  response_data);
+}
+
+/**
+ * @brief Create a ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+create_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t* response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *result_id, *user_id, *note;
+  char *ret;
+
+  result_id = params_value (params, "result_id");
+  user_id = params_value (params, "user_id");
+  note = params_value (params, "note");
+
+  CHECK_VARIABLE_INVALID (result_id, "Create Ticket");
+  CHECK_VARIABLE_INVALID (user_id, "Create Ticket");
+  CHECK_VARIABLE_INVALID (note, "Create Ticket")
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<create_ticket>"
+                "<result id=\"%s\"/>"
+                "<assigned_to>"
+                "<user id=\"%s\"/>"
+                "</assigned_to>"
+                "<open_note>%s</open_note>"
+                "</create_ticket>",
+                result_id,
+                user_id,
+                note ? note : ""
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a ticket. "
+                             "It is unclear whether the ticket has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Create Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
+ * @brief Modify a ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+save_ticket_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                 params_t *params, cmd_response_data_t* response_data)
+{
+  gchar *response = NULL;
+  entity_t entity = NULL;
+  const gchar *ticket_id, *status, *open_note, *fixed_note, *closed_note;
+  const gchar *user_id;
+  gchar *ret;
+
+  ticket_id = params_value (params, "ticket_id");
+  status = params_value (params, "ticket_status");
+  open_note = params_value (params, "open_note");
+  fixed_note = params_value (params, "fixed_note");
+  closed_note = params_value (params, "closed_note");
+  user_id = params_value (params, "user_id");
+
+  CHECK_VARIABLE_INVALID (ticket_id, "Save Ticket");
+  CHECK_VARIABLE_INVALID (status, "Save Ticket");
+  CHECK_VARIABLE_INVALID (user_id, "Save Ticket");
+  CHECK_VARIABLE_INVALID (open_note, "Save Ticket");
+  CHECK_VARIABLE_INVALID (fixed_note, "Save Ticket");
+  CHECK_VARIABLE_INVALID (closed_note, "Save Ticket");
+
+  switch (gmpf (connection, credentials,
+                &response,
+                &entity,
+                response_data,
+                "<modify_ticket ticket_id=\"%s\">"
+                "<assigned_to><user id=\"%s\"/></assigned_to>"
+                "<status>%s</status>"
+                "<open_note>%s</open_note>"
+                "<fixed_note>%s</fixed_note>"
+                "<closed_note>%s</closed_note>"
+                "</modify_ticket>",
+                ticket_id,
+                user_id,
+                status,
+                open_note,
+                fixed_note,
+                closed_note
+               ))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             response_data);
+      case 2:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "It is unclear whether the ticket has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             response_data);
+      default:
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a ticket. "
+                             "It is unclear whether the ticket has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             response_data);
+
+    }
+
+  ret = response_from_entity (connection, credentials, params, entity,
+                              "Save Ticket", response_data);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+/**
+ * @brief Delete a ticket
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+delete_ticket_gmp (gvm_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  return move_resource_to_trash (connection, "ticket", credentials, params,
+                                 response_data);
 }
 
 char *

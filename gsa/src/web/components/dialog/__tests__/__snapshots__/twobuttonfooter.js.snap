@@ -123,12 +123,14 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 >
   <button
     class="c3 c4 c5"
+    data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <button
     class="c3 c4 c5"
+    data-testid="dialog-save-button"
     title="Foo"
   >
     Foo
@@ -270,12 +272,14 @@ exports[`DialogTwoButtonFooter tests should render loading 1`] = `
 >
   <button
     class="c3 c4 c5"
+    data-testid="dialog-close-button"
     title="Cancel"
   >
     Cancel
   </button>
   <button
     class="c6 c4 c5"
+    data-testid="dialog-save-button"
     title="Foo"
   >
     Foo

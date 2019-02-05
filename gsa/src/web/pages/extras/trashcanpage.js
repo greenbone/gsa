@@ -74,6 +74,7 @@ import SchedulesTable from '../schedules/table';
 import TagsTable from '../tags/table';
 import TargetsTable from '../targets/table';
 import TasksTable from '../tasks/table';
+import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
 
@@ -195,6 +196,7 @@ class Trashcan extends React.Component {
     const render_tags = isDefined(trash.tag_list);
     const render_targets = isDefined(trash.target_list);
     const render_tasks = isDefined(trash.task_list);
+    const render_tickets = isDefined(trash.ticket_list);
 
     return (
       <TableBody>
@@ -232,6 +234,8 @@ class Trashcan extends React.Component {
           'target', 'Targets', trash.target_list.length)}
         {render_tasks && this.createContentRow(
           'task', 'Tasks', trash.task_list.length)}
+        {render_tickets && this.createContentRow(
+          'ticket', 'Tickets', trash.ticket_list.length)}
       </TableBody>
     );
   };
@@ -462,6 +466,17 @@ class Trashcan extends React.Component {
               <h1>{_('Tasks')}</h1>
               <TasksTable
                 entities={trash.task_list}
+                {...table_props}
+              />
+            </span>
+          }
+
+          {isDefined(trash.ticket_list) &&
+            <span>
+              <LinkTarget id="ticket"/>
+              <h1>{_('Tickets')}</h1>
+              <TicketsTable
+                entities={trash.ticket_list}
                 {...table_props}
               />
             </span>

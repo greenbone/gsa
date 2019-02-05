@@ -30,9 +30,9 @@ import {
 
 import EntityBox from 'web/entity/box';
 
-import IconDivider from 'web/components/layout/icondivider';
+import DetailsIcon from 'web/components/icon/detailsicon';
 
-import Icon from 'web/components/icon/icon';
+import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -64,7 +64,7 @@ const OverrideBox = ({
         type="override"
         title={_('Override Details')}
       >
-        <Icon img="details.svg"/>
+        <DetailsIcon/>
       </DetailsLink>
     </IconDivider>
   ) : undefined;

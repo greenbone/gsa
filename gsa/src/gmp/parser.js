@@ -40,6 +40,13 @@ export const parseProgressElement = value => {
   return isDefined(progress) ? progress : 0;
 };
 
+export const parseText = text => {
+  if (isDefined(text) && isDefined(text.__text)) {
+    text = text.__text;
+  }
+  return text;
+};
+
 export const parseTextElement = (text = {}) => {
   if (isDefined(text.__text)) {
     return {

@@ -18,6 +18,7 @@ $ cd gsa && git log
    "smb-alert:file_path". #1107 #1142 #1145
  * Fix issues with updating user authentication and logging out active
    sessions after changing the password of a user #1159
+ * New feature: Remediation Tickets #1126
 
 
 ## gsa 8.0+beta2 (2018-12-04)
