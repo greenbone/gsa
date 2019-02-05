@@ -2586,7 +2586,7 @@ start_unix_http_daemon (const char *unix_socket_path,
       return NULL;
     }
   addr.sun_family = AF_UNIX;
-  strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path));
+  strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path) -1);
   if (!stat (addr.sun_path, &ustat))
     {
       /* Remove socket so we can bind(). Keep same permissions when recreating
