@@ -129,7 +129,7 @@ describe('TicketCommand tests', () => {
     });
   });
 
-  test('should trim note when saveing a ticket', () => {
+  test('should trim note when saving a ticket', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
 
