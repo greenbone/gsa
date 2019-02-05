@@ -2585,6 +2585,9 @@ start_unix_http_daemon (const char *unix_socket_path,
       g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
       return NULL;
     }
+ 
+  memset (&addr, 0, sizeof (struct sockaddr_un));
+ 
   addr.sun_family = AF_UNIX;
   strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path) -1);
   if (!stat (addr.sun_path, &ustat))
