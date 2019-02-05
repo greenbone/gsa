@@ -39,6 +39,8 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
+const MAX_HOSTS_LISTINGS = 70;
+
 const TargetDetails = ({
   capabilities,
   entity,
@@ -58,6 +60,11 @@ const TargetDetails = ({
     ssh_credential,
     tasks,
   } = entity;
+
+  const hostsListing = hosts.slice(0, MAX_HOSTS_LISTINGS).map(host => (
+    <span key={host}>{host}</span>
+  ));
+
   return (
     <Layout
       grow="1"
@@ -79,9 +86,8 @@ const TargetDetails = ({
               </TableData>
               <TableData>
                 <Divider wrap>
-                  {hosts.map(host => (
-                    <span key={host}>{host}</span>
-                  ))}
+                  {hostsListing}
+                  {hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                 </Divider>
               </TableData>
             </TableRow>
