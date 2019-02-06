@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Portal component tests should render portal 1`] = `
+<body>
+  <div
+    id="portals"
+  >
+    <div />
+  </div>
+  <div />
+</body>
+`;
