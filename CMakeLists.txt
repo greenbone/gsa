@@ -21,7 +21,7 @@ cmake_minimum_required (VERSION 3.0)
 message ("-- Configuring Greenbone Security Assistant...")
 
 project (greenbone-security-assistant
-         VERSION 8.0.0
+         VERSION 9.0
          LANGUAGES C)
 
 
@@ -43,18 +43,22 @@ if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
     if (GIT_FOUND)
       Git_GET_REVISION(${CMAKE_SOURCE_DIR} ProjectRevision)
       set (GIT_REVISION "~git-${ProjectRevision}")
+    else (GIT_FOUND)
+      set (GIT_REVISION "~git")
     endif (GIT_FOUND)
+  else (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
+    set (GIT_REVISION "~git")
   endif (EXISTS "${CMAKE_SOURCE_DIR}/.git/")
 endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 # Set beta version if this is a beta release series,
 # unset if this is a stable release series.
-set (PROJECT_BETA_RELEASE 3)
+# set (PROJECT_BETA_RELEASE 1)
 
 if (GIT_REVISION)
   set (PROJECT_VERSION_GIT "${GIT_REVISION}")
 else (GIT_REVISION)
-  set (PROJECT_VERSION_GIT "~git")
+  set (PROJECT_VERSION_GIT "")
 endif (GIT_REVISION)
 
 # If PROJECT_BETA_RELEASE is set, the version string will be set to:
@@ -63,7 +67,7 @@ endif (GIT_REVISION)
 #   "major.minor.patch"
 if (PROJECT_BETA_RELEASE)
   set (PROJECT_VERSION_SUFFIX "+beta${PROJECT_BETA_RELEASE}")
-elseif (DEFINED PROJECT_VERSION_PATCH)
+elseif (DEFINED PROJECT_VERSION_PATCH AND NOT PROJECT_VERSION_PATCH STREQUAL "")
   set (PROJECT_VERSION_SUFFIX ".${PROJECT_VERSION_PATCH}")
 endif (PROJECT_BETA_RELEASE)
 
