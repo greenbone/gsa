@@ -74,10 +74,12 @@
     "eject": "NODE_PATH=src react-scripts eject"
   },
   "devDependencies": {
+    "husky": "^1.3.1",
     "jest-dom": "^3.0.0",
     "jest-junit": "^6.0.1",
     "jest-styled-components": "^6.2.0",
     "prettier": "1.16.4",
+    "lint-staged": "^8.1.3",
     "react-testing-library": "^5.4.4"
   },
   "jest": {
@@ -94,5 +96,16 @@
     "not dead",
     "not ie < 11",
     "not op_mini all"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
 }
