@@ -6,6 +6,10 @@ or get the entire source code repository and view log history:
 $ git clone https://github.com/greenbone/gsa.git
 $ cd gsa && git log
 
+## gsa 9.0 unreleased
+
+ * Use HTTPS for documentation links
+
 ## gsa 8.0 unreleased
 
  * Add Sourcefire PKCS12 password support #1150
