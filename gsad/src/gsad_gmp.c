@@ -247,12 +247,6 @@ static char *get_target (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_targets (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_report (gvm_connection_t *connection,
-                         credentials_t * credentials,
-                         params_t *params, const char *commands,
-                         const char *extra_xml,
-                         int *error, cmd_response_data_t* response_data);
-
 static char *get_report_format (gvm_connection_t *, credentials_t *,
                                 params_t *, const char *, cmd_response_data_t*);
 
@@ -11070,11 +11064,10 @@ delete_report_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  */
 char *
 get_report (gvm_connection_t *connection, credentials_t * credentials,
-            params_t *params, const char *commands,
-            const char *extra_xml, int *error,
+            params_t *params, const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
 {
-  GString *xml, *commands_xml;
+  GString *xml;
   entity_t entity;
   entity_t report_entity;
   unsigned int first, max;
@@ -11211,41 +11204,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
-  /* Run any extra commands. */
-
-  commands_xml = g_string_new ("");
-  if (commands)
-    {
-      if (gvm_connection_sendf (connection, "%s", commands)
-          == -1)
-        {
-          g_string_free (commands_xml, TRUE);
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send extra commands to manager daemon.",
-                               response_data);
-        }
-
-      if (read_string_c (connection, &commands_xml))
-        {
-          g_string_free (commands_xml, TRUE);
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-    }
-
   /* Get the report. */
 
   if (params_value (params, "delta_states"))
@@ -11340,7 +11298,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                         alert_id);
       if (ret == -1)
         {
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
@@ -11356,7 +11313,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
       if (read_entity_and_text_c (connection, &entity, &esc_response))
         {
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
@@ -11374,7 +11330,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           || (strlen (status) == 0))
         {
           free_entity (entity);
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
           cmd_response_data_set_status_code (response_data,
@@ -11417,7 +11372,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (delta_states, TRUE);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
       cmd_response_data_set_status_code (response_data,
@@ -11572,7 +11526,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   if (ret == -1)
     {
       g_string_free (delta_states, TRUE);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
       cmd_response_data_set_status_code (response_data,
@@ -11589,7 +11542,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
   if (format_id)
     {
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if ((strcmp (format_id, "a994b278-1f62-11e1-96ac-406186ea4fc5") == 0)
           || strcmp (format_id, "5057e5cc-b825-11e4-9d0e-28d24461215b") == 0)
@@ -11856,9 +11808,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (commands)
-        g_string_append (xml, commands_xml->str);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
 
       if (strcmp (alert_id, "0"))
@@ -12173,7 +12122,7 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
   char *result;
   int error = 0;
 
-  result = get_report (connection, credentials, params, NULL, NULL, &error,
+  result = get_report (connection, credentials, params, NULL, &error,
                        response_data);
 
   return error ? result : envelope_gmp (connection, credentials, params,
