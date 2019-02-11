@@ -11782,9 +11782,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
     }
   else
     {
-      gchar *task_id;
 
-      task_id = NULL;
 
       /* Format is NULL, send enveloped XML. */
 
@@ -11878,8 +11876,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             }
           else
             name = NULL;
-          if (id)
-            task_id = g_strdup (id);
+
           if (delta_report_id && result_id && id && name)
             g_string_append_printf (xml,
                                     "<task id=\"%s\"><name>%s</name></task>",
@@ -11889,43 +11886,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           free_entity (entity);
         }
 
-      if (task_id)
-        {
-          if (gvm_connection_sendf (connection,
-                                    "<get_tasks task_id=\"%s\" details=\"0\" />",
-                                    task_id)
-              == -1)
-            {
-              g_free (task_id);
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_free (task_id);
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          g_free (task_id);
-        }
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         {
