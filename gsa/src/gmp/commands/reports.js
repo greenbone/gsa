@@ -126,7 +126,7 @@ class ReportCommand extends EntityCommand {
       delta_report_id,
       filter,
       ignore_pagination: 1,
-    }, options).then(this.transformResponse);
+    }, {...options, transform: FastXmlTransform}).then(this.transformResponse);
   }
 
   get({id}, {filter, ...options} = {}) {
