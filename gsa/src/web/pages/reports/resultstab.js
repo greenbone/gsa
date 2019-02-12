@@ -34,6 +34,7 @@ const ResultsTab = ({
   delta = false,
   filter,
   hasTarget,
+  isUpdating = false,
   progress,
   results,
   sortField,
@@ -99,6 +100,7 @@ const ResultsTab = ({
           entitiesCounts={entitiesCounts}
           filter={filter}
           footer={false}
+          isUpdating={isUpdating}
           sortBy={sortBy}
           sortDir={sortDir}
           toggleDetailsIcon={false}
@@ -118,6 +120,7 @@ ResultsTab.propTypes = {
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,
   hasTarget: PropTypes.bool,
+  isUpdating: PropTypes.bool,
   progress: PropTypes.number.isRequired,
   results: PropTypes.array.isRequired,
   sortField: PropTypes.string.isRequired,

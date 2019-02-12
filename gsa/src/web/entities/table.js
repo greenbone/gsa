@@ -53,7 +53,7 @@ const exclude_props = [
 ];
 
 const UpdatingStripedTable = styled(StripedTable)`
-  opacity: ${props => props.updating ? '0.2' : '1.0'};
+  opacity: ${props => props.isUpdating ? '0.2' : '1.0'};
 `;
 
 const DetailsIcon = styled(FoldIcon)`
@@ -140,7 +140,7 @@ class EntitiesTable extends React.Component {
       filter,
       footnote = true,
       toggleDetailsIcon = true,
-      updating,
+      isUpdating = false,
       sortBy: currentSortBy,
       sortDir: currentSortDir,
       links,
@@ -258,7 +258,7 @@ class EntitiesTable extends React.Component {
         <UpdatingStripedTable
           header={header}
           footer={footer}
-          updating={updating}
+          isUpdating={isUpdating}
         >
           {body}
         </UpdatingStripedTable>
@@ -286,6 +286,7 @@ EntitiesTable.propTypes = {
   footer: PropTypes.componentOrFalse,
   footnote: PropTypes.bool,
   header: PropTypes.componentOrFalse,
+  isUpdating: PropTypes.bool,
   links: PropTypes.bool,
   pagination: PropTypes.componentOrFalse,
   row: PropTypes.component.isRequired,
@@ -293,7 +294,6 @@ EntitiesTable.propTypes = {
   sortBy: PropTypes.string,
   sortDir: PropTypes.string,
   toggleDetailsIcon: PropTypes.bool,
-  updating: PropTypes.bool,
   onFirstClick: PropTypes.func,
   onLastClick: PropTypes.func,
   onNextClick: PropTypes.func,

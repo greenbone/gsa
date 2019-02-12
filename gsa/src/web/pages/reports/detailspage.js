@@ -236,10 +236,18 @@ class ReportDetails extends React.Component {
 
     this.startDurationMeasurement();
 
-    this.setState({reportId, deltaReportId});
+    this.setState(({lastFilter}) => ({
+      reportId,
+      deltaReportId,
+      isUpdating: isDefined(lastFilter) && !lastFilter.equals(filter), // show update indicator if filter has changed
+      lastFilter: filter,
+    }));
 
     this.props.loadReport(reportId, deltaReportId, filter)
-      .then(() => this.startTimer());
+      .then(() => {
+        this.startTimer();
+        this.setState({isUpdating: false});
+      });
   }
 
   reload() {
@@ -526,6 +534,7 @@ class ReportDetails extends React.Component {
     } = this.props;
     const {
       activeTab,
+      isUpdating = false,
       showFilterDialog,
       showDownloadReportDialog,
       sorting,
@@ -546,6 +555,7 @@ class ReportDetails extends React.Component {
               filter={filter}
               filters={filters}
               isLoading={isLoading}
+              isUpdating={isUpdating}
               sorting={sorting}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
