@@ -171,7 +171,7 @@ Row.propTypes = {
 };
 
 const Footer = createEntitiesFooter({
-  span: 7,
+  span: 8,
   trash: true,
   download: 'tickets.xml',
 });
@@ -179,7 +179,7 @@ const Footer = createEntitiesFooter({
 export default createEntitiesTable({
   emptyTitle: _l('No tickets available'),
   row: Row,
-  rowDetails: withRowDetails('ticket', 7)(TicketDetails),
+  rowDetails: withRowDetails('ticket', 8)(TicketDetails),
   header: createEntitiesHeader(FIELDS),
   footer: Footer,
 });
