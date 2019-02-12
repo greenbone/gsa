@@ -2780,20 +2780,20 @@ create_report_gmp (gvm_connection_t *connection,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *task_id, *name, *comment, *xml_file;
+  const char *task_id, *xml_file;
   const char *in_assets;
 
   task_id = params_value (params, "task_id");
   xml_file = params_value (params, "xml_file");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
 
   if (task_id == NULL)
     {
-      CHECK_VARIABLE_INVALID (name, "Create Report");
-      CHECK_VARIABLE_INVALID (comment, "Create Report");
+      return message_invalid (connection, credentials, params, response_data,
+                              "Task ID required",
+                              "Create Report");
     }
+
   CHECK_VARIABLE_INVALID (xml_file, "Create Report");
 
   if (params_given (params, "in_assets"))
@@ -2801,20 +2801,9 @@ create_report_gmp (gvm_connection_t *connection,
 
   if (strlen (xml_file) == 0)
     {
-      if (task_id)
-        return message_invalid (connection, credentials, params, response_data,
-                                "Report required",
-                                "Create Report");
-
-      /* Create only the container task. */
-
-      command = g_markup_printf_escaped ("<create_task>"
-                                         "<target id=\"0\"/>"
-                                         "<name>%s</name>"
-                                         "<comment>%s</comment>"
-                                         "</create_task>",
-                                         name,
-                                         comment);
+      return message_invalid (connection, credentials, params, response_data,
+                              "Report required",
+                              "Create Report");
     }
   else
     {
@@ -2827,37 +2816,14 @@ create_report_gmp (gvm_connection_t *connection,
         xml_file_escaped = g_strdup (xml_file);
       g_strfreev (xml_file_array);
 
-      if (task_id)
-        command = g_strdup_printf ("<create_report>"
-                                   "<in_assets>%s</in_assets>"
-                                   "<task id=\"%s\"/>"
-                                   "%s"
-                                   "</create_report>",
-                                   in_assets ? in_assets : "0",
-                                   task_id ? task_id : "0",
-                                   xml_file_escaped ? xml_file_escaped : "");
-      else
-        {
-          gchar *name_escaped, *comment_escaped;
-          name_escaped = name ? g_markup_escape_text (name, -1)
-                              : NULL;
-          comment_escaped = comment ? g_markup_escape_text (comment, -1)
-                                    : NULL;
-          command = g_strdup_printf ("<create_report>"
-                                     "<in_assets>%s</in_assets>"
-                                     "<task>"
-                                     "<name>%s</name>"
-                                     "<comment>%s</comment>"
-                                     "</task>"
-                                     "%s"
-                                     "</create_report>",
-                                     in_assets ? in_assets : "",
-                                     name_escaped,
-                                     comment_escaped,
-                                     xml_file_escaped);
-          g_free (name_escaped);
-          g_free (comment_escaped);
-        }
+      command = g_strdup_printf ("<create_report>"
+                                 "<in_assets>%s</in_assets>"
+                                 "<task id=\"%s\"/>"
+                                 "%s"
+                                 "</create_report>",
+                                 in_assets ? in_assets : "0",
+                                 task_id,
+                                 xml_file_escaped ? xml_file_escaped : "");
       g_free (xml_file_escaped);
     }
 
