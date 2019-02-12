@@ -2775,9 +2775,6 @@ create_report_gmp (gvm_connection_t *connection,
   CHECK_VARIABLE_INVALID (task_id, "Create Report");
   CHECK_VARIABLE_INVALID (xml_file, "Create Report");
 
-  if (params_given (params, "in_assets"))
-    CHECK_VARIABLE_INVALID (xml_file, "Create Report");
-
   if (strlen (xml_file) == 0)
     {
       return message_invalid (connection, credentials, params, response_data,
