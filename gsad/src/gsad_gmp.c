@@ -2779,21 +2779,13 @@ create_report_gmp (gvm_connection_t *connection,
 {
   entity_t entity;
   int ret;
+  gchar **xml_file_array, *xml_file_escaped;
   gchar *command, *html, *response;
-  const char *task_id, *xml_file;
-  const char *in_assets;
+  const char *task_id   = params_value (params, "task_id"),
+             *xml_file  = params_value (params, "xml_file"),
+             *in_assets = params_value (params, "in_assets");
 
-  task_id = params_value (params, "task_id");
-  xml_file = params_value (params, "xml_file");
-  in_assets = params_value (params, "in_assets");
-
-  if (task_id == NULL)
-    {
-      return message_invalid (connection, credentials, params, response_data,
-                              "Task ID required",
-                              "Create Report");
-    }
-
+  CHECK_VARIABLE_INVALID (task_id, "Create Report");
   CHECK_VARIABLE_INVALID (xml_file, "Create Report");
 
   if (params_given (params, "in_assets"))
@@ -2805,27 +2797,23 @@ create_report_gmp (gvm_connection_t *connection,
                               "Report required",
                               "Create Report");
     }
+
+  xml_file_array = g_strsplit (xml_file, "%", -1);
+  if (xml_file_array != NULL && xml_file_array[0] != NULL)
+    xml_file_escaped = g_strjoinv ("%%", xml_file_array);
   else
-    {
-      gchar **xml_file_array, *xml_file_escaped;
+    xml_file_escaped = g_strdup (xml_file);
+  g_strfreev (xml_file_array);
 
-      xml_file_array = g_strsplit (xml_file, "%", -1);
-      if (xml_file_array != NULL && xml_file_array[0] != NULL)
-        xml_file_escaped = g_strjoinv ("%%", xml_file_array);
-      else
-        xml_file_escaped = g_strdup (xml_file);
-      g_strfreev (xml_file_array);
-
-      command = g_strdup_printf ("<create_report>"
-                                 "<in_assets>%s</in_assets>"
-                                 "<task id=\"%s\"/>"
-                                 "%s"
-                                 "</create_report>",
-                                 in_assets ? in_assets : "0",
-                                 task_id,
-                                 xml_file_escaped ? xml_file_escaped : "");
-      g_free (xml_file_escaped);
-    }
+  command = g_strdup_printf ("<create_report>"
+                             "<in_assets>%s</in_assets>"
+                             "<task id=\"%s\"/>"
+                             "%s"
+                             "</create_report>",
+                             in_assets ? in_assets : "0",
+                             task_id,
+                             xml_file_escaped ? xml_file_escaped : "");
+  g_free (xml_file_escaped);
 
   ret = gmp (connection, credentials,
              &response,
