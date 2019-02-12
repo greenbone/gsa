@@ -2750,20 +2750,7 @@ new_task_gmp (gvm_connection_t *connection, credentials_t * credentials,
 }
 
 /**
- * @brief Returns page to create a new container task.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  message      If not NULL, display message.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-
-/**
- * @brief Create a report, get all tasks, envelope the result.
+ * @brief Create a report, get all reports, envelope the result.
  *
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
