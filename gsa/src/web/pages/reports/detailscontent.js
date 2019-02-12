@@ -155,10 +155,6 @@ const ToolBarIcons = ({
       </IconDivider>
       {!loading &&
         <React.Fragment>
-          <DownloadIcon
-            title={_('Download filtered Report')}
-            onClick={onReportDownloadClick}
-          />
           <IconDivider>
             <AddToAssetsIcon
               title={_('Add to Assets with QoD=>70% and Overrides enabled')}
@@ -192,16 +188,22 @@ const ToolBarIcons = ({
               <VulnerabilityIcon/>
             </Link>
           </IconDivider>
-          {!delta &&
-            <AlertActions
-              filter={filter}
-              report={report}
-              showError={showError}
-              showSuccessMessage={showSuccessMessage}
-              showErrorMessage={showErrorMessage}
-              onInteraction={onInteraction}
+          <IconDivider>
+            <DownloadIcon
+              title={_('Download filtered Report')}
+              onClick={onReportDownloadClick}
             />
-          }
+            {!delta &&
+              <AlertActions
+                filter={filter}
+                report={report}
+                showError={showError}
+                showSuccessMessage={showSuccessMessage}
+                showErrorMessage={showErrorMessage}
+                onInteraction={onInteraction}
+              />
+            }
+          </IconDivider>
         </React.Fragment>
       }
     </Divider>
