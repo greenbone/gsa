@@ -247,12 +247,6 @@ static char *get_target (gvm_connection_t *, credentials_t *, params_t *,
 static char *get_targets (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_report (gvm_connection_t *connection,
-                         credentials_t * credentials,
-                         params_t *params, const char *commands,
-                         const char *extra_xml,
-                         int *error, cmd_response_data_t* response_data);
-
 static char *get_report_format (gvm_connection_t *, credentials_t *,
                                 params_t *, const char *, cmd_response_data_t*);
 
@@ -260,9 +254,6 @@ static char *get_report_formats (gvm_connection_t *, credentials_t *,
                                  params_t *, const char *,
                                  cmd_response_data_t*);
 
-static char *get_report_section (gvm_connection_t *, credentials_t *,
-                                 params_t *, const char *,
-                                 cmd_response_data_t*);
 
 static char *get_reports (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
@@ -11073,11 +11064,10 @@ delete_report_gmp (gvm_connection_t *connection, credentials_t * credentials, pa
  */
 char *
 get_report (gvm_connection_t *connection, credentials_t * credentials,
-            params_t *params, const char *commands,
-            const char *extra_xml, int *error,
+            params_t *params, const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
 {
-  GString *xml, *commands_xml;
+  GString *xml;
   entity_t entity;
   entity_t report_entity;
   unsigned int first, max;
@@ -11214,41 +11204,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
-  /* Run any extra commands. */
-
-  commands_xml = g_string_new ("");
-  if (commands)
-    {
-      if (gvm_connection_sendf (connection, "%s", commands)
-          == -1)
-        {
-          g_string_free (commands_xml, TRUE);
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send extra commands to manager daemon.",
-                               response_data);
-        }
-
-      if (read_string_c (connection, &commands_xml))
-        {
-          g_string_free (commands_xml, TRUE);
-          if (error) *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               response_data);
-        }
-    }
-
   /* Get the report. */
 
   if (params_value (params, "delta_states"))
@@ -11343,7 +11298,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
                                         alert_id);
       if (ret == -1)
         {
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
@@ -11359,7 +11313,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
       if (read_entity_and_text_c (connection, &entity, &esc_response))
         {
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
           if (error) *error = 1;
@@ -11377,7 +11330,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           || (strlen (status) == 0))
         {
           free_entity (entity);
-          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
           cmd_response_data_set_status_code (response_data,
@@ -11420,7 +11372,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       == -1)
     {
       g_string_free (delta_states, TRUE);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
       cmd_response_data_set_status_code (response_data,
@@ -11575,7 +11526,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   if (ret == -1)
     {
       g_string_free (delta_states, TRUE);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if (error) *error = 1;
       cmd_response_data_set_status_code (response_data,
@@ -11592,7 +11542,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
 
   if (format_id)
     {
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
       if ((strcmp (format_id, "a994b278-1f62-11e1-96ac-406186ea4fc5") == 0)
           || strcmp (format_id, "5057e5cc-b825-11e4-9d0e-28d24461215b") == 0)
@@ -11833,9 +11782,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
     }
   else
     {
-      gchar *task_id;
 
-      task_id = NULL;
 
       /* Format is NULL, send enveloped XML. */
 
@@ -11859,9 +11806,6 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (commands)
-        g_string_append (xml, commands_xml->str);
-      g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
 
       if (strcmp (alert_id, "0"))
@@ -11932,8 +11876,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
             }
           else
             name = NULL;
-          if (id)
-            task_id = g_strdup (id);
+
           if (delta_report_id && result_id && id && name)
             g_string_append_printf (xml,
                                     "<task id=\"%s\"><name>%s</name></task>",
@@ -11943,215 +11886,11 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
           free_entity (entity);
         }
 
-      if (task_id)
-        {
-          if (gvm_connection_sendf (connection,
-                                    "<get_tasks task_id=\"%s\" details=\"0\" />",
-                                    task_id)
-              == -1)
-            {
-              g_free (task_id);
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_free (task_id);
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          g_free (task_id);
-        }
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         {
           g_string_append (xml, "</get_delta_result>");
           return g_string_free (xml, FALSE);
-        }
-
-      if (command_enabled (credentials, "GET_REPORT_FORMATS"))
-        {
-          gchar *default_report_format, *err;
-
-          /* Get Default Report Format. */
-
-          err = setting_get_value_error (connection,
-                                         credentials,
-                                         "353304fc-645e-11e6-ba7a-28d24461215b",
-                                         &default_report_format,
-                                         response_data);
-          if (err)
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              return err;
-            }
-
-          g_string_append_printf (xml,
-                                  "<report_format_id>%s</report_format_id>",
-                                  default_report_format);
-
-          /* Get all the report formats. */
-
-          if (gvm_connection_sendf
-               (connection,
-                "<get_report_formats"
-                " filter=\"rows=-1 sort=name\"/>")
-              == -1)
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   response_data);
-            }
-        }
-
-      if (command_enabled (credentials, "GET_ALERTS"))
-        {
-          if (gvm_connection_sendf
-               (connection,
-                "<get_alerts"
-                " filter=\"rows=-1 sort=name\"/>")
-              == -1)
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   response_data);
-            }
-        }
-
-      if (command_enabled (credentials, "GET_FILTERS"))
-        {
-          /* Get the filters. */
-
-          g_string_append (xml, "<filters>");
-
-          if (gvm_connection_sendf_xml (connection,
-                                        "<get_filters"
-                                        " filter=\"type=result\"/>")
-              == -1)
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting the filter list. "
-                                   "The current list of filters is not available. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   response_data);
-            }
-
-          if (read_string_c (connection, &xml))
-            {
-              g_string_free (xml, TRUE);
-              if (error) *error = 1;
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting the filter list. "
-                                   "The current list of filters is not available. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   response_data);
-            }
-
-          g_string_append (xml, "</filters>");
-        }
-
-      /* Get tag names */
-
-      if (gvm_connection_sendf (connection,
-                                "<get_tags"
-                                " filter=\"resource_type=report"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting tag names list. "
-                              "The current list of resources is not available. "
-                              "Diagnostics: Failure to send command to manager daemon.",
-                              response_data);
-        }
-
-      if (read_string_c (connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting tag names list. "
-                              "The current list of resources is not available. "
-                              "Diagnostics: Failure to receive response from manager daemon.",
-                              response_data);
         }
 
       g_string_append (xml, "</get_report>");
@@ -12176,7 +11915,7 @@ get_report_gmp (gvm_connection_t *connection, credentials_t * credentials,
   char *result;
   int error = 0;
 
-  result = get_report (connection, credentials, params, NULL, NULL, &error,
+  result = get_report (connection, credentials, params, NULL, &error,
                        response_data);
 
   return error ? result : envelope_gmp (connection, credentials, params,
@@ -12337,141 +12076,6 @@ get_reports_gmp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_reports (connection, credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get the hosts for a report, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-static char *
-get_report_section (gvm_connection_t *connection,
-                    credentials_t * credentials, params_t *params,
-                    const char *extra_xml, cmd_response_data_t* response_data)
-{
-  GString *xml;
-  const char *report_id, *report_section, *type;
-  char *result;
-  int error = 0;
-
-  report_section = params_value (params, "report_section");
-  report_id = params_value (params, "report_id");
-  type = params_value (params, "type");
-
-  if (report_section == NULL)
-    report_section = "results";
-
-  if (report_id == NULL && (type == NULL))
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred."
-                           " Diagnostics: report_id was NULL.",
-                           response_data);
-    }
-
-  if (!strcmp (report_section, "results"))
-    {
-      char *result;
-
-      result = get_report (connection, credentials, params, NULL,
-                           extra_xml, &error, response_data);
-
-      return error ? result : envelope_gmp (connection, credentials,
-                                            params, result, response_data);
-    }
-
-  result = get_report (connection, credentials, params, NULL, NULL,
-                       &error, response_data);
-  if (error)
-    return result;
-
-  xml = g_string_new ("");
-  g_string_append_printf (xml, "<get_report_%s_response>", report_section);
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-  g_string_append (xml, result);
-  if (strcmp (params_value (params, "report_section"), "topology") == 0)
-    {
-      int ret;
-      char *response;
-
-      ret = gmp (connection, credentials,
-                 &response,
-                 NULL,
-                 response_data,
-                 "<get_report_formats"
-                 " filter=\"rows=-1\"/>");
-
-      switch (ret)
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            g_string_free (xml, TRUE);
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the "
-                                "result formats list. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                response_data);
-          case 2:
-            g_string_free (xml, TRUE);
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the "
-                                "result formats list. "
-                                "Diagnostics: Failure to receive response from manager daemon.",
-                                response_data);
-          default:
-            g_string_free (xml, TRUE);
-            cmd_response_data_set_status_code (response_data,
-                                               MHD_HTTP_INTERNAL_SERVER_ERROR);
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the "
-                                "result formats list. "
-                                "Diagnostics: Internal Error.",
-                                response_data);
-        }
-
-      g_string_append (xml, response);
-      g_free (response);
-    }
-
-  g_string_append_printf (xml, "</get_report_%s_response>", report_section);
-
-  return envelope_gmp (connection, credentials, params, g_string_free (xml, FALSE),
-                       response_data);
-}
-
-/**
- * @brief Get a report section, envelope the result.
- *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Enveloped XML object.
- */
-char *
-get_report_section_gmp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
-{
-  return get_report_section (connection, credentials, params, NULL, response_data);
 }
 
 /**

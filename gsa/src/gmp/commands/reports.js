@@ -27,6 +27,7 @@ import Report from '../models/report';
 import {ALL_FILTER} from '../models/filter';
 
 import DefaultTransform from '../http/transform/default';
+import FastXmlTransform from '../http/transform/fastxml';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
@@ -125,15 +126,18 @@ class ReportCommand extends EntityCommand {
       delta_report_id,
       filter,
       ignore_pagination: 1,
-    }, options).then(this.transformResponse);
+    }, {...options, transform: FastXmlTransform}).then(this.transformResponse);
   }
 
   get({id}, {filter, ...options} = {}) {
-    return this.httpGet({
-      id,
-      filter,
-      ignore_pagination: 1,
-    }, options).then(this.transformResponse);
+    return this.httpGet(
+      {
+        id,
+        filter,
+        ignore_pagination: 1,
+      },
+      {...options, transform: FastXmlTransform},
+    ).then(this.transformResponse);
   }
 
   getElementFromRoot(root) {

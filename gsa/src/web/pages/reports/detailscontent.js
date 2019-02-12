@@ -228,6 +228,7 @@ const PageContent = ({
   filter,
   filters,
   isLoading = true,
+  isUpdating = false,
   sorting,
   showError,
   showErrorMessage,
@@ -470,6 +471,7 @@ const PageContent = ({
                       delta={delta}
                       filter={filter}
                       hasTarget={!isContainer}
+                      isUpdating={isUpdating}
                       progress={task.progress}
                       results={isDefined(results) ? results.entities : {}}
                       sortField={sorting.results.sortField}
@@ -510,6 +512,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -547,6 +550,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -584,6 +588,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -621,6 +626,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -658,6 +664,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -695,6 +702,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -732,6 +740,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -771,6 +780,7 @@ const PageContent = ({
                           entities={entities}
                           entitiesCounts={entitiesCounts}
                           filter={filter}
+                          isUpdating={isUpdating}
                           sortBy={sortBy}
                           sortDir={sortDir}
                           toggleDetailsIcon={false}
@@ -809,11 +819,11 @@ PageContent.propTypes = {
   filter: PropTypes.filter,
   filters: PropTypes.array,
   isLoading: PropTypes.bool,
+  isUpdating: PropTypes.bool,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
-  updating: PropTypes.bool,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
