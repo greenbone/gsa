@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2018 Greenbone Networks GmbH
+/* Copyright (C) 2009-2019 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -43,8 +43,6 @@ char * clone_gmp (gvm_connection_t *, credentials_t *, params_t *,
                   cmd_response_data_t*);
 
 char * create_report_gmp (gvm_connection_t *, credentials_t *,
-                          params_t *, cmd_response_data_t*);
-char * import_report_gmp (gvm_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
 char * create_container_task_gmp (gvm_connection_t *,
                                   credentials_t *, params_t *,
