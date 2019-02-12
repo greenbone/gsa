@@ -324,7 +324,6 @@ init_validator ()
                      "|(edit_task)"
                      "|(auth_settings)"
                      "|(empty_trashcan)"
-                     "|(alert_report)"
                      "|(export_agent)"
                      "|(export_agents)"
                      "|(export_alert)"
@@ -398,7 +397,6 @@ init_validator ()
                      "|(get_reports)"
                      "|(get_report_format)"
                      "|(get_report_formats)"
-                     "|(get_report_section)"
                      "|(get_result)"
                      "|(get_results)"
                      "|(get_role)"
@@ -1508,12 +1506,6 @@ exec_gmp_post (http_connection_t *con,
   ELSE (delete_ticket)
   ELSE (delete_user)
   ELSE (empty_trashcan)
-  else if (!strcmp (cmd, "alert_report"))
-    {
-      res = get_report_section_gmp
-                            (&connection, credentials, con_info->params,
-                             response_data);
-    }
   ELSE (import_config)
   ELSE (import_port_list)
   ELSE (import_report)
@@ -2125,7 +2117,6 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_results)
   ELSE (get_report_format)
   ELSE (get_report_formats)
-  ELSE (get_report_section)
   ELSE (get_role)
   ELSE (get_roles)
   ELSE (get_scanner)
