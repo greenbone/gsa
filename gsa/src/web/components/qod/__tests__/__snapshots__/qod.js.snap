@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Qod tests should render Qod value 1`] = `
+.c0 {
+  white-space: nowrap;
+}
+
+<span
+  class="c0"
+>
+  42
+   %
+</span>
+`;
+
+exports[`Qod tests should render Qod value 2`] = `
+.c0 {
+  white-space: nowrap;
+}
+
+<span
+  class="c0"
+>
+  42
+   %
+</span>
+`;
