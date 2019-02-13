@@ -167,6 +167,7 @@ const ToolBarIcons = ({
           <IconDivider>
             <DetailsLink
               type="task"
+              textOnly={!isDefined(task)}
               id={isDefined(task) ? task.id : ''}
               title={_('Corresponding Task')}
             >
