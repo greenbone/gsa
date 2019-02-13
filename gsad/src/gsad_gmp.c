@@ -10782,6 +10782,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   if (gvm_connection_sendf (
         connection,
         "<get_reports"
+        " result_tags=\"0\""
         " details=\"%i\""
         "%s%s%s",
         delta_report_id || strcmp (report_section, "summary"),
