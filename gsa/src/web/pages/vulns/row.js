@@ -29,6 +29,8 @@ import SeverityBar from 'web/components/bar/severitybar';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import Qod from 'web/components/qod/qod';
+
 import EntitiesActions from 'web/entities/actions';
 
 import PropTypes from 'web/utils/proptypes';
@@ -61,7 +63,7 @@ const Row = ({
         <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData align="center">
-        {entity.qod} %
+        <Qod value={entity.qod}/>
       </TableData>
       <TableData>
         <Link
