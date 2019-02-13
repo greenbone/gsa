@@ -27,6 +27,7 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
+import Filter from 'gmp/models/filter';
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -49,6 +50,10 @@ import MenuEntry from 'web/components/menu/menuentry';
 import Section from 'web/components/section/section';
 
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -187,6 +192,8 @@ const Selector = withClickHandler()(styled.span`
   }}
 `);
 
+const SLAVE_SCANNER_FILTER = Filter.fromString('type=' + SLAVE_SCANNER_TYPE);
+
 
 class PerformancePage extends React.Component {
 
@@ -221,10 +228,7 @@ class PerformancePage extends React.Component {
       this.setState({reports: response.data});
     });
 
-    gmp.scanners.getAll({filter: 'type=' + SLAVE_SCANNER_TYPE})
-      .then(response => {
-        this.setState({scanners: response.data});
-      });
+    this.props.loadScanners();
   }
 
   handleDurationChange(duration) {
@@ -268,6 +272,9 @@ class PerformancePage extends React.Component {
 
   render() {
     const {
+      scanners,
+    } = this.props;
+    const {
       duration,
       reports,
       slave_id,
@@ -277,7 +284,6 @@ class PerformancePage extends React.Component {
       end_date,
       end_hour,
       end_minute,
-      scanners,
     } = this.state;
     const {gmp} = this.props;
     return (
@@ -374,16 +380,26 @@ class PerformancePage extends React.Component {
 
 PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  loadScanners: PropTypes.func.isRequired,
+  scanners: PropTypes.arrayOf(PropTypes.model),
   onInteraction: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
 });
+
+const mapStateToProps = rootState => {
+  const select = scannerSelector(rootState);
+  return {
+    scanners: select.getEntities(SLAVE_SCANNER_FILTER),
+  };
+};
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:
