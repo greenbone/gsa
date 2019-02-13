@@ -50,10 +50,10 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
+#include <grp.h> /* for setgroups */
 #include <netinet/in.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
-#include <grp.h> /* for setgroups */
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -63,31 +63,30 @@
 #include <sys/prctl.h>
 #endif
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/un.h>
 #include <unistd.h>
 /* This must follow the system includes. */
-#include <microhttpd.h>
-
-#include <gvm/util/fileutils.h>
-#include <gvm/base/networking.h> /* for ipv6_is_enabled */
-#include <gvm/base/pidfile.h>
-#include <gvm/base/logging.h>
-
 #include "gsad_base.h"
-#include "gsad_params.h"
+#include "gsad_credentials.h"
 #include "gsad_gmp.h"
 #include "gsad_gmp_auth.h" /* for authenticate_gmp */
 #include "gsad_http.h"
 #include "gsad_http_handler.h" /* for init_http_handlers */
+#include "gsad_i18n.h"
+#include "gsad_params.h"
+#include "gsad_session.h" /* for session_init */
 #include "gsad_settings.h"
 #include "gsad_user.h"
-#include "gsad_credentials.h"
-#include "gsad_i18n.h"
-#include "gsad_session.h" /* for session_init */
 #include "utils.h" /* for str_equal */
 #include "validator.h"
+
+#include <gvm/base/logging.h>
+#include <gvm/base/networking.h> /* for ipv6_is_enabled */
+#include <gvm/base/pidfile.h>
+#include <gvm/util/fileutils.h>
+#include <microhttpd.h>
 
 #ifdef GIT_REV_AVAILABLE
 #include "gitrevision.h"
@@ -103,8 +102,8 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /*
-* define MHD_USE_INTERNAL_POLLING_THREAD for libmicrohttp < 0.9.53
-*/
+ * define MHD_USE_INTERNAL_POLLING_THREAD for libmicrohttp < 0.9.53
+ */
 #if MHD_VERSION < 0x00095300
 #define MHD_USE_INTERNAL_POLLING_THREAD 0
 #endif
@@ -163,9 +162,9 @@
  * @brief Default value for HTTP header "Content-Security-Policy"
  */
 #define DEFAULT_GSAD_CONTENT_SECURITY_POLICY \
- "default-src 'self' 'unsafe-inline';"       \
- " img-src 'self' blob:;"                    \
- " frame-ancestors 'self'"
+  "default-src 'self' 'unsafe-inline';"      \
+  " img-src 'self' blob:;"                   \
+  " frame-ancestors 'self'"
 
 /**
  * @brief Default value for HTTP header "X-Frame-Options" for guest charts
@@ -176,9 +175,9 @@
  * @brief Default guest charts value for HTTP header "Content-Security-Policy"
  */
 #define DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY \
- "default-src 'self' 'unsafe-inline';"                   \
- " img-src 'self' blob:;"                                \
- " frame-ancestors *"
+  "default-src 'self' 'unsafe-inline';"                  \
+  " img-src 'self' blob:;"                               \
+  " frame-ancestors *"
 
 /**
  * @brief Default "max-age" for HTTP header "Strict-Transport-Security"
@@ -257,8 +256,7 @@ init_validator ()
 {
   validator = gvm_validator_new ();
 
-  gvm_validator_add (validator,
-                     "cmd",
+  gvm_validator_add (validator, "cmd",
                      "^((bulk_delete)"
                      "|(bulk_export)"
                      "|(clone)"
@@ -477,237 +475,287 @@ init_validator ()
   gvm_validator_add (validator, "action_status", "(?s)^.*$");
   gvm_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   gvm_validator_add (validator, "agent_format", "^(installer)$");
-  gvm_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "agent_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
-  gvm_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln)$");
-  gvm_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
+  gvm_validator_add (
+    validator, "aggregate_type",
+    "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|"
+    "permission|port_list|report|report_format|result|role|scanner|schedule|"
+    "tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|"
+    "vuln)$");
+  gvm_validator_add (
+    validator, "alive_tests",
+    "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service "
+    "Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service "
+    "& ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   gvm_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
-  gvm_validator_add (validator, "asset_name",   "(?s)^.*$");
-  gvm_validator_add (validator, "asset_type",   "^(host|os)$");
-  gvm_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
-  gvm_validator_add (validator, "auth_algorithm",   "^(md5|sha1)$");
-  gvm_validator_add (validator, "auth_method",  "^(0|1|2)$");
+  gvm_validator_add (validator, "asset_name", "(?s)^.*$");
+  gvm_validator_add (validator, "asset_type", "^(host|os)$");
+  gvm_validator_add (validator, "asset_id",
+                     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
+  gvm_validator_add (validator, "auth_algorithm", "^(md5|sha1)$");
+  gvm_validator_add (validator, "auth_method", "^(0|1|2)$");
   /* Defined in RFC 2253. */
-  gvm_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
-  gvm_validator_add (validator, "auto_delete",       "^(no|keep)$");
-  gvm_validator_add (validator, "auto_delete_data",  "^(.*){0,10}$");
-  gvm_validator_add (validator, "autofp",       "^(0|1|2)$");
+  gvm_validator_add (validator, "authdn", "^.{0,200}%s.{0,200}$");
+  gvm_validator_add (validator, "auto_delete", "^(no|keep)$");
+  gvm_validator_add (validator, "auto_delete_data", "^(.*){0,10}$");
+  gvm_validator_add (validator, "autofp", "^(0|1|2)$");
   gvm_validator_add (validator, "autofp_value", "^(1|2)$");
-  gvm_validator_add (validator, "boolean",    "^(0|1)$");
-  gvm_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "boolean", "^(0|1)$");
+  gvm_validator_add (validator, "bulk_selected:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
-  gvm_validator_add (validator, "caller",     "^.*$");
-  gvm_validator_add (validator, "certificate",   "(?s)^.*$");
-  gvm_validator_add (validator, "chart_gen:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "caller", "^.*$");
+  gvm_validator_add (validator, "certificate", "(?s)^.*$");
+  gvm_validator_add (validator, "chart_gen:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "chart_gen:value", "(?s)^.*$");
-  gvm_validator_add (validator, "chart_init:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "chart_init:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "chart_init:value", "(?s)^.*$");
   gvm_validator_add (validator, "setting_value", "^.*$");
   gvm_validator_add (validator, "setting_name", "^(.*){0,1000}$");
-  gvm_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
-  gvm_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
+  gvm_validator_add (validator, "comment",
+                     "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  gvm_validator_add (validator, "config_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "osp_config_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "condition", "^[[:alnum:] ]{0,100}$");
   gvm_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
-  gvm_validator_add (validator, "credential_type", "^(cc|up|usk|smime|pgp|snmp|pw)$");
-  gvm_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
+  gvm_validator_add (validator, "credential_type",
+                     "^(cc|up|usk|smime|pgp|snmp|pw)$");
+  gvm_validator_add (validator, "credential_login",
+                     "^[-_[:alnum:]\\.@\\\\]{0,40}$");
   gvm_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "condition_data:value", "(?s)^.*$");
-  gvm_validator_add (validator, "cvss_av",       "^(L|A|N)$");
-  gvm_validator_add (validator, "cvss_ac",       "^(H|M|L)$");
-  gvm_validator_add (validator, "cvss_au",       "^(M|S|N)$");
-  gvm_validator_add (validator, "cvss_c",       "^(N|P|C)$");
-  gvm_validator_add (validator, "cvss_i",       "^(N|P|C)$");
-  gvm_validator_add (validator, "cvss_a",       "^(N|P|C)$");
-  gvm_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
+  gvm_validator_add (validator, "cvss_av", "^(L|A|N)$");
+  gvm_validator_add (validator, "cvss_ac", "^(H|M|L)$");
+  gvm_validator_add (validator, "cvss_au", "^(M|S|N)$");
+  gvm_validator_add (validator, "cvss_c", "^(N|P|C)$");
+  gvm_validator_add (validator, "cvss_i", "^(N|P|C)$");
+  gvm_validator_add (validator, "cvss_a", "^(N|P|C)$");
+  gvm_validator_add (
+    validator, "cvss_vector",
+    "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
   gvm_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
   gvm_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
-  gvm_validator_add (validator, "days",         "^(-1|[0-9]+)$");
+  gvm_validator_add (validator, "days", "^(-1|[0-9]+)$");
   gvm_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "data_columns:name", "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "default_severity", "^(|10\\.0|[0-9]\\.[0-9])$");
+  gvm_validator_add (validator, "default_severity",
+                     "^(|10\\.0|[0-9]\\.[0-9])$");
   gvm_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
-  gvm_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  gvm_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
-  gvm_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
-  gvm_validator_add (validator, "email_list", "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
-  gvm_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "details_fname",
+                     "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "domain", "^[-[:alnum:]\\.]{1,80}$");
+  gvm_validator_add (validator, "email", "^[^@ ]{1,150}@[^@ ]{1,150}$");
+  gvm_validator_add (
+    validator, "email_list",
+    "^[^@ ]{1,150}@[^@ ]{1,150}(, *[^@ ]{1,150}@[^@ ]{1,150})*$");
+  gvm_validator_add (validator, "alert_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
-  gvm_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "event_data:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "event_data:value", "(?s)^.*$");
-  gvm_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
+  gvm_validator_add (validator, "family", "^[-_[:alnum:] :.]{1,200}$");
   gvm_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
-  gvm_validator_add (validator, "exclude_file",         "(?s)^.*$");
-  gvm_validator_add (validator, "exclude_file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
-  gvm_validator_add (validator, "exclude_file:value",   "^yes$");
-  gvm_validator_add (validator, "file",         "(?s)^.*$");
-  gvm_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
-  gvm_validator_add (validator, "file:value",   "^yes$");
-  gvm_validator_add (validator, "settings_changed:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "exclude_file", "(?s)^.*$");
+  gvm_validator_add (validator, "exclude_file:name",
+                     "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  gvm_validator_add (validator, "exclude_file:value", "^yes$");
+  gvm_validator_add (validator, "file", "(?s)^.*$");
+  gvm_validator_add (validator, "file:name",
+                     "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  gvm_validator_add (validator, "file:value", "^yes$");
+  gvm_validator_add (validator, "settings_changed:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "settings_default:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_default:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "settings_default:value", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "settings_filter:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "first",        "^[0-9]+$");
+  gvm_validator_add (validator, "first", "^[0-9]+$");
   gvm_validator_add (validator, "first_group", "^[0-9]+$");
   gvm_validator_add (validator, "first_result", "^[0-9]+$");
-  gvm_validator_add (validator, "filter",       "^(.*){0,1000}$");
+  gvm_validator_add (validator, "filter", "^(.*){0,1000}$");
   gvm_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap_connect". */
-  gvm_validator_add (validator, "group",        "^method:(ldap_connect|radius_connect)$");
+  gvm_validator_add (validator, "group",
+                     "^method:(ldap_connect|radius_connect)$");
   gvm_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "max",          "^(-?[0-9]+|)$");
-  gvm_validator_add (validator, "max_results",  "^[0-9]+$");
-  gvm_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
-  gvm_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
-  gvm_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
-  gvm_validator_add (validator, "hostpath",   "^[-[:alnum:]\\. :/]{1,80}$");
-  gvm_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]+$");
+  gvm_validator_add (validator, "max", "^(-?[0-9]+|)$");
+  gvm_validator_add (validator, "max_results", "^[0-9]+$");
+  gvm_validator_add (validator, "format", "^[-[:alnum:]]{1,15}$");
+  gvm_validator_add (validator, "host", "^[[:alnum:]:\\.]{1,80}$");
+  gvm_validator_add (validator, "hostport", "^[-[:alnum:]\\. :]{1,80}$");
+  gvm_validator_add (validator, "hostpath", "^[-[:alnum:]\\. :/]{1,80}$");
+  gvm_validator_add (validator, "hosts", "^[-[:alnum:],: \\./]+$");
   gvm_validator_add (validator, "hosts_allow", "^(0|1)$");
-  gvm_validator_add (validator, "hosts_opt",  "^[-[:alnum:],: \\./]*$");
-  gvm_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
-  gvm_validator_add (validator, "hour",        "^([01]?[0-9]|2[0-3])$");
-  gvm_validator_add (validator, "howto_use",   "(?s)^.*$");
-  gvm_validator_add (validator, "howto_install",  "(?s)^.*$");
-  gvm_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
+  gvm_validator_add (validator, "hosts_opt", "^[-[:alnum:],: \\./]*$");
+  gvm_validator_add (validator, "hosts_ordering",
+                     "^(sequential|random|reverse)$");
+  gvm_validator_add (validator, "hour", "^([01]?[0-9]|2[0-3])$");
+  gvm_validator_add (validator, "howto_use", "(?s)^.*$");
+  gvm_validator_add (validator, "howto_install", "(?s)^.*$");
+  gvm_validator_add (validator, "id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "id_optional", "^(--|[a-z0-9\\-]+)$");
   gvm_validator_add (validator, "optional_id", "^[a-z0-9\\-]*$");
-  gvm_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
-  gvm_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
-  gvm_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "id_or_empty", "^(|[a-z0-9\\-]+)$");
+  gvm_validator_add (validator, "id_list:name", "^ *[0-9]+ *$");
+  gvm_validator_add (validator, "id_list:value",
+                     "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
   gvm_validator_add (validator, "ifaces_allow", "^(0|1)$");
-  gvm_validator_add (validator, "include_id_list:name",  "^[[:alnum:]\\-_ ]+$");
+  gvm_validator_add (validator, "include_id_list:name", "^[[:alnum:]\\-_ ]+$");
   gvm_validator_add (validator, "include_id_list:value", "^(0|1)$");
-  gvm_validator_add (validator, "installer_sig",  "(?s)^.*$");
+  gvm_validator_add (validator, "installer_sig", "(?s)^.*$");
   gvm_validator_add (validator, "lang",
                      "^(Browser Language|"
                      "([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?"
                      "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
-  gvm_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
-  gvm_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "levels", "^(h|m|l|g|f){0,5}$");
+  gvm_validator_add (validator, "list_fname",
+                     "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   /* Used for users, credentials, and scanner login name. */
-  gvm_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
+  gvm_validator_add (validator, "login", "^[[:alnum:]-_@.]+$");
   gvm_validator_add (validator, "lsc_password", "^.{0,40}$");
   gvm_validator_add (validator, "max_result", "^[0-9]+$");
   gvm_validator_add (validator, "max_groups", "^-?[0-9]+$");
-  gvm_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
-  gvm_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
+  gvm_validator_add (validator, "minute", "^[0-5]{0,1}[0-9]{1,1}$");
+  gvm_validator_add (validator, "month", "^((0??[1-9])|1[012])$");
   gvm_validator_add (validator, "note_optional", "(?s)^(.){0,1000}$");
   gvm_validator_add (validator, "note_required", "(?s)^(.){1,1000}$");
-  gvm_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
-  gvm_validator_add (validator, "info_name",  "(?s)^.*$");
-  gvm_validator_add (validator, "info_type",  "(?s)^.*$");
-  gvm_validator_add (validator, "info_id",  "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
+  gvm_validator_add (validator, "note_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "override_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "name", "^[#-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "info_name", "(?s)^.*$");
+  gvm_validator_add (validator, "info_type", "(?s)^.*$");
+  gvm_validator_add (validator, "info_id", "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
   gvm_validator_add (validator, "details", "^[0-1]$");
   /* Number is special cased in params_mhd_validate to remove the space. */
-  gvm_validator_add (validator, "number",     "^ *[0-9]+ *$");
+  gvm_validator_add (validator, "number", "^ *[0-9]+ *$");
   gvm_validator_add (validator, "optional_number", "^[0-9]*$");
-  gvm_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
-  gvm_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "oid", "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
+  gvm_validator_add (validator, "page", "^[_[:alnum:] ]{1,40}$");
   gvm_validator_add (validator, "package_format", "^(pem|key|rpm|deb|exe)$");
-  gvm_validator_add (validator, "password",   "^.{0,40}$");
+  gvm_validator_add (validator, "password", "^.{0,40}$");
   gvm_validator_add (validator, "password:value", "(?s)^.*$");
-  gvm_validator_add (validator, "port",       "^.{1,60}$");
-  gvm_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
+  gvm_validator_add (validator, "port", "^.{1,60}$");
+  gvm_validator_add (validator, "port_range",
+                     "^((default)|([-0-9, TU:]{1,400}))$");
   gvm_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
   gvm_validator_add (validator, "preference_name", "^(.*){0,400}$");
-  gvm_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+  gvm_validator_add (validator, "preference:name",
+                     "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   gvm_validator_add (validator, "preference:value", "(?s)^.*$");
   gvm_validator_add (validator, "prev_action", "(?s)^.*$");
-  gvm_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
-  gvm_validator_add (validator, "private_key",      "(?s)^.*$");
-  gvm_validator_add (validator, "public_key",      "(?s)^.*$");
-  gvm_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  gvm_validator_add (validator, "xml_file",   "(?s)^.*$");
-  gvm_validator_add (validator, "definitions_file",   "(?s)^.*$");
-  gvm_validator_add (validator, "ca_pub",   "(?s)^.*$");
-  gvm_validator_add (validator, "which_cert",   "^(default|existing|new)$");
-  gvm_validator_add (validator, "key_pub",   "(?s)^.*$");
-  gvm_validator_add (validator, "key_priv",   "(?s)^.*$");
-  gvm_validator_add (validator, "radiuskey",   "^.{0,40}$");
-  gvm_validator_add (validator, "range_type", "^(duration|until_end|from_start|start_to_end)$");
-  gvm_validator_add (validator, "related:name",  "^(.*){0,400}$");
+  gvm_validator_add (validator, "privacy_algorithm", "^(aes|des|)$");
+  gvm_validator_add (validator, "private_key", "(?s)^.*$");
+  gvm_validator_add (validator, "public_key", "(?s)^.*$");
+  gvm_validator_add (validator, "pw", "^[[:alnum:]]{1,10}$");
+  gvm_validator_add (validator, "xml_file", "(?s)^.*$");
+  gvm_validator_add (validator, "definitions_file", "(?s)^.*$");
+  gvm_validator_add (validator, "ca_pub", "(?s)^.*$");
+  gvm_validator_add (validator, "which_cert", "^(default|existing|new)$");
+  gvm_validator_add (validator, "key_pub", "(?s)^.*$");
+  gvm_validator_add (validator, "key_priv", "(?s)^.*$");
+  gvm_validator_add (validator, "radiuskey", "^.{0,40}$");
+  gvm_validator_add (validator, "range_type",
+                     "^(duration|until_end|from_start|start_to_end)$");
+  gvm_validator_add (validator, "related:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "related:value", "^(.*){0,400}$");
-  gvm_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "report_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
+  gvm_validator_add (validator, "report_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "report_fname",
+                     "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   gvm_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "report_section",
-                                "^(summary|results|hosts|ports"
-                                "|closed_cves|os|apps|errors"
-                                "|topology|ssl_certs|cves)$");
-  gvm_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
-  gvm_validator_add (validator, "permission",       "^([_a-z]{1,1000}|Super)$");
-  gvm_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "resource_type",
-                         "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln|ticket|"
-                         "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
-  gvm_validator_add (validator, "resource_id",    "^[[:alnum:]-_.:\\/~]*$");
+                     "^(summary|results|hosts|ports"
+                     "|closed_cves|os|apps|errors"
+                     "|topology|ssl_certs|cves)$");
+  gvm_validator_add (validator, "result_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "role", "^[[:alnum:] ]{1,40}$");
+  gvm_validator_add (validator, "permission", "^([_a-z]{1,1000}|Super)$");
+  gvm_validator_add (validator, "port_list_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "port_range_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (
+    validator, "resource_type",
+    "^(agent|alert|asset|config|credential|filter|group|host|nvt|note|os|"
+    "override|permission|port_list|report|report_format|result|role|scanner|"
+    "schedule|tag|target|task|user|info|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_"
+    "adv|vuln|ticket|"
+    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
+    "System|Override|Permission|Port List|Report|Report "
+    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|CVE|CPE|"
+    "OVAL Definition|CERT-Bund Advisory|DFN-CERT Advisory|Vulnerability)$");
+  gvm_validator_add (validator, "resource_id", "^[[:alnum:]-_.:\\/~]*$");
   gvm_validator_add (validator, "resources_action", "^(|add|set|remove)$");
-  gvm_validator_add (validator, "optional_resource_type",
-                     "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|info|vuln|"
-                     "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating System|Override|Permission|Port List|Report|Report Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|Vulnerability)?$");
+  gvm_validator_add (
+    validator, "optional_resource_type",
+    "^(agent|alert|asset|config|credential|filter|group|host|note|nvt|os|"
+    "override|permission|port_list|report|report_format|result|role|scanner|"
+    "schedule|tag|target|task|user|info|vuln|"
+    "Agent|Alert|Asset|Config|Credential|Filter|Group|Host|Note|NVT|Operating "
+    "System|Override|Permission|Port List|Report|Report "
+    "Format|Result|Role|Scanner|Schedule|Tag|Target|Task|User|SecInfo|"
+    "Vulnerability)?$");
   gvm_validator_add (validator, "select:value", "^(.*){0,400}$");
-  gvm_validator_add (validator, "ssl_cert",        "^(.*){0,2000}$");
+  gvm_validator_add (validator, "ssl_cert", "^(.*){0,2000}$");
   gvm_validator_add (validator, "method_data:name", "^(.*){0,400}$");
   gvm_validator_add (validator, "method_data:value", "(?s)^.*$");
-  gvm_validator_add (validator, "nvt:name",          "(?s)^.*$");
+  gvm_validator_add (validator, "nvt:name", "(?s)^.*$");
   gvm_validator_add (validator, "restrict_credential_type", "^[a-z0-9\\_|]+$");
-  gvm_validator_add (validator, "subject_type",  "^(group|role|user)$");
-  gvm_validator_add (validator, "summary",    "^.{0,400}$");
-  gvm_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "tag_name",  "^[\\:\\-_[:alnum:], \\./]{1,80}$");
-  gvm_validator_add (validator, "tag_value", "^[\\-_@%[:alnum:], \\.\\/\\\\]{0,200}$");
-  gvm_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "term",       "^.{0,1000}");
-  gvm_validator_add (validator, "text",       "^.{0,1000}");
-  gvm_validator_add (validator, "text_columns:name",  "^[0123456789]{1,5}$");
+  gvm_validator_add (validator, "subject_type", "^(group|role|user)$");
+  gvm_validator_add (validator, "summary", "^.{0,400}$");
+  gvm_validator_add (validator, "tag_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "tag_name", "^[\\:\\-_[:alnum:], \\./]{1,80}$");
+  gvm_validator_add (validator, "tag_value",
+                     "^[\\-_@%[:alnum:], \\.\\/\\\\]{0,200}$");
+  gvm_validator_add (validator, "target_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "task_id", "^[a-z0-9\\-]+$");
+  gvm_validator_add (validator, "term", "^.{0,1000}");
+  gvm_validator_add (validator, "text", "^.{0,1000}");
+  gvm_validator_add (validator, "text_columns:name", "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "text_columns:value", "^[_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "threat",     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
+  gvm_validator_add (validator, "threat",
+                     "^(High|Medium|Low|Alarm|Log|False Positive|)$");
   gvm_validator_add (validator, "ticket_status", "^(Open|Fixed|Closed)$");
-  gvm_validator_add (validator, "trend",       "^(0|1)$");
+  gvm_validator_add (validator, "trend", "^(0|1)$");
   gvm_validator_add (validator, "trend:value", "^(0|1)$");
-  gvm_validator_add (validator, "type",       "^(assets)$");
-  gvm_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
+  gvm_validator_add (validator, "type", "^(assets)$");
+  gvm_validator_add (validator, "search_phrase",
+                     "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   gvm_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   gvm_validator_add (validator, "sort_order", "^(ascending|descending)$");
   gvm_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
   gvm_validator_add (validator, "sort_fields:name", "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]{1,40}$");
   gvm_validator_add (validator, "sort_orders:name", "^[0123456789]{1,5}$");
-  gvm_validator_add (validator, "sort_orders:value", "^(ascending|descending)$");
+  gvm_validator_add (validator, "sort_orders:value",
+                     "^(ascending|descending)$");
   gvm_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
   gvm_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
-  gvm_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
+  gvm_validator_add (validator, "target_source",
+                     "^(asset_hosts|file|import|manual)$");
   gvm_validator_add (validator, "target_exclude_source", "^(file|manual)$");
-  gvm_validator_add (validator, "timezone",      "^.{0,1000}$");
+  gvm_validator_add (validator, "timezone", "^.{0,1000}$");
   gvm_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "scanner_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
+  gvm_validator_add (validator, "severity",
+                     "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
   gvm_validator_add (validator, "severity_class", "^(nist|bsi|pci\\-dss)$");
-  gvm_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
+  gvm_validator_add (validator, "severity_optional",
+                     "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
-  gvm_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
+  gvm_validator_add (validator, "uuid", "^[0-9abcdefABCDEF\\-]{1,40}$");
   /* This must be "login" with space and comma. */
-  gvm_validator_add (validator, "users",      "^[[:alnum:]-_@., ]*$");
+  gvm_validator_add (validator, "users", "^[[:alnum:]-_@., ]*$");
   gvm_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
   gvm_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
   gvm_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "year",       "^[0-9]+$");
+  gvm_validator_add (validator, "year", "^[0-9]+$");
   gvm_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
   gvm_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
-  gvm_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
+  gvm_validator_add (validator, "calendar_unit",
+                     "^(second|minute|hour|day|week|month|year|decade)$");
   gvm_validator_add (validator, "chart_title", "(?s)^.*$");
   gvm_validator_add (validator, "icalendar", "(?s)^BEGIN:VCALENDAR.+$");
 
@@ -720,25 +768,26 @@ init_validator ()
   gvm_validator_alias (validator, "optional_task_id", "optional_id");
   gvm_validator_alias (validator, "add_tag", "boolean");
   gvm_validator_alias (validator, "alert_id_2", "alert_id");
-  gvm_validator_alias (validator, "alert_id_optional:name",  "number");
-  gvm_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
-  gvm_validator_alias (validator, "alerts",     "optional_number");
-  gvm_validator_alias (validator, "alert_ids:name",  "number");
+  gvm_validator_alias (validator, "alert_id_optional:name", "number");
+  gvm_validator_alias (validator, "alert_id_optional:value",
+                       "alert_id_optional");
+  gvm_validator_alias (validator, "alerts", "optional_number");
+  gvm_validator_alias (validator, "alert_ids:name", "number");
   gvm_validator_alias (validator, "alert_ids:value", "alert_id_optional");
   gvm_validator_alias (validator, "allow_insecure", "boolean");
   gvm_validator_alias (validator, "alterable", "boolean");
   gvm_validator_alias (validator, "apply_overrides", "boolean");
   gvm_validator_alias (validator, "autogenerate", "boolean");
   gvm_validator_alias (validator, "auto_cache_rebuild", "boolean");
-  gvm_validator_alias (validator, "base",            "name");
-  gvm_validator_alias (validator, "build_filter",    "boolean");
+  gvm_validator_alias (validator, "base", "name");
+  gvm_validator_alias (validator, "build_filter", "boolean");
   /* the "bulk_[...].x" parameters are used to identify the image type
    *  form element used to submit the form for process_bulk */
   gvm_validator_alias (validator, "bulk_create.x", "number");
   gvm_validator_alias (validator, "bulk_delete.x", "number");
   gvm_validator_alias (validator, "bulk_export.x", "number");
-  gvm_validator_alias (validator, "bulk_trash.x",  "number");
-  gvm_validator_alias (validator, "bulk_select",   "number");
+  gvm_validator_alias (validator, "bulk_trash.x", "number");
+  gvm_validator_alias (validator, "bulk_select", "number");
   gvm_validator_alias (validator, "change_community", "boolean");
   gvm_validator_alias (validator, "change_passphrase", "boolean");
   gvm_validator_alias (validator, "change_password", "boolean");
@@ -747,125 +796,127 @@ init_validator ()
   gvm_validator_alias (validator, "chart_type", "name");
   gvm_validator_alias (validator, "chart_template", "name");
   gvm_validator_alias (validator, "community", "lsc_password");
-  gvm_validator_alias (validator, "closed_note",    "note_optional");
+  gvm_validator_alias (validator, "closed_note", "note_optional");
   gvm_validator_alias (validator, "custom_severity", "boolean");
   gvm_validator_alias (validator, "current_user", "boolean");
   gvm_validator_alias (validator, "dashboard_name", "name");
-  gvm_validator_alias (validator, "debug",           "boolean");
-  gvm_validator_alias (validator, "delta_report_id",     "report_id");
+  gvm_validator_alias (validator, "debug", "boolean");
+  gvm_validator_alias (validator, "delta_report_id", "report_id");
   gvm_validator_alias (validator, "delta_state_changed", "boolean");
   gvm_validator_alias (validator, "delta_state_gone", "boolean");
   gvm_validator_alias (validator, "delta_state_new", "boolean");
   gvm_validator_alias (validator, "delta_state_same", "boolean");
-  gvm_validator_alias (validator, "duration",     "optional_number");
+  gvm_validator_alias (validator, "duration", "optional_number");
   gvm_validator_alias (validator, "duration_unit", "calendar_unit");
   gvm_validator_alias (validator, "dynamic_severity", "boolean");
-  gvm_validator_alias (validator, "enable",       "boolean");
-  gvm_validator_alias (validator, "enable_stop",             "boolean");
+  gvm_validator_alias (validator, "enable", "boolean");
+  gvm_validator_alias (validator, "enable_stop", "boolean");
   gvm_validator_alias (validator, "end_day", "day_of_month");
   gvm_validator_alias (validator, "end_hour", "hour");
   gvm_validator_alias (validator, "end_minute", "minute");
   gvm_validator_alias (validator, "end_month", "month");
   gvm_validator_alias (validator, "end_year", "year");
   gvm_validator_alias (validator, "esxi_credential_id", "credential_id");
-  gvm_validator_alias (validator, "filt_id",            "id");
-  gvm_validator_alias (validator, "filter_extra",       "filter");
-  gvm_validator_alias (validator, "filter_id",          "id");
-  gvm_validator_alias (validator, "filterbox",          "boolean");
-  gvm_validator_alias (validator, "fixed_note",         "note_optional");
-  gvm_validator_alias (validator, "from_file",          "boolean");
-  gvm_validator_alias (validator, "force_wizard",       "boolean");
-  gvm_validator_alias (validator, "get_name",           "name");
-  gvm_validator_alias (validator, "grant_full",         "boolean");
-  gvm_validator_alias (validator, "group_id",           "id");
-  gvm_validator_alias (validator, "group_ids:name",     "number");
-  gvm_validator_alias (validator, "group_ids:value",    "id_optional");
-  gvm_validator_alias (validator, "groups",             "optional_number");
-  gvm_validator_alias (validator, "hosts_manual",       "hosts");
-  gvm_validator_alias (validator, "hosts_filter",       "filter");
-  gvm_validator_alias (validator, "exclude_hosts",      "hosts_opt");
-  gvm_validator_alias (validator, "in_assets",          "boolean");
-  gvm_validator_alias (validator, "in_use",             "boolean");
-  gvm_validator_alias (validator, "include_related",   "number");
-  gvm_validator_alias (validator, "inheritor_id",       "id");
-  gvm_validator_alias (validator, "ignore_pagination",   "boolean");
-  gvm_validator_alias (validator, "event",        "condition");
+  gvm_validator_alias (validator, "filt_id", "id");
+  gvm_validator_alias (validator, "filter_extra", "filter");
+  gvm_validator_alias (validator, "filter_id", "id");
+  gvm_validator_alias (validator, "filterbox", "boolean");
+  gvm_validator_alias (validator, "fixed_note", "note_optional");
+  gvm_validator_alias (validator, "from_file", "boolean");
+  gvm_validator_alias (validator, "force_wizard", "boolean");
+  gvm_validator_alias (validator, "get_name", "name");
+  gvm_validator_alias (validator, "grant_full", "boolean");
+  gvm_validator_alias (validator, "group_id", "id");
+  gvm_validator_alias (validator, "group_ids:name", "number");
+  gvm_validator_alias (validator, "group_ids:value", "id_optional");
+  gvm_validator_alias (validator, "groups", "optional_number");
+  gvm_validator_alias (validator, "hosts_manual", "hosts");
+  gvm_validator_alias (validator, "hosts_filter", "filter");
+  gvm_validator_alias (validator, "exclude_hosts", "hosts_opt");
+  gvm_validator_alias (validator, "in_assets", "boolean");
+  gvm_validator_alias (validator, "in_use", "boolean");
+  gvm_validator_alias (validator, "include_related", "number");
+  gvm_validator_alias (validator, "inheritor_id", "id");
+  gvm_validator_alias (validator, "ignore_pagination", "boolean");
+  gvm_validator_alias (validator, "event", "condition");
   gvm_validator_alias (validator, "access_hosts", "hosts_opt");
   gvm_validator_alias (validator, "access_ifaces", "hosts_opt");
-  gvm_validator_alias (validator, "max_checks",   "number");
-  gvm_validator_alias (validator, "max_hosts",    "number");
-  gvm_validator_alias (validator, "method",       "condition");
+  gvm_validator_alias (validator, "max_checks", "number");
+  gvm_validator_alias (validator, "max_hosts", "number");
+  gvm_validator_alias (validator, "method", "condition");
   gvm_validator_alias (validator, "modify_password", "number");
-  gvm_validator_alias (validator, "ldaphost",     "hostport");
-  gvm_validator_alias (validator, "level_high",   "boolean");
+  gvm_validator_alias (validator, "ldaphost", "hostport");
+  gvm_validator_alias (validator, "level_high", "boolean");
   gvm_validator_alias (validator, "level_medium", "boolean");
-  gvm_validator_alias (validator, "level_low",    "boolean");
-  gvm_validator_alias (validator, "level_log",    "boolean");
+  gvm_validator_alias (validator, "level_low", "boolean");
+  gvm_validator_alias (validator, "level_log", "boolean");
   gvm_validator_alias (validator, "level_false_positive", "boolean");
   gvm_validator_alias (validator, "method_data:to_address:", "email_list");
   gvm_validator_alias (validator, "method_data:from_address:", "email");
   gvm_validator_alias (validator, "new_severity", "severity_optional");
-  gvm_validator_alias (validator, "new_severity_from_list", "severity_optional");
-  gvm_validator_alias (validator, "new_threat",   "threat");
-  gvm_validator_alias (validator, "next",         "page");
-  gvm_validator_alias (validator, "next_next",    "page");
-  gvm_validator_alias (validator, "next_error",   "page");
-  gvm_validator_alias (validator, "next_id",      "info_id");
-  gvm_validator_alias (validator, "next_type",    "resource_type");
+  gvm_validator_alias (validator, "new_severity_from_list",
+                       "severity_optional");
+  gvm_validator_alias (validator, "new_threat", "threat");
+  gvm_validator_alias (validator, "next", "page");
+  gvm_validator_alias (validator, "next_next", "page");
+  gvm_validator_alias (validator, "next_error", "page");
+  gvm_validator_alias (validator, "next_id", "info_id");
+  gvm_validator_alias (validator, "next_type", "resource_type");
   gvm_validator_alias (validator, "next_subtype", "info_type");
-  gvm_validator_alias (validator, "next_xml",      "boolean");
-  gvm_validator_alias (validator, "note",         "note_required");
-  gvm_validator_alias (validator, "notes",        "boolean");
-  gvm_validator_alias (validator, "no_chart_links",        "boolean");
+  gvm_validator_alias (validator, "next_xml", "boolean");
+  gvm_validator_alias (validator, "note", "note_required");
+  gvm_validator_alias (validator, "notes", "boolean");
+  gvm_validator_alias (validator, "no_chart_links", "boolean");
   gvm_validator_alias (validator, "no_filter_history", "boolean");
   gvm_validator_alias (validator, "no_redirect", "boolean");
-  gvm_validator_alias (validator, "nvt:value",         "uuid");
+  gvm_validator_alias (validator, "nvt:value", "uuid");
   gvm_validator_alias (validator, "old_login", "login");
   gvm_validator_alias (validator, "old_password", "password");
-  gvm_validator_alias (validator, "open_note",    "note_optional");
-  gvm_validator_alias (validator, "original_overrides",  "boolean");
-  gvm_validator_alias (validator, "overrides",        "boolean");
+  gvm_validator_alias (validator, "open_note", "note_optional");
+  gvm_validator_alias (validator, "original_overrides", "boolean");
+  gvm_validator_alias (validator, "overrides", "boolean");
   gvm_validator_alias (validator, "owner", "name");
-  gvm_validator_alias (validator, "passphrase",   "lsc_password");
+  gvm_validator_alias (validator, "passphrase", "lsc_password");
   gvm_validator_alias (validator, "password:name", "preference_name");
   gvm_validator_alias (validator, "permission", "name");
   gvm_validator_alias (validator, "permission_id", "id");
   gvm_validator_alias (validator, "permission_group_id", "id");
-  gvm_validator_alias (validator, "permission_role_id",  "id");
-  gvm_validator_alias (validator, "permission_user_id",  "id");
-  gvm_validator_alias (validator, "port_manual",       "port");
-  gvm_validator_alias (validator, "port_range_end",    "number");
-  gvm_validator_alias (validator, "port_range_start",  "number");
-  gvm_validator_alias (validator, "pos",               "number");
+  gvm_validator_alias (validator, "permission_role_id", "id");
+  gvm_validator_alias (validator, "permission_user_id", "id");
+  gvm_validator_alias (validator, "port_manual", "port");
+  gvm_validator_alias (validator, "port_range_end", "number");
+  gvm_validator_alias (validator, "port_range_start", "number");
+  gvm_validator_alias (validator, "pos", "number");
   gvm_validator_alias (validator, "privacy_password", "lsc_password");
-  gvm_validator_alias (validator, "radiushost",     "hostport");
+  gvm_validator_alias (validator, "radiushost", "hostport");
   gvm_validator_alias (validator, "restrict_type", "resource_type");
-  gvm_validator_alias (validator, "resource_ids:name",     "number");
-  gvm_validator_alias (validator, "resource_ids:value",    "info_id");
+  gvm_validator_alias (validator, "resource_ids:name", "number");
+  gvm_validator_alias (validator, "resource_ids:value", "info_id");
   gvm_validator_alias (validator, "result_hosts_only", "boolean");
-  gvm_validator_alias (validator, "report_format_ids:name",  "number");
-  gvm_validator_alias (validator, "report_format_ids:value", "report_format_id");
+  gvm_validator_alias (validator, "report_format_ids:name", "number");
+  gvm_validator_alias (validator, "report_format_ids:value",
+                       "report_format_id");
   gvm_validator_alias (validator, "result_task_id", "optional_task_id");
   gvm_validator_alias (validator, "result_uuid", "optional_id");
-  gvm_validator_alias (validator, "report_result_id",  "result_id");
-  gvm_validator_alias (validator, "report_uuid",  "result_id");
-  gvm_validator_alias (validator, "replace_task_id",   "boolean");
+  gvm_validator_alias (validator, "report_result_id", "result_id");
+  gvm_validator_alias (validator, "report_uuid", "result_id");
+  gvm_validator_alias (validator, "replace_task_id", "boolean");
   gvm_validator_alias (validator, "reverse_lookup_only", "boolean");
   gvm_validator_alias (validator, "reverse_lookup_unify", "boolean");
-  gvm_validator_alias (validator, "role_id",           "id");
-  gvm_validator_alias (validator, "role_ids:name",  "number");
+  gvm_validator_alias (validator, "role_id", "id");
+  gvm_validator_alias (validator, "role_ids:name", "number");
   gvm_validator_alias (validator, "role_ids:value", "id_optional");
-  gvm_validator_alias (validator, "roles",             "optional_number");
-  gvm_validator_alias (validator, "period",       "optional_number");
-  gvm_validator_alias (validator, "period_unit",  "calendar_unit");
-  gvm_validator_alias (validator, "scanner_host",     "hostpath");
+  gvm_validator_alias (validator, "roles", "optional_number");
+  gvm_validator_alias (validator, "period", "optional_number");
+  gvm_validator_alias (validator, "period_unit", "calendar_unit");
+  gvm_validator_alias (validator, "scanner_host", "hostpath");
   gvm_validator_alias (validator, "scanner_type", "number");
   gvm_validator_alias (validator, "schedules_only", "boolean");
   gvm_validator_alias (validator, "schedule_periods", "number");
-  gvm_validator_alias (validator, "select:name",  "family");
+  gvm_validator_alias (validator, "select:name", "family");
   gvm_validator_alias (validator, "setting_id", "id");
-  gvm_validator_alias (validator, "show_all",     "boolean");
-  gvm_validator_alias (validator, "slave_id",     "id");
+  gvm_validator_alias (validator, "show_all", "boolean");
+  gvm_validator_alias (validator, "slave_id", "id");
   gvm_validator_alias (validator, "smb_credential_id", "credential_id");
   gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
   gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
@@ -875,20 +926,20 @@ init_validator ()
   gvm_validator_alias (validator, "start_month", "month");
   gvm_validator_alias (validator, "start_year", "year");
   gvm_validator_alias (validator, "subgroup_column", "group_column");
-  gvm_validator_alias (validator, "subject_id",   "id");
+  gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
-  gvm_validator_alias (validator, "subject_name",   "name");
+  gvm_validator_alias (validator, "subject_name", "name");
   gvm_validator_alias (validator, "subtype", "asset_type");
-  gvm_validator_alias (validator, "task_filter",  "filter");
+  gvm_validator_alias (validator, "task_filter", "filter");
   gvm_validator_alias (validator, "task_filt_id", "filt_id");
   gvm_validator_alias (validator, "task_uuid", "optional_id");
   gvm_validator_alias (validator, "ticket_id", "id");
-  gvm_validator_alias (validator, "timeout",      "boolean");
-  gvm_validator_alias (validator, "trend:name",   "family");
-  gvm_validator_alias (validator, "user_id",      "id");
+  gvm_validator_alias (validator, "timeout", "boolean");
+  gvm_validator_alias (validator, "trend:name", "family");
+  gvm_validator_alias (validator, "user_id", "id");
   gvm_validator_alias (validator, "user_id_optional", "id_optional");
-  gvm_validator_alias (validator, "xml",          "boolean");
-  gvm_validator_alias (validator, "esc_filter",        "filter");
+  gvm_validator_alias (validator, "xml", "boolean");
+  gvm_validator_alias (validator, "esc_filter", "filter");
 }
 
 /**
@@ -903,8 +954,8 @@ init_validator ()
  *                            GMP commands.
  */
 static void
-content_type_from_format_string (enum content_type* content_type,
-                                 const char* format)
+content_type_from_format_string (enum content_type *content_type,
+                                 const char *format)
 {
   if (!format)
     *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
@@ -940,8 +991,8 @@ content_type_from_format_string (enum content_type* content_type,
  * @param[in]  toe         Dummy parameter.
  */
 void
-free_resources (void *cls, struct MHD_Connection *connection,
-                void **con_cls, enum MHD_RequestTerminationCode toe)
+free_resources (void *cls, struct MHD_Connection *connection, void **con_cls,
+                enum MHD_RequestTerminationCode toe)
 {
   struct gsad_connection_info *con_info =
     (struct gsad_connection_info *) *con_cls;
@@ -982,12 +1033,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-params_append_mhd (params_t *params,
-                   const char *name,
-                   const char *filename,
-                   const char *chunk_data,
-                   int chunk_size,
-                   int chunk_offset)
+params_append_mhd (params_t *params, const char *name, const char *filename,
+                   const char *chunk_data, int chunk_size, int chunk_offset)
 {
   if ((strncmp (name, "bulk_selected:", strlen ("bulk_selected:")) == 0)
       || (strncmp (name, "chart_gen:", strlen ("chart_gen:")) == 0)
@@ -1036,7 +1083,8 @@ params_append_mhd (params_t *params,
         {
           /* name: "example:", value "abc". */
 
-          params_append_bin (params, name, chunk_data, chunk_size, chunk_offset);
+          params_append_bin (params, name, chunk_data, chunk_size,
+                             chunk_offset);
 
           return MHD_YES;
         }
@@ -1072,12 +1120,11 @@ params_append_mhd (params_t *params,
    * For example multiple instances of "x:" in the request
    *  become "x:1", "x:2", "x:3", etc.
    */
-  if ((strcmp (name, "alert_ids:") == 0)
-      || (strcmp(name, "role_ids:") == 0)
-      || (strcmp(name, "group_ids:") == 0)
-      || (strcmp(name, "report_format_ids:") == 0)
-      || (strcmp(name, "id_list:") == 0)
-      || (strcmp(name, "resource_ids:") == 0))
+  if ((strcmp (name, "alert_ids:") == 0) || (strcmp (name, "role_ids:") == 0)
+      || (strcmp (name, "group_ids:") == 0)
+      || (strcmp (name, "report_format_ids:") == 0)
+      || (strcmp (name, "id_list:") == 0)
+      || (strcmp (name, "resource_ids:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -1146,12 +1193,11 @@ params_mhd_validate_values (const char *parent_name, void *params)
           item_name = NULL;
         }
       /* Item specific value validator like "method_data:to_adddress:". */
-      else switch (gvm_validate (validator,
-                                 (item_name = g_strdup_printf ("%s%s:",
-                                                               parent_name,
-                                                               name)),
-                                 param->value))
-        {
+      else
+        switch (gvm_validate (
+          validator, (item_name = g_strdup_printf ("%s%s:", parent_name, name)),
+          param->value))
+          {
           case 0:
             param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
             break;
@@ -1182,8 +1228,9 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
 
                 alias_for = gvm_validator_alias_for (validator, name);
-                if ((param->value && (strcmp ((gchar*) name, "number") == 0))
-                    || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
+                if ((param->value && (strcmp ((gchar *) name, "number") == 0))
+                    || (alias_for
+                        && (strcmp ((gchar *) alias_for, "number") == 0)))
                   /* Remove any leading or trailing space from numbers. */
                   param->value = g_strstrip (param->value);
               }
@@ -1197,7 +1244,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
               param->valid = 0;
               param->valid_utf8 = 0;
             }
-        }
+          }
 
       g_free (item_name);
     }
@@ -1221,11 +1268,11 @@ params_mhd_validate (void *params)
   while (g_hash_table_iter_next (&iter, &name, &value))
     {
       param_t *param;
-      param = (param_t*) value;
+      param = (param_t *) value;
 
-      param->valid_utf8 = (g_utf8_validate (name, -1, NULL)
-                           && (param->value == NULL
-                               || g_utf8_validate (param->value, -1, NULL)));
+      param->valid_utf8 =
+        (g_utf8_validate (name, -1, NULL)
+         && (param->value == NULL || g_utf8_validate (param->value, -1, NULL)));
 
       if ((!g_str_has_prefix (name, "osp_pref_")
            && gvm_validate (validator, name, param->value)))
@@ -1242,8 +1289,8 @@ params_mhd_validate (void *params)
           param->valid = 1;
 
           alias_for = gvm_validator_alias_for (validator, name);
-          if ((param->value && (strcmp ((gchar*) name, "number") == 0))
-              || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
+          if ((param->value && (strcmp ((gchar *) name, "number") == 0))
+              || (alias_for && (strcmp ((gchar *) alias_for, "number") == 0)))
             /* Remove any leading or trailing space from numbers. */
             param->value = g_strstrip (param->value);
         }
@@ -1256,10 +1303,9 @@ params_mhd_validate (void *params)
 /**
  * @brief Add else branch for an GMP operation.
  */
-#define ELSE(name) \
-  else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    res = name ## _gmp (&connection, credentials, \
-                        con_info->params, response_data);
+#define ELSE(name)                                  \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) res = \
+    name##_gmp (&connection, credentials, con_info->params, response_data);
 
 /**
  * @brief Handle a complete POST request.
@@ -1275,8 +1321,7 @@ params_mhd_validate (void *params)
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-exec_gmp_post (http_connection_t *con,
-               gsad_connection_info_t *con_info,
+exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
                const char *client_address)
 {
   int ret;
@@ -1294,19 +1339,14 @@ exec_gmp_post (http_connection_t *con,
 
   if (!cmd)
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      res = gsad_message (credentials,
-                          "Internal error",
-                          __FUNCTION__,
-                          __LINE__,
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Invalid command.",
                           response_data);
-      return handler_create_response(con, res, response_data, new_sid);
+      return handler_create_response (con, res, response_data, new_sid);
     }
-
 
   if (str_equal (cmd, "login"))
     {
@@ -1317,18 +1357,15 @@ exec_gmp_post (http_connection_t *con,
 
   if (params_value (con_info->params, "token") == NULL)
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
       if (params_given (con_info->params, "token") == 0)
-        res = gsad_message (NULL,
-                            "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token missing.",
                             response_data);
       else
-        res = gsad_message (NULL,
-                            "Internal error", __FUNCTION__, __LINE__,
+        res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred inside GSA daemon. "
                             "Diagnostics: Token bad.",
                             response_data);
@@ -1340,10 +1377,8 @@ exec_gmp_post (http_connection_t *con,
                    client_address, &user);
   if (ret == USER_BAD_TOKEN)
     {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (NULL,
-                          "Internal error", __FUNCTION__, __LINE__,
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+      res = gsad_message (NULL, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: Bad token.",
                           response_data);
@@ -1364,45 +1399,44 @@ exec_gmp_post (http_connection_t *con,
 
       cmd_response_data_free (response_data);
 
-      return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           SESSION_EXPIRED);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            SESSION_EXPIRED);
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
     {
       cmd_response_data_free (response_data);
 
-      return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
-                                           BAD_MISSING_COOKIE);
+      return handler_send_reauthentication (con, MHD_HTTP_UNAUTHORIZED,
+                                            BAD_MISSING_COOKIE);
     }
 
-  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN ||
-          ret == USER_GUEST_LOGIN_ERROR)
+  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_GMP_DOWN
+      || ret == USER_GUEST_LOGIN_ERROR)
     {
-      auth_reason = ret == USER_GMP_DOWN
-                    ? GMP_SERVICE_DOWN
-                    : (ret == USER_GUEST_LOGIN_ERROR
-                      ? LOGIN_ERROR
-                      : LOGIN_FAILED);
+      auth_reason =
+        ret == USER_GMP_DOWN
+          ? GMP_SERVICE_DOWN
+          : (ret == USER_GUEST_LOGIN_ERROR ? LOGIN_ERROR : LOGIN_FAILED);
 
       cmd_response_data_free (response_data);
 
-      return handler_send_reauthentication(con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                           auth_reason);
+      return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
+                                            auth_reason);
     }
 
   /* From here, the user is authenticated. */
 
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
-  language = user_get_language(user) ?: con_info->language ?:
-    DEFAULT_GSAD_LANGUAGE;
+  language =
+    user_get_language (user) ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
 
   credentials = credentials_new (user, language);
 
   credentials_start_cmd (credentials);
 
-  new_sid = g_strdup (user_get_cookie(user));
+  new_sid = g_strdup (user_get_cookie (user));
 
   /* Set the timezone. */
 
@@ -1420,27 +1454,25 @@ exec_gmp_post (http_connection_t *con,
   /* Connect to manager */
   switch (manager_connect (credentials, &connection, response_data))
     {
-      case 0:
-        break;
-      case -1:
-        cmd_response_data_free (response_data);
-        return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                              GMP_SERVICE_DOWN);
-      case -2:
-        res = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred. "
-                            "Diagnostics: Could not authenticate to manager "
-                            "daemon.",
-                            response_data);
-        break;
-      default:
-        res = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred. "
-                            "Diagnostics: Failure to connect to manager daemon.",
-                            response_data);
-        break;
+    case 0:
+      break;
+    case -1:
+      cmd_response_data_free (response_data);
+      return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
+                                            GMP_SERVICE_DOWN);
+    case -2:
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not authenticate to manager "
+                          "daemon.",
+                          response_data);
+      break;
+    default:
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Failure to connect to manager daemon.",
+                          response_data);
+      break;
     }
 
   if (res)
@@ -1450,10 +1482,12 @@ exec_gmp_post (http_connection_t *con,
 
   /* always renew session for http post */
   user_renew_session (user);
-  session_add_user (user_get_token(user), user);
+  session_add_user (user_get_token (user), user);
 
   /* Handle the usual commands. */
-  if (0) {}
+  if (0)
+    {
+    }
   ELSE (bulk_delete)
   ELSE (bulk_export)
   ELSE (clone)
@@ -1526,12 +1560,10 @@ exec_gmp_post (http_connection_t *con,
   ELSE (save_filter)
   ELSE (save_group)
   else if (!strcmp (cmd, "save_my_settings"))
-    {
-      res = save_my_settings_gmp (&connection,
-                                  credentials, con_info->params,
-                                  con_info->language,
-                                  response_data);
-    }
+  {
+    res = save_my_settings_gmp (&connection, credentials, con_info->params,
+                                con_info->language, response_data);
+  }
   ELSE (save_note)
   ELSE (save_override)
   ELSE (save_permission)
@@ -1557,17 +1589,13 @@ exec_gmp_post (http_connection_t *con,
   ELSE (verify_report_format)
   ELSE (verify_scanner)
   else
-    {
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (credentials,
-                          "Internal error",
-                          __FUNCTION__,
-                          __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: Unknown command.",
-                          response_data);
-    }
+  {
+    cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred inside GSA daemon. "
+                        "Diagnostics: Unknown command.",
+                        response_data);
+  }
 
   ret = handler_create_response (con, res, response_data, new_sid);
 
@@ -1662,11 +1690,10 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
   /*
    * Array param (See params_append_mhd for a description)
    */
-  if ((strcmp (name, "alert_ids:") == 0)
-      || (strcmp(name, "role_ids:") == 0)
-      || (strcmp(name, "group_ids:") == 0)
-      || (strcmp(name, "report_format_ids:") == 0)
-      || (strcmp(name, "id_list:") == 0))
+  if ((strcmp (name, "alert_ids:") == 0) || (strcmp (name, "role_ids:") == 0)
+      || (strcmp (name, "group_ids:") == 0)
+      || (strcmp (name, "report_format_ids:") == 0)
+      || (strcmp (name, "id_list:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -1701,7 +1728,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
 /*
  * Connection watcher thread data
  */
-typedef struct {
+typedef struct
+{
   int client_socket_fd;
   gvm_connection_t *gvm_connection;
   int connection_closed;
@@ -1716,7 +1744,7 @@ typedef struct {
  *
  * @return  Newly allocated watcher thread data.
  */
-static connection_watcher_data_t*
+static connection_watcher_data_t *
 connection_watcher_data_new (gvm_connection_t *gvm_connection,
                              int client_socket_fd)
 {
@@ -1726,7 +1754,7 @@ connection_watcher_data_new (gvm_connection_t *gvm_connection,
   watcher_data->gvm_connection = gvm_connection;
   watcher_data->client_socket_fd = client_socket_fd;
   watcher_data->connection_closed = 0;
-  pthread_mutex_init  (&(watcher_data->mutex), NULL);
+  pthread_mutex_init (&(watcher_data->mutex), NULL);
 
   return watcher_data;
 }
@@ -1738,14 +1766,14 @@ connection_watcher_data_new (gvm_connection_t *gvm_connection,
  *
  * @return  Always NULL.
  */
-static void*
-watch_client_connection (void* data)
+static void *
+watch_client_connection (void *data)
 {
   int active;
   connection_watcher_data_t *watcher_data;
 
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
-  watcher_data = (connection_watcher_data_t*) data;
+  watcher_data = (connection_watcher_data_t *) data;
 
   pthread_mutex_lock (&(watcher_data->mutex));
   active = 1;
@@ -1797,15 +1825,14 @@ watch_client_connection (void* data)
   return NULL;
 }
 
-
 #undef ELSE
 
 /**
  * @brief Add else branch for an GMP operation.
  */
-#define ELSE(name) \
-  else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    res = name ## _gmp (&connection, credentials, params, response_data);
+#define ELSE(name)                                  \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) res = \
+    name##_gmp (&connection, credentials, params, response_data);
 
 /**
  * @brief Handle a complete GET request.
@@ -1820,12 +1847,11 @@ watch_client_connection (void* data)
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
-exec_gmp_get (http_connection_t *con,
-              gsad_connection_info_t *con_info,
+exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
               credentials_t *credentials)
 {
   const char *cmd = NULL;
-  const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
+  const int CMD_MAX_SIZE = 27; /* delete_trash_lsc_credential */
   params_t *params = con_info->params;
   gvm_connection_t connection;
   char *res = NULL;
@@ -1849,18 +1875,16 @@ exec_gmp_get (http_connection_t *con,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (credentials,
-                          "Internal error", __FUNCTION__, __LINE__,
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
                           "An internal error occurred inside GSA daemon. "
                           "Diagnostics: No valid command for gmp.",
                           response_data);
       return handler_create_response (con, res, response_data, NULL);
     }
 
-
   /* Set the timezone. */
 
-  user_t * user = credentials_get_user (credentials);
+  user_t *user = credentials_get_user (credentials);
   const gchar *timezone = user_get_timezone (user);
 
   if (timezone)
@@ -1876,32 +1900,29 @@ exec_gmp_get (http_connection_t *con,
   /* Connect to manager */
   switch (manager_connect (credentials, &connection, response_data))
     {
-      case 0:
-        break;
-      case -1:
-        res = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred. "
-                            "Diagnostics: Could not connect to manager "
-                            "daemon.",
-                            response_data);
-        break;
+    case 0:
+      break;
+    case -1:
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not connect to manager "
+                          "daemon.",
+                          response_data);
+      break;
 
-      case -2:
-        res = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred. "
-                            "Diagnostics: Could not authenticate to manager "
-                            "daemon.",
-                            response_data);
-        break;
-      default:
-        res = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred. "
-                            "Diagnostics: Failure to connect to manager "
-                            "daemon.",
-                            response_data);
+    case -2:
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Could not authenticate to manager "
+                          "daemon.",
+                          response_data);
+      break;
+    default:
+      res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                          "An internal error occurred. "
+                          "Diagnostics: Failure to connect to manager "
+                          "daemon.",
+                          response_data);
     }
 
   if (res)
@@ -1916,15 +1937,14 @@ exec_gmp_get (http_connection_t *con,
   if (client_watch_interval)
     {
       const union MHD_ConnectionInfo *mhd_con_info;
-      mhd_con_info
-        = MHD_get_connection_info (con,
-                                   MHD_CONNECTION_INFO_CONNECTION_FD);
+      mhd_con_info =
+        MHD_get_connection_info (con, MHD_CONNECTION_INFO_CONNECTION_FD);
 
-      watcher_data = connection_watcher_data_new (&connection,
-                                                  mhd_con_info->connect_fd);
+      watcher_data =
+        connection_watcher_data_new (&connection, mhd_con_info->connect_fd);
 
-      pthread_create (&watch_thread, NULL,
-                      watch_client_connection, watcher_data);
+      pthread_create (&watch_thread, NULL, watch_client_connection,
+                      watcher_data);
     }
   else
     {
@@ -1957,45 +1977,38 @@ exec_gmp_get (http_connection_t *con,
   ELSE (export_configs)
 
   else if (!strcmp (cmd, "download_credential"))
-    {
-      char *html;
-      gchar *credential_login;
-      const char *credential_id;
-      const char *package_format;
-      char *content_disposition;
-      content_type_t content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
+  {
+    char *html;
+    gchar *credential_login;
+    const char *credential_id;
+    const char *package_format;
+    char *content_disposition;
+    content_type_t content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
 
-      package_format = params_value (params, "package_format");
-      credential_login = NULL;
-      credential_id = params_value (params, "credential_id");
+    package_format = params_value (params, "package_format");
+    credential_login = NULL;
+    credential_id = params_value (params, "credential_id");
 
-      if (download_credential_gmp (&connection,
-                                   credentials,
-                                   params,
-                                   &html,
-                                   &credential_login,
-                                   response_data) == 0)
-        {
-          content_type_from_format_string (&content_type, package_format);
+    if (download_credential_gmp (&connection, credentials, params, &html,
+                                 &credential_login, response_data)
+        == 0)
+      {
+        content_type_from_format_string (&content_type, package_format);
 
-          content_disposition = g_strdup_printf
-                                  ("attachment; filename=credential-%s.%s",
-                                  (credential_login
-                                    && strcmp (credential_login, ""))
-                                      ? credential_login
-                                      : credential_id,
-                                  (strcmp (package_format, "key") == 0
-                                    ? "pub"
-                                    : package_format));
-          cmd_response_data_set_content_disposition (response_data,
-                                                    content_disposition);
-          cmd_response_data_set_content_type (response_data, content_type);
-        }
+        content_disposition = g_strdup_printf (
+          "attachment; filename=credential-%s.%s",
+          (credential_login && strcmp (credential_login, "")) ? credential_login
+                                                              : credential_id,
+          (strcmp (package_format, "key") == 0 ? "pub" : package_format));
+        cmd_response_data_set_content_disposition (response_data,
+                                                   content_disposition);
+        cmd_response_data_set_content_type (response_data, content_type);
+      }
 
-      g_free (credential_login);
+    g_free (credential_login);
 
-      res = html;
-    }
+    res = html;
+  }
 
   ELSE (export_credential)
   ELSE (export_credentials)
@@ -2036,60 +2049,52 @@ exec_gmp_get (http_connection_t *con,
   ELSE (get_assets)
 
   else if (!strcmp (cmd, "download_agent"))
-    {
-      char *html, *filename;
+  {
+    char *html, *filename;
 
-      if (download_agent_gmp (&connection, credentials,
-                              params,
-                              &html,
-                              &filename,
-                              response_data))
+    if (download_agent_gmp (&connection, credentials, params, &html, &filename,
+                            response_data))
       cmd_response_data_set_content_type (response_data,
                                           GSAD_CONTENT_TYPE_OCTET_STREAM);
-      cmd_response_data_set_content_disposition
-          (response_data, g_strdup_printf ("attachment; filename=%s",
-                                           filename));
-      g_free (filename);
+    cmd_response_data_set_content_disposition (
+      response_data, g_strdup_printf ("attachment; filename=%s", filename));
+    g_free (filename);
 
-      res = html;
-    }
+    res = html;
+  }
 
   else if (!strcmp (cmd, "download_ssl_cert"))
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_KEY);
-      cmd_response_data_set_content_disposition
-          (response_data,
-           g_strdup_printf ("attachment; filename=ssl-cert-%s.pem",
-                            params_value (params, "name")));
+  {
+    cmd_response_data_set_content_type (response_data,
+                                        GSAD_CONTENT_TYPE_APP_KEY);
+    cmd_response_data_set_content_disposition (
+      response_data, g_strdup_printf ("attachment; filename=ssl-cert-%s.pem",
+                                      params_value (params, "name")));
 
-      res = download_ssl_cert (&connection, credentials, params,
-                               response_data);
-    }
+    res = download_ssl_cert (&connection, credentials, params, response_data);
+  }
 
   else if (!strcmp (cmd, "download_ca_pub"))
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_KEY);
-      cmd_response_data_set_content_disposition
-          (response_data,
-           g_strdup_printf ("attachment; filename=scanner-ca-pub-%s.pem",
-                            params_value (params, "scanner_id")));
-      res = download_ca_pub (&connection, credentials, params,
-                             response_data);
-    }
+  {
+    cmd_response_data_set_content_type (response_data,
+                                        GSAD_CONTENT_TYPE_APP_KEY);
+    cmd_response_data_set_content_disposition (
+      response_data,
+      g_strdup_printf ("attachment; filename=scanner-ca-pub-%s.pem",
+                       params_value (params, "scanner_id")));
+    res = download_ca_pub (&connection, credentials, params, response_data);
+  }
 
   else if (!strcmp (cmd, "download_key_pub"))
-    {
-      cmd_response_data_set_content_type (response_data,
-                                          GSAD_CONTENT_TYPE_APP_KEY);
-      cmd_response_data_set_content_disposition
-          (response_data,
-           g_strdup_printf ("attachment; filename=scanner-key-pub-%s.pem",
-                            params_value (params, "scanner_id")));
-      res = download_key_pub (&connection, credentials, params,
-                              response_data);
-    }
+  {
+    cmd_response_data_set_content_type (response_data,
+                                        GSAD_CONTENT_TYPE_APP_KEY);
+    cmd_response_data_set_content_disposition (
+      response_data,
+      g_strdup_printf ("attachment; filename=scanner-key-pub-%s.pem",
+                       params_value (params, "scanner_id")));
+    res = download_key_pub (&connection, credentials, params, response_data);
+  }
 
   ELSE (get_aggregate)
   ELSE (get_alert)
@@ -2145,14 +2150,13 @@ exec_gmp_get (http_connection_t *con,
   ELSE (wizard_get)
 
   else
-    {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      res = gsad_message (credentials,
-                          "Internal error", __FUNCTION__, __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: Unknown command.",
-                          response_data);
-    }
+  {
+    cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+    res = gsad_message (credentials, "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred inside GSA daemon. "
+                        "Diagnostics: Unknown command.",
+                        response_data);
+  }
 
   res_len = cmd_response_data_get_content_length (response_data);
 
@@ -2161,9 +2165,8 @@ exec_gmp_get (http_connection_t *con,
 
   response = MHD_create_response_from_buffer (res_len, (void *) res,
                                               MHD_RESPMEM_MUST_FREE);
-  if (get_guest_password()
-      && str_equal (user_get_username (user), get_guest_username ())
-      && cmd
+  if (get_guest_password ()
+      && str_equal (user_get_username (user), get_guest_username ()) && cmd
       && str_equal (cmd, "get_aggregate"))
     {
       add_guest_chart_content_security_headers (response);
@@ -2188,8 +2191,8 @@ exec_gmp_get (http_connection_t *con,
       gvm_connection_close (&connection);
     }
 
-  return handler_send_response(con, response, response_data,
-                               user_get_cookie(user));
+  return handler_send_response (con, response, response_data,
+                                user_get_cookie (user));
 }
 
 /**
@@ -2211,10 +2214,10 @@ exec_gmp_get (http_connection_t *con,
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
 int
-redirect_handler (void *cls, struct MHD_Connection *connection,
-                  const char *url, const char *method,
-                  const char *version, const char *upload_data,
-                  size_t *upload_data_size, void **con_cls)
+redirect_handler (void *cls, struct MHD_Connection *connection, const char *url,
+                  const char *method, const char *version,
+                  const char *upload_data, size_t *upload_data_size,
+                  void **con_cls)
 {
   gchar *location;
   const char *host;
@@ -2241,28 +2244,25 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      send_response (connection, ERROR_PAGE, MHD_HTTP_NOT_ACCEPTABLE, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
 
   /* Redirect every URL to the default file on the HTTPS port. */
-  host = MHD_lookup_connection_value (connection,
-                                      MHD_HEADER_KIND,
-                                      "Host");
+  host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND, "Host");
   if (host && g_utf8_validate (host, -1, NULL) == FALSE)
     {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("'Host' header"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      send_response (connection, UTF8_ERROR_PAGE ("'Host' header"),
+                     MHD_HTTP_BAD_REQUEST, NULL, GSAD_CONTENT_TYPE_TEXT_HTML,
+                     NULL, 0);
       return MHD_YES;
     }
   else if (host == NULL)
     return MHD_NO;
 
   /* [IPv6 or IPv4-mapped IPv6]:port */
-  if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
+  if (sscanf (host, "[%" G_STRINGIFY (MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
       == 1)
     {
       char *name6 = g_strdup_printf ("[%s]", name);
@@ -2270,7 +2270,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
       g_free (name6);
     }
   /* IPv4:port */
-  else if (sscanf (host, "%" G_STRINGIFY(MAX_HOST_LEN) "[^:]:%*i", name) == 1)
+  else if (sscanf (host, "%" G_STRINGIFY (MAX_HOST_LEN) "[^:]:%*i", name) == 1)
     location = g_strdup_printf (redirect_location, name);
   else
     location = g_strdup_printf (redirect_location, host);
@@ -2291,7 +2291,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
  * @return TRUE if successful, FALSE if failed (will g_critical in fail case).
  */
 static gboolean
-drop_privileges (struct passwd * user_pw)
+drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
@@ -2325,8 +2325,7 @@ drop_privileges (struct passwd * user_pw)
  * @return 0 success, 1 failed (will g_critical in fail case).
  */
 static int
-chroot_drop_privileges (gboolean do_chroot, gchar *drop,
-                        const gchar *subdir)
+chroot_drop_privileges (gboolean do_chroot, gchar *drop, const gchar *subdir)
 {
   struct passwd *user_pw;
 
@@ -2337,8 +2336,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
         {
           g_critical ("%s: Failed to drop privileges."
                       "  Could not determine UID and GID for user \"%s\"!\n",
-                      __FUNCTION__,
-                      drop);
+                      __FUNCTION__, drop);
           return 1;
         }
     }
@@ -2351,10 +2349,8 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
 
       if (chroot (GSAD_DATA_DIR))
         {
-          g_critical ("%s: Failed to chroot to \"%s\": %s\n",
-                      __FUNCTION__,
-                      GSAD_DATA_DIR,
-                      strerror (errno));
+          g_critical ("%s: Failed to chroot to \"%s\": %s\n", __FUNCTION__,
+                      GSAD_DATA_DIR, strerror (errno));
           return 1;
         }
       set_chroot_state (1);
@@ -2362,20 +2358,17 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
 
   if (user_pw && (drop_privileges (user_pw) == FALSE))
     {
-      g_critical ("%s: Failed to drop privileges\n",
-                  __FUNCTION__);
+      g_critical ("%s: Failed to drop privileges\n", __FUNCTION__);
       return 1;
     }
 
   if (do_chroot)
     {
-      gchar* root_dir = g_build_filename ("/", subdir, NULL);
+      gchar *root_dir = g_build_filename ("/", subdir, NULL);
       if (chdir (root_dir))
         {
           g_critical ("%s: failed change to chroot root directory (%s): %s\n",
-                      __FUNCTION__,
-                      root_dir,
-                      strerror (errno));
+                      __FUNCTION__, root_dir, strerror (errno));
           g_free (root_dir);
           return 1;
         }
@@ -2383,13 +2376,11 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
     }
   else
     {
-      gchar* data_dir = g_build_filename (GSAD_DATA_DIR, subdir, NULL);
+      gchar *data_dir = g_build_filename (GSAD_DATA_DIR, subdir, NULL);
       if (chdir (data_dir))
         {
-          g_critical ("%s: failed to change to \"%s\": %s\n",
-                      __FUNCTION__,
-                      data_dir,
-                      strerror (errno));
+          g_critical ("%s: failed to change to \"%s\": %s\n", __FUNCTION__,
+                      data_dir, strerror (errno));
           g_free (data_dir);
           return 1;
         }
@@ -2411,10 +2402,9 @@ static void
 my_gnutls_log_func (int level, const char *text)
 {
   fprintf (stderr, "[%d] (%d) %s", getpid (), level, text);
-  if (*text && text[strlen (text) -1] != '\n')
+  if (*text && text[strlen (text) - 1] != '\n')
     putc ('\n', stderr);
 }
-
 
 /**
  * @brief Initialization routine for GSAD.
@@ -2439,8 +2429,8 @@ gsad_init ()
       return MHD_NO;
     }
 
-  /* Init GCRYPT. */
-  /* Register thread callback structure for libgcrypt < 1.6.0. */
+    /* Init GCRYPT. */
+    /* Register thread callback structure for libgcrypt < 1.6.0. */
 #if GCRYPT_VERSION_NUMBER < 0x010600
   gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
 #endif
@@ -2500,14 +2490,17 @@ gsad_init ()
 void
 gsad_cleanup ()
 {
-  if (redirect_pid) kill (redirect_pid, SIGTERM);
-  if (unix_pid) kill (unix_pid, SIGTERM);
+  if (redirect_pid)
+    kill (redirect_pid, SIGTERM);
+  if (unix_pid)
+    kill (unix_pid, SIGTERM);
 
   MHD_stop_daemon (gsad_daemon);
 
   cleanup_http_handlers ();
 
-  if (log_config) free_log_configuration (log_config);
+  if (log_config)
+    free_log_configuration (log_config);
 
   gsad_base_cleanup ();
 
@@ -2559,7 +2552,7 @@ start_unix_http_daemon (const char *unix_socket_path,
                         int handler (void *, struct MHD_Connection *,
                                      const char *, const char *, const char *,
                                      const char *, size_t *, void **),
-                   http_handler_t * http_handlers)
+                        http_handler_t *http_handlers)
 {
   struct sockaddr_un addr;
   struct stat ustat;
@@ -2574,9 +2567,9 @@ start_unix_http_daemon (const char *unix_socket_path,
       g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
       return NULL;
     }
- 
+
   memset (&addr, 0, sizeof (struct sockaddr_un));
- 
+
   addr.sun_family = AF_UNIX;
   strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path) - 1);
   if (!stat (addr.sun_path, &ustat))
@@ -2589,8 +2582,8 @@ start_unix_http_daemon (const char *unix_socket_path,
   if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
       == -1)
     {
-      g_warning ("%s: Error on bind(%s): %s", __FUNCTION__,
-                 unix_socket_path, strerror (errno));
+      g_warning ("%s: Error on bind(%s): %s", __FUNCTION__, unix_socket_path,
+                 strerror (errno));
       return NULL;
     }
   if (oldmask)
@@ -2601,13 +2594,13 @@ start_unix_http_daemon (const char *unix_socket_path,
       return NULL;
     }
 
-  return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-           | MHD_USE_DEBUG, 0, NULL, NULL, handler, http_handlers,
-           MHD_OPTION_NOTIFY_COMPLETED,
-           free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
-           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
+  return MHD_start_daemon (
+    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+      | MHD_USE_DEBUG,
+    0, NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
+    free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
+    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
 static struct MHD_Daemon *
@@ -2615,7 +2608,7 @@ start_http_daemon (int port,
                    int handler (void *, struct MHD_Connection *, const char *,
                                 const char *, const char *, const char *,
                                 size_t *, void **),
-                   http_handler_t * http_handlers,
+                   http_handler_t *http_handlers,
                    struct sockaddr_storage *address)
 {
   int ipv6_flag;
@@ -2629,19 +2622,19 @@ start_http_daemon (int port,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
-  return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-           | MHD_USE_DEBUG | ipv6_flag, port,
-           NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
-           free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
-           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
+  return MHD_start_daemon (
+    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+      | MHD_USE_DEBUG | ipv6_flag,
+    port, NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
+    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
+    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
 static struct MHD_Daemon *
 start_https_daemon (int port, const char *key, const char *cert,
                     const char *priorities, const char *dh_params,
-                    http_handler_t * http_handlers,
+                    http_handler_t *http_handlers,
                     struct sockaddr_storage *address)
 {
   int ipv6_flag;
@@ -2655,23 +2648,20 @@ start_https_daemon (int port, const char *key, const char *cert,
 #endif
   else
     ipv6_flag = MHD_NO_FLAG;
-  return MHD_start_daemon
-          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
-           | MHD_USE_DEBUG | MHD_USE_SSL | ipv6_flag,
-           port, NULL, NULL, &handle_request, http_handlers,
-           MHD_OPTION_HTTPS_MEM_KEY, key,
-           MHD_OPTION_HTTPS_MEM_CERT, cert,
-           MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-           MHD_OPTION_SOCK_ADDR, address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
-           MHD_OPTION_HTTPS_PRIORITIES, priorities,
-           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
+  return MHD_start_daemon (
+    MHD_USE_THREAD_PER_CONNECTION | MHD_USE_INTERNAL_POLLING_THREAD
+      | MHD_USE_DEBUG | MHD_USE_SSL | ipv6_flag,
+    port, NULL, NULL, &handle_request, http_handlers, MHD_OPTION_HTTPS_MEM_KEY,
+    key, MHD_OPTION_HTTPS_MEM_CERT, cert, MHD_OPTION_NOTIFY_COMPLETED,
+    free_resources, NULL, MHD_OPTION_SOCK_ADDR, address,
+    MHD_OPTION_PER_IP_CONNECTION_LIMIT, get_per_ip_connection_limit (),
+    MHD_OPTION_HTTPS_PRIORITIES, priorities, MHD_OPTION_EXTERNAL_LOGGER,
+    mhd_logger, NULL,
 /* LibmicroHTTPD 0.9.35 and higher. */
 #if MHD_VERSION >= 0x00093500
-           dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS : MHD_OPTION_END,
-           dh_params,
+    dh_params ? MHD_OPTION_HTTPS_MEM_DHPARAMS : MHD_OPTION_END, dh_params,
 #endif
-           MHD_OPTION_END);
+    MHD_OPTION_END);
 }
 
 /**
@@ -2785,10 +2775,10 @@ main (int argc, char **argv)
   static gchar *guest_pass = NULL;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
   static gchar *http_csp = DEFAULT_GSAD_CONTENT_SECURITY_POLICY;
-  static gchar *http_guest_chart_frame_opts
-                  = DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
-  static gchar *http_guest_chart_csp
-                  = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
+  static gchar *http_guest_chart_frame_opts =
+    DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
+  static gchar *http_guest_chart_csp =
+    DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
   static int hsts_enabled = FALSE;
   static int hsts_max_age = DEFAULT_GSAD_HSTS_MAX_AGE;
   static gchar *http_cors = "";
@@ -2798,126 +2788,99 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
-    {"drop-privileges", '\0',
-     0, G_OPTION_ARG_STRING, &drop,
-     "Drop privileges to <user>.", "<user>" },
-    {"foreground", 'f',
-     0, G_OPTION_ARG_NONE, &foreground,
-     "Run in foreground.", NULL},
-    {"http-only", '\0',
-     0, G_OPTION_ARG_NONE, &http_only,
+    {"drop-privileges", '\0', 0, G_OPTION_ARG_STRING, &drop,
+     "Drop privileges to <user>.", "<user>"},
+    {"foreground", 'f', 0, G_OPTION_ARG_NONE, &foreground, "Run in foreground.",
+     NULL},
+    {"http-only", '\0', 0, G_OPTION_ARG_NONE, &http_only,
      "Serve HTTP only, without SSL.", NULL},
     /** @todo This is 'a' in Manager. */
-    {"listen", '\0',
-     0, G_OPTION_ARG_STRING_ARRAY, &gsad_address_string,
-     "Listen on <address>.", "<address>" },
-    {"mlisten", '\0',
-     0, G_OPTION_ARG_STRING, &gsad_manager_address_string,
-     "Manager address.", "<address>" },
-    {"port", 'p',
-     0, G_OPTION_ARG_STRING, &gsad_port_string,
+    {"listen", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &gsad_address_string,
+     "Listen on <address>.", "<address>"},
+    {"mlisten", '\0', 0, G_OPTION_ARG_STRING, &gsad_manager_address_string,
+     "Manager address.", "<address>"},
+    {"port", 'p', 0, G_OPTION_ARG_STRING, &gsad_port_string,
      "Use port number <number>.", "<number>"},
-    {"mport", 'm',
-     0, G_OPTION_ARG_STRING, &gsad_manager_port_string,
+    {"mport", 'm', 0, G_OPTION_ARG_STRING, &gsad_manager_port_string,
      "Use manager port number <number>.", "<number>"},
-    {"rport", 'r',
-     0, G_OPTION_ARG_STRING, &gsad_redirect_port_string,
+    {"rport", 'r', 0, G_OPTION_ARG_STRING, &gsad_redirect_port_string,
      "Redirect HTTP from this port number <number>.", "<number>"},
-    {"no-redirect", '\0',
-     0, G_OPTION_ARG_NONE, &no_redirect,
-     "Don't redirect HTTP to HTTPS.", NULL },
-    {"verbose", 'v',
-     0, G_OPTION_ARG_NONE, &verbose,
-     "Has no effect.  See INSTALL for logging config.", NULL },
-    {"version", 'V',
-     0, G_OPTION_ARG_NONE, &print_version,
+    {"no-redirect", '\0', 0, G_OPTION_ARG_NONE, &no_redirect,
+     "Don't redirect HTTP to HTTPS.", NULL},
+    {"verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+     "Has no effect.  See INSTALL for logging config.", NULL},
+    {"version", 'V', 0, G_OPTION_ARG_NONE, &print_version,
      "Print version and exit.", NULL},
-    {"vendor-version", '\0',
-     0, G_OPTION_ARG_STRING, &gsad_vendor_version_string,
-     "Use <string> as version in interface.", "<string>"},
-    {"login-label", '\0',
-     0, G_OPTION_ARG_STRING, &gsad_login_label_name,
+    {"vendor-version", '\0', 0, G_OPTION_ARG_STRING,
+     &gsad_vendor_version_string, "Use <string> as version in interface.",
+     "<string>"},
+    {"login-label", '\0', 0, G_OPTION_ARG_STRING, &gsad_login_label_name,
      "Use <string> as login label.", "<string>"},
-    {"ssl-private-key", 'k',
-     0, G_OPTION_ARG_FILENAME, &ssl_private_key_filename,
-     "Use <file> as the private key for HTTPS", "<file>"},
-    {"ssl-certificate", 'c',
-     0, G_OPTION_ARG_FILENAME, &ssl_certificate_filename,
-     "Use <file> as the certificate for HTTPS", "<file>"},
-    {"dh-params", '\0',
-     0, G_OPTION_ARG_FILENAME, &dh_params_filename,
+    {"ssl-private-key", 'k', 0, G_OPTION_ARG_FILENAME,
+     &ssl_private_key_filename, "Use <file> as the private key for HTTPS",
+     "<file>"},
+    {"ssl-certificate", 'c', 0, G_OPTION_ARG_FILENAME,
+     &ssl_certificate_filename, "Use <file> as the certificate for HTTPS",
+     "<file>"},
+    {"dh-params", '\0', 0, G_OPTION_ARG_FILENAME, &dh_params_filename,
      "Diffie-Hellman parameters file", "<file>"},
-    {"do-chroot", '\0',
-     0, G_OPTION_ARG_NONE, &do_chroot,
-     "Do chroot.", NULL},
-    {"secure-cookie", '\0',
-     0, G_OPTION_ARG_NONE, &secure_cookie,
+    {"do-chroot", '\0', 0, G_OPTION_ARG_NONE, &do_chroot, "Do chroot.", NULL},
+    {"secure-cookie", '\0', 0, G_OPTION_ARG_NONE, &secure_cookie,
      "Use a secure cookie (implied when using HTTPS).", NULL},
-    {"timeout", '\0',
-     0, G_OPTION_ARG_INT, &timeout,
-     "Minutes of user idle time before session expires. Defaults to "
-     G_STRINGIFY (SESSION_TIMEOUT) " minutes", "<number>"},
-    {"client-watch-interval", '\0',
-     0, G_OPTION_ARG_INT, &client_watch_interval,
-     "Check if client connection was closed every <number> seconds."
-     " 0 to disable. Defaults to " G_STRINGIFY (DEFAULT_CLIENT_WATCH_INTERVAL)
-     " seconds.",
+    {"timeout", '\0', 0, G_OPTION_ARG_INT, &timeout,
+     "Minutes of user idle time before session expires. Defaults "
+     "to " G_STRINGIFY (SESSION_TIMEOUT) " minutes",
      "<number>"},
-    {"debug-tls", 0,
-     0, G_OPTION_ARG_INT, &debug_tls,
+    {"client-watch-interval", '\0', 0, G_OPTION_ARG_INT, &client_watch_interval,
+     "Check if client connection was closed every <number> seconds."
+     " 0 to disable. Defaults to " G_STRINGIFY (
+       DEFAULT_CLIENT_WATCH_INTERVAL) " seconds.",
+     "<number>"},
+    {"debug-tls", 0, 0, G_OPTION_ARG_INT, &debug_tls,
      "Enable TLS debugging at <level>", "<level>"},
-    {"gnutls-priorities", '\0',
-     0, G_OPTION_ARG_STRING, &gnutls_priorities,
+    {"gnutls-priorities", '\0', 0, G_OPTION_ARG_STRING, &gnutls_priorities,
      "GnuTLS priorities string.", "<string>"},
-    {"guest-username", 0,
-     0, G_OPTION_ARG_STRING, &guest_user,
+    {"guest-username", 0, 0, G_OPTION_ARG_STRING, &guest_user,
      "Username for guest user.  Enables guest logins.", "<name>"},
-    {"guest-password", 0,
-     0, G_OPTION_ARG_STRING, &guest_pass,
+    {"guest-password", 0, 0, G_OPTION_ARG_STRING, &guest_pass,
      "Password for guest user.  Defaults to guest username.", "<password>"},
-    {"http-frame-opts", 0,
-     0, G_OPTION_ARG_STRING, &http_frame_opts,
-     "X-Frame-Options HTTP header.  Defaults to \""
-     DEFAULT_GSAD_X_FRAME_OPTIONS "\".", "<frame-opts>"},
-    {"http-csp", 0,
-     0, G_OPTION_ARG_STRING, &http_csp,
-     "Content-Security-Policy HTTP header.  Defaults to \""
-     DEFAULT_GSAD_CONTENT_SECURITY_POLICY"\".", "<csp>"},
-    {"http-guest-chart-frame-opts", 0,
-     0, G_OPTION_ARG_STRING, &http_guest_chart_frame_opts,
-     "X-Frame-Options HTTP header for guest charts.  Defaults to \""
-     DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "\".", "<frame-opts>"},
-    {"http-guest-chart-csp", 0,
-     0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
-     "Content-Security-Policy HTTP header.  Defaults to \""
-     DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY"\".", "<csp>"},
-    {"http-sts", 0,
-     0, G_OPTION_ARG_NONE, &hsts_enabled,
+    {"http-frame-opts", 0, 0, G_OPTION_ARG_STRING, &http_frame_opts,
+     "X-Frame-Options HTTP header.  Defaults to \"" DEFAULT_GSAD_X_FRAME_OPTIONS
+     "\".",
+     "<frame-opts>"},
+    {"http-csp", 0, 0, G_OPTION_ARG_STRING, &http_csp,
+     "Content-Security-Policy HTTP header.  Defaults to "
+     "\"" DEFAULT_GSAD_CONTENT_SECURITY_POLICY "\".",
+     "<csp>"},
+    {"http-guest-chart-frame-opts", 0, 0, G_OPTION_ARG_STRING,
+     &http_guest_chart_frame_opts,
+     "X-Frame-Options HTTP header for guest charts.  Defaults to "
+     "\"" DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "\".",
+     "<frame-opts>"},
+    {"http-guest-chart-csp", 0, 0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
+     "Content-Security-Policy HTTP header.  Defaults to "
+     "\"" DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY "\".",
+     "<csp>"},
+    {"http-sts", 0, 0, G_OPTION_ARG_NONE, &hsts_enabled,
      "Enable HTTP Strict-Tranport-Security header.", NULL},
-    {"http-sts-max-age", 0,
-     0, G_OPTION_ARG_INT, &hsts_max_age,
+    {"http-sts-max-age", 0, 0, G_OPTION_ARG_INT, &hsts_max_age,
      "max-age in seconds for HTTP Strict-Tranport-Security header."
      "  Defaults to \"" G_STRINGIFY (DEFAULT_GSAD_HSTS_MAX_AGE) "\".",
      "<max-age>"},
-    {"ignore-x-real-ip", '\0',
-     0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
+    {"ignore-x-real-ip", '\0', 0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
      "Do not use X-Real-IP to determine the client address.", NULL},
-    {"per-ip-connection-limit", '\0',
-     0, G_OPTION_ARG_INT, &per_ip_connection_limit,
+    {"per-ip-connection-limit", '\0', 0, G_OPTION_ARG_INT,
+     &per_ip_connection_limit,
      "Sets the maximum number of connections per ip. Use 0 for unlimited.",
-     "<number>" },
-    {"unix-socket", '\0',
-     0, G_OPTION_ARG_FILENAME, &unix_socket_path,
+     "<number>"},
+    {"unix-socket", '\0', 0, G_OPTION_ARG_FILENAME, &unix_socket_path,
      "Path to unix socket to listen on", "<file>"},
-    {"munix-socket", '\0',
-     0, G_OPTION_ARG_FILENAME, &gsad_manager_unix_socket_path,
-     "Path to Manager unix socket", "<file>"},
-    {"http-cors", 0,
-     0, G_OPTION_ARG_STRING, &http_cors,
+    {"munix-socket", '\0', 0, G_OPTION_ARG_FILENAME,
+     &gsad_manager_unix_socket_path, "Path to Manager unix socket", "<file>"},
+    {"http-cors", 0, 0, G_OPTION_ARG_STRING, &http_cors,
      "Set Cross-Origin Resource Sharing (CORS) allow origin http header ",
      "<cors>"},
-    {NULL}
-  };
+    {NULL}};
 
   option_context =
     g_option_context_new ("- Greenbone Security Assistant Daemon");
@@ -2939,10 +2902,9 @@ main (int argc, char **argv)
 
   if (http_only == FALSE && hsts_enabled)
     {
-      set_http_strict_transport_security (
-        g_strdup_printf ("max-age=%d",
-                         hsts_max_age >= 0 ? hsts_max_age
-                                           : DEFAULT_GSAD_HSTS_MAX_AGE));
+      set_http_strict_transport_security (g_strdup_printf (
+        "max-age=%d",
+        hsts_max_age >= 0 ? hsts_max_age : DEFAULT_GSAD_HSTS_MAX_AGE));
     }
   else
     set_http_strict_transport_security (NULL);
@@ -2973,9 +2935,9 @@ main (int argc, char **argv)
         }
       printf ("Copyright (C) 2010-2016 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
-      printf
-        ("This is free software: you are free to change and redistribute it.\n"
-         "There is NO WARRANTY, to the extent permitted by law.\n\n");
+      printf (
+        "This is free software: you are free to change and redistribute it.\n"
+        "There is NO WARRANTY, to the extent permitted by law.\n\n");
       exit (EXIT_SUCCESS);
     }
 
@@ -2987,10 +2949,10 @@ main (int argc, char **argv)
 
   switch (gsad_base_init ())
     {
-      case 1:
-        g_critical ("%s: libxml must be compiled with thread support\n",
-                    __FUNCTION__);
-        exit (EXIT_FAILURE);
+    case 1:
+      g_critical ("%s: libxml must be compiled with thread support\n",
+                  __FUNCTION__);
+      exit (EXIT_FAILURE);
     }
 
   if (gsad_vendor_version_string)
@@ -3033,7 +2995,7 @@ main (int argc, char **argv)
   /* Enable GNUTLS debugging if requested via env variable.  */
   {
     const char *s;
-    if ((s=getenv ("GVM_GNUTLS_DEBUG")))
+    if ((s = getenv ("GVM_GNUTLS_DEBUG")))
       {
         gnutls_global_set_log_function (log_func_for_gnutls);
         gnutls_global_set_log_level (atoi (s));
@@ -3041,12 +3003,10 @@ main (int argc, char **argv)
   }
 
 #ifdef GSAD_GIT_REVISION
-  g_message ("Starting GSAD version %s (GIT revision %s)\n",
-             GSAD_VERSION,
+  g_message ("Starting GSAD version %s (GIT revision %s)\n", GSAD_VERSION,
              GSAD_GIT_REVISION);
 #else
-  g_message ("Starting GSAD version %s\n",
-             GSAD_VERSION);
+  g_message ("Starting GSAD version %s\n", GSAD_VERSION);
 #endif
 
   /* Finish processing the command line options. */
@@ -3055,8 +3015,8 @@ main (int argc, char **argv)
 
   if ((timeout < 1) || (timeout > MAX_SESSION_TIMEOUT))
     {
-      g_critical ("%s: Timeout must be a number from 1 to %d\n",
-                  __FUNCTION__, MAX_SESSION_TIMEOUT);
+      g_critical ("%s: Timeout must be a number from 1 to %d\n", __FUNCTION__,
+                  MAX_SESSION_TIMEOUT);
       exit (EXIT_FAILURE);
     }
 
@@ -3102,8 +3062,9 @@ main (int argc, char **argv)
       gsad_redirect_port = atoi (gsad_redirect_port_string);
       if (gsad_redirect_port <= 0 || gsad_redirect_port >= 65536)
         {
-          g_critical ("%s: Redirect port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
+          g_critical (
+            "%s: Redirect port must be a number between 0 and 65536\n",
+            __FUNCTION__);
           exit (EXIT_FAILURE);
         }
     }
@@ -3147,8 +3108,7 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " unix socket process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__,
-                       strerror (errno));
+                       __FUNCTION__, strerror (errno));
 #endif
           break;
         case -1:
@@ -3178,11 +3138,10 @@ main (int argc, char **argv)
             g_warning ("%s: Failed to change parent death signal;"
                        " redirect process will remain if parent is killed:"
                        " %s\n",
-                       __FUNCTION__,
-                       strerror (errno));
+                       __FUNCTION__, strerror (errno));
 #endif
-          redirect_location = g_strdup_printf ("https://%%s:%i/login/login.html",
-                                               gsad_port);
+          redirect_location =
+            g_strdup_printf ("https://%%s:%i/login/login.html", gsad_port);
           break;
         case -1:
           /* Parent when error. */
@@ -3220,12 +3179,10 @@ main (int argc, char **argv)
           return 1;
         gsad_address_string++;
       }
-  else
-    if (gsad_address_init (NULL, gsad_port))
-      return 1;
+  else if (gsad_address_init (NULL, gsad_port))
+    return 1;
 
-
-  http_handler_t * handlers = init_http_handlers ();
+  http_handler_t *handlers = init_http_handlers ();
 
   if (!no_redirect)
     {
@@ -3255,12 +3212,11 @@ main (int argc, char **argv)
     {
       /* Start the unix socket server. */
 
-      gmp_init (gsad_manager_unix_socket_path,
-                gsad_manager_address_string,
+      gmp_init (gsad_manager_unix_socket_path, gsad_manager_address_string,
                 gsad_manager_port);
 
-      gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request,
-                                            handlers);
+      gsad_daemon =
+        start_unix_http_daemon (unix_socket_path, handle_request, handlers);
 
       if (gsad_daemon == NULL)
         {
@@ -3278,8 +3234,7 @@ main (int argc, char **argv)
     {
       /* Start the real server. */
 
-      gmp_init (gsad_manager_unix_socket_path,
-                gsad_manager_address_string,
+      gmp_init (gsad_manager_unix_socket_path, gsad_manager_address_string,
                 gsad_manager_port);
 
       if (http_only)
@@ -3293,7 +3248,8 @@ main (int argc, char **argv)
               if (gsad_daemon == NULL && gsad_port_string == NULL)
                 {
                   g_warning ("Binding to port %d failed, trying default port"
-                             " %d next.", gsad_port, DEFAULT_GSAD_PORT);
+                             " %d next.",
+                             gsad_port, DEFAULT_GSAD_PORT);
                   gsad_port = DEFAULT_GSAD_PORT;
                   gsad_address_set_port (list->data, gsad_port);
                   gsad_daemon = start_http_daemon (gsad_port, handle_request,
@@ -3315,8 +3271,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __FUNCTION__,
-                          ssl_private_key_filename,
+                          __FUNCTION__, ssl_private_key_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
@@ -3326,16 +3281,15 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __FUNCTION__,
-                          ssl_certificate_filename,
+                          __FUNCTION__, ssl_certificate_filename,
                           error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
 
-          if (dh_params_filename &&
-              !g_file_get_contents (dh_params_filename, &dh_params, NULL,
-                                    &error))
+          if (dh_params_filename
+              && !g_file_get_contents (dh_params_filename, &dh_params, NULL,
+                                       &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
                           __FUNCTION__, dh_params_filename, error->message);
@@ -3345,24 +3299,22 @@ main (int argc, char **argv)
 
           while (list)
             {
-              gsad_daemon = start_https_daemon
-                             (gsad_port, ssl_private_key, ssl_certificate,
-                              gnutls_priorities, dh_params, handlers,
-                              list->data);
+              gsad_daemon = start_https_daemon (
+                gsad_port, ssl_private_key, ssl_certificate, gnutls_priorities,
+                dh_params, handlers, list->data);
               if (gsad_daemon == NULL && gsad_port_string == NULL)
                 {
                   g_warning ("Binding to port %d failed, trying default port"
-                             " %d next.", gsad_port, DEFAULT_GSAD_PORT);
+                             " %d next.",
+                             gsad_port, DEFAULT_GSAD_PORT);
                   gsad_port = DEFAULT_GSAD_PORT;
                   gsad_address_set_port (list->data, gsad_port);
-                  gsad_daemon = start_https_daemon
-                                 (gsad_port, ssl_private_key, ssl_certificate,
-                                  gnutls_priorities, dh_params, handlers,
-                                  list->data);
+                  gsad_daemon = start_https_daemon (
+                    gsad_port, ssl_private_key, ssl_certificate,
+                    gnutls_priorities, dh_params, handlers, list->data);
                 }
               list = list->next;
             }
-
         }
 
       if (gsad_daemon == NULL)

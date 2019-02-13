@@ -22,8 +22,9 @@
  * @brief Utility functions in GSAD
  */
 
-#include <string.h>  // For strcmp
 #include "utils.h"
+
+#include <string.h> // For strcmp
 
 /**
  * @brief Check if two strings are equal
@@ -33,7 +34,7 @@
 gboolean
 str_equal (const gchar *str1, const gchar *str2)
 {
-  return strcmp(str1, str2) == 0;
+  return strcmp (str1, str2) == 0;
 }
 
 /**
@@ -43,8 +44,8 @@ str_equal (const gchar *str1, const gchar *str2)
  *
  * @return The newly allocated capitalized type or command name.
  */
-gchar*
-capitalize (const char* input)
+gchar *
+capitalize (const char *input)
 {
   gchar *output;
   if (input == NULL)
@@ -72,5 +73,3 @@ capitalize (const char* input)
       return output;
     }
 }
-
-
