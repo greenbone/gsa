@@ -557,6 +557,7 @@ class ReportDetails extends React.Component {
               isLoading={isLoading}
               isUpdating={isUpdating}
               sorting={sorting}
+              task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}

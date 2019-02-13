@@ -130,6 +130,7 @@ const ToolBarIcons = ({
   filter,
   loading,
   report,
+  task,
   onAddToAssetsClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
@@ -138,8 +139,6 @@ const ToolBarIcons = ({
   showSuccessMessage,
   onInteraction,
 }) => {
-  const {task = {}} = report;
-  const {id: task_id = ''} = task;
   return (
     <Divider margin="15px">
       <IconDivider>
@@ -168,7 +167,7 @@ const ToolBarIcons = ({
           <IconDivider>
             <DetailsLink
               type="task"
-              id={task_id}
+              id={isDefined(task) ? task.id : ''}
               title={_('Corresponding Task')}
             >
               <TaskIcon />
@@ -218,6 +217,7 @@ ToolBarIcons.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  task: PropTypes.model,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
@@ -235,6 +235,7 @@ const PageContent = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
+  task,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -272,7 +273,6 @@ const PageContent = ({
     ports,
     results,
     result_count = {},
-    task = {},
     tls_certificates,
     timestamp,
     scan_run_status,
@@ -283,8 +283,9 @@ const PageContent = ({
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
 
-  const isContainer = isDefined(task.isContainer) && task.isContainer();
+  const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
+  const progress = isDefined(task) ? task.progress : 0;
 
   const header_title = (
     <Divider>
@@ -302,7 +303,7 @@ const PageContent = ({
           <Span>
             <StatusBar
               status={status}
-              progress={task.progress}
+              progress={progress}
             />
           </Span>
         </Divider>
@@ -341,6 +342,7 @@ const PageContent = ({
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
+          task={task}
           onAddToAssetsClick={onAddToAssetsClick}
           onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
@@ -474,7 +476,7 @@ const PageContent = ({
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
-                      progress={task.progress}
+                      progress={progress}
                       results={isDefined(results) ? results.entities : {}}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
@@ -826,6 +828,7 @@ PageContent.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
+  task: PropTypes.model,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
