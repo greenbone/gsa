@@ -24,6 +24,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
@@ -222,6 +223,7 @@ class PerformancePage extends React.Component {
   }
 
   componentDidMount() {
+    const {start, end, sensor} = this.props.location.query;
     const {gmp} = this.props;
 
     gmp.performance.get().then(response => {
@@ -229,6 +231,27 @@ class PerformancePage extends React.Component {
     });
 
     this.props.loadScanners();
+
+    if (isDefined(start) && isDefined(end)) {
+      const startDate = date(start);
+      const endDate = date(end);
+
+      this.setState({
+        duration: undefined,
+        end_date: endDate,
+        end_hour: endDate.hour(),
+        end_minute: endDate.minute(),
+        start_date: startDate,
+        start_hour: startDate.hour(),
+        start_minute: startDate.minute(),
+      });
+    }
+
+    if (isDefined(sensor)) {
+      this.setState({
+        slave_id: sensor,
+      });
+    }
   }
 
   handleDurationChange(duration) {
@@ -272,7 +295,7 @@ class PerformancePage extends React.Component {
 
   render() {
     const {
-      scanners,
+      scanners = [],
     } = this.props;
     const {
       duration,
@@ -286,6 +309,7 @@ class PerformancePage extends React.Component {
       end_minute,
     } = this.state;
     const {gmp} = this.props;
+    const sensorId = selectSaveId(scanners, slave_id, 0);
     return (
       <Layout
         flex="column"
@@ -348,7 +372,7 @@ class PerformancePage extends React.Component {
           <FormGroup title={_('Report for GMP Scanner')}>
             <Select
               name="slave_id"
-              value={slave_id}
+              value={sensorId}
               items={renderSelectItems(scanners, 0)}
               onChange={this.handleValueChange}
             />
@@ -361,7 +385,7 @@ class PerformancePage extends React.Component {
               <ReportImage
                 name={report.name}
                 duration={duration}
-                slaveId={slave_id}
+                slaveId={sensorId}
                 startDate={start_date}
                 startHour={start_hour}
                 startMinute={start_minute}
