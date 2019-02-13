@@ -23,17 +23,16 @@
  */
 
 #include "gsad_user.h"
+
 #include "gsad_base.h" /* for set_language_code */
-#include "gsad_settings.h"
 #include "gsad_gmp_auth.h"
 #include "gsad_session.h"
+#include "gsad_settings.h"
 #include "utils.h"
 
-#include <assert.h> /* for asset */
-#include <string.h> /* for strcmp */
-
+#include <assert.h>             /* for asset */
 #include <gvm/util/uuidutils.h> /* for gvm_uuid_make */
-
+#include <string.h>             /* for strcmp */
 
 #define BROWSER_LANGUAGE "Browser Language"
 
@@ -42,19 +41,19 @@
  */
 struct user
 {
-  gchar *cookie;        ///< Cookie token.
-  gchar *token;         ///< Request session token.
-  gchar *username;      ///< Login name.
-  gchar *password;      ///< Password.
-  gchar *role;          ///< Role.
-  gchar *timezone;      ///< Timezone.
-  gchar *severity;      ///< Severity class.
-  gchar *capabilities;  ///< Capabilities.
-  gchar *language;      ///< User Interface Language.
-  gchar *pw_warning;    ///< Password policy warning.
-  gchar *address;       ///< Client's IP address.
-  time_t time;          ///< Login time.
-  gboolean guest;       ///< Whether the user is a guest.
+  gchar *cookie;       ///< Cookie token.
+  gchar *token;        ///< Request session token.
+  gchar *username;     ///< Login name.
+  gchar *password;     ///< Password.
+  gchar *role;         ///< Role.
+  gchar *timezone;     ///< Timezone.
+  gchar *severity;     ///< Severity class.
+  gchar *capabilities; ///< Capabilities.
+  gchar *language;     ///< User Interface Language.
+  gchar *pw_warning;   ///< Password policy warning.
+  gchar *address;      ///< Client's IP address.
+  time_t time;         ///< Login time.
+  gboolean guest;      ///< Whether the user is a guest.
 };
 
 void
@@ -71,18 +70,13 @@ user_new ()
 }
 
 user_t *
-user_new_with_data (const gchar *username,
-                    const gchar *password,
-                    const gchar *timezone,
-                    const gchar *severity,
-                    const gchar *role,
-                    const gchar *capabilities,
-                    const gchar *language,
-                    const gchar *pw_warning,
-                    const gchar *address,
-                    const gboolean guest)
+user_new_with_data (const gchar *username, const gchar *password,
+                    const gchar *timezone, const gchar *severity,
+                    const gchar *role, const gchar *capabilities,
+                    const gchar *language, const gchar *pw_warning,
+                    const gchar *address, const gboolean guest)
 {
-  user_t *user = user_new();
+  user_t *user = user_new ();
 
   user->cookie = gvm_uuid_make ();
   user->token = gvm_uuid_make ();
@@ -112,18 +106,18 @@ user_free (user_t *user)
       return;
     }
 
-  g_free(user->cookie);
-  g_free(user->token);
-  g_free(user->username);
-  g_free(user->password);
-  g_free(user->role);
-  g_free(user->timezone);
-  g_free(user->severity);
-  g_free(user->capabilities);
-  g_free(user->language);
-  g_free(user->pw_warning);
-  g_free(user->address);
-  g_free(user);
+  g_free (user->cookie);
+  g_free (user->token);
+  g_free (user->username);
+  g_free (user->password);
+  g_free (user->role);
+  g_free (user->timezone);
+  g_free (user->severity);
+  g_free (user->capabilities);
+  g_free (user->language);
+  g_free (user->pw_warning);
+  g_free (user->address);
+  g_free (user);
 }
 
 user_t *
@@ -134,19 +128,19 @@ user_copy (user_t *user)
       return NULL;
     }
 
-  user_t *copy = user_new();
+  user_t *copy = user_new ();
 
-  copy->cookie = g_strdup(user->cookie);
-  copy->token = g_strdup(user->token);
-  copy->username = g_strdup(user->username);
-  copy->password = g_strdup(user->password);
-  copy->role = g_strdup(user->role);
-  copy->timezone = g_strdup(user->timezone);
-  copy->severity = g_strdup(user->severity);
-  copy->capabilities = g_strdup(user->capabilities);
-  copy->language = g_strdup(user->language);
-  copy->pw_warning = g_strdup(user->pw_warning);
-  copy->address = g_strdup(user->address);
+  copy->cookie = g_strdup (user->cookie);
+  copy->token = g_strdup (user->token);
+  copy->username = g_strdup (user->username);
+  copy->password = g_strdup (user->password);
+  copy->role = g_strdup (user->role);
+  copy->timezone = g_strdup (user->timezone);
+  copy->severity = g_strdup (user->severity);
+  copy->capabilities = g_strdup (user->capabilities);
+  copy->language = g_strdup (user->language);
+  copy->pw_warning = g_strdup (user->pw_warning);
+  copy->address = g_strdup (user->address);
   copy->time = user->time;
   copy->guest = user->guest;
 
@@ -330,7 +324,7 @@ user_set_username (user_t *user, const gchar *username)
 int
 user_logout (user_t *user)
 {
-  user_t * fuser = session_get_user_by_id (user->token);
+  user_t *fuser = session_get_user_by_id (user->token);
 
   if (fuser)
     {
@@ -366,7 +360,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *severity, const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, const char *address)
 {
-  const gchar * guest_username = get_guest_username ();
+  const gchar *guest_username = get_guest_username ();
 
   user_t *user = session_get_user_by_username (username);
 
@@ -383,9 +377,9 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       guest = str_equal (username, guest_username) ? 1 : 0;
     }
 
-  user = user_new_with_data (username, password, timezone, severity, role,
-                             capabilities, language, pw_warning, address,
-                             guest);
+  user =
+    user_new_with_data (username, password, timezone, severity, role,
+                        capabilities, language, pw_warning, address, guest);
 
   session_add_user (user->token, user);
 
@@ -454,6 +448,6 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
     }
 
   /* should it be really USER_EXPIRED_TOKEN?
-  * No user has been found therefore the token couldn't even expire */
+   * No user has been found therefore the token couldn't even expire */
   return USER_EXPIRED_TOKEN;
 }

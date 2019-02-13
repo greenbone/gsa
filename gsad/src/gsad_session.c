@@ -23,9 +23,9 @@
  */
 
 #include "gsad_session.h"
+
 #include "gsad_user.h"
 #include "utils.h" /* for str_equal */
-
 
 #undef G_LOG_DOMAIN
 /**
@@ -49,7 +49,7 @@ session_get_user_by_id_internal (const gchar *id)
   int index;
   for (index = 0; index < users->len; index++)
     {
-      user_t *item = (user_t*) g_ptr_array_index (users, index);
+      user_t *item = (user_t *) g_ptr_array_index (users, index);
       const gchar *token = user_get_token (item);
 
       if (str_equal (id, token))
@@ -68,9 +68,9 @@ session_remove_user_internal (const gchar *id)
 
   if (user)
     {
-      g_ptr_array_remove(users, (gpointer)user);
+      g_ptr_array_remove (users, (gpointer) user);
 
-      user_free(user);
+      user_free (user);
     }
 }
 
@@ -96,7 +96,7 @@ session_init ()
 user_t *
 session_get_user_by_id (const gchar *id)
 {
-  user_t * user;
+  user_t *user;
 
   g_mutex_lock (mutex);
 
@@ -116,18 +116,18 @@ user_t *
 session_get_user_by_username (const gchar *username)
 {
   int index;
-  user_t * user = NULL;
+  user_t *user = NULL;
 
   g_mutex_lock (mutex);
 
   for (index = 0; index < users->len; index++)
     {
-      user_t *item = (user_t*) g_ptr_array_index (users, index);
+      user_t *item = (user_t *) g_ptr_array_index (users, index);
       const gchar *name = user_get_username (item);
 
       if (str_equal (name, username))
         {
-          user = user_copy(item);
+          user = user_copy (item);
           break;
         }
     }
@@ -186,21 +186,21 @@ session_remove_other_sessions (const gchar *id, user_t *user)
 
   for (index = 0; index < users->len; index++)
     {
-      user_t *item = (user_t*) g_ptr_array_index (users, index);
+      user_t *item = (user_t *) g_ptr_array_index (users, index);
 
-      const gchar *itemtoken = user_get_token(item);
-      const gchar *itemname = user_get_username(item);
-      const gchar *username = user_get_username(user);
+      const gchar *itemtoken = user_get_token (item);
+      const gchar *itemname = user_get_username (item);
+      const gchar *username = user_get_username (user);
 
       if (str_equal (itemname, username) && !str_equal (id, itemtoken))
         {
-          g_debug ("%s: logging out user '%s', token '%s'",
-                   __FUNCTION__, itemname, itemtoken);
+          g_debug ("%s: logging out user '%s', token '%s'", __FUNCTION__,
+                   itemname, itemtoken);
           g_ptr_array_remove (users, (gpointer) item);
 
           user_free (item);
 
-          index --;
+          index--;
         }
     }
 
