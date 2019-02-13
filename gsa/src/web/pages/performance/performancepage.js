@@ -207,12 +207,12 @@ class PerformancePage extends React.Component {
       reports: [],
       duration: 'day',
       scannerId: 0,
-      start_date: start,
-      start_hour: start.hour(),
-      start_minute: start.minute(),
-      end_date: end,
-      end_hour: end.hour(),
-      end_minute: end.minute(),
+      startDate: start,
+      startHour: start.hour(),
+      startMinute: start.minute(),
+      endDate: end,
+      endHour: end.hour(),
+      endMinute: end.minute(),
       scanners: [],
     };
 
@@ -237,12 +237,12 @@ class PerformancePage extends React.Component {
 
       this.setState({
         duration: undefined,
-        end_date: endDate,
-        end_hour: endDate.hour(),
-        end_minute: endDate.minute(),
-        start_date: startDate,
-        start_hour: startDate.hour(),
-        start_minute: startDate.minute(),
+        endDate: endDate,
+        endHour: endDate.hour(),
+        endMinute: endDate.minute(),
+        startDate: startDate,
+        startHour: startDate.hour(),
+        startMinute: startDate.minute(),
       });
     }
 
@@ -260,12 +260,12 @@ class PerformancePage extends React.Component {
 
       this.setState({
         duration,
-        start_date: start,
-        start_hour: start.hour(),
-        start_minute: start.minute(),
-        end_date: end,
-        end_hour: end.hour(),
-        end_minute: end.minute(),
+        startDate: start,
+        startHour: start.hour(),
+        startMinute: start.minute(),
+        endDate: end,
+        endHour: end.hour(),
+        endMinute: end.minute(),
       });
 
       this.handleInteraction();
@@ -300,12 +300,12 @@ class PerformancePage extends React.Component {
       duration,
       reports,
       scannerId,
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     } = this.state;
     const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
@@ -318,12 +318,12 @@ class PerformancePage extends React.Component {
           title={_('Performance')}
         >
           <StartEndTimeSelection
-            startDate={start_date}
-            startHour={start_hour}
-            startMinute={start_minute}
-            endDate={end_date}
-            endMinute={end_minute}
-            endHour={end_hour}
+            startDate={startDate}
+            startHour={startHour}
+            startMinute={startMinute}
+            endDate={endDate}
+            endMinute={endMinute}
+            endHour={endHour}
             onChanged={this.handleStartEndChange}
           />
 
@@ -384,12 +384,12 @@ class PerformancePage extends React.Component {
                 name={report.name}
                 duration={duration}
                 scannerId={sensorId}
-                startDate={start_date}
-                startHour={start_hour}
-                startMinute={start_minute}
-                endDate={end_date}
-                endHour={end_hour}
-                endMinute={end_minute}
+                startDate={startDate}
+                startHour={startHour}
+                startMinute={startMinute}
+                endDate={endDate}
+                endHour={endHour}
+                endMinute={endMinute}
               />
             </div>
           ))}
