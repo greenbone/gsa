@@ -126,7 +126,7 @@ ToolBar.propTypes = {
   onDurationChangeClick: PropTypes.func.isRequired,
 };
 
-const ReportImage = ({
+const ReportImage = withGmp(({
   gmp,
   name,
   duration,
@@ -165,14 +165,13 @@ const ReportImage = ({
       src={url}
     />
   );
-};
+});
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
   endDate: PropTypes.date,
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
-  gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
   slaveId: PropTypes.idOrZero.isRequired,
   startDate: PropTypes.date,
@@ -308,7 +307,6 @@ class PerformancePage extends React.Component {
       end_hour,
       end_minute,
     } = this.state;
-    const {gmp} = this.props;
     const sensorId = selectSaveId(scanners, slave_id, 0);
     return (
       <Layout
@@ -392,7 +390,6 @@ class PerformancePage extends React.Component {
                 endDate={end_date}
                 endHour={end_hour}
                 endMinute={end_minute}
-                gmp={gmp}
               />
             </div>
           ))}
