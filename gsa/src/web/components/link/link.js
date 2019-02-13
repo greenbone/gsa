@@ -64,7 +64,7 @@ export const withTextOnly = Component => {
 
 let Link = ({
   anchor,
-  to,
+  to = '',
   filter,
   query,
   ...other
