@@ -523,6 +523,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/subscriptionprovider.js
+     ${GSA_SRC_DIR}/src/web/components/qod/qod.js
      ${GSA_SRC_DIR}/src/web/components/section/header.js
      ${GSA_SRC_DIR}/src/web/components/section/section.js
      ${GSA_SRC_DIR}/src/web/components/sortby/sortby.js

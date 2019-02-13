@@ -42,6 +42,8 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import Qod from 'web/components/qod/qod';
+
 import {RowDetailsToggle} from 'web/entities/row';
 import EntitiesActions from 'web/entities/actions';
 
@@ -114,7 +116,7 @@ const Row = ({
         <SeverityBar severity={entity.severity}/>
       </TableData>
       <TableData align="end">
-        {entity.qod.value} %
+        <Qod value={entity.qod.value}/>
       </TableData>
       <TableData>
         <DetailsLink
