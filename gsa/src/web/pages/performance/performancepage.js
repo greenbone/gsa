@@ -139,7 +139,7 @@ const ReportImage = withGmp(({
   startMinute,
 }) => {
   const params = {
-    slaveId: scannerId,
+    slave_id: scannerId,
     token: gmp.settings.token,
   };
 
