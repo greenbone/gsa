@@ -11256,9 +11256,7 @@ get_report (gvm_connection_t *connection, credentials_t * credentials,
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
 
-  if (report_id == NULL)
-    return get_reports (connection, credentials, params, extra_xml,
-                        response_data);
+  CHECK_VARIABLE_INVALID (report_id, "Get Report");
 
   if (strcmp (alert_id, "0"))
     {
