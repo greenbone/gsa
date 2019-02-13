@@ -25,20 +25,26 @@
 #ifndef _GSAD_SESSION_H
 #define _GSAD_SESSION_H
 
-#include <glib.h>
-
 #include "gsad_user.h"
 
-void session_add_user (const gchar *id, user_t *user);
+#include <glib.h>
 
-void session_remove_user (const gchar *id);
+void
+session_add_user (const gchar *id, user_t *user);
 
-user_t *session_get_user_by_id (const gchar *id);
+void
+session_remove_user (const gchar *id);
 
-user_t *session_get_user_by_username (const gchar *username);
+user_t *
+session_get_user_by_id (const gchar *id);
 
-void session_remove_other_sessions (const gchar *id, user_t *user);
+user_t *
+session_get_user_by_username (const gchar *username);
 
-void session_init ();
+void
+session_remove_other_sessions (const gchar *id, user_t *user);
+
+void
+session_init ();
 
 #endif
