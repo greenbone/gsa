@@ -25,7 +25,9 @@
 #define _GNU_SOURCE
 
 #include "gsad_i18n.h"
+
 #include "gsad_base.h"
+
 #include <assert.h>
 #include <dirent.h>
 #include <errno.h>
@@ -33,10 +35,10 @@
 #include <libintl.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
-#include <math.h>
-#include <string.h>
 #include <locale.h>
+#include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #undef G_LOG_DOMAIN
 /**
@@ -57,7 +59,7 @@
  *              DEFAULT_GSAD_LANGUAGE is returned.
  */
 gchar *
-accept_language_to_env_fmt (const char* accept_language)
+accept_language_to_env_fmt (const char *accept_language)
 {
   if (accept_language == NULL)
     return g_strdup (DEFAULT_GSAD_LANGUAGE);
@@ -68,7 +70,7 @@ accept_language_to_env_fmt (const char* accept_language)
   gchar **prefs, *pref;
   prefs = g_strsplit_set (accept_language, ",;", -1);
 
-  pref = prefs [0];
+  pref = prefs[0];
   if (pref)
     {
       char *pos;

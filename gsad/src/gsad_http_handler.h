@@ -29,52 +29,58 @@
 
 typedef struct http_handler http_handler_t;
 
-typedef void (*http_handler_free_func_t)(http_handler_t *);
+typedef void (*http_handler_free_func_t) (http_handler_t *);
 
-typedef int (*http_handler_func_t)(http_connection_t *connection,
-                                   const char *method, const char *url,
-                                   gsad_connection_info_t *con_info,
-                                   http_handler_t *handler, void *data);
+typedef int (*http_handler_func_t) (http_connection_t *connection,
+                                    const char *method, const char *url,
+                                    gsad_connection_info_t *con_info,
+                                    http_handler_t *handler, void *data);
 
-http_handler_t * http_handler_add(http_handler_t *handlers,
-                                  http_handler_t *handler);
+http_handler_t *
+http_handler_add (http_handler_t *handlers, http_handler_t *handler);
 
-int http_handler_next(http_connection_t *connection, const char *method,
-                      const char *url, gsad_connection_info_t *con_info,
-                      http_handler_t *handler, void *data);
+int
+http_handler_next (http_connection_t *connection, const char *method,
+                   const char *url, gsad_connection_info_t *con_info,
+                   http_handler_t *handler, void *data);
 
-int http_handler_start(http_connection_t *connection, const char *method,
-                       const char * url, gsad_connection_info_t *con_info,
-                       http_handler_t *handler, void * data);
+int
+http_handler_start (http_connection_t *connection, const char *method,
+                    const char *url, gsad_connection_info_t *con_info,
+                    http_handler_t *handler, void *data);
 
-http_handler_t * http_handler_new(http_handler_func_t);
+http_handler_t *http_handler_new (http_handler_func_t);
 
-void http_handler_free(http_handler_t *handler);
+void
+http_handler_free (http_handler_t *handler);
 
+http_handler_t *
+init_http_handlers ();
 
-http_handler_t * init_http_handlers();
+void
+cleanup_http_handlers ();
 
-void cleanup_http_handlers ();
+http_handler_t *
+url_handler_new (const gchar *regexp, http_handler_t *handler);
 
-http_handler_t * url_handler_new(const gchar *regexp,
-                                 http_handler_t *handler);
+http_handler_t *
+url_handler_add_func (http_handler_t *handlers, const gchar *regexp,
+                      http_handler_func_t handle);
 
-http_handler_t * url_handler_add_func(http_handler_t *handlers,
-                                      const gchar *regexp,
-                                      http_handler_func_t handle);
+http_handler_t *
+method_router_new ();
 
-http_handler_t * method_router_new();
+void
+method_router_set_get_handler (http_handler_t *router, http_handler_t *handler);
 
-void method_router_set_get_handler(http_handler_t *router,
-                                   http_handler_t *handler);
+void
+method_router_set_post_handler (http_handler_t *router,
+                                http_handler_t *handler);
 
-void method_router_set_post_handler(http_handler_t *router,
-                                    http_handler_t *handler);
-
-
-int handle_request (void *cls, http_connection_t *connection,
-                    const char *url, const char *method,
-                    const char *version, const char *upload_data,
-                    size_t *upload_data_size, void **con_cls);
+int
+handle_request (void *cls, http_connection_t *connection, const char *url,
+                const char *method, const char *version,
+                const char *upload_data, size_t *upload_data_size,
+                void **con_cls);
 
 #endif /* _GSAD_HTTP_HANDLER_H */

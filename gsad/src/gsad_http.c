@@ -24,21 +24,20 @@
 
 #include "gsad_http.h"
 
-#include <string.h> /* for strcmp */
-#include <locale.h> /* for setlocale */
-#include <stdlib.h> /* for abort */
-#include <sys/stat.h> /* struct stat */
-#include <sys/types.h>
-#include <unistd.h>
-#include <assert.h> /* for asset */
-
-#include <gvm/base/networking.h> /* for sockaddr_as_str */
-#include <gvm/util/xmlutils.h>   /* for xml_string_append */
-
+#include "gsad_base.h" /* for ctime_r_strip_newline */
 #include "gsad_i18n.h" /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"
-#include "gsad_base.h" /* for ctime_r_strip_newline */
 #include "utils.h" /* for str_equal */
+
+#include <assert.h>              /* for asset */
+#include <gvm/base/networking.h> /* for sockaddr_as_str */
+#include <gvm/util/xmlutils.h>   /* for xml_string_append */
+#include <locale.h>              /* for setlocale */
+#include <stdlib.h>              /* for abort */
+#include <string.h>              /* for strcmp */
+#include <sys/stat.h>            /* struct stat */
+#include <sys/types.h>
+#include <unistd.h>
 
 #undef G_LOG_DOMAIN
 /**
@@ -87,88 +86,87 @@ guess_content_type (const gchar *path)
  * @param[in]      ct        Content Type to set.
  */
 void
-gsad_add_content_type_header (http_response_t *response,
-                              content_type_t* ct)
+gsad_add_content_type_header (http_response_t *response, content_type_t *ct)
 {
   if (!response)
     return;
 
   switch (*ct)
     {
-      case GSAD_CONTENT_TYPE_APP_DEB:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/deb");
-        break;
-      case GSAD_CONTENT_TYPE_APP_EXE:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/exe");
-        break;
-      case GSAD_CONTENT_TYPE_APP_XHTML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/xhtml+xml");
-        break;
-      case GSAD_CONTENT_TYPE_APP_KEY:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/key");
-        break;
-      case GSAD_CONTENT_TYPE_APP_NBE:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/nbe");
-        break;
-      case GSAD_CONTENT_TYPE_APP_PDF:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/pdf");
-        break;
-      case GSAD_CONTENT_TYPE_APP_RPM:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/rpm");
-        break;
-      case GSAD_CONTENT_TYPE_APP_XML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/xml; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_IMAGE_PNG:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "image/png");
-        break;
-      case GSAD_CONTENT_TYPE_IMAGE_SVG:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "image/svg+xml");
-        break;
-      case GSAD_CONTENT_TYPE_IMAGE_GIF:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "image/gif");
-        break;
-      case GSAD_CONTENT_TYPE_OCTET_STREAM:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/octet-stream");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_CSS:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/css");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_HTML:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/html; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_JS:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/javascript");
-        break;
-      case GSAD_CONTENT_TYPE_TEXT_PLAIN:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/plain; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_APP_JSON:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/json; charset=utf-8");
-        break;
-      case GSAD_CONTENT_TYPE_DONE:
-        break;
-      default:
-        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "text/plain; charset=utf-8");
-        break;
+    case GSAD_CONTENT_TYPE_APP_DEB:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/deb");
+      break;
+    case GSAD_CONTENT_TYPE_APP_EXE:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/exe");
+      break;
+    case GSAD_CONTENT_TYPE_APP_XHTML:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/xhtml+xml");
+      break;
+    case GSAD_CONTENT_TYPE_APP_KEY:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/key");
+      break;
+    case GSAD_CONTENT_TYPE_APP_NBE:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/nbe");
+      break;
+    case GSAD_CONTENT_TYPE_APP_PDF:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/pdf");
+      break;
+    case GSAD_CONTENT_TYPE_APP_RPM:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/rpm");
+      break;
+    case GSAD_CONTENT_TYPE_APP_XML:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/xml; charset=utf-8");
+      break;
+    case GSAD_CONTENT_TYPE_IMAGE_PNG:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "image/png");
+      break;
+    case GSAD_CONTENT_TYPE_IMAGE_SVG:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "image/svg+xml");
+      break;
+    case GSAD_CONTENT_TYPE_IMAGE_GIF:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "image/gif");
+      break;
+    case GSAD_CONTENT_TYPE_OCTET_STREAM:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/octet-stream");
+      break;
+    case GSAD_CONTENT_TYPE_TEXT_CSS:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "text/css");
+      break;
+    case GSAD_CONTENT_TYPE_TEXT_HTML:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "text/html; charset=utf-8");
+      break;
+    case GSAD_CONTENT_TYPE_TEXT_JS:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "text/javascript");
+      break;
+    case GSAD_CONTENT_TYPE_TEXT_PLAIN:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "text/plain; charset=utf-8");
+      break;
+    case GSAD_CONTENT_TYPE_APP_JSON:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "application/json; charset=utf-8");
+      break;
+    case GSAD_CONTENT_TYPE_DONE:
+      break;
+    default:
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               "text/plain; charset=utf-8");
+      break;
     }
 }
 
@@ -217,8 +215,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
   if (attach_remove_sid (response, sid) == MHD_NO)
     {
       MHD_destroy_response (response);
-      g_warning ("%s: failed to attach SID, dropping request",
-                  __FUNCTION__);
+      g_warning ("%s: failed to attach SID, dropping request", __FUNCTION__);
       return MHD_NO;
     }
 
@@ -245,10 +242,8 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
  */
 int
 send_response (http_connection_t *connection, const char *content,
-               int status_code, const gchar *sid,
-               content_type_t content_type,
-               const char *content_disposition,
-               size_t content_length)
+               int status_code, const gchar *sid, content_type_t content_type,
+               const char *content_disposition, size_t content_length)
 {
   http_response_t *response;
   size_t size;
@@ -262,9 +257,8 @@ send_response (http_connection_t *connection, const char *content,
       status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       size = 0;
     }
-  response = MHD_create_response_from_buffer (size,
-                                              (void *)(content ? content : ""),
-                                              MHD_RESPMEM_MUST_COPY);
+  response = MHD_create_response_from_buffer (
+    size, (void *) (content ? content : ""), MHD_RESPMEM_MUST_COPY);
 
   gsad_add_content_type_header (response, &content_type);
 
@@ -298,13 +292,11 @@ send_response (http_connection_t *connection, const char *content,
  * @return MHD_YES on success, else MHD_NO.
  */
 int
-handler_send_response (http_connection_t *connection,
-                       http_response_t *response,
-                       cmd_response_data_t *response_data,
-                       const gchar *sid)
+handler_send_response (http_connection_t *connection, http_response_t *response,
+                       cmd_response_data_t *response_data, const gchar *sid)
 {
   int ret;
-  const gchar * content_disposition;
+  const gchar *content_disposition;
   content_type_t content_type;
   int status_code;
 
@@ -319,17 +311,17 @@ handler_send_response (http_connection_t *connection,
 
   if (content_type == GSAD_CONTENT_TYPE_STRING)
     {
-      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                               cmd_response_data_get_content_type_string
-                               (response_data));
+      MHD_add_response_header (
+        response, MHD_HTTP_HEADER_CONTENT_TYPE,
+        cmd_response_data_get_content_type_string (response_data));
     }
   else
     {
       gsad_add_content_type_header (response, &content_type);
     }
 
-  content_disposition = cmd_response_data_get_content_disposition
-    (response_data);
+  content_disposition =
+    cmd_response_data_get_content_disposition (response_data);
 
   if (content_disposition != NULL)
     {
@@ -373,10 +365,8 @@ handler_send_response (http_connection_t *connection,
  * @return MHD_YES on success, else MHD_NO.
  */
 int
-handler_create_response (http_connection_t *connection,
-                         gchar *data,
-                         cmd_response_data_t *response_data,
-                         const gchar *sid)
+handler_create_response (http_connection_t *connection, gchar *data,
+                         cmd_response_data_t *response_data, const gchar *sid)
 {
   http_response_t *response;
   gsize len = 0;
@@ -387,8 +377,7 @@ handler_create_response (http_connection_t *connection,
       len = strlen (data);
     }
 
-  response = MHD_create_response_from_buffer (len, data,
-                                              MHD_RESPMEM_MUST_FREE);
+  response = MHD_create_response_from_buffer (len, data, MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection, response, response_data, sid);
 }
 
@@ -401,7 +390,7 @@ handler_create_response (http_connection_t *connection,
  * @return A http response
  */
 http_response_t *
-create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
+create_not_found_response (const gchar *url, cmd_response_data_t *response_data)
 {
   http_response_t *response;
   int len;
@@ -409,54 +398,59 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
   cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
   gchar *msg = g_strdup_printf (
-    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+    "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "
+    "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
     "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"\">"
     "<head>"
-      "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></meta>"
-      "<link rel=\"icon\" href=\"/img/favicon.gif\" type=\"image/gif\"></link>"
-      "<title>Greenbone Security Assistant</title>"
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/gsa-base.css\"></link>"
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/gsa-style.css\"></link>"
+    "<meta http-equiv=\"Content-Type\" content=\"text/html; "
+    "charset=UTF-8\"></meta>"
+    "<link rel=\"icon\" href=\"/img/favicon.gif\" type=\"image/gif\"></link>"
+    "<title>Greenbone Security Assistant</title>"
+    "<link rel=\"stylesheet\" type=\"text/css\" "
+    "href=\"/css/gsa-base.css\"></link>"
+    "<link rel=\"stylesheet\" type=\"text/css\" "
+    "href=\"/css/gsa-style.css\"></link>"
     "</head>"
     "<body>"
     "<div class=\"gsa-main\"><div>"
     "<div class=\"panel panel-error\">"
-      "<div class=\"panel-heading\">"
-        "<h3 class=\"panel-title\">Error Message</h3>"
-      "</div>"
-      "<div class=\"panel-body\">"
-        "<div class=\"row\">"
-	  "<div class=\"pull-right\">"
-	    "<a href=\"/help/error_messages.html?token=\" class=\"icon icon-sm\" title=\"Help: Error Message\">"
-	      "<img src=\"/img/help.svg\" class=\"icon icon-sm\"></img>"
-	    "</a>"
-	  "</div>"
-	  "<img src=\"/img/alert_sign.svg\" alt=\"\" title=\"%s (GSA %s)\" class=\"pull-left icon icon-lg\"></img>"
-	  "<h4>%s (GSA %s)</h4>"
-        "</div>"
-	"<p style=\"margin-top: 10px; font-size: 16px;\">%s</p>"
-      "</div>"
-      "<div class=\"panel-footer\">"
-      "    Your options (not all may work):"
-      "    'Back' button of browser"
-      "    "
-      "        | <a href=\"/logout\">Logout</a></div>"
-      "</div>"
-      "<div class=\"gsa-footer\">"
-        "<div class=\"pull-left\">"
-	  "<span id=\"gsa-token\" style=\"display: none;\"></span>"
-        "</div>"
-	"Greenbone Security Assistant (GSA) Copyright 2009-2017 by Greenbone Networks"
-    " GmbH, <a href=\"http://www.greenbone.net\" target=\"_blank\">www.greenbone.net</a>"
-      "</div>"
+    "<div class=\"panel-heading\">"
+    "<h3 class=\"panel-title\">Error Message</h3>"
     "</div>"
-  "</div>"
-  "</body></html>",
-                          NOT_FOUND_TITLE,
-                          GSAD_VERSION,
-                          NOT_FOUND_TITLE,
-                          GSAD_VERSION,
-                          NOT_FOUND_MESSAGE);
+    "<div class=\"panel-body\">"
+    "<div class=\"row\">"
+    "<div class=\"pull-right\">"
+    "<a href=\"/help/error_messages.html?token=\" class=\"icon icon-sm\" "
+    "title=\"Help: Error Message\">"
+    "<img src=\"/img/help.svg\" class=\"icon icon-sm\"></img>"
+    "</a>"
+    "</div>"
+    "<img src=\"/img/alert_sign.svg\" alt=\"\" title=\"%s (GSA %s)\" "
+    "class=\"pull-left icon icon-lg\"></img>"
+    "<h4>%s (GSA %s)</h4>"
+    "</div>"
+    "<p style=\"margin-top: 10px; font-size: 16px;\">%s</p>"
+    "</div>"
+    "<div class=\"panel-footer\">"
+    "    Your options (not all may work):"
+    "    'Back' button of browser"
+    "    "
+    "        | <a href=\"/logout\">Logout</a></div>"
+    "</div>"
+    "<div class=\"gsa-footer\">"
+    "<div class=\"pull-left\">"
+    "<span id=\"gsa-token\" style=\"display: none;\"></span>"
+    "</div>"
+    "Greenbone Security Assistant (GSA) Copyright 2009-2017 by Greenbone "
+    "Networks"
+    " GmbH, <a href=\"http://www.greenbone.net\" "
+    "target=\"_blank\">www.greenbone.net</a>"
+    "</div>"
+    "</div>"
+    "</div>"
+    "</body></html>",
+    NOT_FOUND_TITLE, GSAD_VERSION, NOT_FOUND_TITLE, GSAD_VERSION,
+    NOT_FOUND_MESSAGE);
 
   cmd_response_data_set_content_type (response_data,
                                       GSAD_CONTENT_TYPE_TEXT_HTML);
@@ -464,8 +458,7 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
   cmd_response_data_set_content_length (response_data, strlen (msg));
 
   len = cmd_response_data_get_content_length (response_data);
-  response = MHD_create_response_from_buffer (len, msg,
-                                              MHD_RESPMEM_MUST_COPY);
+  response = MHD_create_response_from_buffer (len, msg, MHD_RESPMEM_MUST_COPY);
   g_free (msg);
   return response;
 }
@@ -479,7 +472,7 @@ create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
  * @return MHD_YES on success. MHD_NO on errors.
  */
 int
-handler_send_not_found (http_connection_t *connection, const gchar * url)
+handler_send_not_found (http_connection_t *connection, const gchar *url)
 {
   http_response_t *response;
   cmd_response_data_t *response_data;
@@ -504,44 +497,43 @@ handler_send_reauthentication (http_connection_t *connection,
                                int http_status_code,
                                authentication_reason_t reason)
 {
-
   const char *msg;
 
   switch (reason)
     {
-      case LOGIN_FAILED:
-        msg = "Login failed.";
-        break;
-      case LOGIN_ERROR:
-        msg = "Login failed. Error during authentication.";
-        break;
-      case GMP_SERVICE_DOWN:
-        msg = "Login failed. GMP Service is down.";
-        break;
-      case SESSION_EXPIRED:
-        msg = "Session expired. Please login again.";
-        break;
-      case LOGOUT_ALREADY:
-        msg = "Already logged out.";
-        break;
-      case BAD_MISSING_TOKEN:
-        msg = "Token missing or bad. Please login again.";
-        break;
-      case BAD_MISSING_COOKIE:
-        msg = "Cookie missing or bad. Please login again.";
-        break;
-      case LOGOUT:
-        msg = "Successfully logged out.";
-        break;
-      default:
-        msg = "";
+    case LOGIN_FAILED:
+      msg = "Login failed.";
+      break;
+    case LOGIN_ERROR:
+      msg = "Login failed. Error during authentication.";
+      break;
+    case GMP_SERVICE_DOWN:
+      msg = "Login failed. GMP Service is down.";
+      break;
+    case SESSION_EXPIRED:
+      msg = "Session expired. Please login again.";
+      break;
+    case LOGOUT_ALREADY:
+      msg = "Already logged out.";
+      break;
+    case BAD_MISSING_TOKEN:
+      msg = "Token missing or bad. Please login again.";
+      break;
+    case BAD_MISSING_COOKIE:
+      msg = "Cookie missing or bad. Please login again.";
+      break;
+    case LOGOUT:
+      msg = "Successfully logged out.";
+      break;
+    default:
+      msg = "";
     }
 
   cmd_response_data_t *response_data = cmd_response_data_new ();
   cmd_response_data_set_status_code (response_data, http_status_code);
 
-  gchar *xml = gsad_message(NULL, "Authentication required",
-                            __FUNCTION__, __LINE__, msg, response_data);
+  gchar *xml = gsad_message (NULL, "Authentication required", __FUNCTION__,
+                             __LINE__, msg, response_data);
 
   return handler_create_response (connection, xml, response_data, REMOVE_SID);
 }
@@ -583,9 +575,9 @@ remove_sid (http_response_t *response)
    * Tim Brown's suggested cookie included a domain attribute.  How would
    * we get the domain in here?  Maybe a --domain option. */
 
-  value = g_strdup_printf (SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly",
-                           expires,
-                           (is_use_secure_cookie () ? "secure; " : ""));
+  value =
+    g_strdup_printf (SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly",
+                     expires, (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;
@@ -625,7 +617,7 @@ attach_sid (http_response_t *response, const char *sid)
   locale = g_strdup (setlocale (LC_ALL, NULL));
   setlocale (LC_ALL, "C");
 
-  timeout = get_session_timeout() * 60 + 30;
+  timeout = get_session_timeout () * 60 + 30;
 
   now = time (NULL);
   expire_time = now + timeout;
@@ -658,12 +650,9 @@ attach_sid (http_response_t *response, const char *sid)
    * Tim Brown's suggested cookie included a domain attribute.  How would
    * we get the domain in here?  Maybe a --domain option. */
 
-  value = g_strdup_printf (SID_COOKIE_NAME
-                           "=%s; expires=%s; max-age=%d; path=/; %sHTTPonly",
-                           sid,
-                           expires,
-                           timeout,
-                           (is_use_secure_cookie () ? "secure; " : ""));
+  value = g_strdup_printf (
+    SID_COOKIE_NAME "=%s; expires=%s; max-age=%d; path=/; %sHTTPonly", sid,
+    expires, timeout, (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;
@@ -691,7 +680,7 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
             {
               MHD_destroy_response (response);
               g_warning ("%s: failed to remove SID, dropping request",
-                        __FUNCTION__);
+                         __FUNCTION__);
               return MHD_NO;
             }
         }
@@ -701,7 +690,7 @@ attach_remove_sid (http_response_t *response, const gchar *sid)
             {
               MHD_destroy_response (response);
               g_warning ("%s: failed to attach SID, dropping request",
-                        __FUNCTION__);
+                         __FUNCTION__);
               return MHD_NO;
             }
         }
@@ -745,8 +734,8 @@ file_content_response (http_connection_t *connection, const char *url,
   char date_2822[DATE_2822_LEN];
   struct tm *mtime;
   time_t next_week;
-  http_response_t * response;
-  FILE* file;
+  http_response_t *response;
+  FILE *file;
   struct stat buf;
 
   file = fopen (path, "r"); /* this file is just read and sent */
@@ -754,7 +743,7 @@ file_content_response (http_connection_t *connection, const char *url,
   if (file == NULL)
     {
       g_debug ("File %s failed, ", path);
-      return create_not_found_response(url, response_data);
+      return create_not_found_response (url, response_data);
     }
 
   /* Guess content type. */
@@ -766,9 +755,7 @@ file_content_response (http_connection_t *connection, const char *url,
   if (stat (path, &buf))
     {
       /* File information could not be retrieved. */
-      g_critical ("%s: file <%s> can not be stat'ed.\n",
-                  __FUNCTION__,
-                  path);
+      g_critical ("%s: file <%s> can not be stat'ed.\n", __FUNCTION__, path);
       fclose (file);
       return NULL;
     }
@@ -777,14 +764,12 @@ file_content_response (http_connection_t *connection, const char *url,
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
       fclose (file);
-      return create_not_found_response(url, response_data);
+      return create_not_found_response (url, response_data);
     }
 
-  response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
-                                                (MHD_ContentReaderCallback) &file_reader,
-                                                file,
-                                                (MHD_ContentReaderFreeCallback)
-                                                &fclose);
+  response = MHD_create_response_from_callback (
+    buf.st_size, 32 * 1024, (MHD_ContentReaderCallback) &file_reader, file,
+    (MHD_ContentReaderFreeCallback) &fclose);
 
   mtime = localtime (&buf.st_mtime);
   if (mtime
@@ -831,10 +816,10 @@ append_param (void *string, enum MHD_ValueKind kind, const char *key,
   /* http://foo/bar?key=value */
   if (strcmp (key, "token") && strcmp (key, "r"))
     {
-      g_string_append ((GString*) string, key);
-      g_string_append ((GString*) string, "=");
-      g_string_append ((GString*) string, value);
-      g_string_append ((GString*) string, "&");
+      g_string_append ((GString *) string, key);
+      g_string_append ((GString *) string, "=");
+      g_string_append ((GString *) string, value);
+      g_string_append ((GString *) string, "&");
     }
   return MHD_YES;
 }
@@ -857,8 +842,8 @@ reconstruct_url (http_connection_t *connection, const char *url)
    * one param. */
   g_string_append (full_url, "?r=1&");
 
-  MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
-                             append_param, full_url);
+  MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND, append_param,
+                             full_url);
 
   if (full_url->str[strlen (full_url->str) - 1] == '&')
     full_url->str[strlen (full_url->str) - 1] = '\0';
@@ -866,22 +851,20 @@ reconstruct_url (http_connection_t *connection, const char *url)
   return g_string_free (full_url, FALSE);
 }
 
-
 /**
  * @brief Add security headers to a MHD response.
  */
 void
 add_security_headers (http_response_t *response)
 {
-  const gchar * http_x_frame_options = get_http_x_frame_options ();
-  const gchar * http_content_security_policy =
+  const gchar *http_x_frame_options = get_http_x_frame_options ();
+  const gchar *http_content_security_policy =
     get_http_content_security_policy ();
-  const gchar * http_strict_transport_security =
+  const gchar *http_strict_transport_security =
     get_http_strict_transport_security ();
 
   if (strcmp (http_x_frame_options, ""))
-    MHD_add_response_header (response, "X-Frame-Options",
-                             http_x_frame_options);
+    MHD_add_response_header (response, "X-Frame-Options", http_x_frame_options);
   if (strcmp (http_content_security_policy, ""))
     MHD_add_response_header (response, "Content-Security-Policy",
                              http_content_security_policy);
@@ -907,14 +890,15 @@ add_guest_chart_content_security_headers (http_response_t *response)
 void
 add_cors_headers (http_response_t *response)
 {
-  const gchar * http_cors_origin = get_http_cors_origin ();
+  const gchar *http_cors_origin = get_http_cors_origin ();
 
-  if (strcmp (http_cors_origin, "")) {
-    MHD_add_response_header (response, "Access-Control-Allow-Origin",
-                             http_cors_origin);
-    MHD_add_response_header (response, "Access-Control-Allow-Credentials",
-                             "true");
-  }
+  if (strcmp (http_cors_origin, ""))
+    {
+      MHD_add_response_header (response, "Access-Control-Allow-Origin",
+                               http_cors_origin);
+      MHD_add_response_header (response, "Access-Control-Allow-Credentials",
+                               "true");
+    }
 }
 
 /**
@@ -929,8 +913,7 @@ add_forbid_caching_headers (http_response_t *response)
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
                            "no-cache, no-store");
-  MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA,
-                           "no-cache");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_PRAGMA, "no-cache");
 }
 
 /**
@@ -945,24 +928,22 @@ add_forbid_caching_headers (http_response_t *response)
 int
 get_client_address (http_connection_t *conn, char *client_address)
 {
-  const char* x_real_ip;
+  const char *x_real_ip;
 
   /* First try X-Real-IP header (unless told to ignore), then MHD connection. */
 
-  x_real_ip = MHD_lookup_connection_value (conn,
-                                           MHD_HEADER_KIND,
-                                           "X-Real-IP");
+  x_real_ip = MHD_lookup_connection_value (conn, MHD_HEADER_KIND, "X-Real-IP");
 
-  if (!is_ignore_http_x_real_ip()
-      && x_real_ip && g_utf8_validate (x_real_ip, -1, NULL) == FALSE)
+  if (!is_ignore_http_x_real_ip () && x_real_ip
+      && g_utf8_validate (x_real_ip, -1, NULL) == FALSE)
     return 1;
-  else if (!is_ignore_http_x_real_ip() && x_real_ip != NULL)
+  else if (!is_ignore_http_x_real_ip () && x_real_ip != NULL)
     strncpy (client_address, x_real_ip, INET6_ADDRSTRLEN);
-  else if (is_unix_socket())
+  else if (is_unix_socket ())
     strncpy (client_address, "unix_socket", INET6_ADDRSTRLEN);
   else
     {
-      const union MHD_ConnectionInfo* info;
+      const union MHD_ConnectionInfo *info;
 
       info = MHD_get_connection_info (conn, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
       sockaddr_as_str ((struct sockaddr_storage *) info->client_addr,
@@ -1032,17 +1013,13 @@ gsad_message (credentials_t *credentials, const char *title,
 
   if (function)
     {
-      xmltitle = g_strdup_printf ("<title>%s: %s:%i (GSA %s)</title>",
-                                  title,
-                                  function,
-                                  line,
-                                  GSAD_VERSION);
+      xmltitle = g_strdup_printf ("<title>%s: %s:%i (GSA %s)</title>", title,
+                                  function, line, GSAD_VERSION);
     }
   else
     {
-      xmltitle = g_strdup_printf ("<title>%s (GSA %s)</title>",
-                                  title,
-                                  GSAD_VERSION);
+      xmltitle =
+        g_strdup_printf ("<title>%s (GSA %s)</title>", title, GSAD_VERSION);
     }
 
   if (credentials)
@@ -1055,24 +1032,19 @@ gsad_message (credentials_t *credentials, const char *title,
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
-      pre = g_markup_printf_escaped
-              ("<envelope>"
-               "<version>%s</version>"
-               "<vendor_version>%s</vendor_version>"
-               "<token>%s</token>"
-               "<time>%s</time>"
-               "<login>%s</login>"
-               "<role>%s</role>"
-               "<i18n>%s</i18n>"
-               "<client_address>%s</client_address>",
-               GSAD_VERSION,
-               vendor_version_get (),
-               user_get_token (user),
-               ctime_now,
-               user_get_username (user),
-               user_get_role (user),
-               credentials_get_language (credentials),
-               user_get_client_address (user));
+      pre = g_markup_printf_escaped (
+        "<envelope>"
+        "<version>%s</version>"
+        "<vendor_version>%s</vendor_version>"
+        "<token>%s</token>"
+        "<time>%s</time>"
+        "<login>%s</login>"
+        "<role>%s</role>"
+        "<i18n>%s</i18n>"
+        "<client_address>%s</client_address>",
+        GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
+        user_get_username (user), user_get_role (user),
+        credentials_get_language (credentials), user_get_client_address (user));
 
       xml = g_strdup_printf ("%s"
                              "<gsad_response>"
@@ -1081,34 +1053,28 @@ gsad_message (credentials_t *credentials, const char *title,
                              "</gsad_response>"
                              "<capabilities>%s</capabilities>"
                              "</envelope>",
-                             pre,
-                             xmltitle,
-                             msg,
-                             user_get_capabilities (user));
+                             pre, xmltitle, msg, user_get_capabilities (user));
 
       g_free (pre);
     }
   else
     {
-      xml = g_strdup_printf ("<envelope>"
-                             "<version>%s</version>"
-                             "<vendor_version>%s</vendor_version>"
-                             "<gsad_response>"
-                             "%s"
-                             "<message>%s</message>"
-                             "<token></token>"
-                             "</gsad_response>"
-                             "</envelope>",
-                             GSAD_VERSION,
-                             vendor_version_get (),
-                             xmltitle,
-                             msg);
+      xml =
+        g_strdup_printf ("<envelope>"
+                         "<version>%s</version>"
+                         "<vendor_version>%s</vendor_version>"
+                         "<gsad_response>"
+                         "%s"
+                         "<message>%s</message>"
+                         "<token></token>"
+                         "</gsad_response>"
+                         "</envelope>",
+                         GSAD_VERSION, vendor_version_get (), xmltitle, msg);
     }
 
   g_free (xmltitle);
 
-  cmd_response_data_set_content_type (response_data,
-                                      GSAD_CONTENT_TYPE_APP_XML);
+  cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
   cmd_response_data_set_content_length (response_data, strlen (xml));
 
   return xml;

@@ -23,12 +23,12 @@
  */
 
 #include "gsad_base.h"
+
 #include "gsad_params.h"
 
 #include <glib.h>
-
 #include <libxml/parser.h> /* for xmlHasFeature() */
-#include <string.h> /* for strlen() */
+#include <string.h>        /* for strlen() */
 #include <sys/param.h>
 #ifndef __FreeBSD__
 #include <malloc.h>
@@ -107,18 +107,13 @@ set_http_only (int state)
  *
  * @return Return from ctime_r applied to time, with newline stripped off.
  */
-char*
+char *
 ctime_r_strip_newline (time_t *time, char *string)
 {
   struct tm *tm;
 
   tm = localtime (time);
-  if (tm == NULL
-      || (strftime (string,
-                    199,
-                    "%c %Z",
-                    tm)
-          == 0))
+  if (tm == NULL || (strftime (string, 199, "%c %Z", tm) == 0))
     {
       string[0] = '\0';
       return string;
@@ -126,7 +121,6 @@ ctime_r_strip_newline (time_t *time, char *string)
   return string;
 }
 
-
 /* Params. */
 
 /**
@@ -137,10 +131,10 @@ ctime_r_strip_newline (time_t *time, char *string)
 static void
 param_free (gpointer param)
 {
-  g_free (((param_t*) param)->value);
-  g_free (((param_t*) param)->original_value);
-  g_free (((param_t*) param)->filename);
-  params_free (((param_t*)param)->values);
+  g_free (((param_t *) param)->value);
+  g_free (((param_t *) param)->original_value);
+  g_free (((param_t *) param)->filename);
+  params_free (((param_t *) param)->values);
   g_free (param);
 }
 
@@ -376,14 +370,11 @@ params_append_bin (params_t *params, const char *name, const char *chunk_data,
       return param;
     }
 
-  new_value = realloc (param->value,
-                       param->value_size + chunk_size + 1);
+  new_value = realloc (param->value, param->value_size + chunk_size + 1);
   if (new_value == NULL)
     return NULL;
   param->value = new_value;
-  memcpy (param->value + chunk_offset,
-          chunk_data,
-          chunk_size);
+  memcpy (param->value + chunk_offset, chunk_data, chunk_size);
   param->value[chunk_offset + chunk_size] = '\0';
   param->value_size += chunk_size;
 
@@ -400,8 +391,8 @@ params_append_bin (params_t *params, const char *name, const char *chunk_data,
  * @return TRUE if there was a next element, else FALSE.
  */
 gboolean
-params_iterator_next (params_iterator_t *iterator, char **name,
-                      param_t **param)
+params_iterator_next (params_iterator_t *iterator, char **name, param_t **param)
 {
-  return g_hash_table_iter_next (iterator, (gpointer*) name, (gpointer*) param);
+  return g_hash_table_iter_next (iterator, (gpointer *) name,
+                                 (gpointer *) param);
 }

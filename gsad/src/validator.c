@@ -29,9 +29,9 @@
  * given string matches a given rule.
  */
 
-#include <assert.h>
-
 #include "validator.h"
+
+#include <assert.h>
 
 #undef G_LOG_DOMAIN
 /**
@@ -101,9 +101,7 @@ gvm_validator_rule_free (validator_rule_t *rule)
 validator_t
 gvm_validator_new ()
 {
-  return g_hash_table_new_full (g_str_hash,
-                                g_str_equal,
-                                g_free,
+  return g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                 (void (*) (gpointer)) gvm_validator_rule_free);
 }
 
@@ -115,12 +113,9 @@ gvm_validator_new ()
  * @param  regex      Validation rule as a regular expression.
  */
 void
-gvm_validator_add (validator_t validator,
-                   const char *name,
-                   const char *regex)
+gvm_validator_add (validator_t validator, const char *name, const char *regex)
 {
-  g_hash_table_insert (validator,
-                       (gpointer) g_strdup (name),
+  g_hash_table_insert (validator, (gpointer) g_strdup (name),
                        (gpointer) gvm_validator_rule_new (regex));
 }
 
@@ -131,11 +126,9 @@ gvm_validator_add (validator_t validator,
  * @param  name       Name of the rule.
  */
 void
-gvm_validator_add_binary (validator_t validator,
-                          const char *name)
+gvm_validator_add_binary (validator_t validator, const char *name)
 {
-  g_hash_table_insert (validator,
-                       (gpointer) g_strdup (name),
+  g_hash_table_insert (validator, (gpointer) g_strdup (name),
                        (gpointer) gvm_validator_rule_new_binary ());
 }
 
@@ -149,22 +142,17 @@ gvm_validator_add_binary (validator_t validator,
  * @return 0 success, -1 error.
  */
 int
-gvm_validator_alias (validator_t validator,
-                     const char *alias,
-                     const char *name)
+gvm_validator_alias (validator_t validator, const char *alias, const char *name)
 {
   gpointer key, value_rule;
 
   if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
       validator_rule_t *alias_rule, *rule;
-      rule = (validator_rule_t*) value_rule;
-      alias_rule = gvm_validator_rule_new (rule->regex
-                                           ? rule->regex
-                                           : NULL);
+      rule = (validator_rule_t *) value_rule;
+      alias_rule = gvm_validator_rule_new (rule->regex ? rule->regex : NULL);
       alias_rule->alias_for = g_strdup (name);
-      g_hash_table_insert (validator,
-                           (gpointer) g_strdup (alias),
+      g_hash_table_insert (validator, (gpointer) g_strdup (alias),
                            (gpointer) alias_rule);
       return 0;
     }
@@ -189,7 +177,7 @@ gvm_validator_alias_for (validator_t validator, const char *alias)
     {
       validator_rule_t *rule;
       assert (value_rule);
-      rule = (validator_rule_t*) value_rule;
+      rule = (validator_rule_t *) value_rule;
       return rule->alias_for;
     }
   return NULL;
@@ -224,7 +212,7 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 
       assert (value_rule);
 
-      rule = (validator_rule_t*) value_rule;
+      rule = (validator_rule_t *) value_rule;
 
       if (rule->is_binary)
         {
@@ -256,10 +244,7 @@ gvm_validate (validator_t validator, const char *name, const char *value)
         }
 
       g_debug ("matching <%s> against <%s>: ", (char *) rule->regex, value);
-      if (g_regex_match_simple (rule->regex,
-                                (const gchar *) value,
-                                0,
-                                0))
+      if (g_regex_match_simple (rule->regex, (const gchar *) value, 0, 0))
         {
           g_debug ("%s: matched", __FUNCTION__);
           return 0;
@@ -280,5 +265,6 @@ gvm_validate (validator_t validator, const char *name, const char *value)
 void
 gvm_validator_free (validator_t validator)
 {
-  if (validator) g_hash_table_destroy (validator);
+  if (validator)
+    g_hash_table_destroy (validator);
 }

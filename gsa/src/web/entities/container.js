@@ -624,7 +624,6 @@ class EntitiesContainer extends React.Component {
           selectionType: selectionType,
           sortBy,
           sortDir,
-          updating: isUpdating, // TODO remove after list pages are converted to use isUpdating
           onChanged: this.handleChanged,
           onDeleteBulk: this.handleDeleteBulk,
           onDownloadBulk: this.handleDownloadBulk,

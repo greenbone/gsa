@@ -52,41 +52,57 @@ struct param
  */
 typedef struct param param_t;
 
-params_t *params_new ();
+params_t *
+params_new ();
 
-void params_free (params_t *);
+void
+params_free (params_t *);
 
-int params_given (params_t *, const char *);
+int
+params_given (params_t *, const char *);
 
-const char *params_value (params_t *, const char *);
+const char *
+params_value (params_t *, const char *);
 
-int params_value_size (params_t *, const char *);
+int
+params_value_size (params_t *, const char *);
 
-gboolean params_value_bool (params_t *, const char *);
+gboolean
+params_value_bool (params_t *, const char *);
 
-const char *params_original_value (params_t *, const char *);
+const char *
+params_original_value (params_t *, const char *);
 
-const char *params_filename (params_t *, const char *);
+const char *
+params_filename (params_t *, const char *);
 
-params_t *params_values (params_t *, const char *);
+params_t *
+params_values (params_t *, const char *);
 
-param_t *params_get (params_t *, const char *);
+param_t *
+params_get (params_t *, const char *);
 
-int params_valid (params_t *, const char *);
+int
+params_valid (params_t *, const char *);
 
-param_t *params_add (params_t *, const char *, const char *);
+param_t *
+params_add (params_t *, const char *, const char *);
 
-param_t *params_append_bin (params_t *, const char *, const char *, int, int);
+param_t *
+params_append_bin (params_t *, const char *, const char *, int, int);
 
 #define params_iterator_t GHashTableIter
 
 #define params_iterator_init g_hash_table_iter_init
 
-gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
+gboolean
+params_iterator_next (params_iterator_t *, char **, param_t **);
 
-int params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
-                    const char *value);
+int
+params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
+                const char *value);
 
-void params_mhd_validate (void *params);
+void
+params_mhd_validate (void *params);
 
 #endif /* _GSAD_PARAMS_H */
