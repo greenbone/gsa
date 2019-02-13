@@ -36,6 +36,7 @@ import DownloadIcon from 'web/components/icon/downloadicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import PerformanceIcon from 'web/components/icon/performanceicon';
 import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
@@ -187,6 +188,21 @@ const ToolBarIcons = ({
             >
               <VulnerabilityIcon/>
             </Link>
+            {isDefined(task) && !task.isContainer() &&
+              <Link
+                to="performance"
+                query={{
+                  start: isDefined(report.scan_start) ?
+                    report.scan_start.toISOString() : undefined,
+                  end: isDefined(report.scan_end) ?
+                    report.scan_end.toISOString() : undefined,
+                  sensor: isDefined(report.slave) ?
+                    report.slave.id : undefined,
+                }}
+              >
+                <PerformanceIcon/>
+              </Link>
+            }
           </IconDivider>
           <IconDivider>
             <DownloadIcon
