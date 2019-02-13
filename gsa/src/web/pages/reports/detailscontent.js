@@ -196,7 +196,7 @@ const ToolBarIcons = ({
                     report.scan_start.toISOString() : undefined,
                   end: isDefined(report.scan_end) ?
                     report.scan_end.toISOString() : undefined,
-                  sensor: isDefined(report.slave) ?
+                  scanner: isDefined(report.slave) ?
                     report.slave.id : undefined,
                 }}
               >

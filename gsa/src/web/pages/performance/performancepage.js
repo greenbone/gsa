@@ -130,7 +130,7 @@ const ReportImage = withGmp(({
   gmp,
   name,
   duration,
-  slaveId,
+  scannerId,
   endDate,
   endHour,
   endMinute,
@@ -139,7 +139,7 @@ const ReportImage = withGmp(({
   startMinute,
 }) => {
   const params = {
-    slaveId,
+    slaveId: scannerId,
     token: gmp.settings.token,
   };
 
@@ -173,7 +173,7 @@ ReportImage.propTypes = {
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
   name: PropTypes.string.isRequired,
-  slaveId: PropTypes.idOrZero.isRequired,
+  scannerId: PropTypes.idOrZero.isRequired,
   startDate: PropTypes.date,
   startHour: PropTypes.number,
   startMinute: PropTypes.number,
@@ -206,7 +206,7 @@ class PerformancePage extends React.Component {
     this.state = {
       reports: [],
       duration: 'day',
-      slave_id: 0,
+      scannerId: 0,
       start_date: start,
       start_hour: start.hour(),
       start_minute: start.minute(),
@@ -222,7 +222,7 @@ class PerformancePage extends React.Component {
   }
 
   componentDidMount() {
-    const {start, end, sensor} = this.props.location.query;
+    const {start, end, scanner} = this.props.location.query;
     const {gmp} = this.props;
 
     gmp.performance.get().then(response => {
@@ -246,9 +246,9 @@ class PerformancePage extends React.Component {
       });
     }
 
-    if (isDefined(sensor)) {
+    if (isDefined(scanner)) {
       this.setState({
-        slave_id: sensor,
+        scannerId: scanner,
       });
     }
   }
@@ -299,7 +299,7 @@ class PerformancePage extends React.Component {
     const {
       duration,
       reports,
-      slave_id,
+      scannerId,
       start_date,
       start_hour,
       start_minute,
@@ -307,7 +307,7 @@ class PerformancePage extends React.Component {
       end_hour,
       end_minute,
     } = this.state;
-    const sensorId = selectSaveId(scanners, slave_id, 0);
+    const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
       <Layout
         flex="column"
@@ -369,7 +369,7 @@ class PerformancePage extends React.Component {
 
           <FormGroup title={_('Report for GMP Scanner')}>
             <Select
-              name="slave_id"
+              name="scannerId"
               value={sensorId}
               items={renderSelectItems(scanners, 0)}
               onChange={this.handleValueChange}
@@ -383,7 +383,7 @@ class PerformancePage extends React.Component {
               <ReportImage
                 name={report.name}
                 duration={duration}
-                slaveId={sensorId}
+                scannerId={sensorId}
                 startDate={start_date}
                 startHour={start_hour}
                 startMinute={start_minute}
