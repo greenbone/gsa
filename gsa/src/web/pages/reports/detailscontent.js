@@ -36,6 +36,7 @@ import DownloadIcon from 'web/components/icon/downloadicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
 import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
+import PerformanceIcon from 'web/components/icon/performanceicon';
 import RemoveFromAssetsIcon from 'web/components/icon/removefromassetsicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
@@ -130,6 +131,7 @@ const ToolBarIcons = ({
   filter,
   loading,
   report,
+  task,
   onAddToAssetsClick,
   onRemoveFromAssetsClick,
   onReportDownloadClick,
@@ -138,8 +140,6 @@ const ToolBarIcons = ({
   showSuccessMessage,
   onInteraction,
 }) => {
-  const {task = {}} = report;
-  const {id: task_id = ''} = task;
   return (
     <Divider margin="15px">
       <IconDivider>
@@ -168,7 +168,8 @@ const ToolBarIcons = ({
           <IconDivider>
             <DetailsLink
               type="task"
-              id={task_id}
+              textOnly={!isDefined(task)}
+              id={isDefined(task) ? task.id : ''}
               title={_('Corresponding Task')}
             >
               <TaskIcon />
@@ -187,6 +188,21 @@ const ToolBarIcons = ({
             >
               <VulnerabilityIcon/>
             </Link>
+            {isDefined(task) && !task.isContainer() &&
+              <Link
+                to="performance"
+                query={{
+                  start: isDefined(report.scan_start) ?
+                    report.scan_start.toISOString() : undefined,
+                  end: isDefined(report.scan_end) ?
+                    report.scan_end.toISOString() : undefined,
+                  scanner: isDefined(report.slave) ?
+                    report.slave.id : undefined,
+                }}
+              >
+                <PerformanceIcon/>
+              </Link>
+            }
           </IconDivider>
           <IconDivider>
             <DownloadIcon
@@ -218,6 +234,7 @@ ToolBarIcons.propTypes = {
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
+  task: PropTypes.model,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
@@ -235,6 +252,7 @@ const PageContent = ({
   showError,
   showErrorMessage,
   showSuccessMessage,
+  task,
   onActivateTab,
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
@@ -272,7 +290,6 @@ const PageContent = ({
     ports,
     results,
     result_count = {},
-    task = {},
     tls_certificates,
     timestamp,
     scan_run_status,
@@ -283,8 +300,9 @@ const PageContent = ({
   const delta = isDefined(report.isDeltaReport) ?
     report.isDeltaReport() : undefined;
 
-  const isContainer = isDefined(task.isContainer) && task.isContainer();
+  const isContainer = isDefined(task) && task.isContainer();
   const status = isContainer ? TASK_STATUS.container : scan_run_status;
+  const progress = isDefined(task) ? task.progress : 0;
 
   const header_title = (
     <Divider>
@@ -302,7 +320,7 @@ const PageContent = ({
           <Span>
             <StatusBar
               status={status}
-              progress={task.progress}
+              progress={progress}
             />
           </Span>
         </Divider>
@@ -341,6 +359,7 @@ const PageContent = ({
           showError={showError}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
+          task={task}
           onAddToAssetsClick={onAddToAssetsClick}
           onInteraction={onInteraction}
           onRemoveFromAssetsClick={onRemoveFromAssetsClick}
@@ -474,7 +493,7 @@ const PageContent = ({
                       filter={filter}
                       hasTarget={!isContainer}
                       isUpdating={isUpdating}
-                      progress={task.progress}
+                      progress={progress}
                       results={isDefined(results) ? results.entities : {}}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
@@ -826,6 +845,7 @@ PageContent.propTypes = {
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
   sorting: PropTypes.object,
+  task: PropTypes.model,
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
