@@ -98,7 +98,6 @@ const getFilter = (entity = {}) => {
 };
 
 class ReportDetails extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -152,35 +151,41 @@ class ReportDetails extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.handleFilterAddLogLevel = this.handleFilterAddLogLevel.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleFilterDecreaseMinQoD =
-      this.handleFilterDecreaseMinQoD.bind(this);
+    this.handleFilterDecreaseMinQoD = this.handleFilterDecreaseMinQoD.bind(
+      this,
+    );
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterRemoveSeverity =
-      this.handleFilterRemoveSeverity.bind(this);
+    this.handleFilterRemoveSeverity = this.handleFilterRemoveSeverity.bind(
+      this,
+    );
     this.handleFilterRemoveClick = this.handleFilterRemoveClick.bind(this);
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
     this.handleTimer = this.handleTimer.bind(this);
-    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload
-      .bind(this);
+    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
+      this,
+    );
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
-    this.handleOpenDownloadReportDialog =
-      this.handleOpenDownloadReportDialog.bind(this);
-    this.handleCloseDownloadReportDialog =
-      this.handleCloseDownloadReportDialog.bind(this);
+    this.handleOpenDownloadReportDialog = this.handleOpenDownloadReportDialog.bind(
+      this,
+    );
+    this.handleCloseDownloadReportDialog = this.handleCloseDownloadReportDialog.bind(
+      this,
+    );
   }
 
   componentDidMount() {
     this.isRunning = true;
     const {filter: filterString} = this.props.location.query;
 
-    const filter = isDefined(filterString) ?
-      Filter.fromString(filterString) : undefined;
+    const filter = isDefined(filterString)
+      ? Filter.fromString(filterString)
+      : undefined;
 
     this.load(filter);
     this.props.loadFilters();
@@ -201,8 +206,10 @@ class ReportDetails extends React.Component {
       this.setState({reportFormatId: first(reportFormats).id});
     }
 
-    if (this.state.reportId !== this.props.reportId ||
-      this.state.deltaReportId !== this.props.deltaReportId) {
+    if (
+      this.state.reportId !== this.props.reportId ||
+      this.state.deltaReportId !== this.props.deltaReportId
+    ) {
       this.load();
     }
   }
@@ -243,11 +250,10 @@ class ReportDetails extends React.Component {
       lastFilter: filter,
     }));
 
-    this.props.loadReport(reportId, deltaReportId, filter)
-      .then(() => {
-        this.startTimer();
-        this.setState({isUpdating: false});
-      });
+    this.props.loadReport(reportId, deltaReportId, filter).then(() => {
+      this.startTimer();
+      this.setState({isUpdating: false});
+    });
   }
 
   reload() {
@@ -257,9 +263,9 @@ class ReportDetails extends React.Component {
 
   getReloadInterval() {
     const {entity} = this.props;
-    return isActive(entity.report.scan_run_status) ?
-      DEFAULT_RELOAD_INTERVAL_ACTIVE :
-      0; // report doesn't change anymore. no need to reload
+    return isActive(entity.report.scan_run_status)
+      ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : 0; // report doesn't change anymore. no need to reload
   }
 
   startTimer() {
@@ -280,8 +286,13 @@ class ReportDetails extends React.Component {
 
     if (interval > 0) {
       this.timer = global.setTimeout(this.handleTimer, interval);
-      log.debug('Started reload timer with id', this.timer, 'and interval of',
-        interval, 'milliseconds');
+      log.debug(
+        'Started reload timer with id',
+        this.timer,
+        'and interval of',
+        interval,
+        'milliseconds',
+      );
     }
   }
 
@@ -337,7 +348,9 @@ class ReportDetails extends React.Component {
 
     gmp.report.addAssets(entity, {filter}).then(response => {
       showSuccessMessage(
-        _('Report content added to Assets with QoD>=70% and Overrides enabled.')
+        _(
+          'Report content added to Assets with QoD>=70% and Overrides enabled.',
+        ),
       );
     }, this.handleError);
   }
@@ -349,9 +362,7 @@ class ReportDetails extends React.Component {
     this.handleInteraction();
 
     gmp.report.removeAssets(entity, {filter}).then(response => {
-      showSuccessMessage(
-        _('Report content removed from Assets.')
-      );
+      showSuccessMessage(_('Report content removed from Assets.'));
     }, this.handleError);
   }
 
@@ -409,23 +420,27 @@ class ReportDetails extends React.Component {
     }
 
     const report_format = reportFormats.find(
-      format => reportFormatId === format.id);
+      format => reportFormatId === format.id,
+    );
 
-    const extension = isDefined(report_format) ? report_format.extension :
-      'unknown'; // unknown should never happen but we should be save here
+    const extension = isDefined(report_format)
+      ? report_format.extension
+      : 'unknown'; // unknown should never happen but we should be save here
 
     this.handleInteraction();
 
-    gmp.report.download(entity, {
-      reportFormatId,
-      deltaReportId,
-      filter: newFilter,
-    }).then(response => {
-      this.setState({showDownloadReportDialog: false});
-      const {data} = response;
-      const filename = 'report-' + entity.id + '.' + extension;
-      onDownload({filename, data});
-    }, this.handleError);
+    gmp.report
+      .download(entity, {
+        reportFormatId,
+        deltaReportId,
+        filter: newFilter,
+      })
+      .then(response => {
+        this.setState({showDownloadReportDialog: false});
+        const {data} = response;
+        const filename = 'report-' + entity.id + '.' + extension;
+        onDownload({filename, data});
+      }, this.handleError);
   }
 
   handleTlsCertificateDownload(cert) {
@@ -491,8 +506,8 @@ class ReportDetails extends React.Component {
 
     const prev = this.state.sorting[name];
 
-    const sortReverse = sortField === prev.sortField ?
-      !prev.sortReverse : false;
+    const sortReverse =
+      sortField === prev.sortField ? !prev.sortReverse : false;
 
     this.setState({
       sorting: {
@@ -557,6 +572,7 @@ class ReportDetails extends React.Component {
               isLoading={isLoading}
               isUpdating={isUpdating}
               sorting={sorting}
+              task={isDefined(report) ? report.task : undefined}
               onActivateTab={this.handleActivateTab}
               onAddToAssetsClick={this.handleAddToAssets}
               onError={this.handleError}
@@ -573,8 +589,9 @@ class ReportDetails extends React.Component {
               onReportDownloadClick={this.handleOpenDownloadReportDialog}
               onSortChange={this.handleSortChange}
               onTagSuccess={this.handleChanged}
-              onTargetEditClick={() => this.loadTarget()
-                .then(response => edit(response.data))}
+              onTargetEditClick={() =>
+                this.loadTarget().then(response => edit(response.data))
+              }
               onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
               showError={showError}
               showErrorMessage={showErrorMessage}
@@ -582,15 +599,15 @@ class ReportDetails extends React.Component {
             />
           )}
         </TargetComponent>
-        {showFilterDialog &&
+        {showFilterDialog && (
           <FilterDialog
             filter={filter}
             delta={isDefined(report) && report.isDeltaReport()}
             onFilterChanged={this.handleFilterChange}
             onCloseClick={this.handleFilterDialogClose}
           />
-        }
-        {showDownloadReportDialog &&
+        )}
+        {showDownloadReportDialog && (
           <DownloadReportDialog
             defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
             filter={filter}
@@ -601,7 +618,7 @@ class ReportDetails extends React.Component {
             onClose={this.handleCloseDownloadReportDialog}
             onSave={this.handleReportDownload}
           />
-        }
+        )}
       </React.Fragment>
     );
   }
@@ -638,13 +655,16 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
     loadTarget: targetId => gmp.target.get({id: targetId}),
-    loadReportFormats: () => dispatch(
-      loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-    loadReport: (id, deltaId, filter) => dispatch(isDefined(deltaId) ?
-      loadDeltaReport(gmp)(id, deltaId, filter) :
-      loadReport(gmp)(id, filter)),
-    loadReportComposerDefaults: () => dispatch(
-      loadReportComposerDefaults(gmp)()),
+    loadReportFormats: () =>
+      dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
+    loadReport: (id, deltaId, filter) =>
+      dispatch(
+        isDefined(deltaId)
+          ? loadDeltaReport(gmp)(id, deltaId, filter)
+          : loadReport(gmp)(id, filter),
+      ),
+    loadReportComposerDefaults: () =>
+      dispatch(loadReportComposerDefaults(gmp)()),
     saveReportComposerDefaults: reportComposerDefaults =>
       dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   };
@@ -657,8 +677,9 @@ const mapStateToProps = (rootState, {match}) => {
   const deltaSel = deltaSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
 
-  const entity = isDefined(deltaid) ? deltaSel.getEntity(id, deltaid) :
-    reportSel.getEntity(id);
+  const entity = isDefined(deltaid)
+    ? deltaSel.getEntity(id, deltaid)
+    : reportSel.getEntity(id);
   return {
     entity,
     filter: getFilter(entity),
@@ -676,7 +697,10 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(ReportDetails);
 
 // vim: set ts=2 sw=2 tw=80:

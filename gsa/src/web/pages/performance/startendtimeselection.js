@@ -31,17 +31,25 @@ import Divider from '../../components/layout/divider.js';
 import Layout from '../../components/layout/layout.js';
 
 class StartTimeSelection extends React.Component {
-
   constructor(...args) {
     super(...args);
 
+    const {
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
+    } = this.props;
+
     this.state = {
-      start_date: this.props.startDate,
-      start_hour: this.props.startHour,
-      start_minute: this.props.startMinute,
-      end_date: this.props.endDate,
-      end_hour: this.props.endHour,
-      end_minute: this.props.endMinute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     };
 
     this.handleValueChange = this.handleValueChange.bind(this);
@@ -50,33 +58,33 @@ class StartTimeSelection extends React.Component {
 
   componentWillReceiveProps(next) {
     const {
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     } = this.state;
 
     const state = {};
 
-    if (!start_date.isSame(next.startDate)) {
-      state.start_date = next.startDate;
+    if (!startDate.isSame(next.startDate)) {
+      state.startDate = next.startDate;
     }
-    if (start_hour !== next.startHour) {
-      state.start_hour = next.startHour;
+    if (startHour !== next.startHour) {
+      state.startHour = next.startHour;
     }
-    if (start_minute !== next.startMinute) {
-      state.start_minute = next.startMinute;
+    if (startMinute !== next.startMinute) {
+      state.startMinute = next.startMinute;
     }
-    if (!end_date.isSame(next.endDate)) {
-      state.end_date = next.endDate;
+    if (!endDate.isSame(next.endDate)) {
+      state.endDate = next.endDate;
     }
-    if (end_hour !== next.endHour) {
-      state.end_hour = next.endHour;
+    if (endHour !== next.endHour) {
+      state.endHour = next.endHour;
     }
-    if (end_minute !== next.endMinute) {
-      state.end_minute = next.endMinute;
+    if (endMinute !== next.endMinute) {
+      state.endMinute = next.endMinute;
     }
 
     this.setState(state);
@@ -89,60 +97,62 @@ class StartTimeSelection extends React.Component {
   handleUpdate() {
     const {onChanged} = this.props;
     const {
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     } = this.state;
 
     onChanged({
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     });
   }
 
   render() {
     const {
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     } = this.state;
     return (
       <Layout flex="column">
         <FormGroup title={_('Start Time')}>
           <Divider flex="column">
             <Datepicker
-              value={start_date}
-              name="start_date"
+              value={startDate}
+              name="startDate"
               minDate={false}
               onChange={this.handleValueChange}
             />
             <Divider margin="20px">
               <Spinner
-                name="start_hour"
-                value={start_hour}
+                name="startHour"
+                value={startHour}
                 min="0"
                 max="23"
                 type="int"
                 onChange={this.handleValueChange}
-              /> h
+              />{' '}
+              h
               <Spinner
-                name="start_minute"
-                value={start_minute}
+                name="startMinute"
+                value={startMinute}
                 min="0"
                 max="59"
                 type="int"
                 onChange={this.handleValueChange}
-              /> m
+              />{' '}
+              m
             </Divider>
           </Divider>
         </FormGroup>
@@ -150,36 +160,36 @@ class StartTimeSelection extends React.Component {
         <FormGroup title={_('End Time')}>
           <Divider flex="column">
             <Datepicker
-              value={end_date}
-              name="end_date"
+              value={endDate}
+              name="endDate"
               minDate={false}
               onChange={this.handleValueChange}
             />
             <Divider margin="20px">
               <Spinner
-                name="end_hour"
-                value={end_hour}
+                name="endHour"
+                value={endHour}
                 min="0"
                 max="23"
                 type="int"
                 onChange={this.handleValueChange}
-              /> h
+              />{' '}
+              h
               <Spinner
-                name="end_minute"
-                value={end_minute}
+                name="endMinute"
+                value={endMinute}
                 min="0"
                 max="59"
                 type="int"
                 onChange={this.handleValueChange}
-              /> m
+              />{' '}
+              m
             </Divider>
           </Divider>
         </FormGroup>
 
         <FormGroup offset="4">
-          <Button onClick={this.handleUpdate}>
-            {_('Update')}
-          </Button>
+          <Button onClick={this.handleUpdate}>{_('Update')}</Button>
         </FormGroup>
       </Layout>
     );

@@ -31,10 +31,7 @@ import PropTypes from '../../utils/proptypes.js';
 RLink.displayName = 'RouterLink';
 
 export const withTextOnly = Component => {
-  const TextOnly = ({
-    textOnly = false,
-    ...props
-  }) => {
+  const TextOnly = ({textOnly = false, ...props}) => {
     if (textOnly) {
       const {className, children, style, title} = props;
       return (
@@ -49,7 +46,7 @@ export const withTextOnly = Component => {
       );
     }
 
-    return <Component {...props}/>;
+    return <Component {...props} />;
   };
 
   TextOnly.propTypes = {
@@ -62,20 +59,12 @@ export const withTextOnly = Component => {
   return TextOnly;
 };
 
-let Link = ({
-  anchor,
-  to,
-  filter,
-  query,
-  ...other
-}) => {
-
+let Link = ({anchor, to = '', filter, query, ...other}) => {
   let pathname = '';
 
   if (to.startsWith('/')) {
     pathname += to;
-  }
-  else {
+  } else {
     pathname += '/' + to;
   }
 
@@ -86,18 +75,14 @@ let Link = ({
   };
 
   if (isDefined(filter)) {
-    location.query.filter = isString(filter) ?
-      filter : filter.toFilterString();
+    location.query.filter = isString(filter) ? filter : filter.toFilterString();
   }
-  return <RLink {...other} to={location}/>;
+  return <RLink {...other} to={location} />;
 };
 
 Link.propTypes = {
   anchor: PropTypes.string,
-  filter: PropTypes.oneOfType([
-    PropTypes.filter,
-    PropTypes.string,
-  ]),
+  filter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
   query: PropTypes.object,
   to: PropTypes.string.isRequired,
 };
