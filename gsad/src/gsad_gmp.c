@@ -10490,7 +10490,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   entity_t report_entity;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *alert_id, *search_phrase, *min_qod, *zone;
+  const char *search_phrase, *min_qod, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *apply_overrides;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
@@ -10500,7 +10500,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   int ret;
   int ignore_filter, ignore_pagination;
   gchar *built_filter;
-  gchar *fname_format, *esc_response;
+  gchar *fname_format;
   const gchar *extension, *requested_content_type;
 
   build_filter = params_value (params, "build_filter");
@@ -10537,10 +10537,6 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
          && strcmp (report_section, "results")
          && strcmp (report_section, "summary"));
     }
-
-  alert_id = params_value (params, "alert_id");
-  if (alert_id == NULL)
-    params_given (params, "alert_id") || (alert_id = "0");
 
   search_phrase = params_value (params, "search_phrase");
   if (search_phrase == NULL)
@@ -10678,94 +10674,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
 
-  if (report_id == NULL)
-    return get_reports (connection, credentials, params, extra_xml,
-                        response_data);
-
-  if (strcmp (alert_id, "0"))
-    {
-      const char *status, *esc_filter;
-
-      esc_filter = params_value (params, "esc_filter");
-      if (esc_filter == NULL)
-        params_given (params, "esc_filter")
-          || (esc_filter = "first=1 rows=-1"
-                           "  result_hosts_only=0"
-                           "  apply_overrides=1"
-                           "  notes=1 overrides=1"
-                           "  sort-reverse=severity");
-
-      if (ignore_filter)
-        ret = gvm_connection_sendf_xml (connection,
-                                        "<get_reports"
-                                        " report_id=\"%s\""
-                                        " filter=\"first=1 rows=-1"
-                                        "  result_hosts_only=0"
-                                        "  apply_overrides=1"
-                                        "  notes=1 overrides=1"
-                                        "  sort-reverse=severity\""
-                                        " alert_id=\"%s\"/>",
-                                        report_id, alert_id);
-      else
-        ret = gvm_connection_sendf_xml (connection,
-                                        "<get_reports"
-                                        " report_id=\"%s\""
-                                        " ignore_pagination=\"%d\""
-                                        " filter=\"%s\""
-                                        " alert_id=\"%s\"/>",
-                                        report_id, ignore_pagination,
-                                        esc_filter ? esc_filter : "", alert_id);
-      if (ret == -1)
-        {
-          g_string_free (delta_states, TRUE);
-          g_string_free (levels, TRUE);
-          if (error)
-            *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a report. "
-            "The report could not be delivered. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-
-      if (read_entity_and_text_c (connection, &entity, &esc_response))
-        {
-          g_string_free (delta_states, TRUE);
-          g_string_free (levels, TRUE);
-          if (error)
-            *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a report. "
-            "The report could not be delivered. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-      status = entity_attribute (entity, "status");
-      if ((status == NULL) || (strlen (status) == 0))
-        {
-          free_entity (entity);
-          g_string_free (delta_states, TRUE);
-          if (error)
-            *error = 1;
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __FUNCTION__, __LINE__,
-            "An internal error occurred while getting a report. "
-            "The report could not be delivered. "
-            "Diagnostics: Failure to parse response from manager daemon.",
-            response_data);
-        }
-      free_entity (entity);
-    }
-  else
-    esc_response = NULL;
+  CHECK_VARIABLE_INVALID (report_id, "Get Report");
 
   result_id = params_value (params, "result_id");
   delta_report_id = params_value (params, "delta_report_id");
@@ -10782,6 +10691,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
   if (gvm_connection_sendf (
         connection,
         "<get_reports"
+        " result_tags=\"0\""
         " details=\"%i\""
         "%s%s%s",
         delta_report_id || strcmp (report_section, "summary"),
@@ -11200,17 +11110,7 @@ get_report (gvm_connection_t *connection, credentials_t *credentials,
 
       g_string_free (levels, TRUE);
 
-      if (strcmp (alert_id, "0"))
-        {
-          g_string_append_printf (xml, "<get_reports_alert_response>");
-          if (esc_response)
-            {
-              g_string_append (xml, esc_response);
-              g_free (esc_response);
-            }
-          g_string_append_printf (xml, "</get_reports_alert_response>");
-        }
-      else if (delta_report_id)
+      if (delta_report_id)
         g_string_append_printf (xml,
                                 "<delta>%s</delta>"
                                 "<result id=\"%s\"/>",

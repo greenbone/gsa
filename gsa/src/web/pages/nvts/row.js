@@ -33,6 +33,8 @@ import Link from 'web/components/link/link';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import Qod from 'web/components/qod/qod';
+
 import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
@@ -47,10 +49,7 @@ const Row = ({
 }) => (
   <TableRow>
     <TableData>
-      <RowDetailsToggle
-        name={entity.id}
-        onClick={onToggleDetailsClick}
-      >
+      <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
         {entity.name}
       </RowDetailsToggle>
     </TableData>
@@ -63,38 +62,27 @@ const Row = ({
         {entity.family}
       </Link>
     </TableData>
-    <TableData>
-      {longDate(entity.creationTime)}
-    </TableData>
-    <TableData>
-      {longDate(entity.modificationTime)}
-    </TableData>
+    <TableData>{longDate(entity.creationTime)}</TableData>
+    <TableData>{longDate(entity.modificationTime)}</TableData>
     <TableData>
       <Divider wrap>
         {entity.cves.map(id => (
-          <CveLink
-            key={id}
-            id={id}
-            textOnly={!links}
-          />
+          <CveLink key={id} id={id} textOnly={!links} />
         ))}
       </Divider>
     </TableData>
     <TableData align="center">
-      {entity && entity.tags &&
-        <SolutionTypeIcon type={entity.tags.solution_type}/>
-      }
+      {entity && entity.tags && (
+        <SolutionTypeIcon type={entity.tags.solution_type} />
+      )}
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.severity}/>
+      <SeverityBar severity={entity.severity} />
     </TableData>
     <TableData align="end">
-      {entity.qod && entity.qod.value} %
+      {entity.qod && <Qod value={entity.qod.value} />}
     </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

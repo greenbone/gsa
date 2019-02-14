@@ -24,9 +24,11 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
+import Filter from 'gmp/models/filter';
 import {SLAVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -49,6 +51,10 @@ import MenuEntry from 'web/components/menu/menuentry';
 import Section from 'web/components/section/section';
 
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -71,9 +77,7 @@ const DURATIONS = {
   year: DURATION_YEAR,
 };
 
-const ToolBar = ({
-  onDurationChangeClick,
-}) => {
+const ToolBar = ({onDurationChangeClick}) => {
   return (
     <IconDivider>
       <ManualIcon
@@ -82,10 +86,7 @@ const ToolBar = ({
         size="small"
         title={_('Help: Performance')}
       />
-      <IconMenu
-        icon={<WizardIcon/>}
-        size="small"
-      >
+      <IconMenu icon={<WizardIcon />} size="small">
         <MenuEntry
           title={_('Report for Last Hour')}
           value="hour"
@@ -120,55 +121,50 @@ ToolBar.propTypes = {
   onDurationChangeClick: PropTypes.func.isRequired,
 };
 
-const ReportImage = ({
-  gmp,
-  name,
-  duration,
-  slaveId,
-  endDate,
-  endHour,
-  endMinute,
-  startDate,
-  startHour,
-  startMinute,
-}) => {
-  const params = {
-    slaveId,
-    token: gmp.settings.token,
-  };
+const ReportImage = withGmp(
+  ({
+    gmp,
+    name,
+    duration,
+    scannerId,
+    endDate,
+    endHour,
+    endMinute,
+    startDate,
+    startHour,
+    startMinute,
+  }) => {
+    const params = {
+      slave_id: scannerId,
+      token: gmp.settings.token,
+    };
 
-  if (isDefined(duration)) {
-    params.duration = DURATIONS[duration];
-  }
-  else {
-    params.start_year = startDate.year();
-    params.start_month = startDate.month() + 1; // month is zero indexed
-    params.start_day = startDate.date();
-    params.start_hour = startHour;
-    params.start_minute = startMinute;
-    params.end_year = endDate.year();
-    params.end_month = endDate.month() + 1;
-    params.end_day = endDate.date();
-    params.end_hour = endHour;
-    params.end_minute = endMinute;
-  }
-  const url = gmp.buildUrl('system_report/' + name + '/report.', params);
-  return (
-    <img
-      alt=""
-      src={url}
-    />
-  );
-};
+    if (isDefined(duration)) {
+      params.duration = DURATIONS[duration];
+    } else {
+      params.start_year = startDate.year();
+      params.start_month = startDate.month() + 1; // month is zero indexed
+      params.start_day = startDate.date();
+      params.start_hour = startHour;
+      params.start_minute = startMinute;
+      params.end_year = endDate.year();
+      params.end_month = endDate.month() + 1;
+      params.end_day = endDate.date();
+      params.end_hour = endHour;
+      params.end_minute = endMinute;
+    }
+    const url = gmp.buildUrl('system_report/' + name + '/report.', params);
+    return <img alt="" src={url} />;
+  },
+);
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
   endDate: PropTypes.date,
   endHour: PropTypes.number,
   endMinute: PropTypes.number,
-  gmp: PropTypes.gmp.isRequired,
   name: PropTypes.string.isRequired,
-  slaveId: PropTypes.idOrZero.isRequired,
+  scannerId: PropTypes.idOrZero.isRequired,
   startDate: PropTypes.date,
   startHour: PropTypes.number,
   startMinute: PropTypes.number,
@@ -187,9 +183,9 @@ const Selector = withClickHandler()(styled.span`
   }}
 `);
 
+const SLAVE_SCANNER_FILTER = Filter.fromString('type=' + SLAVE_SCANNER_TYPE);
 
 class PerformancePage extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -199,13 +195,13 @@ class PerformancePage extends React.Component {
     this.state = {
       reports: [],
       duration: 'day',
-      slave_id: 0,
-      start_date: start,
-      start_hour: start.hour(),
-      start_minute: start.minute(),
-      end_date: end,
-      end_hour: end.hour(),
-      end_minute: end.minute(),
+      scannerId: 0,
+      startDate: start,
+      startHour: start.hour(),
+      startMinute: start.minute(),
+      endDate: end,
+      endHour: end.hour(),
+      endMinute: end.minute(),
       scanners: [],
     };
 
@@ -215,16 +211,35 @@ class PerformancePage extends React.Component {
   }
 
   componentDidMount() {
+    const {start, end, scanner} = this.props.location.query;
     const {gmp} = this.props;
 
     gmp.performance.get().then(response => {
       this.setState({reports: response.data});
     });
 
-    gmp.scanners.getAll({filter: 'type=' + SLAVE_SCANNER_TYPE})
-      .then(response => {
-        this.setState({scanners: response.data});
+    this.props.loadScanners();
+
+    if (isDefined(start) && isDefined(end)) {
+      const startDate = date(start);
+      const endDate = date(end);
+
+      this.setState({
+        duration: undefined,
+        endDate: endDate,
+        endHour: endDate.hour(),
+        endMinute: endDate.minute(),
+        startDate: startDate,
+        startHour: startDate.hour(),
+        startMinute: startDate.minute(),
       });
+    }
+
+    if (isDefined(scanner)) {
+      this.setState({
+        scannerId: scanner,
+      });
+    }
   }
 
   handleDurationChange(duration) {
@@ -234,12 +249,12 @@ class PerformancePage extends React.Component {
 
       this.setState({
         duration,
-        start_date: start,
-        start_hour: start.hour(),
-        start_minute: start.minute(),
-        end_date: end,
-        end_hour: end.hour(),
-        end_minute: end.minute(),
+        startDate: start,
+        startHour: start.hour(),
+        startMinute: start.minute(),
+        endDate: end,
+        endHour: end.hour(),
+        endMinute: end.minute(),
       });
 
       this.handleInteraction();
@@ -267,35 +282,33 @@ class PerformancePage extends React.Component {
   }
 
   render() {
+    const {scanners = []} = this.props;
     const {
       duration,
       reports,
-      slave_id,
-      start_date,
-      start_hour,
-      start_minute,
-      end_date,
-      end_hour,
-      end_minute,
-      scanners,
+      scannerId,
+      startDate,
+      startHour,
+      startMinute,
+      endDate,
+      endHour,
+      endMinute,
     } = this.state;
-    const {gmp} = this.props;
+    const sensorId = selectSaveId(scanners, scannerId, 0);
     return (
-      <Layout
-        flex="column"
-      >
+      <Layout flex="column">
         <ToolBar onDurationChangeClick={this.handleDurationChange} />
         <Section
-          img={<PerformanceIcon size="large"/>}
+          img={<PerformanceIcon size="large" />}
           title={_('Performance')}
         >
           <StartEndTimeSelection
-            startDate={start_date}
-            startHour={start_hour}
-            startMinute={start_minute}
-            endDate={end_date}
-            endMinute={end_minute}
-            endHour={end_hour}
+            startDate={startDate}
+            startHour={startHour}
+            startMinute={startMinute}
+            endDate={endDate}
+            endMinute={endMinute}
+            endHour={endHour}
             onChanged={this.handleStartEndChange}
           />
 
@@ -341,8 +354,8 @@ class PerformancePage extends React.Component {
 
           <FormGroup title={_('Report for GMP Scanner')}>
             <Select
-              name="slave_id"
-              value={slave_id}
+              name="scannerId"
+              value={sensorId}
               items={renderSelectItems(scanners, 0)}
               onChange={this.handleValueChange}
             />
@@ -350,19 +363,18 @@ class PerformancePage extends React.Component {
 
           {reports.map(report => (
             <div key={report.name}>
-              <LinkTarget id={report.name}/>
+              <LinkTarget id={report.name} />
               <h2>{report.title}</h2>
               <ReportImage
                 name={report.name}
                 duration={duration}
-                slaveId={slave_id}
-                startDate={start_date}
-                startHour={start_hour}
-                startMinute={start_minute}
-                endDate={end_date}
-                endHour={end_hour}
-                endMinute={end_minute}
-                gmp={gmp}
+                scannerId={sensorId}
+                startDate={startDate}
+                startHour={startHour}
+                startMinute={startMinute}
+                endDate={endDate}
+                endHour={endHour}
+                endMinute={endMinute}
               />
             </div>
           ))}
@@ -374,16 +386,29 @@ class PerformancePage extends React.Component {
 
 PerformancePage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  loadScanners: PropTypes.func.isRequired,
+  scanners: PropTypes.arrayOf(PropTypes.model),
   onInteraction: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
 });
+
+const mapStateToProps = rootState => {
+  const select = scannerSelector(rootState);
+  return {
+    scanners: select.getEntities(SLAVE_SCANNER_FILTER),
+  };
+};
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:

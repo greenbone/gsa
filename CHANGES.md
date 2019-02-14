@@ -23,6 +23,10 @@ $ cd gsa && git log
  * Fix issues with updating user authentication and logging out active
    sessions after changing the password of a user #1159
  * New feature: Remediation Tickets #1126
+ * Allow to pass start time, end time and sensor/slave id as url parameters to
+   performance page.
+ * Add link referencing the performance during scan time to the report details
+   page.
 
 
 ## gsa 8.0+beta2 (2018-12-04)
