@@ -14,7 +14,7 @@ jobs:
             - v1-deps
       - run:
           working_directory: ~/gsa/gsa
-          name: Install JavaScript dependencies
+          name: Update JavaScript dependencies
           command: yarn
       - save_cache:
           key: v1-deps-{{ checksum "./gsa/yarn.lock"  }}
@@ -46,6 +46,10 @@ jobs:
           keys:
             - v1-deps-{{ checksum "./gsa/yarn.lock"  }}
             - v1-deps
+      - run:
+          working_directory: ~/gsa/gsa
+          name: Update JavaScript dependencies
+          command: yarn
       - run:
           working_directory: ~/gsa/gsa
           name: Linting JavaScript files
