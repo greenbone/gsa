@@ -185,9 +185,9 @@ exports[`Menu tests should render 1`] = `
 .c0 {
   outline: 0;
   border-radius: 0 0 4px 4px;
-  -webkit-transition: opacity .1s ease;
-  transition: opacity .1s ease;
-  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
   border: 1px solid #aaaaaa;
   background-color: #fff;
   display: -webkit-box;
@@ -219,9 +219,9 @@ exports[`Menu tests should render with position adjust 1`] = `
 .c0 {
   outline: 0;
   border-radius: 0 0 4px 4px;
-  -webkit-transition: opacity .1s ease;
-  transition: opacity .1s ease;
-  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
   border: 1px solid #aaaaaa;
   background-color: #fff;
   display: -webkit-box;
@@ -253,9 +253,9 @@ exports[`Menu tests should render with position right 1`] = `
 .c0 {
   outline: 0;
   border-radius: 0 0 4px 4px;
-  -webkit-transition: opacity .1s ease;
-  transition: opacity .1s ease;
-  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
   border: 1px solid #aaaaaa;
   background-color: #fff;
   display: -webkit-box;
