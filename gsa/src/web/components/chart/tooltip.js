@@ -63,15 +63,12 @@ ToolTipContainer.displayName = 'ToolTipContainer';
 
 const ToolTipDisplay = ({children, ...props}) => (
   <ToolTipContainer {...props}>
-    <ToolTipText>
-      {children}
-    </ToolTipText>
+    <ToolTipText>{children}</ToolTipText>
     <ToolTipArrow>▼</ToolTipArrow>
   </ToolTipContainer>
 );
 
 class ToolTip extends React.Component {
-
   static propTypes = {
     children: PropTypes.func.isRequired,
     content: PropTypes.elementOrString,
@@ -110,8 +107,8 @@ class ToolTip extends React.Component {
 
     const rect = target.getBoundingClientRect();
     const top = rect.top - tooltip.offsetHeight + window.scrollY;
-    const left = rect.left + (rect.width - tooltip.offsetWidth) / 2 +
-        window.scrollX;
+    const left =
+      rect.left + (rect.width - tooltip.offsetWidth) / 2 + window.scrollX;
 
     tooltip.style.top = `${top}px`;
     tooltip.style.left = `${left}px`;
@@ -128,15 +125,11 @@ class ToolTip extends React.Component {
     const {visible} = this.state;
     return (
       <React.Fragment>
-        {content && visible &&
+        {content && visible && (
           <Portal>
-            <ToolTipDisplay
-              innerRef={this.tooltip}
-            >
-              {content}
-            </ToolTipDisplay>
+            <ToolTipDisplay innerRef={this.tooltip}>{content}</ToolTipDisplay>
           </Portal>
-        }
+        )}
         {children({
           show: this.show,
           hide: this.hide,

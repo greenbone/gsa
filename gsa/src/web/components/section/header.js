@@ -56,27 +56,14 @@ const SectionHeader = ({
   img,
 }) => {
   return (
-    <HeaderLayout
-      flex
-      align={align}
-      className="section-header"
-    >
+    <HeaderLayout flex align={align} className="section-header">
       <HeaderHeading align={['start', 'stretch']}>
-        {isDefined(img) &&
-          <HeaderIconLayout
-            flex
-            align={['start', 'end']}
-          >
-            {isString(img) ?
-              <Icon size="large" img={img}/> : img
-            }
+        {isDefined(img) && (
+          <HeaderIconLayout flex align={['start', 'end']}>
+            {isString(img) ? <Icon size="large" img={img} /> : img}
           </HeaderIconLayout>
-        }
-        {isDefined(title) &&
-          <Layout align={['start', 'end']}>
-            {title}
-          </Layout>
-        }
+        )}
+        {isDefined(title) && <Layout align={['start', 'end']}>{title}</Layout>}
       </HeaderHeading>
       {children}
     </HeaderLayout>
@@ -84,18 +71,9 @@ const SectionHeader = ({
 };
 
 SectionHeader.propTypes = {
-  align: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-  ]),
-  img: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
+  align: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  img: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default SectionHeader;

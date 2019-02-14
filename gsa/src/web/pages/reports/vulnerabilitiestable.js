@@ -34,40 +34,24 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
-const Row = ({
-  entity,
-  links = true,
-  ...other
-}) => {
+const Row = ({entity, links = true, ...other}) => {
   return (
     <TableRow>
       <TableData>
-        <DetailsLink
-          type="nvt"
-          id={entity.id}
-          textOnly={!links}
-        >
+        <DetailsLink type="nvt" id={entity.id} textOnly={!links}>
           {entity.name}
         </DetailsLink>
       </TableData>
       <TableData align="center">
-        <SeverityBar severity={entity.severity}/>
+        <SeverityBar severity={entity.severity} />
       </TableData>
+      <TableData align="center">{entity.qod.value} %</TableData>
       <TableData align="center">
-        {entity.qod.value} %
-      </TableData>
-      <TableData align="center">
-        <Link
-          to="results"
-          filter={'nvt=' + entity.id}
-          textOnly={!links}
-        >
+        <Link to="results" filter={'nvt=' + entity.id} textOnly={!links}>
           {entity.results.count}
         </Link>
       </TableData>
-      <TableData align="center">
-        {entity.hosts.count}
-      </TableData>
+      <TableData align="center">{entity.hosts.count}</TableData>
     </TableRow>
   );
 };

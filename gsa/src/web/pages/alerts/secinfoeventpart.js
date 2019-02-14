@@ -44,42 +44,51 @@ const SecinfoEventPart = ({
       value={EVENT_TYPE_NEW_SECINFO}
       checked={event === EVENT_TYPE_NEW_SECINFO}
       onChange={onEventChange}
-    >
-    </Radio>
+    />
     <Select
       disabled={!isSecinfoEvent(event)}
-      items={[{
-        value: 'new',
-        label: _('New'),
-      }, {
-        value: 'updated',
-        label: _('Updated'),
-      }]}
+      items={[
+        {
+          value: 'new',
+          label: _('New'),
+        },
+        {
+          value: 'updated',
+          label: _('Updated'),
+        },
+      ]}
       value={feedEvent}
       name={prefix + 'feed_event'}
       onChange={onChange}
     />
     <Select
       disabled={!isSecinfoEvent(event)}
-      items={[{
-        value: 'nvt',
-        label: _('NVTs'),
-      }, {
-        value: 'cve',
-        label: _('CVEs'),
-      }, {
-        value: 'cpe',
-        label: _('CPEs'),
-      }, {
-        value: 'cert_bund_adv',
-        label: _('CERT-Bund Advisories'),
-      }, {
-        value: 'dfn_cert_adv',
-        label: _('DFN-CERT Advisories'),
-      }, {
-        value: 'ovaldef',
-        label: _('OVAL Definition'),
-      }]}
+      items={[
+        {
+          value: 'nvt',
+          label: _('NVTs'),
+        },
+        {
+          value: 'cve',
+          label: _('CVEs'),
+        },
+        {
+          value: 'cpe',
+          label: _('CPEs'),
+        },
+        {
+          value: 'cert_bund_adv',
+          label: _('CERT-Bund Advisories'),
+        },
+        {
+          value: 'dfn_cert_adv',
+          label: _('DFN-CERT Advisories'),
+        },
+        {
+          value: 'ovaldef',
+          label: _('OVAL Definition'),
+        },
+      ]}
       value={secinfoType}
       name={prefix + 'secinfo_type'}
       onChange={onChange}

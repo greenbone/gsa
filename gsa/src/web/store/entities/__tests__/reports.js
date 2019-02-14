@@ -52,7 +52,6 @@ testReducerForEntity('report', reducer, entityActions);
 const entityType = 'report';
 
 describe('report loadEntity function tests', () => {
-
   test('should load report successfully', () => {
     const id = 'a1';
     const rootState = createState(entityType, {
@@ -60,17 +59,15 @@ describe('report loadEntity function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const get = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({
+    const get = jest.fn().mockReturnValue(
+      Promise.resolve({
         data: {foo: 'bar'},
-      }));
+      }),
+    );
 
     const gmp = {
       [entityType]: {
@@ -85,17 +82,21 @@ describe('report loadEntity function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType,
-        id,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
-        data: {foo: 'bar'},
-        id,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType,
+          data: {foo: 'bar'},
+          id,
+        },
+      ]);
     });
   });
 
@@ -106,17 +107,15 @@ describe('report loadEntity function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const get = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({
+    const get = jest.fn().mockReturnValue(
+      Promise.resolve({
         data: {foo: 'bar'},
-      }));
+      }),
+    );
 
     const gmp = {
       [entityType]: {
@@ -133,17 +132,21 @@ describe('report loadEntity function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {filter});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType,
-        id,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_SUCCESS,
-        entityType,
-        data: {foo: 'bar'},
-        id,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType,
+          data: {foo: 'bar'},
+          id,
+        },
+      ]);
     });
   });
 
@@ -155,15 +158,11 @@ describe('report loadEntity function tests', () => {
       },
     });
 
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const get = jest
-      .fn()
-      .mockReturnValue(Promise.resolve([{id: 'foo'}]));
+    const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
     const gmp = {
       [entityType]: {
@@ -186,15 +185,11 @@ describe('report loadEntity function tests', () => {
       },
     });
 
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const get = jest
-      .fn()
-      .mockReturnValue(Promise.reject('An Error'));
+    const get = jest.fn().mockReturnValue(Promise.reject('An Error'));
 
     const gmp = {
       [entityType]: {
@@ -206,17 +201,21 @@ describe('report loadEntity function tests', () => {
       expect(getState).toBeCalled();
       expect(get).toBeCalledWith({id}, {filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType,
-        id,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_ERROR,
-        entityType,
-        error: 'An Error',
-        id,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType,
+          id,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_ERROR,
+          entityType,
+          error: 'An Error',
+          id,
+        },
+      ]);
     });
   });
 });
@@ -225,7 +224,6 @@ testEntityActions('deltaReport', deltaEntityActions);
 testReducerForEntity('deltaReport', deltaReducer, deltaEntityActions);
 
 describe('delta report loadDeltaReport function tests', () => {
-
   test('should load delta report successfully', () => {
     const id = 'a1';
     const deltaId = 'a2';
@@ -236,17 +234,15 @@ describe('delta report loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const getDelta = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({
+    const getDelta = jest.fn().mockReturnValue(
+      Promise.resolve({
         data: {foo: 'bar'},
-      }));
+      }),
+    );
 
     const gmp = {
       [entityType]: {
@@ -261,17 +257,21 @@ describe('delta report loadDeltaReport function tests', () => {
       expect(getState).toBeCalled();
       expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType: 'deltaReport',
-        id: identifier,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_SUCCESS,
-        entityType: 'deltaReport',
-        data: {foo: 'bar'},
-        id: identifier,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType: 'deltaReport',
+          data: {foo: 'bar'},
+          id: identifier,
+        },
+      ]);
     });
   });
 
@@ -285,17 +285,15 @@ describe('delta report loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const getDelta = jest
-      .fn()
-      .mockReturnValue(Promise.resolve({
+    const getDelta = jest.fn().mockReturnValue(
+      Promise.resolve({
         data: {foo: 'bar'},
-      }));
+      }),
+    );
 
     const gmp = {
       [entityType]: {
@@ -308,23 +306,28 @@ describe('delta report loadDeltaReport function tests', () => {
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
 
-    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState)
-      .then(() => {
-      expect(getState).toBeCalled();
-      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
-      expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType: 'deltaReport',
-        id: identifier,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_SUCCESS,
-        entityType: 'deltaReport',
-        data: {foo: 'bar'},
-        id: identifier,
-      }]);
-    });
+    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState).then(
+      () => {
+        expect(getState).toBeCalled();
+        expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch.mock.calls[0]).toEqual([
+          {
+            type: types.ENTITY_LOADING_REQUEST,
+            entityType: 'deltaReport',
+            id: identifier,
+          },
+        ]);
+        expect(dispatch.mock.calls[1]).toEqual([
+          {
+            type: types.ENTITY_LOADING_SUCCESS,
+            entityType: 'deltaReport',
+            data: {foo: 'bar'},
+            id: identifier,
+          },
+        ]);
+      },
+    );
   });
 
   test('should not load delta report if isLoading is true', () => {
@@ -337,15 +340,11 @@ describe('delta report loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const getDelta = jest
-      .fn()
-      .mockReturnValue(Promise.resolve([{id: 'foo'}]));
+    const getDelta = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
     const gmp = {
       [entityType]: {
@@ -370,15 +369,11 @@ describe('delta report loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = jest
-      .fn()
-      .mockReturnValue(rootState);
+    const getState = jest.fn().mockReturnValue(rootState);
 
     const dispatch = jest.fn();
 
-    const getDelta = jest
-      .fn()
-      .mockReturnValue(Promise.reject('An Error'));
+    const getDelta = jest.fn().mockReturnValue(Promise.reject('An Error'));
 
     const gmp = {
       [entityType]: {
@@ -390,23 +385,26 @@ describe('delta report loadDeltaReport function tests', () => {
       expect(getState).toBeCalled();
       expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter: undefined});
       expect(dispatch).toHaveBeenCalledTimes(2);
-      expect(dispatch.mock.calls[0]).toEqual([{
-        type: types.ENTITY_LOADING_REQUEST,
-        entityType: 'deltaReport',
-        id: identifier,
-      }]);
-      expect(dispatch.mock.calls[1]).toEqual([{
-        type: types.ENTITY_LOADING_ERROR,
-        entityType: 'deltaReport',
-        error: 'An Error',
-        id: identifier,
-      }]);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_ERROR,
+          entityType: 'deltaReport',
+          error: 'An Error',
+          id: identifier,
+        },
+      ]);
     });
   });
 });
 
 describe('deltaSelector isLoading tests', () => {
-
   test('should be false for undefined state', () => {
     const id = 'a1';
     const deltaId = 'a2';
@@ -465,11 +463,9 @@ describe('deltaSelector isLoading tests', () => {
 
     expect(selector.isLoading(id, deltaId)).toBe(true);
   });
-
 });
 
 describe('deltaSelector getEntity tests', () => {
-
   test('should return undefined for empty state', () => {
     const rootState = createRootState({});
     const selector = deltaSelector(rootState);
@@ -522,7 +518,6 @@ describe('deltaSelector getEntity tests', () => {
 });
 
 describe('deltaSelector getError tests', () => {
-
   test('should return undefined for empty state', () => {
     const id = 'a1';
     const deltaId = 'a2';
@@ -571,7 +566,6 @@ describe('deltaSelector getError tests', () => {
 
     expect(selector.getError(id, deltaId)).toEqual('An error');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

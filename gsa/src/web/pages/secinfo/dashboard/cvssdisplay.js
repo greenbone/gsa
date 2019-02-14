@@ -31,8 +31,8 @@ export const SecInfosCvssDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of SecInfo Items'),
-  title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('SecInfo Items by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: SECINFO_FILTER_FILTER,
   displayId: 'allinfo-by-cvss',
   displayName: 'SecInfosCvssDisplay',
@@ -41,12 +41,9 @@ export const SecInfosCvssDisplay = createDisplay({
 export const SecInfosCvssTableDisplay = createDisplay({
   loaderComponent: SecInfosSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of SecInfo Items'),
-  ],
-  title: ({data: tdata}) => _('SecInfo Items by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of SecInfo Items')],
+  title: ({data: tdata}) =>
+    _('SecInfo Items by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: SECINFO_FILTER_FILTER,
   displayId: 'allinfo-by-cvss-table',
   displayName: 'SecInfoCvssTableDisplay',
@@ -56,9 +53,7 @@ registerDisplay(SecInfosCvssDisplay.displayId, SecInfosCvssDisplay, {
   title: _l('Chart: SecInfo Items by CVSS'),
 });
 
-registerDisplay(
-  SecInfosCvssTableDisplay.displayId,
-  SecInfosCvssTableDisplay, {
+registerDisplay(SecInfosCvssTableDisplay.displayId, SecInfosCvssTableDisplay, {
   title: _l('Table: SecInfo Items by CVSS'),
 });
 

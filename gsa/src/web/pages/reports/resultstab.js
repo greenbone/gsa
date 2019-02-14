@@ -59,8 +59,7 @@ const ResultsTab = ({
           onTargetEditClick={onTargetEditClick}
         />
       );
-    }
-    else if (counts.all > 0) {
+    } else if (counts.all > 0) {
       return (
         <EmptyResultsReport
           all={counts.all}

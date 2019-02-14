@@ -49,7 +49,7 @@ const BoxLayout = styled(Layout)`
   width: 400px;
   & h3 {
     margin-top: 0;
-  };
+  }
 `;
 
 const EntityBox = ({
@@ -62,11 +62,7 @@ const EntityBox = ({
   ...props
 }) => {
   return (
-    <BoxLayout
-      {...props}
-      flex="column"
-      align="space-between"
-    >
+    <BoxLayout {...props} flex="column" align="space-between">
       <Layout align={['space-between', 'start']}>
         <h3>{title}</h3>
         {isDefined(toolbox) && toolbox}
@@ -75,23 +71,15 @@ const EntityBox = ({
       {children}
       <InfoTable>
         <TableBody>
-          {isDefined(end) &&
+          {isDefined(end) && (
             <TableRow>
-              <TableData>
-                {_('Active until')}
-              </TableData>
-              <TableData>
-                {longDate(end)}
-              </TableData>
+              <TableData>{_('Active until')}</TableData>
+              <TableData>{longDate(end)}</TableData>
             </TableRow>
-          }
+          )}
           <TableRow>
-            <TableData>
-              {_('Modifed')}
-            </TableData>
-            <TableData>
-              {longDate(modified)}
-            </TableData>
+            <TableData>{_('Modifed')}</TableData>
+            <TableData>{longDate(modified)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>

@@ -39,12 +39,11 @@ import {
 } from '../actions';
 
 describe('settings actions tests', () => {
-
   test('should create a setLocale action', () => {
-     expect(setLocale('de')).toEqual({
-       type: USER_SETTINGS_SET_LOCALE,
-       locale: 'de',
-     });
+    expect(setLocale('de')).toEqual({
+      type: USER_SETTINGS_SET_LOCALE,
+      locale: 'de',
+    });
   });
 
   test('should create a setTimezone action', () => {
@@ -94,9 +93,11 @@ describe('settings actions tests', () => {
     const dispatch = jest.fn();
     const sessionTimeout = moment().add(1, 'day');
 
-    const renewSession = jest.fn().mockReturnValue(Promise.resolve({
-      data: sessionTimeout,
-    }));
+    const renewSession = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: sessionTimeout,
+      }),
+    );
 
     const gmp = {
       user: {
@@ -113,13 +114,13 @@ describe('settings actions tests', () => {
   });
 
   describe('loadReportComposerDefaults tests', () => {
-
     test('should dispatch success actions', () => {
       const dispatch = jest.fn();
 
       const data = {foo: 'bar'};
-      const getReportComposerDefaults = jest.fn().mockReturnValue(
-        Promise.resolve({data}));
+      const getReportComposerDefaults = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -140,13 +141,13 @@ describe('settings actions tests', () => {
   });
 
   describe('saveReportComposerDefaults tests', () => {
-
     test('should dispatch success actions', () => {
       const dispatch = jest.fn();
 
       const data = {foo: 'bar'};
-      const saveReportComposerDefaultsMock = jest.fn().mockReturnValue(
-        Promise.resolve({data}));
+      const saveReportComposerDefaultsMock = jest
+        .fn()
+        .mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -167,7 +168,6 @@ describe('settings actions tests', () => {
       });
     });
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

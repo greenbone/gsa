@@ -37,13 +37,15 @@ const getRestorableDeletableForEntityType = {
     return {restorable: true, deletable: true};
   },
   alert: entity => {
-    const restorable =
-     isDefined(entity.filter) ? !entity.filter.isInTrash() : true;
+    const restorable = isDefined(entity.filter)
+      ? !entity.filter.isInTrash()
+      : true;
     return {restorable, deletable: !entity.isInUse()};
   },
   scanconfig: entity => {
-    const restorable =
-      isDefined(entity.scanner) ? !entity.scanner.isInTrash() : true;
+    const restorable = isDefined(entity.scanner)
+      ? !entity.scanner.isInTrash()
+      : true;
     return {restorable, deletable: !entity.isInUse()};
   },
   credential: entity => {
@@ -74,8 +76,9 @@ const getRestorableDeletableForEntityType = {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   scanner: entity => {
-    const restorable = isDefined(entity.credential) ?
-      !entity.credential.isInTrash() : true;
+    const restorable = isDefined(entity.credential)
+      ? !entity.credential.isInTrash()
+      : true;
     return {restorable, deletable: !entity.isInUse()};
   },
   schedule: entity => {
@@ -85,32 +88,38 @@ const getRestorableDeletableForEntityType = {
     return {restorable: true, deletable: !entity.isInUse()};
   },
   target: entity => {
-    const ssh_cred = isDefined(entity.ssh_credential) ?
-     !entity.ssh_credential.isInTrash() : true;
-    const smb_cred = isDefined(entity.smb_credential) ?
-     !entity.smb_credential.isInTrash() : true;
-    const esxi_cred = isDefined(entity.esxi_credential) ?
-     !entity.esxi_credential.isInTrash() : true;
-    const snmp_cred = isDefined(entity.snmp_credential) ?
-     !entity.snmp_credential.isInTrash() : true;
-    const portlist = isDefined(entity.port_list) ?
-     !entity.port_list.isInTrash() : true;
+    const ssh_cred = isDefined(entity.ssh_credential)
+      ? !entity.ssh_credential.isInTrash()
+      : true;
+    const smb_cred = isDefined(entity.smb_credential)
+      ? !entity.smb_credential.isInTrash()
+      : true;
+    const esxi_cred = isDefined(entity.esxi_credential)
+      ? !entity.esxi_credential.isInTrash()
+      : true;
+    const snmp_cred = isDefined(entity.snmp_credential)
+      ? !entity.snmp_credential.isInTrash()
+      : true;
+    const portlist = isDefined(entity.port_list)
+      ? !entity.port_list.isInTrash()
+      : true;
 
     const restorable =
       ssh_cred && smb_cred && esxi_cred && snmp_cred && portlist;
     return {restorable, deletable: !entity.isInUse()};
   },
   task: entity => {
-    const schedule = isDefined(entity.schedule) ?
-      !entity.schedule.isInTrash() : true;
-    const target = isDefined(entity.target) ?
-      !entity.target.isInTrash() : true;
-    const config = isDefined(entity.config) ?
-      !entity.config.isInTrash() : true;
-    const scanner = isDefined(entity.scanner) ?
-      !entity.scanner.isInTrash() : true;
-    const alerts = isDefined(entity.alerts) ?
-      !entity.alerts.some(alert => alert.isInTrash()) : true;
+    const schedule = isDefined(entity.schedule)
+      ? !entity.schedule.isInTrash()
+      : true;
+    const target = isDefined(entity.target) ? !entity.target.isInTrash() : true;
+    const config = isDefined(entity.config) ? !entity.config.isInTrash() : true;
+    const scanner = isDefined(entity.scanner)
+      ? !entity.scanner.isInTrash()
+      : true;
+    const alerts = isDefined(entity.alerts)
+      ? !entity.alerts.some(alert => alert.isInTrash())
+      : true;
 
     const restorable = schedule && target && config && scanner && alerts;
     return {restorable, deletable: true};
@@ -124,16 +133,12 @@ const isAbleToRestoreAndDelete = entity => {
   const entityType = getEntityType(entity);
   const canRestoreAndDelete = getRestorableDeletableForEntityType[entityType];
 
-  return isDefined(canRestoreAndDelete) ?
-    canRestoreAndDelete(entity) :
-    {restorable: false, deletable: false};
+  return isDefined(canRestoreAndDelete)
+    ? canRestoreAndDelete(entity)
+    : {restorable: false, deletable: false};
 };
 
-const getRestoreDeleteProps = (
-  entity,
-  onEntityRestore,
-  onEntityDelete,
-) => {
+const getRestoreDeleteProps = (entity, onEntityRestore, onEntityDelete) => {
   let restoreprops;
   let deleteprops;
   const {restorable, deletable} = isAbleToRestoreAndDelete(entity);
@@ -143,8 +148,7 @@ const getRestoreDeleteProps = (
       title: _('Restore'),
       onClick: onEntityRestore,
     };
-  }
-  else {
+  } else {
     restoreprops = {
       active: false,
     };
@@ -155,8 +159,7 @@ const getRestoreDeleteProps = (
       title: _('Delete'),
       onClick: onEntityDelete,
     };
-  }
-  else {
+  } else {
     deleteprops = {
       active: false,
       title: _('Still in use'),
@@ -165,32 +168,19 @@ const getRestoreDeleteProps = (
   return {restoreprops, deleteprops};
 };
 
-const TrashActions = ({
-  entity,
-  onEntityDelete,
-  onEntityRestore,
-}) => {
-  const {restoreprops, deleteprops} =
-    getRestoreDeleteProps(entity, onEntityRestore, onEntityDelete);
+const TrashActions = ({entity, onEntityDelete, onEntityRestore}) => {
+  const {restoreprops, deleteprops} = getRestoreDeleteProps(
+    entity,
+    onEntityRestore,
+    onEntityDelete,
+  );
   return (
     <TableData>
-      <IconDivider
-        align={['center', 'center']}
-        grow
-      >
-        <RestoreIcon
-          name="restore"
-          value={entity}
-          {...restoreprops}
-        />
-        <TrashDeleteIcon
-          name="delete"
-          value={entity}
-          {...deleteprops}
-        />
+      <IconDivider align={['center', 'center']} grow>
+        <RestoreIcon name="restore" value={entity} {...restoreprops} />
+        <TrashDeleteIcon name="delete" value={entity} {...deleteprops} />
       </IconDivider>
     </TableData>
-
   );
 };
 

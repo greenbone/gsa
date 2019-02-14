@@ -24,7 +24,6 @@ import Model from '../model';
 import Event from './event';
 
 class Schedule extends Model {
-
   static entityType = 'schedule';
 
   parseProperties(elem) {
@@ -50,8 +49,7 @@ class Schedule extends Model {
 
     if (isDefined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
-    }
-    else {
+    } else {
       ret.tasks = [];
     }
 

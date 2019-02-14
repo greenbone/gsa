@@ -25,7 +25,6 @@ const EPSILON = 1e-12; // 1 * 10^(-12)
 const PI2 = Math.PI * 2;
 
 class Arc {
-
   constructor() {
     this._innerRadiusX = 0;
   }
@@ -50,35 +49,33 @@ class Arc {
     return this;
   }
 
-  centroid({
-    startAngle = 0,
-    endAngle = PI2,
-  } = {}) {
+  centroid({startAngle = 0, endAngle = PI2} = {}) {
     this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
-    const outerRadiusY = isDefined(this._outerRadiusY) ?
-      this._outerRadiusY : outerRadiusX;
+    const outerRadiusY = isDefined(this._outerRadiusY)
+      ? this._outerRadiusY
+      : outerRadiusX;
 
     const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = isDefined(this._innerRadiusY) ?
-      this._innerRadiusY : innerRadiusX;
+    const innerRadiusY = isDefined(this._innerRadiusY)
+      ? this._innerRadiusY
+      : innerRadiusX;
 
     const rx = (innerRadiusX + outerRadiusX) / 2;
-    const ry = isDefined(innerRadiusY) && isDefined(outerRadiusY) ?
-      (innerRadiusY + outerRadiusY) / 2 : rx;
+    const ry =
+      isDefined(innerRadiusY) && isDefined(outerRadiusY)
+        ? (innerRadiusY + outerRadiusY) / 2
+        : rx;
 
     const a = (startAngle + endAngle) / 2;
     return {
       x: Math.cos(a) * rx,
       y: Math.sin(a) * ry,
     };
-  };
+  }
 
-  path({
-    startAngle = 0,
-    endAngle = PI2,
-  } = {}) {
+  path({startAngle = 0, endAngle = PI2} = {}) {
     const paths = path();
     const diff = endAngle - startAngle;
 
@@ -93,12 +90,14 @@ class Arc {
     this._checkRadius();
 
     const outerRadiusX = this._outerRadiusX;
-    const outerRadiusY = isDefined(this._outerRadiusY) ?
-      this._outerRadiusY : outerRadiusX;
+    const outerRadiusY = isDefined(this._outerRadiusY)
+      ? this._outerRadiusY
+      : outerRadiusX;
 
     const innerRadiusX = this._innerRadiusX;
-    const innerRadiusY = isDefined(this._innerRadiusY) ?
-      this._innerRadiusY : innerRadiusX;
+    const innerRadiusY = isDefined(this._innerRadiusY)
+      ? this._innerRadiusY
+      : innerRadiusX;
 
     const sx = outerRadiusX * Math.cos(startAngle);
     const sy = outerRadiusY * Math.sin(startAngle);
@@ -113,19 +112,21 @@ class Arc {
     paths.move(sx, sy);
     paths.arc(outerRadiusX, outerRadiusY, ex, ey, {largeArc, sweep: 1});
     paths.line(irx * ex, iry * ey);
-    paths.arc(innerRadiusX, innerRadiusY, sx * irx, sy * iry,
-      {largeArc, sweep: 0});
+    paths.arc(innerRadiusX, innerRadiusY, sx * irx, sy * iry, {
+      largeArc,
+      sweep: 0,
+    });
     paths.close();
 
     return paths;
-  };
+  }
 
   _checkRadius() {
     if (!isDefined(this._outerRadiusX)) {
       throw new Error('outerRadiusX must be set');
     }
   }
-};
+}
 
 export default () => new Arc();
 

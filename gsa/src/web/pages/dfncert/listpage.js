@@ -37,7 +37,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
- // DFN-CERT uses same filter dialog as CERT-Bund
+// DFN-CERT uses same filter dialog as CERT-Bund
 import FilterDialog from '../certbund/filterdialog';
 
 import DfnCertTable from './table';
@@ -52,12 +52,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -77,7 +72,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={FilterDialog}
     filtersFilter={DFNCERT_FILTER_FILTER}
-    sectionIcon={<DfnCertAdvIcon size="large"/>}
+    sectionIcon={<DfnCertAdvIcon size="large" />}
     table={DfnCertTable}
     title={_('DFN-CERT Advisories')}
     toolBarIcons={ToolBarIcons}

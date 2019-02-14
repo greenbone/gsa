@@ -38,17 +38,13 @@ const NvtComponent = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      create: notecreate,
-    }) => (
+    {({create: notecreate}) => (
       <OverrideComponent
         onCreated={onChanged}
         onInteraction={onInteraction}
         onSaved={onChanged}
       >
-        {({
-          create: overridecreate,
-        }) => (
+        {({create: overridecreate}) => (
           <EntityComponent
             name="nvt"
             onDownloaded={onDownloaded}

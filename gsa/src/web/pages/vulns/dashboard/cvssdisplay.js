@@ -31,8 +31,8 @@ export const VulnsCvssDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Vulnerabilities'),
-  title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-cvss',
   displayName: 'VulnsCvssDisplay',
   filtersFilter: VULNS_FILTER_FILTER,
@@ -41,12 +41,9 @@ export const VulnsCvssDisplay = createDisplay({
 export const VulnsCvssTableDisplay = createDisplay({
   loaderComponent: VulnsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Vulnerabilties'),
-  ],
-  title: ({data: tdata}) => _('Vulnerabilities by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of Vulnerabilties')],
+  title: ({data: tdata}) =>
+    _('Vulnerabilities by CVSS (Total: {{count}})', {count: tdata.total}),
   displayId: 'vuln-by-cvss-table',
   displayName: 'VulnsCvssTableDisplay',
   filtersFilter: VULNS_FILTER_FILTER,

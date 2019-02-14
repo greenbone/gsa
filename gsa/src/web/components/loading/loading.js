@@ -31,9 +31,10 @@ const Loader = styled.div`
   width: 80px;
   height: 80px;
   animation: ${keyframes({
-    '0%': {transform: 'rotate(0deg)'},
-    '100%': {transform: 'rotate(360deg)'},
-  })} 2s linear infinite;
+      '0%': {transform: 'rotate(0deg)'},
+      '100%': {transform: 'rotate(360deg)'},
+    })}
+    2s linear infinite;
 `;
 
 const StyledLayout = styled(Layout)`
@@ -42,7 +43,7 @@ const StyledLayout = styled(Layout)`
 
 const Loading = () => (
   <StyledLayout align={['center', 'center']}>
-    <Loader/>
+    <Loader />
   </StyledLayout>
 );
 

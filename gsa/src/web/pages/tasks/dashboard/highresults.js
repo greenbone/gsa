@@ -42,9 +42,7 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {
-  riskFactorColorScale,
-} from 'web/components/dashboard/display/utils';
+import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 
 import {TasksHighResultsLoader} from './loaders';
 
@@ -65,8 +63,9 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
       const riskFactor = resultSeverityRiskFactor(severity, severityClass);
-      const displaySeverity = isDefined(severity) ?
-        severityFormat(severity) : `${_NA}`;
+      const displaySeverity = isDefined(severity)
+        ? severityFormat(severity)
+        : `${_NA}`;
       const displayHighHost = format(high_per_host);
       return {
         value: high_per_host,
@@ -80,7 +79,6 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
 };
 
 export class TasksHighResultsDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -94,14 +92,9 @@ export class TasksHighResultsDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <TasksHighResultsLoader
-        filter={filter}
-      >
+      <TasksHighResultsLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -136,7 +129,7 @@ TasksHighResultsDisplay = compose(
   withRouter,
   withFilterSelection({
     filtersFilter: TASKS_FILTER_FILTER,
-  })
+  }),
 )(TasksHighResultsDisplay);
 
 TasksHighResultsDisplay.displayId = 'task-by-high-results';
@@ -144,11 +137,7 @@ TasksHighResultsDisplay.displayId = 'task-by-high-results';
 export const TasksHighResultsTableDisplay = createDisplay({
   loaderComponent: TasksHighResultsLoader,
   displayComponent: DataTableDisplay,
-  dataTitles: [
-    _l('Task Name'),
-    _l('High per Host'),
-    _l('Severity'),
-  ],
+  dataTitles: [_l('Task Name'), _l('High per Host'), _l('Severity')],
   dataRow: row => [row.label, row.value, row.severity],
   dataTransform: transformHighResultsData,
   title: () => _l('Tasks by High Results per Host'),
@@ -161,8 +150,10 @@ registerDisplay(TasksHighResultsDisplay.displayId, TasksHighResultsDisplay, {
   title: _l('Chart: Tasks by High Results per Host'),
 });
 
-registerDisplay(TasksHighResultsTableDisplay.displayId,
-  TasksHighResultsTableDisplay, {
+registerDisplay(
+  TasksHighResultsTableDisplay.displayId,
+  TasksHighResultsTableDisplay,
+  {
     title: _l('Table: Tasks by High Results per Host'),
   },
 );

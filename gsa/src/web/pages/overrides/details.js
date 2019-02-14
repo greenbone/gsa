@@ -42,101 +42,71 @@ import DetailsBlock from 'web/entity/block';
 import OverrideBox from 'web/entity/override';
 import {Col} from 'web/entity/page';
 
-const OverrideDetails = ({
-  entity,
-}) => {
-  const {
-    hosts,
-    port,
-    result,
-    severity,
-    task,
-  } = entity;
+const OverrideDetails = ({entity}) => {
+  const {hosts, port, result, severity, task} = entity;
   return (
-    <Layout
-      grow="1"
-      flex="column"
-    >
-      <DetailsBlock
-        title={_('Application')}
-      >
+    <Layout grow="1" flex="column">
+      <DetailsBlock title={_('Application')}>
         <InfoTable size="full">
           <colgroup>
-            <Col width="10%"/>
-            <Col width="90%"/>
+            <Col width="10%" />
+            <Col width="90%" />
           </colgroup>
           <TableBody>
             <TableRow>
+              <TableData>{_('Hosts')}</TableData>
               <TableData>
-                {_('Hosts')}
-              </TableData>
-              <TableData>
-                {hosts.length > 0 ?
+                {hosts.length > 0 ? (
                   <Divider>
                     {hosts.map(host => (
                       <span key={host}>{host}</span>
                     ))}
-                  </Divider> :
+                  </Divider>
+                ) : (
                   _('Any')
-                }
+                )}
               </TableData>
             </TableRow>
 
             <TableRow>
+              <TableData>{_('Port')}</TableData>
+              <TableData>{isDefined(port) ? port : _('Any')}</TableData>
+            </TableRow>
+
+            <TableRow>
+              <TableData>{_('Severity')}</TableData>
               <TableData>
-                {_('Port')}
+                {isDefined(severity)
+                  ? severity > LOG_VALUE
+                    ? _('> 0.0')
+                    : translatedResultSeverityRiskFactor(severity)
+                  : _('Any')}
               </TableData>
+            </TableRow>
+
+            <TableRow>
+              <TableData>{_('Task')}</TableData>
               <TableData>
-                {isDefined(port) ?
-                  port :
+                {entity.isOrphan() ? (
+                  <b>{_('Orphan')}</b>
+                ) : isDefined(task) ? (
+                  <EntityLink entity={task} />
+                ) : (
                   _('Any')
-                }
+                )}
               </TableData>
             </TableRow>
 
             <TableRow>
+              <TableData>{_('Result')}</TableData>
               <TableData>
-                {_('Severity')}
-              </TableData>
-              <TableData>
-                {isDefined(severity) ?
-                  severity > LOG_VALUE ?
-                    _('> 0.0') :
-                    translatedResultSeverityRiskFactor(severity) :
-                 _('Any')
-                }
-              </TableData>
-            </TableRow>
-
-            <TableRow>
-              <TableData>
-                {_('Task')}
-              </TableData>
-              <TableData>
-                {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> :
-                  isDefined(task) ?
-                    <EntityLink
-                      entity={task}
-                    /> :
-                    _('Any')
-                }
-              </TableData>
-            </TableRow>
-
-            <TableRow>
-              <TableData>
-                {_('Result')}
-              </TableData>
-              <TableData>
-                {entity.isOrphan() ?
-                  <b>{_('Orphan')}</b> :
-                  isDefined(result) ?
-                    <EntityLink
-                      entity={result}
-                    /> :
-                    _('Any')
-                }
+                {entity.isOrphan() ? (
+                  <b>{_('Orphan')}</b>
+                ) : isDefined(result) ? (
+                  <EntityLink entity={result} />
+                ) : (
+                  _('Any')
+                )}
               </TableData>
             </TableRow>
           </TableBody>
@@ -145,15 +115,10 @@ const OverrideDetails = ({
 
       <DetailsBlock
         title={
-          entity.isActive() ?
-            _('Appearance') :
-            _('Appearance when active')
+          entity.isActive() ? _('Appearance') : _('Appearance when active')
         }
       >
-        <OverrideBox
-          override={entity}
-          detailsLink={false}
-        />
+        <OverrideBox override={entity} detailsLink={false} />
       </DetailsBlock>
     </Layout>
   );

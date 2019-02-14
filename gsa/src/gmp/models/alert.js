@@ -69,8 +69,7 @@ export const isTicketEvent = event =>
   event === EVENT_TYPE_OWNED_TICKET_CHANGED ||
   event === EVENT_TYPE_TICKET_RECEIVED;
 export const isSecinfoEvent = event =>
-  event === EVENT_TYPE_NEW_SECINFO ||
-  event === EVENT_TYPE_UPDATED_SECINFO;
+  event === EVENT_TYPE_NEW_SECINFO || event === EVENT_TYPE_UPDATED_SECINFO;
 
 const create_values = data => {
   const value = isEmpty(data.__text) ? undefined : data.__text;
@@ -91,7 +90,6 @@ const create_values = data => {
 };
 
 class Alert extends Model {
-
   static entityType = 'alert';
 
   parseProperties(elem) {
@@ -111,8 +109,7 @@ class Alert extends Model {
           type: ret[type].__text,
           data,
         };
-      }
-      else {
+      } else {
         ret[type] = {
           type: ret[type],
           data: {},
@@ -125,10 +122,8 @@ class Alert extends Model {
     }
 
     if (isDefined(elem.tasks)) {
-      ret.tasks = map(elem.tasks.task,
-        task => new Model(task, 'task'));
-    }
-    else {
+      ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
+    } else {
       ret.tasks = [];
     }
 
@@ -137,8 +132,7 @@ class Alert extends Model {
     if (isDefined(methDatRepForm) && isDefined(methDatRepForm.value)) {
       const methDatRepFormSplit = methDatRepForm.value.split(',');
       ret.method.data.report_formats = methDatRepFormSplit.map(rf => rf.trim());
-    }
-    else {
+    } else {
       ret.method.data.report_formats = [];
     }
 

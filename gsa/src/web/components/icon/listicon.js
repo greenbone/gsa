@@ -27,13 +27,8 @@ import ListSvgIcon from './listsvgicon';
 
 const ListIcon = ({page, filter, ...props}) => {
   return (
-    <Link
-      to={page}
-      filter={filter}
-    >
-      <ListSvgIcon
-        {...props}
-      />
+    <Link to={page} filter={filter}>
+      <ListSvgIcon {...props} />
     </Link>
   );
 };

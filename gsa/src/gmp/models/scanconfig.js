@@ -18,10 +18,7 @@
  */
 
 import {isDefined} from '../utils/identity';
-import {
-  forEach,
-  map,
-} from '../utils/array';
+import {forEach, map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
 import {parseInt} from '../parser';
@@ -48,7 +45,6 @@ export const ospScanConfigsFilter = config =>
   config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
 class ScanConfig extends Model {
-
   static entityType = 'scanconfig';
 
   parseProperties(elem) {
@@ -72,8 +68,7 @@ class ScanConfig extends Model {
         families[name] = new_family;
         return new_family;
       });
-    }
-    else {
+    } else {
       ret.family_list = [];
     }
 
@@ -82,8 +77,7 @@ class ScanConfig extends Model {
       families.trend = ret.family_count.growing;
 
       delete ret.family_count;
-    }
-    else {
+    } else {
       families.count = 0;
     }
 
@@ -106,8 +100,7 @@ class ScanConfig extends Model {
         ret.nvts.max = parse_count(ret.max_nvt_count);
         delete ret.max_nvt_count;
       }
-    }
-    else {
+    } else {
       ret.nvts = {};
     }
 
@@ -121,8 +114,7 @@ class ScanConfig extends Model {
           delete pref.nvt;
 
           scanner_preferences.push(pref);
-        }
-        else {
+        } else {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt._oid;
@@ -150,8 +142,7 @@ class ScanConfig extends Model {
 
     if (isDefined(elem.tasks)) {
       ret.tasks = map(elem.tasks.task, task => new Model(task, 'task'));
-    }
-    else {
+    } else {
       ret.tasks = [];
     }
 

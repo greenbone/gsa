@@ -39,19 +39,13 @@ const Margin = styled.div`
   overflow-y: auto;
 `;
 
-const DataTable = ({
-  dataTitles = [],
-  data = [],
-  dataRow: rowFunc,
-}) => (
+const DataTable = ({dataTitles = [], data = [], dataRow: rowFunc}) => (
   <Margin>
     <Table>
       <TableHeader>
         <TableRow>
           {dataTitles.map((head, i) => (
-            <TableHead key={i}>
-              {`${head}`}
-            </TableHead>
+            <TableHead key={i}>{`${head}`}</TableHead>
           ))}
         </TableRow>
       </TableHeader>
@@ -61,9 +55,7 @@ const DataTable = ({
           return (
             <TableRow key={i}>
               {rowData.map((value, j) => (
-                <TableData key={j}>
-                  {value}
-                </TableData>
+                <TableData key={j}>{value}</TableData>
               ))}
             </TableRow>
           );

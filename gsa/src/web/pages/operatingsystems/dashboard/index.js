@@ -26,10 +26,7 @@ import {
   OsSeverityClassDisplay,
   OsSeverityClassTableDisplay,
 } from './severityclassdisplay';
-import {
-  OsVulnScoreDisplay,
-  OsVulnScoreTableDisplay,
-} from './vulnscoredisplay';
+import {OsVulnScoreDisplay, OsVulnScoreTableDisplay} from './vulnscoredisplay';
 
 export const OS_DASHBOARD_ID = 'e93b51ed-5881-40e0-bc4f-7d3268a36177';
 

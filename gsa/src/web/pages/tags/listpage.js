@@ -72,22 +72,12 @@ export const SORT_FIELDS = [
   },
 ];
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onTagCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onTagCreateClick}) => (
   <IconDivider>
-    <ManualIcon
-      page="gui_introduction"
-      anchor="tags"
-      title={_('Help: Tags')}
-    />
-    {capabilities.mayCreate('tag') &&
-      <NewIcon
-        title={_('New Tag')}
-        onClick={onTagCreateClick}
-      />
-    }
+    <ManualIcon page="gui_introduction" anchor="tags" title={_('Help: Tags')} />
+    {capabilities.mayCreate('tag') && (
+      <NewIcon title={_('New Tag')} onClick={onTagCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -120,39 +110,40 @@ const TagsPage = ({
     onEnableError={onError}
     onEnabled={onChanged}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-    enable,
-    disable,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={TagsFilterDialog}
-      filterFilter={TAGS_FILTER_FILTER}
-      sectionIcon={<TagIcon size="large"/>}
-      table={TagsTable}
-      tags={false}
-      title={_('Tags')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onTagCloneClick={clone}
-      onTagCreateClick={create}
-      onTagDeleteClick={delete_func}
-      onTagDownloadClick={download}
-      onTagEditClick={edit}
-      onTagSaveClick={save}
-      onTagEnableClick={enable}
-      onTagDisableClick={disable}
-    />
-  )}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      save,
+      enable,
+      disable,
+    }) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={TagsFilterDialog}
+        filterFilter={TAGS_FILTER_FILTER}
+        sectionIcon={<TagIcon size="large" />}
+        table={TagsTable}
+        tags={false}
+        title={_('Tags')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onTagCloneClick={clone}
+        onTagCreateClick={create}
+        onTagDeleteClick={delete_func}
+        onTagDownloadClick={download}
+        onTagEditClick={edit}
+        onTagSaveClick={save}
+        onTagEnableClick={enable}
+        onTagDisableClick={disable}
+      />
+    )}
   </TagComponent>
 );
 

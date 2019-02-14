@@ -22,9 +22,7 @@ import {isDefined} from '../../utils/identity';
 
 import convert from './convert.js';
 
-const RELATIONS = [
-  '=', ':', '~', '>', '<',
-];
+const RELATIONS = ['=', ':', '~', '>', '<'];
 
 /**
  * Represents a filter term
@@ -37,7 +35,6 @@ const RELATIONS = [
  * value or relation after creation. This can lead to unexpected behaviour.
  */
 class FilterTerm {
-
   /**
    * @param {String} keyword  Filter keyword
    * @param {String} value    Value of the filter term
@@ -99,11 +96,13 @@ class FilterTerm {
    * @return {bool} true if this and the other term equal
    */
   equals(term) {
-    return term instanceof FilterTerm &&
+    return (
+      term instanceof FilterTerm &&
       isDefined(term) &&
       this.keyword === term.keyword &&
       this.value === term.value &&
-      this.relation === term.relation;
+      this.relation === term.relation
+    );
   }
 
   /**

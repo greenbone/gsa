@@ -46,41 +46,35 @@ const StyledButton = styled.button`
   cursor: pointer;
   overflow: visible;
   z-index: ${Theme.Layers.higher}; /* Don't interfere with dialog resizer */
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     border: 1px solid ${Theme.darkGray};
-  };
+  }
   &:hover {
     text-decoration: none;
     background: ${Theme.green};
     font-weight: bold;
     color: ${Theme.white};
-  };
+  }
   &[disabled] {
     cursor: not-allowed;
     opacity: 0.65;
     box-shadow: none;
-  };
+  }
   & img {
     height: 32px;
     width: 32px;
     margin-top: 5px 10px 5px -10px;
     vertical-align: middle;
-  };
+  }
   &:link {
     text-decoration: none;
     color: ${Theme.darkGray};
-  };
+  }
 `;
 
-const Button = ({
-  title,
-  children = title,
-  ...other
-}) => (
-  <StyledButton
-    {...other}
-    title={title}
-  >
+const Button = ({title, children = title, ...other}) => (
+  <StyledButton {...other} title={title}>
     {children}
   </StyledButton>
 );

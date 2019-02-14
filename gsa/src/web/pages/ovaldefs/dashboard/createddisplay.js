@@ -67,14 +67,16 @@ export const OvaldefsCreatedTableDisplay = createDisplay({
   filtersFilter: OVALDEFS_FILTER_FILTER,
 });
 
-registerDisplay(OvaldefsCreatedTableDisplay.displayId,
-  OvaldefsCreatedTableDisplay, {
+registerDisplay(
+  OvaldefsCreatedTableDisplay.displayId,
+  OvaldefsCreatedTableDisplay,
+  {
     title: _l('Table: OVAL Definitions by Creation Time'),
-  });
+  },
+);
 
-registerDisplay(OvaldefsCreatedDisplay.displayId,
-  OvaldefsCreatedDisplay, {
-    title: _l('Chart: OVAL Definitions by Creation Time'),
-  });
+registerDisplay(OvaldefsCreatedDisplay.displayId, OvaldefsCreatedDisplay, {
+  title: _l('Chart: OVAL Definitions by Creation Time'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

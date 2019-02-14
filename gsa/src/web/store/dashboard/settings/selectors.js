@@ -19,7 +19,6 @@
 import {isDefined} from 'gmp/utils/identity';
 
 export class DashboardSetting {
-
   constructor(rootState) {
     this.state = rootState;
   }
@@ -44,20 +43,22 @@ export class DashboardSetting {
   }
 
   getError(id) {
-    return isDefined(this.state) && isDefined(this.state.errors) ?
-      this.state.errors[id] : undefined;
+    return isDefined(this.state) && isDefined(this.state.errors)
+      ? this.state.errors[id]
+      : undefined;
   }
 
   getIsLoading(id) {
-    return isDefined(this.state) && isDefined(this.state.isLoading) ?
-      !!this.state.isLoading[id] : false;
+    return isDefined(this.state) && isDefined(this.state.isLoading)
+      ? !!this.state.isLoading[id]
+      : false;
   }
-
 }
 
 const getDashboardSettings = rootState => {
-  const dashboardSettings = isDefined(rootState) ?
-    rootState.dashboardSettings : undefined;
+  const dashboardSettings = isDefined(rootState)
+    ? rootState.dashboardSettings
+    : undefined;
 
   return new DashboardSetting(dashboardSettings);
 };
@@ -65,4 +66,3 @@ const getDashboardSettings = rootState => {
 export default getDashboardSettings;
 
 // vim: set ts=2 sw=2 tw=80:
-

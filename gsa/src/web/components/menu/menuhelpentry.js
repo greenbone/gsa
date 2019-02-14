@@ -31,18 +31,9 @@ const StyledManualLink = styled(ManualLink)`
   height: 100%;
 `;
 
-const MenuHelpEntry = ({
-  title,
-  ...props
-}) => (
-  <MenuEntry
-    {...props}
-    caps="help"
-  >
-    <StyledManualLink
-      page="index"
-      title={title}
-    >
+const MenuHelpEntry = ({title, ...props}) => (
+  <MenuEntry {...props} caps="help">
+    <StyledManualLink page="index" title={title}>
       {title}
     </StyledManualLink>
   </MenuEntry>

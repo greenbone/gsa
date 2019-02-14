@@ -21,7 +21,6 @@ import {isFunction} from '../../utils/identity';
 import LanguageDetector from '../detector';
 
 describe('LanguageDetector tests', () => {
-
   test('should be a i18next language detector', () => {
     expect(LanguageDetector.type).toEqual('languageDetector');
 
@@ -178,14 +177,16 @@ describe('LanguageDetector tests', () => {
 
     const detector = new LanguageDetector();
 
-    detector.init({languageUtils}, {storage, navigator: null},
-      {fallbackLng: 'bar'});
+    detector.init(
+      {languageUtils},
+      {storage, navigator: null},
+      {fallbackLng: 'bar'},
+    );
 
     expect(detector.detect()).toEqual('bar');
     expect(languageUtils.formatLanguageCode).not.toHaveBeenCalled();
     expect(languageUtils.isWhitelisted).not.toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

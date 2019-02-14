@@ -29,7 +29,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Ovaldef, 'ovaldef');
 
 describe('Ovaldef model tests', () => {
-
   test('should parse severity', () => {
     const ovaldef = new Ovaldef({max_cvss: '8.5'});
 
@@ -86,14 +85,8 @@ describe('Ovaldef model tests', () => {
         definition: {
           metadata: {
             affected: {
-              product: [
-                'foo',
-                'bar',
-              ],
-              platform: [
-                'lorem',
-                'ipsum',
-              ],
+              product: ['foo', 'bar'],
+              platform: ['lorem', 'ipsum'],
               _family: 'dolor',
             },
             reference: [
@@ -133,7 +126,9 @@ describe('Ovaldef model tests', () => {
     expect(ovaldef.references[0].url).toEqual('prot://url');
     expect(ovaldef.repository.status).toEqual('accep');
     expect(isDate(ovaldef.repository.changes[0].date)).toEqual(true);
-    expect(ovaldef.repository.changes[0].contributors).toEqual([{name: 'han', organization: 'rebels'}]);
+    expect(ovaldef.repository.changes[0].contributors).toEqual([
+      {name: 'han', organization: 'rebels'},
+    ]);
     expect(ovaldef.repository.changes[0].description).toEqual('amet');
     expect(ovaldef.repository.changes[0].name).toEqual('sit');
   });
@@ -174,14 +169,24 @@ describe('Ovaldef model tests', () => {
     };
     const ovaldef = new Ovaldef(elem);
 
-    expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual('foo');
+    expect(ovaldef.criterias[0].criterions[0].applicability_check).toEqual(
+      'foo',
+    );
     expect(ovaldef.criterias[0].criterions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].criterions[0].negate).toEqual(true);
     expect(ovaldef.criterias[0].criterions[0].test_ref).toEqual('ref');
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].applicability_check).toEqual('lorem');
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].comment).toEqual('ipsum');
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].negate).toEqual(false);
-    expect(ovaldef.criterias[0].criterias[0].criterions[0].test_ref).toEqual('ref2');
+    expect(
+      ovaldef.criterias[0].criterias[0].criterions[0].applicability_check,
+    ).toEqual('lorem');
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].comment).toEqual(
+      'ipsum',
+    );
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].negate).toEqual(
+      false,
+    );
+    expect(ovaldef.criterias[0].criterias[0].criterions[0].test_ref).toEqual(
+      'ref2',
+    );
   });
 
   test('should parse criteria extend_definitions', () => {
@@ -203,10 +208,14 @@ describe('Ovaldef model tests', () => {
     };
     const ovaldef = new Ovaldef(elem);
 
-    expect(ovaldef.criterias[0].extend_definitions[0].applicability_check).toEqual('foo');
+    expect(
+      ovaldef.criterias[0].extend_definitions[0].applicability_check,
+    ).toEqual('foo');
     expect(ovaldef.criterias[0].extend_definitions[0].comment).toEqual('bar');
     expect(ovaldef.criterias[0].extend_definitions[0].negate).toEqual(false);
-    expect(ovaldef.criterias[0].extend_definitions[0].definition_ref).toEqual('ref');
+    expect(ovaldef.criterias[0].extend_definitions[0].definition_ref).toEqual(
+      'ref',
+    );
   });
 
   test('should parse criteria comment', () => {

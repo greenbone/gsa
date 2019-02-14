@@ -43,17 +43,12 @@ const GridItem = styled.div`
   margin-right: ${GRID_ITEM_MARGIN.right}px;
 `;
 
-const Item = ({
-  children,
-  index,
-  id,
-  ...props
-}) => (
-  <Draggable
-    draggableId={id}
-    index={index}
-  >
-    {(provided, snapshot) => ( // eslint-disable-line no-shadow
+const Item = ({children, index, id, ...props}) => (
+  <Draggable draggableId={id} index={index}>
+    {(
+      provided,
+      snapshot, // eslint-disable-line no-shadow
+    ) => (
       <GridItem
         innerRef={provided.innerRef}
         {...provided.draggableProps}

@@ -28,7 +28,6 @@ import {createReducer} from './reducers';
 import {createSelector} from './selectors';
 
 export const createAll = entityType => {
-
   const selector = createSelector(entityType);
   const entitiesActions = createEntitiesActions(entityType);
   const entityActions = createEntityActions(entityType);

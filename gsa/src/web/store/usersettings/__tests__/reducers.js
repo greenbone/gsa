@@ -33,9 +33,7 @@ import {
 } from '../reducers';
 
 describe('settings reducers tests', () => {
-
   describe('timezone reducer tests', () => {
-
     test('should create initial state', () => {
       expect(timezone(undefined, {})).toBeUndefined();
     });
@@ -52,7 +50,6 @@ describe('settings reducers tests', () => {
   });
 
   describe('locale reducer tests', () => {
-
     test('should create initial state', () => {
       expect(locale(undefined, {})).toBeUndefined();
     });
@@ -69,7 +66,6 @@ describe('settings reducers tests', () => {
   });
 
   describe('username reducer tests', () => {
-
     test('should create initial state', () => {
       expect(username(undefined, {})).toBeUndefined();
     });
@@ -86,7 +82,6 @@ describe('settings reducers tests', () => {
   });
 
   describe('sessionTimeout reducer tests', () => {
-
     test('should create initial state', () => {
       expect(sessionTimeout(undefined, {})).toBeUndefined();
     });
@@ -103,7 +98,6 @@ describe('settings reducers tests', () => {
   });
 
   describe('reportComposerDefaults reducer tests', () => {
-
     test('should create initial empty state', () => {
       expect(reportComposerDefaults(undefined, {})).toEqual({});
     });

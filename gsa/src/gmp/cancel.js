@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-
 /*
  * The CancelToken class is based on the cancelable-promises tc39 proposal
  *
@@ -60,7 +59,6 @@
  */
 
 class CancelToken {
-
   constructor(executor) {
     this.canceled = false;
 
@@ -76,7 +74,7 @@ class CancelToken {
 
   static source() {
     let cancel;
-    const token = new CancelToken(func => cancel = func);
+    const token = new CancelToken(func => (cancel = func));
     return {
       cancel,
       token,

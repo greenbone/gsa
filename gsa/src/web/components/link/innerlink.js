@@ -21,11 +21,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const InnerLink = ({
-  children,
-  to,
-  ...props
-}) => {
+const InnerLink = ({children, to, ...props}) => {
   return (
     <a {...props} href={'#' + to}>
       {children}

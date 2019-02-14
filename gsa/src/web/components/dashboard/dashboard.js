@@ -92,7 +92,6 @@ const RowPlaceHolder = styled.div`
 `;
 
 export class Dashboard extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -104,8 +103,7 @@ export class Dashboard extends React.Component {
 
       if (isDefined(display)) {
         this.components[displayId] = display.component;
-      }
-      else {
+      } else {
         log.warn('Unknown Dashboard display', displayId);
       }
     });
@@ -163,9 +161,7 @@ export class Dashboard extends React.Component {
     const rowIndex = rows.findIndex(row => row.id === rowId);
     const row = rows[rowIndex];
 
-    const newRows = [
-      ...rows,
-    ];
+    const newRows = [...rows];
     const newRow = {
       ...row,
       height,
@@ -191,7 +187,7 @@ export class Dashboard extends React.Component {
       ...currentState,
       ...newState,
     });
-  };
+  }
 
   getRows(defaultRows) {
     return getRows(this.props.settings, defaultRows);
@@ -211,14 +207,13 @@ export class Dashboard extends React.Component {
   updateDisplay(id, props) {
     const rows = this.getRows();
 
-    const rowIndex = rows.findIndex(
-      row => row.items.some(item => item.id === id));
+    const rowIndex = rows.findIndex(row =>
+      row.items.some(item => item.id === id),
+    );
 
     const row = rows[rowIndex];
 
-    const rowItems = [
-      ...row.items,
-    ];
+    const rowItems = [...row.items];
 
     const displayIndex = rowItems.findIndex(i => i.id === id);
 
@@ -268,8 +263,7 @@ export class Dashboard extends React.Component {
           {_('Could not load dashboard settings. Reason: {{error}}', {error})}
         </RowPlaceHolder>
       );
-    }
-    else if (!isDefined(rows) && isLoading) {
+    } else if (!isDefined(rows) && isLoading) {
       return (
         <RowPlaceHolder>
           <Loading />
@@ -283,8 +277,10 @@ export class Dashboard extends React.Component {
     const getDisplaySettings = id => displaysById[id];
     const isAllowed = id => {
       const settings = getDisplaySettings(id);
-      return isDefined(settings) &&
-        isDefined(getDisplayComponent(settings.displayId));
+      return (
+        isDefined(settings) &&
+        isDefined(getDisplayComponent(settings.displayId))
+      );
     };
 
     const other = excludeObjectProps(props, ownPropNames);
@@ -298,12 +294,7 @@ export class Dashboard extends React.Component {
           onChange={this.handleItemsChange}
           onRowResize={this.handleRowResize}
         >
-          {({
-            id,
-            dragHandleProps,
-            height,
-            width,
-          }) => {
+          {({id, dragHandleProps, height, width}) => {
             const {displayId, ...displayProps} = getDisplaySettings(id);
             const Component = getDisplayComponent(displayId);
             const state = this.getDisplayState(id);
@@ -317,9 +308,11 @@ export class Dashboard extends React.Component {
                 id={id}
                 state={state}
                 setState={stateFunc =>
-                  this.handleSetDisplayState(id, stateFunc)}
-                onFilterIdChanged={
-                  filterId => this.handleUpdateDisplay(id, {filterId})}
+                  this.handleSetDisplayState(id, stateFunc)
+                }
+                onFilterIdChanged={filterId =>
+                  this.handleUpdateDisplay(id, {filterId})
+                }
                 onInteractive={this.props.onInteraction}
                 onRemoveClick={() => this.handleRemoveDisplay(id)}
               />
@@ -361,7 +354,6 @@ Dashboard.propTypes = {
   onInteraction: PropTypes.func,
 };
 
-
 const mapStateToProps = (rootState, {id}) => {
   const settingsSelector = DashboardSettings(rootState);
   const settings = settingsSelector.getById(id);
@@ -375,17 +367,18 @@ const mapStateToProps = (rootState, {id}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) =>
-    dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) =>
-    dispatch(saveSettings(gmp)(id, settings)),
+  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
+  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(Dashboard);
 
 // vim: set ts=2 sw=2 tw=80:

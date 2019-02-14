@@ -22,7 +22,6 @@ import {buildServerUrl} from './utils.js';
 import X2JsTransform from './transform/x2js.js';
 
 class GmpHttp extends Http {
-
   constructor(settings) {
     const {server, protocol, timeout} = settings;
     const url = buildServerUrl(server, 'gmp', protocol);
@@ -37,7 +36,6 @@ class GmpHttp extends Http {
       token: this.settings.token,
     };
   }
-
 }
 
 export default GmpHttp;

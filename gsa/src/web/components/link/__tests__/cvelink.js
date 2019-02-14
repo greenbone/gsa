@@ -18,23 +18,14 @@
  */
 import React from 'react';
 
-import {
-  fireEvent,
-  rendererWith,
-} from 'web/utils/testing';
+import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import CveLink from '../cvelink';
 
 describe('CveLink tests', () => {
-
   test('should render CveLink', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(
-      <CveLink
-        title="Foo"
-        id="foo"
-      />
-    );
+    const {element} = render(<CveLink title="Foo" id="foo" />);
 
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveAttribute('title', 'Foo');
@@ -43,13 +34,7 @@ describe('CveLink tests', () => {
 
   test('should not override type', () => {
     const {render} = rendererWith({capabilities: true, router: true});
-    const {element} = render(
-      <CveLink
-        title="Foo"
-        type="bar"
-        id="foo"
-      />
-    );
+    const {element} = render(<CveLink title="Foo" type="bar" id="foo" />);
 
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveAttribute('title', 'Foo');
@@ -58,12 +43,7 @@ describe('CveLink tests', () => {
 
   test('should route to details', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
-    const {element} = render(
-      <CveLink
-        title="Foo"
-        id="foo"
-      />
-    );
+    const {element} = render(<CveLink title="Foo" id="foo" />);
 
     expect(history.location.pathname).toEqual('/');
 
@@ -74,13 +54,7 @@ describe('CveLink tests', () => {
 
   test('should not route to details in text mode', () => {
     const {render, history} = rendererWith({capabilities: true, router: true});
-    const {element} = render(
-      <CveLink
-        title="Foo"
-        id="foo"
-        textOnly={true}
-      />
-    );
+    const {element} = render(<CveLink title="Foo" id="foo" textOnly={true} />);
 
     expect(history.location.pathname).toEqual('/');
 
@@ -88,7 +62,6 @@ describe('CveLink tests', () => {
 
     expect(history.location.pathname).toEqual('/');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

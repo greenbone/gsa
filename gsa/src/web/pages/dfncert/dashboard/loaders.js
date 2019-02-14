@@ -27,22 +27,17 @@ export const DFNCERTS_CREATED = 'dfncerts-created';
 export const DFNCERTS_SEVERITY = 'dfncerts-severity';
 
 export const dfnCertsCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.dfncerts.getCreatedAggregates({filter})
-    .then(r => r.data),
-  DFNCERTS_CREATED);
+  ({gmp, filter}) =>
+    gmp.dfncerts.getCreatedAggregates({filter}).then(r => r.data),
+  DFNCERTS_CREATED,
+);
 
-export const DfnCertsCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const DfnCertsCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={DFNCERTS_CREATED}
     filter={filter}
     load={dfnCertsCreatedLoader}
-    subscriptions={[
-      'dfncerts.timer',
-      'dfncerts.changed',
-    ]}
+    subscriptions={['dfncerts.timer', 'dfncerts.changed']}
   >
     {children}
   </Loader>
@@ -51,22 +46,17 @@ export const DfnCertsCreatedLoader = ({
 DfnCertsCreatedLoader.propTypes = loaderPropTypes;
 
 export const dfnCertSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.dfncerts.getSeverityAggregates({filter})
-    .then(r => r.data),
-  DFNCERTS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.dfncerts.getSeverityAggregates({filter}).then(r => r.data),
+  DFNCERTS_SEVERITY,
+);
 
-export const DfnCertSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const DfnCertSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={DFNCERTS_SEVERITY}
     filter={filter}
     load={dfnCertSeverityLoader}
-    subscriptions={[
-      'dfncerts.timer',
-      'dfncerts.changed',
-    ]}
+    subscriptions={['dfncerts.timer', 'dfncerts.changed']}
   >
     {children}
   </Loader>

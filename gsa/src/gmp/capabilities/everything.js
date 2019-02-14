@@ -20,7 +20,6 @@
 import Capabilities from './capabilities.js';
 
 class EverythingCapabilities extends Capabilities {
-
   constructor() {
     super(['everything']);
   }

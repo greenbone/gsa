@@ -24,7 +24,6 @@ import PropTypes from '../utils/proptypes.js';
 import Checkbox from '../components/form/checkbox.js';
 
 export class EntitySelection extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -32,26 +31,19 @@ export class EntitySelection extends React.Component {
   }
 
   handleSelection(value) {
-    const {
-      onDeselected,
-      onSelected,
-      entity,
-    } = this.props;
+    const {onDeselected, onSelected, entity} = this.props;
 
     if (value) {
       if (onSelected) {
         onSelected(entity);
       }
-    }
-    else if (onDeselected) {
+    } else if (onDeselected) {
       onDeselected(entity);
     }
   }
 
   render() {
-    return (
-      <Checkbox onChange={this.handleSelection}/>
-    );
+    return <Checkbox onChange={this.handleSelection} />;
   }
 }
 

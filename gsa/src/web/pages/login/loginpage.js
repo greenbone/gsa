@@ -94,7 +94,6 @@ const Wrapper = styled.div`
 `;
 
 class LoginPage extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -108,30 +107,32 @@ class LoginPage extends React.Component {
   handleSubmit(username, password) {
     const {gmp} = this.props;
 
-    gmp.login(username, password).then(data => {
-      const {
-        locale,
-        timezone,
-        sessionTimeout,
-      } = data;
+    gmp.login(username, password).then(
+      data => {
+        const {locale, timezone, sessionTimeout} = data;
 
-      const {location, history} = this.props;
-      if (location && location.state && location.state.next &&
-          location.state.next !== location.pathname) {
-        history.replace(location.state.next);
-      }
-      else {
-        history.replace('/');
-      }
+        const {location, history} = this.props;
+        if (
+          location &&
+          location.state &&
+          location.state.next &&
+          location.state.next !== location.pathname
+        ) {
+          history.replace(location.state.next);
+        } else {
+          history.replace('/');
+        }
 
-      this.props.setTimezone(timezone);
-      this.props.setLocale(locale);
-      this.props.setSessionTimeout(sessionTimeout);
-      this.props.setUsername(username);
-    }, rej => {
-      log.error(rej);
-      this.setState({error: rej});
-    });
+        this.props.setTimezone(timezone);
+        this.props.setLocale(locale);
+        this.props.setSessionTimeout(sessionTimeout);
+        this.props.setUsername(username);
+      },
+      rej => {
+        log.error(rej);
+        this.setState({error: rej});
+      },
+    );
   }
 
   componentDidMount() {
@@ -147,26 +148,22 @@ class LoginPage extends React.Component {
     if (error) {
       if (isEmpty(error.message)) {
         message = _('Unknown error on login');
-      }
-      else {
+      } else {
         message = error.message;
       }
     }
 
     return (
       <StyledLayout>
-        <LoginHeader/>
-        <MenuSpacer/>
+        <LoginHeader />
+        <MenuSpacer />
         <LoginLayout flex="column" className="login">
-          <GreenboneLogo/>
+          <GreenboneLogo />
           <Wrapper>
-            <LoginForm
-              error={message}
-              onSubmit={this.handleSubmit}
-            />
+            <LoginForm error={message} onSubmit={this.handleSubmit} />
           </Wrapper>
         </LoginLayout>
-        <Footer/>
+        <Footer />
       </StyledLayout>
     );
   }
@@ -192,7 +189,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withRouter,
   withGmp,
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:

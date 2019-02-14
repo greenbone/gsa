@@ -50,12 +50,7 @@ const ToolBarIcons = props => (
   />
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     createFilterType="info"
@@ -75,7 +70,7 @@ const Page = ({
     filter={filter}
     filterEditDialog={CpeFilterDialog}
     filtersFilter={CPES_FILTER_FILTER}
-    sectionIcon={<CpeLogoIcon size="large"/>}
+    sectionIcon={<CpeLogoIcon size="large" />}
     table={CpesTable}
     title={_('CPEs')}
     toolBarIcons={ToolBarIcons}

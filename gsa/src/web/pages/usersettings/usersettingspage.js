@@ -30,10 +30,7 @@ import {
   openVasScanConfigsFilter,
   ospScanConfigsFilter,
 } from 'gmp/models/scanconfig';
-import {
-  openVasScannersFilter,
-  ospScannersFilter,
-} from 'gmp/models/scanner';
+import {openVasScannersFilter, ospScannersFilter} from 'gmp/models/scanner';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
@@ -100,9 +97,7 @@ import {
 } from 'web/store/entities/targets';
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {
-  getUserSettingsDefaults,
-} from 'web/store/usersettings/defaults/selectors';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 import {
@@ -140,31 +135,18 @@ const getLangNameByCode = code => {
   return isDefined(language) ? `${language.name}` : null;
 };
 
-const SettingTableRow = ({
-  setting,
-  title,
-  type,
-}) => {
-  const {
-    comment,
-    id,
-    name,
-  } = setting;
+const SettingTableRow = ({setting, title, type}) => {
+  const {comment, id, name} = setting;
   return (
     <TableRow title={comment}>
-      <TableData>
-        {title}
-      </TableData>
+      <TableData>{title}</TableData>
       <TableData>
         <Layout>
-          {isDefined(id) &&
-            <DetailsLink
-              id={id}
-              type={type}
-            >
+          {isDefined(id) && (
+            <DetailsLink id={id} type={type}>
               {name}
             </DetailsLink>
-          }
+          )}
         </Layout>
       </TableData>
     </TableRow>
@@ -260,27 +242,25 @@ class UserSettings extends React.Component {
   }
 
   getSeverityClassNameById(id) {
-    const specifiedClass = SEVERITY_CLASSES.find(
-      clas => {
-        return clas.id === id;
-      }
-    );
+    const specifiedClass = SEVERITY_CLASSES.find(clas => {
+      return clas.id === id;
+    });
     return isDefined(specifiedClass) ? specifiedClass.name : undefined;
   }
 
   handleSaveSettings(data) {
     const {gmp} = this.props;
-    const {
-      userInterfaceLanguage = BROWSER_LANGUAGE,
-      timezone,
-    } = data;
+    const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
 
     this.handleInteraction();
 
     return gmp.user.saveSettings(data).then(() => {
       this.closeDialog();
-      this.props.setLocale(userInterfaceLanguage === BROWSER_LANGUAGE ?
-        undefined : userInterfaceLanguage);
+      this.props.setLocale(
+        userInterfaceLanguage === BROWSER_LANGUAGE
+          ? undefined
+          : userInterfaceLanguage,
+      );
       this.props.setTimezone(timezone);
 
       this.props.loadSettings();
@@ -292,10 +272,7 @@ class UserSettings extends React.Component {
   }
 
   render() {
-    const {
-      activeTab,
-      dialogVisible,
-    } = this.state;
+    const {activeTab, dialogVisible} = this.state;
 
     const {
       capabilities,
@@ -368,39 +345,27 @@ class UserSettings extends React.Component {
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ToolBarIcons
-            onEditSettingsClick={this.openDialog}
-          />
+          <ToolBarIcons onEditSettingsClick={this.openDialog} />
           <Section
-            img={<MySettingsIcon size="large"/>}
+            img={<MySettingsIcon size="large" />}
             title={_('My Settings')}
           />
-          {isLoading ?
-            <Loading/> :
+          {isLoading ? (
+            <Loading />
+          ) : (
             <React.Fragment>
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={this.handleActivateTab}
                 >
-                  <Tab>
-                    {_('General')}
-                  </Tab>
-                  <Tab>
-                    {_('Severity')}
-                  </Tab>
-                  <Tab>
-                    {_('Defaults')}
-                  </Tab>
-                  {capabilities.mayAccess('filter') &&
-                    <Tab>
-                      {_('Filters')}
-                    </Tab>
-                  }
+                  <Tab>{_('General')}</Tab>
+                  <Tab>{_('Severity')}</Tab>
+                  <Tab>{_('Defaults')}</Tab>
+                  {capabilities.mayAccess('filter') && (
+                    <Tab>{_('Filters')}</Tab>
+                  )}
                 </TabList>
               </TabLayout>
 
@@ -408,82 +373,52 @@ class UserSettings extends React.Component {
                 <TabPanels>
                   <TabPanel>
                     <Table>
-                      <colgroup width={FIRST_COL_WIDTH}/>
+                      <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
                         <TableRow>
-                          <TableData>
-                            {_('Timezone')}
-                          </TableData>
-                          <TableData>
-                            {timezone}
-                          </TableData>
+                          <TableData>{_('Timezone')}</TableData>
+                          <TableData>{timezone}</TableData>
                         </TableRow>
                         <TableRow>
-                          <TableData>
-                            {_('Password')}
-                          </TableData>
-                          <TableData>
-                            ********
-                          </TableData>
+                          <TableData>{_('Password')}</TableData>
+                          <TableData>********</TableData>
                         </TableRow>
                         <TableRow title={userInterfaceLanguage.comment}>
-                          <TableData>
-                            {_('User Interface Language')}
-                          </TableData>
+                          <TableData>{_('User Interface Language')}</TableData>
                           <TableData>
                             {getLangNameByCode(userInterfaceLanguage.value)}
                           </TableData>
                         </TableRow>
                         <TableRow title={rowsPerPage.comment}>
-                          <TableData>
-                            {_('Rows Per Page')}
-                          </TableData>
-                          <TableData>
-                            {rowsPerPage.value}
-                          </TableData>
+                          <TableData>{_('Rows Per Page')}</TableData>
+                          <TableData>{rowsPerPage.value}</TableData>
                         </TableRow>
                         <TableRow title={detailsExportFileName.comment}>
-                          <TableData>
-                            {_('Details Export File Name')}
-                          </TableData>
-                          <TableData>
-                            {detailsExportFileName.value}
-                          </TableData>
+                          <TableData>{_('Details Export File Name')}</TableData>
+                          <TableData>{detailsExportFileName.value}</TableData>
                         </TableRow>
                         <TableRow title={listExportFileName.comment}>
-                          <TableData>
-                            {_('List Export File Name')}
-                          </TableData>
-                          <TableData>
-                            {listExportFileName.value}
-                          </TableData>
+                          <TableData>{_('List Export File Name')}</TableData>
+                          <TableData>{listExportFileName.value}</TableData>
                         </TableRow>
                         <TableRow title={reportExportFileName.comment}>
-                          <TableData>
-                            {_('Report Export File Name')}
-                          </TableData>
-                          <TableData>
-                            {reportExportFileName.value}
-                          </TableData>
+                          <TableData>{_('Report Export File Name')}</TableData>
+                          <TableData>{reportExportFileName.value}</TableData>
                         </TableRow>
                         <TableRow title={maxRowsPerPage.comment}>
                           <TableData>
                             {_('Max Rows Per Page (immutable)')}
                           </TableData>
-                          <TableData>
-                            {maxRowsPerPage.value}
-                          </TableData>
+                          <TableData>{maxRowsPerPage.value}</TableData>
                         </TableRow>
                         <TableRow title={autoCacheRebuild.comment}>
+                          <TableData>{_('Auto Cache Rebuild')}</TableData>
                           <TableData>
-                            {_('Auto Cache Rebuild')}
-                          </TableData>
-                          <TableData>
-                            {isDefined(autoCacheRebuild.value) ?
-                              parseYesNo(autoCacheRebuild.value) === YES_VALUE ?
-                                _('Yes') : _('No') :
-                              ''
-                            }
+                            {isDefined(autoCacheRebuild.value)
+                              ? parseYesNo(autoCacheRebuild.value) === YES_VALUE
+                                ? _('Yes')
+                                : _('No')
+                              : ''}
                           </TableData>
                         </TableRow>
                       </TableBody>
@@ -491,35 +426,27 @@ class UserSettings extends React.Component {
                   </TabPanel>
                   <TabPanel>
                     <Table>
-                      <colgroup width={FIRST_COL_WIDTH}/>
+                      <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
                         <TableRow title={severityClass.comment}>
-                          <TableData>
-                            {_('Severity Class')}
-                          </TableData>
+                          <TableData>{_('Severity Class')}</TableData>
                           <TableData>
                             {this.getSeverityClassNameById(severityClass.value)}
                           </TableData>
                         </TableRow>
                         <TableRow title={dynamicSeverity.comment}>
+                          <TableData>{_('Dynamic Severity')}</TableData>
                           <TableData>
-                            {_('Dynamic Severity')}
-                          </TableData>
-                          <TableData>
-                            {isDefined(dynamicSeverity.value) ?
-                              parseYesNo(dynamicSeverity.value) === YES_VALUE ?
-                                _('Yes') : _('No') :
-                              ''
-                            }
+                            {isDefined(dynamicSeverity.value)
+                              ? parseYesNo(dynamicSeverity.value) === YES_VALUE
+                                ? _('Yes')
+                                : _('No')
+                              : ''}
                           </TableData>
                         </TableRow>
                         <TableRow title={defaultSeverity.comment}>
-                          <TableData>
-                            {_('Default Severity')}
-                          </TableData>
-                          <TableData>
-                            {defaultSeverity.value}
-                          </TableData>
+                          <TableData>{_('Default Severity')}</TableData>
+                          <TableData>{defaultSeverity.value}</TableData>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -527,107 +454,107 @@ class UserSettings extends React.Component {
 
                   <TabPanel>
                     <Table>
-                      <colgroup width={FIRST_COL_WIDTH}/>
+                      <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
-                        {capabilities.mayAccess('alert') &&
+                        {capabilities.mayAccess('alert') && (
                           <SettingTableRow
                             setting={defaultAlert}
                             title={_('Default Alert')}
                             type="alert"
                           />
-                        }
-                        {capabilities.mayAccess('credential') &&
+                        )}
+                        {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultEsxiCredential}
                             title={_('Default ESXi Credential')}
                             type="credential"
                           />
-                        }
-                        {capabilities.mayAccess('scanconfig') &&
+                        )}
+                        {capabilities.mayAccess('scanconfig') && (
                           <SettingTableRow
                             setting={defaultOspScanConfig}
                             title={_('Default OSP Scan Config')}
                             type="scanconfig"
                           />
-                        }
-                        {capabilities.mayAccess('scanner') &&
+                        )}
+                        {capabilities.mayAccess('scanner') && (
                           <SettingTableRow
                             setting={defaultOspScanner}
                             title={_('Default OSP Scanner')}
                             type="scanner"
                           />
-                        }
-                        {capabilities.mayAccess('scanconfig') &&
+                        )}
+                        {capabilities.mayAccess('scanconfig') && (
                           <SettingTableRow
                             setting={defaultOpenvasScanConfig}
                             title={_('Default OpenVAS Scan Config')}
                             type="scanconfig"
                           />
-                        }
-                        {capabilities.mayAccess('scanner') &&
+                        )}
+                        {capabilities.mayAccess('scanner') && (
                           <SettingTableRow
                             setting={defaultOpenvasScanner}
                             title={_('Default OpenVAS Scanner')}
                             type="scanner"
                           />
-                        }
-                        {capabilities.mayAccess('portlist') &&
+                        )}
+                        {capabilities.mayAccess('portlist') && (
                           <SettingTableRow
                             setting={defaultPortList}
                             title={_('Default Port List')}
                             type="portlist"
                           />
-                        }
-                        {capabilities.mayAccess('reportformat') &&
+                        )}
+                        {capabilities.mayAccess('reportformat') && (
                           <SettingTableRow
                             setting={defaultReportFormat}
                             title={_('Default Report Format')}
                             type="reportformat"
                           />
-                        }
-                        {capabilities.mayAccess('credential') &&
+                        )}
+                        {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultSmbCredential}
                             title={_('Default SMB Credential')}
                             type="credential"
                           />
-                        }
-                        {capabilities.mayAccess('credential') &&
+                        )}
+                        {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultSnmpCredential}
                             title={_('Default SNMP Credential')}
                             type="credential"
                           />
-                        }
-                        {capabilities.mayAccess('credential') &&
+                        )}
+                        {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultSshCredential}
                             title={_('Default SSH Credential')}
                             type="credential"
                           />
-                        }
-                        {capabilities.mayAccess('schedule') &&
+                        )}
+                        {capabilities.mayAccess('schedule') && (
                           <SettingTableRow
                             setting={defaultSchedule}
                             title={_('Default Schedule')}
                             type="schedule"
                           />
-                        }
-                        {capabilities.mayAccess('target') &&
+                        )}
+                        {capabilities.mayAccess('target') && (
                           <SettingTableRow
                             setting={defaultTarget}
                             title={_('Default Target')}
                             type="target"
                           />
-                        }
+                        )}
                       </TableBody>
                     </Table>
                   </TabPanel>
 
-                  {capabilities.mayAccess('filter') &&
+                  {capabilities.mayAccess('filter') && (
                     <TabPanel>
                       <Table>
-                        <colgroup width={FIRST_COL_WIDTH}/>
+                        <colgroup width={FIRST_COL_WIDTH} />
                         <TableBody>
                           <SettingTableRow
                             setting={agentsFilter}
@@ -757,12 +684,12 @@ class UserSettings extends React.Component {
                         </TableBody>
                       </Table>
                     </TabPanel>
-                  }
+                  )}
                 </TabPanels>
               </Tabs>
             </React.Fragment>
-          }
-          {dialogVisible && !isLoading &&
+          )}
+          {dialogVisible && !isLoading && (
             <SettingsDialog
               alerts={alerts}
               filters={filters}
@@ -783,8 +710,9 @@ class UserSettings extends React.Component {
               listExportFileName={listExportFileName.value}
               reportExportFileName={reportExportFileName.value}
               autoCacheRebuild={autoCacheRebuild.value}
-              severityClass={severityClass.value === '' ?
-                undefined : severityClass.value}
+              severityClass={
+                severityClass.value === '' ? undefined : severityClass.value
+              }
               dynamicSeverity={dynamicSeverity.value}
               defaultSeverity={defaultSeverity.value}
               defaultAlert={defaultAlert.id}
@@ -829,7 +757,7 @@ class UserSettings extends React.Component {
               onSave={this.handleSaveSettings}
               onValueChange={this.handleValueChange}
             />
-          }
+          )}
         </Layout>
       </ErrorBoundary>
     );
@@ -917,17 +845,20 @@ const mapStateToProps = rootState => {
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
 
   const userInterfaceLanguage = userDefaultsSelector.getByName(
-    'userinterfacelanguage');
+    'userinterfacelanguage',
+  );
   const rowsPerPage = userDefaultsSelector.getByName('rowsperpage');
   const detailsExportFileName = userDefaultsSelector.getByName(
-    'detailsexportfilename');
+    'detailsexportfilename',
+  );
   const listExportFileName = userDefaultsSelector.getByName(
-    'listexportfilename');
+    'listexportfilename',
+  );
   const reportExportFileName = userDefaultsSelector.getByName(
-    'reportexportfilename');
+    'reportexportfilename',
+  );
   const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage');
-  const autoCacheRebuild = userDefaultsSelector.getByName(
-    'autocacherebuild');
+  const autoCacheRebuild = userDefaultsSelector.getByName('autocacherebuild');
 
   const severityClass = userDefaultsSelector.getByName('severityclass');
   const defaultSeverity = userDefaultsSelector.getByName('defaultseverity');
@@ -935,28 +866,39 @@ const mapStateToProps = rootState => {
 
   const defaultAlertId = userDefaultsSelector.getValueByName('defaultalert');
   const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
-    'defaultesxicredential');
+    'defaultesxicredential',
+  );
   const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
-    'defaultospscanconfig');
+    'defaultospscanconfig',
+  );
   const defaultOspScannerId = userDefaultsSelector.getValueByName(
-    'defaultospscanner');
+    'defaultospscanner',
+  );
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
-    'defaultopenvasscanconfig');
+    'defaultopenvasscanconfig',
+  );
   const defaultOpenvasScannerId = userDefaultsSelector.getValueByName(
-    'defaultopenvasscanner');
+    'defaultopenvasscanner',
+  );
 
   const defaultPortListId = userDefaultsSelector.getValueByName(
-    'defaultportlist');
+    'defaultportlist',
+  );
   const defaultReportFormatId = userDefaultsSelector.getValueByName(
-    'defaultreportformat');
+    'defaultreportformat',
+  );
   const defaultSmbCredentialId = userDefaultsSelector.getValueByName(
-    'defaultsmbcredential');
+    'defaultsmbcredential',
+  );
   const defaultSnmpCredentialId = userDefaultsSelector.getValueByName(
-    'defaultsnmpcredential');
+    'defaultsnmpcredential',
+  );
   const defaultSshCredentialId = userDefaultsSelector.getValueByName(
-    'defaultsshcredential');
+    'defaultsshcredential',
+  );
   const defaultScheduleId = userDefaultsSelector.getValueByName(
-      'defaultschedule');
+    'defaultschedule',
+  );
   const defaultTargetId = userDefaultsSelector.getValueByName('defaulttarget');
 
   const agentsFilterId = userDefaultsSelector.getValueByName('agentsfilter');
@@ -964,24 +906,29 @@ const mapStateToProps = rootState => {
   const assetsFilterId = userDefaultsSelector.getValueByName('assetsfilter');
   const configsFilterId = userDefaultsSelector.getValueByName('configsfilter');
   const credentialsFilterId = userDefaultsSelector.getValueByName(
-    'credentialsfilter');
+    'credentialsfilter',
+  );
   const filtersFilterId = userDefaultsSelector.getValueByName('filtersfilter');
   const notesFilterId = userDefaultsSelector.getValueByName('notesfilter');
   const overridesFilterId = userDefaultsSelector.getValueByName(
-    'overridesfilter');
+    'overridesfilter',
+  );
   const permissionsFilterId = userDefaultsSelector.getValueByName(
-    'permissionsfilter');
+    'permissionsfilter',
+  );
   const portListsFilterId = userDefaultsSelector.getValueByName(
-    'portlistsfilter');
+    'portlistsfilter',
+  );
 
-  const reportsFilterId = userDefaultsSelector.getValueByName(
-    'reportsfilter');
+  const reportsFilterId = userDefaultsSelector.getValueByName('reportsfilter');
   const reportFormatsFilterId = userDefaultsSelector.getValueByName(
-    'reportformatsfilter');
+    'reportformatsfilter',
+  );
   const resultsFilterId = userDefaultsSelector.getValueByName('resultsfilter');
   const rolesFilterId = userDefaultsSelector.getValueByName('rolesfilter');
   const schedulesFilterId = userDefaultsSelector.getValueByName(
-    'schedulesfilter');
+    'schedulesfilter',
+  );
   const tagsFilterId = userDefaultsSelector.getValueByName('tagsfilter');
 
   const targetsFilterId = userDefaultsSelector.getValueByName('targetsfilter');
@@ -989,12 +936,14 @@ const mapStateToProps = rootState => {
   const cpeFilterId = userDefaultsSelector.getValueByName('cpefilter');
   const cveFilterId = userDefaultsSelector.getValueByName('cvefilter');
   const certBundFilterId = userDefaultsSelector.getValueByName(
-    'certbundfilter');
+    'certbundfilter',
+  );
   const dfnCertFilterId = userDefaultsSelector.getValueByName('dfncertfilter');
   const nvtFilterId = userDefaultsSelector.getValueByName('nvtfilter');
   const ovalFilterId = userDefaultsSelector.getValueByName('ovalfilter');
   const secInfoFilterId = userDefaultsSelector.getValueByName(
-    'allsecinfofilter');
+    'allsecinfofilter',
+  );
 
   const alertsSel = alertsSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
@@ -1009,18 +958,20 @@ const mapStateToProps = rootState => {
   // select entities with these IDs
   const defaultAlert = alertsSel.getEntity(defaultAlertId);
   const defaultEsxiCredential = credentialsSel.getEntity(
-    defaultEsxiCredentialId);
-  const defaultOspScanConfig = scanConfigsSel.getEntity(
-    defaultOspScanConfigId);
+    defaultEsxiCredentialId,
+  );
+  const defaultOspScanConfig = scanConfigsSel.getEntity(defaultOspScanConfigId);
   const defaultOspScanner = scannersSel.getEntity(defaultOspScannerId);
   const defaultOpenvasScanConfig = scanConfigsSel.getEntity(
-    defaultOpenvasScanConfigId);
+    defaultOpenvasScanConfigId,
+  );
   const defaultOpenvasScanner = scannersSel.getEntity(defaultOpenvasScannerId);
   const defaultPortList = portListsSel.getEntity(defaultPortListId);
   const defaultReportFormat = reportFormatsSel.getEntity(defaultReportFormatId);
   const defaultSmbCredential = credentialsSel.getEntity(defaultSmbCredentialId);
   const defaultSnmpCredential = credentialsSel.getEntity(
-    defaultSnmpCredentialId);
+    defaultSnmpCredentialId,
+  );
   const defaultSshCredential = credentialsSel.getEntity(defaultSshCredentialId);
   const defaultSchedule = schedulesSel.getEntity(defaultScheduleId);
   const defaultTarget = targetsSel.getEntity(defaultTargetId);
@@ -1138,7 +1089,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(UserSettings);
 
 // vim: set ts=2 sw=2 tw=80:

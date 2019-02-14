@@ -26,7 +26,6 @@ import {testNvtModel} from 'gmp/models/testing';
 testNvtModel(Nvt, 'nvt');
 
 describe('NVT model tests', () => {
-
   test('should be instance of Info', () => {
     const nvt = new Nvt({});
 
@@ -104,10 +103,12 @@ describe('NVT model tests', () => {
         ],
       },
     };
-    const res = [{
-      foo: 'bar',
-      lorem: 'ipsum',
-    }];
+    const res = [
+      {
+        foo: 'bar',
+        lorem: 'ipsum',
+      },
+    ];
     const nvt1 = new Nvt({});
     const nvt2 = new Nvt(elem);
 
@@ -150,10 +151,12 @@ describe('NVT model tests', () => {
         ],
       },
     };
-    const res3 = [{
-      id: '123',
-      type: 'foo',
-    }];
+    const res3 = [
+      {
+        id: '123',
+        type: 'foo',
+      },
+    ];
     const elem4 = {
       cert: {
         cert_ref: [

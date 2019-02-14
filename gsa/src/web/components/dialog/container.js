@@ -30,41 +30,25 @@ const StyledDialogContainer = styled.div`
   margin: 10% auto;
   border: 0;
   outline: 0;
-  width: ${props => isDefined(props.width) ? props.width : '400px'};
-  height: ${props => isDefined(props.height) ? props.height : 'auto'};
+  width: ${props => (isDefined(props.width) ? props.width : '400px')};
+  height: ${props => (isDefined(props.height) ? props.height : 'auto')};
 `;
 
-const DialogContainer = ({
-  width = '',
-  height = '',
-  ...other
-}) => {
+const DialogContainer = ({width = '', height = '', ...other}) => {
   if (!width.toString().endsWith('px')) {
     width += 'px';
   }
   if (!height.toString().endsWith('px')) {
     height += 'px';
   }
-  return (
-    <StyledDialogContainer
-      {...other}
-      width={width}
-      height={height}
-    />
-  );
+  return <StyledDialogContainer {...other} width={width} height={height} />;
 };
 
 DialogContainer.displayName = 'DialogContainer';
 
 DialogContainer.propTypes = {
-  height: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
-  width: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default DialogContainer;

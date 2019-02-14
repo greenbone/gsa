@@ -30,7 +30,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.reportformats');
 
 class ReportFormatCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'report_format', ReportFormat);
   }
@@ -45,14 +44,7 @@ class ReportFormatCommand extends EntityCommand {
   }
 
   save(args) {
-    const {
-      active,
-      id,
-      id_lists = {},
-      name,
-      preferences = {},
-      summary,
-    } = args;
+    const {active, id, id_lists = {}, name, preferences = {}, summary} = args;
 
     const data = {
       cmd: 'save_report_format',
@@ -87,8 +79,11 @@ class ReportFormatCommand extends EntityCommand {
     }).then(this.transformRequest, rej => {
       const {root} = rej;
 
-      if (isDefined(root) && isDefined(root.get_report_formats) &&
-        isDefined(root.get_report_formats.verify_report_format_response)) {
+      if (
+        isDefined(root) &&
+        isDefined(root.get_report_formats) &&
+        isDefined(root.get_report_formats.verify_report_format_response)
+      ) {
         const response = root.get_report_formats.verify_report_format_response;
         rej.setMessage(response._status_text);
       }
@@ -103,7 +98,6 @@ class ReportFormatCommand extends EntityCommand {
 }
 
 class ReportFormatsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'report_format', ReportFormat);
   }

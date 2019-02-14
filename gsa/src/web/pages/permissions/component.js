@@ -36,14 +36,14 @@ import EntityComponent from '../../entity/component';
 import PermissionDialog from './dialog';
 
 class PermissionsComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
     this.state = {dialogVisible: false};
 
-    this.handleClosePermissionDialog =
-      this.handleClosePermissionDialog.bind(this);
+    this.handleClosePermissionDialog = this.handleClosePermissionDialog.bind(
+      this,
+    );
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -54,8 +54,9 @@ class PermissionsComponent extends React.Component {
     let opts;
 
     if (isDefined(permission)) {
-      const subjectType = isDefined(permission.subject) ?
-        getEntityType(permission.subject) : undefined;
+      const subjectType = isDefined(permission.subject)
+        ? getEntityType(permission.subject)
+        : undefined;
 
       state = {
         id: permission.id,
@@ -63,12 +64,15 @@ class PermissionsComponent extends React.Component {
         comment: permission.comment,
         groupId: undefined,
         permission,
-        resourceId: isDefined(permission.resource) ?
-          permission.resource.id : '',
-        resourceName: isDefined(permission.resource) ?
-          permission.resource.name : '',
-        resourceType: isDefined(permission.resource) ?
-          getEntityType(permission.resource) : '',
+        resourceId: isDefined(permission.resource)
+          ? permission.resource.id
+          : '',
+        resourceName: isDefined(permission.resource)
+          ? permission.resource.name
+          : '',
+        resourceType: isDefined(permission.resource)
+          ? getEntityType(permission.resource)
+          : '',
         roleId: undefined,
         subjectType,
         title: _('Edit Permission {{name}}', {name: permission.name}),
@@ -91,8 +95,7 @@ class PermissionsComponent extends React.Component {
       opts = {
         title: _('Edit permission {{name}}', {name: shorten(permission.name)}),
       };
-    }
-    else {
+    } else {
       state = {
         comment: undefined,
         id: undefined,
@@ -125,8 +128,7 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('roles')) {
-      if (!capabilities.mayAccess('users') &&
-        !isDefined(state.subjectType)) {
+      if (!capabilities.mayAccess('users') && !isDefined(state.subjectType)) {
         state.subjectType = 'role';
       }
 
@@ -140,8 +142,11 @@ class PermissionsComponent extends React.Component {
     }
 
     if (capabilities.mayAccess('groups')) {
-      if (!capabilities.mayAccess('users') &&
-        !capabilities.mayAccess('roles') && !isDefined(state.subjectType)) {
+      if (
+        !capabilities.mayAccess('users') &&
+        !capabilities.mayAccess('roles') &&
+        !isDefined(state.subjectType)
+      ) {
         state.subjectType = 'group';
       }
 
@@ -230,17 +235,14 @@ class PermissionsComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openPermissionDialog,
               edit: this.openPermissionDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <PermissionDialog
                 comment={comment}
                 fixedResource={fixedResource}
@@ -264,7 +266,7 @@ class PermissionsComponent extends React.Component {
                   return save(d).then(() => this.closePermissionDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

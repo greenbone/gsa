@@ -53,7 +53,6 @@ import {
 } from './utils';
 
 export class DashboardControls extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -68,10 +67,7 @@ export class DashboardControls extends React.Component {
   }
 
   handleResetClick() {
-    const {
-      dashboardId,
-      onResetClick,
-    } = this.props;
+    const {dashboardId, onResetClick} = this.props;
 
     if (isDefined(onResetClick)) {
       onResetClick(dashboardId);
@@ -95,11 +91,7 @@ export class DashboardControls extends React.Component {
   }
 
   handleNewDisplay({displayId}) {
-    const {
-      dashboardId,
-      settings,
-      onNewDisplay,
-    } = this.props;
+    const {dashboardId, settings, onNewDisplay} = this.props;
 
     if (isDefined(onNewDisplay)) {
       this.closeNewDialog();
@@ -122,8 +114,9 @@ export class DashboardControls extends React.Component {
     const {showNewDialog} = this.state;
     const {canAdd, displayIds = []} = this.props;
 
-    const displays = displayIds.map(displayId =>
-      getDisplay(displayId)).filter(isDefined);
+    const displays = displayIds
+      .map(displayId => getDisplay(displayId))
+      .filter(isDefined);
     const displayItems = displays.map(display => ({
       label: `${display.title}`,
       value: display.displayId,
@@ -134,9 +127,9 @@ export class DashboardControls extends React.Component {
           <NewIcon
             active={canAdd}
             title={
-              canAdd ?
-                _('Add new Dashboard Display') :
-                _('Dashboard limit reached')
+              canAdd
+                ? _('Add new Dashboard Display')
+                : _('Dashboard limit reached')
             }
             onClick={canAdd ? this.handleNewClick : undefined}
           />
@@ -145,7 +138,7 @@ export class DashboardControls extends React.Component {
             onClick={this.handleResetClick}
           />
         </IconDivider>
-        {showNewDialog &&
+        {showNewDialog && (
           <SaveDialog
             title={_('Add new Dashboard Display')}
             buttonTitle={_('Add')}
@@ -158,10 +151,7 @@ export class DashboardControls extends React.Component {
             onSave={this.handleNewDisplay}
           >
             {({values, onValueChange}) => (
-              <FormGroup
-                title={_('Choose Display')}
-                titleSize={4}
-              >
+              <FormGroup title={_('Choose Display')} titleSize={4}>
                 <Select
                   name="displayId"
                   items={displayItems}
@@ -172,7 +162,7 @@ export class DashboardControls extends React.Component {
               </FormGroup>
             )}
           </SaveDialog>
-        }
+        )}
       </React.Fragment>
     );
   }
@@ -211,8 +201,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(DashboardControls);
-
 
 // vim: set ts=2 sw=2 tw=80:

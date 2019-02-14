@@ -45,56 +45,54 @@ const EmptyReport = ({
   const may_edit_target = capabilities.mayEdit('target');
   const isActiveReport = hasTarget && isActive(status);
   return (
-    <Divider
-      flex="column"
-      align={['start', 'stretch']}
-      grow
-    >
+    <Divider flex="column" align={['start', 'stretch']} grow>
       <InfoPanel
-        heading={
-          _('The Report is empty. This can happen for the following ' +
-            'reasons:')
-        }
+        heading={_(
+          'The Report is empty. This can happen for the following ' +
+            'reasons:',
+        )}
       />
       <Divider wrap>
-        {!isActiveReport &&
+        {!isActiveReport && (
           <ReportPanel
-            icon={props => <TaskIcon {...props}/>}
+            icon={props => <TaskIcon {...props} />}
             title={_('The scan did not collect any results')}
           >
             {_('If the scan got interrupted you can try to re-start the task.')}
           </ReportPanel>
-        }
-        {isActiveReport && progress === 1 &&
+        )}
+        {isActiveReport && progress === 1 && (
           <ReportPanel
-            icon={props => <RefreshIcon {...props}/>}
+            icon={props => <RefreshIcon {...props} />}
             title={_('The scan just started and no results have arrived yet')}
           >
             {_('Just wait for results to arrive.')}
           </ReportPanel>
-        }
-        {isActiveReport && progress > 1 &&
+        )}
+        {isActiveReport && progress > 1 && (
           <ReportPanel
-            icon={props => <RefreshIcon {...props}/>}
-            title={
-              _('The scan is still running and no results have arrived yet')
-            }
+            icon={props => <RefreshIcon {...props} />}
+            title={_(
+              'The scan is still running and no results have arrived yet',
+            )}
           >
             {_('Just wait for results to arrive.')}
           </ReportPanel>
-        }
-        {progress < 1 && hasTarget &&
+        )}
+        {progress < 1 && hasTarget && (
           <ReportPanel
-            icon={props => <TargetIcon {...props}/>}
+            icon={props => <TargetIcon {...props} />}
             title={_('The target hosts could be regarded dead')}
             onClick={may_edit_target ? onTargetEditClick : undefined}
           >
-            {_('You should change the Alive Test Method of the ' +
-               'target for the next scan. However, if the target hosts ' +
-               'are indeed dead, the scan duration might increase ' +
-               'significantly.')}
+            {_(
+              'You should change the Alive Test Method of the ' +
+                'target for the next scan. However, if the target hosts ' +
+                'are indeed dead, the scan duration might increase ' +
+                'significantly.',
+            )}
           </ReportPanel>
-        }
+        )}
       </Divider>
     </Divider>
   );

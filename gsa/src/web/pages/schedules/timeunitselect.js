@@ -32,12 +32,7 @@ const TIME_UNIT_ITEMS = [
   {value: ReccurenceFrequency.YEARLY, label: _l('year(s)')},
 ];
 
-const TimeUnitSelect = props => (
-  <Select
-    {...props}
-    items={TIME_UNIT_ITEMS}
-  />
-);
+const TimeUnitSelect = props => <Select {...props} items={TIME_UNIT_ITEMS} />;
 
 export default TimeUnitSelect;
 

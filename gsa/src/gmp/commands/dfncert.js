@@ -29,14 +29,12 @@ import DfnCertAdv from '../models/dfncert.js';
 const info_filter = info => isDefined(info.dfn_cert_adv);
 
 class DfnCertAdvCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'dfn_cert_adv', DfnCertAdv);
   }
 }
 
 class DfnCertAdvsCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'dfn_cert_adv', DfnCertAdv, info_filter);
   }

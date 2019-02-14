@@ -40,21 +40,19 @@ import {ResultsDescriptionWordCountLoader} from './loaders';
 
 const transformWordCountData = (data = {}) => {
   const {groups = []} = data;
-  const tdata = groups
-    .map(group => {
-      const {count, value} = group;
-      return {
-        value: parseFloat(count),
-        label: value,
-        color: randomColor(),
-        filterValue: value,
-      };
-    });
+  const tdata = groups.map(group => {
+    const {count, value} = group;
+    return {
+      value: parseFloat(count),
+      label: value,
+      color: randomColor(),
+      filterValue: value,
+    };
+  });
   return tdata;
 };
 
 export class ResultsDescriptionWordCloudDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -79,23 +77,18 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
       wordFilter = Filter.fromTerm(wordTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(wordFilter) :
-      wordFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(wordFilter)
+      : wordFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <ResultsDescriptionWordCountLoader
-        filter={filter}
-      >
+      <ResultsDescriptionWordCountLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -111,8 +104,9 @@ export class ResultsDescriptionWordCloudDisplay extends React.Component {
                 data={tdata}
                 height={height}
                 width={width}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -137,10 +131,7 @@ export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
   loaderComponent: ResultsDescriptionWordCountLoader,
   displayComponent: DataTableDisplay,
   dataTransform: transformWordCountData,
-  dataTitles: [
-    _l('Description'),
-    _l('Word Count'),
-  ],
+  dataTitles: [_l('Description'), _l('Word Count')],
   dataRow: row => [row.label, row.value],
   title: () => _('Results Description Word Cloud'),
   displayId: 'result-by-desc-words-table',
@@ -148,14 +139,18 @@ export const ResultsDescriptionWordCloudTableDisplay = createDisplay({
   filtersFilter: RESULTS_FILTER_FILTER,
 });
 
-registerDisplay(ResultsDescriptionWordCloudDisplay.displayId,
-  ResultsDescriptionWordCloudDisplay, {
+registerDisplay(
+  ResultsDescriptionWordCloudDisplay.displayId,
+  ResultsDescriptionWordCloudDisplay,
+  {
     title: _l('Chart: Results Description Word Cloud'),
   },
 );
 
-registerDisplay(ResultsDescriptionWordCloudTableDisplay.displayId,
-  ResultsDescriptionWordCloudTableDisplay, {
+registerDisplay(
+  ResultsDescriptionWordCloudTableDisplay.displayId,
+  ResultsDescriptionWordCloudTableDisplay,
+  {
     title: _l('Table: Results Description Word Cloud'),
   },
 );

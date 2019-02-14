@@ -39,39 +39,26 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onNoteDeleteClick,
-  onNoteDownloadClick,
-  onNoteCloneClick,
-  onNoteEditClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      entity={entity}
-      name="note"
-      onClick={onNoteDeleteClick}
-    />
-    <EditIcon
-      entity={entity}
-      name="note"
-      onClick={onNoteEditClick}
-    />
-    <CloneIcon
-      entity={entity}
-      name="note"
-      onClick={onNoteCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Note')}
-      onClick={onNoteDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onNoteDeleteClick,
+    onNoteDownloadClick,
+    onNoteCloneClick,
+    onNoteEditClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon entity={entity} name="note" onClick={onNoteDeleteClick} />
+      <EditIcon entity={entity} name="note" onClick={onNoteEditClick} />
+      <CloneIcon entity={entity} name="note" onClick={onNoteCloneClick} />
+      <ExportIcon
+        value={entity}
+        title={_('Export Note')}
+        onClick={onNoteDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model,
@@ -90,38 +77,28 @@ const Row = ({
 }) => {
   const text = (
     <div>
-      {entity.isOrphan() &&
-        <div><b>{_('Orphan')}</b></div>
-      }
+      {entity.isOrphan() && (
+        <div>
+          <b>{_('Orphan')}</b>
+        </div>
+      )}
       {shorten(entity.text)}
     </div>
   );
   return (
     <TableRow>
       <TableData>
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
           {text}
         </RowDetailsToggle>
       </TableData>
-      <TableData>
-        {entity.nvt ? entity.nvt.name : ''}
-      </TableData>
+      <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
       <TableData title={entity.hosts}>
         {shorten(entity.hosts.join(', '))}
       </TableData>
-      <TableData title={entity.port}>
-        {shorten(entity.port)}
-      </TableData>
-      <TableData>
-        {entity.isActive() ? _('yes') : _('no')}
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <TableData title={entity.port}>{shorten(entity.port)}</TableData>
+      <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
 };

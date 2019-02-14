@@ -43,7 +43,6 @@ export const getTranslatableTicketStatus = status =>
   `${TICKET_STATUS_TRANSLATIONS[status]}`;
 
 class Ticket extends Model {
-
   static entityType = 'ticket';
 
   parseProperties(elem) {
@@ -56,22 +55,19 @@ class Ticket extends Model {
 
     if (isModelElement(elem.result)) {
       ret.result = new Model(elem.result, 'result');
-    }
-    else {
+    } else {
       delete ret.result;
     }
 
     if (isModelElement(elem.report)) {
       ret.report = new Model(elem.report, 'report');
-    }
-    else {
+    } else {
       delete ret.report;
     }
 
     if (isModelElement(elem.task)) {
       ret.task = new Model(elem.task, 'task');
-    }
-    else {
+    } else {
       delete ret.task;
     }
 
@@ -131,7 +127,6 @@ class Ticket extends Model {
 
     return ret;
   }
-
 }
 
 export default Ticket;

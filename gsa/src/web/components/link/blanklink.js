@@ -20,11 +20,7 @@ import React from 'react';
 
 import PropTypes from '../../utils/proptypes.js';
 
-const BlankLink = ({
-  to,
-  children,
-  ...props
-}) => (
+const BlankLink = ({to, children, ...props}) => (
   <a
     {...props}
     href={to}

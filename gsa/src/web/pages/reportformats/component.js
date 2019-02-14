@@ -30,14 +30,14 @@ import EntityComponent from 'web/entity/component';
 import ReportFormatDialog from './dialog';
 
 class ReportFormatComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
     this.state = {dialogVisible: false};
 
-    this.handleCloseReportFormatDialog =
-      this.handleCloseReportFormatDialog.bind(this);
+    this.handleCloseReportFormatDialog = this.handleCloseReportFormatDialog.bind(
+      this,
+    );
     this.handleVerify = this.handleVerify.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.openReportFormatDialog = this.openReportFormatDialog.bind(this);
@@ -68,17 +68,16 @@ class ReportFormatComponent extends React.Component {
           if (param.type === 'report_format_list') {
             load_formats = true;
             id_lists[param.name] = param.value;
-          }
-          else {
+          } else {
             preferences[param.name] = param.value;
           }
         });
 
         // only load formats if they are required for the report format list
         // type param
-        const p2 = load_formats ?
-          gmp.reportformats.getAll().then(resp => resp.data) :
-          Promise.resolve(undefined);
+        const p2 = load_formats
+          ? gmp.reportformats.getAll().then(resp => resp.data)
+          : Promise.resolve(undefined);
 
         p2.then(formats => {
           this.setState({
@@ -91,8 +90,7 @@ class ReportFormatComponent extends React.Component {
           });
         });
       });
-    }
-    else {
+    } else {
       this.setState({
         dialogVisible: true,
         reportformat: undefined,
@@ -117,13 +115,15 @@ class ReportFormatComponent extends React.Component {
 
     if (isDefined(data.id)) {
       const {onSaved, onSaveError} = this.props;
-      return gmp.reportformat.save(data)
+      return gmp.reportformat
+        .save(data)
         .then(onSaved, onSaveError)
         .then(() => this.closeReportFormatDialog());
     }
 
     const {onImported, onImportError} = this.props;
-    return gmp.reportformat.import(data)
+    return gmp.reportformat
+      .import(data)
       .then(onImported, onImportError)
       .then(() => this.closeReportFormatDialog());
   }
@@ -147,11 +147,7 @@ class ReportFormatComponent extends React.Component {
       onInteraction,
     } = this.props;
 
-    const {
-      dialogVisible,
-      reportformat,
-      title,
-    } = this.state;
+    const {dialogVisible, reportformat, title} = this.state;
 
     return (
       <EntityComponent
@@ -172,14 +168,14 @@ class ReportFormatComponent extends React.Component {
               edit: this.openReportFormatDialog,
               verify: this.handleVerify,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <ReportFormatDialog
                 reportformat={reportformat}
                 title={title}
                 onClose={this.handleCloseReportFormatDialog}
                 onSave={this.handleSave}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

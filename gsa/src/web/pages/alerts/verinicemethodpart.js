@@ -50,12 +50,10 @@ const VeriniceMethodPart = ({
 }) => {
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
   credentials = credentials.filter(
-    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+    cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  );
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
+    <Layout flex="column" grow="1">
       <FormGroup title={_('verinice.PRO URL')}>
         <TextField
           grow="1"
@@ -94,7 +92,6 @@ const VeriniceMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-
     </Layout>
   );
 };

@@ -43,49 +43,48 @@ import PropTypes from 'web/utils/proptypes';
 
 import CredentialDownloadIcon from './downloadicon';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onCredentialDeleteClick,
-  onCredentialDownloadClick,
-  onCredentialCloneClick,
-  onCredentialEditClick,
-  onCredentialInstallerDownloadClick,
-}) => (
-  <IconDivider
-    align={['start', 'center']}
-    grow
-  >
-    <TrashIcon
-      displayName={_('Credential')}
-      name="credential"
-      entity={entity}
-      onClick={onCredentialDeleteClick}
-    />
-    <EditIcon
-      displayName={_('Credential')}
-      name="credential"
-      entity={entity}
-      onClick={onCredentialEditClick}
-    />
-    <CloneIcon
-      displayName={_('Credential')}
-      name="credential"
-      entity={entity}
-      title={_('Clone Credential')}
-      value={entity}
-      onClick={onCredentialCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Credential')}
-      onClick={onCredentialDownloadClick}
-    />
-    <CredentialDownloadIcon
-      credential={entity}
-      onDownload={onCredentialInstallerDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onCredentialDeleteClick,
+    onCredentialDownloadClick,
+    onCredentialCloneClick,
+    onCredentialEditClick,
+    onCredentialInstallerDownloadClick,
+  }) => (
+    <IconDivider align={['start', 'center']} grow>
+      <TrashIcon
+        displayName={_('Credential')}
+        name="credential"
+        entity={entity}
+        onClick={onCredentialDeleteClick}
+      />
+      <EditIcon
+        displayName={_('Credential')}
+        name="credential"
+        entity={entity}
+        onClick={onCredentialEditClick}
+      />
+      <CloneIcon
+        displayName={_('Credential')}
+        name="credential"
+        entity={entity}
+        title={_('Clone Credential')}
+        value={entity}
+        onClick={onCredentialCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Credential')}
+        onClick={onCredentialDownloadClick}
+      />
+      <CredentialDownloadIcon
+        credential={entity}
+        onDownload={onCredentialInstallerDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -113,24 +112,13 @@ const Row = ({
     />
     <TableData>
       <Divider>
-        <span>
-          {getCredentialTypeName(entity.credential_type)}
-        </span>
-        <FootNote>
-          ({entity.credential_type})
-        </FootNote>
+        <span>{getCredentialTypeName(entity.credential_type)}</span>
+        <FootNote>({entity.credential_type})</FootNote>
       </Divider>
     </TableData>
-    <TableData>
-      {entity.isAllowInsecure() ? _('Yes') : _('No')}
-    </TableData>
-    <TableData>
-      {entity.login}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{entity.isAllowInsecure() ? _('Yes') : _('No')}</TableData>
+    <TableData>{entity.login}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

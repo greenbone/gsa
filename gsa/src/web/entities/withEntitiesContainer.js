@@ -35,11 +35,10 @@ import withGmp from 'web/utils/withGmp';
 
 import EntitiesContainer from './container';
 
-const withEntitiesContainer = (gmpname, {
-  entitiesSelector,
-  loadEntities,
-  reloadInterval,
-}) => Component => {
+const withEntitiesContainer = (
+  gmpname,
+  {entitiesSelector, loadEntities, reloadInterval},
+) => Component => {
   let EntitiesContainerWrapper = props => (
     <SubscriptionProvider>
       {({notify}) => (
@@ -49,11 +48,7 @@ const withEntitiesContainer = (gmpname, {
           gmpname={gmpname}
           reloadInterval={reloadInterval}
         >
-          {pageProps => (
-            <Component
-              {...pageProps}
-            />
-          )}
+          {pageProps => <Component {...pageProps} />}
         </EntitiesContainer>
       )}
     </SubscriptionProvider>
@@ -84,7 +79,10 @@ const withEntitiesContainer = (gmpname, {
     withDialogNotification,
     withDownload,
     withGmp,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    ),
   )(EntitiesContainerWrapper);
 
   return EntitiesContainerWrapper;

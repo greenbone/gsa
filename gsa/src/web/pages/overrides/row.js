@@ -48,7 +48,6 @@ import {
   LOG_VALUE,
 } from 'web/utils/severity';
 
-
 const render_severity = severity => {
   if (isDefined(severity)) {
     if (severity <= LOG_VALUE) {
@@ -59,39 +58,34 @@ const render_severity = severity => {
   return _('Any');
 };
 
-const Actions = withEntitiesActions(({
-  entity,
-  onOverrideDeleteClick,
-  onOverrideDownloadClick,
-  onOverrideCloneClick,
-  onOverrideEditClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    <TrashIcon
-      entity={entity}
-      name="override"
-      onClick={onOverrideDeleteClick}
-    />
-    <EditIcon
-      entity={entity}
-      name="override"
-      onClick={onOverrideEditClick}
-    />
-    <CloneIcon
-      entity={entity}
-      name="override"
-      onClick={onOverrideCloneClick}
-    />
-    <ExportIcon
-      value={entity}
-      title={_('Export Override')}
-      onClick={onOverrideDownloadClick}
-    />
-  </IconDivider>
-));
+const Actions = withEntitiesActions(
+  ({
+    entity,
+    onOverrideDeleteClick,
+    onOverrideDownloadClick,
+    onOverrideCloneClick,
+    onOverrideEditClick,
+  }) => (
+    <IconDivider align={['center', 'center']} grow>
+      <TrashIcon
+        entity={entity}
+        name="override"
+        onClick={onOverrideDeleteClick}
+      />
+      <EditIcon entity={entity} name="override" onClick={onOverrideEditClick} />
+      <CloneIcon
+        entity={entity}
+        name="override"
+        onClick={onOverrideCloneClick}
+      />
+      <ExportIcon
+        value={entity}
+        title={_('Export Override')}
+        onClick={onOverrideDownloadClick}
+      />
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -110,35 +104,21 @@ const Row = ({
 }) => (
   <TableRow>
     <TableData>
-      <RowDetailsToggle
-        name={entity.id}
-        onClick={onToggleDetailsClick}
-      >
+      <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
         {shorten(entity.text)}
       </RowDetailsToggle>
     </TableData>
-    <TableData>
-      {entity.nvt ? entity.nvt.name : ''}
-    </TableData>
+    <TableData>{entity.nvt ? entity.nvt.name : ''}</TableData>
     <TableData title={entity.hosts}>
       {shorten(entity.hosts.join(', '))}
     </TableData>
-    <TableData title={entity.port}>
-      {shorten(entity.port)}
-    </TableData>
+    <TableData title={entity.port}>{shorten(entity.port)}</TableData>
+    <TableData>{render_severity(entity.severity)}</TableData>
     <TableData>
-      {render_severity(entity.severity)}
+      <SeverityBar severity={entity.new_severity} />
     </TableData>
-    <TableData>
-      <SeverityBar severity={entity.new_severity}/>
-    </TableData>
-    <TableData>
-      {entity.isActive() ? _('yes') : _('no')}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{entity.isActive() ? _('yes') : _('no')}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

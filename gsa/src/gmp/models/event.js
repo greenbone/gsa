@@ -32,9 +32,10 @@ import date, {duration as createDuration} from './date';
 
 const log = Logger.getLogger('gmp.models.event');
 
-const convertIcalDate = (idate, timezone) => isDefined(timezone) ?
-  date.unix(idate.toUnixTime()).tz(timezone) :
-  date.unix(idate.toUnixTime());
+const convertIcalDate = (idate, timezone) =>
+  isDefined(timezone)
+    ? date.unix(idate.toUnixTime()).tz(timezone)
+    : date.unix(idate.toUnixTime());
 
 const setEventDuration = (event, duration) => {
   // setting the duration of an event directly isn't possible in
@@ -84,12 +85,12 @@ const ABR_TO_WEEKDAY = {
 };
 
 const getWeekDaysFromRRule = rrule => {
-    if (!isDefined(rrule)) {
-      return undefined;
-    }
+  if (!isDefined(rrule)) {
+    return undefined;
+  }
 
-    const byday = rrule.getComponent('byday');
-    return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
+  const byday = rrule.getComponent('byday');
+  return byday.length > 0 ? WeekDays.fromByDay(byday) : undefined;
 };
 
 const getMonthDaysFromRRule = rrule => {
@@ -102,7 +103,6 @@ const getMonthDaysFromRRule = rrule => {
 };
 
 export class WeekDays {
-
   constructor({
     monday = false,
     tuesday = false,
@@ -189,8 +189,7 @@ export class WeekDays {
       if (value) {
         if (value === true) {
           byday.push(abbr.toUpperCase());
-        }
-        else {
+        } else {
           byday.push('' + value + abbr.toUpperCase());
         }
       }
@@ -229,7 +228,6 @@ export class WeekDays {
 }
 
 class Event {
-
   constructor(icalevent, timezone) {
     this.event = icalevent;
     this.timezone = timezone;
@@ -243,17 +241,19 @@ class Event {
     return new Event(event, timezone);
   }
 
-  static fromData({
-    description,
-    duration,
-    freq,
-    interval,
-    monthdays = [],
-    startDate,
-    summary,
-    weekdays,
-  }, timezone) {
-
+  static fromData(
+    {
+      description,
+      duration,
+      freq,
+      interval,
+      monthdays = [],
+      startDate,
+      summary,
+      weekdays,
+    },
+    timezone,
+  ) {
     const event = new ical.Event();
 
     event.uid = uuid();
@@ -325,11 +325,13 @@ class Event {
       weeks = 0,
       seconds = 0,
     } = this.event.duration;
-    return seconds +
+    return (
+      seconds +
       minutes * 60 +
       hours * 60 * 60 +
       days * 24 * 60 * 60 +
-      weeks * 7 * 24 * 60 * 60;
+      weeks * 7 * 24 * 60 * 60
+    );
   }
 
   get recurrence() {
@@ -355,8 +357,7 @@ class Event {
             return convertIcalDate(next, this.timezone);
           }
           retries = 0;
-        }
-        catch (err) {
+        } catch (err) {
           // ical.js raises an exception if the same date occurs twice
           // See https://github.com/mozilla-comm/ical.js/blob/master/lib/ical/recur_iterator.js#L373
           // But this may be valid e.g. when last day of month and the 31 of a

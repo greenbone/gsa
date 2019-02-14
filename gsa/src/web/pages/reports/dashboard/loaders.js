@@ -27,22 +27,17 @@ export const REPORTS_HIGH_RESULTS = 'reports-high-results';
 export const REPORTS_SEVERITY = 'reports-severity';
 
 export const reportsSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.reports.getSeverityAggregates({filter})
-    .then(r => r.data),
-  REPORTS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.reports.getSeverityAggregates({filter}).then(r => r.data),
+  REPORTS_SEVERITY,
+);
 
-export const ReportsSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const ReportsSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={REPORTS_SEVERITY}
     filter={filter}
     load={reportsSeverityLoader}
-    subscriptions={[
-      'reports.timer',
-      'reports.changed',
-    ]}
+    subscriptions={['reports.timer', 'reports.changed']}
   >
     {children}
   </Loader>
@@ -51,22 +46,17 @@ export const ReportsSeverityLoader = ({
 ReportsSeverityLoader.propTypes = loaderPropTypes;
 
 export const reportsHighResultsLoader = loadFunc(
-  ({gmp, filter}) => gmp.reports.getHighResultsAggregates({filter})
-    .then(r => r.data),
-  REPORTS_HIGH_RESULTS);
+  ({gmp, filter}) =>
+    gmp.reports.getHighResultsAggregates({filter}).then(r => r.data),
+  REPORTS_HIGH_RESULTS,
+);
 
-export const ReportsHighResultsLoader = ({
-  filter,
-  children,
-}) => (
+export const ReportsHighResultsLoader = ({filter, children}) => (
   <Loader
     dataId={REPORTS_HIGH_RESULTS}
     filter={filter}
     load={reportsHighResultsLoader}
-    subscriptions={[
-      'reports.timer',
-      'reports.changed',
-    ]}
+    subscriptions={['reports.timer', 'reports.changed']}
   >
     {children}
   </Loader>

@@ -44,9 +44,12 @@ const TITLE_BAR_HEIGHT = '42px';
 const LogoutLink = styled.a`
   color: ${Theme.darkGray};
   cursor: pointer;
-  &:link, &:hover, &:active, &:visited{
+  &:link,
+  &:hover,
+  &:active,
+  &:visited {
     color: ${Theme.darkGray};
-  };
+  }
 `;
 
 const GreenboneIcon = styled(Logo)`
@@ -65,11 +68,8 @@ const GsaIcon = styled(Img)`
 
 const Greenbone = () => (
   <Layout>
-    <GreenboneIcon/>
-    <GsaIcon
-      src="gsa.svg"
-      alt={_('Greenbone Security Assistant')}
-    />
+    <GreenboneIcon />
+    <GsaIcon src="gsa.svg" alt={_('Greenbone Security Assistant')} />
   </Layout>
 );
 
@@ -88,11 +88,10 @@ const TitlebarLayout = styled.div`
 `;
 
 const TitlebarPlaceholder = styled.div`
-  height: ${TITLE_BAR_HEIGHT}
+  height: ${TITLE_BAR_HEIGHT};
 `;
 
 class Titlebar extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -113,27 +112,25 @@ class Titlebar extends React.Component {
     const {gmp} = this.props;
     return (
       <React.Fragment>
-        <TitlebarPlaceholder/>
+        <TitlebarPlaceholder />
         <TitlebarLayout>
-          {gmp.isLoggedIn() ?
+          {gmp.isLoggedIn() ? (
             <React.Fragment>
-              <Link
-                to="/"
-                title={_('Dashboard')}
-              >
-                <Greenbone/>
+              <Link to="/" title={_('Dashboard')}>
+                <Greenbone />
               </Link>
               <Divider>
                 <span>{_('Logged in as ')}</span>
-                <UserLink/>
+                <UserLink />
                 <span> | </span>
                 <LogoutLink onClick={this.handleLogout}>
                   {_('Logout')}
                 </LogoutLink>
               </Divider>
-            </React.Fragment> :
-            <Greenbone/>
-          }
+            </React.Fragment>
+          ) : (
+            <Greenbone />
+          )}
         </TitlebarLayout>
       </React.Fragment>
     );

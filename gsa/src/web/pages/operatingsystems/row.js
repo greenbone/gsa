@@ -40,33 +40,26 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 import PropTypes from 'web/utils/proptypes';
 
-const Actions = withEntitiesActions(({
-  entity,
-  onOsDeleteClick,
-  onOsDownloadClick,
-}) => (
-  <IconDivider
-    align={['center', 'center']}
-    grow
-  >
-    {entity.isInUse() ?
-      <DeleteIcon
-        active={false}
-        title={_('Operating System is in use')}
-      /> :
-      <DeleteIcon
+const Actions = withEntitiesActions(
+  ({entity, onOsDeleteClick, onOsDownloadClick}) => (
+    <IconDivider align={['center', 'center']} grow>
+      {entity.isInUse() ? (
+        <DeleteIcon active={false} title={_('Operating System is in use')} />
+      ) : (
+        <DeleteIcon
+          value={entity}
+          title={_('Delete')}
+          onClick={onOsDeleteClick}
+        />
+      )}
+      <ExportIcon
         value={entity}
-        title={_('Delete')}
-        onClick={onOsDeleteClick}
+        onClick={onOsDownloadClick}
+        title={_('Export Operating System')}
       />
-    }
-    <ExportIcon
-      value={entity}
-      onClick={onOsDownloadClick}
-      title={_('Export Operating System')}
-    />
-  </IconDivider>
-));
+    </IconDivider>
+  ),
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -83,44 +76,29 @@ const Row = ({
   <TableRow>
     <TableData>
       <IconDivider align={['start', 'center']}>
-        <CpeIcon name={entity.name}/>
-        <DetailsLink
-          type={entity.entityType}
-          id={entity.id}
-          textOnly={!links}
-        >
+        <CpeIcon name={entity.name} />
+        <DetailsLink type={entity.entityType} id={entity.id} textOnly={!links}>
           {entity.name}
         </DetailsLink>
       </IconDivider>
     </TableData>
+    <TableData>{entity.title}</TableData>
     <TableData>
-      {entity.title}
+      <SeverityBar severity={entity.latest_severity} />
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.latest_severity}/>
+      <SeverityBar severity={entity.highest_severity} />
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.highest_severity}/>
+      <SeverityBar severity={entity.average_severity} />
     </TableData>
     <TableData>
-      <SeverityBar severity={entity.average_severity}/>
-    </TableData>
-    <TableData>
-      <Link
-        to={'hosts'}
-        filter={'os~"' + entity.name + '"'}
-        textOnly={!links}
-      >
+      <Link to={'hosts'} filter={'os~"' + entity.name + '"'} textOnly={!links}>
         {entity.hosts.length}
       </Link>
     </TableData>
-    <TableData>
-      {longDate(entity.modificationTime)}
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <TableData>{longDate(entity.modificationTime)}</TableData>
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

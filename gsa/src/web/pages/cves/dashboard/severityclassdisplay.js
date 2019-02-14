@@ -42,10 +42,7 @@ export const CvesSeverityClassTableDisplay = createDisplay({
   displayComponent: SeverityClassTableDisplay,
   title: ({data: tdata}) =>
     _('CVEs by Severity Class (Total: {{count}})', {count: tdata.total}),
-  dataTitles: [
-    _l('Severity Class'),
-    _l('# of CVEs'),
-  ],
+  dataTitles: [_l('Severity Class'), _l('# of CVEs')],
   displayId: 'cve-by-severity-table',
   displayName: 'CvesSeverityClassTableDisplay',
   filtersFilter: CVES_FILTER_FILTER,
@@ -55,8 +52,10 @@ registerDisplay(CvesSeverityClassDisplay.displayId, CvesSeverityClassDisplay, {
   title: _l('Chart: CVEs by Severity Class'),
 });
 
-registerDisplay(CvesSeverityClassTableDisplay.displayId,
-  CvesSeverityClassTableDisplay, {
+registerDisplay(
+  CvesSeverityClassTableDisplay.displayId,
+  CvesSeverityClassTableDisplay,
+  {
     title: _l('Table: CVEs by Severity Class'),
   },
 );

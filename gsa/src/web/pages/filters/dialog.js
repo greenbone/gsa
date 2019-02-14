@@ -41,7 +41,6 @@ const FilterDialog = ({
   onClose,
   onSave,
 }) => {
-
   const filterOptions = types.map(option => ({
     value: option[0],
     label: option[1],
@@ -60,11 +59,7 @@ const FilterDialog = ({
         type,
       }}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
-
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>

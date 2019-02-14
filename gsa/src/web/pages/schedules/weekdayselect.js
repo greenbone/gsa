@@ -36,7 +36,6 @@ import PropTypes from 'web/utils/proptypes';
 export const WeekDaysPropType = PropTypes.instanceOf(WeekDays);
 
 class WeekDaySelect extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -52,15 +51,14 @@ class WeekDaySelect extends React.Component {
 
     const newValue = value.setWeekDay(valname, val);
 
-    if (!newValue.isDefault()) { // at least one day must be still selected
+    if (!newValue.isDefault()) {
+      // at least one day must be still selected
       onChange(newValue, name);
     }
   }
 
   render() {
-    const {
-      value,
-    } = this.props;
+    const {value} = this.props;
     return (
       <Divider>
         <ToggleButton

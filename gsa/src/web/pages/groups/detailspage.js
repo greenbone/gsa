@@ -50,10 +50,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import GroupIcon from 'web/components/icon/groupicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/groups';
+import {selector, loadEntity} from 'web/store/entities/groups';
 
 import {
   selector as permissionsSelector,
@@ -80,28 +77,13 @@ const ToolBarIcons = ({
         anchor="groups"
         title={_('Help: Group Details')}
       />
-      <ListIcon
-        title={_('Groups List')}
-        page="groups"
-      />
+      <ListIcon title={_('Groups List')} page="groups" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onGroupCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onGroupCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onGroupEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onGroupDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onGroupCreateClick} />
+      <CloneIcon entity={entity} onClick={onGroupCloneClick} />
+      <EditIcon entity={entity} onClick={onGroupEditClick} />
+      <TrashIcon entity={entity} onClick={onGroupDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Group as XML')}
@@ -140,18 +122,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<GroupIcon size="large"/>}
+        sectionIcon={<GroupIcon size="large" />}
         title={_('Group')}
         toolBarIcons={ToolBarIcons}
         onGroupCloneClick={clone}
@@ -162,24 +137,16 @@ const Page = ({
         onGroupSaveClick={save}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -192,9 +159,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <GroupDetails
-                      entity={entity}
-                    />
+                    <GroupDetails entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -236,10 +201,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsSubjectFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

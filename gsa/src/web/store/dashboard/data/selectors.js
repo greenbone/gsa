@@ -21,7 +21,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {filterIdentifier} from 'web/store/utils';
 
 class DashboardData {
-
   constructor(rootState) {
     this.state = rootState;
   }
@@ -55,8 +54,9 @@ class DashboardData {
 }
 
 const getDashboardData = rootState => {
-  const dashboardData = isDefined(rootState) ?
-    rootState.dashboardData : undefined;
+  const dashboardData = isDefined(rootState)
+    ? rootState.dashboardData
+    : undefined;
 
   return new DashboardData(dashboardData);
 };

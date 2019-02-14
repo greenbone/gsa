@@ -43,30 +43,18 @@ const Row = ({
 }) => (
   <TableRow>
     <TableData>
-      <RowDetailsToggle
-        name={entity.id}
-        onClick={onToggleDetailsClick}
-      >
+      <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
         {entity.name}
       </RowDetailsToggle>
-      <Comment text={entity.comment}/>
+      <Comment text={entity.comment} />
     </TableData>
+    <TableData>{na(entity.title)}</TableData>
+    <TableData>{longDate(entity.creationTime)}</TableData>
+    <TableData>{entity.cve_refs}</TableData>
     <TableData>
-      {na(entity.title)}
+      <SeverityBar severity={entity.severity} />
     </TableData>
-    <TableData>
-      {longDate(entity.creationTime)}
-    </TableData>
-    <TableData>
-      {entity.cve_refs}
-    </TableData>
-    <TableData>
-      <SeverityBar severity={entity.severity}/>
-    </TableData>
-    <ActionsComponent
-      {...props}
-      entity={entity}
-    />
+    <ActionsComponent {...props} entity={entity} />
   </TableRow>
 );
 

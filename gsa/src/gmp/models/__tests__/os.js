@@ -25,7 +25,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(OperatingSystem, 'operatingsystem');
 
 describe('OperatingSystem model tests', () => {
-
   test('should be an instance of Asset', () => {
     const os = new OperatingSystem({});
 

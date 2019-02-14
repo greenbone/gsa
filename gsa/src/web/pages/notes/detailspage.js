@@ -61,10 +61,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector as notesSelector,
-  loadEntity,
-} from 'web/store/entities/notes';
+import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
 
 import {
   selector as permissionsSelector,
@@ -92,28 +89,13 @@ const ToolBarIcons = ({
         anchor="notes"
         title={_('Help: Notes')}
       />
-      <ListIcon
-        title={_('Note List')}
-        page="notes"
-      />
+      <ListIcon title={_('Note List')} page="notes" />
     </IconDivider>
     <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onNoteCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onNoteCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onNoteEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onNoteDeleteClick}
-      />
+      <CreateIcon entity={entity} onClick={onNoteCreateClick} />
+      <CloneIcon entity={entity} onClick={onNoteCloneClick} />
+      <EditIcon entity={entity} onClick={onNoteEditClick} />
+      <TrashIcon entity={entity} onClick={onNoteDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Note as XML')}
@@ -132,60 +114,44 @@ ToolBarIcons.propTypes = {
   onNoteEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   const {nvt} = entity;
   return (
     <Layout flex="column">
       <InfoTable>
         <TableBody>
           <TableRow>
+            <TableData>{_('NVT Name')}</TableData>
             <TableData>
-              {_('NVT Name')}
-            </TableData>
-            <TableData>
-              {isDefined(nvt) ?
-                <DetailsLink
-                  id={nvt.id}
-                  type="nvt"
-                >
+              {isDefined(nvt) ? (
+                <DetailsLink id={nvt.id} type="nvt">
                   {nvt.name}
-                </DetailsLink> :
+                </DetailsLink>
+              ) : (
                 _('None. Result was an open port.')
-              }
+              )}
             </TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('NVT OID')}
-            </TableData>
-            <TableData>
-              {nvt.id}
-            </TableData>
+            <TableData>{_('NVT OID')}</TableData>
+            <TableData>{nvt.id}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Active')}
-            </TableData>
+            <TableData>{_('Active')}</TableData>
             <TableData>
               {renderYesNo(entity.isActive())}
-              {entity.isActive() && isDefined(entity.endTime) &&
-                ' ' + _('until {{- enddate}}',
-                  {enddate: longDate(entity.endTime)})
-              }
+              {entity.isActive() &&
+                isDefined(entity.endTime) &&
+                ' ' +
+                  _('until {{- enddate}}', {enddate: longDate(entity.endTime)})}
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <NoteDetails
-        entity={entity}
-        {...props}
-      />
+      <NoteDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -214,18 +180,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-    }) => (
+    {({clone, create, delete: delete_func, download, edit, save}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<NoteIcon size="large"/>}
+        sectionIcon={<NoteIcon size="large" />}
         title={_('Note')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
@@ -239,24 +198,16 @@ const Page = ({
         onNoteEditClick={edit}
         onNoteSaveClick={save}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -269,9 +220,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -313,10 +262,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

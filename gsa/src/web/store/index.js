@@ -31,10 +31,7 @@ const configureStore = () => {
     middlewares.push(createLogger());
   }
 
-  return createStore(
-    rootReducer,
-    applyMiddleware(...middlewares)
-  );
+  return createStore(rootReducer, applyMiddleware(...middlewares));
 };
 
 export default configureStore;

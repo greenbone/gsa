@@ -56,10 +56,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/scanners';
+import {selector, loadEntity} from 'web/store/entities/scanners';
 
 import {
   selector as permissionsSelector,
@@ -90,29 +87,17 @@ const ToolBarIcons = ({
           searchTerm="scanner"
           title={_('Help: Scanners')}
         />
-        <ListIcon
-          title={_('Scanner List')}
-          page="scanners"
-        />
+        <ListIcon title={_('Scanner List')} page="scanners" />
       </IconDivider>
       <IconDivider>
-        <CreateIcon
-          entity={entity}
-          onClick={onScannerCreateClick}
-        />
+        <CreateIcon entity={entity} onClick={onScannerCreateClick} />
         <CloneIcon
           entity={entity}
           mayClone={entity.scannerType !== CVE_SCANNER_TYPE}
           onClick={onScannerCloneClick}
         />
-        <EditIcon
-          entity={entity}
-          onClick={onScannerEditClick}
-        />
-        <TrashIcon
-          entity={entity}
-          onClick={onScannerDeleteClick}
-        />
+        <EditIcon entity={entity} onClick={onScannerEditClick} />
+        <TrashIcon entity={entity} onClick={onScannerDeleteClick} />
         <ExportIcon
           value={entity}
           title={_('Export Scanner as XML')}
@@ -125,20 +110,20 @@ const ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
-        {isDefined(entity.credential) &&
+        {isDefined(entity.credential) && (
           <DownloadKeyIcon
             title={_('Download Certificate')}
             value={entity}
             onClick={onScannerCredentialDownloadClick}
           />
-        }
-        {isDefined(entity.ca_pub) &&
+        )}
+        {isDefined(entity.ca_pub) && (
           <DownloadKeyIcon
             title={_('Download CA Certificate')}
             value={entity}
             onClick={onScannerCertificateDownloadClick}
           />
-        }
+        )}
       </IconDivider>
     </Divider>
   );
@@ -196,7 +181,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<ScannerIcon size="large"/>}
+        sectionIcon={<ScannerIcon size="large" />}
         toolBarIcons={ToolBarIcons}
         title={_('Scanner')}
         onInteraction={onInteraction}
@@ -210,24 +195,16 @@ const Page = ({
         onScannerSaveClick={save}
         onScannerVerifyClick={verify}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -240,9 +217,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <ScannerDetails
-                      entity={entity}
-                    />
+                    <ScannerDetails entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -284,10 +259,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

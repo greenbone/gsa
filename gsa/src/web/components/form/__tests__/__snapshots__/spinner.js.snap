@@ -21,9 +21,9 @@ exports[`Spinner tests should render 1`] = `
   background: none;
   color: inherit;
   padding: 0;
-  margin: .2em 0;
+  margin: 0.2em 0;
   vertical-align: middle;
-  margin-left: .4em;
+  margin-left: 0.4em;
   margin-right: 22px;
 }
 
@@ -33,7 +33,7 @@ exports[`Spinner tests should render 1`] = `
   border-left: 1px solid #393637;
   width: 16px;
   height: 50%;
-  font-size: .6em;
+  font-size: 0.6em;
   padding: 0;
   margin: 0;
   text-align: center;

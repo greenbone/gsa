@@ -21,7 +21,6 @@ import {isDate} from 'gmp/models/date';
 import Login from 'gmp/models/login';
 
 describe('Login model tests', () => {
-
   test('should set all properties correctly', () => {
     const elem = {
       client_address: '1.2.3.4',
@@ -50,7 +49,6 @@ describe('Login model tests', () => {
     expect(isDate(login.sessionTimeout)).toEqual(true);
     expect(login2.sessionTimeout).toBeUndefined();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

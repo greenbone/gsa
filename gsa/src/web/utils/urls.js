@@ -25,7 +25,7 @@ let url_loader = public_url_loader;
 
 export function get_img_url(name) {
   return url_loader(name);
-};
+}
 
 export const set_url_loader = loader => {
   url_loader = loader;

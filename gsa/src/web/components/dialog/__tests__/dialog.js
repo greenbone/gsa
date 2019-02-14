@@ -25,17 +25,12 @@ import {isFunction} from 'gmp/utils/identity';
 import {KeyCode} from 'gmp/utils/event';
 
 describe('Dialog component tests', () => {
-
   test('should render a Dialog', () => {
     const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div/>);
+    const renderFunc = jest.fn().mockReturnValue(<div />);
 
     const {baseElement} = render(
-      <Dialog
-        onClose={handleClose}
-      >
-        {renderFunc}
-      </Dialog>
+      <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -53,15 +48,9 @@ describe('Dialog component tests', () => {
 
   test('should close Dialog', () => {
     const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div/>);
+    const renderFunc = jest.fn().mockReturnValue(<div />);
 
-    render(
-      <Dialog
-        onClose={handleClose}
-      >
-        {renderFunc}
-      </Dialog>
-    );
+    render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
 
     expect(renderFunc).toHaveBeenCalled();
 
@@ -75,14 +64,10 @@ describe('Dialog component tests', () => {
 
   test('should close Dialog on escape key', () => {
     const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div/>);
+    const renderFunc = jest.fn().mockReturnValue(<div />);
 
     const {getByRole} = render(
-      <Dialog
-        onClose={handleClose}
-      >
-        {renderFunc}
-      </Dialog>
+      <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
     );
 
     expect(renderFunc).toHaveBeenCalled();
@@ -94,7 +79,6 @@ describe('Dialog component tests', () => {
 
     expect(handleClose).toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

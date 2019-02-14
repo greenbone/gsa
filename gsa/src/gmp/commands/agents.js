@@ -30,7 +30,6 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.agents');
 
 class AgentCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'agent', Agent);
   }
@@ -70,16 +69,18 @@ class AgentCommand extends EntityCommand {
   }
 
   downloadInstaller({id}) {
-    return this.httpGet({
-      cmd: 'download_agent',
-      agent_format: 'installer',
-      agent_id: id,
-    }, {transform: DefaultTransform, responseType: 'arraybuffer'});
+    return this.httpGet(
+      {
+        cmd: 'download_agent',
+        agent_format: 'installer',
+        agent_id: id,
+      },
+      {transform: DefaultTransform, responseType: 'arraybuffer'},
+    );
   }
 }
 
 class AgentsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'agent', Agent);
   }

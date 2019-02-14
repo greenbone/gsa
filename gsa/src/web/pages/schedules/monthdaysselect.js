@@ -36,7 +36,6 @@ const RANGE = [1, 2, 3, 4, 5, 6, 7];
 const ROWS = [0, 1, 2, 3];
 
 class MonthDaysSelect extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -54,28 +53,21 @@ class MonthDaysSelect extends React.Component {
 
     let newValue;
     if (val && !value.includes(day)) {
-      newValue = [
-        ...value,
-        day,
-      ];
-    }
-    else if (!val && value.includes(day)) {
+      newValue = [...value, day];
+    } else if (!val && value.includes(day)) {
       newValue = value.filter(v => v !== day);
-    }
-    else {
+    } else {
       newValue = value;
     }
 
-    if (newValue.length > 0) { // at least one day must be still selected
+    if (newValue.length > 0) {
+      // at least one day must be still selected
       onChange(newValue, name);
     }
   }
 
   render() {
-    const {
-      value = [],
-      disabled,
-    } = this.props;
+    const {value = [], disabled} = this.props;
     return (
       <Divider flex="column">
         {ROWS.map(j => (

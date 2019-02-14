@@ -129,16 +129,15 @@ const ToolBarIcons = ({
           anchor="creating-a-task"
           title={_('Help: Tasks')}
         />
-        <ListIcon
-          title={_('Task List')}
-          page="tasks"
-        />
-        {entity.isAlterable() && !entity.isNew() &&
+        <ListIcon title={_('Task List')} page="tasks" />
+        {entity.isAlterable() && !entity.isNew() && (
           <AlterableIcon
-            title={_('This is an Alterable Task. Reports may not relate to ' +
-              'current Scan Config or Target!')}
+            title={_(
+              'This is an Alterable Task. Reports may not relate to ' +
+                'current Scan Config or Target!',
+            )}
           />
-        }
+        )}
       </IconDivider>
 
       <IconDivider>
@@ -146,21 +145,9 @@ const ToolBarIcons = ({
           onNewClick={onTaskCreateClick}
           onNewContainerClick={onContainerTaskCreateClick}
         />
-        <CloneIcon
-          entity={entity}
-          name="task"
-          onClick={onTaskCloneClick}
-        />
-        <EditIcon
-          entity={entity}
-          name="task"
-          onClick={onTaskEditClick}
-        />
-        <TrashIcon
-          entity={entity}
-          name="task"
-          onClick={onTaskDeleteClick}
-        />
+        <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+        <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -169,27 +156,27 @@ const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        {isDefined(entity.schedule) &&
+        {isDefined(entity.schedule) && (
           <ScheduleIcon
             schedule={entity.schedule}
             schedulePeriods={entity.schedule_periods}
             links={links}
           />
-        }
-        <StartIcon task={entity} onClick={onTaskStartClick}/>
+        )}
+        <StartIcon task={entity} onClick={onTaskStartClick} />
 
-        <ImportReportIcon task={entity} onClick={onReportImportClick}/>
+        <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
-        <StopIcon task={entity} onClick={onTaskStopClick}/>
+        <StopIcon task={entity} onClick={onTaskStopClick} />
 
-        {!entity.isContainer() &&
+        {!entity.isContainer() && (
           <ResumeIcon task={entity} onClick={onTaskResumeClick} />
-        }
+        )}
       </IconDivider>
 
       <Divider margin="10px">
         <IconDivider>
-          {isDefined(entity.current_report) &&
+          {isDefined(entity.current_report) && (
             <DetailsLink
               type="report"
               id={entity.current_report.id}
@@ -198,11 +185,11 @@ const ToolBarIcons = ({
                 date: shortDate(entity.current_report.scan_start),
               })}
             >
-              <ReportIcon/>
+              <ReportIcon />
             </DetailsLink>
-          }
+          )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) &&
+          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
             <DetailsLink
               type="report"
               id={entity.last_report.id}
@@ -211,19 +198,17 @@ const ToolBarIcons = ({
                 date: shortDate(entity.last_report.scan_start),
               })}
             >
-              <ReportIcon/>
+              <ReportIcon />
             </DetailsLink>
-          }
+          )}
 
           <Link
             to="reports"
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Task {{name}}', entity)}
           >
-            <Badge
-              content={entity.report_count.total}
-            >
-              <ReportIcon/>
+            <Badge content={entity.report_count.total}>
+              <ReportIcon />
             </Badge>
           </Link>
         </IconDivider>
@@ -233,9 +218,7 @@ const ToolBarIcons = ({
           filter={'task_id=' + entity.id}
           title={_('Results for Task {{name}}', entity)}
         >
-          <Badge
-            content={entity.result_count}
-          >
+          <Badge content={entity.result_count}>
             <ResultIcon />
           </Badge>
         </Link>
@@ -246,9 +229,7 @@ const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Notes for Task {{name}}', entity)}
           >
-            <Badge
-              content={notes.length}
-            >
+            <Badge content={notes.length}>
               <NoteIcon />
             </Badge>
           </Link>
@@ -258,15 +239,12 @@ const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Overrides for Task {{name}}', entity)}
           >
-            <Badge
-              content={overrides.length}
-            >
+            <Badge content={overrides.length}>
               <OverrideIcon />
             </Badge>
           </Link>
         </IconDivider>
       </Divider>
-
     </Divider>
   );
 };
@@ -288,62 +266,40 @@ ToolBarIcons.propTypes = {
   onTaskStopClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  ...props
-}) => {
+const Details = ({entity, ...props}) => {
   return (
     <Layout flex="column">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
           <TableRow>
-            <TableData>
-              {_('Name')}
-            </TableData>
-            <TableData>
-              {entity.name}
-            </TableData>
+            <TableData>{_('Name')}</TableData>
+            <TableData>{entity.name}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Comment')}
-            </TableData>
-            <TableData>
-              {entity.comment}
-            </TableData>
+            <TableData>{_('Comment')}</TableData>
+            <TableData>{entity.comment}</TableData>
           </TableRow>
 
           <TableRow>
-            <TableData>
-              {_('Alterable')}
-            </TableData>
-            <TableData>
-              {renderYesNo(entity.isAlterable())}
-            </TableData>
+            <TableData>{_('Alterable')}</TableData>
+            <TableData>{renderYesNo(entity.isAlterable())}</TableData>
           </TableRow>
 
           <TableRow>
+            <TableData>{_('Status')}</TableData>
             <TableData>
-              {_('Status')}
-            </TableData>
-            <TableData>
-              <TaskStatus
-                task={entity}
-              />
+              <TaskStatus task={entity} />
             </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
 
-      <TaskDetails
-        entity={entity}
-        {...props}
-      />
+      <TaskDetails entity={entity} {...props} />
     </Layout>
   );
 };
@@ -396,7 +352,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<TaskIcon size="large"/>}
+        sectionIcon={<TaskIcon size="large" />}
         title={_('Task')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
@@ -413,24 +369,16 @@ const Page = ({
         onTaskStartClick={start}
         onTaskStopClick={stop}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -443,9 +391,7 @@ const Page = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags
@@ -486,8 +432,10 @@ Page.propTypes = {
 
 const TaskPermissions = withComponentDefaults({
   relatedResourcesLoaders: [
-    ({entity, gmp}) => isDefined(entity.alerts) ?
-      Promise.resolve([...entity.alerts]) : Promise.resolve([]),
+    ({entity, gmp}) =>
+      isDefined(entity.alerts)
+        ? Promise.resolve([...entity.alerts])
+        : Promise.resolve([]),
     ({entity, gmp}) => {
       const resources = [];
       const names = ['config', 'scanner', 'schedule'];
@@ -537,21 +485,21 @@ const load = gmp => {
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadTaskFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    dispatch(loadNotesFunc(taskIdFilter(id))),
-    dispatch(loadOverridesFunc(taskIdFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadTaskFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+      dispatch(loadNotesFunc(taskIdFilter(id))),
+      dispatch(loadOverridesFunc(taskIdFilter(id))),
+    ]);
 };
 
 export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
   mapStateToProps,
-  reloadInterval: ({defaultReloadInterval, entity}) => entity.isActive() ?
-    DEFAULT_RELOAD_INTERVAL_ACTIVE :
-    defaultReloadInterval,
+  reloadInterval: ({defaultReloadInterval, entity}) =>
+    entity.isActive() ? DEFAULT_RELOAD_INTERVAL_ACTIVE : defaultReloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

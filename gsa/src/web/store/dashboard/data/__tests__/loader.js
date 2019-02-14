@@ -33,7 +33,6 @@ const createState = state => ({
 });
 
 describe('loadFunc tests', () => {
-
   test('should request dashboard data successfully', () => {
     const dispatch = jest.fn();
     const getState = jest.fn();
@@ -121,7 +120,6 @@ describe('loadFunc tests', () => {
       });
     });
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

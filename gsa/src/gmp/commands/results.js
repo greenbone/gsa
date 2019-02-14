@@ -24,7 +24,6 @@ import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 class ResultsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'result', Result);
   }
@@ -60,10 +59,9 @@ class ResultsCommand extends EntitiesCommand {
       filter,
     });
   }
-};
+}
 
 class ResultCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'result', Result);
   }

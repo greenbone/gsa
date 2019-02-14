@@ -24,38 +24,39 @@ import PropTyes from 'web/utils/proptypes';
 
 import Select from 'web/components/form/select';
 
-const DAY_SELECT_ITEMS = [{
-  label: _l('Monday'),
-  value: 'monday',
-}, {
-  label: _l('Tuesday'),
-  value: 'tuesday',
-}, {
-  label: _l('Wednesday'),
-  value: 'wednesday',
-}, {
-  label: _l('Thursday'),
-  value: 'thursday',
-}, {
-  label: _l('Friday'),
-  value: 'friday',
-}, {
-  label: _l('Saturday'),
-  value: 'saturday',
-}, {
-  label: _l('Sunday'),
-  value: 'sunday',
-}];
+const DAY_SELECT_ITEMS = [
+  {
+    label: _l('Monday'),
+    value: 'monday',
+  },
+  {
+    label: _l('Tuesday'),
+    value: 'tuesday',
+  },
+  {
+    label: _l('Wednesday'),
+    value: 'wednesday',
+  },
+  {
+    label: _l('Thursday'),
+    value: 'thursday',
+  },
+  {
+    label: _l('Friday'),
+    value: 'friday',
+  },
+  {
+    label: _l('Saturday'),
+    value: 'saturday',
+  },
+  {
+    label: _l('Sunday'),
+    value: 'sunday',
+  },
+];
 
-const DaySelect = ({
-  value,
-  ...props
-}) => (
-  <Select
-    {...props}
-    value={value}
-    items={DAY_SELECT_ITEMS}
-  />
+const DaySelect = ({value, ...props}) => (
+  <Select {...props} value={value} items={DAY_SELECT_ITEMS} />
 );
 
 DaySelect.propTypes = {

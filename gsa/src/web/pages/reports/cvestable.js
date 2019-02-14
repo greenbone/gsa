@@ -35,12 +35,7 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({
-  currentSortDir,
-  currentSortBy,
-  sort = true,
-  onSortChange,
-}) => (
+const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -94,21 +89,14 @@ const Row = ({entity}) => {
       <TableData>
         <Divider wrap>
           {cves.map(cve => (
-            <CveLink
-              key={cve}
-              id={cve}
-            />
+            <CveLink key={cve} id={cve} />
           ))}
         </Divider>
       </TableData>
+      <TableData>{hosts.count}</TableData>
+      <TableData>{occurrences}</TableData>
       <TableData>
-        {hosts.count}
-      </TableData>
-      <TableData>
-        {occurrences}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={severity}/>
+        <SeverityBar severity={severity} />
       </TableData>
     </TableRow>
   );

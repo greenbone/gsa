@@ -44,22 +44,12 @@ import {
 import FilterComponent from './component';
 import FiltersTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onFilterCreateClick,
-}) => (
+const ToolBarIcons = withCapabilities(({capabilities, onFilterCreateClick}) => (
   <IconDivider>
-    <ManualIcon
-      page="search"
-      searchTerm="filter"
-      title={_('Help: Filters')}
-    />
-    {capabilities.mayCreate('filter') &&
-      <NewIcon
-        title={_('New Filter')}
-        onClick={onFilterCreateClick}
-      />
-    }
+    <ManualIcon page="search" searchTerm="filter" title={_('Help: Filters')} />
+    {capabilities.mayCreate('filter') && (
+      <NewIcon title={_('New Filter')} onClick={onFilterCreateClick} />
+    )}
   </IconDivider>
 ));
 
@@ -88,34 +78,28 @@ const FiltersPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={FiltersFilterDialog}
-      filtersFilter={FILTERS_FILTER_FILTER}
-      sectionIcon={<FilterIcon size="large"/>}
-      table={FiltersTable}
-      title={_('Filters')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onFilterCloneClick={clone}
-      onFilterCreateClick={create}
-      onFilterDeleteClick={delete_func}
-      onFilterDownloadClick={download}
-      onFilterEditClick={edit}
-      onFilterSaveClick={save}
-      onInteraction={onInteraction}
-    />
-  )}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={FiltersFilterDialog}
+        filtersFilter={FILTERS_FILTER_FILTER}
+        sectionIcon={<FilterIcon size="large" />}
+        table={FiltersTable}
+        title={_('Filters')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onFilterCloneClick={clone}
+        onFilterCreateClick={create}
+        onFilterDeleteClick={delete_func}
+        onFilterDownloadClick={download}
+        onFilterEditClick={edit}
+        onFilterSaveClick={save}
+        onInteraction={onInteraction}
+      />
+    )}
   </FilterComponent>
 );
 

@@ -64,8 +64,7 @@ const convert_preferences = (values, nvt_name) => {
       const typestring = nvt_name + '[' + type + ']:' + prop;
       if (type === 'password') {
         ret['password:' + typestring] = 'yes';
-      }
-      else if (type === 'file') {
+      } else if (type === 'file') {
         ret['file:' + typestring] = 'yes';
       }
       ret['preference:' + typestring] = value;
@@ -75,7 +74,6 @@ const convert_preferences = (values, nvt_name) => {
 };
 
 class ScanConfigCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'config', ScanConfig);
   }
@@ -89,12 +87,7 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  create({
-    base,
-    name,
-    comment,
-    scanner_id,
-  }) {
+  create({base, name, comment, scanner_id}) {
     const data = {
       cmd: 'create_config',
       base,
@@ -106,14 +99,7 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({
-    id,
-    name,
-    comment = '',
-    trend,
-    select,
-    scanner_preference_values,
-  }) {
+  save({id, name, comment = '', trend, select, scanner_preference_values}) {
     const data = {
       ...convert(trend, 'trend:'),
       ...convert(scanner_preference_values, 'preference:scanner[scanner]:'),
@@ -128,7 +114,8 @@ class ScanConfigCommand extends EntityCommand {
     return this.action(data);
   }
 
-  editScanConfigSettings({id}) { // should be removed in future and split into several api calls
+  editScanConfigSettings({id}) {
+    // should be removed in future and split into several api calls
     return this.httpGet({
       cmd: 'edit_config',
       id,
@@ -138,7 +125,8 @@ class ScanConfigCommand extends EntityCommand {
       const settings = {};
 
       settings.scanconfig = new ScanConfig(
-        config_resp.get_configs_response.config);
+        config_resp.get_configs_response.config,
+      );
 
       settings.families = map(
         config_resp.get_nvt_families_response.families.family,
@@ -147,18 +135,14 @@ class ScanConfigCommand extends EntityCommand {
             name: family.name,
             max: parse_count(family.max_nvt_count),
           };
-        });
+        },
+      );
 
       return response.setData(settings);
     });
   }
 
-  saveScanConfigFamily({
-    config_name,
-    family_name,
-    id,
-    selected,
-  }) {
+  saveScanConfigFamily({config_name, family_name, id, selected}) {
     const data = {
       ...convert_select(selected, 'nvt:'),
       cmd: 'save_config_family',
@@ -171,11 +155,7 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  editScanConfigFamilySettings({
-    id,
-    family_name,
-    config_name,
-  }) {
+  editScanConfigFamilySettings({id, family_name, config_name}) {
     return this.httpGet({
       cmd: 'edit_config_family',
       id,
@@ -236,12 +216,7 @@ class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  editScanConfigNvtSettings({
-    config_name,
-    family_name,
-    id,
-    oid,
-  }) {
+  editScanConfigNvtSettings({config_name, family_name, id, oid}) {
     return this.httpGet({
       cmd: 'edit_config_nvt',
       id,
@@ -257,8 +232,10 @@ class ScanConfigCommand extends EntityCommand {
       settings.nvt = new Nvt(config_resp.get_nvts_response.nvt);
 
       settings.nvt.notes_counts = parseCounts(data.get_notes_response, 'note');
-      settings.nvt.overrides_counts = parseCounts(data.get_overrides_response,
-        'override');
+      settings.nvt.overrides_counts = parseCounts(
+        data.get_overrides_response,
+        'override',
+      );
 
       return response.setData(settings);
     });
@@ -267,11 +244,9 @@ class ScanConfigCommand extends EntityCommand {
   getElementFromRoot(root) {
     return root.get_config_response.get_configs_response.config;
   }
-
 }
 
 class ScanConfigsCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'config', ScanConfig);
   }

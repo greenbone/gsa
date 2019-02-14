@@ -41,7 +41,6 @@ import {
 } from './parser';
 
 class ReportReport extends Model {
-
   static entityType = 'report';
 
   parseProperties(elem) {
@@ -96,13 +95,10 @@ class ReportReport extends Model {
       copy.scan_end = parseDate(scan_end);
     }
 
-    if (isDefined(scan) && isDefined(scan.task) &&
-      isDefined(scan.task.slave)) {
-
+    if (isDefined(scan) && isDefined(scan.task) && isDefined(scan.task.slave)) {
       if (isEmpty(scan.task.slave._id)) {
         delete copy.scan.task.slave;
-      }
-      else {
+      } else {
         copy.slave = {
           ...scan.task.slave,
         };

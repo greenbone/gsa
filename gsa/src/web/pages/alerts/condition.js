@@ -31,20 +31,18 @@ import {
   CONDITION_DIRECTION_DECREASED,
 } from 'gmp/models/alert';
 
-const Condition = ({
-  condition,
-  event,
-}) => {
+const Condition = ({condition, event}) => {
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_AT_LEAST) {
     const count = parseInt(condition.data.count.value);
     let type;
 
     // FIXME this is not translateable
-    if (event.type === EVENT_TYPE_NEW_SECINFO ||
-      event.type === EVENT_TYPE_UPDATED_SECINFO) {
+    if (
+      event.type === EVENT_TYPE_NEW_SECINFO ||
+      event.type === EVENT_TYPE_UPDATED_SECINFO
+    ) {
       type = 'NVT';
-    }
-    else {
+    } else {
       type = 'result';
     }
 
@@ -58,17 +56,23 @@ const Condition = ({
     const count = parseInt(condition.data.count.value);
 
     // FIXME this is not translateable
-    return _('Filter matches at least {{count}} more {{result}} ' +
-      'than the previous scan', {
+    return _(
+      'Filter matches at least {{count}} more {{result}} ' +
+        'than the previous scan',
+      {
         count,
         result: count > 0 ? 'results' : 'result',
-      });
+      },
+    );
   }
 
-  if (condition.type === CONDITION_TYPE_SEVERITY_AT_LEAST &&
-    isDefined(condition.data.severity)) {
-    return _('Severity at least {{severity}}',
-      {severity: condition.data.severity.value});
+  if (
+    condition.type === CONDITION_TYPE_SEVERITY_AT_LEAST &&
+    isDefined(condition.data.severity)
+  ) {
+    return _('Severity at least {{severity}}', {
+      severity: condition.data.severity.value,
+    });
   }
 
   if (condition.type === 'Severity changed') {

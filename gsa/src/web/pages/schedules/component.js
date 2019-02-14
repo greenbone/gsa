@@ -33,7 +33,6 @@ import PropTypes from 'web/utils/proptypes';
 import ScheduleDialog from './dialog';
 
 class ScheduleComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -48,12 +47,7 @@ class ScheduleComponent extends React.Component {
 
     if (isDefined(schedule)) {
       const {event} = schedule;
-      const {
-        startDate,
-        recurrence = {},
-        duration,
-        durationInSeconds,
-      } = event;
+      const {startDate, recurrence = {}, duration, durationInSeconds} = event;
 
       const {interval, freq, monthdays, weekdays} = recurrence;
 
@@ -71,8 +65,7 @@ class ScheduleComponent extends React.Component {
         timezone: schedule.timezone,
         weekdays,
       });
-    }
-    else {
+    } else {
       this.setState({
         comment: undefined,
         dialogVisible: true,
@@ -124,10 +117,7 @@ class ScheduleComponent extends React.Component {
       onSaveError,
     } = this.props;
 
-    const {
-      dialogVisible,
-      ...dialogProps
-    } = this.state;
+    const {dialogVisible, ...dialogProps} = this.state;
 
     return (
       <EntityComponent
@@ -144,17 +134,14 @@ class ScheduleComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
               create: this.openScheduleDialog,
               edit: this.openScheduleDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <ScheduleDialog
                 {...dialogProps}
                 onClose={this.handleCloseScheduleDialog}
@@ -163,7 +150,7 @@ class ScheduleComponent extends React.Component {
                   return save(d).then(() => this.closeScheduleDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

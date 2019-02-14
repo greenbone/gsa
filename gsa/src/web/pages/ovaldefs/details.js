@@ -35,9 +35,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const OvaldefDetails = ({
-  entity,
-}) => {
+const OvaldefDetails = ({entity}) => {
   const {
     title,
     severity,
@@ -48,107 +46,72 @@ const OvaldefDetails = ({
     metadata,
   } = entity;
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
-
+    <Layout flex="column" grow="1">
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(title) &&
+          {isDefined(title) && (
             <TableRow>
-              <TableData>
-                {_('Title')}
-              </TableData>
-              <TableData>
-                {title}
-              </TableData>
+              <TableData>{_('Title')}</TableData>
+              <TableData>{title}</TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(version) &&
+          {isDefined(version) && (
             <TableRow>
-              <TableData>
-                {_('Version')}
-              </TableData>
-              <TableData>
-                {version}
-              </TableData>
+              <TableData>{_('Version')}</TableData>
+              <TableData>{version}</TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(entity.class) &&
+          {isDefined(entity.class) && (
             <TableRow>
-              <TableData>
-                {_('Definition Class')}
-              </TableData>
-              <TableData>
-                {entity.class}
-              </TableData>
+              <TableData>{_('Definition Class')}</TableData>
+              <TableData>{entity.class}</TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(cve_refs) &&
+          {isDefined(cve_refs) && (
             <TableRow>
-              <TableData>
-                {_('Referenced CVEs')}
-              </TableData>
-              <TableData>
-                {cve_refs}
-              </TableData>
+              <TableData>{_('Referenced CVEs')}</TableData>
+              <TableData>{cve_refs}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
+            <TableData>{_('Severity')}</TableData>
             <TableData>
-              {_('Severity')}
-            </TableData>
-            <TableData>
-              <SeverityBar
-                severity={severity}
-              />
+              <SeverityBar severity={severity} />
             </TableData>
           </TableRow>
 
-          {isDefined(entity.isDeprecated) && entity.isDeprecated() &&
+          {isDefined(entity.isDeprecated) && entity.isDeprecated() && (
             <TableRow>
-              <TableData>
-                {_('Deprecated')}
-              </TableData>
-              <TableData>
-                {deprecation}
-              </TableData>
+              <TableData>{_('Deprecated')}</TableData>
+              <TableData>{deprecation}</TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(file) &&
+          {isDefined(file) && (
             <TableRow>
-              <TableData>
-                {_('File')}
-              </TableData>
-              <TableData>
-                {file}
-              </TableData>
+              <TableData>{_('File')}</TableData>
+              <TableData>{file}</TableData>
             </TableRow>
-          }
-
+          )}
         </TableBody>
       </InfoTable>
 
-      {isDefined(metadata) &&
+      {isDefined(metadata) && (
         <div>
           <h2>{_('Description')}</h2>
           <p>
-            {isDefined(metadata.description) ?
-                metadata.description :
-                _('None')}
+            {isDefined(metadata.description) ? metadata.description : _('None')}
           </p>
         </div>
-      }
+      )}
     </Layout>
   );
 };

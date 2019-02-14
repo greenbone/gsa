@@ -23,9 +23,8 @@ import {render} from 'web/utils/testing';
 import BlankLink from '../blanklink';
 
 describe('BlankLink tests', () => {
-
   test('should render BlankLink', () => {
-    const {element} = render(<BlankLink to="foo"/>);
+    const {element} = render(<BlankLink to="foo" />);
 
     expect(element).toHaveAttribute('href', 'foo');
     expect(element).toHaveAttribute('rel', 'noopener noreferrer');
@@ -34,19 +33,15 @@ describe('BlankLink tests', () => {
 
   test('should forward props', () => {
     const {element} = render(
-      <BlankLink
-        to="foo"
-        title="bar"
-      >
+      <BlankLink to="foo" title="bar">
         Ipsum
-      </BlankLink>
+      </BlankLink>,
     );
 
     expect(element).toHaveAttribute('href', 'foo');
     expect(element).toHaveAttribute('title', 'bar');
     expect(element).toHaveTextContent('Ipsum');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

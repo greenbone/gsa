@@ -19,7 +19,6 @@
 import {isDefined} from 'gmp/utils/identity';
 
 class PageSelector {
-
   constructor(state = {}) {
     this.state = state;
   }

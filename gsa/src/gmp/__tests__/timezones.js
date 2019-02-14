@@ -21,7 +21,6 @@ import {isArray} from '../utils/identity';
 import timezones from '../timezones';
 
 describe('timezones tests', () => {
-
   test('should be a list of timezone objects', () => {
     expect(isArray(timezones)).toEqual(true);
   });
@@ -33,7 +32,6 @@ describe('timezones tests', () => {
       expect(zone.name).toBeDefined();
     }
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

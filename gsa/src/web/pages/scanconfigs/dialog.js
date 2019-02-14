@@ -40,16 +40,15 @@ import {
 } from 'gmp/models/scanconfig';
 
 const Dialog = ({
-    base = EMPTY_SCAN_CONFIG_ID,
-    comment = '',
-    name = _('Unnamed'),
-    scanner_id,
-    scanners = [],
-    title = _('New Scan Config'),
-    onClose,
-    onSave,
-  }) => {
-
+  base = EMPTY_SCAN_CONFIG_ID,
+  comment = '',
+  name = _('Unnamed'),
+  scanner_id,
+  scanners = [],
+  title = _('New Scan Config'),
+  onClose,
+  onSave,
+}) => {
   const data = {
     base,
     comment,
@@ -64,13 +63,9 @@ const Dialog = ({
       onSave={onSave}
       defaultValues={data}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
@@ -109,7 +104,7 @@ const Dialog = ({
                   title={_('Full and fast')}
                   onChange={onValueChange}
                 />
-                {scanners.length > 0 &&
+                {scanners.length > 0 && (
                   <Divider>
                     <Radio
                       name="base"
@@ -124,7 +119,7 @@ const Dialog = ({
                       onChange={onValueChange}
                     />
                   </Divider>
-                }
+                )}
               </Divider>
             </FormGroup>
           </Layout>
@@ -136,7 +131,9 @@ const Dialog = ({
 
 Dialog.propTypes = {
   base: PropTypes.oneOf([
-    FULL_AND_FAST_SCAN_CONFIG_ID, EMPTY_SCAN_CONFIG_ID, '0',
+    FULL_AND_FAST_SCAN_CONFIG_ID,
+    EMPTY_SCAN_CONFIG_ID,
+    '0',
   ]),
   comment: PropTypes.string,
   name: PropTypes.string,

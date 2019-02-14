@@ -27,29 +27,17 @@ import Group from '../group';
 import ToolTip from '../tooltip';
 import {ArcDataPropType} from 'web/components/chart/donut/proptypes';
 
-const Arc2d = ({
-  data,
-  path,
-  x,
-  y,
-  onDataClick,
-}) => {
+const Arc2d = ({data, path, x, y, onDataClick}) => {
   const {color = Theme.lightGray, toolTip} = data;
   return (
-    <ToolTip
-      content={toolTip}
-    >
+    <ToolTip content={toolTip}>
       {({targetRef, hide, show}) => (
         <Group
           onMouseEnter={show}
           onMouseLeave={hide}
-          onClick={isDefined(onDataClick) ?
-            () => onDataClick(data) : undefined}
+          onClick={isDefined(onDataClick) ? () => onDataClick(data) : undefined}
         >
-          <path
-            d={path}
-            fill={color}
-          />
+          <path d={path} fill={color} />
           <circle // used as positioning ref for tooltips
             ref={targetRef}
             cx={x}

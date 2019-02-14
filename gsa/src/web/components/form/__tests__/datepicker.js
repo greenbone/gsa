@@ -25,10 +25,9 @@ import DatePicker from '../datepicker.js';
 import date from 'gmp/models/date';
 
 describe('DatePicker component tests', () => {
-
   test('should render', () => {
     const adate = date('2018-11-11');
-    const {element} = render(<DatePicker value={adate}/>);
+    const {element} = render(<DatePicker value={adate} />);
 
     expect(element).toMatchSnapshot();
 
@@ -36,7 +35,6 @@ describe('DatePicker component tests', () => {
 
     expect(element).toMatchSnapshot();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

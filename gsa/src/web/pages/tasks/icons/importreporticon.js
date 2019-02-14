@@ -25,13 +25,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ImportIcon from 'web/components/icon/importicon';
 
-const ImportReportIcon = ({
-  capabilities,
-  size,
-  task,
-  onClick,
-}) => {
-
+const ImportReportIcon = ({capabilities, size, task, onClick}) => {
   if (!task.isContainer() || !capabilities.mayCreate('report')) {
     return null;
   }

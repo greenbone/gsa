@@ -25,12 +25,7 @@ import PropTypes from 'web/utils/proptypes';
 import DataDisplay from './datadisplay';
 import DataTable from './datatable';
 
-const DataTableDisplay = ({
-  children,
-  dataRow,
-  dataTitles,
-  ...props
-}) => (
+const DataTableDisplay = ({children, dataRow, dataTitles, ...props}) => (
   <DataDisplay
     {...props}
     dataRow={dataRow}
@@ -38,19 +33,17 @@ const DataTableDisplay = ({
     showSvgDownload={false}
     showToggleLegend={false}
   >
-    {({data}) => (
-      isDefined(children) ?
+    {({data}) =>
+      isDefined(children) ? (
         children({
           data,
           dataRow,
           dataTitles,
-        }) :
-        <DataTable
-          data={data}
-          dataRow={dataRow}
-          dataTitles={dataTitles}
-        />
-    )}
+        })
+      ) : (
+        <DataTable data={data} dataRow={dataRow} dataTitles={dataTitles} />
+      )
+    }
   </DataDisplay>
 );
 

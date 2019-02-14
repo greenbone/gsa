@@ -49,7 +49,7 @@ const dashboardData = (state = {}, action) => {
       };
     default:
       return state;
-    }
+  }
 };
 
 const dashboardDataForFilter = (state = {}, action) => {

@@ -24,13 +24,8 @@ import Theme from 'web/utils/theme';
 import DialogTwoButtonFooter from '../twobuttonfooter';
 
 describe('DialogTwoButtonFooter tests', () => {
-
   test('should render', () => {
-    const {element} = render(
-      <DialogTwoButtonFooter
-        rightButtonTitle="Foo"
-      />
-    );
+    const {element} = render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);
 
     expect(element).toMatchSnapshot();
 
@@ -41,26 +36,21 @@ describe('DialogTwoButtonFooter tests', () => {
 
   test('should render loading', () => {
     const {element} = render(
-      <DialogTwoButtonFooter
-        rightButtonTitle="Foo"
-        loading={true}
-      />
+      <DialogTwoButtonFooter rightButtonTitle="Foo" loading={true} />,
     );
 
     expect(element).toMatchSnapshot();
 
     const button = element.querySelector('button[title="Foo"]');
 
-    expect(button).toHaveStyleRule('background',
-      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`);
+    expect(button).toHaveStyleRule(
+      'background',
+      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
+    );
   });
 
   test('should render footer with default title', () => {
-    const {element} = render(
-      <DialogTwoButtonFooter
-        rightButtonTitle="Foo"
-      />
-    );
+    const {element} = render(<DialogTwoButtonFooter rightButtonTitle="Foo" />);
 
     const buttons = element.querySelectorAll('button');
 
@@ -74,10 +64,7 @@ describe('DialogTwoButtonFooter tests', () => {
 
   test('should render footer with custom titles', () => {
     const {element} = render(
-      <DialogTwoButtonFooter
-        rightButtonTitle="Foo"
-        leftButtonTitle="Bar"
-      />
+      <DialogTwoButtonFooter rightButtonTitle="Foo" leftButtonTitle="Bar" />,
     );
 
     const buttons = element.querySelectorAll('button');
@@ -100,8 +87,7 @@ describe('DialogTwoButtonFooter tests', () => {
         leftButtonTitle="Bar"
         onLeftButtonClick={handler1}
         onRightButtonClick={handler2}
-      />
-
+      />,
     );
 
     const buttons = element.querySelectorAll('button');
@@ -116,7 +102,6 @@ describe('DialogTwoButtonFooter tests', () => {
 
     expect(handler2).toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -26,7 +26,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Agent, 'agent');
 
 describe('Agent Model tests', () => {
-
   test('should parse time and status of trust', () => {
     const elem = {
       installer: {

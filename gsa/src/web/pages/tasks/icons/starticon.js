@@ -25,40 +25,21 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import StartIcon from 'web/components/icon/starticon';
 
-const TaskStartIcon = ({
-  capabilities,
-  task,
-  onClick,
-}) => {
-
+const TaskStartIcon = ({capabilities, task, onClick}) => {
   if (task.isRunning() || task.isContainer()) {
     return null;
   }
 
   if (!capabilities.mayOp('start_task')) {
     return (
-      <StartIcon
-        active={false}
-        title={_('Permission to start Task denied')}
-      />
+      <StartIcon active={false} title={_('Permission to start Task denied')} />
     );
   }
 
   if (!task.isActive()) {
-    return (
-      <StartIcon
-        title={_('Start')}
-        value={task}
-        onClick={onClick}
-      />
-    );
+    return <StartIcon title={_('Start')} value={task} onClick={onClick} />;
   }
-  return (
-    <StartIcon
-      active={false}
-      title={_('Task is already active')}
-    />
-  );
+  return <StartIcon active={false} title={_('Task is already active')} />;
 };
 
 TaskStartIcon.propTypes = {

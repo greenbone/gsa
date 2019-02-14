@@ -34,22 +34,13 @@ const ScrollableContent = styled.div`
 `;
 
 const StyledLayout = styled(Layout)`
-  overflow: hidden;/* fix for adjusting the content while resizing in firefox */
+  overflow: hidden; /* fix for adjusting the content while resizing in firefox */
   height: 100%; /* needs to be set for Chrome */
 `;
 
-const ScrollableContentLayout = ({
-  children,
-  maxHeight,
-}) => (
-  <StyledLayout
-    flex="column"
-    align={['center', 'start']}
-    grow="1"
-  >
-    <ScrollableContent maxHeight={maxHeight}>
-      {children}
-    </ScrollableContent>
+const ScrollableContentLayout = ({children, maxHeight}) => (
+  <StyledLayout flex="column" align={['center', 'start']} grow="1">
+    <ScrollableContent maxHeight={maxHeight}>{children}</ScrollableContent>
   </StyledLayout>
 );
 

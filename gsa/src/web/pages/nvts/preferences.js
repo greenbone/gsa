@@ -31,44 +31,26 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-const Preferences = ({
-  preferences = [],
-  default_timeout,
-}) => {
+const Preferences = ({preferences = [], default_timeout}) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>
-            {_('Name')}
-          </TableHead>
-          <TableHead>
-            {_('Default Value')}
-          </TableHead>
+          <TableHead>{_('Name')}</TableHead>
+          <TableHead>{_('Default Value')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow>
+          <TableData>{_('Timeout')}</TableData>
           <TableData>
-            {_('Timeout')}
-          </TableData>
-          <TableData>
-            {isDefined(default_timeout) ?
-              default_timeout :
-              _('default')
-            }
+            {isDefined(default_timeout) ? default_timeout : _('default')}
           </TableData>
         </TableRow>
         {preferences.map(pref => (
-          <TableRow
-            key={pref.name}
-          >
-            <TableData>
-              {pref.hr_name}
-            </TableData>
-            <TableData>
-              {pref.default}
-            </TableData>
+          <TableRow key={pref.name}>
+            <TableData>{pref.hr_name}</TableData>
+            <TableData>{pref.default}</TableData>
           </TableRow>
         ))}
       </TableBody>

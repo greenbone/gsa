@@ -24,7 +24,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Ticket, 'ticket');
 
 describe('Additional Ticket Model tests', () => {
-
   test('should parse assignedTo', () => {
     let ticket = new Ticket({assigned_to: {}});
 
@@ -164,7 +163,6 @@ describe('Additional Ticket Model tests', () => {
     expect(ticket.closedNote).toBeDefined();
     expect(ticket.closedNote).toEqual('foo');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -41,40 +41,27 @@ import 'react-datepicker/dist/react-datepicker.css';
 const StyledCalendarIcon = styled(CalendarIcon)`
   margin-left: 5px;
   :hover {
-    cursor: ${props => props.disabled ? 'not-allowed ' : 'pointer'};
-  };
+    cursor: ${props => (props.disabled ? 'not-allowed ' : 'pointer')};
+  }
 `;
 
 const StyledDiv = styled.div`
   display: flex;
   margin-right: 5px;
   width: ${props => props.width};
-  color: ${props => props.disabled ? Theme.lightGray : undefined};
+  color: ${props => (props.disabled ? Theme.lightGray : undefined)};
 `;
 
 // InputField must be a Class to work correctly with Datepicker :-/
-class InputField extends React.Component { // eslint-disable-line react/prefer-stateless-function
-
+// eslint-disable-next-line react/prefer-stateless-function
+class InputField extends React.Component {
   render() {
-    const {
-      disabled,
-      onClick,
-      value,
-      width = 'auto',
-      ...props
-    } = this.props;
+    const {disabled, onClick, value, width = 'auto', ...props} = this.props;
 
     return (
-      <StyledDiv
-        {...props}
-        disabled={disabled}
-        width={width}
-        onClick={onClick}
-      >
+      <StyledDiv {...props} disabled={disabled} width={width} onClick={onClick}>
         {value}
-        <StyledCalendarIcon
-          disabled={disabled}
-        />
+        <StyledCalendarIcon disabled={disabled} />
       </StyledDiv>
     );
   }
@@ -88,7 +75,6 @@ InputField.propTypes = {
 };
 
 class DatePickerComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -117,12 +103,7 @@ class DatePickerComponent extends React.Component {
       <DatePicker
         {...props}
         disabled={disabled}
-        customInput={
-          <InputField
-            width={width}
-            disabled={disabled}
-          />
-        }
+        customInput={<InputField width={width} disabled={disabled} />}
         minDate={minDate === false ? undefined : minDate}
         maxDate={date().add(3, 'years')}
         selected={value}
@@ -136,10 +117,7 @@ class DatePickerComponent extends React.Component {
 
 DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
-  minDate: PropTypes.oneOfType([
-    PropTypes.date,
-    PropTypes.oneOf([false]),
-  ]),
+  minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
   name: PropTypes.string,
   value: PropTypes.date.isRequired,
   width: PropTypes.string,

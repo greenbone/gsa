@@ -74,7 +74,6 @@ Notification.propTypes = {
 };
 
 class ResourceList extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -99,33 +98,28 @@ class ResourceList extends React.Component {
 
     return (
       <React.Fragment>
-        {isLoading ?
-          <Loading/> :
+        {isLoading ? (
+          <Loading />
+        ) : (
           <Layout flex="column">
-            {showNotification &&
-              <Notification
-                id={id}
-                resourceType={resourceType}
-              />
-            }
-            <Spacer/>
+            {showNotification && (
+              <Notification id={id} resourceType={resourceType} />
+            )}
+            <Spacer />
             <ul>
-              {resources.map(resource =>
-                (<li key={resource.id}>
-                  <DetailsLink
-                    id={resource.id}
-                    type={resourceType}
-                  >
+              {resources.map(resource => (
+                <li key={resource.id}>
+                  <DetailsLink id={resource.id} type={resourceType}>
                     {resource.name}
                   </DetailsLink>
-                </li>)
-              )}
+                </li>
+              ))}
             </ul>
           </Layout>
-        }
+        )}
       </React.Fragment>
     );
-  };
+  }
 }
 
 ResourceList.propTypes = {
@@ -135,8 +129,8 @@ ResourceList.propTypes = {
   resources: PropTypes.array,
 };
 
-const resourcesFilter = id => Filter.fromString(
-  'tag_id="' + id + '" rows=' + MAX_RESOURCES);
+const resourcesFilter = id =>
+  Filter.fromString('tag_id="' + id + '" rows=' + MAX_RESOURCES);
 
 const mapStateToProps = (rootState, {entity}) => {
   if (!isDefined(entity)) {
@@ -168,14 +162,17 @@ const mapDispatchToProps = (dispatch, {entity, gmp}) => {
     entityType,
   });
   return {
-    loadResources: () => dispatch(loadEntities(gmp)(
-      resourcesFilter(entity.id))),
+    loadResources: () =>
+      dispatch(loadEntities(gmp)(resourcesFilter(entity.id))),
   };
 };
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(ResourceList);
 
 // vim: set ts=2 sw=2 tw=80:

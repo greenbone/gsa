@@ -23,13 +23,11 @@ import {render} from 'web/utils/testing';
 import Loading from '../loading.js';
 
 describe('Loading component tests', () => {
-
   test('should render', () => {
-    const {element} = render(<Loading/>);
+    const {element} = render(<Loading />);
 
     expect(element).toMatchSnapshot();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

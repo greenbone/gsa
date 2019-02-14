@@ -59,7 +59,6 @@ const PortListsDialog = ({
   onTmpDeletePortRange,
   onSave,
 }) => {
-
   const is_edit = isDefined(port_list);
 
   const newrangeicon = (
@@ -88,13 +87,9 @@ const PortListsDialog = ({
       defaultValues={data}
       values={{port_ranges}}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
@@ -117,7 +112,7 @@ const PortListsDialog = ({
               />
             </FormGroup>
 
-            {!is_edit &&
+            {!is_edit && (
               <FormGroup title={_('Port Ranges')} flex="column">
                 <Divider flex="column">
                   <Divider>
@@ -146,24 +141,21 @@ const PortListsDialog = ({
                       onChange={onValueChange}
                       checked={from_file === FROM_FILE}
                     />
-                    <FileField
-                      name="file"
-                      onChange={onValueChange}
-                    />
+                    <FileField name="file" onChange={onValueChange} />
                   </Divider>
                 </Divider>
               </FormGroup>
-            }
-            {is_edit &&
+            )}
+            {is_edit && (
               <Section title={_('Port Ranges')} extra={newrangeicon}>
-                {isDefined(port_list) &&
+                {isDefined(port_list) && (
                   <PortRangesTable
                     portRanges={state.port_ranges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
-                }
+                )}
               </Section>
-            }
+            )}
           </Layout>
         );
       }}
@@ -186,7 +178,6 @@ PortListsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
   onTmpDeletePortRange: PropTypes.func.isRequired,
 };
-
 
 export default PortListsDialog;
 

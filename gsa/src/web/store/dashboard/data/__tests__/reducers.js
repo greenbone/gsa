@@ -29,7 +29,6 @@ import {
 } from '../actions';
 
 describe('dashboard data reducers tests', () => {
-
   test('should return the initial state', () => {
     const state = dashboardData(undefined, {});
     expect(state).toEqual({});

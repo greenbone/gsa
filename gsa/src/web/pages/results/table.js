@@ -52,7 +52,7 @@ const Header = ({
   return (
     <TableHeader>
       <TableRow>
-        {delta &&
+        {delta && (
           <TableHead
             width="4%"
             rowSpan="2"
@@ -63,7 +63,7 @@ const Header = ({
           >
             {_('Delta')}
           </TableHead>
-        }
+        )}
         <TableHead
           width="45%"
           rowSpan="2"
@@ -76,12 +76,13 @@ const Header = ({
         </TableHead>
         <TableHead width="2%" rowSpan="2">
           <Layout align="center">
-            {sort ?
+            {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
-                <SolutionTypeSvgIcon title={_('Solution type')}/>
-              </Sort> :
-              <SolutionTypeSvgIcon title={_('Solution type')}/>
-            }
+                <SolutionTypeSvgIcon title={_('Solution type')} />
+              </Sort>
+            ) : (
+              <SolutionTypeSvgIcon title={_('Solution type')} />
+            )}
           </Layout>
         </TableHead>
         <TableHead
@@ -104,10 +105,7 @@ const Header = ({
         >
           {_('QoD')}
         </TableHead>
-        <TableHead
-          colSpan="2"
-          width="23%"
-        >
+        <TableHead colSpan="2" width="23%">
           {_('Host')}
         </TableHead>
         <TableHead

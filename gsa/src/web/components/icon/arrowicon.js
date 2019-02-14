@@ -34,16 +34,11 @@ const Styled = styled.span`
   outline: none;
   margin: 1px;
   user-select: none;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `;
 
-const ArrowIcon = ({
-  down = false,
-  ...props
-}) => (
-  <Styled {...props}>
-    {down ? '▼' : '▲' }
-  </Styled>
+const ArrowIcon = ({down = false, ...props}) => (
+  <Styled {...props}>{down ? '▼' : '▲'}</Styled>
 );
 
 ArrowIcon.propTypes = {

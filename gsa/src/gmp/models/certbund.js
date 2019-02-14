@@ -24,7 +24,6 @@ import {parseSeverity, parseDate} from '../parser';
 import Info from './info';
 
 class CertBundAdv extends Info {
-
   static entityType = 'certbund';
 
   parseProperties(elem) {
@@ -56,18 +55,19 @@ class CertBundAdv extends Info {
         ret.version = advisory.Ref_Num._update;
       }
 
-      if (isDefined(advisory.Description) &&
-        isDefined(advisory.Description.Element)) {
+      if (
+        isDefined(advisory.Description) &&
+        isDefined(advisory.Description.Element)
+      ) {
         forEach(advisory.Description.Element, element => {
           if (isDefined(element.TextBlock)) {
             ret.description.push(element.TextBlock);
-          }
-          else if (isDefined(element.Infos)) {
+          } else if (isDefined(element.Infos)) {
             ret.additional_information = ret.additional_information.concat(
               map(element.Infos.Info, info => ({
                 issuer: info._Info_Issuer,
                 url: info._Info_URL,
-              }))
+              })),
             );
           }
         });

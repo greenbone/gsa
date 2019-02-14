@@ -34,7 +34,6 @@ import {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp.js';
 const log = logger.getLogger('gmp.commands.entities');
 
 class EntitiesCommand extends HttpCommand {
-
   constructor(http, name, clazz) {
     super(http, {cmd: 'get_' + name + 's'});
 
@@ -68,7 +67,8 @@ class EntitiesCommand extends HttpCommand {
   get(params, options) {
     return this.httpGet(params, options).then(response => {
       const {entities, filter, counts} = this.getCollectionListFromRoot(
-        response.data);
+        response.data,
+      );
       return response.set(entities, {filter, counts});
     });
   }
@@ -77,11 +77,9 @@ class EntitiesCommand extends HttpCommand {
     const {filter} = params;
     if (!isDefined(filter)) {
       params.filter = ALL_FILTER;
-    }
-    else if (isString(filter)) {
+    } else if (isString(filter)) {
       params.filter = Filter.fromString(filter).all();
-    }
-    else {
+    } else {
       params.filter = filter.all();
     }
     return this.get(params, options);
@@ -114,8 +112,10 @@ class EntitiesCommand extends HttpCommand {
   }
 
   delete(entities, extra_params) {
-    return this.deleteByIds(map(entities, entity => entity.id), extra_params)
-      .then(response => response.setData(entities));
+    return this.deleteByIds(
+      map(entities, entity => entity.id),
+      extra_params,
+    ).then(response => response.setData(entities));
   }
 
   deleteByIds(ids, extra_params = {}) {
@@ -133,10 +133,12 @@ class EntitiesCommand extends HttpCommand {
   deleteByFilter(filter, extra_params) {
     // FIXME change gmp to allow deletion by filter
     let deleted;
-    return this.get({filter}).then(entities => {
-      deleted = entities.data;
-      return this.delete(deleted, extra_params);
-    }).then(response => response.setData(deleted));
+    return this.get({filter})
+      .then(entities => {
+        deleted = entities.data;
+        return this.delete(deleted, extra_params);
+      })
+      .then(response => response.setData(deleted));
   }
 
   transformAggregates(response) {
@@ -193,14 +195,15 @@ class EntitiesCommand extends HttpCommand {
     subgroupColumn,
     ...params
   } = {}) {
-
     const requestParams = {};
 
-    dataColumns.forEach((column, i) =>
-      requestParams[`data_columns:${i}`] = column);
+    dataColumns.forEach(
+      (column, i) => (requestParams[`data_columns:${i}`] = column),
+    );
 
-    textColumns.forEach((column, i) =>
-      requestParams[`text_columns:${i}`] = column);
+    textColumns.forEach(
+      (column, i) => (requestParams[`text_columns:${i}`] = column),
+    );
 
     sort.forEach(({field, direction = 'ascending', stat = 'value'}, i) => {
       requestParams[`sort_fields:${i}`] = field;

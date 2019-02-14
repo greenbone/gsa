@@ -28,22 +28,17 @@ export const OVERRIDES_CREATED = 'overrides-created';
 export const OVERRIDES_WORDCOUNT = 'overrides-wordcount';
 
 export const overridesActiveDaysLoader = loadFunc(
-  ({gmp, filter}) => gmp.overrides.getActiveDaysAggregates({filter})
-    .then(r => r.data),
-  OVERRIDES_ACTIVE_DAYS);
+  ({gmp, filter}) =>
+    gmp.overrides.getActiveDaysAggregates({filter}).then(r => r.data),
+  OVERRIDES_ACTIVE_DAYS,
+);
 
-export const OverridesActiveDaysLoader = ({
-  filter,
-  children,
-}) => (
+export const OverridesActiveDaysLoader = ({filter, children}) => (
   <Loader
     dataId={OVERRIDES_ACTIVE_DAYS}
     filter={filter}
     load={overridesActiveDaysLoader}
-    subscriptions={[
-      'overrides.timer',
-      'overrides.changed',
-    ]}
+    subscriptions={['overrides.timer', 'overrides.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +47,17 @@ export const OverridesActiveDaysLoader = ({
 OverridesActiveDaysLoader.propTypes = loaderPropTypes;
 
 export const overridesCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.overrides.getCreatedAggregates({filter})
-    .then(r => r.data),
-  OVERRIDES_CREATED);
+  ({gmp, filter}) =>
+    gmp.overrides.getCreatedAggregates({filter}).then(r => r.data),
+  OVERRIDES_CREATED,
+);
 
-export const OverridesCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const OverridesCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={OVERRIDES_CREATED}
     filter={filter}
     load={overridesCreatedLoader}
-    subscriptions={[
-      'overrides.timer',
-      'overrides.changed',
-    ]}
+    subscriptions={['overrides.timer', 'overrides.changed']}
   >
     {children}
   </Loader>
@@ -75,24 +65,18 @@ export const OverridesCreatedLoader = ({
 
 OverridesCreatedLoader.propTypes = loaderPropTypes;
 
-
 export const overridesWordCountLoader = loadFunc(
-  ({gmp, filter}) => gmp.overrides.getWordCountsAggregates({filter})
-    .then(r => r.data),
-  OVERRIDES_WORDCOUNT);
+  ({gmp, filter}) =>
+    gmp.overrides.getWordCountsAggregates({filter}).then(r => r.data),
+  OVERRIDES_WORDCOUNT,
+);
 
-export const OverridesWordCountLoader = ({
-  filter,
-  children,
-}) => (
+export const OverridesWordCountLoader = ({filter, children}) => (
   <Loader
     dataId={OVERRIDES_WORDCOUNT}
     filter={filter}
     load={overridesWordCountLoader}
-    subscriptions={[
-      'overrides.timer',
-      'overrides.changed',
-    ]}
+    subscriptions={['overrides.timer', 'overrides.changed']}
   >
     {children}
   </Loader>

@@ -30,7 +30,6 @@ const createRootState = state => ({
 });
 
 describe('settings selectors tests', () => {
-
   test('should return undefined timezone for empty state', () => {
     const state = createRootState({});
     expect(getTimezone(state)).toBeUndefined();

@@ -36,7 +36,6 @@ const locationChanged = (loc, prevLoc) =>
   loc.pathname !== prevLoc.pathname || loc.search !== prevLoc.search;
 
 class LocationObserver extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -85,9 +84,12 @@ LocationObserver.propTypes = {
 export default compose(
   withGmp,
   withRouter,
-  connect(undefined, (dispatch, {gmp}) => ({
-    renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-  })),
+  connect(
+    undefined,
+    (dispatch, {gmp}) => ({
+      renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
+    }),
+  ),
 )(LocationObserver);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -25,7 +25,6 @@ import {
 } from '../testing';
 
 describe('TicketCommand tests', () => {
-
   test('should trim note when creating ticket', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
@@ -33,24 +32,26 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.create({
-      resultId: 'r1',
-      userId: 'u1',
-      foo: 'bar',
-      note: ' ',
-    }).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'create_ticket',
-          result_id: 'r1',
-          user_id: 'u1',
-          note: '',
-        },
-      });
+    return cmd
+      .create({
+        resultId: 'r1',
+        userId: 'u1',
+        foo: 'bar',
+        note: ' ',
+      })
+      .then(resp => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'create_ticket',
+            result_id: 'r1',
+            user_id: 'u1',
+            note: '',
+          },
+        });
 
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
-    });
+        const {data} = resp;
+        expect(data.id).toEqual('foo');
+      });
   });
 
   test('should create new ticket with note', () => {
@@ -60,24 +61,26 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.create({
-      resultId: 'r1',
-      userId: 'u1',
-      note: 'foo',
-      foo: 'bar',
-    }).then(resp => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'create_ticket',
-          result_id: 'r1',
-          user_id: 'u1',
-          note: 'foo',
-        },
-      });
+    return cmd
+      .create({
+        resultId: 'r1',
+        userId: 'u1',
+        note: 'foo',
+        foo: 'bar',
+      })
+      .then(resp => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'create_ticket',
+            result_id: 'r1',
+            user_id: 'u1',
+            note: 'foo',
+          },
+        });
 
-      const {data} = resp;
-      expect(data.id).toEqual('foo');
-    });
+        const {data} = resp;
+        expect(data.id).toEqual('foo');
+      });
   });
 
   test('should return single ticket', () => {
@@ -107,26 +110,28 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.save({
-      id: 'foo',
-      status: 'fixed',
-      userId: 'u1',
-      openNote: 'bar',
-      fixedNote: 'bar',
-      closedNote: 'bar',
-    }).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'save_ticket',
-          ticket_id: 'foo',
-          ticket_status: 'fixed',
-          open_note: 'bar',
-          fixed_note: 'bar',
-          closed_note: 'bar',
-          user_id: 'u1',
-        },
+    return cmd
+      .save({
+        id: 'foo',
+        status: 'fixed',
+        userId: 'u1',
+        openNote: 'bar',
+        fixedNote: 'bar',
+        closedNote: 'bar',
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_ticket',
+            ticket_id: 'foo',
+            ticket_status: 'fixed',
+            open_note: 'bar',
+            fixed_note: 'bar',
+            closed_note: 'bar',
+            user_id: 'u1',
+          },
+        });
       });
-    });
   });
 
   test('should trim note when saving a ticket', () => {
@@ -136,26 +141,28 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.save({
-      id: 'foo',
-      status: 'fixed',
-      userId: 'u1',
-      openNote: '   bar   ',
-      fixedNote: '   bar   ',
-      closedNote: '   bar   ',
-    }).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'save_ticket',
-          ticket_id: 'foo',
-          ticket_status: 'fixed',
-          open_note: 'bar',
-          fixed_note: 'bar',
-          closed_note: 'bar',
-          user_id: 'u1',
-        },
+    return cmd
+      .save({
+        id: 'foo',
+        status: 'fixed',
+        userId: 'u1',
+        openNote: '   bar   ',
+        fixedNote: '   bar   ',
+        closedNote: '   bar   ',
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_ticket',
+            ticket_id: 'foo',
+            ticket_status: 'fixed',
+            open_note: 'bar',
+            fixed_note: 'bar',
+            closed_note: 'bar',
+            user_id: 'u1',
+          },
+        });
       });
-    });
   });
 
   test('should delete a ticket', () => {
@@ -165,16 +172,18 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.delete({
-      id: 'foo',
-    }).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'delete_ticket',
-          ticket_id: 'foo',
-        },
+    return cmd
+      .delete({
+        id: 'foo',
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'delete_ticket',
+            ticket_id: 'foo',
+          },
+        });
       });
-    });
   });
 
   test('should clone a ticket', () => {
@@ -184,17 +193,18 @@ describe('TicketCommand tests', () => {
     expect.hasAssertions();
 
     const cmd = new TicketCommand(fakeHttp);
-    return cmd.clone({
-      id: 'foo',
-    }).then(() => {
-      expect(fakeHttp.request).toHaveBeenCalledWith('post', {
-        data: {
-          cmd: 'clone',
-          id: 'foo',
-          resource_type: 'ticket',
-        },
+    return cmd
+      .clone({
+        id: 'foo',
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'clone',
+            id: 'foo',
+            resource_type: 'ticket',
+          },
+        });
       });
-    });
   });
-
 });

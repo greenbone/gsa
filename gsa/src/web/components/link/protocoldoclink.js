@@ -23,17 +23,11 @@ import withGmp from 'web/utils/withGmp';
 
 import BlankLink from './blanklink';
 
-const ProtocolDocLink = ({
-  gmp,
-  title,
-}) => {
+const ProtocolDocLink = ({gmp, title}) => {
   const {protocoldocurl} = gmp.settings;
 
   return (
-    <BlankLink
-      to={protocoldocurl}
-      title={title}
-    >
+    <BlankLink to={protocoldocurl} title={title}>
       {title}
     </BlankLink>
   );

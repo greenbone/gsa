@@ -63,8 +63,10 @@ const transformActiveDaysData = (data = {}) => {
     // this value
     const {value} = groups[groups.length - 1];
 
-    const count = mostActiveDaysBin.reduce((prev, current) =>
-      prev + parseFloat(current.count), 0);
+    const count = mostActiveDaysBin.reduce(
+      (prev, current) => prev + parseFloat(current.count),
+      0,
+    );
     const reducedMostActiveDaysBin = {
       value,
       count,
@@ -89,8 +91,7 @@ const transformActiveDaysData = (data = {}) => {
       default:
         if (group.bulked) {
           label = _('Active for > {{value}} days', {value});
-        }
-        else {
+        } else {
           label = _('Active for the next {{value}} days', {value});
         }
         break;
@@ -110,7 +111,6 @@ const transformActiveDaysData = (data = {}) => {
 };
 
 export class OverridesActiveDaysDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -127,12 +127,9 @@ export class OverridesActiveDaysDisplay extends React.Component {
 
     let activeDaysTerm;
     if (bulked) {
-      activeDaysTerm =
-        FilterTerm.fromString(`active_days>"${filterValue}"`);
-    }
-    else {
-      activeDaysTerm =
-        FilterTerm.fromString(`active_days="${filterValue}"`);
+      activeDaysTerm = FilterTerm.fromString(`active_days>"${filterValue}"`);
+    } else {
+      activeDaysTerm = FilterTerm.fromString(`active_days="${filterValue}"`);
     }
 
     if (isDefined(filter) && filter.hasTerm(activeDaysTerm)) {
@@ -140,31 +137,29 @@ export class OverridesActiveDaysDisplay extends React.Component {
     }
     const activeDaysFilter = Filter.fromTerm(activeDaysTerm);
 
-    const newFilter = isDefined(filter) ? filter.copy().and(activeDaysFilter) :
-      activeDaysFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(activeDaysFilter)
+      : activeDaysFilter;
 
     onFilterChanged(newFilter);
   }
 
   render() {
-    const {
-      filter,
-      onFilterChanged,
-      ...props
-    } = this.props;
+    const {filter, onFilterChanged, ...props} = this.props;
 
     return (
-      <OverridesActiveDaysLoader
-        filter={filter}
-      >
+      <OverridesActiveDaysLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
             {...loaderProps}
             filter={filter}
             dataTransform={transformActiveDaysData}
-            title={({data: tdata}) => _('Overrides by Active Days (Total: ' +
-              '{{count}})', {count: tdata.total})}
+            title={({data: tdata}) =>
+              _('Overrides by Active Days (Total: {{count}})', {
+                count: tdata.total,
+              })
+            }
             initialState={{
               show3d: true,
             }}
@@ -178,8 +173,9 @@ export class OverridesActiveDaysDisplay extends React.Component {
                 width={width}
                 show3d={state.show3d}
                 showLegend={state.showLegend}
-                onDataClick={isDefined(onFilterChanged) ?
-                  this.handleDataClick : undefined}
+                onDataClick={
+                  isDefined(onFilterChanged) ? this.handleDataClick : undefined
+                }
               />
             )}
           </DataDisplay>
@@ -204,26 +200,27 @@ export const OverridesActiveDaysTableDisplay = createDisplay({
   loaderComponent: OverridesActiveDaysLoader,
   displayComponent: DataTableDisplay,
   dataRow: row => [row.label, row.value],
-  dataTitles: [
-    _l('Active'),
-    _l('# of Overrides'),
-  ],
+  dataTitles: [_l('Active'), _l('# of Overrides')],
   dataTransform: transformActiveDaysData,
-  title: ({data: tdata}) => _('Overrides by Active Days (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Overrides by Active Days (Total: {{count}})', {count: tdata.total}),
   displayName: 'OverridesActiveDaysTableDisplay',
   displayId: 'override-by-active-days-table',
   filtersFilter: OVERRIDES_FILTER_FILTER,
 });
 
-registerDisplay(OverridesActiveDaysDisplay.displayId,
-  OverridesActiveDaysDisplay, {
+registerDisplay(
+  OverridesActiveDaysDisplay.displayId,
+  OverridesActiveDaysDisplay,
+  {
     title: _l('Chart: Overrides by Active Days'),
   },
 );
 
-registerDisplay(OverridesActiveDaysTableDisplay.displayId,
-  OverridesActiveDaysTableDisplay, {
+registerDisplay(
+  OverridesActiveDaysTableDisplay.displayId,
+  OverridesActiveDaysTableDisplay,
+  {
     title: _l('Table: Overrides by Active Days'),
   },
 );

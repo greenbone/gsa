@@ -34,7 +34,6 @@ import {testModel} from 'gmp/models/testing';
 testModel(Alert, 'alert');
 
 describe('Alert Model tests', () => {
-
   test('should parse condition, event, and method', () => {
     const elem = {
       condition: {
@@ -161,7 +160,6 @@ describe('Alert Model tests', () => {
 });
 
 describe('isTaskEvent tests', () => {
-
   test('should consider only task events', () => {
     expect(isTaskEvent()).toEqual(false);
     expect(isTaskEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(true);
@@ -171,11 +169,9 @@ describe('isTaskEvent tests', () => {
     expect(isTaskEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(false);
     expect(isTaskEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
   });
-
 });
 
 describe('isSecinfoEvent tests', () => {
-
   test('should consider only secinfo events', () => {
     expect(isSecinfoEvent()).toEqual(false);
     expect(isSecinfoEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(false);
@@ -185,11 +181,9 @@ describe('isSecinfoEvent tests', () => {
     expect(isSecinfoEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(true);
     expect(isSecinfoEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(true);
   });
-
 });
 
 describe('isTicketEvent tests', () => {
-
   test('should consider only ticket events', () => {
     expect(isTicketEvent()).toEqual(false);
     expect(isTicketEvent(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(false);
@@ -199,7 +193,6 @@ describe('isTicketEvent tests', () => {
     expect(isTicketEvent(EVENT_TYPE_NEW_SECINFO)).toEqual(false);
     expect(isTicketEvent(EVENT_TYPE_UPDATED_SECINFO)).toEqual(false);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

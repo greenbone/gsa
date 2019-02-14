@@ -49,14 +49,11 @@ export function scannerTypeName(scannerType) {
   scannerType = parseInt(scannerType);
   if (scannerType === OSP_SCANNER_TYPE) {
     return _('OSP Scanner');
-  }
-  else if (scannerType === OPENVAS_SCANNER_TYPE) {
+  } else if (scannerType === OPENVAS_SCANNER_TYPE) {
     return _('OpenVAS Scanner');
-  }
-  else if (scannerType === CVE_SCANNER_TYPE) {
+  } else if (scannerType === CVE_SCANNER_TYPE) {
     return _('CVE Scanner');
-  }
-  else if (scannerType === SLAVE_SCANNER_TYPE) {
+  } else if (scannerType === SLAVE_SCANNER_TYPE) {
     return _('GMP Scanner');
   }
   return _('Unknown type ({{type}})', {type: scannerType});
@@ -76,7 +73,6 @@ const parse_scanner_info = (info = {}) => {
 };
 
 class Scanner extends Model {
-
   static entityType = 'scanner';
 
   parseProperties(elem) {
@@ -84,14 +80,14 @@ class Scanner extends Model {
 
     ret.scannerType = parseInt(elem.type);
 
-    ret.credential = isDefined(ret.credential) &&
-      !isEmpty(ret.credential._id) ? new Credential(ret.credential) :
-      undefined;
+    ret.credential =
+      isDefined(ret.credential) && !isEmpty(ret.credential._id)
+        ? new Credential(ret.credential)
+        : undefined;
 
     if (isEmpty(ret.ca_pub)) {
       delete ret.ca_pub;
-    }
-    else {
+    } else {
       ret.ca_pub = {
         certificate: ret.ca_pub,
       };
@@ -99,10 +95,10 @@ class Scanner extends Model {
       if (isDefined(ret.ca_pub_info)) {
         ret.ca_pub.info = ret.ca_pub_info;
         ret.ca_pub.info.activationTime = parseDate(
-          ret.ca_pub.info.activation_time
+          ret.ca_pub.info.activation_time,
         );
         ret.ca_pub.info.expirationTime = parseDate(
-          ret.ca_pub.info.expiration_time
+          ret.ca_pub.info.expiration_time,
         );
         delete ret.ca_pub.info.activation_time;
         delete ret.ca_pub.info.expiration_time;
@@ -112,17 +108,17 @@ class Scanner extends Model {
 
     if (isDefined(ret.tasks)) {
       ret.tasks = map(ret.tasks.task, task => new Model(task, 'task'));
-    }
-    else {
+    } else {
       ret.tasks = [];
     }
 
     if (isEmpty(ret.configs)) {
       ret.configs = [];
-    }
-    else {
-      ret.configs = map(ret.configs.config,
-        config => new Model(config, 'scanconfig'));
+    } else {
+      ret.configs = map(
+        ret.configs.config,
+        config => new Model(config, 'scanconfig'),
+      );
     }
 
     if (isDefined(ret.info)) {
@@ -137,8 +133,7 @@ class Scanner extends Model {
       }
       if (isEmpty(params)) {
         delete ret.info.params;
-      }
-      else {
+      } else {
         ret.info.params = map(ret.info.params.param, param => ({
           name: param.name,
           description: param.description,
@@ -153,13 +148,18 @@ class Scanner extends Model {
   }
 
   isClonable() {
-    return this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE;
+    return (
+      this.scannerType !== CVE_SCANNER_TYPE &&
+      this.scannerType !== OPENVAS_SCANNER_TYPE
+    );
   }
 
   isWritable() {
-    return super.isWritable() && this.scannerType !== CVE_SCANNER_TYPE &&
-      this.scannerType !== OPENVAS_SCANNER_TYPE;
+    return (
+      super.isWritable() &&
+      this.scannerType !== CVE_SCANNER_TYPE &&
+      this.scannerType !== OPENVAS_SCANNER_TYPE
+    );
   }
 
   hasUnixSocket() {

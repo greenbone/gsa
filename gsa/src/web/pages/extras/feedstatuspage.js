@@ -63,27 +63,27 @@ const ToolBarIcons = () => (
 );
 
 const renderCheck = feed => {
-    const age = feed.age.asDays();
+  const age = feed.age.asDays();
 
-    return age >= 10 ?
-      _('Please check the automatic synchronization of your system.') : '';
+  return age >= 10
+    ? _('Please check the automatic synchronization of your system.')
+    : '';
 };
 
 const renderFeedStatus = feed => {
-    const age = parseInt(feed.age.asDays());
+  const age = parseInt(feed.age.asDays());
 
-    if (age >= 10) {
-      return _('Too old ({{age}} days)', {age});
-    }
+  if (age >= 10) {
+    return _('Too old ({{age}} days)', {age});
+  }
 
-    if (age >= 2) {
-      return _('{{age}} days old', {age});
-    }
-    return _('Current');
+  if (age >= 2) {
+    return _('{{age}} days old', {age});
+  }
+  return _('Current');
 };
 
 class FeedStatus extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -109,104 +109,73 @@ class FeedStatus extends React.Component {
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ToolBarIcons/>
-          <Section
-            img={<FeedIcon size="large"/>}
-            title={_('Feed Status')}
-          />
+          <ToolBarIcons />
+          <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
           <Table>
             <TableBody>
               <TableRow>
-                <TableHead width="3rem">
-                  {_('Type')}
-                </TableHead>
-                <TableHead width="21rem">
-                  {_('Content')}
-                </TableHead>
-                <TableHead width="9rem">
-                  {_('Origin')}
-                </TableHead>
-                <TableHead width="7rem">
-                  {_('Version')}
-                </TableHead>
-                <TableHead>
-                  {_('Status')}
-                </TableHead>
+                <TableHead width="3rem">{_('Type')}</TableHead>
+                <TableHead width="21rem">{_('Content')}</TableHead>
+                <TableHead width="9rem">{_('Origin')}</TableHead>
+                <TableHead width="7rem">{_('Version')}</TableHead>
+                <TableHead>{_('Status')}</TableHead>
               </TableRow>
 
               {feeds.map(feed => (
                 <TableRow key={feed.feed_type}>
+                  <TableData>{feed.feed_type}</TableData>
                   <TableData>
-                    {feed.feed_type}
-                  </TableData>
-                  <TableData>
-                    {feed.feed_type === NVT_FEED &&
+                    {feed.feed_type === NVT_FEED && (
                       <IconDivider>
                         <Link to="nvts">
                           <IconDivider align={['start', 'center']}>
-                            <NvtIcon
-                              size="medium"
-                            />
+                            <NvtIcon size="medium" />
                             <span>NVTs</span>
                           </IconDivider>
                         </Link>
                       </IconDivider>
-                    }
-                    {feed.feed_type === SCAP_FEED &&
+                    )}
+                    {feed.feed_type === SCAP_FEED && (
                       <IconDivider>
                         <Link to="cves">
                           <IconDivider align={['start', 'center']}>
-                            <CveIcon
-                              size="medium"
-                            />
+                            <CveIcon size="medium" />
                             <span>CVEs</span>
                           </IconDivider>
                         </Link>
                         <Link to="cpes">
                           <IconDivider align={['start', 'center']}>
-                            <CpeLogoIcon
-                              size="medium"
-                            />
+                            <CpeLogoIcon size="medium" />
                             <span>CPEs</span>
                           </IconDivider>
                         </Link>
                         <Link to="ovaldefs">
                           <IconDivider align={['start', 'center']}>
-                            <OvalDefIcon
-                              size="medium"
-                            />
+                            <OvalDefIcon size="medium" />
                             <span>OVAL Definitions</span>
                           </IconDivider>
                         </Link>
                       </IconDivider>
-                    }
-                    {feed.feed_type === CERT_FEED &&
+                    )}
+                    {feed.feed_type === CERT_FEED && (
                       <IconDivider>
                         <Link to="certbunds">
                           <IconDivider align={['start', 'center']}>
-                            <CertBundAdvIcon
-                              size="medium"
-                            />
+                            <CertBundAdvIcon size="medium" />
                             <span>CERT-Bund Advisories</span>
                           </IconDivider>
                         </Link>
                         <Link to="dfncerts">
                           <IconDivider align={['start', 'center']}>
-                            <DfnCertAdvIcon
-                              size="medium"
-                            />
+                            <DfnCertAdvIcon size="medium" />
                             <span>DFN-CERT Advisories</span>
                           </IconDivider>
                         </Link>
                       </IconDivider>
-                    }
+                    )}
                   </TableData>
-                  <TableData>
-                    {feed.name}
-                  </TableData>
-                  <TableData>
-                    {feed.version}
-                  </TableData>
+                  <TableData>{feed.name}</TableData>
+                  <TableData>{feed.version}</TableData>
                   <TableData>
                     <Divider wrap>
                       <strong>{renderFeedStatus(feed)}</strong>
@@ -221,7 +190,7 @@ class FeedStatus extends React.Component {
       </ErrorBoundary>
     );
   }
-};
+}
 
 FeedStatus.propTypes = {
   gmp: PropTypes.gmp.isRequired,

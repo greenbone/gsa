@@ -23,11 +23,9 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import Field, {DISABLED_OPACTIY} from '../field';
 
-
 describe('Field tests', () => {
-
   test('should render', () => {
-    const {element} = render(<Field/>);
+    const {element} = render(<Field />);
 
     expect(element).not.toHaveStyleRule('cursor');
     expect(element).not.toHaveStyleRule('opacity');
@@ -37,7 +35,7 @@ describe('Field tests', () => {
   });
 
   test('should render in disabled state', () => {
-    const {element} = render(<Field disabled={true}/>);
+    const {element} = render(<Field disabled={true} />);
 
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
     expect(element).toHaveStyleRule('opacity', `${DISABLED_OPACTIY}`);
@@ -49,50 +47,36 @@ describe('Field tests', () => {
   test('should call change handler with value', () => {
     const onChange = jest.fn();
 
-    const {element} = render(
-      <Field
-        value="foo"
-        onChange={onChange}
-      />
-     );
+    const {element} = render(<Field value="foo" onChange={onChange} />);
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', undefined);
+    expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
 
   test('should call change handler with value and name', () => {
     const onChange = jest.fn();
 
     const {element} = render(
-      <Field
-        name="foo"
-        value="ipsum"
-        onChange={onChange}
-      />
-     );
+      <Field name="foo" value="ipsum" onChange={onChange} />,
+    );
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).toHaveBeenCalledWith('bar', 'foo');
+    expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
 
   test('should not call change handler if disabled', () => {
     const onChange = jest.fn();
 
     const {element} = render(
-      <Field
-        disabled={true}
-        value="foo"
-        onChange={onChange}
-      />
-     );
+      <Field disabled={true} value="foo" onChange={onChange} />,
+    );
 
-     fireEvent.change(element, {target: {value: 'bar'}});
+    fireEvent.change(element, {target: {value: 'bar'}});
 
-     expect(onChange).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

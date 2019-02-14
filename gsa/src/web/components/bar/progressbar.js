@@ -36,7 +36,7 @@ const ProgressBarBox = styled.div`
   @media print {
     background: none;
     border: 0;
-  };
+  }
 `;
 
 const Content = styled.div`
@@ -51,7 +51,7 @@ const Content = styled.div`
 
   @media print {
     color: black;
-  };
+  }
 `;
 
 const Progress = styled.div`
@@ -59,26 +59,21 @@ const Progress = styled.div`
 
   @media print {
     background: none;
-  };
+  }
   ${props => {
     let {background, progress} = props;
 
     if (background === 'warn') {
       background = '#F0A519';
-    }
-    else if (background === 'error') {
+    } else if (background === 'error') {
       background = '#C83814';
-    }
-    else if (background === 'low') {
+    } else if (background === 'low') {
       background = '#4F91C7';
-    }
-    else if (background === 'new') {
+    } else if (background === 'new') {
       background = '#99BE48';
-    }
-    else if (background === 'run') {
+    } else if (background === 'run') {
       background = '#70C000';
-    }
-    else if (background === 'log') {
+    } else if (background === 'log') {
       background = 'gray';
     }
 
@@ -92,18 +87,11 @@ const Progress = styled.div`
   }};
 `;
 
-const ProgressBar = ({
-  background,
-  children,
-  progress,
-  title,
-}) => {
+const ProgressBar = ({background, children, progress, title}) => {
   return (
     <ProgressBarBox title={title}>
-      <Progress progress={progress} background={background}/>
-      <Content>
-        {children}
-      </Content>
+      <Progress progress={progress} background={background} />
+      <Content>{children}</Content>
     </ProgressBarBox>
   );
 };

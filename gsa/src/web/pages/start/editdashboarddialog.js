@@ -29,7 +29,6 @@ import PropTypes from 'web/utils/proptypes';
 
 import {MAX_TITLE_LENGTH} from './newdashboarddialog';
 
-
 const EditDashboardDialog = ({
   dashboardId,
   dashboardTitle,
@@ -48,15 +47,9 @@ const EditDashboardDialog = ({
     onClose={onClose}
     onSave={onSave}
   >
-    {({
-      values,
-      onValueChange,
-    }) => (
+    {({values, onValueChange}) => (
       <React.Fragment>
-        <FormGroup
-          title={_('Dashboard Title')}
-          titleSize={4}
-        >
+        <FormGroup title={_('Dashboard Title')} titleSize={4}>
           <TextField
             grow
             name="dashboardTitle"

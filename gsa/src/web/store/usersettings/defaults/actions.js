@@ -50,11 +50,12 @@ export const loadUserSettingDefaults = gmp => () => (dispatch, getState) => {
 
   dispatch(loadingActions.request());
 
-  return gmp.user.currentSettings().then(
-    response => dispatch(loadingActions.success(response.data)),
-    err => dispatch(loadingActions.error(err)),
-  );
+  return gmp.user
+    .currentSettings()
+    .then(
+      response => dispatch(loadingActions.success(response.data)),
+      err => dispatch(loadingActions.error(err)),
+    );
 };
 
 // vim: set ts=2 sw=2 two=80:
-

@@ -27,10 +27,7 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import {
-  parseCvssBaseVector,
-  parseCvssBaseFromVector,
-} from 'gmp/parser';
+import {parseCvssBaseVector, parseCvssBaseFromVector} from 'gmp/parser';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -67,7 +64,6 @@ const ToolBarIcons = () => (
 );
 
 class CvssCalculator extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -93,8 +89,11 @@ class CvssCalculator extends React.Component {
   componentDidMount() {
     const {location} = this.props;
 
-    if (isDefined(location) && isDefined(location.query) &&
-      isDefined(location.query.cvssVector)) {
+    if (
+      isDefined(location) &&
+      isDefined(location.query) &&
+      isDefined(location.query.cvssVector)
+    ) {
       const {cvssVector} = location.query;
       this.setState({cvssVector, userVector: cvssVector});
       this.calculateScore(cvssVector);
@@ -171,10 +170,14 @@ class CvssCalculator extends React.Component {
       availabilityImpact,
     } = cvssValues;
 
-    if (isDefined(accessVector) && isDefined(accessComplexity) &&
-      isDefined(confidentialityImpact) && isDefined(authentication) &&
-      isDefined(integrityImpact) && isDefined(availabilityImpact)) {
-
+    if (
+      isDefined(accessVector) &&
+      isDefined(accessComplexity) &&
+      isDefined(confidentialityImpact) &&
+      isDefined(authentication) &&
+      isDefined(integrityImpact) &&
+      isDefined(availabilityImpact)
+    ) {
       /* only override cvss values and vector if user vector has valid input */
 
       this.setState({...cvssValues, cvssVector: userVector});
@@ -204,25 +207,29 @@ class CvssCalculator extends React.Component {
     return (
       <ErrorBoundary errElement={_('page')}>
         <Layout flex="column">
-          <ToolBarIcons/>
+          <ToolBarIcons />
           <Section
-            img={<CvssIcon size="large"/>}
+            img={<CvssIcon size="large" />}
             title={_('CVSS Base Score Calculator')}
           />
 
           <h3>{_('From Metrics')}:</h3>
           <FormGroup title={_('Access Vector')}>
             <Select
-              items={[{
-                value: 'LOCAL',
-                label: _('Local'),
-              }, {
-                value: 'ADJACENT_NETWORK',
-                label: _('Adjacent'),
-              }, {
-                value: 'NETWORK',
-                label: _('Network'),
-              }]}
+              items={[
+                {
+                  value: 'LOCAL',
+                  label: _('Local'),
+                },
+                {
+                  value: 'ADJACENT_NETWORK',
+                  label: _('Adjacent'),
+                },
+                {
+                  value: 'NETWORK',
+                  label: _('Network'),
+                },
+              ]}
               name="accessVector"
               value={accessVector}
               menuPosition="adjust"
@@ -231,16 +238,20 @@ class CvssCalculator extends React.Component {
           </FormGroup>
           <FormGroup title={_('Access Complexity')}>
             <Select
-              items={[{
-                value: 'LOW',
-                label: _('Low'),
-              }, {
-                value: 'MEDIUM',
-                label: _('Medium'),
-              }, {
-                value: 'HIGH',
-                label: _('High'),
-              }]}
+              items={[
+                {
+                  value: 'LOW',
+                  label: _('Low'),
+                },
+                {
+                  value: 'MEDIUM',
+                  label: _('Medium'),
+                },
+                {
+                  value: 'HIGH',
+                  label: _('High'),
+                },
+              ]}
               name="accessComplexity"
               value={accessComplexity}
               menuPosition="adjust"
@@ -249,16 +260,20 @@ class CvssCalculator extends React.Component {
           </FormGroup>
           <FormGroup title={_('Authentication')}>
             <Select
-              items={[{
-                value: 'NONE',
-                label: _('None'),
-              }, {
-                value: 'SINGLE_INSTANCES',
-                label: _('Single'),
-              }, {
-                value: 'MULTIPLE_INSTANCES',
-                label: _('Multiple'),
-              }]}
+              items={[
+                {
+                  value: 'NONE',
+                  label: _('None'),
+                },
+                {
+                  value: 'SINGLE_INSTANCES',
+                  label: _('Single'),
+                },
+                {
+                  value: 'MULTIPLE_INSTANCES',
+                  label: _('Multiple'),
+                },
+              ]}
               name="authentication"
               value={authentication}
               menuPosition="adjust"
@@ -267,16 +282,20 @@ class CvssCalculator extends React.Component {
           </FormGroup>
           <FormGroup title={_('Confidentiality')}>
             <Select
-              items={[{
-                value: 'NONE',
-                label: _('None'),
-              }, {
-                value: 'PARTIAL',
-                label: _('Partial'),
-              }, {
-                value: 'COMPLETE',
-                label: _('Complete'),
-              }]}
+              items={[
+                {
+                  value: 'NONE',
+                  label: _('None'),
+                },
+                {
+                  value: 'PARTIAL',
+                  label: _('Partial'),
+                },
+                {
+                  value: 'COMPLETE',
+                  label: _('Complete'),
+                },
+              ]}
               name="confidentialityImpact"
               value={confidentialityImpact}
               onChange={this.handleMetricsChange}
@@ -284,16 +303,20 @@ class CvssCalculator extends React.Component {
           </FormGroup>
           <FormGroup title={_('Integrity')}>
             <Select
-              items={[{
-                value: 'NONE',
-                label: _('None'),
-              }, {
-                value: 'PARTIAL',
-                label: _('Partial'),
-              }, {
-                value: 'COMPLETE',
-                label: _('Complete'),
-              }]}
+              items={[
+                {
+                  value: 'NONE',
+                  label: _('None'),
+                },
+                {
+                  value: 'PARTIAL',
+                  label: _('Partial'),
+                },
+                {
+                  value: 'COMPLETE',
+                  label: _('Complete'),
+                },
+              ]}
               name="integrityImpact"
               value={integrityImpact}
               menuPosition="adjust"
@@ -302,16 +325,20 @@ class CvssCalculator extends React.Component {
           </FormGroup>
           <FormGroup title={_('Availability')}>
             <Select
-              items={[{
-                value: 'NONE',
-                label: _('None'),
-              }, {
-                value: 'PARTIAL',
-                label: _('Partial'),
-              }, {
-                value: 'COMPLETE',
-                label: _('Complete'),
-              }]}
+              items={[
+                {
+                  value: 'NONE',
+                  label: _('None'),
+                },
+                {
+                  value: 'PARTIAL',
+                  label: _('Partial'),
+                },
+                {
+                  value: 'COMPLETE',
+                  label: _('Complete'),
+                },
+              ]}
               name="availabilityImpact"
               value={availabilityImpact}
               menuPosition="adjust"
@@ -335,7 +362,7 @@ class CvssCalculator extends React.Component {
             <span>{cvssVector}</span>
           </FormGroup>
           <FormGroup title={_('Severity')}>
-            <SeverityBar severity={cvssScore}/>
+            <SeverityBar severity={cvssScore} />
           </FormGroup>
         </Layout>
       </ErrorBoundary>
@@ -354,7 +381,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(
+    undefined,
+    mapDispatchToProps,
+  ),
 )(CvssCalculator);
 
 // vim: set ts=2 sw=2 tw=80:

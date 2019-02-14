@@ -32,25 +32,13 @@ const createDisplay = ({
   loaderComponent: Loader,
   ...other
 }) => {
-  const DisplayComponent = ({
-    filter,
-    ...props
-  }) => (
-    <Loader
-      filter={filter}
-    >
+  const DisplayComponent = ({filter, ...props}) => (
+    <Loader filter={filter}>
       {loaderProps => (
-        <Display
-          {...other}
-          {...loaderProps}
-          {...props}
-          filter={filter}
-        >
-          {isDefined(Chart) ? displayProps => (
-            <Chart
-              {...displayProps}
-            />
-          ) : undefined}
+        <Display {...other} {...loaderProps} {...props} filter={filter}>
+          {isDefined(Chart)
+            ? displayProps => <Chart {...displayProps} />
+            : undefined}
         </Display>
       )}
     </Loader>

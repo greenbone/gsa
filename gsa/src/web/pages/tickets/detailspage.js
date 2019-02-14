@@ -77,10 +77,7 @@ const ToolBarIcons = ({
   onTicketEditClick,
 }) => (
   <Divider margin="10px">
-    <ListIcon
-      title={_('Ticket List')}
-      page="tickets"
-    />
+    <ListIcon title={_('Ticket List')} page="tickets" />
     <IconDivider>
       <EntityCloneIcon
         entity={entity}
@@ -114,97 +111,59 @@ ToolBarIcons.propTypes = {
   onTicketEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-}) => (
+const Details = ({entity}) => (
   <Layout flex="column">
     <InfoTable>
       <colgroup>
-        <Col width="10%"/>
-        <Col width="90%"/>
+        <Col width="10%" />
+        <Col width="90%" />
       </colgroup>
       <TableBody>
         <TableRow>
-          <TableData>
-            {_('Name')}
-          </TableData>
-          <TableData>
-            {entity.name}
-          </TableData>
+          <TableData>{_('Name')}</TableData>
+          <TableData>{entity.name}</TableData>
         </TableRow>
         <TableRow>
           <TableData>
-            <Comment>
-              {_('Comment')}
-            </Comment>
+            <Comment>{_('Comment')}</Comment>
           </TableData>
+          <TableData>{entity.comment}</TableData>
+        </TableRow>
+        <TableRow>
+          <TableData>{_('Severity')}</TableData>
           <TableData>
-            {entity.comment}
+            <SeverityBar severity={entity.severity} />
           </TableData>
         </TableRow>
         <TableRow>
-          <TableData>
-            {_('Severity')}
-          </TableData>
-          <TableData>
-            <SeverityBar
-              severity={entity.severity}
-            />
-          </TableData>
+          <TableData>{_('Status')}</TableData>
+          <TableData>{getTranslatableTicketStatus(entity.status)}</TableData>
         </TableRow>
         <TableRow>
+          <TableData>{_('Assigned To')}</TableData>
           <TableData>
-            {_('Status')}
-          </TableData>
-          <TableData>
-            {getTranslatableTicketStatus(entity.status)}
-          </TableData>
-        </TableRow>
-        <TableRow>
-          <TableData>
-            {_('Assigned To')}
-          </TableData>
-          <TableData>
-            <DetailsLink
-              type="user"
-              id={entity.assignedTo.user.id}
-            >
+            <DetailsLink type="user" id={entity.assignedTo.user.id}>
               {entity.assignedTo.user.name}
             </DetailsLink>
           </TableData>
         </TableRow>
         <TableRow>
+          <TableData>{_('Solution Type')}</TableData>
           <TableData>
-            {_('Solution Type')}
-          </TableData>
-          <TableData>
-            <SolutionType
-              displayTitleText
-              type={entity.solutionType}
-            />
+            <SolutionType displayTitleText type={entity.solutionType} />
           </TableData>
         </TableRow>
         <TableRow>
-          <TableData>
-            {_('Host')}
-          </TableData>
-          <TableData>
-            {entity.host}
-          </TableData>
+          <TableData>{_('Host')}</TableData>
+          <TableData>{entity.host}</TableData>
         </TableRow>
         <TableRow>
-          <TableData>
-            {_('Location')}
-          </TableData>
-          <TableData>
-            {entity.location}
-          </TableData>
+          <TableData>{_('Location')}</TableData>
+          <TableData>{entity.location}</TableData>
         </TableRow>
       </TableBody>
     </InfoTable>
-    <TicketDetails
-      entity={entity}
-    />
+    <TicketDetails entity={entity} />
   </Layout>
 );
 
@@ -230,18 +189,11 @@ const Page = ({
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({
-      clone,
-      close,
-      delete: deleteFunc,
-      download,
-      edit,
-      solve,
-    }) => (
+    {({clone, close, delete: deleteFunc, download, edit, solve}) => (
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<TicketIcon size="large"/>}
+        sectionIcon={<TicketIcon size="large" />}
         title={_('Ticket')}
         toolBarIcons={ToolBarIcons}
         onChanged={onChanged}
@@ -254,23 +206,15 @@ const Page = ({
         onTicketEditClick={edit}
         onTicketSolveClick={solve}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => (
+        {({activeTab = 0, onActivateTab}) => (
           <Layout grow="1" flex="column">
-            <TabLayout
-              grow="1"
-              align={['start', 'end']}
-            >
+            <TabLayout grow="1" align={['start', 'end']}>
               <TabList
                 active={activeTab}
                 align={['start', 'stretch']}
                 onActivateTab={onActivateTab}
               >
-                <Tab>
-                  {_('Information')}
-                </Tab>
+                <Tab>{_('Information')}</Tab>
                 <EntitiesTab entities={entity.userTags}>
                   {_('User Tags')}
                 </EntitiesTab>
@@ -280,9 +224,7 @@ const Page = ({
             <Tabs active={activeTab}>
               <TabPanels>
                 <TabPanel>
-                  <Details
-                    entity={entity}
-                  />
+                  <Details entity={entity} />
                 </TabPanel>
                 <TabPanel>
                   <EntityTags

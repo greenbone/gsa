@@ -141,16 +141,14 @@ const Footer = ({
       filter,
       selectionType,
     };
-  }
-  else if (selectionType === SelectionType.SELECTION_USER) {
+  } else if (selectionType === SelectionType.SELECTION_USER) {
     title = _('Create Target from selection');
     has_selected = isDefined(entitiesSelected) && entitiesSelected.size > 0;
     value = {
       entitiesSelected,
       selectionType,
     };
-  }
-  else {
+  } else {
     title = _('Create Target form all filtered');
     value = {
       entities,

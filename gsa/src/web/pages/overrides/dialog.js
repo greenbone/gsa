@@ -125,28 +125,37 @@ const OverrideDialog = ({
     text,
   };
 
-  let severity_from_list_items = [{
-    value: HIGH_VALUE,
-    label: `${_HIGH}`,
-  }, {
-    value: MEDIUM_VALUE,
-    label: `${_MEDIUM}`,
-  }, {
-    value: LOW_VALUE,
-    label: `${_LOW}`,
-  }, {
-    value: LOG_VALUE,
-    label: `${_LOG}`,
-  }, {
-    value: FALSE_POSITIVE_VALUE,
-    label: `${_FALSE_POSITIVE}`,
-  }];
+  let severity_from_list_items = [
+    {
+      value: HIGH_VALUE,
+      label: `${_HIGH}`,
+    },
+    {
+      value: MEDIUM_VALUE,
+      label: `${_MEDIUM}`,
+    },
+    {
+      value: LOW_VALUE,
+      label: `${_LOW}`,
+    },
+    {
+      value: LOG_VALUE,
+      label: `${_LOG}`,
+    },
+    {
+      value: FALSE_POSITIVE_VALUE,
+      label: `${_FALSE_POSITIVE}`,
+    },
+  ];
 
   if (is_edit) {
-    severity_from_list_items = [{
-      label: '--',
-      value: '',
-    }, ...severity_from_list_items];
+    severity_from_list_items = [
+      {
+        label: '--',
+        value: '',
+      },
+      ...severity_from_list_items,
+    ];
   }
   return (
     <SaveDialog
@@ -156,18 +165,15 @@ const OverrideDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            {fixed &&
+            {fixed && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
-            }
-            {is_edit && !fixed &&
+            )}
+            {is_edit && !fixed && (
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
                   name="oid"
@@ -186,14 +192,13 @@ const OverrideDialog = ({
                   <TextField
                     name="oid"
                     disabled={state.oid === oid}
-                    value={state.oid === oid ?
-                      DEFAULT_OID_VALUE : state.oid}
+                    value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
                 </Divider>
               </FormGroup>
-            }
-            {!is_edit && !fixed &&
+            )}
+            {!is_edit && !fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
                   name="oid"
@@ -201,7 +206,7 @@ const OverrideDialog = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-            }
+            )}
 
             <FormGroup title={_('Active')} flex="column">
               <Radio
@@ -211,8 +216,7 @@ const OverrideDialog = ({
                 title={_('yes, always')}
                 onChange={onValueChange}
               />
-              {is_edit && override.isActive() &&
-                isDefined(override.endTime) &&
+              {is_edit && override.isActive() && isDefined(override.endTime) && (
                 <Layout>
                   <Divider>
                     <Radio
@@ -225,7 +229,7 @@ const OverrideDialog = ({
                     <span>{longDate(override.endTime)}</span>
                   </Divider>
                 </Layout>
-              }
+              )}
               <Divider>
                 <Radio
                   name="active"
@@ -270,14 +274,14 @@ const OverrideDialog = ({
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!fixed &&
+                {!fixed && (
                   <TextField
                     name="hosts_manual"
                     value={state.hosts_manual}
                     disabled={state.hosts !== MANUAL}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Layout>
             </FormGroup>
 
@@ -297,14 +301,14 @@ const OverrideDialog = ({
                   value={MANUAL}
                   onChange={onValueChange}
                 />
-                {!fixed &&
+                {!fixed && (
                   <TextField
                     name="port_manual"
                     disabled={state.port !== MANUAL}
                     value={state.port_manual}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Layout>
             </FormGroup>
 
@@ -316,18 +320,18 @@ const OverrideDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {isDefined(severity) &&
+              {isDefined(severity) && (
                 <Layout>
-                  {severity > 0 ?
+                  {severity > 0 ? (
                     <Radio
                       name="severity"
-                      title={' > ' +
-                        severityFormat(severity - 0.1)}
+                      title={' > ' + severityFormat(severity - 0.1)}
                       checked={true}
                       convert={parseFloat}
                       value={severity}
                       onChange={onValueChange}
-                    /> :
+                    />
+                  ) : (
                     <Radio
                       name="severity"
                       title={translatedResultSeverityRiskFactor(severity)}
@@ -336,10 +340,10 @@ const OverrideDialog = ({
                       value={severity}
                       onChange={onValueChange}
                     />
-                  }
+                  )}
                 </Layout>
-              }
-              {!isDefined(severity) &&
+              )}
+              {!isDefined(severity) && (
                 <Layout>
                   <Radio
                     name="severity"
@@ -358,7 +362,7 @@ const OverrideDialog = ({
                     onChange={onValueChange}
                   />
                 </Layout>
-              }
+              )}
             </FormGroup>
 
             <FormGroup title={_('New Severity')}>
@@ -412,7 +416,7 @@ const OverrideDialog = ({
                   value={TASK_SELECTED}
                   onChange={onValueChange}
                 />
-                {!fixed &&
+                {!fixed && (
                   <Select
                     name="task_uuid"
                     disabled={state.task_id !== TASK_SELECTED}
@@ -420,7 +424,7 @@ const OverrideDialog = ({
                     value={state.task_uuid}
                     onChange={onValueChange}
                   />
-                }
+                )}
               </Layout>
             </FormGroup>
 
@@ -436,24 +440,26 @@ const OverrideDialog = ({
                 <Radio
                   name="result_id"
                   title={
-                    isDefined(result_name) ?
-                      _('Only selected result ({{- name}})',
-                        {name: result_name}) : _('UUID')
+                    isDefined(result_name)
+                      ? _('Only selected result ({{- name}})', {
+                          name: result_name,
+                        })
+                      : _('UUID')
                   }
                   checked={state.result_id === RESULT_UUID}
                   value={RESULT_UUID}
                   onChange={onValueChange}
                 />
                 {(result_id === RESULT_ANY || result_id === RESULT_UUID) &&
-                  !fixed &&
-                  <TextField
-                    name="result_uuid"
-                    size="34"
-                    disabled={state.result_id !== RESULT_UUID}
-                    value={state.result_uuid}
-                    onChange={onValueChange}
-                  />
-                }
+                  !fixed && (
+                    <TextField
+                      name="result_uuid"
+                      size="34"
+                      disabled={state.result_id !== RESULT_UUID}
+                      value={state.result_uuid}
+                      onChange={onValueChange}
+                    />
+                  )}
               </Divider>
             </FormGroup>
 

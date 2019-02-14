@@ -53,7 +53,7 @@ const Header = ({
         >
           {_('Name')}
         </TableHead>
-        {hideColumns.oldest !== true &&
+        {hideColumns.oldest !== true && (
           <TableHead
             width="15%"
             currentSortDir={currentSortDir}
@@ -63,8 +63,8 @@ const Header = ({
           >
             {_('Oldest Result')}
           </TableHead>
-        }
-        {hideColumns.oldest !== true &&
+        )}
+        {hideColumns.oldest !== true && (
           <TableHead
             width="15%"
             currentSortDir={currentSortDir}
@@ -74,7 +74,7 @@ const Header = ({
           >
             {_('Newest Result')}
           </TableHead>
-        }
+        )}
         <TableHead
           width="8%"
           currentSortDir={currentSortDir}

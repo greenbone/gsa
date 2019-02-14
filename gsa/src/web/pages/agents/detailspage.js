@@ -51,10 +51,7 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/agents';
+import {selector, loadEntity} from 'web/store/entities/agents';
 
 import {
   selector as permissionsSelector,
@@ -67,66 +64,53 @@ import withCapabilities from 'web/utils/withCapabilities';
 import AgentComponent from './component';
 import AgentDetails from './details';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  entity,
-  onAgentCloneClick,
-  onAgentCreateClick,
-  onAgentDeleteClick,
-  onAgentDownloadClick,
-  onAgentEditClick,
-  onAgentInstallerDownloadClick,
-  onAgentVerifyClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        page="search"
-        searchTerm="agent"
-        title={_('Help: Agents')}
-      />
-      <ListIcon
-        title={_('Agent List')}
-        page="agents"
-      />
-    </IconDivider>
-    <IconDivider>
-      <CreateIcon
-        entity={entity}
-        onClick={onAgentCreateClick}
-      />
-      <CloneIcon
-        entity={entity}
-        onClick={onAgentCloneClick}
-      />
-      <EditIcon
-        entity={entity}
-        onClick={onAgentEditClick}
-      />
-      <TrashIcon
-        entity={entity}
-        onClick={onAgentDeleteClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Agent as XML')}
-        onClick={onAgentDownloadClick}
-      />
-      {capabilities.mayOp('verify_report_format') &&
-        <VerifyIcon
-          value={entity}
-          title={_('Verify Agent')}
-          onClick={onAgentVerifyClick}
+const ToolBarIcons = withCapabilities(
+  ({
+    capabilities,
+    entity,
+    onAgentCloneClick,
+    onAgentCreateClick,
+    onAgentDeleteClick,
+    onAgentDownloadClick,
+    onAgentEditClick,
+    onAgentInstallerDownloadClick,
+    onAgentVerifyClick,
+  }) => (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          page="search"
+          searchTerm="agent"
+          title={_('Help: Agents')}
         />
-      }
-      <AgentIcon
-        value={entity}
-        title={_('Download Agent Installer Package')}
-        onClick={onAgentInstallerDownloadClick}
-      />
-    </IconDivider>
-  </Divider>
-));
+        <ListIcon title={_('Agent List')} page="agents" />
+      </IconDivider>
+      <IconDivider>
+        <CreateIcon entity={entity} onClick={onAgentCreateClick} />
+        <CloneIcon entity={entity} onClick={onAgentCloneClick} />
+        <EditIcon entity={entity} onClick={onAgentEditClick} />
+        <TrashIcon entity={entity} onClick={onAgentDeleteClick} />
+        <ExportIcon
+          value={entity}
+          title={_('Export Agent as XML')}
+          onClick={onAgentDownloadClick}
+        />
+        {capabilities.mayOp('verify_report_format') && (
+          <VerifyIcon
+            value={entity}
+            title={_('Verify Agent')}
+            onClick={onAgentVerifyClick}
+          />
+        )}
+        <AgentIcon
+          value={entity}
+          title={_('Download Agent Installer Package')}
+          onClick={onAgentInstallerDownloadClick}
+        />
+      </IconDivider>
+    </Divider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -175,7 +159,7 @@ const Page = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<AgentIcon size="large"/>}
+        sectionIcon={<AgentIcon size="large" />}
         toolBarIcons={ToolBarIcons}
         title={_('Agent')}
         onAgentCloneClick={clone}
@@ -188,23 +172,15 @@ const Page = ({
         onAgentVerifyClick={verify}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => (
+        {({activeTab = 0, onActivateTab}) => (
           <Layout grow="1" flex="column">
-            <TabLayout
-              grow="1"
-              align={['start', 'end']}
-            >
+            <TabLayout grow="1" align={['start', 'end']}>
               <TabList
                 active={activeTab}
                 align={['start', 'stretch']}
                 onActivateTab={onActivateTab}
               >
-                <Tab>
-                  {_('Information')}
-                </Tab>
+                <Tab>{_('Information')}</Tab>
                 <EntitiesTab entities={entity.userTags}>
                   {_('User Tags')}
                 </EntitiesTab>
@@ -217,9 +193,7 @@ const Page = ({
             <Tabs active={activeTab}>
               <TabPanels>
                 <TabPanel>
-                  <AgentDetails
-                    entity={entity}
-                  />
+                  <AgentDetails entity={entity} />
                 </TabPanel>
                 <TabPanel>
                   <EntityTags
@@ -260,10 +234,11 @@ Page.propTypes = {
 const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch => Promise.all([
-    dispatch(loadEntityFunc(id)),
-    dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-  ]);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {

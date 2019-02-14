@@ -101,20 +101,13 @@ const DisplayTitle = styled.div`
   text-align: center;
 `;
 
-const Display = ({
-  children,
-  dragHandleProps,
-  title,
-  onRemoveClick,
-}) => {
+const Display = ({children, dragHandleProps, title, onRemoveClick}) => {
   return (
     <DisplayView>
       <HeaderContainer {...dragHandleProps}>
         <Header>
           <HeaderContent>
-            <DisplayTitle>
-              {title}
-            </DisplayTitle>
+            <DisplayTitle>{title}</DisplayTitle>
             <CloseButton
               size="small"
               title={_('Remove')}
@@ -124,9 +117,7 @@ const Display = ({
         </Header>
       </HeaderContainer>
       <DisplayContent>
-        <ErrorBoundary errElement={_('chart')}>
-          {children}
-        </ErrorBoundary>
+        <ErrorBoundary errElement={_('chart')}>{children}</ErrorBoundary>
       </DisplayContent>
     </DisplayView>
   );

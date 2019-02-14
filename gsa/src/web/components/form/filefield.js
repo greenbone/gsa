@@ -26,7 +26,6 @@ import withLayout from 'web/components/layout/withLayout';
 import PropTypes from 'web/utils/proptypes';
 
 class FileFieldComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -44,17 +43,8 @@ class FileFieldComponent extends React.Component {
   }
 
   render() {
-    const {
-      onChange,
-      ...props
-    } = this.props;
-    return (
-      <input
-        {...props}
-        type="file"
-        onChange={this.handleChange}
-      />
-    );
+    const {onChange, ...props} = this.props;
+    return <input {...props} type="file" onChange={this.handleChange} />;
   }
 }
 

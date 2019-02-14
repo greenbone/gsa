@@ -30,14 +30,15 @@ export const registerDisplay = (displayId, component, {title}) => {
   }
 
   if (!isDefined(component)) {
-    log.error('Undefined component passed while registering display',
-      displayId);
+    log.error(
+      'Undefined component passed while registering display',
+      displayId,
+    );
     return;
   }
 
   if (!isDefined(title)) {
-    log.error('Undefined title passed while registering display',
-      displayId);
+    log.error('Undefined title passed while registering display', displayId);
     return;
   }
 

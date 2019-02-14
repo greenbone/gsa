@@ -53,16 +53,10 @@ const Section = ({
 }) => {
   if (!isDefined(header)) {
     header = (
-      <SectionHeader
-        img={img}
-        title={title}
-      >
-        <Layout
-          flex
-          align={['space-between', 'center']}
-        >
+      <SectionHeader img={img} title={title}>
+        <Layout flex align={['space-between', 'center']}>
           {extra}
-          {foldable &&
+          {foldable && (
             <FoldLayout>
               <FoldIcon
                 className="section-fold-icon"
@@ -70,7 +64,7 @@ const Section = ({
                 onClick={onFoldToggle}
               />
             </FoldLayout>
-          }
+          )}
         </Layout>
       </SectionHeader>
     );
@@ -78,16 +72,17 @@ const Section = ({
   return (
     <section className={className}>
       {header}
-      {foldable ?
+      {foldable ? (
         <FoldableLayout
           grow="1"
           foldState={foldState}
           onFoldStepEnd={onFoldStepEnd}
         >
           {children}
-        </FoldableLayout> :
+        </FoldableLayout>
+      ) : (
         children
-      }
+      )}
     </section>
   );
 };
@@ -98,10 +93,7 @@ Section.propTypes = {
   foldState: PropTypes.string,
   foldable: PropTypes.bool,
   header: PropTypes.element,
-  img: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
+  img: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   title: PropTypes.string,
   onFoldStepEnd: PropTypes.func,
   onFoldToggle: PropTypes.func,

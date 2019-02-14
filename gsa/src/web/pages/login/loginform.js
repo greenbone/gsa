@@ -58,7 +58,6 @@ const Error = styled.p`
 `;
 
 class LoginForm extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -99,18 +98,26 @@ class LoginForm extends React.Component {
     const protocol_insecure = window.location.protocol !== 'https:';
     return (
       <React.Fragment>
-        {protocol_insecure &&
+        {protocol_insecure && (
           <Panel>
             <Error>{_('Warning: Connection unencrypted')}</Error>
-            <p>{_('The connection to this GSA is not encrypted, allowing ' +
-              'anyone listening to the traffic to steal your credentials.')}</p>
-            <p>{_('Please configure a TLS certificate for the HTTPS service ' +
-              'or ask your administrator to do so as soon as possible.')}</p>
+            <p>
+              {_(
+                'The connection to this GSA is not encrypted, allowing ' +
+                  'anyone listening to the traffic to steal your credentials.',
+              )}
+            </p>
+            <p>
+              {_(
+                'Please configure a TLS certificate for the HTTPS service ' +
+                  'or ask your administrator to do so as soon as possible.',
+              )}
+            </p>
           </Panel>
-        }
+        )}
 
         <LoginPanel>
-          <ProductImage/>
+          <ProductImage />
           <Layout flex="column">
             <FormGroup title={_('Username')} titleSize="4">
               <TextField
@@ -133,19 +140,16 @@ class LoginForm extends React.Component {
               />
             </FormGroup>
             <FormGroup size="4" offset="4">
-              <Button
-                title={_('Login')}
-                onClick={this.handleSubmit}
-              />
+              <Button title={_('Login')} onClick={this.handleSubmit} />
             </FormGroup>
           </Layout>
         </LoginPanel>
 
-        {isDefined(error) &&
+        {isDefined(error) && (
           <Panel>
             <Error>{error}</Error>
           </Panel>
-        }
+        )}
       </React.Fragment>
     );
   }

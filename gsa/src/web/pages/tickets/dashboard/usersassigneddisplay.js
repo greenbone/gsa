@@ -33,7 +33,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 import {TicketsListLoader} from './loaders';
 
 export const assignedUserColorScale = scaleLinear()
-  .domain([0, 0.05, 0.25, 0.50, 0.75, 0.95, 1.00])
+  .domain([0, 0.05, 0.25, 0.5, 0.75, 0.95, 1.0])
   .range([
     '#008644',
     '#55B200',
@@ -82,10 +82,7 @@ export const TicketsAssignedUsersDisplay = createDisplay({
 
 export const TicketsAssignedUsersTableDisplay = createDisplay({
   dataRow: row => [row.label, row.value],
-  dataTitles: [
-    _l('Assigned To'),
-    _l('# of Tickets'),
-  ],
+  dataTitles: [_l('Assigned To'), _l('# of Tickets')],
   dataTransform: transformUserAssignedData,
   displayComponent: DataTableDisplay,
   displayId: 'tickets-by-assigned-users-table',
@@ -96,12 +93,18 @@ export const TicketsAssignedUsersTableDisplay = createDisplay({
     _('Tickets by Assigned User (Total: {{total}})', tdata),
 });
 
-registerDisplay(TicketsAssignedUsersDisplay.displayId,
-  TicketsAssignedUsersDisplay, {
+registerDisplay(
+  TicketsAssignedUsersDisplay.displayId,
+  TicketsAssignedUsersDisplay,
+  {
     title: _l('Chart: Tickets by Assigned User'),
-  });
+  },
+);
 
-registerDisplay(TicketsAssignedUsersTableDisplay.displayId,
-  TicketsAssignedUsersTableDisplay, {
+registerDisplay(
+  TicketsAssignedUsersTableDisplay.displayId,
+  TicketsAssignedUsersTableDisplay,
+  {
     title: _l('Table: Tickets by Assigned User'),
-  });
+  },
+);

@@ -41,11 +41,7 @@ import {Col} from 'web/entity/page';
 
 const MAX_HOSTS_LISTINGS = 70;
 
-const TargetDetails = ({
-  capabilities,
-  entity,
-  links = true,
-}) => {
+const TargetDetails = ({capabilities, entity, links = true}) => {
   const {
     alive_tests,
     esxi_credential,
@@ -61,29 +57,21 @@ const TargetDetails = ({
     tasks,
   } = entity;
 
-  const hostsListing = hosts.slice(0, MAX_HOSTS_LISTINGS).map(host => (
-    <span key={host}>{host}</span>
-  ));
+  const hostsListing = hosts
+    .slice(0, MAX_HOSTS_LISTINGS)
+    .map(host => <span key={host}>{host}</span>);
 
   return (
-    <Layout
-      grow="1"
-      flex="column"
-    >
-
-      <DetailsBlock
-        title={_('Hosts')}
-      >
+    <Layout grow="1" flex="column">
+      <DetailsBlock title={_('Hosts')}>
         <InfoTable size="full">
           <colgroup>
-            <Col width="15%"/>
-            <Col width="85%"/>
+            <Col width="15%" />
+            <Col width="85%" />
           </colgroup>
           <TableBody>
             <TableRow>
-              <TableData>
-                {_('Included')}
-              </TableData>
+              <TableData>{_('Included')}</TableData>
               <TableData>
                 <Divider wrap>
                   {hostsListing}
@@ -92,11 +80,9 @@ const TargetDetails = ({
               </TableData>
             </TableRow>
 
-            {exclude_hosts.length > 0 &&
+            {exclude_hosts.length > 0 && (
               <TableRow>
-                <TableData>
-                  {_('Excluded')}
-                </TableData>
+                <TableData>{_('Excluded')}</TableData>
                 <TableData>
                   <Divider>
                     {exclude_hosts.map(host => (
@@ -105,156 +91,111 @@ const TargetDetails = ({
                   </Divider>
                 </TableData>
               </TableRow>
-            }
+            )}
 
             <TableRow>
-              <TableData>
-                {_('Maximum Number of Hosts')}
-              </TableData>
-              <TableData>
-                {max_hosts}
-              </TableData>
+              <TableData>{_('Maximum Number of Hosts')}</TableData>
+              <TableData>{max_hosts}</TableData>
             </TableRow>
 
             <TableRow>
-              <TableData>
-                {_('Reverse Lookup Only')}
-              </TableData>
-              <TableData>
-                {renderYesNo(reverse_lookup_only)}
-              </TableData>
+              <TableData>{_('Reverse Lookup Only')}</TableData>
+              <TableData>{renderYesNo(reverse_lookup_only)}</TableData>
             </TableRow>
 
             <TableRow>
-              <TableData>
-                {_('Reverse Lookup Unify')}
-              </TableData>
-              <TableData>
-                {renderYesNo(reverse_lookup_unify)}
-              </TableData>
+              <TableData>{_('Reverse Lookup Unify')}</TableData>
+              <TableData>{renderYesNo(reverse_lookup_unify)}</TableData>
             </TableRow>
 
             <TableRow>
-              <TableData>
-                {_('Alive Test')}
-              </TableData>
-              <TableData>
-                {alive_tests}
-              </TableData>
+              <TableData>{_('Alive Test')}</TableData>
+              <TableData>{alive_tests}</TableData>
             </TableRow>
 
             <TableRow>
+              <TableData>{_('Port List')}</TableData>
               <TableData>
-                {_('Port List')}
-              </TableData>
-              <TableData>
-                <DetailsLink
-                  id={port_list.id}
-                  type="portlist"
-                >
+                <DetailsLink id={port_list.id} type="portlist">
                   {port_list.name}
                 </DetailsLink>
               </TableData>
             </TableRow>
-
           </TableBody>
         </InfoTable>
       </DetailsBlock>
 
-      {capabilities.mayAccess('credentials') && (isDefined(ssh_credential) ||
-        isDefined(snmp_credential) || isDefined(smb_credential) ||
-        isDefined(esxi_credential)) &&
+      {capabilities.mayAccess('credentials') &&
+        (isDefined(ssh_credential) ||
+          isDefined(snmp_credential) ||
+          isDefined(smb_credential) ||
+          isDefined(esxi_credential)) && (
+          <DetailsBlock title={_('Credentials')}>
+            <InfoTable>
+              <TableBody>
+                {isDefined(ssh_credential) && (
+                  <TableRow>
+                    <TableData>{_('SSH')}</TableData>
+                    <TableData>
+                      <DetailsLink id={ssh_credential.id} type="credential">
+                        {ssh_credential.name}
+                      </DetailsLink>
+                      {_(' on Port {{port}}', {port: ssh_credential.port})}
+                    </TableData>
+                  </TableRow>
+                )}
+
+                {isDefined(smb_credential) && (
+                  <TableRow>
+                    <TableData>{_('SMB')}</TableData>
+                    <TableData>
+                      <DetailsLink id={smb_credential.id} type="credential">
+                        {smb_credential.name}
+                      </DetailsLink>
+                    </TableData>
+                  </TableRow>
+                )}
+
+                {isDefined(esxi_credential) && (
+                  <TableRow>
+                    <TableData>{_('ESXi')}</TableData>
+                    <TableData>
+                      <DetailsLink id={esxi_credential.id} type="credential">
+                        {esxi_credential.name}
+                      </DetailsLink>
+                    </TableData>
+                  </TableRow>
+                )}
+
+                {isDefined(snmp_credential) && (
+                  <TableRow>
+                    <TableData>{_('SNMP')}</TableData>
+                    <TableData>
+                      <DetailsLink id={snmp_credential.id} type="credential">
+                        {snmp_credential.name}
+                      </DetailsLink>
+                    </TableData>
+                  </TableRow>
+                )}
+              </TableBody>
+            </InfoTable>
+          </DetailsBlock>
+        )}
+      {isDefined(tasks) && tasks.length > 0 && (
         <DetailsBlock
-          title={_('Credentials')}
-        >
-          <InfoTable>
-            <TableBody>
-              {isDefined(ssh_credential) &&
-                <TableRow>
-                  <TableData>
-                    {_('SSH')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={ssh_credential.id}
-                      type="credential"
-                    >
-                      {ssh_credential.name}
-                    </DetailsLink>
-                    {_(' on Port {{port}}', {port: ssh_credential.port})}
-                  </TableData>
-                </TableRow>
-              }
-
-              {isDefined(smb_credential) &&
-                <TableRow>
-                  <TableData>
-                    {_('SMB')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={smb_credential.id}
-                      type="credential"
-                    >
-                      {smb_credential.name}
-                    </DetailsLink>
-                  </TableData>
-                </TableRow>
-              }
-
-              {isDefined(esxi_credential) &&
-                <TableRow>
-                  <TableData>
-                    {_('ESXi')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={esxi_credential.id}
-                      type="credential"
-                    >
-                      {esxi_credential.name}
-                    </DetailsLink>
-                  </TableData>
-                </TableRow>
-              }
-
-              {isDefined(snmp_credential) &&
-                <TableRow>
-                  <TableData>
-                    {_('SNMP')}
-                  </TableData>
-                  <TableData>
-                    <DetailsLink
-                      id={snmp_credential.id}
-                      type="credential"
-                    >
-                      {snmp_credential.name}
-                    </DetailsLink>
-                  </TableData>
-                </TableRow>
-              }
-            </TableBody>
-          </InfoTable>
-        </DetailsBlock>
-      }
-      {isDefined(tasks) && tasks.length > 0 &&
-        <DetailsBlock
-          title={_('Tasks using this Target ({{count}})',
-            {count: tasks.length})}
+          title={_('Tasks using this Target ({{count}})', {
+            count: tasks.length,
+          })}
         >
           <Divider>
             {tasks.map(task => (
-              <DetailsLink
-                key={task.id}
-                id={task.id}
-                type="task"
-              >
+              <DetailsLink key={task.id} id={task.id} type="task">
                 {task.name}
               </DetailsLink>
             ))}
           </Divider>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };

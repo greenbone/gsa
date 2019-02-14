@@ -38,7 +38,6 @@ import TargetComponent from 'web/pages/targets/component';
 import HostDialog from 'web/pages/hosts/dialog';
 
 class HostComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -48,8 +47,9 @@ class HostComponent extends React.Component {
     this.handleIdentifierDelete = this.handleIdentifierDelete.bind(this);
     this.openHostDialog = this.openHostDialog.bind(this);
     this.openCreateTargetDialog = this.openCreateTargetDialog.bind(this);
-    this.openCreateTargetSelectionDialog =
-      this.openCreateTargetSelectionDialog.bind(this);
+    this.openCreateTargetSelectionDialog = this.openCreateTargetSelectionDialog.bind(
+      this,
+    );
   }
 
   handleIdentifierDelete(identifier) {
@@ -57,8 +57,9 @@ class HostComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.host.deleteIdentifier(identifier).then(
-      onIdentifierDeleted, onIdentifierDeleteError);
+    return gmp.host
+      .deleteIdentifier(identifier)
+      .then(onIdentifierDeleted, onIdentifierDeleteError);
   }
 
   openHostDialog(host) {
@@ -107,13 +108,10 @@ class HostComponent extends React.Component {
       const hosts = [...entitiesSelected]; // convert set to array
       size = entitiesSelected.size;
       filterstring = map(hosts, host => 'uuid=' + host.id).join(' ');
-
-    }
-    else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       size = entities.length;
       filterstring = filter.toFilterString();
-    }
-    else {
+    } else {
       const counts = entities.getCounts();
       size = counts.filtered;
       filterstring = filter.all().toFilterString();
@@ -146,11 +144,7 @@ class HostComponent extends React.Component {
       onSaveError,
     } = this.props;
 
-    const {
-      dialogVisible,
-      host,
-      title,
-    } = this.state;
+    const {dialogVisible, host, title} = this.state;
 
     return (
       <EntityComponent
@@ -167,10 +161,7 @@ class HostComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -180,7 +171,7 @@ class HostComponent extends React.Component {
               createtargetfromselection: this.openCreateTargetSelectionDialog,
               createtargetfromhost: this.openCreateTargetDialog,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <HostDialog
                 host={host}
                 title={title}
@@ -190,7 +181,7 @@ class HostComponent extends React.Component {
                   return save(d).then(() => this.closeHostDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

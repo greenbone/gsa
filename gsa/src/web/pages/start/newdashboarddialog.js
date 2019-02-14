@@ -49,20 +49,13 @@ import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
 export const MAX_TITLE_LENGTH = 50;
 
 export const DEFAULT_DISPLAYS = [
-  [
-    TasksSeverityDisplay.displayId,
-    TasksStatusDisplay.displayId,
-  ], [
-    CvesCreatedDisplay.displayId,
-    NvtsSeverityClassDisplay.displayId,
-  ],
+  [TasksSeverityDisplay.displayId, TasksStatusDisplay.displayId],
+  [CvesCreatedDisplay.displayId, NvtsSeverityClassDisplay.displayId],
 ];
 
 const SCAN_DEFAULT_DISPLAYS = [
+  [ResultsSeverityDisplay.displayId, ReportsSeverityDisplay.displayId],
   [
-    ResultsSeverityDisplay.displayId,
-    ReportsSeverityDisplay.displayId,
-  ], [
     TasksStatusDisplay.displayId,
     ReportsHighResultsDisplay.displayId,
     TasksSeverityDisplay.displayId,
@@ -74,10 +67,8 @@ const ASSET_DEFAULT_DISPLAYS = [
     HostsVulnScoreDisplay.displayId,
     HostsTopologyDisplay.displayId,
     OsVulnScoreDisplay.displayId,
-  ], [
-    OsSeverityClassDisplay.displayId,
-    HostsModifiedDisplay.displayId,
   ],
+  [OsSeverityClassDisplay.displayId, HostsModifiedDisplay.displayId],
 ];
 
 const SECINFO_DEFAULT_DISPLAYS = [
@@ -85,41 +76,40 @@ const SECINFO_DEFAULT_DISPLAYS = [
     NvtsSeverityClassDisplay.displayId,
     CvesCreatedDisplay.displayId,
     CvesSeverityClassDisplay.displayId,
-  ], [
-    CertBundCreatedDisplay.displayId,
-    CertBundCvssDisplay.displayId,
   ],
+  [CertBundCreatedDisplay.displayId, CertBundCvssDisplay.displayId],
 ];
 
 const EMPTY_DISPLAYS = [];
 
-const NewDashboardDialog = ({
-  additionalDisplayChoices,
-  onClose,
-  onSave,
-}) => {
-  const defaultDisplayChoices = [{
-    label: _('Default'),
-    key: 'default',
-    value: DEFAULT_DISPLAYS,
-  }, {
-    label: _('Scan Displays'),
-    key: 'scan-displays',
-    value: SCAN_DEFAULT_DISPLAYS,
-  }, {
-    label: _('Asset Displays'),
-    key: 'asset-displays',
-    value: ASSET_DEFAULT_DISPLAYS,
-  }, {
-    label: _('SecInfo Displays'),
-    key: 'secinfo-displays',
-    value: SECINFO_DEFAULT_DISPLAYS,
-  }, {
-    label: _('Empty'),
-    key: 'empty',
-    value: EMPTY_DISPLAYS,
-  },
-  ...additionalDisplayChoices,
+const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
+  const defaultDisplayChoices = [
+    {
+      label: _('Default'),
+      key: 'default',
+      value: DEFAULT_DISPLAYS,
+    },
+    {
+      label: _('Scan Displays'),
+      key: 'scan-displays',
+      value: SCAN_DEFAULT_DISPLAYS,
+    },
+    {
+      label: _('Asset Displays'),
+      key: 'asset-displays',
+      value: ASSET_DEFAULT_DISPLAYS,
+    },
+    {
+      label: _('SecInfo Displays'),
+      key: 'secinfo-displays',
+      value: SECINFO_DEFAULT_DISPLAYS,
+    },
+    {
+      label: _('Empty'),
+      key: 'empty',
+      value: EMPTY_DISPLAYS,
+    },
+    ...additionalDisplayChoices,
   ];
   return (
     <SaveDialog
@@ -135,15 +125,9 @@ const NewDashboardDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values,
-        onValueChange,
-      }) => (
+      {({values, onValueChange}) => (
         <React.Fragment>
-          <FormGroup
-            title={_('Dashboard Title')}
-            titleSize={4}
-          >
+          <FormGroup title={_('Dashboard Title')} titleSize={4}>
             <TextField
               grow
               name="title"
@@ -152,10 +136,7 @@ const NewDashboardDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
-          <FormGroup
-            title={_('Initial Displays')}
-            titleSize={4}
-          >
+          <FormGroup title={_('Initial Displays')} titleSize={4}>
             <Select
               name="defaultDisplays"
               items={defaultDisplayChoices}
@@ -170,10 +151,12 @@ const NewDashboardDialog = ({
 };
 
 NewDashboardDialog.propTypes = {
-  additionalDisplayChoices: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.toString,
-    value: PropTypes.array,
-  })),
+  additionalDisplayChoices: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.toString,
+      value: PropTypes.array,
+    }),
+  ),
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

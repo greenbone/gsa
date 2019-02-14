@@ -29,14 +29,12 @@ import Cve from '../models/cve.js';
 const info_filter = info => isDefined(info.cve);
 
 class CveCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'cve', Cve);
   }
 }
 
 class CvesCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'cve', Cve, info_filter);
   }

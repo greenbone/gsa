@@ -23,41 +23,39 @@ import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
 import Select from '../select.js';
 
 const openSelectElement = element => {
-    const button = element.querySelector('[type="button"]');
-    fireEvent.click(button);
+  const button = element.querySelector('[type="button"]');
+  fireEvent.click(button);
 };
 
 const getItemElements = baseElement => {
-    const portal = baseElement.querySelector('#portals');
-    return queryAllByTestId(portal, 'select-item');
+  const portal = baseElement.querySelector('#portals');
+  return queryAllByTestId(portal, 'select-item');
 };
 
 const getInputBox = baseElement => {
-    const portal = baseElement.querySelector('#portals');
-    return portal.querySelector('[role="combobox"]');
+  const portal = baseElement.querySelector('#portals');
+  return portal.querySelector('[role="combobox"]');
 };
 
 describe('Select component tests', () => {
-
   test('should render', () => {
-    const {element} = render(<Select/>);
+    const {element} = render(<Select />);
 
     expect(element).toMatchSnapshot();
   });
 
   test('should render with items', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
-    const {element, baseElement} = render(
-      <Select
-        items={items}
-      />
-    );
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
+    const {element, baseElement} = render(<Select items={items} />);
 
     let domItems = getItemElements(baseElement);
 
@@ -73,21 +71,21 @@ describe('Select component tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {element, baseElement} = render(
-      <Select
-        items={items}
-        onChange={onChange}
-      />
+      <Select items={items} onChange={onChange} />,
     );
 
     openSelectElement(element);
@@ -101,22 +99,21 @@ describe('Select component tests', () => {
   });
 
   test('should call onChange handler with name', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {element, baseElement} = render(
-      <Select
-        name="abc"
-        items={items}
-        onChange={onChange}
-      />
+      <Select name="abc" items={items} onChange={onChange} />,
     );
 
     openSelectElement(element);
@@ -130,22 +127,21 @@ describe('Select component tests', () => {
   });
 
   test('should change value', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
     const onChange = jest.fn();
 
     const {baseElement, element} = render(
-      <Select
-        items={items}
-        value="bar"
-        onChange={onChange}
-      />
+      <Select items={items} value="bar" onChange={onChange} />,
     );
 
     const displayedValue = element.querySelector('[type="button"]').firstChild;
@@ -163,23 +159,22 @@ describe('Select component tests', () => {
   });
 
   test('should filter items', () => {
-    const items = [{
-      value: 'bar',
-      label: 'Bar',
-    }, {
-      value: 'bat',
-      label: 'Bat',
-    }, {
-      value: 'foo',
-      label: 'Foo',
-    }];
+    const items = [
+      {
+        value: 'bar',
+        label: 'Bar',
+      },
+      {
+        value: 'bat',
+        label: 'Bat',
+      },
+      {
+        value: 'foo',
+        label: 'Foo',
+      },
+    ];
 
-    const {element, baseElement} = render(
-      <Select
-        items={items}
-        value="bar"
-      />
-    );
+    const {element, baseElement} = render(<Select items={items} value="bar" />);
 
     openSelectElement(element);
 
@@ -198,7 +193,6 @@ describe('Select component tests', () => {
     domItems = getItemElements(baseElement);
     expect(domItems.length).toEqual(1);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

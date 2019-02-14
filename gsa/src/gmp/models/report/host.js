@@ -39,7 +39,6 @@ const parse_page_count = value => {
 };
 
 class Host {
-
   constructor(elem) {
     this.parseProperties(elem);
   }
@@ -51,8 +50,7 @@ class Host {
 
     if (isEmpty(asset._asset_id)) {
       delete copy.asset;
-    }
-    else {
+    } else {
       copy.asset = setProperties(asset);
       copy.asset.id = asset._asset_id;
     }
@@ -68,8 +66,7 @@ class Host {
         false_positive: parse_page_count(result_count.false_positive),
         total: parse_page_count(result_count),
       };
-    }
-    else {
+    } else {
       copy.result_counts = {
         false_positive: 0,
         high: 0,

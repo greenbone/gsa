@@ -19,7 +19,6 @@
 import EntityCommand from './entity';
 
 class InfoEntityCommand extends EntityCommand {
-
   constructor(http, info_type, model) {
     super(http, 'info', model);
     this.setParam('info_type', info_type);

@@ -23,26 +23,21 @@ import {render} from 'web/utils/testing';
 import InnerLink from '../innerlink';
 
 describe('InnerLink tests', () => {
-
   test('should render InnerLink', () => {
-    const {element} = render(<InnerLink to="foo"/>);
+    const {element} = render(<InnerLink to="foo" />);
 
     expect(element).toHaveAttribute('href', '#foo');
   });
 
   test('should forward props', () => {
     const {element} = render(
-      <InnerLink
-        to="foo"
-        title="bar"
-      >
+      <InnerLink to="foo" title="bar">
         Ipsum
-      </InnerLink>
+      </InnerLink>,
     );
 
     expect(element).toHaveAttribute('href', '#foo');
     expect(element).toHaveAttribute('title', 'bar');
     expect(element).toHaveTextContent('Ipsum');
   });
-
 });

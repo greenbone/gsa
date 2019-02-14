@@ -40,8 +40,8 @@ export const Box = styled.div`
   background-color: ${Theme.white};
   color: ${Theme.black};
   font-weight: normal;
-  border-radius: ${props => props.isOpen ? '2px 2px 0 0' : null};
-  background-color: ${props => props.disabled ? Theme.dialogGray : null};
+  border-radius: ${props => (props.isOpen ? '2px 2px 0 0' : null)};
+  background-color: ${props => (props.disabled ? Theme.dialogGray : null)};
 `;
 
 export const Input = styled.input`
@@ -50,9 +50,9 @@ export const Input = styled.input`
   margin: 5px;
 
   /* use font and line settings from parents not from browser default */
- font-family: inherit;
- font-size: inherit;
- line-height: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 `;
 
 export const Item = styled.span`
@@ -61,14 +61,15 @@ export const Item = styled.span`
   &:hover {
     background-color: ${Theme.mediumBlue};
     color: ${Theme.white};
-  };
-  background-color: ${props => props.isSelected ? Theme.lightGray : null};
-  ${props => props.isActive ?
-    {
-      backgroundColor: Theme.mediumBlue,
-      color: Theme.white,
-    } : null
-  };
+  }
+  background-color: ${props => (props.isSelected ? Theme.lightGray : null)};
+  ${props =>
+    props.isActive
+      ? {
+          backgroundColor: Theme.mediumBlue,
+          color: Theme.white,
+        }
+      : null};
 `;
 
 export const ItemContainer = styled.div`
@@ -82,8 +83,8 @@ export const ItemContainer = styled.div`
 const MenuContainer = styled.div`
   outline: 0;
   border-radius: 0 0 4px 4px;
-  transition: opacity .1s ease;
-  box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
   border: 1px solid ${Theme.inputBorderGray};
   background-color: ${Theme.white};
   display: flex;
@@ -143,21 +144,20 @@ const getScrollParent = element => {
   }
 
   const {overflow, overflowX, overflowY} = getStyleComputedProperty(element);
-  if ((/(auto|scroll|overlay)/).test(overflow + overflowY + overflowX)) {
+  if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
     return element;
   }
 
   return getScrollParent(getParentNode(element));
 };
 
-const getScrollX = () => isDefined(window.scrollX) ?
-  window.scrollX : window.pageXOffset;
+const getScrollX = () =>
+  isDefined(window.scrollX) ? window.scrollX : window.pageXOffset;
 
-const getScrollY = () => isDefined(window.scrollY) ?
-  window.scrollY : window.pageYOffset;
+const getScrollY = () =>
+  isDefined(window.scrollY) ? window.scrollY : window.pageYOffset;
 
 export class Menu extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -173,13 +173,13 @@ export class Menu extends React.Component {
 
     this.eventTarget = getScrollParent(target);
 
-    this.eventTarget.addEventListener('scroll', this.handleScroll,
-      {passive: true});
+    this.eventTarget.addEventListener('scroll', this.handleScroll, {
+      passive: true,
+    });
 
     if (this.eventTarget !== window) {
       window.addEventListener('scroll', this.handleScroll, {passive: true});
     }
-
   }
 
   componentWillUnmount() {
@@ -191,10 +191,7 @@ export class Menu extends React.Component {
   }
 
   render() {
-    const {
-      target,
-      ...props
-    } = this.props;
+    const {target, ...props} = this.props;
 
     if (!hasValue(target)) {
       return null;
@@ -236,7 +233,7 @@ export const SelectedValue = styled.div`
   word-break: keep-all;
   white-space: nowrap;
   overflow: hidden;
-  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+  cursor: ${props => (props.disabled ? 'default' : 'pointer')};
 `;
 
 /**

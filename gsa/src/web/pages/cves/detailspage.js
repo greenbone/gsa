@@ -54,20 +54,14 @@ import {InfoLayout} from 'web/entity/info';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 
-import {
-  selector,
-  loadEntity,
-} from 'web/store/entities/cves';
+import {selector, loadEntity} from 'web/store/entities/cves';
 
 import PropTypes from 'web/utils/proptypes';
 
 import CveDetails from './details';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
-const ToolBarIcons = ({
-  entity,
-  onCveDownloadClick,
-}) => (
+const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -75,10 +69,7 @@ const ToolBarIcons = ({
         anchor="cve"
         title={_('Help: CVEs')}
       />
-      <ListIcon
-        title={_('CVE List')}
-        page="cves"
-      />
+      <ListIcon title={_('CVE List')} page="cves" />
     </IconDivider>
     <ExportIcon
       value={entity}
@@ -93,33 +84,21 @@ ToolBarIcons.propTypes = {
   onCveDownloadClick: PropTypes.func.isRequired,
 };
 
-const Details = ({
-  entity,
-  links = true,
-}) => {
+const Details = ({entity, links = true}) => {
   const {certs = [], nvts = []} = entity;
   let {products} = entity;
   products = products.sort();
   return (
     <Layout flex="column">
+      <CveDetails entity={entity} />
 
-      <CveDetails
-        entity={entity}
-      />
-
-      {certs.length > 0 &&
-        <DetailsBlock
-          title={_('CERT Advisories referencing this CVE')}
-        >
+      {certs.length > 0 && (
+        <DetailsBlock title={_('CERT Advisories referencing this CVE')}>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Title')}
-                </TableHead>
+                <TableHead>{_('Name')}</TableHead>
+                <TableHead>{_('Title')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -132,51 +111,37 @@ const Details = ({
                       textOnly={!links}
                     />
                   </TableData>
-                  <TableData>
-                    {cert.title}
-                  </TableData>
+                  <TableData>{cert.title}</TableData>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </DetailsBlock>
-      }
+      )}
 
-      {products.length > 0 &&
-        <DetailsBlock
-          title={_('Vulnerable Products')}
-        >
+      {products.length > 0 && (
+        <DetailsBlock title={_('Vulnerable Products')}>
           <Layout flex="column">
             {products.map(product => (
-              <DetailsLink
-                key={product}
-                type="cpe"
-                id={product}
-              >
+              <DetailsLink key={product} type="cpe" id={product}>
                 {product}
               </DetailsLink>
             ))}
           </Layout>
         </DetailsBlock>
-      }
+      )}
 
-      {nvts.length > 0 &&
-        <DetailsBlock
-          title={_('NVTs addressing this CVE')}
-        >
+      {nvts.length > 0 && (
+        <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
             {nvts.map(nvt => (
-              <DetailsLink
-                key={nvt.id}
-                type="nvt"
-                id={nvt.id}
-              >
+              <DetailsLink key={nvt.id} type="nvt" id={nvt.id}>
                 {nvt.name}
               </DetailsLink>
             ))}
           </Layout>
         </DetailsBlock>
-      }
+      )}
     </Layout>
   );
 };
@@ -186,9 +151,7 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const EntityInfo = ({
-  entity,
-}) => {
+const EntityInfo = ({entity}) => {
   const {id, publishedTime, lastModifiedTime, updateTime} = entity;
   return (
     <InfoLayout>
@@ -226,31 +189,23 @@ const CvePage = ({
       <EntityPage
         {...props}
         entity={entity}
-        sectionIcon={<CveIcon size="large"/>}
+        sectionIcon={<CveIcon size="large" />}
         title={_('CVE')}
         infoComponent={EntityInfo}
         toolBarIcons={ToolBarIcons}
         onCveDownloadClick={download}
         onInteraction={onInteraction}
       >
-        {({
-          activeTab = 0,
-          onActivateTab,
-        }) => {
+        {({activeTab = 0, onActivateTab}) => {
           return (
             <Layout grow="1" flex="column">
-              <TabLayout
-                grow="1"
-                align={['start', 'end']}
-              >
+              <TabLayout grow="1" align={['start', 'end']}>
                 <TabList
                   active={activeTab}
                   align={['start', 'stretch']}
                   onActivateTab={onActivateTab}
                 >
-                  <Tab>
-                    {_('Information')}
-                  </Tab>
+                  <Tab>{_('Information')}</Tab>
                   <EntitiesTab entities={entity.userTags}>
                     {_('User Tags')}
                   </EntitiesTab>
@@ -260,9 +215,7 @@ const CvePage = ({
               <Tabs active={activeTab}>
                 <TabPanels>
                   <TabPanel>
-                    <Details
-                      entity={entity}
-                    />
+                    <Details entity={entity} />
                   </TabPanel>
                   <TabPanel>
                     <EntityTags

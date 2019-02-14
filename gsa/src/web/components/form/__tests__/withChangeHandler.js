@@ -22,19 +22,12 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import withChangeHandler from '../withChangeHandler';
 
-
 describe('withChangeHandlerTests', () => {
-
   test('should call change handler with value', () => {
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
     const onChange = jest.fn();
-    const {element} = render(
-      <Component
-        value="bar"
-        onChange={onChange}
-      />
-    );
+    const {element} = render(<Component value="bar" onChange={onChange} />);
 
     fireEvent.change(element, {target: {value: 'foo'}});
 
@@ -42,15 +35,11 @@ describe('withChangeHandlerTests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        value="bar"
-        onChange={onChange}
-      />
+      <Component name="bar" value="bar" onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: 'foo'}});
@@ -59,7 +48,7 @@ describe('withChangeHandlerTests', () => {
   });
 
   test('should call change handler with converted value', () => {
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
@@ -68,7 +57,7 @@ describe('withChangeHandlerTests', () => {
         value={1}
         convert={v => v * 2}
         onChange={onChange}
-      />
+      />,
     );
 
     fireEvent.change(element, {target: {value: 2}});
@@ -79,15 +68,11 @@ describe('withChangeHandlerTests', () => {
   test('should allow to set a pre-defined convert function', () => {
     const Component = withChangeHandler({
       convert_func: v => v * 2,
-    })(props => <input {...props}/>);
+    })(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        value={0}
-        onChange={onChange}
-      />
+      <Component name="bar" value={0} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: 2}});
@@ -98,16 +83,11 @@ describe('withChangeHandlerTests', () => {
   test('should allow to set a pre-defined value function', () => {
     const Component = withChangeHandler({
       value_func: (event, props) => props.foo,
-    })(props => <input {...props}/>);
+    })(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        foo={42}
-        value={0}
-        onChange={onChange}
-      />
+      <Component name="bar" foo={42} value={0} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: 'foo'}});
@@ -116,16 +96,11 @@ describe('withChangeHandlerTests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        value="bar"
-        disabled={true}
-        onChange={onChange}
-      />
+      <Component name="bar" value="bar" disabled={true} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: 'foo'}});
@@ -136,16 +111,11 @@ describe('withChangeHandlerTests', () => {
   test('should allow to set a debounce delay', () => {
     jest.useFakeTimers();
 
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
     const onChange = jest.fn();
     const {element} = render(
-      <Component
-        name="bar"
-        value={0}
-        debounce={500}
-        onChange={onChange}
-      />
+      <Component name="bar" value={0} debounce={500} onChange={onChange} />,
     );
 
     fireEvent.change(element, {target: {value: 1}});
@@ -159,14 +129,9 @@ describe('withChangeHandlerTests', () => {
   });
 
   test('should set value on component', () => {
-    const Component = withChangeHandler()(props => <input {...props}/>);
+    const Component = withChangeHandler()(props => <input {...props} />);
 
-    const {rerender, element} = render(
-      <Component
-        name="bar"
-        value="foo"
-      />
-    );
+    const {rerender, element} = render(<Component name="bar" value="foo" />);
 
     expect(element).toHaveAttribute('value', 'foo');
 
@@ -174,16 +139,10 @@ describe('withChangeHandlerTests', () => {
 
     expect(element).toHaveAttribute('value', 'bar');
 
-    rerender(
-      <Component
-        name="bar"
-        value="foobar"
-      />
-    );
+    rerender(<Component name="bar" value="foobar" />);
 
     expect(element).toHaveAttribute('value', 'foobar');
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

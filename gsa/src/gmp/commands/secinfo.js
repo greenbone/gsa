@@ -29,14 +29,12 @@ import SecInfo from '../models/secinfo.js';
 const info_filter = info => isDefined(info.allinfo);
 
 class SecInfoCommand extends InfoEntityCommand {
-
   constructor(http) {
     super(http, 'allinfo', SecInfo);
   }
 }
 
 class SecInfosCommand extends InfoEntitiesCommand {
-
   constructor(http) {
     super(http, 'allinfo', SecInfo, info_filter);
   }

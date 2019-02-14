@@ -42,10 +42,7 @@ const defaults = (state = {}, action) => {
 };
 
 const byId = (state = {}, action) => {
-  const {
-    id,
-    settings = {},
-  } = action;
+  const {id, settings = {}} = action;
 
   switch (action.type) {
     case DASHBOARD_SETTINGS_LOADING_SUCCESS:
@@ -118,4 +115,3 @@ const dashboardSettings = combineReducers({
 export default dashboardSettings;
 
 // vim: set ts=2 sw=2 tw=80:
-

@@ -49,7 +49,6 @@ import compose from 'web/utils/compose';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 class RadiusAuthentication extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -70,8 +69,7 @@ class RadiusAuthentication extends React.Component {
   }
 
   load() {
-    this.getRadiusAuth()
-      .then(this.setState({loading: false}));
+    this.getRadiusAuth().then(this.setState({loading: false}));
   }
 
   getRadiusAuth() {
@@ -98,11 +96,7 @@ class RadiusAuthentication extends React.Component {
   }
 
   handleSaveSettings() {
-    const {
-      enable,
-      radiushost,
-      radiuskey,
-    } = this.state;
+    const {enable, radiushost, radiuskey} = this.state;
 
     const data = {
       enable,
@@ -124,14 +118,10 @@ class RadiusAuthentication extends React.Component {
   render() {
     const {loading} = this.state;
     if (loading) {
-      return <Loading/>;
+      return <Loading />;
     }
 
-    const {
-      enable,
-      radiushost,
-      radiuskey,
-    } = this.state;
+    const {enable, radiushost, radiuskey} = this.state;
 
     return (
       <ErrorBoundary errElement={_('page')}>
@@ -143,7 +133,7 @@ class RadiusAuthentication extends React.Component {
             title={_('Help: RADIUS Authentication')}
           />
           <Section
-            img={<RadiusIcon size="large"/>}
+            img={<RadiusIcon size="large" />}
             title={_('RADIUS Authentication')}
           />
           <Layout flex="column">
@@ -174,10 +164,7 @@ class RadiusAuthentication extends React.Component {
             </FormGroup>
           </Layout>
           <FormGroup title=" ">
-            <Button
-              width="auto"
-              onClick={this.handleSaveSettings}
-            >
+            <Button width="auto" onClick={this.handleSaveSettings}>
               {_('Save')}
             </Button>
           </FormGroup>
@@ -198,7 +185,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(
+    undefined,
+    mapDispatchToProps,
+  ),
 )(RadiusAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -37,12 +37,7 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({
-  currentSortDir,
-  currentSortBy,
-  sort = true,
-  onSortChange,
-}) => (
+const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -90,44 +85,26 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
-const Row = ({
-  entity,
-  links = true,
-}) => {
+const Row = ({entity, links = true}) => {
   const {name, cpe, hosts, severity} = entity;
   return (
     <TableRow>
       <TableData>
-        <Link
-          to="operatingsystems"
-          filter={'name=' + cpe}
-          textOnly={!links}
-        >
+        <Link to="operatingsystems" filter={'name=' + cpe} textOnly={!links}>
           <IconDivider>
-            <OsIcon
-              osCpe={cpe}
-              osTxt={name}
-            />
-            <span>
-              {name}
-            </span>
+            <OsIcon osCpe={cpe} osTxt={name} />
+            <span>{name}</span>
           </IconDivider>
         </Link>
       </TableData>
       <TableData>
-        <Link
-          to="operatingsystems"
-          filter={'name=' + cpe}
-          textOnly={!links}
-        >
+        <Link to="operatingsystems" filter={'name=' + cpe} textOnly={!links}>
           {cpe}
         </Link>
       </TableData>
+      <TableData>{hosts.count}</TableData>
       <TableData>
-        {hosts.count}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={severity}/>
+        <SeverityBar severity={severity} />
       </TableData>
     </TableRow>
   );

@@ -33,12 +33,7 @@ import TextField from 'web/components/form/textfield';
 
 const DEFAULTS = {name: '127.0.0.1', comment: ''};
 
-const HostsDialog = ({
-    host,
-    title = _('New Host'),
-    onClose,
-    onSave,
-  }) => {
+const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
   return (
     <SaveDialog
       title={title}
@@ -46,13 +41,9 @@ const HostsDialog = ({
       onSave={onSave}
       defaultValues={{...DEFAULTS, ...host}}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
@@ -90,7 +81,6 @@ HostsDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
-
 
 export default HostsDialog;
 

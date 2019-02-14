@@ -52,10 +52,7 @@ const SourcefireMethodPart = ({
 }) => {
   const credentialOptions = credentials.filter(password_only_credential_filter);
   return (
-    <Layout
-      flex="column"
-      grow="1"
-    >
+    <Layout flex="column" grow="1">
       <FormGroup title={_('Defense Center IP')}>
         <TextField
           size="30"
@@ -95,10 +92,7 @@ const SourcefireMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('PKCS12 File')}>
-        <FileField
-          name={prefix + 'pkcs12'}
-          onChange={onChange}
-        />
+        <FileField name={prefix + 'pkcs12'} onChange={onChange} />
       </FormGroup>
     </Layout>
   );

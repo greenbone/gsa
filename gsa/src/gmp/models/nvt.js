@@ -50,7 +50,6 @@ const parse_ids = (ids, no) => {
 };
 
 class Nvt extends Info {
-
   static entityType = 'nvt';
 
   parseProperties(elem) {
@@ -65,13 +64,15 @@ class Nvt extends Info {
     // several properties use different names in different responses
     // cve and cve_id, bid and bugtraq_id, cert and cert_ref
 
-    ret.cves = parse_ids(ret.cve, 'NOCVE')
-      .concat(parse_ids(ret.cve_id, 'NOCVE'));
+    ret.cves = parse_ids(ret.cve, 'NOCVE').concat(
+      parse_ids(ret.cve_id, 'NOCVE'),
+    );
     delete ret.cve;
     delete ret.cve_id;
 
-    ret.bids = parse_ids(ret.bid, 'NOBID')
-      .concat(parse_ids(ret.bugtraq_id, 'NOBID'));
+    ret.bids = parse_ids(ret.bid, 'NOBID').concat(
+      parse_ids(ret.bugtraq_id, 'NOBID'),
+    );
     delete ret.bid;
     delete ret.bugtraq_id;
 
@@ -84,8 +85,7 @@ class Nvt extends Info {
         delete pref.nvt;
         return pref;
       });
-    }
-    else {
+    } else {
       ret.preferences = [];
     }
 
@@ -98,8 +98,7 @@ class Nvt extends Info {
       });
 
       delete ret.cert;
-    }
-    else {
+    } else {
       ret.certs = [];
     }
 
@@ -123,8 +122,10 @@ class Nvt extends Info {
         type = 'URL';
         ref = xref.slice(4);
         if (
-          !ref.startsWith('http://') && !ref.startsWith('https://') &&
-          !ref.startsWith('ftp://') && !ref.startsWith('ftps://')
+          !ref.startsWith('http://') &&
+          !ref.startsWith('https://') &&
+          !ref.startsWith('ftp://') &&
+          !ref.startsWith('ftps://')
         ) {
           ref = 'http://' + ref;
         }
@@ -137,8 +138,7 @@ class Nvt extends Info {
     if (isDefined(elem.qod)) {
       if (isEmpty(elem.qod.value)) {
         delete ret.qod.value;
-      }
-      else {
+      } else {
         ret.qod.value = parseFloat(elem.qod.value);
       }
 
@@ -149,15 +149,13 @@ class Nvt extends Info {
 
     if (isEmpty(elem.default_timeout)) {
       delete ret.default_timeout;
-    }
-    else {
+    } else {
       ret.default_timeout = parseFloat(elem.default_timeout);
     }
 
     if (isEmpty(elem.timeout)) {
       delete ret.timeout;
-    }
-    else {
+    } else {
       ret.timeout = parseFloat(elem.timeout);
     }
 

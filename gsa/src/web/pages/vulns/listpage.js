@@ -54,12 +54,7 @@ const ToolBarIcons = () => (
   </Layout>
 );
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
+const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
   <EntitiesPage
     {...props}
     dashboard={() => (
@@ -80,7 +75,7 @@ const Page = ({
     filtersFilter={VULNS_FILTER_FILTER}
     table={VulnsTable}
     title={_('Vulnerabilities')}
-    sectionIcon={<VulnerabilityIcon size="large"/>}
+    sectionIcon={<VulnerabilityIcon size="large" />}
     toolBarIcons={ToolBarIcons}
     onFilterChanged={onFilterChanged}
     onInteraction={onInteraction}

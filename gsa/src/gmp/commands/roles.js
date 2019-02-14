@@ -36,16 +36,11 @@ import EntityCommand from './entity';
 const log = logger.getLogger('gmp.commands.roles');
 
 class RoleCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'role', Role);
   }
 
-  create({
-    name,
-    comment = '',
-    users = [],
-  }) {
+  create({name, comment = '', users = []}) {
     const data = {
       cmd: 'create_role',
       name,
@@ -56,12 +51,7 @@ class RoleCommand extends EntityCommand {
     return this.action(data);
   }
 
-  save({
-    id,
-    name,
-    comment = '',
-    users = [],
-  }) {
+  save({id, name, comment = '', users = []}) {
     const data = {
       cmd: 'save_role',
       id,
@@ -80,21 +70,21 @@ class RoleCommand extends EntityCommand {
     }).then(response => {
       const {capabilities, edit_role} = response.data;
 
-      edit_role.role = new Role(
-      edit_role.get_roles_response.role);
+      edit_role.role = new Role(edit_role.get_roles_response.role);
 
       delete edit_role.get_roles_response;
 
       const perm_names = new Set();
 
       edit_role.permissions = map(
-        edit_role.get_permissions_response.permission, permission => {
+        edit_role.get_permissions_response.permission,
+        permission => {
           const perm = new Permission(permission);
           if (!isDefined(perm.resource)) {
             perm_names.add(permission.name);
           }
           return perm;
-        }
+        },
       );
 
       delete edit_role.get_permissions_response;
@@ -102,10 +92,9 @@ class RoleCommand extends EntityCommand {
       const caps = map(capabilities.help_response.schema.command, cap => {
         cap.name = cap.name.toLowerCase();
         return cap;
-      })
-        .filter(cap => {
-          return cap.name !== 'get_version' && !perm_names.has(cap.name);
-        });
+      }).filter(cap => {
+        return cap.name !== 'get_version' && !perm_names.has(cap.name);
+      });
 
       edit_role.all_permissions = caps;
 
@@ -125,7 +114,6 @@ class RoleCommand extends EntityCommand {
 }
 
 class RolesCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'role', Role);
   }

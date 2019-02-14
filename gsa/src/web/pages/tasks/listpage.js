@@ -53,53 +53,48 @@ import TaskFilterDialog from './filterdialog';
 import Table from './table';
 import TaskIcon from 'web/components/icon/taskicon';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onAdvancedTaskWizardClick,
-  onModifyTaskWizardClick,
-  onContainerTaskCreateClick,
-  onTaskCreateClick,
-  onTaskWizardClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="creating-a-task"
-      title={_('Help: Tasks')}
-    />
-    {capabilities.mayOp('run_wizard') &&
-      <IconMenu
-        icon={<WizardIcon/>}
-        onClick={onTaskWizardClick}
-      >
-        {capabilities.mayCreate('task') &&
-          <MenuEntry
-            title={_('Task Wizard')}
-            onClick={onTaskWizardClick}
-          />
-        }
-        {capabilities.mayCreate('task') &&
-          <MenuEntry
-            title={_('Advanced Task Wizard')}
-            onClick={onAdvancedTaskWizardClick}
-          />
-        }
-        {capabilities.mayEdit('task') &&
-          <MenuEntry
-            title={_('Modify Task Wizard')}
-            onClick={onModifyTaskWizardClick}
-          />
-        }
-      </IconMenu>
-    }
+const ToolBarIcons = withCapabilities(
+  ({
+    capabilities,
+    onAdvancedTaskWizardClick,
+    onModifyTaskWizardClick,
+    onContainerTaskCreateClick,
+    onTaskCreateClick,
+    onTaskWizardClick,
+  }) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="creating-a-task"
+        title={_('Help: Tasks')}
+      />
+      {capabilities.mayOp('run_wizard') && (
+        <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
+          {capabilities.mayCreate('task') && (
+            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+          )}
+          {capabilities.mayCreate('task') && (
+            <MenuEntry
+              title={_('Advanced Task Wizard')}
+              onClick={onAdvancedTaskWizardClick}
+            />
+          )}
+          {capabilities.mayEdit('task') && (
+            <MenuEntry
+              title={_('Modify Task Wizard')}
+              onClick={onModifyTaskWizardClick}
+            />
+          )}
+        </IconMenu>
+      )}
 
-    <NewIconMenu
-      onNewClick={onTaskCreateClick}
-      onNewContainerClick={onContainerTaskCreateClick}
-    />
-
-  </IconDivider>
-));
+      <NewIconMenu
+        onNewClick={onTaskCreateClick}
+        onNewContainerClick={onContainerTaskCreateClick}
+      />
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onAdvancedTaskWizardClick: PropTypes.func.isRequired,
@@ -174,7 +169,7 @@ const Page = ({
         filter={filter}
         filterEditDialog={TaskFilterDialog}
         filtersFilter={TASKS_FILTER_FILTER}
-        sectionIcon={<TaskIcon size="large"/>}
+        sectionIcon={<TaskIcon size="large" />}
         table={Table}
         title={_('Tasks')}
         toolBarIcons={ToolBarIcons}
@@ -208,12 +203,10 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const taskReloadInterval = ({
-  entities = [],
-  defaultReloadInterval,
-}) => entities.some(task => task.isActive()) ?
-  DEFAULT_RELOAD_INTERVAL_ACTIVE :
-  defaultReloadInterval;
+const taskReloadInterval = ({entities = [], defaultReloadInterval}) =>
+  entities.some(task => task.isActive())
+    ? DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : defaultReloadInterval;
 
 export default withEntitiesContainer('task', {
   entitiesSelector,

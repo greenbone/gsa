@@ -40,12 +40,10 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const renderLanguageItems = () =>
-  Object.entries(Languages).map(
-    ([code, {name, native_name}]) => ({
-      value: code,
-      label: isDefined(native_name) ? `${name} | ${native_name}` : `${name}`,
-    })
-  );
+  Object.entries(Languages).map(([code, {name, native_name}]) => ({
+    value: code,
+    label: isDefined(native_name) ? `${name} | ${native_name}` : `${name}`,
+  }));
 
 const NotificationDiv = styled.div`
   color: ${props => props.color};
@@ -56,20 +54,14 @@ const Notification = ({newPassword, oldPassword, confPassword}) => {
   let text;
   if (newPassword === '' && confPassword === '') {
     text = null;
-  }
-  else if (newPassword !== confPassword) {
+  } else if (newPassword !== confPassword) {
     color = Theme.warningRed;
     text = _('Confirmation does not match new password!');
-  }
-  else if (newPassword === confPassword) {
+  } else if (newPassword === confPassword) {
     color = Theme.darkGreen;
     text = _('Confirmation matches new password!');
   }
-  return (
-    <NotificationDiv color={color}>
-      {text}
-    </NotificationDiv>
-  );
+  return <NotificationDiv color={color}>{text}</NotificationDiv>;
 };
 
 Notification.propTypes = {
@@ -95,11 +87,7 @@ const GeneralPart = ({
   return (
     <React.Fragment>
       <FormGroup title={_('Timezone')} titleSize="3">
-        <TimeZoneSelect
-          name="timezone"
-          value={timezone}
-          onChange={onChange}
-        />
+        <TimeZoneSelect name="timezone" value={timezone} onChange={onChange} />
       </FormGroup>
       <FormGroup title={_('Password')} titleSize="3">
         <Divider flex="column">
@@ -153,8 +141,7 @@ const GeneralPart = ({
           value={userInterfaceLanguage}
           items={renderLanguageItems()}
           onChange={onChange}
-        >
-        </Select>
+        />
       </FormGroup>
       <FormGroup title={_('Rows Per Page')} titleSize="3">
         <TextField

@@ -28,22 +28,17 @@ export const RESULTS_SEVERITY = 'results-severity';
 export const RESULTS_WORDCOUNT = 'results-wordcount';
 
 export const resultsSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.results.getSeverityAggregates({filter})
-    .then(r => r.data),
-  RESULTS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.results.getSeverityAggregates({filter}).then(r => r.data),
+  RESULTS_SEVERITY,
+);
 
-export const ResultsSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const ResultsSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={RESULTS_SEVERITY}
     filter={filter}
     load={resultsSeverityLoader}
-    subscriptions={[
-      'results.timer',
-      'results.changed',
-    ]}
+    subscriptions={['results.timer', 'results.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +47,17 @@ export const ResultsSeverityLoader = ({
 ResultsSeverityLoader.propTypes = loaderPropTypes;
 
 export const resultsWordCountLoader = loadFunc(
-  ({gmp, filter}) => gmp.results.getWordCountsAggregates({filter})
-    .then(r => r.data),
-  RESULTS_WORDCOUNT);
+  ({gmp, filter}) =>
+    gmp.results.getWordCountsAggregates({filter}).then(r => r.data),
+  RESULTS_WORDCOUNT,
+);
 
-export const ResultsWordCountLoader = ({
-  filter,
-  children,
-}) => (
+export const ResultsWordCountLoader = ({filter, children}) => (
   <Loader
     dataId={RESULTS_WORDCOUNT}
     filter={filter}
     load={resultsWordCountLoader}
-    subscriptions={[
-      'results.timer',
-      'results.changed',
-    ]}
+    subscriptions={['results.timer', 'results.changed']}
   >
     {children}
   </Loader>
@@ -76,22 +66,17 @@ export const ResultsWordCountLoader = ({
 ResultsWordCountLoader.propTypes = loaderPropTypes;
 
 export const resultsDescriptionWordCountLoader = loadFunc(
-  ({gmp, filter}) => gmp.results.getDescriptionWordCountsAggregates({filter})
-    .then(r => r.data),
-  RESULTS_DESCRIPTION_WORDCOUNT);
+  ({gmp, filter}) =>
+    gmp.results.getDescriptionWordCountsAggregates({filter}).then(r => r.data),
+  RESULTS_DESCRIPTION_WORDCOUNT,
+);
 
-export const ResultsDescriptionWordCountLoader = ({
-  filter,
-  children,
-}) => (
+export const ResultsDescriptionWordCountLoader = ({filter, children}) => (
   <Loader
     dataId={RESULTS_DESCRIPTION_WORDCOUNT}
     filter={filter}
     load={resultsDescriptionWordCountLoader}
-    subscriptions={[
-      'results.timer',
-      'results.changed',
-    ]}
+    subscriptions={['results.timer', 'results.changed']}
   >
     {children}
   </Loader>

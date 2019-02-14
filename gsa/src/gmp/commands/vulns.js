@@ -24,14 +24,12 @@ import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 class VulnerabilityCommand extends EntityCommand {
-
   constructor(http) {
     super(http, 'vuln', Vulnerability);
   }
 }
 
 class VulnerabilitiesCommand extends EntitiesCommand {
-
   constructor(http) {
     super(http, 'vuln', Vulnerability);
   }

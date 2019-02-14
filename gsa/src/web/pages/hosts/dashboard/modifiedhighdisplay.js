@@ -62,7 +62,6 @@ const transformModified = (data = {}) => {
 };
 
 export class HostsModifiedHighDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -83,14 +82,14 @@ export class HostsModifiedHighDisplay extends React.Component {
     let newFilter = isDefined(filter) ? filter.copy() : new Filter();
 
     if (isDefined(startDate)) {
-
       if (startDate.isSame(endDate)) {
         startDate = startDate.clone().subtract(1, 'day');
         endDate = endDate.clone().add(1, 'day');
       }
 
       const startTerm = FilterTerm.fromString(
-        `modified>${startDate.format(dateFormat)}`);
+        `modified>${startDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(startTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(startTerm));
@@ -99,7 +98,8 @@ export class HostsModifiedHighDisplay extends React.Component {
 
     if (isDefined(endDate)) {
       const endTerm = FilterTerm.fromString(
-        `modified<${endDate.format(dateFormat)}`);
+        `modified<${endDate.format(dateFormat)}`,
+      );
 
       if (!newFilter.hasTerm(endTerm)) {
         newFilter = newFilter.and(Filter.fromTerm(endTerm));
@@ -110,14 +110,9 @@ export class HostsModifiedHighDisplay extends React.Component {
   }
 
   render() {
-    const {
-      filter,
-      ...props
-    } = this.props;
+    const {filter, ...props} = this.props;
     return (
-      <HostsModifiedLoader
-        filter={filter}
-      >
+      <HostsModifiedLoader filter={filter}>
         {loaderProps => (
           <DataDisplay
             {...props}
@@ -125,8 +120,9 @@ export class HostsModifiedHighDisplay extends React.Component {
             dataTransform={transformModified}
             filter={filter}
             title={({data: tdata}) =>
-              _('Hosts (High) by Modification Time (Total: {{count}})',
-                {count: tdata.total})
+              _('Hosts (High) by Modification Time (Total: {{count}})', {
+                count: tdata.total,
+              })
             }
           >
             {({width, height, data: tdata, svgRef, state}) => (
@@ -180,8 +176,9 @@ export const HostsModifiedHighTableDisplay = createDisplay({
   displayComponent: DataTableDisplay,
   dataTransform: transformModified,
   title: ({data: tdata}) =>
-    _('Hosts (High) by Modification Time (Total: {{count}})',
-      {count: tdata.total}),
+    _('Hosts (High) by Modification Time (Total: {{count}})', {
+      count: tdata.total,
+    }),
   dataTitles: [
     _l('Creation Time'),
     _l('# of Modified Hosts (High)'),
@@ -197,8 +194,10 @@ registerDisplay(HostsModifiedHighDisplay.displayId, HostsModifiedHighDisplay, {
   title: _l('Chart: Hosts (High) by Modification Time'),
 });
 
-registerDisplay(HostsModifiedHighTableDisplay.displayId,
-  HostsModifiedHighTableDisplay, {
+registerDisplay(
+  HostsModifiedHighTableDisplay.displayId,
+  HostsModifiedHighTableDisplay,
+  {
     title: _l('Table: Hosts (High) by Modification Time'),
   },
 );

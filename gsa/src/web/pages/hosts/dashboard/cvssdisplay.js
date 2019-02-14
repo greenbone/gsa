@@ -31,8 +31,8 @@ export const HostsCvssDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
   displayComponent: CvssDisplay,
   yLabel: _l('# of Hosts'),
-  title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  title: ({data: tdata}) =>
+    _('Hosts by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-cvss',
   displayName: 'HostsCvssDisplay',
@@ -41,12 +41,9 @@ export const HostsCvssDisplay = createDisplay({
 export const HostsCvssTableDisplay = createDisplay({
   loaderComponent: HostsSeverityLoader,
   displayComponent: CvssTableDisplay,
-  dataTitles: [
-    _l('Severity'),
-    _l('# of Hosts'),
-  ],
-  title: ({data: tdata}) => _('Hosts by CVSS (Total: {{count}})',
-    {count: tdata.total}),
+  dataTitles: [_l('Severity'), _l('# of Hosts')],
+  title: ({data: tdata}) =>
+    _('Hosts by CVSS (Total: {{count}})', {count: tdata.total}),
   filtersFilter: HOSTS_FILTER_FILTER,
   displayId: 'host-by-cvss-table',
   displayName: 'HostsCvssTableDisplay',

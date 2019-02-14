@@ -28,11 +28,7 @@ import YesNoRadio from '../../components/form/yesnoradio.js';
 export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
   return (
     <FormGroup title={_('Add results to Assets')}>
-      <YesNoRadio
-        name="in_assets"
-        value={inAssets}
-        onChange={onChange}
-      />
+      <YesNoRadio name="in_assets" value={inAssets} onChange={onChange} />
     </FormGroup>
   );
 };

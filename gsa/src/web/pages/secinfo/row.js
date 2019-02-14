@@ -47,39 +47,23 @@ const Row = ({
 }) => (
   <TableBody>
     <TableRow>
-      <TableData
-        rowSpan="2"
-      >
-        <RowDetailsToggle
-          name={entity.id}
-          onClick={onToggleDetailsClick}
-        >
+      <TableData rowSpan="2">
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
           {entity.name}
         </RowDetailsToggle>
-        <Comment text={entity.comment}/>
+        <Comment text={entity.comment} />
       </TableData>
+      <TableData>{secInfoTypeName(secInfoType(entity))}</TableData>
+      <TableData>{longDate(entity.creationTime)}</TableData>
+      <TableData>{longDate(entity.modificationTime)}</TableData>
       <TableData>
-        {secInfoTypeName(secInfoType(entity))}
+        <SeverityBar severity={entity.severity} />
       </TableData>
-      <TableData>
-        {longDate(entity.creationTime)}
-      </TableData>
-      <TableData>
-        {longDate(entity.modificationTime)}
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity}/>
-      </TableData>
-      <ActionsComponent
-        {...props}
-        entity={entity}
-      />
+      <ActionsComponent {...props} entity={entity} />
     </TableRow>
     <TableRow>
       <TableData colSpan="5">
-        <span title={entity.extra}>
-          {shorten(entity.extra, 150)}
-        </span>
+        <span title={entity.extra}>{shorten(entity.extra, 150)}</span>
       </TableData>
     </TableRow>
   </TableBody>

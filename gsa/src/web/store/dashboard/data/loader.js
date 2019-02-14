@@ -40,8 +40,10 @@ export const loaderPropTypes = {
   filter: PropTypes.filter,
 };
 
-export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
-  (dispatch, getState) => {
+export const loadFunc = (func, id) => ({dataId = id, ...props}) => (
+  dispatch,
+  getState,
+) => {
   const rootState = getState();
   const state = getDashboardData(rootState);
 
@@ -62,7 +64,6 @@ export const loadFunc = (func, id) => ({dataId = id, ...props}) =>
 };
 
 class Loader extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -109,7 +110,6 @@ class Loader extends React.Component {
   }
 
   componentWillUnmount() {
-
     for (const unsubscribe of this.subscriptions) {
       unsubscribe();
     }
@@ -158,7 +158,10 @@ const mapDispatchToProps = (dispatch, {load, ...props}) => ({
 export default compose(
   withGmp,
   withSubscription,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(Loader);
 
 // vim: set ts=2 sw=2 tw=80:

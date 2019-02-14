@@ -58,31 +58,24 @@ class ExternalLink extends React.Component {
   }
 
   render() {
-    const {
-      dialogvisible,
-    } = this.state;
+    const {dialogvisible} = this.state;
 
-    const {
-      children,
-      to,
-      ...props
-    } = this.props;
+    const {children, to, ...props} = this.props;
 
     const dialogtitle = _('You are leaving GSA');
-    const dialogtext = _('This dialog will open a new window for {{- to}} ' +
-      'if you click on "follow link". Following this link is on your own ' +
-      'responsibility. Greenbone does not endorse the content you will ' +
-      'see there.', {to});
+    const dialogtext = _(
+      'This dialog will open a new window for {{- to}} ' +
+        'if you click on "follow link". Following this link is on your own ' +
+        'responsibility. Greenbone does not endorse the content you will ' +
+        'see there.',
+      {to},
+    );
     return (
       <React.Fragment>
-        <a
-          {...props}
-          href={to}
-          onClick={this.handleClick}
-        >
+        <a {...props} href={to} onClick={this.handleClick}>
           {children}
         </a>
-        {dialogvisible &&
+        {dialogvisible && (
           <LinkConfirmationDialog
             onClose={this.handleCloseDialog}
             onResumeClick={this.handleOpenLink}
@@ -91,10 +84,10 @@ class ExternalLink extends React.Component {
             to={to}
             width="500px"
           />
-        }
+        )}
       </React.Fragment>
     );
-  };
+  }
 }
 
 ExternalLink.propTypes = {

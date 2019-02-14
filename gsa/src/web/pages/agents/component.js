@@ -32,7 +32,6 @@ import EntityComponent from 'web/entity/component';
 import AgentDialog from './dialog.js';
 
 class AgentComponent extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -58,10 +57,13 @@ class AgentComponent extends React.Component {
 
     this.handleInteraction();
 
-    return gmp.agent.downloadInstaller(agent).then(response => {
-      const filename = 'agent-' + name + '-' + id + '-installer';
-      return {filename, data: response.data};
-    }).then(onInstallerDownloaded, onInstallerDownloadError);
+    return gmp.agent
+      .downloadInstaller(agent)
+      .then(response => {
+        const filename = 'agent-' + name + '-' + id + '-installer';
+        return {filename, data: response.data};
+      })
+      .then(onInstallerDownloaded, onInstallerDownloadError);
   }
 
   openAgentDialog(agent) {
@@ -69,10 +71,9 @@ class AgentComponent extends React.Component {
 
     if (isDefined(agent)) {
       title = _('Edit Agent {{name}}', {name: shorten(agent.name)});
-    }
-    else {
+    } else {
       title = _('New Agent');
-    };
+    }
 
     this.setState({
       dialogVisible: true,
@@ -115,11 +116,7 @@ class AgentComponent extends React.Component {
       onSaveError,
     } = this.props;
 
-    const {
-      agent,
-      dialogVisible,
-      title,
-    } = this.state;
+    const {agent, dialogVisible, title} = this.state;
 
     return (
       <EntityComponent
@@ -136,10 +133,7 @@ class AgentComponent extends React.Component {
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({
-          save,
-          ...other
-        }) => (
+        {({save, ...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -148,7 +142,7 @@ class AgentComponent extends React.Component {
               verify: this.handleVerifyAgent,
               downloadinstaller: this.handleDownloadInstaller,
             })}
-            {dialogVisible &&
+            {dialogVisible && (
               <AgentDialog
                 agent={agent}
                 title={title}
@@ -158,7 +152,7 @@ class AgentComponent extends React.Component {
                   return save(d).then(() => this.closeAgentDialog());
                 }}
               />
-            }
+            )}
           </React.Fragment>
         )}
       </EntityComponent>

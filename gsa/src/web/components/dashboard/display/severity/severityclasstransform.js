@@ -37,18 +37,14 @@ import {
   ERROR_VALUE,
 } from 'web/utils/severity';
 
-import {
-  totalCount,
-  percent,
-  riskFactorColorScale,
-} from '../utils';
+import {totalCount, percent, riskFactorColorScale} from '../utils';
 import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
 const transformSeverityData = (
   data = {},
-  {severityClass: severityClassType}
+  {severityClass: severityClassType},
 ) => {
   const {groups = []} = data;
 

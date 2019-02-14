@@ -35,7 +35,6 @@ import DataDisplay from '../datadisplay';
 import transformCvssData from './cvsstransform';
 
 class CvssDisplay extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -58,25 +57,24 @@ class CvssDisplay extends React.Component {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
-      if (isDefined(filter) && filter.hasTerm(startTerm) &&
-        filter.hasTerm(endTerm)) {
+      if (
+        isDefined(filter) &&
+        filter.hasTerm(startTerm) &&
+        filter.hasTerm(endTerm)
+      ) {
         return;
       }
 
       statusFilter = Filter.fromTerm(startTerm).and(Filter.fromTerm(endTerm));
-    }
-    else {
+    } else {
       let statusTerm;
 
       if (isDefined(start)) {
-
         if (start > 0) {
           statusTerm = FilterTerm.fromString(`severity>${start}`);
-        }
-        else if (start === NA_VALUE) {
+        } else if (start === NA_VALUE) {
           statusTerm = FilterTerm.fromString('severity=""');
-        }
-        else {
+        } else {
           statusTerm = FilterTerm.fromString(`severity=${start}`);
         }
       }
@@ -88,8 +86,9 @@ class CvssDisplay extends React.Component {
       statusFilter = Filter.fromTerm(statusTerm);
     }
 
-    const newFilter = isDefined(filter) ? filter.copy().and(statusFilter) :
-      statusFilter;
+    const newFilter = isDefined(filter)
+      ? filter.copy().and(statusFilter)
+      : statusFilter;
 
     onFilterChanged(newFilter);
   }
@@ -118,8 +117,9 @@ class CvssDisplay extends React.Component {
             data={data}
             xLabel={xLabel}
             yLabel={yLabel}
-            onDataClick={isDefined(onFilterChanged) ?
-              this.handleDataClick : undefined}
+            onDataClick={
+              isDefined(onFilterChanged) ? this.handleDataClick : undefined
+            }
           />
         )}
       </DataDisplay>

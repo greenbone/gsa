@@ -18,7 +18,6 @@
  */
 
 class Path {
-
   constructor() {
     this.paths = [];
     this.closed = false;
@@ -45,13 +44,23 @@ class Path {
     return this.push('L', x, y);
   }
 
-  arc(radiusX, radiusY, x, y, {
-    largeArc = 0,
-    sweep = 0,
-    rotationDegree = 0,
-  } = {}) {
-    return this.push('A', radiusX, radiusY, rotationDegree, largeArc, sweep,
-      x, y);
+  arc(
+    radiusX,
+    radiusY,
+    x,
+    y,
+    {largeArc = 0, sweep = 0, rotationDegree = 0} = {},
+  ) {
+    return this.push(
+      'A',
+      radiusX,
+      radiusY,
+      rotationDegree,
+      largeArc,
+      sweep,
+      x,
+      y,
+    );
   }
 
   toString() {

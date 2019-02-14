@@ -38,7 +38,7 @@ const Div = styled.div`
 
   ${IconMenu}:hover & {
     display: block;
-  };
+  }
 `;
 
 const List = styled.ul`
@@ -67,43 +67,32 @@ const Entry = styled.li`
 
   &:first-child {
     border-top: 1px solid ${Theme.mediumGray};
-  };
+  }
   &:last-child {
     border-bottom: 1px solid ${Theme.mediumGray};
-  };
+  }
   &:hover {
     background: ${Theme.green};
     color: ${Theme.white};
-  };
+  }
 
   & div {
     display: flex;
     align-items: center;
     flex-grow: 1;
     cursor: pointer;
-  };
+  }
 `;
 
-const IconMenuContainer = ({
-  children,
-  icon,
-  ...other
-}) => {
+const IconMenuContainer = ({children, icon, ...other}) => {
   const menuentries = React.Children.map(children, child => (
-    <Entry>
-      {child}
-    </Entry>
+    <Entry>{child}</Entry>
   ));
   return (
     <IconMenu>
-      {isDefined(icon) ?
-        icon :
-        <Icon {...other}/>
-      }
+      {isDefined(icon) ? icon : <Icon {...other} />}
       <Div>
-        <List>
-          {menuentries}
-        </List>
+        <List>{menuentries}</List>
       </Div>
     </IconMenu>
   );

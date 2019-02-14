@@ -49,7 +49,6 @@ const rename_props = (obj, rename = {}) => {
 };
 
 class Cve extends Info {
-
   static entityType = 'cve';
 
   parseProperties(elem) {
@@ -83,8 +82,7 @@ class Cve extends Info {
       });
 
       delete ret.cert;
-    }
-    else {
+    } else {
       ret.certs = [];
     }
 
@@ -119,8 +117,7 @@ class Cve extends Info {
 
     if (isEmpty(ret.products)) {
       ret.products = [];
-    }
-    else {
+    } else {
       ret.products = ret.products.split(' ');
     }
 
@@ -132,8 +129,7 @@ class Cve extends Info {
       }
 
       ret.publishedTime = parseDate(entry['published-datetime'].__text);
-      ret.lastModifiedTime = parseDate(
-        entry['last-modified-datetime'].__text);
+      ret.lastModifiedTime = parseDate(entry['last-modified-datetime'].__text);
 
       ret.references = map(entry.references, ref => ({
         name: ref.reference.__text,
@@ -142,8 +138,11 @@ class Cve extends Info {
         reference_type: ref._reference_type,
       }));
 
-      if (isDefined(entry.cvss) && isDefined(entry.cvss.base_metrics) &&
-        isDefined(entry.cvss.base_metrics.source)) {
+      if (
+        isDefined(entry.cvss) &&
+        isDefined(entry.cvss.base_metrics) &&
+        isDefined(entry.cvss.base_metrics.source)
+      ) {
         ret.source = entry.cvss.base_metrics.source.__text;
       }
 
@@ -160,11 +159,9 @@ class Cve extends Info {
       }
 
       delete ret.raw_data;
-    }
-    else {
+    } else {
       ret.references = [];
     }
-
 
     return ret;
   }

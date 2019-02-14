@@ -55,30 +55,28 @@ const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;
 `;
 
-const SectionElements = withCapabilities(({
-  capabilities,
-  entity,
-  onTagCreateClick,
-}) => (
-  <Layout grow align="end">
-    <SectionElementDivider margin="10px">
-      <IconDivider>
-        {capabilities.mayCreate('tag') &&
-          <NewIcon
-            title={_('New Tag')}
-            value={entity}
-            onClick={onTagCreateClick}
+const SectionElements = withCapabilities(
+  ({capabilities, entity, onTagCreateClick}) => (
+    <Layout grow align="end">
+      <SectionElementDivider margin="10px">
+        <IconDivider>
+          {capabilities.mayCreate('tag') && (
+            <NewIcon
+              title={_('New Tag')}
+              value={entity}
+              onClick={onTagCreateClick}
+            />
+          )}
+          <ManualIcon
+            page="gui_introduction"
+            anchor="tags"
+            title={_('Help: User Tags')}
           />
-        }
-        <ManualIcon
-          page="gui_introduction"
-          anchor="tags"
-          title={_('Help: User Tags')}
-        />
-      </IconDivider>
-    </SectionElementDivider>
-  </Layout>
-));
+        </IconDivider>
+      </SectionElementDivider>
+    </Layout>
+  ),
+);
 
 SectionElements.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -86,7 +84,6 @@ SectionElements.propTypes = {
 };
 
 class EntityTagsTable extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -95,10 +92,7 @@ class EntityTagsTable extends React.Component {
   }
 
   handleCreateTag() {
-    const {
-      entity,
-      onTagCreateClick,
-    } = this.props;
+    const {entity, onTagCreateClick} = this.props;
 
     const entityType = getEntityType(entity);
 
@@ -111,44 +105,30 @@ class EntityTagsTable extends React.Component {
   }
 
   handleEditTag(tag) {
-    const {
-      onTagEditClick,
-    } = this.props;
+    const {onTagEditClick} = this.props;
     onTagEditClick(tag, {fixed: true});
   }
 
   render() {
-    const {
-      entity,
-      onTagDisableClick,
-      onTagRemoveClick,
-    } = this.props;
+    const {entity, onTagDisableClick, onTagRemoveClick} = this.props;
     const {userTags} = entity;
     const count = userTags.length;
     const entityType = getEntityType(entity);
     return (
-      <Layout
-        flex="column"
-        title={_('User Tags ({{count}})', {count})}
-      >
+      <Layout flex="column" title={_('User Tags ({{count}})', {count})}>
         <SectionElements
           entity={entity}
           onTagCreateClick={this.handleCreateTag}
         />
-        {count === 0 ?
-          _('No user tags available') :
+        {count === 0 ? (
+          _('No user tags available')
+        ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Value')}
-                </TableHead>
-                <TableHead>
-                  {_('Comment')}
-                </TableHead>
+                <TableHead>{_('Name')}</TableHead>
+                <TableHead>{_('Value')}</TableHead>
+                <TableHead>{_('Comment')}</TableHead>
                 <TableHead width="8%" align="center">
                   {_('Actions')}
                 </TableHead>
@@ -156,54 +136,45 @@ class EntityTagsTable extends React.Component {
             </TableHeader>
             <TableBody>
               {userTags.map(tag => {
-                  return (
-                    <TableRow
-                      key={tag.id}
-                    >
-                      <TableData>
-                        <DetailsLink
-                          id={tag.id}
-                          type="tag"
-                        >
-                          {tag.name}
-                        </DetailsLink>
-                      </TableData>
-                      <TableData>
-                        {tag.value}
-                      </TableData>
-                      <TableData>
-                        {tag.comment}
-                      </TableData>
-                      <TableData>
-                        <IconDivider align="center" grow>
-                          <DisableIcon
-                            value={tag}
-                            title={_('Disable Tag')}
-                            onClick={onTagDisableClick}
-                          />
-                          <DeleteIcon
-                            value={tag}
-                            title={_('Remove Tag from {{type}}',
-                              {type: typeName(entityType)})}
-                            onClick={() => onTagRemoveClick(tag.id, entity)}
-                          />
-                          <EditIcon
-                            value={tag}
-                            title={_('Edit Tag')}
-                            onClick={this.handleEditTag}
-                          />
-                        </IconDivider>
-                      </TableData>
-                    </TableRow>
-                  );
-                })
-              }
+                return (
+                  <TableRow key={tag.id}>
+                    <TableData>
+                      <DetailsLink id={tag.id} type="tag">
+                        {tag.name}
+                      </DetailsLink>
+                    </TableData>
+                    <TableData>{tag.value}</TableData>
+                    <TableData>{tag.comment}</TableData>
+                    <TableData>
+                      <IconDivider align="center" grow>
+                        <DisableIcon
+                          value={tag}
+                          title={_('Disable Tag')}
+                          onClick={onTagDisableClick}
+                        />
+                        <DeleteIcon
+                          value={tag}
+                          title={_('Remove Tag from {{type}}', {
+                            type: typeName(entityType),
+                          })}
+                          onClick={() => onTagRemoveClick(tag.id, entity)}
+                        />
+                        <EditIcon
+                          value={tag}
+                          title={_('Edit Tag')}
+                          onClick={this.handleEditTag}
+                        />
+                      </IconDivider>
+                    </TableData>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
-        }
+        )}
       </Layout>
     );
-  };
+  }
 }
 
 EntityTagsTable.propTypes = {
@@ -214,12 +185,7 @@ EntityTagsTable.propTypes = {
   onTagRemoveClick: PropTypes.func.isRequired,
 };
 
-const EntityTags = ({
-  entity,
-  onChanged,
-  onError,
-  onInteraction,
-}) => (
+const EntityTags = ({entity, onChanged, onError, onInteraction}) => (
   <TagComponent
     onAdded={onChanged}
     onAddError={onError}
@@ -237,12 +203,7 @@ const EntityTags = ({
     onSaved={onChanged}
     onSaveError={onError}
   >
-    {({
-      create,
-      disable,
-      edit,
-      remove,
-    }) => (
+    {({create, disable, edit, remove}) => (
       <EntityTagsTable
         entity={entity}
         onTagCreateClick={create}

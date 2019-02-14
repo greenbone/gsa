@@ -58,7 +58,6 @@ const LeftDivider = styled(Divider)`
 `;
 
 class PowerFilter extends React.Component {
-
   constructor(...args) {
     super(...args);
 
@@ -93,11 +92,9 @@ class PowerFilter extends React.Component {
 
     if (isDefined(filter) && isDefined(filter.toFilterCriteriaString)) {
       userfilter = filter.toFilterCriteriaString();
-    }
-    else if (isString(filter)) {
+    } else if (isString(filter)) {
       userfilter = filter;
-    }
-    else {
+    } else {
       userfilter = '';
     }
 
@@ -164,8 +161,7 @@ class PowerFilter extends React.Component {
         filter,
         userfilter: '',
       });
-    }
-    else if (
+    } else if (
       !isDefined(state_filter) ||
       filter.id !== state_filter.id ||
       !filter.equals(this.state.filter)
@@ -178,10 +174,7 @@ class PowerFilter extends React.Component {
   }
 
   render() {
-    const {
-      userfilter = '',
-      filter,
-    } = this.state;
+    const {userfilter = '', filter} = this.state;
     const {
       capabilities,
       filters,
@@ -189,17 +182,13 @@ class PowerFilter extends React.Component {
       onRemoveClick,
       onResetClick,
     } = this.props;
-    const namedfilterid = isDefined(filter) && isDefined(filter.id) ?
-      filter.id : DEFAULT_FILTER_ID;
+    const namedfilterid =
+      isDefined(filter) && isDefined(filter.id) ? filter.id : DEFAULT_FILTER_ID;
 
     const filter_items = renderSelectItems(filters, DEFAULT_FILTER_ID);
 
     return (
-      <Layout
-        flex="column"
-        align={['start', 'stetch']}
-        className="powerfilter"
-      >
+      <Layout flex="column" align={['start', 'stetch']} className="powerfilter">
         <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
             <Layout align={['start', 'center']}>
@@ -221,20 +210,20 @@ class PowerFilter extends React.Component {
                 onClick={this.handleUpdateFilter}
               />
 
-              {onRemoveClick &&
+              {onRemoveClick && (
                 <DeleteIcon
                   title={_('Remove Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onRemoveClick : undefined}
                 />
-              }
-              {onResetClick &&
+              )}
+              {onResetClick && (
                 <ResetIcon
                   title={_('Reset to Default Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onResetClick : undefined}
                 />
-              }
+              )}
 
               <ManualIcon
                 title={_('Help: Powerfilter')}
@@ -242,17 +231,17 @@ class PowerFilter extends React.Component {
                 anchor="powerfilter"
               />
 
-              {onEditClick &&
+              {onEditClick && (
                 <EditIcon
                   title={_('Edit Filter')}
                   active={isDefined(filter)}
                   onClick={isDefined(filter) ? onEditClick : undefined}
                 />
-              }
+              )}
             </IconDivider>
           </LeftDivider>
           <Divider align={['end', 'center']}>
-            {capabilities.mayAccess('filters') &&
+            {capabilities.mayAccess('filters') && (
               <Select
                 width="150px"
                 items={filter_items}
@@ -260,7 +249,7 @@ class PowerFilter extends React.Component {
                 menuPosition="right"
                 onChange={this.handleNamedFilterChange}
               />
-            }
+            )}
           </Divider>
         </Layout>
       </Layout>

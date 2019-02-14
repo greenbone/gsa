@@ -25,21 +25,22 @@ const TableHeader = styled.thead`
   & a {
     text-decoration: none;
     color: ${Theme.black};
-  };
+  }
 
   & a:hover {
     text-decoration: underline;
     color: ${Theme.black};
-  };
+  }
 
   @media print {
     border-bottom: 1px solid black;
 
-    & a, & a:hover {
+    & a,
+    & a:hover {
       text-decoration: none;
       color: ${Theme.black};
-    };
-  };
+    }
+  }
 `;
 
 export default TableHeader;

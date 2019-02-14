@@ -55,40 +55,19 @@ const Body = styled.div`
   flex-grow: 1;
 `;
 
-const InfoPanel = ({
-  heading,
-  footer,
-  children,
-  ...props
-}) => {
+const InfoPanel = ({heading, footer, children, ...props}) => {
   return (
-    <Panel
-      {...props}
-      align={['start', 'stretch']}
-      flex="column"
-    >
-      {heading &&
-        <Heading>{heading}</Heading>
-      }
-      {children &&
-        <Body>{children}</Body>
-      }
-      {footer &&
-        <Footer>{footer}</Footer>
-      }
+    <Panel {...props} align={['start', 'stretch']} flex="column">
+      {heading && <Heading>{heading}</Heading>}
+      {children && <Body>{children}</Body>}
+      {footer && <Footer>{footer}</Footer>}
     </Panel>
   );
 };
 
 InfoPanel.propTypes = {
-  footer: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-  ]),
-  heading: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.string,
-  ]),
+  footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
 export default InfoPanel;

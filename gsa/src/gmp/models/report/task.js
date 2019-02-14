@@ -28,7 +28,6 @@ import Model from '../../model';
  */
 
 class ReportTask extends Model {
-
   static entityType = 'task';
 
   parseProperties(elem) {
@@ -37,8 +36,7 @@ class ReportTask extends Model {
     const {target} = elem;
     if (isDefined(target) && !isEmpty(target._id)) {
       copy.target = new Model(target, 'target');
-    }
-    else {
+    } else {
       delete copy.target;
     }
 

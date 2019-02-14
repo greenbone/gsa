@@ -25,20 +25,20 @@ import Theme from 'web/utils/theme';
 
 const DialogButton = styled(Button)`
   border: 1px solid ${Theme.mediumGray};
-  color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGreen};
-  background: ${props => props.loading ?
-    Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat' :
-    Theme.lightGreen
-  };
+  color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGreen)};
+  background: ${props =>
+    props.loading
+      ? Theme.lightGreen + ' url(/img/loading.gif) center center no-repeat'
+      : Theme.lightGreen};
 
   /* when hovering these settings have to be overwritten explicitly */
   :hover {
-    color: ${props => props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white};
-    background: ${props => props.loading ?
-      Theme.green + ' url(/img/loading.gif) center center no-repeat' :
-      Theme.darkGreen
-    };
-  };
+    color: ${props => (props.loading ? 'rgba(0, 0, 0, 0.0)' : Theme.white)};
+    background: ${props =>
+      props.loading
+        ? Theme.green + ' url(/img/loading.gif) center center no-repeat'
+        : Theme.darkGreen};
+  }
 `;
 
 export default DialogButton;

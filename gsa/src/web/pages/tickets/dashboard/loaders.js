@@ -30,23 +30,21 @@ const TICKETS_LIST = 'tickets-list';
 const DEFAULT_FILTER = Filter.fromString('sort-reverse=modified');
 
 const ticketsListLoader = loadFunc(
-  ({gmp, filter = DEFAULT_FILTER}) => gmp.tickets.getAll({
-    filter,
-  }).then(r => r.data),
-  TICKETS_LIST);
+  ({gmp, filter = DEFAULT_FILTER}) =>
+    gmp.tickets
+      .getAll({
+        filter,
+      })
+      .then(r => r.data),
+  TICKETS_LIST,
+);
 
-export const TicketsListLoader = ({
-  children,
-  filter,
-}) => (
+export const TicketsListLoader = ({children, filter}) => (
   <Loader
     dataId={TICKETS_LIST}
     filter={filter}
     load={ticketsListLoader}
-    subscriptions={[
-      'tickets.timer',
-      'tickets.changed',
-    ]}
+    subscriptions={['tickets.timer', 'tickets.changed']}
   >
     {children}
   </Loader>

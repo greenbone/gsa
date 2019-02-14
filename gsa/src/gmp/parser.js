@@ -62,7 +62,7 @@ export const parseTextElement = (text = {}) => {
 };
 
 export const parseInt = value => {
-  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+  if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
     return undefined;
   }
 
@@ -76,7 +76,7 @@ export const parseInt = value => {
 };
 
 export const parseFloat = value => {
-  if (!(/^(-|\+)?([0-9.]+)$/).test(value)) {
+  if (!/^(-|\+)?([0-9.]+)$/.test(value)) {
     return undefined;
   }
 
@@ -92,11 +92,13 @@ export const parseFloat = value => {
 export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
-export const parseYesNo = value => value === '1' || value === 1 ?
-  YES_VALUE : NO_VALUE;
+export const parseYesNo = value =>
+  value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 
-export const parseCsv = value => !isDefined(value) || isEmpty(value.trim()) ?
-  [] : value.split(',').map(val => val.trim());
+export const parseCsv = value =>
+  !isDefined(value) || isEmpty(value.trim())
+    ? []
+    : value.split(',').map(val => val.trim());
 
 export const parseQod = qod => ({
   type: qod.type,
@@ -170,12 +172,14 @@ export const parseCvssBaseVector = ({
   confidentialityImpact,
   integrityImpact,
 } = {}) => {
-  if (!isDefined(accessVector) &&
+  if (
+    !isDefined(accessVector) &&
     !isDefined(accessComplexity) &&
     !isDefined(authentication) &&
     !isDefined(confidentialityImpact) &&
     !isDefined(integrityImpact) &&
-    !isDefined(availabilityImpact)) {
+    !isDefined(availabilityImpact)
+  ) {
     return undefined;
   }
 
@@ -270,7 +274,6 @@ export const parseCvssBaseVector = ({
       vector += 'ERROR';
   }
   return vector;
-
 };
 
 export const parseCvssBaseFromVector = vector => {
@@ -297,66 +300,54 @@ export const parseCvssBaseFromVector = vector => {
       case 'av':
         if (value === 'l') {
           av = 'LOCAL';
-        }
-        else if (value === 'a') {
+        } else if (value === 'a') {
           av = 'ADJACENT_NETWORK';
-        }
-        else if (value === 'n') {
+        } else if (value === 'n') {
           av = 'NETWORK';
         }
         break;
       case 'ac':
         if (value === 'h') {
           ac = 'HIGH';
-        }
-        else if (value === 'm') {
+        } else if (value === 'm') {
           ac = 'MEDIUM';
-        }
-        else if (value === 'l') {
+        } else if (value === 'l') {
           ac = 'LOW';
         }
         break;
       case 'au':
         if (value === 'm') {
           au = 'MULTIPLE_INSTANCES';
-        }
-        else if (value === 's') {
+        } else if (value === 's') {
           au = 'SINGLE_INSTANCES';
-        }
-        else if (value === 'n') {
+        } else if (value === 'n') {
           au = 'NONE';
         }
         break;
       case 'c':
         if (value === 'c') {
           c = 'COMPLETE';
-        }
-        else if (value === 'p') {
+        } else if (value === 'p') {
           c = 'PARTIAL';
-        }
-        else if (value === 'n') {
+        } else if (value === 'n') {
           c = 'NONE';
         }
         break;
       case 'i':
         if (value === 'c') {
           i = 'COMPLETE';
-        }
-        else if (value === 'p') {
+        } else if (value === 'p') {
           i = 'PARTIAL';
-        }
-        else if (value === 'n') {
+        } else if (value === 'n') {
           i = 'NONE';
         }
         break;
       case 'a':
         if (value === 'c') {
           a = 'COMPLETE';
-        }
-        else if (value === 'p') {
+        } else if (value === 'p') {
           a = 'PARTIAL';
-        }
-        else if (value === 'n') {
+        } else if (value === 'n') {
           a = 'NONE';
         }
         break;
@@ -382,8 +373,7 @@ export const parseCvssBaseFromVector = vector => {
  *
  * @returns {date} A date instance (Not a js Date!)
  */
-export const parseDate = value => isDefined(value) ?
-  date(value) : undefined;
+export const parseDate = value => (isDefined(value) ? date(value) : undefined);
 
 /**
  * Parse duration from string or integer

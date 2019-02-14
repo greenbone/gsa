@@ -16,13 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {
-  exclude,
-  excludeObjectProps,
-} from '../object';
+import {exclude, excludeObjectProps} from '../object';
 
 describe('exclude function test', () => {
-
   test('exclude object property', () => {
     const obj = {
       foo: 1,
@@ -36,7 +32,6 @@ describe('exclude function test', () => {
 });
 
 describe('excludeObjectProps function test', () => {
-
   test('exclude object properties', () => {
     const obj = {
       foo: 1,

@@ -27,7 +27,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 testModel(Override, 'override');
 
 describe('Note model tests', () => {
-
   test('should parse severity', () => {
     const override1 = new Override({severity: '8.5'});
     const override2 = new Override({severity: '10'});

@@ -27,7 +27,6 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 class Authorized extends React.Component {
-
   constructor(...args) {
     super(...args);
 

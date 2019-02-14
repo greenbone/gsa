@@ -28,22 +28,17 @@ export const SEC_INFOS_SEVERITY = 'secinfos-severity';
 export const SEC_INFOS_TYPE = 'secinfos-type';
 
 export const secInfoCreatedLoader = loadFunc(
-  ({gmp, filter}) => gmp.secinfos.getCreatedAggregates({filter})
-    .then(r => r.data),
-  SEC_INFOS_CREATED);
+  ({gmp, filter}) =>
+    gmp.secinfos.getCreatedAggregates({filter}).then(r => r.data),
+  SEC_INFOS_CREATED,
+);
 
-export const SecInfosCreatedLoader = ({
-  filter,
-  children,
-}) => (
+export const SecInfosCreatedLoader = ({filter, children}) => (
   <Loader
     dataId={SEC_INFOS_CREATED}
     filter={filter}
     load={secInfoCreatedLoader}
-    subscriptions={[
-      'secinfos.timer',
-      'secinfos.changed',
-    ]}
+    subscriptions={['secinfos.timer', 'secinfos.changed']}
   >
     {children}
   </Loader>
@@ -52,22 +47,17 @@ export const SecInfosCreatedLoader = ({
 SecInfosCreatedLoader.propTypes = loaderPropTypes;
 
 export const secInfosSeverityLoader = loadFunc(
-  ({gmp, filter}) => gmp.secinfos.getSeverityAggregates({filter})
-    .then(r => r.data),
-  SEC_INFOS_SEVERITY);
+  ({gmp, filter}) =>
+    gmp.secinfos.getSeverityAggregates({filter}).then(r => r.data),
+  SEC_INFOS_SEVERITY,
+);
 
-export const SecInfosSeverityLoader = ({
-  filter,
-  children,
-}) => (
+export const SecInfosSeverityLoader = ({filter, children}) => (
   <Loader
     dataId={SEC_INFOS_SEVERITY}
     filter={filter}
     load={secInfosSeverityLoader}
-    subscriptions={[
-      'secinfos.timer',
-      'secinfos.changed',
-    ]}
+    subscriptions={['secinfos.timer', 'secinfos.changed']}
   >
     {children}
   </Loader>
@@ -76,22 +66,16 @@ export const SecInfosSeverityLoader = ({
 SecInfosSeverityLoader.propTypes = loaderPropTypes;
 
 export const secInfosTypeLoader = loadFunc(
-  ({gmp, filter}) => gmp.secinfos.getTypeAggregates({filter})
-    .then(r => r.data),
-  SEC_INFOS_TYPE);
+  ({gmp, filter}) => gmp.secinfos.getTypeAggregates({filter}).then(r => r.data),
+  SEC_INFOS_TYPE,
+);
 
-export const SecInfosTypeLoader = ({
-  filter,
-  children,
-}) => (
+export const SecInfosTypeLoader = ({filter, children}) => (
   <Loader
     dataId={SEC_INFOS_TYPE}
     filter={filter}
     load={secInfosTypeLoader}
-    subscriptions={[
-      'secinfos.timer',
-      'secinfos.changed',
-    ]}
+    subscriptions={['secinfos.timer', 'secinfos.changed']}
   >
     {children}
   </Loader>

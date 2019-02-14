@@ -23,7 +23,6 @@ import {isDefined} from '../../utils/identity';
 import {parseInt} from '../../parser';
 
 class TLSCertificate {
-
   constructor(fingerprint) {
     this.fingerprint = fingerprint;
     this.ports = [];

@@ -23,13 +23,10 @@ import {render, fireEvent} from 'web/utils/testing';
 import CreateNamedFilterGroup from '../createnamedfiltergroup';
 
 describe('CreateNamedFilterGroup tests', () => {
-
   test('should render', () => {
     const handleChangeMock = jest.fn();
     const {element} = render(
-      <CreateNamedFilterGroup
-        onValueChange={handleChangeMock}
-      />
+      <CreateNamedFilterGroup onValueChange={handleChangeMock} />,
     );
 
     expect(element).toHaveStyleRule('display', 'flex');
@@ -43,7 +40,7 @@ describe('CreateNamedFilterGroup tests', () => {
       <CreateNamedFilterGroup
         saveNamedFilter={true}
         onValueChange={handleChangeMock}
-      />
+      />,
     );
     const checkbox = getByTestId('createnamedfiltergroup-checkbox');
     const textfield = getByTestId('createnamedfiltergroup-textfield');
@@ -58,7 +55,7 @@ describe('CreateNamedFilterGroup tests', () => {
       <CreateNamedFilterGroup
         saveNamedFilter={false}
         onValueChange={handleChangeMock}
-      />
+      />,
     );
     const checkbox = getByTestId('createnamedfiltergroup-checkbox');
     const textfield = getByTestId('createnamedfiltergroup-textfield');
@@ -70,9 +67,7 @@ describe('CreateNamedFilterGroup tests', () => {
   test('should uncheck checkbox if saveNamedFilter is undefined', () => {
     const handleChangeMock = jest.fn();
     const {getByTestId} = render(
-      <CreateNamedFilterGroup
-        onValueChange={handleChangeMock}
-      />
+      <CreateNamedFilterGroup onValueChange={handleChangeMock} />,
     );
     const checkbox = getByTestId('createnamedfiltergroup-checkbox');
     expect(checkbox.checked).toEqual(false);
@@ -84,7 +79,7 @@ describe('CreateNamedFilterGroup tests', () => {
       <CreateNamedFilterGroup
         saveNamedFilter={true}
         onValueChange={handleChangeMock}
-      />
+      />,
     );
 
     const checkbox = getByTestId('createnamedfiltergroup-checkbox');
@@ -99,7 +94,7 @@ describe('CreateNamedFilterGroup tests', () => {
       <CreateNamedFilterGroup
         saveNamedFilter={false}
         onValueChange={handleChangeMock}
-      />
+      />,
     );
 
     const checkbox = getByTestId('createnamedfiltergroup-checkbox');
@@ -107,7 +102,6 @@ describe('CreateNamedFilterGroup tests', () => {
 
     expect(handleChangeMock).toHaveBeenCalledWith(true, 'saveNamedFilter');
   });
-
 
   test('should call change handler of textfield with value and name', () => {
     const handleChangeMock = jest.fn();
@@ -117,13 +111,13 @@ describe('CreateNamedFilterGroup tests', () => {
         saveNamedFilter={true}
         filterName={'foo'}
         onValueChange={handleChangeMock}
-      />
-     );
+      />,
+    );
 
-     const textField = getByTestId('createnamedfiltergroup-textfield');
-     fireEvent.change(textField, {target: {value: 'bar'}});
+    const textField = getByTestId('createnamedfiltergroup-textfield');
+    fireEvent.change(textField, {target: {value: 'bar'}});
 
-     expect(handleChangeMock).toHaveBeenCalledWith('bar', 'filterName');
+    expect(handleChangeMock).toHaveBeenCalledWith('bar', 'filterName');
   });
 
   test('textfield should not change value when disabled', () => {
@@ -134,13 +128,13 @@ describe('CreateNamedFilterGroup tests', () => {
         saveNamedFilter={false}
         filterName={'foo'}
         onValueChange={handleChangeMock}
-      />
-     );
+      />,
+    );
 
-     const textField = getByTestId('createnamedfiltergroup-textfield');
-     fireEvent.change(textField, {target: {value: 'bar'}});
+    const textField = getByTestId('createnamedfiltergroup-textfield');
+    fireEvent.change(textField, {target: {value: 'bar'}});
 
-     expect(handleChangeMock).not.toHaveBeenCalled();
+    expect(handleChangeMock).not.toHaveBeenCalled();
   });
 });
 

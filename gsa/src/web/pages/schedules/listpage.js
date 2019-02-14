@@ -44,24 +44,20 @@ import {
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(({
-  capabilities,
-  onScheduleCreateClick,
-}) => (
-  <IconDivider>
-    <ManualIcon
-      page="vulnerabilitymanagement"
-      anchor="scheduled-scan"
-      title={_('Help: Schedules')}
-    />
-    {capabilities.mayCreate('schedule') &&
-      <NewIcon
-        title={_('New Schedule')}
-        onClick={onScheduleCreateClick}
+const ToolBarIcons = withCapabilities(
+  ({capabilities, onScheduleCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="vulnerabilitymanagement"
+        anchor="scheduled-scan"
+        title={_('Help: Schedules')}
       />
-    }
-  </IconDivider>
-));
+      {capabilities.mayCreate('schedule') && (
+        <NewIcon title={_('New Schedule')} onClick={onScheduleCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onScheduleCreateClick: PropTypes.func.isRequired,
@@ -88,34 +84,28 @@ const SchedulesPage = ({
     onDownloaded={onDownloaded}
     onDownloadError={onError}
     onInteraction={onInteraction}
-  >{({
-    clone,
-    create,
-    delete: delete_func,
-    download,
-    edit,
-    save,
-  }) => (
-    <EntitiesPage
-      {...props}
-      filterEditDialog={ScheduleFilterDialog}
-      filtersFilter={SCHEDULES_FILTER_FILTER}
-      sectionIcon={<ScheduleIcon size="large"/>}
-      table={SchedulesTable}
-      title={_('Schedules')}
-      toolBarIcons={ToolBarIcons}
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onError={onError}
-      onInteraction={onInteraction}
-      onScheduleCloneClick={clone}
-      onScheduleCreateClick={create}
-      onScheduleDeleteClick={delete_func}
-      onScheduleDownloadClick={download}
-      onScheduleEditClick={edit}
-      onScheduleSaveClick={save}
-    />
-  )}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <EntitiesPage
+        {...props}
+        filterEditDialog={ScheduleFilterDialog}
+        filtersFilter={SCHEDULES_FILTER_FILTER}
+        sectionIcon={<ScheduleIcon size="large" />}
+        table={SchedulesTable}
+        title={_('Schedules')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onError={onError}
+        onInteraction={onInteraction}
+        onScheduleCloneClick={clone}
+        onScheduleCreateClick={create}
+        onScheduleDeleteClick={delete_func}
+        onScheduleDownloadClick={download}
+        onScheduleEditClick={edit}
+        onScheduleSaveClick={save}
+      />
+    )}
   </ScheduleComponent>
 );
 

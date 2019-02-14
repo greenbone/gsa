@@ -20,7 +20,6 @@
 import Settings from 'gmp/models/settings';
 
 describe('Settings model tests', () => {
-
   test('settings have working setters and getters', () => {
     const settings = new Settings({});
     settings.set('foo', 'bar');
@@ -38,7 +37,6 @@ describe('Settings model tests', () => {
 
     expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
   });
-
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -53,56 +53,33 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-const CertInfo = ({
-  info,
-}) => {
-  const {
-    activationTime,
-    expirationTime,
-    issuer,
-    md5_fingerprint,
-  } = info;
+const CertInfo = ({info}) => {
+  const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
   return (
     <InfoTable>
       <colgroup>
-        <Col width="10%"/>
-        <Col width="90%"/>
+        <Col width="10%" />
+        <Col width="90%" />
       </colgroup>
       <TableBody>
         <TableRow>
-          <TableData>
-            {_('Activation')}
-          </TableData>
-          <TableData>
-            {dateTimeWithTimeZone(activationTime)}
-          </TableData>
+          <TableData>{_('Activation')}</TableData>
+          <TableData>{dateTimeWithTimeZone(activationTime)}</TableData>
         </TableRow>
 
         <TableRow>
-          <TableData>
-            {_('Expiration')}
-          </TableData>
-          <TableData>
-            {dateTimeWithTimeZone(expirationTime)}
-          </TableData>
+          <TableData>{_('Expiration')}</TableData>
+          <TableData>{dateTimeWithTimeZone(expirationTime)}</TableData>
         </TableRow>
 
         <TableRow>
-          <TableData>
-            {_('MD5 Fingerprint')}
-          </TableData>
-          <TableData>
-            {md5_fingerprint}
-          </TableData>
+          <TableData>{_('MD5 Fingerprint')}</TableData>
+          <TableData>{md5_fingerprint}</TableData>
         </TableRow>
 
         <TableRow>
-          <TableData>
-            {_('Issuer')}
-          </TableData>
-          <TableData>
-            {issuer}
-          </TableData>
+          <TableData>{_('Issuer')}</TableData>
+          <TableData>{issuer}</TableData>
         </TableRow>
       </TableBody>
     </InfoTable>
@@ -113,94 +90,62 @@ CertInfo.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-const OspScannerDetails = ({
-  info,
-}) => {
-  const {
-    scanner,
-    daemon,
-    protocol,
-    description,
-    params = [],
-  } = info;
+const OspScannerDetails = ({info}) => {
+  const {scanner, daemon, protocol, description, params = []} = info;
   if (isDefined(scanner.name)) {
     return (
       <div>
-        <DetailsBlock
-          title={_('OSP Scanner Details')}
-        >
+        <DetailsBlock title={_('OSP Scanner Details')}>
           <InfoTable>
             <colgroup>
-              <Col width="10%"/>
-              <Col width="90%"/>
+              <Col width="10%" />
+              <Col width="90%" />
             </colgroup>
             <TableBody>
               <TableRow>
+                <TableData>{_('Scanner Name')}</TableData>
+                <TableData>{scanner.name}</TableData>
+              </TableRow>
+
+              <TableRow>
+                <TableData>{_('Scanner Version')}</TableData>
+                <TableData>{scanner.version}</TableData>
+              </TableRow>
+
+              <TableRow>
+                <TableData>{_('OSP Daemon')}</TableData>
                 <TableData>
-                  {_('Scanner Name')}
-                </TableData>
-                <TableData>
-                  {scanner.name}
+                  <span>
+                    {daemon.name} {daemon.version}
+                  </span>
                 </TableData>
               </TableRow>
 
               <TableRow>
+                <TableData>{_('Protocol')}</TableData>
                 <TableData>
-                  {_('Scanner Version')}
-                </TableData>
-                <TableData>
-                  {scanner.version}
-                </TableData>
-              </TableRow>
-
-              <TableRow>
-                <TableData>
-                  {_('OSP Daemon')}
-                </TableData>
-                <TableData>
-                  <span>{daemon.name} {daemon.version}</span>
-                </TableData>
-              </TableRow>
-
-              <TableRow>
-                <TableData>
-                  {_('Protocol')}
-                </TableData>
-                <TableData>
-                  <span>{protocol.name} {protocol.version}</span>
+                  <span>
+                    {protocol.name} {protocol.version}
+                  </span>
                 </TableData>
               </TableRow>
             </TableBody>
           </InfoTable>
         </DetailsBlock>
 
-        <DetailsBlock
-          title={_('Description')}
-        >
+        <DetailsBlock title={_('Description')}>
           <pre>{description}</pre>
         </DetailsBlock>
 
-        <DetailsBlock
-          title={_('Scanner Parameters')}
-        >
+        <DetailsBlock title={_('Scanner Parameters')}>
           <SimpleTable>
             <TableHeader>
               <TableRow>
-                <TableHead>
-                  {_('Name')}
-                </TableHead>
-                <TableHead>
-                  {_('Description')}
-                </TableHead>
-                <TableHead>
-                  {_('Type')}
-                </TableHead>
-                <TableHead>
-                  {_('Default')}
-                </TableHead>
-                <TableHead>
-                  {_('Mandatory')}
-                </TableHead>
+                <TableHead>{_('Name')}</TableHead>
+                <TableHead>{_('Description')}</TableHead>
+                <TableHead>{_('Type')}</TableHead>
+                <TableHead>{_('Default')}</TableHead>
+                <TableHead>{_('Mandatory')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -209,54 +154,35 @@ const OspScannerDetails = ({
                 let {default: def} = param;
                 if (param_type === PARAM_TYPE_OVALDEF_FILE) {
                   def = _('OVAL Definitions File List');
-                }
-                else if (param_type === PARAM_TYPE_SELECTION) {
+                } else if (param_type === PARAM_TYPE_SELECTION) {
                   def = _('List');
-                }
-                else if (param_type === PARAM_TYPE_BOOLEAN) {
+                } else if (param_type === PARAM_TYPE_BOOLEAN) {
                   def = renderYesNo(def);
                 }
                 return (
-                  <TableRow
-                    key={param.name}
-                  >
-                    <TableData>
-                      {param.name}
-                    </TableData>
-                    <TableData>
-                      {param.description}
-                    </TableData>
-                    <TableData>
-                      {param_type}
-                    </TableData>
-                    <TableData>
-                      {def}
-                    </TableData>
-                    <TableData>
-                      {renderYesNo(param.mandatory)}
-                    </TableData>
+                  <TableRow key={param.name}>
+                    <TableData>{param.name}</TableData>
+                    <TableData>{param.description}</TableData>
+                    <TableData>{param_type}</TableData>
+                    <TableData>{def}</TableData>
+                    <TableData>{renderYesNo(param.mandatory)}</TableData>
                   </TableRow>
                 );
               })}
             </TableBody>
           </SimpleTable>
         </DetailsBlock>
-
       </div>
     );
   }
-  return (
-    <h2>{_('OSP Scanner is offline')}</h2>
-  );
+  return <h2>{_('OSP Scanner is offline')}</h2>;
 };
 
 OspScannerDetails.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-const ScannerDetails = ({
-  entity,
-}) => {
+const ScannerDetails = ({entity}) => {
   const {
     comment,
     scannerType,
@@ -268,106 +194,80 @@ const ScannerDetails = ({
     info,
   } = entity;
   return (
-    <Layout
-      flex="column"
-      grow
-    >
+    <Layout flex="column" grow>
       <InfoTable>
         <colgroup>
-          <Col width="10%"/>
-          <Col width="90%"/>
+          <Col width="10%" />
+          <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) &&
+          {isDefined(comment) && (
             <TableRow>
-              <TableData>
-                {_('Comment')}
-              </TableData>
-              <TableData>
-                {comment}
-              </TableData>
+              <TableData>{_('Comment')}</TableData>
+              <TableData>{comment}</TableData>
             </TableRow>
-          }
+          )}
 
           <TableRow>
-            <TableData>
-              {_('Scanner Type')}
-            </TableData>
-            <TableData>
-              {scannerTypeName(scannerType)}
-            </TableData>
+            <TableData>{_('Scanner Type')}</TableData>
+            <TableData>{scannerTypeName(scannerType)}</TableData>
           </TableRow>
 
-          {!entity.hasUnixSocket() &&
+          {!entity.hasUnixSocket() && (
             <TableRow>
+              <TableData>{_('Host')}</TableData>
               <TableData>
-                {_('Host')}
-              </TableData>
-              <TableData>
-                {scannerType === CVE_SCANNER_TYPE ?
-                  <span>{_('N/A (Builtin Scanner)')}</span> :
+                {scannerType === CVE_SCANNER_TYPE ? (
+                  <span>{_('N/A (Builtin Scanner)')}</span>
+                ) : (
                   host
-                }
+                )}
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {!entity.hasUnixSocket() &&
+          {!entity.hasUnixSocket() && (
             <TableRow>
+              <TableData>{_('Port')}</TableData>
               <TableData>
-                {_('Port')}
-              </TableData>
-              <TableData>
-                {scannerType === CVE_SCANNER_TYPE ?
-                  <span>{_('N/A (Builtin Scanner)')}</span> :
+                {scannerType === CVE_SCANNER_TYPE ? (
+                  <span>{_('N/A (Builtin Scanner)')}</span>
+                ) : (
                   port
-                }
+                )}
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {isDefined(credential) &&
+          {isDefined(credential) && (
             <TableRow>
+              <TableData>{_('Credential')}</TableData>
               <TableData>
-                {_('Credential')}
-              </TableData>
-              <TableData>
-                <DetailsLink
-                  id={credential.id}
-                  type="credential"
-                >
+                <DetailsLink id={credential.id} type="credential">
                   {credential.name}
                 </DetailsLink>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {tasks.length > 0 &&
+          {tasks.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Tasks using this Scanner')}
-              </TableData>
+              <TableData>{_('Tasks using this Scanner')}</TableData>
               <TableData>
                 <Divider wrap>
                   {tasks.map(task => (
-                    <DetailsLink
-                      key={task.id}
-                      id={task.id}
-                      type="task"
-                    >
+                    <DetailsLink key={task.id} id={task.id} type="task">
                       {task.name}
                     </DetailsLink>
                   ))}
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
 
-          {configs.length > 0 &&
+          {configs.length > 0 && (
             <TableRow>
-              <TableData>
-                {_('Scan Configs using this Scanner')}
-              </TableData>
+              <TableData>{_('Scan Configs using this Scanner')}</TableData>
               <TableData>
                 <Divider wrap>
                   {configs.map(config => (
@@ -382,26 +282,21 @@ const ScannerDetails = ({
                 </Divider>
               </TableData>
             </TableRow>
-          }
+          )}
         </TableBody>
       </InfoTable>
 
-      {scannerType === OSP_SCANNER_TYPE && isDefined(info) &&
-        <OspScannerDetails
-          info={info}
-        />
-      }
+      {scannerType === OSP_SCANNER_TYPE && isDefined(info) && (
+        <OspScannerDetails info={info} />
+      )}
 
-      {!entity.hasUnixSocket() && isDefined(credential) &&
-          isDefined(credential.certificate_info) &&
-          <DetailsBlock
-            title={_('Client Certificate (from Credential)')}
-          >
-            <CertInfo
-              info={credential.certificate_info}
-            />
+      {!entity.hasUnixSocket() &&
+        isDefined(credential) &&
+        isDefined(credential.certificate_info) && (
+          <DetailsBlock title={_('Client Certificate (from Credential)')}>
+            <CertInfo info={credential.certificate_info} />
           </DetailsBlock>
-      }
+        )}
     </Layout>
   );
 };

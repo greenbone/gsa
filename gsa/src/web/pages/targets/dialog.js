@@ -55,21 +55,29 @@ const DEFAULT_PORT = 22;
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
 const DEFAULT_PORT_LIST_NAME = 'OpenVAS Default';
 
-const DEFAULT_PORT_LISTS = [{
-  id: DEFAULT_PORT_LIST_ID,
-  name: DEFAULT_PORT_LIST_NAME,
-}];
+const DEFAULT_PORT_LISTS = [
+  {
+    id: DEFAULT_PORT_LIST_ID,
+    name: DEFAULT_PORT_LIST_NAME,
+  },
+];
 
 const ALIVE_TESTS_DEFAULT = 'Scan Config Default';
 
 const ALIVE_TESTS = [
-  'ICMP Ping', 'TCP-ACK Service Ping', 'TCP-SYN Service Ping',
-  'ARP Ping', 'ICMP & TCP-ACK Service Ping',
-  'ICMP & ARP Ping', 'TCP-ACK Service & ARP Ping',
-  'ICMP, TCP-ACK Service & ARP Ping', 'Consider Alive',
+  'ICMP Ping',
+  'TCP-ACK Service Ping',
+  'TCP-SYN Service Ping',
+  'ARP Ping',
+  'ICMP & TCP-ACK Service Ping',
+  'ICMP & ARP Ping',
+  'TCP-ACK Service & ARP Ping',
+  'ICMP, TCP-ACK Service & ARP Ping',
+  'Consider Alive',
 ];
 
-const ALIVE_TESTS_ITEMS = [{
+const ALIVE_TESTS_ITEMS = [
+  {
     value: ALIVE_TESTS_DEFAULT,
     label: _l(ALIVE_TESTS_DEFAULT),
   },
@@ -134,8 +142,9 @@ const TargetDialog = ({
   ...initial
 }) => {
   const ssh_credentials = credentials.filter(ssh_credential_filter);
-  const up_credentials = credentials.filter(value =>
-    value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
+  const up_credentials = credentials.filter(
+    value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  );
   const snmp_credentials = credentials.filter(snmp_credential_filter);
 
   const uncontrolledValues = {
@@ -170,10 +179,7 @@ const TargetDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({
-        values: state,
-        onValueChange,
-      }) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>
@@ -187,10 +193,7 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Comment')}
-              flex="column"
-            >
+            <FormGroup title={_('Comment')} flex="column">
               <TextField
                 name="comment"
                 size="30"
@@ -200,10 +203,7 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            <FormGroup
-              title={_('Hosts')}
-              flex="column"
-            >
+            <FormGroup title={_('Hosts')} flex="column">
               <Divider flex="column">
                 <Divider>
                   <Radio
@@ -240,11 +240,12 @@ const TargetDialog = ({
                 </Divider>
               </Divider>
 
-              {state.hosts_count &&
+              {state.hosts_count && (
                 <Layout>
                   <Radio
-                    title={_('From host assets ({{count}} hosts)',
-                      {count: state.hosts_count})}
+                    title={_('From host assets ({{count}} hosts)', {
+                      count: state.hosts_count,
+                    })}
                     name="target_source"
                     disabled={state.in_use}
                     checked={state.target_source === 'asset_hosts'}
@@ -252,14 +253,10 @@ const TargetDialog = ({
                     onChange={onValueChange}
                   />
                 </Layout>
-              }
-
+              )}
             </FormGroup>
 
-            <FormGroup
-              title={_('Exclude Hosts')}
-              flex="column"
-            >
+            <FormGroup title={_('Exclude Hosts')} flex="column">
               <Divider flex="column">
                 <Divider>
                   <Radio
@@ -272,8 +269,9 @@ const TargetDialog = ({
                   />
                   <TextField
                     grow="1"
-                    disabled=
-                      {state.in_use || state.target_exclude_source !== 'manual'}
+                    disabled={
+                      state.in_use || state.target_exclude_source !== 'manual'
+                    }
                     name="exclude_hosts"
                     value={state.exclude_hosts}
                     onChange={onValueChange}
@@ -316,7 +314,7 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            {capabilities.mayOp('get_port_lists') &&
+            {capabilities.mayOp('get_port_lists') && (
               <FormGroup title={_('Port List')}>
                 <Divider>
                   <Select
@@ -326,17 +324,17 @@ const TargetDialog = ({
                     value={state.port_list_id}
                     onChange={onPortListChange}
                   />
-                  {!state.in_use &&
+                  {!state.in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new port list')}
                         onClick={onNewPortListClick}
                       />
                     </Layout>
-                  }
+                  )}
                 </Divider>
               </FormGroup>
-            }
+            )}
 
             <FormGroup title={_('Alive Test')}>
               <Select
@@ -347,13 +345,11 @@ const TargetDialog = ({
               />
             </FormGroup>
 
-            {capabilities.mayOp('get_credentials') &&
-              <h4>
-                {_('Credentials for authenticated checks')}
-              </h4>
-            }
+            {capabilities.mayOp('get_credentials') && (
+              <h4>{_('Credentials for authenticated checks')}</h4>
+            )}
 
-            {capabilities.mayOp('get_credentials') &&
+            {capabilities.mayOp('get_credentials') && (
               <FormGroup title={_('SSH')}>
                 <Divider>
                   <Select
@@ -364,9 +360,7 @@ const TargetDialog = ({
                     value={state.ssh_credential_id}
                     onChange={onSshCredentialChange}
                   />
-                  <Layout>
-                    {_('on port')}
-                  </Layout>
+                  <Layout>{_('on port')}</Layout>
                   <TextField
                     size="6"
                     name="port"
@@ -374,7 +368,7 @@ const TargetDialog = ({
                     value={state.port}
                     onChange={onValueChange}
                   />
-                  {!state.in_use &&
+                  {!state.in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -382,12 +376,12 @@ const TargetDialog = ({
                         onClick={onNewCredentialsClick}
                       />
                     </Layout>
-                  }
+                  )}
                 </Divider>
               </FormGroup>
-            }
+            )}
 
-            {capabilities.mayOp('get_credentials') &&
+            {capabilities.mayOp('get_credentials') && (
               <FormGroup title={_('SMB')}>
                 <Divider>
                   <Select
@@ -397,7 +391,7 @@ const TargetDialog = ({
                     value={state.smb_credential_id}
                     onChange={onSmbCredentialChange}
                   />
-                  {!in_use &&
+                  {!in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -405,12 +399,12 @@ const TargetDialog = ({
                         onClick={onNewCredentialsClick}
                       />
                     </Layout>
-                  }
+                  )}
                 </Divider>
               </FormGroup>
-            }
+            )}
 
-            {capabilities.mayOp('get_credentials') &&
+            {capabilities.mayOp('get_credentials') && (
               <FormGroup title={_('ESXi')}>
                 <Divider>
                   <Select
@@ -420,7 +414,7 @@ const TargetDialog = ({
                     value={state.esxi_credential_id}
                     onChange={onEsxiCredentialChange}
                   />
-                  {!state.in_use &&
+                  {!state.in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -428,12 +422,12 @@ const TargetDialog = ({
                         onClick={onNewCredentialsClick}
                       />
                     </Layout>
-                  }
+                  )}
                 </Divider>
               </FormGroup>
-            }
+            )}
 
-            {capabilities.mayOp('get_credentials') &&
+            {capabilities.mayOp('get_credentials') && (
               <FormGroup title={_('SNMP')}>
                 <Divider>
                   <Select
@@ -443,7 +437,7 @@ const TargetDialog = ({
                     value={state.snmp_credential_id}
                     onChange={onSnmpCredentialChange}
                   />
-                  {!in_use &&
+                  {!in_use && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -451,10 +445,10 @@ const TargetDialog = ({
                         onClick={onNewCredentialsClick}
                       />
                     </Layout>
-                  }
+                  )}
                 </Divider>
               </FormGroup>
-            }
+            )}
           </Layout>
         );
       }}
@@ -481,12 +475,8 @@ TargetDialog.propTypes = {
   smb_credential_id: PropTypes.idOrZero,
   snmp_credential_id: PropTypes.idOrZero,
   ssh_credential_id: PropTypes.idOrZero,
-  target_exclude_source: PropTypes.oneOf([
-    'manual', 'file',
-  ]),
-  target_source: PropTypes.oneOf([
-    'manual', 'file', 'asset_hosts',
-  ]),
+  target_exclude_source: PropTypes.oneOf(['manual', 'file']),
+  target_source: PropTypes.oneOf(['manual', 'file', 'asset_hosts']),
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEsxiCredentialChange: PropTypes.func.isRequired,
