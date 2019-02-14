@@ -379,18 +379,15 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
     case 'everything':
       return _('{{subjectType}} {{subjectName}} has all permissions', type);
     case 'empty_trashcan':
-      return _(
-        '{{subjectType}} {{subjectName}} may empty the ' + 'trashcan',
-        type,
-      );
+      return _('{{subjectType}} {{subjectName}} may empty the trashcan', type);
     case 'get_dependencies':
       return _(
-        '{{subjectType}} {{subjectName}} may get the dependencies ' + 'of NVTs',
+        '{{subjectType}} {{subjectName}} may get the dependencies of NVTs',
         type,
       );
     case 'get_version':
       return _(
-        '{{subjectType}} {{subjectName}} may get version ' + 'information',
+        '{{subjectType}} {{subjectName}} may get version information',
         type,
       );
     case 'help':
@@ -456,34 +453,31 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
     case 'sync':
       if (res === 'cert') {
         return _(
-          '{{subjectType}} {{subjectName}} may sync the CERT ' + 'feed',
+          '{{subjectType}} {{subjectName}} may sync the CERT feed',
           type,
         );
       }
       if (res === 'feed') {
-        return _(
-          '{{subjectType}} {{subjectName}} may sync the NVT ' + 'feed',
-          type,
-        );
+        return _('{{subjectType}} {{subjectName}} may sync the NVT feed', type);
       }
       if (res === 'scap') {
         return _(
-          '{{subjectType}} {{subjectName}} may sync the SCAP ' + 'feed',
+          '{{subjectType}} {{subjectName}} may sync the SCAP feed',
           type,
         );
       }
       return _(
-        '{{subjectType}} {{subjectName}} may sync ' + '{{resourceType}}',
+        '{{subjectType}} {{subjectName}} may sync {{resourceType}}',
         type,
       );
     case 'move':
       return _(
-        '{{subjectType}} {{subjectName}} may move ' + '{{resourceType}}',
+        '{{subjectType}} {{subjectName}} may move {{resourceType}}',
         type,
       );
     case 'verify':
       return _(
-        '{{subjectType}} {{subjectName}} may verify ' + '{{resourceType}}',
+        '{{subjectType}} {{subjectName}} may verify {{resourceType}}',
         type,
       );
     default:

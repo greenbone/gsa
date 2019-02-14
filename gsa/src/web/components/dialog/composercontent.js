@@ -54,7 +54,7 @@ const FilterField = styled.div`
 
 const ComposerContent = ({
   filterFieldTitle = _(
-    'To change the filter, please filter your results on ' + 'the report page.',
+    'To change the filter, please filter your results on the report page.',
   ),
   filterString,
   includeNotes,

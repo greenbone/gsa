@@ -211,7 +211,7 @@ class PortListComponent extends React.Component {
     if (!port_range_start || !port_range_end) {
       return Promise.reject(
         new Error(
-          _('The port range needs numerical ' + 'values for start and end!'),
+          _('The port range needs numerical values for start and end!'),
         ),
       );
     }
@@ -219,9 +219,7 @@ class PortListComponent extends React.Component {
     // reject port ranges with start value lower than end value
     if (port_range_start > port_range_end) {
       return Promise.reject(
-        new Error(
-          _("The end of the port range can't " + 'be below its start!'),
-        ),
+        new Error(_('The end of the port range can not be below its start!')),
       );
     }
 
@@ -241,7 +239,7 @@ class PortListComponent extends React.Component {
           (port_range_start < start && port_range_end > end))
       ) {
         return Promise.reject(
-          new Error(_('New port range overlaps with an ' + 'existing one!')),
+          new Error(_('New port range overlaps with an existing one!')),
         );
       }
     }

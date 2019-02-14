@@ -53,9 +53,8 @@ const StyledDiv = styled.div`
 `;
 
 // InputField must be a Class to work correctly with Datepicker :-/
+// eslint-disable-next-line react/prefer-stateless-function
 class InputField extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
-
   render() {
     const {disabled, onClick, value, width = 'auto', ...props} = this.props;
 

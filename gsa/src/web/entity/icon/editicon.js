@@ -55,8 +55,8 @@ const EntityEditIcon = ({
       title = _('Edit {{entity}}', {entity: displayName});
     } else if (!entity.isWritable()) {
       title = _('{{entity}} is not writable', {entity: displayName});
+      // eslint-disable-next-line no-negated-condition
     } else if (!mayEdit) {
-      // eslint-disable-line no-negated-condition
       title = _('Permission to edit {{entity}} denied', {entity: displayName});
     } else {
       title = _('Cannot modify {{entity}}', {entity: displayName});

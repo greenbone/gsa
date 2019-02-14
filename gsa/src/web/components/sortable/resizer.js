@@ -60,8 +60,8 @@ class Resizer extends React.Component {
   }
 
   handleMouseDown(event) {
+    // eslint-disable-next-line no-bitwise
     if (event.buttons & 1) {
-      // eslint-disable-line no-bitwise
       this.startY = event.pageY;
 
       document.addEventListener('mousemove', this.handleMouseMove);

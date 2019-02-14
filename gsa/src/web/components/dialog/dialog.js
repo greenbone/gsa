@@ -96,8 +96,8 @@ class Dialog extends React.Component {
 
   onMouseDownMove(event) {
     const {current: dialog} = this.dialogRef;
+    // eslint-disable-next-line no-bitwise
     if (event.buttons & 1 && dialog !== null) {
-      // eslint-disable-line no-bitwise
       const box = dialog.getBoundingClientRect();
       this.relX = event.pageX - box.left;
       this.relY = event.pageY - box.top;
@@ -111,8 +111,8 @@ class Dialog extends React.Component {
   }
 
   onMouseDownResize(event) {
+    // eslint-disable-next-line no-bitwise
     if (event.buttons & 1) {
-      // eslint-disable-line no-bitwise
       const {current: dialog} = this.dialogRef;
       const box = dialog.getBoundingClientRect();
 

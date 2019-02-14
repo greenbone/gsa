@@ -48,9 +48,7 @@ const AutoDeleteReportsGroup = ({
         name="auto_delete"
         value="keep"
         onChange={onChange}
-        title={_(
-          'Automatically delete oldest reports but always' + ' keep newest',
-        )}
+        title={_('Automatically delete oldest reports but always keep newest')}
         checked={autoDelete === AUTO_DELETE_KEEP}
       />
       <Spinner

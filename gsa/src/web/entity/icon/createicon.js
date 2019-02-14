@@ -55,8 +55,8 @@ const EntityCreateIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Create new {{entity}}', {entity: displayName});
+      // eslint-disable-next-line no-negated-condition
     } else if (!mayCreate) {
-      // eslint-disable-line no-negated-condition
       title = _('{{entity}} may not be created', {entity: displayName});
     } else {
       title = _('Permission to create {{entity}} denied', {

@@ -158,7 +158,7 @@ export class NotesActiveDaysDisplay extends React.Component {
             filter={filter}
             dataTransform={transformActiveDaysData}
             title={({data: tdata}) =>
-              _('Notes by Active Days (Total: ' + '{{count}})', {
+              _('Notes by Active Days (Total: {{count}})', {
                 count: tdata.total,
               })
             }
@@ -204,7 +204,7 @@ export const NotesActiveDaysTableDisplay = createDisplay({
   dataRow: row => [row.label, row.value],
   dataTransform: transformActiveDaysData,
   title: ({data: tdata}) =>
-    _('Notes by Active Days (Total: ' + '{{count}})', {count: tdata.total}),
+    _('Notes by Active Days (Total: {{count}})', {count: tdata.total}),
   displayId: 'note-by-active-days-table',
   displayName: 'NotesActiveDaysTableDisplay',
   filtersFilter: NOTES_FILTER_FILTER,

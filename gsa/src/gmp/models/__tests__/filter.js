@@ -207,7 +207,7 @@ describe('Filter parse from keywords', () => {
 
     const filter = new Filter(elem);
     const filterstring =
-      'severity>3.9 and severity<7 first=1 rows=10 ' + 'sort=name';
+      'severity>3.9 and severity<7 first=1 rows=10 sort=name';
     expect(filter.toFilterString()).toEqual(filterstring);
 
     const filter2 = Filter.fromString(filterstring);
@@ -851,16 +851,13 @@ describe('filter and', () => {
     expect(filter1.and(filter2).toFilterString()).toBe('bar=2');
   });
 
-  test(
-    'filters with only extra keywords should be concatenated ' + 'without and',
-    () => {
-      const filter1 = Filter.fromString('apply_overrides=1 min_qod=70');
-      const filter2 = Filter.fromString('bar=2');
-      expect(filter1.and(filter2).toFilterString()).toBe(
-        'apply_overrides=1 min_qod=70 bar=2',
-      );
-    },
-  );
+  test('filters with only extra keywords should be concatenated without and', () => {
+    const filter1 = Filter.fromString('apply_overrides=1 min_qod=70');
+    const filter2 = Filter.fromString('bar=2');
+    expect(filter1.and(filter2).toFilterString()).toBe(
+      'apply_overrides=1 min_qod=70 bar=2',
+    );
+  });
 });
 
 describe('filter hasTerm', () => {

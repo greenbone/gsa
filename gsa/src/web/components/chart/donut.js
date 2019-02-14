@@ -188,8 +188,8 @@ class DonutChart extends React.Component {
       targetY = target.getAttribute('y');
 
       // compare target label with all other labels
+      // eslint-disable-next-line no-shadow
       labels.forEach(label => {
-        // eslint-disable-line no-shadow
         comparison = label;
         if (target === comparison) {
           return;

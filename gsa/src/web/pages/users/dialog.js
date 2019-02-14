@@ -47,9 +47,8 @@ import TextField from 'web/components/form/textfield';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Dialog extends React.Component {
-  // eslint-disable-line react/prefer-stateless-function
-
   render() {
     const {
       accessHosts = '',

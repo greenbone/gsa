@@ -53,8 +53,8 @@ const EntityCloneIcon = ({
   if (!isDefined(title)) {
     if (active) {
       title = _('Clone {{entity}}', {entity: displayName});
+      // eslint-disable-next-line no-negated-condition
     } else if (!mayClone) {
-      // eslint-disable-line no-negated-condition
       title = _('{{entity}} may not be cloned', {entity: displayName});
     } else {
       title = _('Permission to clone {{entity}} denied', {entity: displayName});
